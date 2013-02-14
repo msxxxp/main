@@ -1,0 +1,43 @@
+﻿.Language=English,English
+
+"terminal sessions"
+"terminal sessions"
+"terminal sessions"
+
+"&o OK"
+"&c Cancel"
+
+"Add to Plugins menu"
+"Add to Disk menu"
+"Plugin prefix"
+
+"Remote connection"
+"&h Host:"
+"(empty for local system)"
+"&u Login:"
+"&p Password:"
+"(empty for current user)"
+"Connecting..."
+
+"Send message"
+"Title:"
+"Message:"
+
+"Status"
+"Session"
+
+"SrvOper"
+"Messg"
+"Connct"
+"mstsc"
+"Disconn"
+"Local"
+"LogOff"
+
+"Server operation"
+"Reboot"
+"Turn off"
+
+"Are you sure?"
+"Disconnect session"
+"Logoff session"

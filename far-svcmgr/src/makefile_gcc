@@ -1,0 +1,18 @@
+#path to the Far Manager SVN trunk
+FARDEV ?= ../../../FAR/fardev
+COMMON = $(FARDEV)/plugins/common
+
+NAME = main
+SRCS = globalinfo.cpp guid.cpp main.cpp panelactions.cpp panelcontroller.cpp panelmodel.cpp farplugin.cpp
+
+USERCPP = -fno-threadsafe-statics  -fexceptions -I ../.. -I ../../libext/include -I ../../libfar3/include -I ../../libbase/include -I ../include
+USERLIBS = -llibext -llibfar3 -llibbase -L../../common_lib/lib$(DIRBIT)-d
+
+include $(FARDEV)/unicode_far/makefile_gcc_common
+
+include $(FARDEV)/plugins/makefile_gcc_def_inc
+
+NOSTART :=
+NODEFLIBS :=
+
+include $(FARDEV)/plugins/makefile_gcc_target_inc

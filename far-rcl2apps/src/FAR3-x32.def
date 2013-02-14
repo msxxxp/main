@@ -1,0 +1,5 @@
+EXPORTS
+	ExitFAR=ExitFARW@4
+	GetPluginInfoW=GetPluginInfoW@4
+	SetStartupInfoW=SetStartupInfoW@4
+	GetGlobalInfoW=GetGlobalInfoW@4

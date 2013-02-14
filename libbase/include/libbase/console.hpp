@@ -59,6 +59,7 @@ namespace Base {
 		WORD m_color;
 	};
 
+/*
 #ifndef NDEBUG
 	extern PCSTR FUNC_ENTER_FORMAT;
 	extern PCSTR FUNC_LEAVE_FORMAT;
@@ -78,6 +79,7 @@ namespace Base {
 #define FuncTrace()
 
 #endif
+*/
 
 }
 

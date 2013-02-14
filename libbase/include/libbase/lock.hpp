@@ -174,6 +174,11 @@ namespace Base {
 			{
 			}
 
+			operator HANDLE() const
+			{
+				return m_handle;
+			}
+
 			HANDLE handle() const
 			{
 				return m_handle;

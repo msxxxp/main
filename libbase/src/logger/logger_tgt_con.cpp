@@ -19,27 +19,29 @@ namespace Base {
 		};
 
 		struct LogToConsole: public Target_i, private Uncopyable {
-			virtual ~LogToConsole();
-
-			virtual void out(const Module_i * lgr, Level lvl, PCWSTR str, size_t size) const;
-
-			virtual void out(PCWSTR str, size_t size) const;
+			~LogToConsole();
 
 			LogToConsole();
+
+			void out(const Module_i * lgr, Level lvl, PCWSTR str, size_t size) const override;
+
+			void out(PCWSTR str, size_t size) const override;
 
 		private:
 			Base::auto_destroy<Lock::SyncUnit_i*> m_sync;
 		};
 
-
-		LogToConsole::~LogToConsole() {
+		LogToConsole::~LogToConsole()
+		{
 		}
 
 		LogToConsole::LogToConsole() :
-			m_sync(Lock::get_CritSection()) {
+			m_sync(Lock::get_CritSection())
+		{
 		}
 
-		void LogToConsole::out(const Module_i * lgr, Level lvl, PCWSTR str, size_t size) const {
+		void LogToConsole::out(const Module_i * lgr, Level lvl, PCWSTR str, size_t size) const
+		{
 			auto lk(m_sync->lock_scope());
 			if (lgr->is_color_mode()) {
 				ConsoleColor color(LogLevelColors[(int)lvl]);
@@ -49,14 +51,15 @@ namespace Base {
 			}
 		}
 
-		void LogToConsole::out(PCWSTR str, size_t size) const {
+		void LogToConsole::out(PCWSTR str, size_t size) const
+		{
 			auto lk(m_sync->lock_scope());
 			consoleout(str, size);
 		}
 
-
 		///=========================================================================================
-		Target_i * get_TargetToConsole() {
+		Target_i * get_TargetToConsole()
+		{
 			return new LogToConsole();
 		}
 

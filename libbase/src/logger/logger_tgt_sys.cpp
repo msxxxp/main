@@ -1,5 +1,6 @@
-﻿#include <libbase/lock.hpp>
-#include <libbase/logger.hpp>
+﻿#include <libbase/logger.hpp>
+
+#include <libbase/lock.hpp>
 #include <libbase/memory.hpp>
 #include <libbase/pcstr.hpp>
 
@@ -9,42 +10,44 @@ namespace Base {
 	namespace Logger {
 
 		WORD const LogLevelTypes[(int)Level::Fatal + 1] = {
-			EVENTLOG_SUCCESS,
-			EVENTLOG_SUCCESS,
-			EVENTLOG_INFORMATION_TYPE,
-			EVENTLOG_INFORMATION_TYPE,
-			EVENTLOG_WARNING_TYPE,
-			EVENTLOG_WARNING_TYPE,
-			EVENTLOG_ERROR_TYPE,
-			EVENTLOG_ERROR_TYPE,
+		    EVENTLOG_SUCCESS,
+		    EVENTLOG_SUCCESS,
+		    EVENTLOG_INFORMATION_TYPE,
+		    EVENTLOG_INFORMATION_TYPE,
+		    EVENTLOG_WARNING_TYPE,
+		    EVENTLOG_WARNING_TYPE,
+		    EVENTLOG_ERROR_TYPE,
+		    EVENTLOG_ERROR_TYPE,
 		};
 
 		struct LogToSys: public Target_i {
-			virtual ~LogToSys();
-
-			virtual void out(const Module_i * lgr, Level lvl, PCWSTR str, size_t size) const;
-
-			virtual void out(PCWSTR str, size_t size) const;
+			~LogToSys();
 
 			LogToSys(PCWSTR name, PCWSTR path);
 
-			static void app_register(PCWSTR name, PCWSTR path);
+			void out(const Module_i * lgr, Level lvl, PCWSTR str, size_t size) const override;
+
+			void out(PCWSTR str, size_t size) const override;
 
 		private:
-			HANDLE	m_hndl;
+			static void app_register(PCWSTR name, PCWSTR path);
+
+			HANDLE m_hndl;
 		};
 
-
-		LogToSys::~LogToSys() {
+		LogToSys::~LogToSys()
+		{
 			::DeregisterEventSource(m_hndl);
 		}
 
-		LogToSys::LogToSys(PCWSTR name, PCWSTR path) {
+		LogToSys::LogToSys(PCWSTR name, PCWSTR path)
+		{
 			app_register(name, path);
 			m_hndl = ::RegisterEventSourceW(nullptr, name);
 		}
 
-		void LogToSys::out(const Module_i * /*lgr*/, Level lvl, PCWSTR str, size_t /*size*/) const {
+		void LogToSys::out(const Module_i * /*lgr*/, Level lvl, PCWSTR str, size_t /*size*/) const
+		{
 //			PSID user = nullptr;
 //			HANDLE token;
 //			PTOKEN_USER token_user = nullptr;
@@ -58,12 +61,14 @@ namespace Base {
 //			free(token_user);
 		}
 
-		void LogToSys::out(PCWSTR str, size_t /*size*/) const {
+		void LogToSys::out(PCWSTR str, size_t /*size*/) const
+		{
 			::ReportEventW(m_hndl, LogLevelTypes[(int)get_default_level()], 0, EV_MSG_STRING, nullptr, 1, 0, &str, nullptr);
 		}
 
-		void LogToSys::app_register(PCWSTR name, PCWSTR path) {
-			wchar_t path_buf[MAX_PATH_LEN], * fullpath = path_buf;
+		void LogToSys::app_register(PCWSTR name, PCWSTR path)
+		{
+			wchar_t path_buf[MAX_PATH_LEN], *fullpath = path_buf;
 			if (Str::is_empty(path)) {
 				::GetModuleFileNameW(0, path_buf, lengthof(path_buf));
 			} else {
@@ -83,8 +88,8 @@ namespace Base {
 			::RegCloseKey(hKey);
 		}
 
-
-		Target_i * get_TargetToSys(PCWSTR name, PCWSTR path) {
+		Target_i * get_TargetToSys(PCWSTR name, PCWSTR path)
+		{
 			return new LogToSys(name, path);
 		}
 

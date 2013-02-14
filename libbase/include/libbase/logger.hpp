@@ -3,7 +3,6 @@
 
 #include <libbase/std.hpp>
 
-
 namespace Base {
 
 	namespace Logger {
@@ -12,7 +11,7 @@ namespace Base {
 		struct Module_i;
 		struct Target_i;
 
-		enum class Level: ssize_t {
+		enum class Level : ssize_t {
 			Trace,
 			Debug,
 			Info,
@@ -23,7 +22,7 @@ namespace Base {
 			Fatal,
 		};
 
-		enum class Wideness: ssize_t {
+		enum class Wideness : ssize_t {
 			Full,
 			Module,
 			Medium,
@@ -35,7 +34,6 @@ namespace Base {
 		Wideness get_default_wideness();
 
 		Module_i * get_default_module();
-
 
 		///================================================================================ Logger_i
 		struct Logger_i {
@@ -53,19 +51,18 @@ namespace Base {
 			virtual void free_module_(Module_i * module) = 0;
 		};
 
-
 #ifdef NO_LOGGER
 
-		inline void set_target(Target_i * /*target*/, Module_i * /*module*/ = nullptr) {
+		inline void set_target(Target_i * /*target*/, Module_i * /*module*/= nullptr) {
 		}
 
-		inline void set_level(Level /*lvl*/, Module_i * /*module*/ = nullptr) {
+		inline void set_level(Level /*lvl*/, Module_i * /*module*/= nullptr) {
 		}
 
-		inline void set_wideness(Wideness /*wide*/, Module_i * /*module*/ = nullptr) {
+		inline void set_wideness(Wideness /*wide*/, Module_i * /*module*/= nullptr) {
 		}
 
-		inline void set_color_mode(bool /*mode*/, Module_i * /*module*/ = nullptr) {
+		inline void set_color_mode(bool /*mode*/, Module_i * /*module*/= nullptr) {
 		}
 
 #else
@@ -81,7 +78,6 @@ namespace Base {
 		void set_color_mode(bool mode, Module_i * module = get_default_module());
 
 #endif
-
 
 		///================================================================================ Module_i
 		struct Module_i {
@@ -110,7 +106,6 @@ namespace Base {
 			virtual ssize_t get_index() const = 0;
 		};
 
-
 		///================================================================================ Target_i
 		struct Target_i {
 			virtual ~Target_i();
@@ -119,7 +114,6 @@ namespace Base {
 
 			virtual void out(PCWSTR str, size_t size) const = 0;
 		};
-
 
 #ifdef NO_LOGGER
 
@@ -135,7 +129,7 @@ namespace Base {
 			return nullptr;
 		}
 
-		inline Target_i * get_TargetToSys(PCWSTR /*name*/, PCWSTR /*path*/ = nullptr) {
+		inline Target_i * get_TargetToSys(PCWSTR /*name*/, PCWSTR /*path*/= nullptr) {
 			return nullptr;
 		}
 
@@ -150,7 +144,6 @@ namespace Base {
 		Target_i * get_TargetToSys(PCWSTR name, PCWSTR path = nullptr);
 
 #endif
-
 
 	}
 

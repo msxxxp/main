@@ -1,4 +1,5 @@
 #include <libbase/thread.hpp>
+
 #include <libbase/logger.hpp>
 
 namespace Base {

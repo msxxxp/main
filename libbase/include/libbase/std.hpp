@@ -104,12 +104,11 @@ namespace Base {
 //	const size_t CP_AUTODETECT = (UINT)-1;
 	const UINT DEFAULT_CP = CP_UTF8;
 
-	enum class WaitResult_t
-		: size_t {
-			SUCCESS = WAIT_OBJECT_0,
-		APC = WAIT_IO_COMPLETION,
-		TIMEOUT = WAIT_TIMEOUT,
-		FAILED = WAIT_FAILED,
+	enum class WaitResult_t : size_t {
+		SUCCESS   = WAIT_OBJECT_0,
+		APC       = WAIT_IO_COMPLETION,
+		TIMEOUT   = WAIT_TIMEOUT,
+		FAILED    = WAIT_FAILED,
 		ABANDONED = WAIT_ABANDONED,
 	};
 

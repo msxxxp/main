@@ -29,14 +29,13 @@
 /// GlobalInfo
 void WINAPI GetGlobalInfoW(GlobalInfo * Info)
 {
-	Base::Logger::set_target(Base::Logger::get_TargetToFile(L"D:/projects/~test/sortstr.log"));
-	Base::Logger::set_level(Base::Logger::Level::Trace);
+	using namespace Base::Logger;
+	auto logger = get_logger_module();
+	logger->set_target(get_TargetToFile(L"D:/projects/~test/sortstr.log"));
+	logger->set_level(Level::Trace);
 
 	LogTrace();
-	LogNoise(L"==========================================================================\n");
-
 	Far::helper_t::inst().init(new FarGlobalInfo);
-
 	get_global_info()->GetGlobalInfoW(Info);
 }
 

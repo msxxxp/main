@@ -25,14 +25,20 @@
 #include <libfar3/plugin_i.hpp>
 #include <libbase/logger.hpp>
 
+namespace {
+	void setup_logger()
+	{
+		using namespace Base::Logger;
+		set_target(get_TargetToFile(L"D:/projects/~test/sortstr.log"));
+		set_level(Level::Trace);
+	}
+}
+
 ///========================================================================================== Export
 /// GlobalInfo
 void WINAPI GetGlobalInfoW(GlobalInfo * Info)
 {
-	using namespace Base::Logger;
-	auto logger = get_logger_module();
-	logger->set_target(get_TargetToFile(L"D:/projects/~test/sortstr.log"));
-	logger->set_level(Level::Trace);
+	setup_logger();
 
 	LogTrace();
 	Far::helper_t::inst().init(new FarGlobalInfo);

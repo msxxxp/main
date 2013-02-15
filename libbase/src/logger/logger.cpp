@@ -99,7 +99,7 @@ namespace Base {
 			ssize_t m_index;
 			Level m_lvl;
 			Wideness m_wide;
-			uint8_t m_color :1;
+			uint32_t m_color :1;
 
 			friend class Logger_impl;
 		};

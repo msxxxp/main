@@ -30,7 +30,16 @@ namespace Base {
 
 		Level get_default_level();
 
+		void set_default_level(Level lvl);
+
 		Wideness get_default_wideness();
+
+		void set_default_wideness(Wideness wdns);
+
+		inline Module_i * get_empty_module()
+		{
+			return nullptr;
+		}
 
 		Module_i * get_default_module();
 
@@ -79,16 +88,20 @@ namespace Base {
 
 #ifdef NO_LOGGER
 
-		inline void set_target(Target_i * /*target*/, Module_i * /*module*/= nullptr) {
+		inline void set_target(Target_i * /*target*/, Module_i * /*module*/= nullptr)
+		{
 		}
 
-		inline void set_level(Level /*lvl*/, Module_i * /*module*/= nullptr) {
+		inline void set_level(Level /*lvl*/, Module_i * /*module*/= nullptr)
+		{
 		}
 
-		inline void set_wideness(Wideness /*wide*/, Module_i * /*module*/= nullptr) {
+		inline void set_wideness(Wideness /*wide*/, Module_i * /*module*/= nullptr)
+		{
 		}
 
-		inline void set_color_mode(bool /*mode*/, Module_i * /*module*/= nullptr) {
+		inline void set_color_mode(bool /*mode*/, Module_i * /*module*/= nullptr)
+		{
 		}
 
 #else
@@ -116,19 +129,23 @@ namespace Base {
 
 #ifdef NO_LOGGER
 
-		inline Target_i * get_TargetToNull() {
+		inline Target_i * get_TargetToNull()
+		{
 			return nullptr;
 		}
 
-		inline Target_i * get_TargetToConsole() {
+		inline Target_i * get_TargetToConsole()
+		{
 			return nullptr;
 		}
 
-		inline Target_i * get_TargetToFile(PCWSTR /*path*/) {
+		inline Target_i * get_TargetToFile(PCWSTR /*path*/)
+		{
 			return nullptr;
 		}
 
-		inline Target_i * get_TargetToSys(PCWSTR /*name*/, PCWSTR /*path*/= nullptr) {
+		inline Target_i * get_TargetToSys(PCWSTR /*name*/, PCWSTR /*path*/= nullptr)
+		{
 			return nullptr;
 		}
 
@@ -149,7 +166,11 @@ namespace Base {
 
 Base::Logger::Module_i * get_logger_module()
 {
+#ifdef NO_LOGGER
+	return Base::Logger::get_empty_module();
+#else
 	return Base::Logger::get_default_module();
+#endif
 }
 
 #ifdef NO_LOGGER

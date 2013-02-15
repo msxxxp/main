@@ -34,14 +34,28 @@ namespace Base {
 			{L"%S: %-4d [%S] ", L""},
 		};
 
+		static Level defLevel = Level::Warn;
+
+		static Wideness defWideness = Wideness::Medium;
+
 		Level get_default_level()
 		{
-			return Level::Warn;
+			return defLevel;
+		}
+
+		void set_default_level(Level lvl)
+		{
+			defLevel = lvl;
 		}
 
 		Wideness get_default_wideness()
 		{
-			return Wideness::Medium;
+			return defWideness;
+		}
+
+		void set_default_wideness(Wideness wdns)
+		{
+			defWideness = wdns;
 		}
 
 		///================================================================================ Module_i

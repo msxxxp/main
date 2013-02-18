@@ -58,9 +58,9 @@ namespace Base {
 		}
 
 		///=========================================================================================
-		Target_i * get_TargetToConsole()
+		Base::shared_ptr<Target_i> get_TargetToConsole()
 		{
-			return new LogToConsole();
+			return Base::shared_ptr<Target_i>(new LogToConsole());
 		}
 
 	}

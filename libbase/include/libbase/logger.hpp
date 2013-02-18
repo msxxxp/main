@@ -2,6 +2,7 @@
 #define _LIBBASE_LOGGER_HPP_
 
 #include <libbase/std.hpp>
+#include <libbase/shared_ptr.hpp>
 
 namespace Base {
 	namespace Logger {
@@ -9,6 +10,8 @@ namespace Base {
 		struct Logger_i;
 		struct Module_i;
 		struct Target_i;
+
+		typedef Base::shared_ptr<Target_i> Target_t;
 
 		enum class Level : ssize_t {
 			Trace,
@@ -36,12 +39,18 @@ namespace Base {
 
 		void set_default_wideness(Wideness wdns);
 
+		Target_t get_default_target();
+
+		void set_default_target(Target_t target);
+
 		inline Module_i * get_empty_module()
 		{
 			return nullptr;
 		}
 
 		Module_i * get_default_module();
+
+		Module_i * create_module(PCWSTR name, const Target_t & target, Level lvl = get_default_level());
 
 		///================================================================================ Module_i
 		struct Module_i {
@@ -61,7 +70,7 @@ namespace Base {
 
 			virtual void set_color_mode(bool mode) = 0;
 
-			virtual void set_target(Target_i * target) = 0;
+			virtual void set_target(const Target_t & target) = 0;
 
 			virtual void out(PCSTR file, int line, PCSTR func, Level lvl, PCWSTR format, ...) const = 0;
 
@@ -72,7 +81,7 @@ namespace Base {
 
 		///================================================================================ Logger_i
 		struct Logger_i {
-			Module_i * register_module(PCWSTR name, Target_i * target, Level lvl = get_default_level());
+			Module_i * register_module(PCWSTR name, const Target_t & target, Level lvl = get_default_level());
 
 			void free_module(Module_i * module);
 
@@ -81,14 +90,14 @@ namespace Base {
 		private:
 //			virtual Module_i * get_module_(PCWSTR name) const = 0;
 
-			virtual Module_i * register_module_(PCWSTR name, Target_i * target, Level lvl) = 0;
+			virtual Module_i * register_module_(PCWSTR name, const Target_t & target, Level lvl) = 0;
 
 			virtual void free_module_(Module_i * module) = 0;
 		};
 
 #ifdef NO_LOGGER
 
-		inline void set_target(Target_i * /*target*/, Module_i * /*module*/= nullptr)
+		inline void set_target(const Target_t & /*target*/, Module_i * /*module*/= nullptr)
 		{
 		}
 
@@ -108,7 +117,7 @@ namespace Base {
 
 		Logger_i & get_instance();
 
-		void set_target(Target_i * target, Module_i * module = get_default_module());
+		void set_target(const Target_t & target, Module_i * module = get_default_module());
 
 		void set_level(Level lvl, Module_i * module = get_default_module());
 
@@ -129,35 +138,35 @@ namespace Base {
 
 #ifdef NO_LOGGER
 
-		inline Target_i * get_TargetToNull()
+		inline Target_t get_TargetToNull()
 		{
-			return nullptr;
+			return Target_t();
 		}
 
-		inline Target_i * get_TargetToConsole()
+		inline Target_t get_TargetToConsole()
 		{
-			return nullptr;
+			return Target_t();
 		}
 
-		inline Target_i * get_TargetToFile(PCWSTR /*path*/)
+		inline Target_t get_TargetToFile(PCWSTR /*path*/)
 		{
-			return nullptr;
+			return Target_t();
 		}
 
-		inline Target_i * get_TargetToSys(PCWSTR /*name*/, PCWSTR /*path*/= nullptr)
+		inline Target_t get_TargetToSys(PCWSTR /*name*/, PCWSTR /*path*/= nullptr)
 		{
-			return nullptr;
+			return Target_t();
 		}
 
 #else
 
-		Target_i * get_TargetToNull();
+		Target_t get_TargetToNull();
 
-		Target_i * get_TargetToConsole();
+		Target_t get_TargetToConsole();
 
-		Target_i * get_TargetToFile(PCWSTR path);
+		Target_t get_TargetToFile(PCWSTR path);
 
-		Target_i * get_TargetToSys(PCWSTR name, PCWSTR path = nullptr);
+		Target_t get_TargetToSys(PCWSTR name, PCWSTR path = nullptr);
 
 #endif
 

@@ -47,9 +47,9 @@ namespace Base {
 			}
 		}
 
-		Target_i * get_TargetToFile(PCWSTR path)
+		Base::shared_ptr<Target_i> get_TargetToFile(PCWSTR path)
 		{
-			return new LogToFile(path);
+			return Base::shared_ptr<Target_i>(new LogToFile(path));
 		}
 
 	}

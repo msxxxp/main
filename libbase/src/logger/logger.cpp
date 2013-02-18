@@ -34,30 +34,6 @@ namespace Base {
 			{L"%S: %-4d [%S] ", L""},
 		};
 
-		static Level defLevel = Level::Warn;
-
-		static Wideness defWideness = Wideness::Medium;
-
-		Level get_default_level()
-		{
-			return defLevel;
-		}
-
-		void set_default_level(Level lvl)
-		{
-			defLevel = lvl;
-		}
-
-		Wideness get_default_wideness()
-		{
-			return defWideness;
-		}
-
-		void set_default_wideness(Wideness wdns)
-		{
-			defWideness = wdns;
-		}
-
 		///================================================================================ Module_i
 		Module_i::~Module_i()
 		{
@@ -65,7 +41,7 @@ namespace Base {
 
 		///============================================================================= Module_impl
 		struct Module_impl: public Module_i, private Uncopyable {
-			Module_impl(PCWSTR name, Target_i * tgt, Level lvl, ssize_t index);
+			Module_impl(PCWSTR name, const Target_t & tgt, Level lvl, ssize_t index);
 
 			~Module_impl();
 
@@ -83,7 +59,7 @@ namespace Base {
 
 			void set_color_mode(bool mode) override;
 
-			void set_target(Target_i * target) override;
+			void set_target(const Target_t & target) override;
 
 			void out(PCSTR file, int line, PCSTR func, Level lvl, PCWSTR format, ...) const override;
 
@@ -104,9 +80,10 @@ namespace Base {
 			friend class Logger_impl;
 		};
 
-		Module_impl::Module_impl(PCWSTR name, Target_i * tgt, Level lvl, ssize_t index) :
+		Module_impl::Module_impl(PCWSTR name, const Target_t & tgt, Level lvl, ssize_t index) :
 			m_name(Str::length(name) + 1, name),
-			m_target(tgt), m_index(index),
+			m_target(tgt),
+			m_index(index),
 			m_lvl(lvl),
 			m_wide(get_default_wideness()),
 			m_color(0)
@@ -152,9 +129,9 @@ namespace Base {
 			m_color = mode;
 		}
 
-		void Module_impl::set_target(Target_i * target)
+		void Module_impl::set_target(const Target_t & target)
 		{
-			m_target.reset(target);
+			m_target = target;
 		}
 
 		void Module_impl::out(PCSTR file, int line, PCSTR func, Level lvl, PCWSTR format, ...) const
@@ -221,12 +198,8 @@ namespace Base {
 			}
 		};
 
-		Module_i * defaultModule = nullptr;
-
-		PCWSTR const defaultModuleName = L"default";
-
 		///================================================================================ Logger_i
-		Module_i * Logger_i::register_module(PCWSTR name, Target_i * target, Level lvl)
+		Module_i * Logger_i::register_module(PCWSTR name, const Target_t & target, Level lvl)
 		{
 			return register_module_(name, target, lvl);
 		}
@@ -242,25 +215,79 @@ namespace Base {
 
 		///============================================================================= Logger_impl
 		struct Logger_impl: public Logger_i, private Base::Uncopyable {
-			Logger_impl();
-
 			~Logger_impl();
 
 //			Module_i * get_module_(PCWSTR name) const override;
 
-			Module_i * register_module_(PCWSTR name, Target_i * target, Level lvl) override;
+			Module_i * register_module_(PCWSTR name, const Target_t & target, Level lvl) override;
 
 			void free_module_(Module_i * module) override;
 
+			static Level get_default_level()
+			{
+				return defLevel;
+			}
+
+			static Wideness get_default_wideness()
+			{
+				return defWideness;
+			}
+
+			static Target_t get_default_target()
+			{
+				return defTarget;
+			}
+
+			static Module_i * get_default_module()
+			{
+				return defModule;
+			}
+
+			static PCWSTR get_default_module_name()
+			{
+				return defModuleName;
+			}
+
+			static void set_default_level(Level level)
+			{
+				defLevel = level;
+			}
+
+			static void set_default_wideness(Wideness wideness)
+			{
+				defWideness = wideness;
+			}
+
+			static void set_default_target(Target_t target)
+			{
+				defTarget = target;
+			}
+
 		private:
+			Logger_impl();
+
 			std::vector<Module_i*> m_modules;
 			Base::auto_destroy<Lock::SyncUnit_i*> m_sync;
+
+			static Level defLevel;
+			static Wideness defWideness;
+			static Target_t defTarget;
+			static Module_i * defModule;
+			static PCWSTR const defModuleName;
+
+			friend Logger_i & get_instance();
 		};
+
+		Level Logger_impl::defLevel = Level::Warn;
+		Wideness Logger_impl::defWideness = Wideness::Medium;
+		Target_t Logger_impl::defTarget = get_TargetToNull();
+		Module_i * Logger_impl::defModule = nullptr;
+		PCWSTR const Logger_impl::defModuleName = L"default";
 
 		Logger_impl::Logger_impl() :
 			m_sync(Lock::get_ReadWrite())
 		{
-			defaultModule = register_module_(defaultModuleName, get_TargetToNull(), get_default_level());
+			defModule = register_module_(defModuleName, defTarget, defLevel);
 		}
 
 		Logger_impl::~Logger_impl()
@@ -277,7 +304,7 @@ namespace Base {
 //			return *(m_modules[module.index].iface);
 //		}
 
-		Module_i * Logger_impl::register_module_(PCWSTR name, Target_i * target, Level lvl)
+		Module_i * Logger_impl::register_module_(PCWSTR name, const Target_t & target, Level lvl)
 		{
 			auto lk(m_sync->lock_scope());
 			m_modules.push_back(new Module_impl(name, target, lvl, m_modules.size()));
@@ -294,10 +321,40 @@ namespace Base {
 			}
 		}
 
+		Level get_default_level()
+		{
+			return Logger_impl::get_default_level();
+		}
+
+		void set_default_level(Level lvl)
+		{
+			Logger_impl::set_default_level(lvl);
+		}
+
+		Wideness get_default_wideness()
+		{
+			return Logger_impl::get_default_wideness();
+		}
+
+		void set_default_wideness(Wideness wdns)
+		{
+			Logger_impl::set_default_wideness(wdns);
+		}
+
+		Target_t get_default_target()
+		{
+			return Logger_impl::get_default_target();
+		}
+
+		void set_default_target(Target_t target)
+		{
+			Logger_impl::set_default_target(target);
+		}
+
 		Module_i * get_default_module()
 		{
 			get_instance();
-			return defaultModule;
+			return Logger_impl::get_default_module();
 		}
 
 		Logger_i & get_instance()
@@ -306,7 +363,7 @@ namespace Base {
 			return ret;
 		}
 
-		void set_target(Target_i * target, Module_i * module)
+		void set_target(Target_t & target, Module_i * module)
 		{
 			module->set_target(target);
 		}

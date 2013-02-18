@@ -88,9 +88,9 @@ namespace Base {
 			::RegCloseKey(hKey);
 		}
 
-		Target_i * get_TargetToSys(PCWSTR name, PCWSTR path)
+		Target_t get_TargetToSys(PCWSTR name, PCWSTR path)
 		{
-			return new LogToSys(name, path);
+			return Target_t(new LogToSys(name, path));
 		}
 
 	}

@@ -41,7 +41,7 @@ namespace Base {
 
 		///============================================================================= Module_impl
 		struct Module_impl: public Module_i, private Uncopyable {
-			Module_impl(PCWSTR name, const Target_t & tgt, Level lvl, ssize_t index);
+			Module_impl(PCWSTR name, const Target_t & tgt, Level lvl);
 
 			~Module_impl();
 
@@ -65,14 +65,11 @@ namespace Base {
 
 			void out(Level lvl, PCWSTR format, ...) const override;
 
-			ssize_t get_index() const override;
-
 		private:
 			void out_args(Level lvl, const ustring & prefix, PCWSTR format, va_list args) const;
 
 			auto_array<wchar_t> m_name;
 			shared_ptr<Target_i> m_target;
-			ssize_t m_index;
 			Level m_lvl;
 			Wideness m_wide;
 			uint32_t m_color :1;
@@ -80,10 +77,9 @@ namespace Base {
 			friend class Logger_impl;
 		};
 
-		Module_impl::Module_impl(PCWSTR name, const Target_t & tgt, Level lvl, ssize_t index) :
+		Module_impl::Module_impl(PCWSTR name, const Target_t & tgt, Level lvl) :
 			m_name(Str::length(name) + 1, name),
 			m_target(tgt),
-			m_index(index),
 			m_lvl(lvl),
 			m_wide(get_default_wideness()),
 			m_color(0)
@@ -165,40 +161,46 @@ namespace Base {
 			m_target->out(this, lvl, tmp.c_str(), tmp.size());
 		}
 
-		ssize_t Module_impl::get_index() const
-		{
-			return m_index;
-		}
-
-		struct pModule_pModule_less: public std::binary_function<const Module_i *, const Module_i *, bool> {
-			bool operator ()(const Module_i * lhs, const Module_i * rhs)
+//		struct pModule_pModule_less: public std::binary_function<const Module_i *, const Module_i *, bool> {
+//		};
+//
+		struct pModule_PCWSTR_less: public std::binary_function<const Module_i *, PCWSTR, bool> {
+			bool operator ()(const Module_i * lhs, const Module_i * rhs) const
 			{
 				return Str::compare(lhs->get_name(), rhs->get_name()) < 0;
 			}
-		};
 
-		struct pModule_PCWSTR_less: public std::binary_function<const Module_i *, PCWSTR, bool> {
-			bool operator ()(const Module_i * lhs, PCWSTR rhs)
+			bool operator ()(const Module_i * lhs, PCWSTR rhs) const
 			{
 				return Str::compare(lhs->get_name(), rhs) < 0;
 			}
-		};
 
-		struct pModule_pModule_equal: public std::binary_function<const Module_i *, const Module_i *, bool> {
-			bool operator ()(const Module_i * lhs, const Module_i * rhs)
+			bool operator ()(PCWSTR left, const Module_i * right) const
 			{
-				return Str::compare(lhs->get_name(), rhs->get_name()) == 0;
+				return Str::compare(left, right->get_name()) < 0;
 			}
 		};
 
-		struct pModule_PCWSTR_equal: public std::binary_function<const Module_i *, PCWSTR, bool> {
-			bool operator ()(const Module_i * lhs, PCWSTR rhs)
-			{
-				return Str::compare(lhs->get_name(), rhs) == 0;
-			}
-		};
+//		struct pModule_pModule_equal: public std::binary_function<const Module_i *, const Module_i *, bool> {
+//			bool operator ()(const Module_i * lhs, const Module_i * rhs)
+//			{
+//				return Str::compare(lhs->get_name(), rhs->get_name()) == 0;
+//			}
+//		};
+//
+//		struct pModule_PCWSTR_equal: public std::binary_function<const Module_i *, PCWSTR, bool> {
+//			bool operator ()(const Module_i * lhs, PCWSTR rhs)
+//			{
+//				return Str::compare(lhs->get_name(), rhs) == 0;
+//			}
+//		};
 
 		///================================================================================ Logger_i
+		Module_i * Logger_i::get_module(PCWSTR name)
+		{
+			return get_module_(name);
+		}
+
 		Module_i * Logger_i::register_module(PCWSTR name, const Target_t & target, Level lvl)
 		{
 			return register_module_(name, target, lvl);
@@ -217,7 +219,7 @@ namespace Base {
 		struct Logger_impl: public Logger_i, private Base::Uncopyable {
 			~Logger_impl();
 
-//			Module_i * get_module_(PCWSTR name) const override;
+			Module_i * get_module_(PCWSTR name) override;
 
 			Module_i * register_module_(PCWSTR name, const Target_t & target, Level lvl) override;
 
@@ -299,26 +301,35 @@ namespace Base {
 			}
 		}
 
-//		Module_i & Logger_impl::get_module_(PCWSTR name) const {
-//			auto lk(m_sync->get_lock_read());
-//			return *(m_modules[module.index].iface);
-//		}
+		Module_i * Logger_impl::get_module_(PCWSTR name)
+		{
+			auto lk(m_sync->lock_scope());
+			auto range = std::equal_range(m_modules.begin(), m_modules.end(), name, pModule_PCWSTR_less());
+			if (range.first != range.second)
+				return *range.first;
+			return register_module(name);
+		}
 
 		Module_i * Logger_impl::register_module_(PCWSTR name, const Target_t & target, Level lvl)
 		{
 			auto lk(m_sync->lock_scope());
-			m_modules.push_back(new Module_impl(name, target, lvl, m_modules.size()));
-			return m_modules.back();
+			auto range = std::equal_range(m_modules.begin(), m_modules.end(), name, pModule_PCWSTR_less());
+			if (range.first != range.second) {
+				return *range.first;
+			}
+			Module_i * module = new Module_impl(name, target, lvl);
+			m_modules.emplace(std::upper_bound(m_modules.begin(), m_modules.end(), module, pModule_PCWSTR_less()), module);
+			return module;
 		}
 
 		void Logger_impl::free_module_(Module_i * module)
 		{
 			auto lk(m_sync->lock_scope());
-			if (module) {
-				ssize_t index = module->get_index();
-				delete m_modules[index];
-				m_modules[index] = nullptr;
-			}
+			auto range = std::equal_range(m_modules.begin(), m_modules.end(), module, pModule_PCWSTR_less());
+			for_each(range.first, range.second, [](Module_i * found_module) {
+				delete found_module;
+			});
+			m_modules.erase(range.first, range.second);
 		}
 
 		Level get_default_level()
@@ -357,15 +368,15 @@ namespace Base {
 			return Logger_impl::get_default_module();
 		}
 
+		Module_i * create_module(PCWSTR name, const Target_t & target, Level lvl)
+		{
+			return get_instance().register_module(name, target, lvl);
+		}
+
 		Logger_i & get_instance()
 		{
 			static Logger_impl ret;
 			return ret;
-		}
-
-		void set_target(Target_t & target, Module_i * module)
-		{
-			module->set_target(target);
 		}
 
 		void set_level(Level lvl, Module_i * module)
@@ -376,6 +387,11 @@ namespace Base {
 		void set_wideness(Wideness mode, Module_i * module)
 		{
 			module->set_wideness(mode);
+		}
+
+		void set_target(Target_t & target, Module_i * module)
+		{
+			module->set_target(target);
 		}
 
 		void set_color_mode(bool mode, Module_i * module)

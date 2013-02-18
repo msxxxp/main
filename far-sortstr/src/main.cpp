@@ -30,11 +30,9 @@ namespace {
 	{
 		using namespace Base::Logger;
 		set_default_level(Level::Trace);
+		set_default_target(get_TargetToFile(L"D:/projects/~test/sortstr.log"));
 
-		auto target = get_TargetToFile(L"D:/projects/~test/sortstr.log");
-		set_target(target);
-
-		auto module  = create_module(L"threads", target);
+		auto module  = create_module(L"threads");
 	}
 }
 

@@ -50,7 +50,7 @@ namespace Base {
 
 		Module_i * get_default_module();
 
-		Module_i * create_module(PCWSTR name, const Target_t & target, Level lvl = get_default_level());
+		Module_i * create_module(PCWSTR name, const Target_t & target = get_default_target(), Level lvl = get_default_level());
 
 		///================================================================================ Module_i
 		struct Module_i {
@@ -75,20 +75,20 @@ namespace Base {
 			virtual void out(PCSTR file, int line, PCSTR func, Level lvl, PCWSTR format, ...) const = 0;
 
 			virtual void out(Level lvl, PCWSTR format, ...) const = 0;
-
-			virtual ssize_t get_index() const = 0;
 		};
 
 		///================================================================================ Logger_i
 		struct Logger_i {
-			Module_i * register_module(PCWSTR name, const Target_t & target, Level lvl = get_default_level());
+			Module_i * get_module(PCWSTR name);
+
+			Module_i * register_module(PCWSTR name, const Target_t & target = get_default_target(), Level lvl = get_default_level());
 
 			void free_module(Module_i * module);
 
 			virtual ~Logger_i();
 
 		private:
-//			virtual Module_i * get_module_(PCWSTR name) const = 0;
+			virtual Module_i * get_module_(PCWSTR name) = 0;
 
 			virtual Module_i * register_module_(PCWSTR name, const Target_t & target, Level lvl) = 0;
 
@@ -173,7 +173,7 @@ namespace Base {
 	}
 }
 
-Base::Logger::Module_i * get_logger_module()
+inline Base::Logger::Module_i * get_logger_module()
 {
 #ifdef NO_LOGGER
 	return Base::Logger::get_empty_module();

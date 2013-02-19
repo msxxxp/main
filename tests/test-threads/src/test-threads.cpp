@@ -8,30 +8,50 @@
 #include <memory>
 #include <vector>
 
+namespace {
+	void setup_logger()
+	{
+		using namespace Base::Logger;
+		set_default_level(Level::Trace);
+		set_default_wideness(Wideness::Full);
+		set_default_target(get_TargetToConsole());
+
+//		set_module_target(get_TargetToNull(), get_module(L"threads"));
+	}
+}
+
 struct Routine: public Base::ThreadRoutine_i
 {
+	Routine(ssize_t num):
+		m_num(num)
+	{
+		LogTrace();
+	}
+
 	size_t run(void *) override
 	{
-		Sleep(15000);
-		return 42;
+		LogTrace();
+		Sleep(10000);
+		return m_num;
 	}
 
 private:
 	static Base::Queue m_queue;
+
+	ssize_t m_num;
 };
 
 int main()
 {
-	Base::Logger::set_target(Base::Logger::get_TargetToConsole());
-	Base::Logger::set_level(Base::Logger::Level::Trace);
-	Base::Logger::set_wideness(Base::Logger::Wideness::Full);
-	Base::Logger::set_color_mode(true);
+	setup_logger();
+	LogTrace();
 
-	Routine routine;
+	Routine routine1(100);
+	Routine routine2(200);
 
 	std::vector<Base::Thread> threads;
-	threads.emplace_back(Base::Thread(&routine));
-	threads.emplace_back(Base::Thread(&routine));
+	threads.emplace_back(Base::Thread(&routine1));
+	threads.emplace_back(Base::Thread(&routine2));
 
 	Sleep(5000);
 	threads[0].set_io_priority(Base::Thread::IoPriority_t::LOW);

@@ -1,9 +1,15 @@
-#include <libbase/logger.hpp>
 #include <libbase/thread.hpp>
+
 #include <libbase/err.hpp>
+#include <libbase/logger.hpp>
 #include <libbase/str.hpp>
 
 namespace Base {
+	inline Base::Logger::Module_i * get_logger_module()
+	{
+		return Base::Logger::get_module(L"threads");
+	}
+
 	enum THREADINFOCLASS {
 		ThreadBasicInformation,
 		ThreadTimes,

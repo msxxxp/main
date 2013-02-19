@@ -23,9 +23,9 @@ namespace Base {
 		{
 		}
 
-		Target_i * get_TargetToNull()
+		Target_t get_TargetToNull()
 		{
-			return new LogToNull();
+			return Target_t(new LogToNull());
 		}
 
 	}

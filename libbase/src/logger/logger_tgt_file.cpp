@@ -47,9 +47,9 @@ namespace Base {
 			}
 		}
 
-		Target_i * get_TargetToFile(PCWSTR path)
+		Target_t get_TargetToFile(PCWSTR path)
 		{
-			return new LogToFile(path);
+			return Target_t(new LogToFile(path));
 		}
 
 	}

@@ -58,9 +58,9 @@ namespace Base {
 		}
 
 		///=========================================================================================
-		Target_i * get_TargetToConsole()
+		Target_t get_TargetToConsole()
 		{
-			return new LogToConsole();
+			return Target_t(new LogToConsole());
 		}
 
 	}

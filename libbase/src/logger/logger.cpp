@@ -28,10 +28,10 @@ namespace Base {
 		};
 
 		const FmtString fmtStrings[(int)Wideness::Short + 1] = {
-			{L"%S: %-4d [%S] ", L"%s{%s}:%-5u "},
-			{L"%S: %-4d [%S] ", L"%s{%s} "},
-			{L"%S: %-4d [%S] ", L"%s"},
-			{L"%S: %-4d [%S] ", L""},
+			{L"%14.14S:%-4d [%S] ", L"%s{%s}:%5u "},
+			{L"%14.14S:%-4d [%S] ", L"%s{%s} "},
+			{L"%14.14S:%-4d [%S] ", L"%s"},
+			{L"%14.14S:%-4d [%S] ", L""},
 		};
 
 		///================================================================================ Module_i
@@ -82,7 +82,7 @@ namespace Base {
 			m_target(tgt),
 			m_lvl(lvl),
 			m_wide(get_default_wideness()),
-			m_color(0)
+			m_color(1)
 		{
 		}
 
@@ -368,7 +368,7 @@ namespace Base {
 			return Logger_impl::get_default_module();
 		}
 
-		Module_i * create_module(PCWSTR name, const Target_t & target, Level lvl)
+		Module_i * get_module(PCWSTR name, const Target_t & target, Level lvl)
 		{
 			return get_instance().register_module(name, target, lvl);
 		}
@@ -379,22 +379,22 @@ namespace Base {
 			return ret;
 		}
 
-		void set_level(Level lvl, Module_i * module)
+		void set_module_level(Level lvl, Module_i * module)
 		{
 			module->set_level(lvl);
 		}
 
-		void set_wideness(Wideness mode, Module_i * module)
+		void set_module_wideness(Wideness mode, Module_i * module)
 		{
 			module->set_wideness(mode);
 		}
 
-		void set_target(Target_t & target, Module_i * module)
+		void set_module_target(const Target_t & target, Module_i * module)
 		{
 			module->set_target(target);
 		}
 
-		void set_color_mode(bool mode, Module_i * module)
+		void set_module_color_mode(bool mode, Module_i * module)
 		{
 			module->set_color_mode(mode);
 		}

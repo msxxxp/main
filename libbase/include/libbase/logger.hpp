@@ -50,7 +50,7 @@ namespace Base {
 
 		Module_i * get_default_module();
 
-		Module_i * create_module(PCWSTR name, const Target_t & target = get_default_target(), Level lvl = get_default_level());
+		Module_i * get_module(PCWSTR name, const Target_t & target = get_default_target(), Level lvl = get_default_level());
 
 		///================================================================================ Module_i
 		struct Module_i {
@@ -97,19 +97,19 @@ namespace Base {
 
 #ifdef NO_LOGGER
 
-		inline void set_target(const Target_t & /*target*/, Module_i * /*module*/= nullptr)
+		inline void set_module_target(const Target_t & /*target*/, Module_i * /*module*/= nullptr)
 		{
 		}
 
-		inline void set_level(Level /*lvl*/, Module_i * /*module*/= nullptr)
+		inline void set_module_level(Level /*lvl*/, Module_i * /*module*/= nullptr)
 		{
 		}
 
-		inline void set_wideness(Wideness /*wide*/, Module_i * /*module*/= nullptr)
+		inline void set_module_wideness(Wideness /*wide*/, Module_i * /*module*/= nullptr)
 		{
 		}
 
-		inline void set_color_mode(bool /*mode*/, Module_i * /*module*/= nullptr)
+		inline void set_module_color_mode(bool /*mode*/, Module_i * /*module*/= nullptr)
 		{
 		}
 
@@ -117,13 +117,13 @@ namespace Base {
 
 		Logger_i & get_instance();
 
-		void set_target(const Target_t & target, Module_i * module = get_default_module());
+		void set_module_target(const Target_t & target, Module_i * module = get_default_module());
 
-		void set_level(Level lvl, Module_i * module = get_default_module());
+		void set_module_level(Level lvl, Module_i * module = get_default_module());
 
-		void set_wideness(Wideness wide, Module_i * module = get_default_module());
+		void set_module_wideness(Wideness wide, Module_i * module = get_default_module());
 
-		void set_color_mode(bool mode, Module_i * module = get_default_module());
+		void set_module_color_mode(bool mode, Module_i * module = get_default_module());
 
 #endif
 
@@ -203,22 +203,29 @@ inline Base::Logger::Module_i * get_logger_module()
 #		define LogNoise(format, args ...)
 #		define LogDebug(format, args ...)
 #		define LogDebugIf(condition, format, args ...) (condition)
+#		define LogInfo(format, args ...)	get_logger_module()->out(Base::Logger::Level::Info, format, ##args)
+#		define LogReport(format, args ...)	get_logger_module()->out(Base::Logger::Level::Report, format, ##args)
+#		define LogAtten(format, args ...)	get_logger_module()->out(Base::Logger::Level::Atten, format, ##args)
+#		define LogWarn(format, args ...)	get_logger_module()->out(Base::Logger::Level::Warn, format, ##args)
+#   	define LogWarnIf(condition, format, args ...) if (condition) get_logger_module()->out(Base::Logger::Level::Warn, format, ##args)
+#   	define LogError(format, args ...)	get_logger_module()->out(Base::Logger::Level::Error, format, ##args)
+#   	define LogErrorIf(condition, format, args ...) if (condition) get_logger_module()->out(Base::Logger::Level::Error, format, ##args)
+#		define LogFatal(format, args ...)	get_logger_module()->out(Base::Logger::Level::Fatal, format, ##args)
 #	else
 #       define LogTrace()                   get_logger_module()->out(THIS_PLACE, Base::Logger::Level::Trace, L"\n")
 #       define LogTraceIf(condition)        if (condition) get_logger_module()->out(THIS_PLACE, Base::Logger::Level::Trace, L"\n")
 #       define LogNoise(format, args ...)	get_logger_module()->out(THIS_PLACE, Base::Logger::Level::Trace, format, ##args)
 #       define LogDebug(format, args ...)	get_logger_module()->out(THIS_PLACE, Base::Logger::Level::Debug, format, ##args)
 #       define LogDebugIf(condition, format, args ...)	if (condition) get_logger_module()->out(THIS_PLACE, Base::Logger::Level::Debug, format, ##args)
+#		define LogInfo(format, args ...)	get_logger_module()->out(THIS_PLACE, Base::Logger::Level::Info, format, ##args)
+#		define LogReport(format, args ...)	get_logger_module()->out(THIS_PLACE, Base::Logger::Level::Report, format, ##args)
+#		define LogAtten(format, args ...)	get_logger_module()->out(THIS_PLACE, Base::Logger::Level::Atten, format, ##args)
+#		define LogWarn(format, args ...)	get_logger_module()->out(THIS_PLACE, Base::Logger::Level::Warn, format, ##args)
+#   	define LogWarnIf(condition, format, args ...) if (condition) get_logger_module()->out(THIS_PLACE, Base::Logger::Level::Warn, format, ##args)
+#   	define LogError(format, args ...)	get_logger_module()->out(THIS_PLACE, Base::Logger::Level::Error, format, ##args)
+#   	define LogErrorIf(condition, format, args ...) if (condition) get_logger_module()->out(THIS_PLACE, Base::Logger::Level::Error, format, ##args)
+#		define LogFatal(format, args ...)	get_logger_module()->out(THIS_PLACE, Base::Logger::Level::Fatal, format, ##args)
 #	endif
-
-#	define LogInfo(format, args ...)	get_logger_module()->out(Base::Logger::Level::Info, format, ##args)
-#	define LogReport(format, args ...)	get_logger_module()->out(Base::Logger::Level::Report, format, ##args)
-#	define LogAtten(format, args ...)	get_logger_module()->out(Base::Logger::Level::Atten, format, ##args)
-#	define LogWarn(format, args ...)	get_logger_module()->out(Base::Logger::Level::Warn, format, ##args)
-#   define LogWarnIf(condition, format, args ...) if (condition) get_logger_module()->out(Base::Logger::Level::Warn, format, ##args)
-#   define LogError(format, args ...)	get_logger_module()->out(Base::Logger::Level::Error, format, ##args)
-#   define LogErrorIf(condition, format, args ...) if (condition) get_logger_module()->out(Base::Logger::Level::Error, format, ##args)
-#	define LogFatal(format, args ...)	get_logger_module()->out(Base::Logger::Level::Fatal, format, ##args)
 #endif
 
 #endif

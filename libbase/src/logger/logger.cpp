@@ -70,8 +70,6 @@ namespace Base {
 			Level m_lvl;
 			size_t m_prefix;
 			uint32_t m_color:1;
-
-			friend class Logger_impl;
 		};
 
 		Module_impl::Module_impl(PCWSTR name, const Target_t & tgt, Level lvl) :
@@ -152,12 +150,19 @@ namespace Base {
 		ustring Module_impl::create_prefix(Level lvl) const
 		{
 			ustring prefix;
+			if (m_prefix & Prefix::Date) {
+				SYSTEMTIME time;
+				::GetLocalTime(&time);
+				prefix += format_str(L"%04u-%02u-%02u ", time.wYear, time.wMonth, time.wDay);
+			}
+			if (m_prefix & Prefix::Time) {
+				SYSTEMTIME time;
+				::GetLocalTime(&time);
+				prefix += format_str(L"%02u:%02u:%02u.%03u ", time.wHour, time.wMinute, time.wSecond, time.wMilliseconds);
+			}
 			if (m_prefix & Prefix::Level) {
 				prefix += format_str(L"%s ", LogLevelNames[(int)lvl]);
 			}
-//			if (m_prefix & Prefix::Time) {
-//				prefix += format_str(L"%s ", LogLevelNames[(int)lvl]);
-//			}
 			if (m_prefix & Prefix::Module) {
 				prefix += format_str(L"{%s} ", m_name.data());
 			}
@@ -170,7 +175,7 @@ namespace Base {
 		ustring & Module_impl::add_place(ustring & prefix, PCSTR file, int line, PCSTR func) const
 		{
 			if (m_prefix & Prefix::Place) {
-				prefix += format_str(L"%14.14S:%-4d ", file, line);
+				prefix += format_str(L"%14.14S:%4d ", file, line);
 			}
 			if (m_prefix & Prefix::Function) {
 				prefix += format_str(L"[%S] ", func);
@@ -185,9 +190,6 @@ namespace Base {
 			m_target->out(this, lvl, tmp.c_str(), tmp.size());
 		}
 
-//		struct pModule_pModule_less: public std::binary_function<const Module_i *, const Module_i *, bool> {
-//		};
-//
 		struct pModule_PCWSTR_less: public std::binary_function<const Module_i *, PCWSTR, bool> {
 			bool operator ()(const Module_i * lhs, const Module_i * rhs) const
 			{
@@ -204,20 +206,6 @@ namespace Base {
 				return Str::compare(left, right->get_name()) < 0;
 			}
 		};
-
-//		struct pModule_pModule_equal: public std::binary_function<const Module_i *, const Module_i *, bool> {
-//			bool operator ()(const Module_i * lhs, const Module_i * rhs)
-//			{
-//				return Str::compare(lhs->get_name(), rhs->get_name()) == 0;
-//			}
-//		};
-//
-//		struct pModule_PCWSTR_equal: public std::binary_function<const Module_i *, PCWSTR, bool> {
-//			bool operator ()(const Module_i * lhs, PCWSTR rhs)
-//			{
-//				return Str::compare(lhs->get_name(), rhs) == 0;
-//			}
-//		};
 
 		///================================================================================ Logger_i
 		Module_i * Logger_i::get_module(PCWSTR name)
@@ -304,7 +292,7 @@ namespace Base {
 			friend Logger_i & get_instance();
 		};
 
-		Level Logger_impl::defLevel = Level::Warn;
+		Level Logger_impl::defLevel = Level::Atten;
 		size_t Logger_impl::defPrefix = Prefix::Medium;
 		Target_t Logger_impl::defTarget = get_TargetToNull();
 		Module_i * Logger_impl::defModule = nullptr;

@@ -31,10 +31,11 @@ namespace Base {
 			const static size_t Place    = 0x0008;
 			const static size_t Thread   = 0x0010;
 			const static size_t Time     = 0x0020;
+			const static size_t Date     = 0x0040;
 
-			const static size_t Lite     = Level | Time;
-			const static size_t Medium   = Level | Time | Function;
-			const static size_t Full     = Level | Time | Function | Module | Thread | Place;
+			const static size_t Lite     = Time | Level;
+			const static size_t Medium   = Time | Level | Function;
+			const static size_t Full     = Date | Time | Level | Function | Module | Thread | Place;
 		};
 
 		Level get_default_level();

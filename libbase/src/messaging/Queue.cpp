@@ -7,6 +7,12 @@
 
 namespace Base {
 
+	static Base::Logger::Module_i * get_logger_module()
+	{
+		auto static module = Base::Logger::get_module(L"message");
+		return module;
+	}
+
 	struct Queue::Queue_impl: private Lock::CriticalSection, private Lock::Semaphore, private std::deque<Message> {
 		void post_message(value_type const& message);
 
@@ -15,6 +21,7 @@ namespace Base {
 
 	void Queue::Queue_impl::post_message(const value_type & message)
 	{
+		LogTrace();
 		CriticalSection::lock();
 		emplace_back(message);
 		CriticalSection::release();
@@ -23,6 +30,7 @@ namespace Base {
 
 	bool Queue::Queue_impl::get_message(value_type & message, size_t timeout_msec)
 	{
+		LogTrace();
 		bool ret = false;
 		if (Semaphore::wait(timeout_msec) == WaitResult_t::SUCCESS) {
 			CriticalSection::lock();
@@ -37,11 +45,13 @@ namespace Base {
 	Queue::~Queue()
 	{
 		delete m_impl;
+		LogTrace();
 	}
 
 	Queue::Queue():
 		m_impl(new Queue_impl)
 	{
+		LogTrace();
 	}
 
 	Queue::Queue(Queue && right):
@@ -65,11 +75,13 @@ namespace Base {
 
 	void Queue::put_message(const Message & message)
 	{
+		LogTrace();
 		return m_impl->post_message(message);
 	}
 
 	bool Queue::get_message(Message & message, Timeout_t timeout_msec)
 	{
+		LogTrace();
 		return m_impl->get_message(message, timeout_msec);
 	}
 

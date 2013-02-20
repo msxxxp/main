@@ -1,5 +1,6 @@
 #include <libbase/messaging.hpp>
 #include <libbase/lock.hpp>
+#include <libbase/logger.hpp>
 
 #include <vector>
 
@@ -127,24 +128,34 @@ namespace {
 
 namespace Base {
 	namespace Delivery {
+		static Base::Logger::Module_i * get_logger_module()
+		{
+			auto static module = Base::Logger::get_module(L"message");
+			return module;
+		}
+
 
 		SubscribtionId Subscribe(Queue * queue, Message::type_t type_mask, Message::code_t code_mask, filter_t filter)
 		{
+			LogTrace();
 			return Delivery_impl::inst().Subscribe(queue, type_mask, code_mask, filter);
 		}
 
 		void Unsubscribe(SubscribtionId id)
 		{
+			LogTrace();
 			Delivery_impl::inst().Unsubscribe(id);
 		}
 
 		void Unsubscribe(const Queue * queue)
 		{
+			LogTrace();
 			Delivery_impl::inst().Unsubscribe(queue);
 		}
 
 		void SendRound(const Message & message)
 		{
+			LogTrace();
 			Delivery_impl::inst().SendRound(message);
 		}
 

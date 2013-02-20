@@ -31,9 +31,22 @@ namespace Base {
 			Short,
 		};
 
+		namespace Prefix {
+			const static size_t Function = 0x0001;
+			const static size_t Level    = 0x0002;
+			const static size_t Module   = 0x0004;
+			const static size_t Place    = 0x0008;
+			const static size_t Thread   = 0x0010;
+			const static size_t Time     = 0x0020;
+		};
+
 		Level get_default_level();
 
 		void set_default_level(Level lvl);
+
+		size_t get_default_prefix();
+
+		void set_default_prefix(size_t prefix);
 
 		Wideness get_default_wideness();
 
@@ -49,6 +62,8 @@ namespace Base {
 		}
 
 		Module_i * get_default_module();
+
+//		Module_i * get_module(PCSTR name, const Target_t & target = get_default_target(), Level lvl = get_default_level());
 
 		Module_i * get_module(PCWSTR name, const Target_t & target = get_default_target(), Level lvl = get_default_level());
 

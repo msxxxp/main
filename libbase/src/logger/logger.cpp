@@ -12,14 +12,14 @@ namespace Base {
 	namespace Logger {
 
 		PCWSTR const LogLevelNames[(int)Level::Fatal + 1] = {
-			L"TRACE ",
-			L"DEBUG ",
-			L"INFO  ",
-			L"REPRT ",
-			L"ATTEN ",
-			L"WARN  ",
-			L"ERROR ",
-			L"FATAL ",
+			L"TRACE",
+			L"DEBUG",
+			L"INFO ",
+			L"REPRT",
+			L"ATTEN",
+			L"WARN ",
+			L"ERROR",
+			L"FATAL",
 		};
 
 		struct FmtString {
@@ -66,21 +66,27 @@ namespace Base {
 			void out(Level lvl, PCWSTR format, ...) const override;
 
 		private:
+			ustring create_prefix(Level lvl) const;
+
+			ustring & add_place(ustring & prefix, PCSTR file, int line, PCSTR func) const;
+
 			void out_args(Level lvl, const ustring & prefix, PCWSTR format, va_list args) const;
 
-			auto_array<wchar_t> m_name;
+			ustring m_name;
 			shared_ptr<Target_i> m_target;
 			Level m_lvl;
+			size_t m_prefix;
 			Wideness m_wide;
-			uint32_t m_color :1;
+			uint32_t m_color:1;
 
 			friend class Logger_impl;
 		};
 
 		Module_impl::Module_impl(PCWSTR name, const Target_t & tgt, Level lvl) :
-			m_name(Str::length(name) + 1, name),
+			m_name(name),
 			m_target(tgt),
 			m_lvl(lvl),
+			m_prefix(0),
 			m_wide(get_default_wideness()),
 			m_color(1)
 		{
@@ -133,12 +139,11 @@ namespace Base {
 		void Module_impl::out(PCSTR file, int line, PCSTR func, Level lvl, PCWSTR format, ...) const
 		{
 			if (lvl >= m_lvl) {
+				ustring prefix = create_prefix(lvl);
+				add_place(prefix, file, line, func);
 				va_list args;
 				va_start(args, format);
-				ustring tmp = format_str(fmtStrings[(int)m_wide].additional, LogLevelNames[(int)lvl], m_name.data(), ::GetCurrentThreadId());
-				tmp += format_str(fmtStrings[(int)m_wide].place, file, line, func);
-				;
-				out_args(lvl, tmp, format, args);
+				out_args(lvl, prefix, format, args);
 				va_end(args);
 			}
 		}
@@ -148,10 +153,38 @@ namespace Base {
 			if (lvl >= m_lvl) {
 				va_list args;
 				va_start(args, format);
-				ustring tmp = format_str(fmtStrings[(int)m_wide].additional, LogLevelNames[(int)lvl], m_name.data(), ::GetCurrentThreadId());
-				out_args(lvl, tmp, format, args);
+				out_args(lvl, create_prefix(lvl), format, args);
 				va_end(args);
 			}
+		}
+
+		ustring Module_impl::create_prefix(Level lvl) const
+		{
+			ustring prefix;
+			if (m_prefix & Prefix::Level) {
+				prefix += format_str(L"%s ", LogLevelNames[(int)lvl]);
+			}
+//			if (m_prefix & Prefix::Time) {
+//				prefix += format_str(L"%s ", LogLevelNames[(int)lvl]);
+//			}
+			if (m_prefix & Prefix::Module) {
+				prefix += format_str(L"{%s} ", m_name.data());
+			}
+			if (m_prefix & Prefix::Thread) {
+				prefix += format_str(L"%5u ", ::GetCurrentThreadId());
+			}
+			return prefix;
+		}
+
+		ustring & Module_impl::add_place(ustring & prefix, PCSTR file, int line, PCSTR func) const
+		{
+			if (m_prefix & Prefix::Place) {
+				prefix += format_str(L"%14.14S:%-4d ", file, line);
+			}
+			if (m_prefix & Prefix::Function) {
+				prefix += format_str(L"[%S] ", func);
+			}
+			return prefix;
 		}
 
 		void Module_impl::out_args(Level lvl, const ustring & prefix, PCWSTR format, va_list args) const
@@ -230,6 +263,11 @@ namespace Base {
 				return defLevel;
 			}
 
+			static size_t get_default_prefix()
+			{
+				return defPrefix;
+			}
+
 			static Wideness get_default_wideness()
 			{
 				return defWideness;
@@ -255,6 +293,11 @@ namespace Base {
 				defLevel = level;
 			}
 
+			static void set_default_prefix(size_t prefix)
+			{
+				defPrefix = prefix;
+			}
+
 			static void set_default_wideness(Wideness wideness)
 			{
 				defWideness = wideness;
@@ -272,6 +315,7 @@ namespace Base {
 			Base::auto_destroy<Lock::SyncUnit_i*> m_sync;
 
 			static Level defLevel;
+			static size_t defPrefix;
 			static Wideness defWideness;
 			static Target_t defTarget;
 			static Module_i * defModule;
@@ -281,6 +325,7 @@ namespace Base {
 		};
 
 		Level Logger_impl::defLevel = Level::Warn;
+		size_t Logger_impl::defPrefix = Prefix::Level | Prefix::Time | Prefix::Function;
 		Wideness Logger_impl::defWideness = Wideness::Medium;
 		Target_t Logger_impl::defTarget = get_TargetToNull();
 		Module_i * Logger_impl::defModule = nullptr;
@@ -342,6 +387,16 @@ namespace Base {
 			Logger_impl::set_default_level(lvl);
 		}
 
+		size_t get_default_prefix()
+		{
+			return Logger_impl::get_default_prefix();
+		}
+
+		void set_default_prefix(size_t prefix)
+		{
+			Logger_impl::set_default_prefix(prefix);
+		}
+
 		Wideness get_default_wideness()
 		{
 			return Logger_impl::get_default_wideness();
@@ -367,6 +422,13 @@ namespace Base {
 			get_instance();
 			return Logger_impl::get_default_module();
 		}
+
+//		Module_i * get_module(PCSTR name, const Target_t & target, Level lvl)
+//		{
+//			wchar_t buf[MAX_PATH_LEN];
+//			Str::convert(buf, lengthof(buf), name, CP_ACP);
+//			return get_module(buf, target, lvl);
+//		}
 
 		Module_i * get_module(PCWSTR name, const Target_t & target, Level lvl)
 		{

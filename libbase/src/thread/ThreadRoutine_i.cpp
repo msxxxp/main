@@ -3,9 +3,10 @@
 #include <libbase/logger.hpp>
 
 namespace Base {
-	inline Base::Logger::Module_i * get_logger_module()
+	static Base::Logger::Module_i * get_logger_module()
 	{
-		return Base::Logger::get_module(L"threads");
+		auto static module = Base::Logger::get_module(L"threads");
+		return module;
 	}
 
 	DWORD WINAPI ThreadRoutine_i::run_thread(void * routine)

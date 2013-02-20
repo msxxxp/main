@@ -81,6 +81,8 @@ namespace Base {
 
 			virtual void set_target(const Target_t & target) = 0;
 
+			virtual void set_enabled(bool enabled) = 0;
+
 			virtual void out(PCSTR file, int line, PCSTR func, Level lvl, PCWSTR format, ...) const = 0;
 
 			virtual void out(Level lvl, PCWSTR format, ...) const = 0;
@@ -105,7 +107,6 @@ namespace Base {
 		};
 
 #ifdef NO_LOGGER
-
 		inline void set_module_target(const Target_t & /*target*/, Module_i * /*module*/= nullptr)
 		{
 		}
@@ -122,8 +123,10 @@ namespace Base {
 		{
 		}
 
+		inline void set_module_enabled(bool /*enabled*/, Module_i * /*module*/ = nullptr)
+		{
+		}
 #else
-
 		Logger_i & get_instance();
 
 		void set_module_target(const Target_t & target, Module_i * module = get_default_module());
@@ -134,6 +137,7 @@ namespace Base {
 
 		void set_module_color_mode(bool mode, Module_i * module = get_default_module());
 
+		void set_module_enabled(bool enabled, Module_i * module = get_default_module());
 #endif
 
 		///================================================================================ Target_i

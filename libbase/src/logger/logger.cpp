@@ -54,6 +54,8 @@ namespace Base {
 
 			void set_target(const Target_t & target) override;
 
+			void set_enabled(bool enabled) override;
+
 			void out(PCSTR file, int line, PCSTR func, Level lvl, PCWSTR format, ...) const override;
 
 			void out(Level lvl, PCWSTR format, ...) const override;
@@ -70,6 +72,7 @@ namespace Base {
 			Level m_lvl;
 			size_t m_prefix;
 			uint32_t m_color:1;
+			uint32_t m_enabled:1;
 		};
 
 		Module_impl::Module_impl(PCWSTR name, const Target_t & tgt, Level lvl) :
@@ -77,7 +80,8 @@ namespace Base {
 			m_target(tgt),
 			m_lvl(lvl),
 			m_prefix(get_default_prefix()),
-			m_color(1)
+			m_color(1),
+			m_enabled(1)
 		{
 		}
 
@@ -125,9 +129,14 @@ namespace Base {
 			m_target = target;
 		}
 
+		void Module_impl::set_enabled(bool enabled)
+		{
+			m_enabled = enabled;
+		}
+
 		void Module_impl::out(PCSTR file, int line, PCSTR func, Level lvl, PCWSTR format, ...) const
 		{
-			if (lvl >= m_lvl) {
+			if (m_enabled && lvl >= m_lvl) {
 				ustring prefix = create_prefix(lvl);
 				add_place(prefix, file, line, func);
 				va_list args;
@@ -139,7 +148,7 @@ namespace Base {
 
 		void Module_impl::out(Level lvl, PCWSTR format, ...) const
 		{
-			if (lvl >= m_lvl) {
+			if (m_enabled && lvl >= m_lvl) {
 				va_list args;
 				va_start(args, format);
 				out_args(lvl, create_prefix(lvl), format, args);
@@ -413,9 +422,9 @@ namespace Base {
 			module->set_target(target);
 		}
 
-		void set_module_color_mode(bool mode, Module_i * module)
+		void set_module_enabled(bool enabled, Module_i * module)
 		{
-			module->set_color_mode(mode);
+			module->set_enabled(enabled);
 		}
 
 		///================================================================================ Target_i

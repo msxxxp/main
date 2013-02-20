@@ -16,7 +16,7 @@ namespace {
 		set_default_prefix(Prefix::Medium | Prefix::Place | Prefix::Module);
 		set_default_target(get_TargetToConsole());
 
-//		set_module_target(get_TargetToNull(), get_module(L"threads"));
+//		set_module_enabled(false, get_module(L"threads"));
 	}
 }
 

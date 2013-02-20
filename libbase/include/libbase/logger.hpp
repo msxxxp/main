@@ -24,13 +24,6 @@ namespace Base {
 			Fatal,
 		};
 
-		enum class Wideness : ssize_t {
-			Full,
-			Module,
-			Medium,
-			Short,
-		};
-
 		namespace Prefix {
 			const static size_t Function = 0x0001;
 			const static size_t Level    = 0x0002;
@@ -38,6 +31,10 @@ namespace Base {
 			const static size_t Place    = 0x0008;
 			const static size_t Thread   = 0x0010;
 			const static size_t Time     = 0x0020;
+
+			const static size_t Lite     = Level | Time;
+			const static size_t Medium   = Level | Time | Function;
+			const static size_t Full     = Level | Time | Function | Module | Thread | Place;
 		};
 
 		Level get_default_level();
@@ -47,10 +44,6 @@ namespace Base {
 		size_t get_default_prefix();
 
 		void set_default_prefix(size_t prefix);
-
-		Wideness get_default_wideness();
-
-		void set_default_wideness(Wideness wdns);
 
 		Target_t get_default_target();
 
@@ -75,13 +68,13 @@ namespace Base {
 
 			virtual Level get_level() const = 0;
 
-			virtual Wideness get_wideness() const = 0;
+			virtual size_t get_prefix() const = 0;
 
 			virtual bool is_color_mode() const = 0;
 
 			virtual void set_level(Level lvl) = 0;
 
-			virtual void set_wideness(Wideness wide) = 0;
+			virtual void set_prefix(size_t prefix) = 0;
 
 			virtual void set_color_mode(bool mode) = 0;
 
@@ -120,7 +113,7 @@ namespace Base {
 		{
 		}
 
-		inline void set_module_wideness(Wideness /*wide*/, Module_i * /*module*/= nullptr)
+		inline void set_module_prefix(size_t /*prefix*/, Module_i * /*module*/= nullptr)
 		{
 		}
 
@@ -136,7 +129,7 @@ namespace Base {
 
 		void set_module_level(Level lvl, Module_i * module = get_default_module());
 
-		void set_module_wideness(Wideness wide, Module_i * module = get_default_module());
+		void set_module_prefix(size_t prefix, Module_i * module = get_default_module());
 
 		void set_module_color_mode(bool mode, Module_i * module = get_default_module());
 

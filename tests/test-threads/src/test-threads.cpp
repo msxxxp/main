@@ -13,7 +13,7 @@ namespace {
 	{
 		using namespace Base::Logger;
 		set_default_level(Level::Trace);
-		set_default_wideness(Wideness::Full);
+//		set_default_prefix(Prefix::Level);
 		set_default_target(get_TargetToConsole());
 
 //		set_module_target(get_TargetToNull(), get_module(L"threads"));

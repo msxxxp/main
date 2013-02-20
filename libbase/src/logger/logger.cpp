@@ -27,13 +27,6 @@ namespace Base {
 			PCWSTR const additional;
 		};
 
-		const FmtString fmtStrings[(int)Wideness::Short + 1] = {
-			{L"%14.14S:%-4d [%S] ", L"%s{%s}:%5u "},
-			{L"%14.14S:%-4d [%S] ", L"%s{%s} "},
-			{L"%14.14S:%-4d [%S] ", L"%s"},
-			{L"%14.14S:%-4d [%S] ", L""},
-		};
-
 		///================================================================================ Module_i
 		Module_i::~Module_i()
 		{
@@ -49,13 +42,13 @@ namespace Base {
 
 			Level get_level() const override;
 
-			Wideness get_wideness() const override;
+			size_t get_prefix() const override;
 
 			bool is_color_mode() const override;
 
 			void set_level(Level lvl) override;
 
-			void set_wideness(Wideness mode) override;
+			void set_prefix(size_t prefix) override;
 
 			void set_color_mode(bool mode) override;
 
@@ -76,7 +69,6 @@ namespace Base {
 			shared_ptr<Target_i> m_target;
 			Level m_lvl;
 			size_t m_prefix;
-			Wideness m_wide;
 			uint32_t m_color:1;
 
 			friend class Logger_impl;
@@ -86,8 +78,7 @@ namespace Base {
 			m_name(name),
 			m_target(tgt),
 			m_lvl(lvl),
-			m_prefix(0),
-			m_wide(get_default_wideness()),
+			m_prefix(get_default_prefix()),
 			m_color(1)
 		{
 		}
@@ -106,9 +97,9 @@ namespace Base {
 			return m_lvl;
 		}
 
-		Wideness Module_impl::get_wideness() const
+		size_t Module_impl::get_prefix() const
 		{
-			return m_wide;
+			return m_prefix;
 		}
 
 		bool Module_impl::is_color_mode() const
@@ -121,9 +112,9 @@ namespace Base {
 			m_lvl = lvl;
 		}
 
-		void Module_impl::set_wideness(Wideness wide)
+		void Module_impl::set_prefix(size_t prefix)
 		{
-			m_wide = wide;
+			m_prefix = prefix;
 		}
 
 		void Module_impl::set_color_mode(bool mode)
@@ -268,11 +259,6 @@ namespace Base {
 				return defPrefix;
 			}
 
-			static Wideness get_default_wideness()
-			{
-				return defWideness;
-			}
-
 			static Target_t get_default_target()
 			{
 				return defTarget;
@@ -298,11 +284,6 @@ namespace Base {
 				defPrefix = prefix;
 			}
 
-			static void set_default_wideness(Wideness wideness)
-			{
-				defWideness = wideness;
-			}
-
 			static void set_default_target(Target_t target)
 			{
 				defTarget = target;
@@ -316,7 +297,6 @@ namespace Base {
 
 			static Level defLevel;
 			static size_t defPrefix;
-			static Wideness defWideness;
 			static Target_t defTarget;
 			static Module_i * defModule;
 			static PCWSTR const defModuleName;
@@ -325,8 +305,7 @@ namespace Base {
 		};
 
 		Level Logger_impl::defLevel = Level::Warn;
-		size_t Logger_impl::defPrefix = Prefix::Level | Prefix::Time | Prefix::Function;
-		Wideness Logger_impl::defWideness = Wideness::Medium;
+		size_t Logger_impl::defPrefix = Prefix::Medium;
 		Target_t Logger_impl::defTarget = get_TargetToNull();
 		Module_i * Logger_impl::defModule = nullptr;
 		PCWSTR const Logger_impl::defModuleName = L"default";
@@ -397,16 +376,6 @@ namespace Base {
 			Logger_impl::set_default_prefix(prefix);
 		}
 
-		Wideness get_default_wideness()
-		{
-			return Logger_impl::get_default_wideness();
-		}
-
-		void set_default_wideness(Wideness wdns)
-		{
-			Logger_impl::set_default_wideness(wdns);
-		}
-
 		Target_t get_default_target()
 		{
 			return Logger_impl::get_default_target();
@@ -446,9 +415,9 @@ namespace Base {
 			module->set_level(lvl);
 		}
 
-		void set_module_wideness(Wideness mode, Module_i * module)
+		void set_module_prefix(size_t prefix, Module_i * module)
 		{
-			module->set_wideness(mode);
+			module->set_prefix(prefix);
 		}
 
 		void set_module_target(const Target_t & target, Module_i * module)

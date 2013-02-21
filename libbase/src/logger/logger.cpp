@@ -1,7 +1,7 @@
 ﻿#include <libbase/logger.hpp>
+#include "logger_pvt.hpp"
 
 #include <libbase/lock.hpp>
-#include <libbase/shared_ptr.hpp>
 #include <libbase/str.hpp>
 
 #include <vector>

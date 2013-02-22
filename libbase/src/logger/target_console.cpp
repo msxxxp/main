@@ -61,7 +61,8 @@ namespace Base {
 		///=========================================================================================
 		Target_t get_TargetToConsole()
 		{
-			return Target_t(new LogToConsole());
+			static Target_t instance(new LogToConsole());
+			return instance;
 		}
 
 	}

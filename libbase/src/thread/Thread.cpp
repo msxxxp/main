@@ -69,7 +69,6 @@ namespace Base {
 			::CloseHandle(m_handle);
 			LogNoise(L"id: %u\n", m_id);
 		}
-
 	}
 
 	Thread::Thread(ThreadRoutine_i * routine):
@@ -188,7 +187,7 @@ namespace Base {
 			case Thread::Priority_t::TIME_CRITICAL:
 				return L"Time critical";
 		}
-		return L"Unknown";
+		return L"unknown";
 	}
 
 	PCWSTR to_str(Thread::IoPriority_t prio)
@@ -205,6 +204,6 @@ namespace Base {
 			case Thread::IoPriority_t::CRITICAL:
 				return L"Critical";
 		}
-		return L"Unknown";
+		return L"unknown";
 	}
 }

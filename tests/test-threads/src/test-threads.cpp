@@ -2,6 +2,7 @@
 #include <libbase/logger.hpp>
 #include <libbase/messaging.hpp>
 #include <libbase/thread.hpp>
+#include <libbase/ThreadPool.hpp>
 
 #include <stdio.h>
 #include <functional>
@@ -33,11 +34,12 @@ struct Routine: public Base::ThreadRoutine_i
 		LogTrace();
 		Base::Message message;
 		m_queue.get_message(message, 5000);
+		LogTrace();
 		return m_num;
 	}
 
-private:
 	static Base::Queue m_queue;
+private:
 
 	ssize_t m_num;
 };
@@ -51,9 +53,9 @@ int main()
 
 	Routine routine1(100);
 	Routine routine2(200);
-	std::vector<Base::Thread> threads;
-	threads.emplace_back(Base::Thread(&routine1));
-	threads.emplace_back(Base::Thread(&routine2));
+	Base::ThreadPool threads;
+	threads.emplace_back(&routine1);
+	threads.emplace_back(&routine2);
 
 //	Sleep(5000);
 	threads[0].set_io_priority(Base::Thread::IoPriority_t::LOW);
@@ -63,12 +65,14 @@ int main()
 	threads[0].set_priority(Base::Thread::Priority_t::TIME_CRITICAL);
 	threads[1].set_priority(Base::Thread::Priority_t::ABOVE_NORMAL);
 
+	Base::Message message(1, 2, 3, nullptr);
+	Routine::m_queue.put_message(message);
 	threads[0].resume();
 	threads[1].resume();
-	threads[0].wait();
-	threads[1].wait();
+	threads.wait_all();
 
 	LogInfo(L"threads[0] exited: %d\n", threads[0].get_exitcode());
 	LogInfo(L"threads[1] exited: %d\n", threads[1].get_exitcode());
+	LogTrace();
 	return 0;
 }

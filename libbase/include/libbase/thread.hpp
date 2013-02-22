@@ -4,7 +4,6 @@
 #include <libbase/std.hpp>
 #include <libbase/uncopyable.hpp>
 #include <libbase/thread/ThreadRoutine_i.hpp>
-#include <libbase/thread/ThreadPool.hpp>
 
 namespace Base {
 

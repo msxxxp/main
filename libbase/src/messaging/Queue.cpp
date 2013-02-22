@@ -72,15 +72,15 @@ namespace Base {
 
 	void Queue::put_message(const Message & message)
 	{
-		LogNoise(L"Message(type: %Id, code: %Id, param: %Id, data: %p)\n", message.get_type(), message.get_code(), message.get_param(), message.get_data());
+		LogNoise(L"Queue: %p Message(type: %Id, code: %Id, param: %Id, data: %p)\n", m_impl, message.get_type(), message.get_code(), message.get_param(), message.get_data());
 		return m_impl->post_message(message);
 	}
 
 	WaitResult_t Queue::get_message(Message & message, Timeout_t timeout_msec)
 	{
 		auto ret = m_impl->get_message(message, timeout_msec);
-		LogNoiseIf(ret != WaitResult_t::SUCCESS, L"ret: '%s'\n", to_str(ret));
-		LogNoiseIf(ret == WaitResult_t::SUCCESS, L"ret: '%s' Message(type: %Id, code: %Id, param: %Id, data: %p)\n", to_str(ret), message.get_type(), message.get_code(), message.get_param(), message.get_data());
+		LogNoiseIf(ret != WaitResult_t::SUCCESS, L"Queue: %p ret: '%s'\n", m_impl, to_str(ret));
+		LogNoiseIf(ret == WaitResult_t::SUCCESS, L"Queue: %p ret: '%s' Message(type: %Id, code: %Id, param: %Id, data: %p)\n", m_impl, to_str(ret), message.get_type(), message.get_code(), message.get_param(), message.get_data());
 		return ret;
 	}
 

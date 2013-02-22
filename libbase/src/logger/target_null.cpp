@@ -25,7 +25,8 @@ namespace Base {
 
 		Target_t get_TargetToNull()
 		{
-			return Target_t(new LogToNull());
+			static Target_t instance(new LogToNull());
+			return instance;
 		}
 
 	}

@@ -138,7 +138,22 @@ namespace Base {
 		void Unsubscribe(const Queue * queue);
 
 		void SendRound(const Message & message);
-	};
+
+		struct Subscriber: private Queue {
+			Subscriber(Message::type_t type_mask, Message::code_t code_mask, filter_t filter = nullptr):
+				m_id(Subscribe(this, type_mask, code_mask, filter))
+			{
+			}
+
+			~Subscriber()
+			{
+				Unsubscribe(this);
+			}
+
+		private:
+			SubscribtionId m_id;
+		};
+};
 
 }
 

@@ -62,7 +62,7 @@ namespace Base {
 
 		void put_message(const Message & message);
 
-		bool get_message(Message & message, Timeout_t timeout_msec = WAIT_FOREVER);
+		WaitResult_t get_message(Message & message, Timeout_t timeout_msec = WAIT_FOREVER);
 
 	private:
 		struct Queue_impl;

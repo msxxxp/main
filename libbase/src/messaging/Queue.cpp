@@ -16,42 +16,39 @@ namespace Base {
 	struct Queue::Queue_impl: private Lock::CriticalSection, private Lock::Semaphore, private std::deque<Message> {
 		void post_message(value_type const& message);
 
-		bool get_message(value_type & message, size_t timeout_msec);
+		WaitResult_t get_message(value_type & message, size_t timeout_msec);
 	};
 
 	void Queue::Queue_impl::post_message(const value_type & message)
 	{
-		LogTrace();
 		CriticalSection::lock();
 		emplace_back(message);
 		CriticalSection::release();
 		Semaphore::release(1);
 	}
 
-	bool Queue::Queue_impl::get_message(value_type & message, size_t timeout_msec)
+	WaitResult_t Queue::Queue_impl::get_message(value_type & message, size_t timeout_msec)
 	{
-		LogTrace();
-		bool ret = false;
-		if (Semaphore::wait(timeout_msec) == WaitResult_t::SUCCESS) {
+		auto waitResult = Semaphore::wait(timeout_msec);
+		if (waitResult == WaitResult_t::SUCCESS) {
 			CriticalSection::lock();
 			message = front();
 			pop_front();
 			CriticalSection::release();
-			ret = true;
 		}
-		return ret;
+		return waitResult;
 	}
 
 	Queue::~Queue()
 	{
 		delete m_impl;
-		LogTrace();
+//		LogTrace();
 	}
 
 	Queue::Queue():
 		m_impl(new Queue_impl)
 	{
-		LogTrace();
+//		LogTrace();
 	}
 
 	Queue::Queue(Queue && right):
@@ -75,14 +72,16 @@ namespace Base {
 
 	void Queue::put_message(const Message & message)
 	{
-		LogTrace();
+		LogNoise(L"Message(type: %Id, code: %Id, param: %Id, data: %p)\n", message.get_type(), message.get_code(), message.get_param(), message.get_data());
 		return m_impl->post_message(message);
 	}
 
-	bool Queue::get_message(Message & message, Timeout_t timeout_msec)
+	WaitResult_t Queue::get_message(Message & message, Timeout_t timeout_msec)
 	{
-		LogTrace();
-		return m_impl->get_message(message, timeout_msec);
+		auto ret = m_impl->get_message(message, timeout_msec);
+		LogNoiseIf(ret != WaitResult_t::SUCCESS, L"ret: '%s'\n", to_str(ret));
+		LogNoiseIf(ret == WaitResult_t::SUCCESS, L"ret: '%s' Message(type: %Id, code: %Id, param: %Id, data: %p)\n", to_str(ret), message.get_type(), message.get_code(), message.get_param(), message.get_data());
+		return ret;
 	}
 
 }

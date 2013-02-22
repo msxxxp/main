@@ -170,15 +170,30 @@ namespace Base {
 
 		Module_i * get_module(PCWSTR name, const Target_t & target = get_default_target(), Level lvl = get_default_level());
 
-		void set_module_target(const Target_t & target, Module_i * module = get_default_module());
+		inline void set_module_target(const Target_t & target, Module_i * module = get_default_module())
+		{
+			module->set_target(target);
+		}
 
-		void set_module_level(Level lvl, Module_i * module = get_default_module());
+		inline void set_module_level(Level lvl, Module_i * module = get_default_module())
+		{
+			module->set_level(lvl);
+		}
 
-		void set_module_prefix(size_t prefix, Module_i * module = get_default_module());
+		inline void set_module_prefix(size_t prefix, Module_i * module = get_default_module())
+		{
+			module->set_prefix(prefix);
+		}
 
-		void set_module_color_mode(bool mode, Module_i * module = get_default_module());
+		inline void set_module_color_mode(bool mode, Module_i * module = get_default_module())
+		{
+			module->set_color_mode(mode);
+		}
 
-		void set_module_enabled(bool enabled, Module_i * module = get_default_module());
+		inline void set_module_enabled(bool enabled, Module_i * module = get_default_module())
+		{
+			module->set_enabled(enabled);
+		}
 
 		Target_t get_TargetToNull();
 
@@ -201,6 +216,7 @@ inline Base::Logger::Module_i * get_logger_module()
 #	define LogTrace()
 #	define LogTraceIf(condition) (condition)
 #	define LogNoise(format, args ...)
+#	define LogNoiseIf(condition, format, args ...)
 #	define LogDebug(format, args ...)
 #	define LogDebugIf(condition, format, args ...) (condition)
 #	define LogInfo(format, args ...)
@@ -216,6 +232,7 @@ inline Base::Logger::Module_i * get_logger_module()
 #		define LogTrace()
 #		define LogTraceIf(condition) (condition)
 #		define LogNoise(format, args ...)
+#		define LogNoiseIf(condition) (condition)
 #		define LogDebug(format, args ...)
 #		define LogDebugIf(condition, format, args ...) (condition)
 #		define LogInfo(format, args ...)	get_logger_module()->out(Base::Logger::Level::Info, format, ##args)
@@ -230,8 +247,9 @@ inline Base::Logger::Module_i * get_logger_module()
 #       define LogTrace()                   get_logger_module()->out(THIS_PLACE, Base::Logger::Level::Trace, L"\n")
 #       define LogTraceIf(condition)        if (condition) get_logger_module()->out(THIS_PLACE, Base::Logger::Level::Trace, L"\n")
 #       define LogNoise(format, args ...)	get_logger_module()->out(THIS_PLACE, Base::Logger::Level::Trace, format, ##args)
+#       define LogNoiseIf(condition, format, args ...) if (condition) get_logger_module()->out(THIS_PLACE, Base::Logger::Level::Trace, format, ##args)
 #       define LogDebug(format, args ...)	get_logger_module()->out(THIS_PLACE, Base::Logger::Level::Debug, format, ##args)
-#       define LogDebugIf(condition, format, args ...)	if (condition) get_logger_module()->out(THIS_PLACE, Base::Logger::Level::Debug, format, ##args)
+#       define LogDebugIf(condition, format, args ...) if (condition) get_logger_module()->out(THIS_PLACE, Base::Logger::Level::Debug, format, ##args)
 #		define LogInfo(format, args ...)	get_logger_module()->out(THIS_PLACE, Base::Logger::Level::Info, format, ##args)
 #		define LogReport(format, args ...)	get_logger_module()->out(THIS_PLACE, Base::Logger::Level::Report, format, ##args)
 #		define LogAtten(format, args ...)	get_logger_module()->out(THIS_PLACE, Base::Logger::Level::Atten, format, ##args)

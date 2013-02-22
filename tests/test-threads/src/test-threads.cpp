@@ -13,7 +13,7 @@ namespace {
 	{
 		using namespace Base::Logger;
 		set_default_level(Level::Trace);
-		set_default_prefix(Prefix::Medium | Prefix::Place | Prefix::Module);
+		set_default_prefix(Prefix::Medium | Prefix::Place | Prefix::Module | Prefix::Thread);
 		set_default_target(get_TargetToConsole());
 
 //		set_module_enabled(false, get_module(L"threads"));
@@ -31,7 +31,8 @@ struct Routine: public Base::ThreadRoutine_i
 	size_t run(void *) override
 	{
 		LogTrace();
-		Sleep(10000);
+		Base::Message message;
+		m_queue.get_message(message, 5000);
 		return m_num;
 	}
 
@@ -41,6 +42,8 @@ private:
 	ssize_t m_num;
 };
 
+Base::Queue Routine::m_queue;
+
 int main()
 {
 	setup_logger();
@@ -48,16 +51,15 @@ int main()
 
 	Routine routine1(100);
 	Routine routine2(200);
-
 	std::vector<Base::Thread> threads;
 	threads.emplace_back(Base::Thread(&routine1));
 	threads.emplace_back(Base::Thread(&routine2));
 
-	Sleep(5000);
+//	Sleep(5000);
 	threads[0].set_io_priority(Base::Thread::IoPriority_t::LOW);
 	threads[1].set_io_priority(Base::Thread::IoPriority_t::HIGH);
 
-	Sleep(5000);
+//	Sleep(5000);
 	threads[0].set_priority(Base::Thread::Priority_t::TIME_CRITICAL);
 	threads[1].set_priority(Base::Thread::Priority_t::ABOVE_NORMAL);
 

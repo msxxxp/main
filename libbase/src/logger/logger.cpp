@@ -91,7 +91,7 @@ namespace Base {
 
 		PCWSTR Module_impl::get_name() const
 		{
-			return m_name.data();
+			return m_name.c_str();
 		}
 
 		Level Module_impl::get_level() const
@@ -173,7 +173,7 @@ namespace Base {
 				prefix += format_str(L"%s ", LogLevelNames[(int)lvl]);
 			}
 			if (m_prefix & Prefix::Module) {
-				prefix += format_str(L"{%s} ", m_name.data());
+				prefix += format_str(L"{%s} ", m_name.c_str());
 			}
 			if (m_prefix & Prefix::Thread) {
 				prefix += format_str(L"%5u ", ::GetCurrentThreadId());
@@ -318,7 +318,6 @@ namespace Base {
 			auto lk(m_sync->lock_scope());
 			while (!m_modules.empty()) {
 				free_module_(m_modules.back());
-				m_modules.pop_back();
 			}
 		}
 
@@ -407,25 +406,6 @@ namespace Base {
 			return ret;
 		}
 
-		void set_module_level(Level lvl, Module_i * module)
-		{
-			module->set_level(lvl);
-		}
-
-		void set_module_prefix(size_t prefix, Module_i * module)
-		{
-			module->set_prefix(prefix);
-		}
-
-		void set_module_target(const Target_t & target, Module_i * module)
-		{
-			module->set_target(target);
-		}
-
-		void set_module_enabled(bool enabled, Module_i * module)
-		{
-			module->set_enabled(enabled);
-		}
 
 		///================================================================================ Target_i
 		Target_i::~Target_i()

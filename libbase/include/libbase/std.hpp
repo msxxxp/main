@@ -112,6 +112,8 @@ namespace Base {
 		ABANDONED = WAIT_ABANDONED,
 	};
 
+	PCWSTR to_str(WaitResult_t waitResult);
+
 	typedef ssize_t Timeout_t;
 
 	static const Timeout_t WAIT_FOREVER = INFINITE;

@@ -20,13 +20,13 @@ namespace Base {
 		return in.size();
 	}
 
-	inline astring as_str_a(int64_t num, int base = 10) {
+	inline astring to_str_a(int64_t num, int base = 10) {
 		CHAR buf[64];
 		::_i64toa(num, buf, base);
 		return astring(buf);
 	}
 
-	inline ustring as_str(int64_t num, int base = 10) {
+	inline ustring to_str(int64_t num, int base = 10) {
 		wchar_t buf[64];
 		::_i64tow(num, buf, base);
 		return ustring(buf);
@@ -171,13 +171,13 @@ namespace Base {
 	//	return (last1 == pos) ? nullptr : &(*pos);
 	//}
 
-	ustring as_str(const PBYTE buf, size_t size);
+	ustring to_str(const PBYTE buf, size_t size);
 
-	ustring as_str(auto_array<BYTE> buf);
+	ustring to_str(auto_array<BYTE> buf);
 
-	auto_array<BYTE> as_hash(const ustring & str);
+	auto_array<BYTE> to_hash(const ustring & str);
 
-	void as_hash(const ustring & str, PBYTE & buf, size_t & size);
+	void to_hash(const ustring & str, PBYTE & buf, size_t & size);
 
 	astring Hash2Str(const PBYTE buf, size_t size);
 	astring Hash2StrNum(const PBYTE buf, size_t size);
@@ -187,8 +187,8 @@ namespace Base {
 	UINT IsUTF8(const PVOID buf, size_t size);
 	bool GetCP(HANDLE hFile, UINT & cp, bool bUseHeuristics = false);
 
-	ustring as_str(const SYSTEMTIME & in, bool tolocal = true);
-	ustring as_str(const FILETIME & in);
+	ustring to_str(const SYSTEMTIME & in, bool tolocal = true);
+	ustring to_str(const FILETIME & in);
 
 	ustring copy_after_last(const ustring & in, const ustring & delim);
 

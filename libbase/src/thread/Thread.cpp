@@ -110,7 +110,7 @@ namespace Base {
 
 	bool Thread::set_priority(Thread::Priority_t prio)
 	{
-		LogNoise(L"id: %u, prio: %s\n", m_id, as_str(prio));
+		LogNoise(L"id: %u, prio: %s\n", m_id, to_str(prio));
 		bool ret = ::SetThreadPriority(m_handle, (int)prio);
 		LogErrorIf(!ret, L"%s\n", ErrAsStr().c_str());
 		return ret;
@@ -118,7 +118,7 @@ namespace Base {
 
 	bool Thread::set_io_priority(Thread::IoPriority_t prio)
 	{
-		LogNoise(L"id: %u, prio: %s\n", m_id, as_str(prio));
+		LogNoise(L"id: %u, prio: %s\n", m_id, to_str(prio));
 		ULONG p = (ULONG)prio;
 		NTSTATUS ret = NtSetInformationThread(m_handle, ThreadIoPriority, &p, sizeof(p));
 		LogErrorIf(ret, L"%s\n", NTStatusAsStr(ret).c_str());
@@ -170,7 +170,7 @@ namespace Base {
 		return (WaitResult_t)::WaitForSingleObjectEx(m_handle, timeout, true);
 	}
 
-	PCWSTR as_str(Thread::Priority_t prio)
+	PCWSTR to_str(Thread::Priority_t prio)
 	{
 		switch (prio) {
 			case Thread::Priority_t::IDLE:
@@ -191,7 +191,7 @@ namespace Base {
 		return L"Unknown";
 	}
 
-	PCWSTR as_str(Thread::IoPriority_t prio)
+	PCWSTR to_str(Thread::IoPriority_t prio)
 	{
 		switch (prio) {
 			case Thread::IoPriority_t::VERY_LOW:

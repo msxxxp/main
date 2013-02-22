@@ -11,7 +11,7 @@
 namespace Base {
 	namespace Logger {
 
-		PCWSTR const LogLevelNames[(int)Level::Fatal + 1] = {
+		PCWSTR const LogLevelNames[(int)Level::Logger + 1] = {
 			L"TRACE",
 			L"DEBUG",
 			L"INFO ",
@@ -20,6 +20,7 @@ namespace Base {
 			L"WARN ",
 			L"ERROR",
 			L"FATAL",
+			L"LOGGR",
 		};
 
 		struct FmtString {
@@ -83,6 +84,7 @@ namespace Base {
 			m_color(1),
 			m_enabled(1)
 		{
+//			out(Level::Logger, L"Logger module has been created\n");
 		}
 
 		Module_impl::~Module_impl()
@@ -176,7 +178,7 @@ namespace Base {
 				prefix += format_str(L"{%s} ", m_name.c_str());
 			}
 			if (m_prefix & Prefix::Thread) {
-				prefix += format_str(L"%5u ", ::GetCurrentThreadId());
+				prefix += format_str(L"<%05u> ", ::GetCurrentThreadId());
 			}
 			return prefix;
 		}
@@ -311,11 +313,17 @@ namespace Base {
 			m_sync(Lock::get_ReadWrite())
 		{
 			defModule = register_module_(defModuleName, defTarget, defLevel);
+			auto prefix = defModule->get_prefix();
+			defModule->set_prefix(Prefix::Thread | Prefix::Time | Prefix::Date);
+			defModule->out(Level::Logger, L"Logger has been created\n");
+			defModule->set_prefix(prefix);
 		}
 
 		Logger_impl::~Logger_impl()
 		{
 			auto lk(m_sync->lock_scope());
+			defModule->set_prefix(Prefix::Thread | Prefix::Time | Prefix::Date);
+			defModule->out(Level::Logger, L"Logger is being destroyed\n");
 			while (!m_modules.empty()) {
 				free_module_(m_modules.back());
 			}

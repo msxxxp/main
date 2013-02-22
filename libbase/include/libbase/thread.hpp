@@ -95,9 +95,9 @@ namespace Base {
 		id_t m_id;
 	};
 
-	PCWSTR as_str(Thread::Priority_t prio);
+	PCWSTR to_str(Thread::Priority_t prio);
 
-	PCWSTR as_str(Thread::IoPriority_t prio);
+	PCWSTR to_str(Thread::IoPriority_t prio);
 }
 
 #endif

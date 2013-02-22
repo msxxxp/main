@@ -9,7 +9,7 @@
 namespace Base {
 	namespace Logger {
 
-		WORD const LogLevelTypes[(int)Level::Fatal + 1] = {
+		WORD const LogLevelTypes[(int)Level::Logger + 1] = {
 		    EVENTLOG_SUCCESS,
 		    EVENTLOG_SUCCESS,
 		    EVENTLOG_INFORMATION_TYPE,
@@ -18,6 +18,7 @@ namespace Base {
 		    EVENTLOG_WARNING_TYPE,
 		    EVENTLOG_ERROR_TYPE,
 		    EVENTLOG_ERROR_TYPE,
+		    EVENTLOG_INFORMATION_TYPE,
 		};
 
 		struct LogToSys: public Target_i {

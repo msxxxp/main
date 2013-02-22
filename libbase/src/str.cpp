@@ -304,7 +304,7 @@ namespace Base {
 	 }
 	 */
 
-	ustring as_str(const PBYTE hash, size_t size) {
+	ustring to_str(const PBYTE hash, size_t size) {
 		wchar_t buf[(size + 1) * 2];
 		PWSTR tmp = buf;
 		for (size_t i = 0; i < size; ++i) {
@@ -314,18 +314,18 @@ namespace Base {
 		return buf;
 	}
 
-	auto_array<BYTE> as_hash(const ustring & str) {
+	auto_array<BYTE> to_hash(const ustring & str) {
 		size_t size = str.size() / 2;
 		auto_array<BYTE> ret(size);
 		for (size_t i = 0; i < size; ++i) {
 			ustring tmp = str.substr(i * 2, 2);
-			ret[i] = (BYTE)Str::as_int32(tmp.c_str(), 16);
+			ret[i] = (BYTE)Str::to_int32(tmp.c_str(), 16);
 		}
 		return ret;
 	}
 
-	void as_hash(const ustring & str, PBYTE & buf, size_t & size) {
-		auto_array<BYTE>(as_hash(str)).detach(buf, size);
+	void to_hash(const ustring & str, PBYTE & buf, size_t & size) {
+		auto_array<BYTE>(to_hash(str)).detach(buf, size);
 	}
 
 	astring Hash2Str(const PBYTE hash, size_t size) {
@@ -354,7 +354,7 @@ namespace Base {
 			if (Memory::alloc(hash, size)) {
 				for (size_t i = 0; i < size; ++i) {
 					astring tmp = str.substr(i * 2, 2);
-					((PBYTE)hash)[i] = (BYTE)Str::as_int32(tmp.c_str(), 16);
+					((PBYTE)hash)[i] = (BYTE)Str::to_int32(tmp.c_str(), 16);
 				}
 				return true;
 			}
@@ -362,7 +362,7 @@ namespace Base {
 		return false;
 	}
 
-	ustring as_str(const SYSTEMTIME & in, bool tolocal) {
+	ustring to_str(const SYSTEMTIME & in, bool tolocal) {
 		SYSTEMTIME stTime;
 		if (tolocal) {
 			::SystemTimeToTzSpecificLocalTime(nullptr, (SYSTEMTIME*)&in, &stTime);
@@ -374,10 +374,10 @@ namespace Base {
 		return buf;
 	}
 
-	ustring as_str(const FILETIME & in) {
+	ustring to_str(const FILETIME & in) {
 		SYSTEMTIME stUTC;
 		::FileTimeToSystemTime(&in, &stUTC);
-		return as_str(stUTC);
+		return to_str(stUTC);
 	}
 
 	ustring copy_after_last(const ustring & in, const ustring & delim) {
@@ -442,7 +442,7 @@ namespace Base {
 		if (pos1 > 0 && str[pos1 - 1] == L'-')
 			--pos1;
 		ustring tmp(str.substr(pos1, pos2 - pos1));
-		num = Str::as_int64(tmp.c_str(), base);
+		num = Str::to_int64(tmp.c_str(), base);
 		str.erase(0, pos2);
 		return true;
 	}

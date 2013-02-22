@@ -7,7 +7,7 @@
 namespace Base {
 	namespace Logger {
 
-		WORD LogLevelColors[(int)Level::Fatal + 1] = {
+		WORD LogLevelColors[(int)Level::Logger + 1] = {
 			0x8,
 			0x6,
 			0,
@@ -16,6 +16,7 @@ namespace Base {
 			0xE,
 			0xC,
 			0x4,
+			0,
 		};
 
 		struct LogToConsole: public Target_i, private Uncopyable {

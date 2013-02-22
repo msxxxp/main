@@ -38,33 +38,33 @@ namespace Base {
 			return Result;
 		}
 
-		static ustring as_str(Type in, size_t lim = 0)
+		static ustring to_str(Type in, size_t lim = 0)
 		{
 			// count bits from 1
 			ustring Result;
 			lim = Bits::Limit < Type > (lim);
 			for (size_t bit = 0; bit < lim; ++bit) {
 				if (Bits::check(in, bit)) {
-					Add(Result, as_str(bit + 1), L",");
+					Add(Result, to_str(bit + 1), L",");
 				}
 			}
 			return Result;
 		}
 
-		static ustring as_str_0(Type in, size_t lim = 0)
+		static ustring to_str_0(Type in, size_t lim = 0)
 		{
 			// count bits from zero
 			ustring Result;
 			lim = Bits::Limit < Type > (lim);
 			for (size_t bit = 0; bit < lim; ++bit) {
 				if (Bits::check(in, bit)) {
-					Add(Result, as_str(bit), L",");
+					Add(Result, to_str(bit), L",");
 				}
 			}
 			return Result;
 		}
 
-		static ustring as_str_bin(Type in, size_t lim = 0)
+		static ustring to_str_bin(Type in, size_t lim = 0)
 		{
 			ustring Result;
 			uintmax_t flag = (uintmax_t)1 << (Bits::Limit < Type > (lim) - 1);
@@ -75,7 +75,7 @@ namespace Base {
 			return Result;
 		}
 
-		static ustring as_str_num(Type in, size_t lim = 0)
+		static ustring to_str_num(Type in, size_t lim = 0)
 		{
 			ustring Result;
 			uintmax_t flag = (uintmax_t)1 << (Bits::Limit < Type > (lim) - 1);

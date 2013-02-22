@@ -16,6 +16,7 @@ namespace Base {
 			Warn,
 			Error,
 			Fatal,
+			Logger,
 		};
 
 		namespace Prefix {

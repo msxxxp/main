@@ -17,7 +17,7 @@ namespace Base {
 			return m_threads.size();
 		}
 
-		template< class... Args >
+		template<class... Args>
 		void emplace_back(Args&&... args)
 		{
 			m_threads.emplace_back(args...);

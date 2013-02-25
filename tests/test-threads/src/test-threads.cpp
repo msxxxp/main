@@ -23,7 +23,8 @@ namespace {
 
 struct Routine: public Base::ThreadRoutine_i
 {
-	Routine(ssize_t num):
+	Routine(Base::Queue * queue, ssize_t num):
+		m_queue(queue),
 		m_num(num)
 	{
 		LogTrace();
@@ -33,26 +34,25 @@ struct Routine: public Base::ThreadRoutine_i
 	{
 		LogTrace();
 		Base::Message message;
-		m_queue.get_message(message, 5000);
+		m_queue->get_message(message, 5000);
 		LogTrace();
 		return m_num;
 	}
 
-	static Base::Queue m_queue;
 private:
-
+	Base::Queue * m_queue;
 	ssize_t m_num;
 };
 
-Base::Queue Routine::m_queue;
 
 int main()
 {
 	setup_logger();
 	LogTrace();
 
-	Routine routine1(100);
-	Routine routine2(200);
+	Base::Queue queue;
+	Routine routine1(&queue, 100);
+	Routine routine2(&queue, 200);
 	Base::ThreadPool threads;
 	threads.emplace_back(&routine1);
 	threads.emplace_back(&routine2);
@@ -66,10 +66,12 @@ int main()
 	threads[1].set_priority(Base::Thread::Priority_t::ABOVE_NORMAL);
 
 	Base::Message message(1, 2, 3, nullptr);
-	Routine::m_queue.put_message(message);
+	queue.put_message(message);
 	threads[0].resume();
 	threads[1].resume();
-	threads.wait_all();
+	while (threads.wait_all(1000) != Base::WaitResult_t::SUCCESS)
+		;
+
 
 	LogInfo(L"threads[0] exited: %d\n", threads[0].get_exitcode());
 	LogInfo(L"threads[1] exited: %d\n", threads[1].get_exitcode());

@@ -18,7 +18,7 @@ namespace WinNet {
 
 ///==================================================================================== WinSysTimers
 WinSysTimers::WinSysTimers() {
-	Base::Memory::zero(this, sizeof(*this));
+	Memory::zero(*this);
 	typedef LONG(WINAPI * PROCNTQSI)(UINT, PVOID, ULONG, PULONG);
 
 	PROCNTQSI NtQuerySystemInformation;
@@ -48,15 +48,15 @@ ustring	WinSysTimers::UptimeAsText() {
 	size_t	us = uptime % 60;
 	ustring	Result;
 	if (ud) {
-		Result += Base::as_str(ud);
+		Result += Base::to_str(ud);
 		Result += L"d ";
 	}
 
-	Result += Base::as_str(uh);
+	Result += Base::to_str(uh);
 	Result += L":";
-	Result += Base::as_str(um);
+	Result += Base::to_str(um);
 	Result += L":";
-	Result += Base::as_str(us);
+	Result += Base::to_str(us);
 	return Result;
 }
 

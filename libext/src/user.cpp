@@ -214,9 +214,9 @@ namespace Ext {
 		const DWORD level = 1008;
 		DWORD dwFlags = get_flags(name, dom);
 		if (value)
-			Base::WinFlag::Set(dwFlags, in);
+			Base::Flags::set(dwFlags, in);
 		else
-			Base::WinFlag::UnSet(dwFlags, in);
+			Base::Flags::unset(dwFlags, in);
 		USER_INFO_1008 info;
 		info.usri1008_flags = dwFlags;
 		set_info(name, dom, level, &info);

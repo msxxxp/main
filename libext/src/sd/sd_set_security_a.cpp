@@ -20,18 +20,18 @@ namespace Ext {
 		WORD control = WinSD::get_control(sd);
 
 		PACL dacl = nullptr;
-		if (Base::WinFlag::Check(control, (WORD)SE_DACL_PRESENT)) {
+		if (Base::Flags::check(control, (WORD)SE_DACL_PRESENT)) {
 			dacl = WinSD::get_dacl(sd);
 			flag |= DACL_SECURITY_INFORMATION;
-			flag |= (Base::WinFlag::Check(control, (WORD)SE_DACL_PROTECTED)) ?
+			flag |= (Base::Flags::check(control, (WORD)SE_DACL_PROTECTED)) ?
 				PROTECTED_DACL_SECURITY_INFORMATION : UNPROTECTED_DACL_SECURITY_INFORMATION;
 		}
 
 		PACL sacl = nullptr;
-//		if (Base::WinFlag::Check(control, (WORD)SE_SACL_PRESENT)) {
+//		if (Base::Flags::check(control, (WORD)SE_SACL_PRESENT)) {
 //			sacl = WinSD::get_sacl(sd);
 //			flag |= SACL_SECURITY_INFORMATION;
-//			flag |= (Base::WinFlag::Check(control, (WORD)SE_SACL_PROTECTED)) ?
+//			flag |= (Base::Flags::check(control, (WORD)SE_SACL_PROTECTED)) ?
 //				PROTECTED_SACL_SECURITY_INFORMATION : UNPROTECTED_SACL_SECURITY_INFORMATION;
 //		}
 

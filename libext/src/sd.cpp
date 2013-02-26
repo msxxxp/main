@@ -32,11 +32,11 @@ namespace Ext {
 	}
 
 	bool WinSD::is_protected(PSECURITY_DESCRIPTOR sd) {
-		return Base::WinFlag::Check(get_control(sd), (WORD)SE_DACL_PROTECTED);
+		return Base::Flags::check(get_control(sd), (WORD)SE_DACL_PROTECTED);
 	}
 
 	bool WinSD::is_selfrelative(PSECURITY_DESCRIPTOR sd) {
-		return Base::WinFlag::Check(get_control(sd), (WORD)SE_SELF_RELATIVE);
+		return Base::Flags::check(get_control(sd), (WORD)SE_SELF_RELATIVE);
 	}
 
 	size_t WinSD::size(PSECURITY_DESCRIPTOR sd) {

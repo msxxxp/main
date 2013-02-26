@@ -57,7 +57,7 @@ namespace ODBC_base {
 ///======================================================================================= OdbcError
 struct OdbcError {
 	OdbcError(DWORD code): m_code(code) {
-		Base::Memory::zero(m_state, sizeof(m_state));
+		Memory::zero(m_state, sizeof(m_state));
 	}
 
 	OdbcError(DWORD code, SQLSMALLINT type, SQLHANDLE hndl): m_code(code) {

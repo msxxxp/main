@@ -148,7 +148,7 @@ namespace Memory {
 
 }
 
-//#ifdef NoStdNew
+#ifdef NoStdNew
 inline void * operator new(size_t size) noexcept
 {
 	return Memory::alloc<PVOID>(size, HEAP_ZERO_MEMORY);
@@ -168,7 +168,7 @@ inline void operator delete [](void * ptr) noexcept
 {
 	::operator delete(ptr);
 }
-//#endif
+#endif
 
 #include <algorithm>
 

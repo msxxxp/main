@@ -6,8 +6,8 @@ namespace Ext {
 
 	void set_dacl(PCWSTR path, PSECURITY_DESCRIPTOR sd, SE_OBJECT_TYPE type) {
 		WORD control = WinSD::get_control(sd);
-		if (Base::WinFlag::Check(control, (WORD)SE_DACL_PRESENT)) {
-			DWORD flag = (Base::WinFlag::Check(control, (WORD)SE_DACL_PROTECTED)) ?
+		if (Base::Flags::check(control, (WORD)SE_DACL_PRESENT)) {
+			DWORD flag = (Base::Flags::check(control, (WORD)SE_DACL_PROTECTED)) ?
 				PROTECTED_DACL_SECURITY_INFORMATION
 				:
 				UNPROTECTED_DACL_SECURITY_INFORMATION;

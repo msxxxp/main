@@ -59,7 +59,7 @@ namespace Ext {
 					}
 				}
 				LogInfo(L"\tAceType: %s\n", pszString);
-				LogInfo(L"\tACE Mask: %s\n", Base::BitMask<DWORD>::as_str_bin(pACE->Mask).c_str());
+				LogInfo(L"\tACE Mask: %s\n", Base::BitMask<DWORD>::to_str_bin(pACE->Mask).c_str());
 
 				LogInfo(L"\tACE Flags:\n", pszString);
 				lIndex2 = 7;

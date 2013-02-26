@@ -64,7 +64,7 @@ namespace Http {
 
 	ustring HttpBindIP::get_port() const {
 		sockaddr_in * tmp = (sockaddr_in*)pIpPort;
-		return Base::as_str(ntohs(tmp->sin_port));
+		return Base::to_str(ntohs(tmp->sin_port));
 	}
 
 	ustring	HttpBindIP::as_str() const {
@@ -72,7 +72,7 @@ namespace Http {
 	}
 
 	bool HttpBindIP::copy(HTTP_SERVICE_CONFIG_SSL_KEY & out) const {
-		out.pIpPort = (PSOCKADDR)Memory::alloc(sizeof(SOCKADDR));
+		out.pIpPort = Memory::alloc<PSOCKADDR>(sizeof(SOCKADDR));
 		Memory::copy(out.pIpPort, pIpPort, sizeof(*pIpPort));
 		return true;
 	}
@@ -89,7 +89,7 @@ namespace Http {
 	}
 
 	bool HttpBindIP::Assign(const ustring & ip, const ustring & port) {
-		u_short	prt = htons(Str::as_uint32(port.c_str()));
+		u_short	prt = htons(Str::to_uint32(port.c_str()));
 		if (is_valid(ip) && prt) {
 			sockaddr_in *tmp = (sockaddr_in*)pIpPort;
 			tmp->sin_port		= prt;
@@ -109,7 +109,7 @@ namespace Http {
 		Memory::zero(this, sizeof(*this));
 		PBYTE buf;
 		size_t size;
-		as_hash(hash, buf, size);
+		to_hash(hash, buf, size);
 		pSslHash = buf;
 		SslHashLength = size;
 		pSslCertStoreName = (PWSTR)L"MY";
@@ -123,13 +123,13 @@ namespace Http {
 		out.pSslCertStoreName = (PWSTR)L"MY";
 
 		out.SslHashLength = SslHashLength;
-		out.pSslHash = Memory::alloc(out.SslHashLength);
+		out.pSslHash = Memory::alloc<PVOID>(out.SslHashLength);
 		Memory::copy(out.pSslHash, pSslHash, out.SslHashLength);
 		return true;
 	}
 
 	ustring as_str(const HTTP_SERVICE_CONFIG_SSL_PARAM & m_data) {
-		return Base::as_str((PBYTE)m_data.pSslHash, m_data.SslHashLength);
+		return Base::to_str((PBYTE)m_data.pSslHash, m_data.SslHashLength);
 	}
 
 	///==================================================================================== SslQuery

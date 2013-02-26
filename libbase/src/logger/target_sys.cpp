@@ -30,9 +30,14 @@ namespace Base {
 
 			void out(PCWSTR str, size_t size) const override;
 
+			void lock() const override;
+
+			void unlock() const override;
+
 		private:
 			static void app_register(PCWSTR name, PCWSTR path);
 
+			Base::auto_destroy<Lock::SyncUnit_i*> m_sync;
 			HANDLE m_hndl;
 		};
 
@@ -41,7 +46,8 @@ namespace Base {
 			::DeregisterEventSource(m_hndl);
 		}
 
-		LogToSys::LogToSys(PCWSTR name, PCWSTR path)
+		LogToSys::LogToSys(PCWSTR name, PCWSTR path) :
+			m_sync(Lock::get_CritSection())
 		{
 			app_register(name, path);
 			m_hndl = ::RegisterEventSourceW(nullptr, name);
@@ -65,6 +71,16 @@ namespace Base {
 		void LogToSys::out(PCWSTR str, size_t /*size*/) const
 		{
 			::ReportEventW(m_hndl, LogLevelTypes[(int)get_default_level()], 0, EV_MSG_STRING, nullptr, 1, 0, &str, nullptr);
+		}
+
+		void LogToSys::lock() const
+		{
+			m_sync->lock();
+		}
+
+		void LogToSys::unlock() const
+		{
+			m_sync->release();
 		}
 
 		void LogToSys::app_register(PCWSTR name, PCWSTR path)

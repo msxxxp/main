@@ -24,9 +24,17 @@
 //#define WIN32_LEAN_AND_MEAN
 #define NOMCX
 #define NOIME
+#define NOMINMAX
 
 #include <cstdint>
 #include <windows.h>
+
+#ifdef _MSC_VER
+	typedef int WINBOOL;
+	typedef SSIZE_T ssize_t;
+#define noexcept
+#define __PRETTY_FUNCTION__ __FUNCSIG__
+#endif
 
 #ifdef NoStdNew
 inline void * operator new(size_t size) noexcept {
@@ -55,7 +63,11 @@ struct AutoSTR;
 typedef AutoSTR<char> astring;
 typedef AutoSTR<wchar_t> ustring;
 #else
+#ifdef _MSC_VER
+	#include <string>
+#else
 #include <iosfwd>
+#endif
 typedef std::string astring;
 typedef std::wstring ustring;
 #endif
@@ -141,12 +153,22 @@ namespace Base {
 
 	inline PCSTR filename_only(PCSTR path, char ch = '\\')
 	{
+#ifdef _MSC_VER
+		PCSTR tmp = strrchr((path), ch);
+		return ( tmp ? tmp : (path) - 1) + 1;
+#else
 		return (strrchr((path), ch) ? : (path) - 1) + 1;
+#endif
 	}
 
 	inline PCWSTR filename_only(PCWSTR path, wchar_t ch = PATH_SEPARATOR_C)
 	{
+#ifdef _MSC_VER
+		PCWSTR tmp = wcsrchr((path), ch);
+		return ( tmp ? tmp : (path) - 1) + 1;
+#else
 		return (wcsrchr((path), ch) ? : (path) - 1) + 1;
+#endif
 	}
 
 	///=============================================================================================

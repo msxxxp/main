@@ -61,6 +61,10 @@ namespace Base {
 
 			void out(Level lvl, PCWSTR format, ...) const override;
 
+			void lock() const override;
+
+			void unlock() const override;
+
 		private:
 			ustring create_prefix(Level lvl) const;
 
@@ -113,27 +117,37 @@ namespace Base {
 
 		void Module_impl::set_level(Level lvl)
 		{
+			lock();
 			m_lvl = lvl;
+			unlock();
 		}
 
 		void Module_impl::set_prefix(size_t prefix)
 		{
+			lock();
 			m_prefix = prefix;
+			unlock();
 		}
 
 		void Module_impl::set_color_mode(bool mode)
 		{
+			lock();
 			m_color = mode;
+			unlock();
 		}
 
 		void Module_impl::set_target(const Target_t & target)
 		{
+			lock();
 			m_target = target;
+			unlock();
 		}
 
 		void Module_impl::set_enabled(bool enabled)
 		{
+			lock();
 			m_enabled = enabled;
+			unlock();
 		}
 
 		void Module_impl::out(PCSTR file, int line, PCSTR func, Level lvl, PCWSTR format, ...) const
@@ -156,6 +170,16 @@ namespace Base {
 				out_args(lvl, create_prefix(lvl), format, args);
 				va_end(args);
 			}
+		}
+
+		void Module_impl::lock() const
+		{
+			m_target->lock();
+		}
+
+		void Module_impl::unlock() const
+		{
+			m_target->unlock();
 		}
 
 		ustring Module_impl::create_prefix(Level lvl) const
@@ -198,7 +222,9 @@ namespace Base {
 		{
 			ustring tmp(prefix);
 			tmp += format_str(format, args);
+			lock();
 			m_target->out(this, lvl, tmp.c_str(), tmp.size());
+			unlock();
 		}
 
 		struct pModule_PCWSTR_less: public std::binary_function<const Module_i *, PCWSTR, bool> {

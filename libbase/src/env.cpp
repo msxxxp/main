@@ -6,9 +6,9 @@ namespace Base {
 	namespace Env {
 
 		ustring get(PCWSTR name) {
-			wchar_t buf[::GetEnvironmentVariableW(name, nullptr, 0)];
-			::GetEnvironmentVariableW(name, buf, sizeofa(buf));
-			return ustring(buf);
+			Base::auto_array<wchar_t> buf(::GetEnvironmentVariableW(name, nullptr, 0));
+			::GetEnvironmentVariableW(name, buf.data(), buf.size());
+			return ustring(buf.data());
 		}
 
 		bool set(PCWSTR name, PCWSTR val) {
@@ -16,10 +16,10 @@ namespace Base {
 		}
 
 		bool add(PCWSTR name, PCWSTR val) {
-			wchar_t buf[::GetEnvironmentVariableW(name, nullptr, 0) + Str::length(val)];
-			::GetEnvironmentVariableW(name, buf, sizeofa(buf));
-			Str::cat(buf, val);
-			return ::SetEnvironmentVariableW(name, buf) != 0;
+			Base::auto_array<wchar_t> buf(::GetEnvironmentVariableW(name, nullptr, 0) + Str::length(val));
+			::GetEnvironmentVariableW(name, buf.data(), buf.size());
+			Str::cat(buf.data(), val);
+			return ::SetEnvironmentVariableW(name, buf.data()) != 0;
 		}
 
 		bool del(PCWSTR name) {

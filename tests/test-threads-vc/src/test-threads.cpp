@@ -36,6 +36,7 @@ struct Routine: public Base::ThreadRoutine_i
 		LogTrace();
 		Base::Message message;
 		m_queue->get_message(message, 5000);
+		LogBacktrace();
 		LogTrace();
 		return m_num;
 	}

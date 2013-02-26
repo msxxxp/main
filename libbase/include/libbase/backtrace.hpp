@@ -9,7 +9,8 @@
 
 namespace Base {
 
-	struct FrameInfo {
+	struct FrameInfo
+	{
 		~FrameInfo();
 
 		FrameInfo(size_t frame);
@@ -52,16 +53,20 @@ namespace Base {
 	struct Backtrace: private std::vector<FrameInfo> {
 		~Backtrace();
 
-		Backtrace(size_t depth = MAX_DEPTH);
+		Backtrace(PCWSTR path = nullptr, size_t depth = MAX_DEPTH);
 
 		using std::vector<FrameInfo>::begin;
 		using std::vector<FrameInfo>::end;
 		using std::vector<FrameInfo>::empty;
 		using std::vector<FrameInfo>::size;
+		using std::vector<FrameInfo>::operator[];
 
+		void Print() const;
 	private:
 		static const size_t MAX_DEPTH = 128;
 	};
+
+	#define LogBacktrace() Base::Backtrace().Print()
 
 }
 

@@ -305,13 +305,13 @@ namespace Base {
 	 */
 
 	ustring to_str(const PBYTE hash, size_t size) {
-		wchar_t buf[(size + 1) * 2];
-		PWSTR tmp = buf;
+		Base::auto_array<wchar_t> buf((size + 1) * 2);
+		PWSTR tmp = buf.data();
 		for (size_t i = 0; i < size; ++i) {
-			_snwprintf(tmp, sizeofa(buf) - i * 2, L"%02x", hash[i]);
+			_snwprintf(tmp, buf.size() - i * 2, L"%02x", hash[i]);
 			tmp += 2;
 		}
-		return buf;
+		return ustring(buf.data());
 	}
 
 	auto_array<BYTE> to_hash(const ustring & str) {
@@ -329,22 +329,22 @@ namespace Base {
 	}
 
 	astring Hash2Str(const PBYTE hash, size_t size) {
-		CHAR buf[(size + 1) * 2];
-		PSTR tmp = buf;
+		Base::auto_array<char> buf((size + 1) * 2);
+		PSTR tmp = buf.data();
 		for (size_t i = 0; i < size; ++i) {
-			snprintf(tmp, sizeofa(buf) - i * 2, "%02x", hash[i]);
+			_snprintf(tmp, buf.size() - i * 2, "%02x", hash[i]);
 			tmp += 2;
 		}
-		return buf;
+		return astring(buf.data());
 	}
 
 	astring Hash2StrNum(const PBYTE hash, size_t size) {
-		CHAR buf[(size + 1) * 4];
-		PSTR tmp = buf;
+		Base::auto_array<char> buf((size + 1) * 4);
+		PSTR tmp = buf.data();
 		for (size_t i = 0; i < size; ++i) {
-			tmp += snprintf(tmp, sizeofa(buf) - i * 2, "%02i ", hash[i]);
+			tmp += _snprintf(tmp, buf.size() - i * 2, "%02i ", hash[i]);
 		}
-		return buf;
+		return astring(buf.data());
 	}
 
 	bool Str2Hash(const astring &str, PVOID &hash, ULONG &size) {

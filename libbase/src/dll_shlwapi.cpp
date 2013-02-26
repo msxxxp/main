@@ -9,11 +9,11 @@ namespace Base {
 
 		///============================================================================= shlwapi_dll
 		struct shlwapi_dll: private Base::DynamicLibrary {
-			typedef HRESULT (WINAPI *FPathMatchSpecExW)(PCWSTR, PCWSTR, DWORD);
-			typedef WINBOOL (WINAPI *FPathCanonicalizeW)(PWSTR, PCWSTR);
-			typedef WINBOOL (WINAPI *FPathCompactPathExW)(PWSTR, PCWSTR, UINT, DWORD);
-			typedef WINBOOL (WINAPI *FPathIsDirectoryEmptyW)(PCWSTR);
-			typedef WINBOOL (WINAPI *FPathUnExpandEnvStringsW)(PCWSTR, PWSTR, UINT);
+			typedef HRESULT (*FPathMatchSpecExW)(PCWSTR, PCWSTR, DWORD);
+			typedef WINBOOL (*FPathCanonicalizeW)(PWSTR, PCWSTR);
+			typedef WINBOOL (*FPathCompactPathExW)(PWSTR, PCWSTR, UINT, DWORD);
+			typedef WINBOOL (*FPathIsDirectoryEmptyW)(PCWSTR);
+			typedef WINBOOL (*FPathUnExpandEnvStringsW)(PCWSTR, PWSTR, UINT);
 
 			DEFINE_FUNC(PathMatchSpecExW);
 			DEFINE_FUNC(PathCanonicalizeW);

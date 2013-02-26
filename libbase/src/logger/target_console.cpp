@@ -28,6 +28,10 @@ namespace Base {
 
 			void out(PCWSTR str, size_t size) const override;
 
+			void lock() const override;
+
+			void unlock() const override;
+
 		private:
 			Base::auto_destroy<Lock::SyncUnit_i*> m_sync;
 		};
@@ -56,6 +60,16 @@ namespace Base {
 		{
 			auto lk(m_sync->lock_scope());
 			consoleout(str, size);
+		}
+
+		void LogToConsole::lock() const
+		{
+			m_sync->lock();
+		}
+
+		void LogToConsole::unlock() const
+		{
+			m_sync->release();
 		}
 
 		///=========================================================================================

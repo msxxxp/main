@@ -15,6 +15,10 @@ namespace Base {
 
 			void out(PCWSTR str, size_t size) const override;
 
+			void lock() const override;
+
+			void unlock() const override;
+
 		private:
 			Base::auto_destroy<Lock::SyncUnit_i*> m_sync;
 			auto_close<HANDLE> m_file;
@@ -45,6 +49,16 @@ namespace Base {
 				auto lk(m_sync->lock_scope());
 				::WriteFile(m_file, str, size * sizeof(wchar_t), &written, nullptr);
 			}
+		}
+
+		void LogToFile::lock() const
+		{
+			m_sync->lock();
+		}
+
+		void LogToFile::unlock() const
+		{
+			m_sync->release();
 		}
 
 		Target_t get_TargetToFile(PCWSTR path)

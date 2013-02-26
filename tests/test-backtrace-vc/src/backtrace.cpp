@@ -6,6 +6,7 @@ typedef SSIZE_T ssize_t;
 
 #if !defined(_AMD64_) && defined(__GNUC__)
 #include <bfd.h>
+#include <cxxabi.h>
 
 struct bfd_ctx {
 	bfd * handle;
@@ -189,7 +190,7 @@ namespace Base
 		offset(0),
 		module_base(0),
 		line(0),
-		func(L"????")
+		func(L"?")
 	{
 		IMAGEHLP_MODULEW64 modinfo;
 		modinfo.SizeOfStruct = sizeof(modinfo);
@@ -362,7 +363,7 @@ namespace Base
 			m_data = new Data(m_frame);
 	}
 
-	ustring FrameInfo::AsStr() const
+	ustring FrameInfo::to_str() const
 	{
 		WCHAR buf[MAX_PATH];
 		if (line())
@@ -404,9 +405,9 @@ namespace Base
 	{
 	}
 
-	Backtrace::Backtrace(size_t depth)
+	Backtrace::Backtrace(PCWSTR path, size_t depth)
 	{
-		SymbolInit::inst();
+		SymbolInit::inst(path);
 
 		CONTEXT ctx = {0};
 		ctx.ContextFlags = CONTEXT_FULL;

@@ -1,5 +1,5 @@
-#ifndef __BACKTRACE_HPP__
-#define	__BACKTRACE_HPP__
+#ifndef _LIBBASE_BACKTRACE_HPP_
+#define	_LIBBASE_BACKTRACE_HPP_
 
 #include <windows.h>
 #include <dbghelp.h>
@@ -9,8 +9,7 @@
 
 typedef std::wstring ustring;
 
-namespace Base
-{
+namespace Base {
 
 	struct FrameInfo
 	{
@@ -42,7 +41,7 @@ namespace Base
 
 		size_t line() const;
 
-		ustring AsStr() const;
+		ustring to_str() const;
 
 	private:
 		void InitData() const;
@@ -56,12 +55,13 @@ namespace Base
 	struct Backtrace: private std::vector<FrameInfo> {
 		~Backtrace();
 
-		Backtrace(size_t depth = MAX_DEPTH);
+		Backtrace(PCWSTR path = nullptr, size_t depth = MAX_DEPTH);
 
 		using std::vector<FrameInfo>::begin;
 		using std::vector<FrameInfo>::end;
 		using std::vector<FrameInfo>::empty;
 		using std::vector<FrameInfo>::size;
+		using std::vector<FrameInfo>::operator[];
 
 	private:
 		static const size_t MAX_DEPTH = 128;

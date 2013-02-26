@@ -4,8 +4,6 @@
 #include <libbase/logger.hpp>
 #include <libbase/str.hpp>
 
-#include <string>
-
 #if !defined(_AMD64_) && defined(__GNUC__)
 #include <bfd.h>
 #include <cxxabi.h>
@@ -147,7 +145,15 @@ void find(bfd_ctx * b, DWORD offset, const char *& file, const char *& func, siz
 
 namespace Base {
 
-	struct FrameInfo::Data {
+	static Base::Logger::Module_i * get_logger_module()
+	{
+		auto static module = Base::Logger::get_module(L"backtra");
+		return module;
+	}
+
+
+	struct FrameInfo::Data
+	{
 		Data(size_t frame);
 
 		bool LoadFromPDB(size_t frame);
@@ -173,17 +179,19 @@ namespace Base {
 		line(0),
 		func(L"?")
 	{
-		IMAGEHLP_MODULEW64 modinfo;
-		modinfo.SizeOfStruct = sizeof(modinfo);
-		if (SymGetModuleInfoW64(GetCurrentProcess(), frame, &modinfo) != FALSE) {
+		IMAGEHLP_MODULEW64 modinfo = {0};
+		modinfo.SizeOfStruct = sizeof(modinfo) - 8;
+		BOOL ret = SymGetModuleInfoW64(GetCurrentProcess(), frame, &modinfo);
+		LogErrorIf(ret == FALSE, L"%s\n", ErrAsStr().c_str());
+		if (ret != FALSE) {
 			module = modinfo.ModuleName;
 			module_base = modinfo.BaseOfImage;
 			image = modinfo.ImageName;
-			LogNoise(L"ModuleName: %s\n", modinfo.ModuleName);
-			LogNoise(L"ImageName: %s\n", modinfo.ImageName);
-			LogNoise(L"LoadedImageName: %s\n", modinfo.LoadedImageName);
-			LogNoise(L"LoadedPdbName: %s\n", modinfo.LoadedPdbName);
-			LogNoise(L"SymType: %d\n", (int)modinfo.SymType);
+//			LogNoise(L"ModuleName: %s\n", modinfo.ModuleName);
+//			LogNoise(L"ImageName: %s\n", modinfo.ImageName);
+//			LogNoise(L"LoadedImageName: %s\n", modinfo.LoadedImageName);
+//			LogNoise(L"LoadedPdbName: %s\n", modinfo.LoadedPdbName);
+//			LogNoise(L"SymType: %d\n", (int)modinfo.SymType);
 		}
 
 		(modinfo.SymType && LoadFromPDB(frame)) || LoadFromSymbols(frame) || LoadFromMap(frame);
@@ -195,18 +203,20 @@ namespace Base {
 
 		{
 			size_t size = sizeof(SYMBOL_INFOW) + MAX_SYM_NAME * sizeof(wchar_t);
-			SYMBOL_INFOW * info = (SYMBOL_INFOW*)malloc(size);
-			info->SizeOfStruct = sizeof(*info);
-			info->MaxNameLen = MAX_SYM_NAME;
+			SYMBOL_INFOW * m_syminfo = (SYMBOL_INFOW*)malloc(size);
+			m_syminfo->SizeOfStruct = sizeof(*m_syminfo);
+			m_syminfo->MaxNameLen = MAX_SYM_NAME;
 
 			DWORD64 displacement;
-			if (SymFromAddrW(GetCurrentProcess(), frame, &displacement, info) != FALSE) {
-				addr = (size_t)info->Address;
-				func = info->Name;
+			BOOL ret = SymFromAddrW(GetCurrentProcess(), frame, &displacement, m_syminfo);
+			LogErrorIf(ret == FALSE, L"%s\n", ErrAsStr().c_str());
+			if (ret != FALSE) {
+				addr = (size_t)m_syminfo->Address;
+				func = m_syminfo->Name;
 				offset = (size_t)displacement;
 				ret = true;
 			}
-			free(info);
+			free(m_syminfo);
 		}
 
 		{
@@ -362,7 +372,8 @@ namespace Base {
 	}
 
 	///=============================================================================================
-	struct SymbolInit {
+	struct SymbolInit
+	{
 		static SymbolInit & inst(PCWSTR path = nullptr)
 		{
 			static SymbolInit instance(path);
@@ -372,12 +383,12 @@ namespace Base {
 	private:
 		~SymbolInit()
 		{
-			SymCleanup(GetCurrentProcess());
+			LogErrorIf(!SymCleanup(GetCurrentProcess()), L"%s\n", ErrAsStr().c_str());
 		}
 
 		SymbolInit(PCWSTR path)
 		{
-			SymInitializeW(GetCurrentProcess(), path, TRUE);
+			LogErrorIf(!SymInitializeW(GetCurrentProcess(), path, TRUE), L"%s\n", ErrAsStr().c_str());
 			SymSetOptions(SymGetOptions() | SYMOPT_FAIL_CRITICAL_ERRORS | SYMOPT_LOAD_LINES);
 
 #if !defined(_AMD64_) && defined(__GNUC__)
@@ -389,13 +400,11 @@ namespace Base {
 	///=============================================================================================
 	Backtrace::~Backtrace()
 	{
-		LogTrace();
 	}
 
-	Backtrace::Backtrace(size_t depth)
+	Backtrace::Backtrace(PCWSTR path, size_t depth)
 	{
-		LogTrace();
-		SymbolInit::inst();
+		SymbolInit::inst(path);
 
 		CONTEXT ctx = {0};
 		ctx.ContextFlags = CONTEXT_FULL;
@@ -436,7 +445,20 @@ namespace Base {
 			emplace_back((size_t)sf.AddrPC.Offset);
 #endif
 		}
-		LogNoise(L"depth: %Iu\n", size());
+//		LogNoise(L"depth: %Iu\n", size());
+	}
+
+	void Backtrace::Print() const
+	{
+		Logger::lock_module(get_logger_module());
+		Logger::set_module_color_mode(true, get_logger_module());
+		auto prefix = Logger::get_module_prefix(get_logger_module());
+		Logger::set_module_prefix(Logger::Prefix::Time | Logger::Prefix::Thread, get_logger_module());
+		LogInfo(L"Backtrace: [%Iu]\n", size());
+		for (size_t i = 0; i < size(); ++i)
+			LogInfo(L"[%Iu] %s\n", i, operator[](i).to_str().c_str());
+		Logger::set_module_prefix(prefix, get_logger_module());
+		Logger::unlock_module(get_logger_module());
 	}
 
 }

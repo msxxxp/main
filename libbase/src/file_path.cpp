@@ -101,9 +101,9 @@ extern "C" {
 	}
 
 	ustring GetWorkDirectory() {
-		wchar_t Result[::GetCurrentDirectoryW(0, nullptr)];
-		::GetCurrentDirectoryW(sizeofa(Result), Result);
-		return Result;
+		Base::auto_array<wchar_t> Result(::GetCurrentDirectoryW(0, nullptr));
+		::GetCurrentDirectoryW(Result.size(), Result.data());
+		return ustring(Result.data());
 	}
 
 	bool SetWorkDirectory(PCWSTR path) {

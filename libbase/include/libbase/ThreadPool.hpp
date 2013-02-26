@@ -5,6 +5,8 @@
 #include <libbase/uncopyable.hpp>
 #include <libbase/thread.hpp>
 
+#include <vector>
+
 namespace Base {
 
 	struct ThreadPool: private Base::Uncopyable {

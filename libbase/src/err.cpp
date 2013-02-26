@@ -27,7 +27,7 @@ namespace Base {
 		}
 
 		wchar_t out[MAX_PATH_LEN];
-		_snwprintf(out, sizeofa(out), L"[0x%x] %s", err, buf);
+		_snwprintf(out, sizeofa(out), L"[0x%x (%u)] %s", err, err, buf);
 		::LocalFree(buf);
 
 		ustring ret(out);

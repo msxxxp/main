@@ -3,6 +3,8 @@
 
 #include <libbase/thread.hpp>
 
+#include <vector>
+
 namespace Base {
 
 	struct ThreadsHolder: private Base::Uncopyable {

@@ -9,6 +9,10 @@ namespace Base {
 			void out(const Module_i * lgr, Level lvl, PCWSTR str, size_t size) const override;
 
 			void out(PCWSTR str, size_t size) const override;
+
+			void lock() const override;
+
+			void unlock() const override;
 		};
 
 		LogToNull::~LogToNull()
@@ -20,6 +24,14 @@ namespace Base {
 		}
 
 		void LogToNull::out(PCWSTR /*str*/, size_t /*size*/) const
+		{
+		}
+
+		void LogToNull::lock() const
+		{
+		}
+
+		void LogToNull::unlock() const
 		{
 		}
 

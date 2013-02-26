@@ -2,11 +2,14 @@
 #define _LIBBASE_PCSTR_HPP_
 
 #include <libbase/std.hpp>
+#include <wchar.h>
 
+#ifndef _MSC_VER
 extern "C" {
 	long long __MINGW_NOTHROW wcstoll(const wchar_t * __restrict__, wchar_t** __restrict__, int);
 	unsigned long long __MINGW_NOTHROW wcstoull(const wchar_t * __restrict__, wchar_t ** __restrict__, int);
 }
+#endif
 
 namespace Base {
 	namespace Str {
@@ -115,7 +118,7 @@ namespace Base {
 		}
 
 		inline PSTR find(PCSTR where, PCSTR what) {
-			return ::strstr(where, what);
+			return (PSTR)::strstr(where, what);
 		}
 
 		inline PCSTR find(PCSTR where, CHAR what) {
@@ -123,7 +126,7 @@ namespace Base {
 		}
 
 		inline PWSTR find(PCWSTR where, PCWSTR what) {
-			return ::wcsstr(where, what);
+			return (PWSTR)::wcsstr(where, what);
 		}
 
 		inline PCWSTR find(PCWSTR where, wchar_t what) {
@@ -249,15 +252,21 @@ namespace Base {
 		}
 
 		inline uint64_t to_uint64(PCWSTR in, int base = 10) {
-			//	return _wtoi64(in);
+#ifdef _MSC_VER
+			return _wtoi64(in);
+#else
 			PWSTR end_ptr;
 			return ::wcstoull(in, &end_ptr, base);
+#endif
 		}
 
 		inline int64_t to_int64(PCWSTR in, int base = 10) {
-			//	return _wtoi64(in);
+#ifdef _MSC_VER
+			return _wtoi64(in);
+#else
 			PWSTR end_ptr;
 			return ::wcstoll(in, &end_ptr, base);
+#endif
 		}
 
 		inline uint32_t to_uint32(PCWSTR in, int base = 10) {

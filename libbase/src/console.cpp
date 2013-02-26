@@ -51,7 +51,7 @@ namespace Base {
 	int snprintf(PWSTR buff, size_t len, PCWSTR format, ...) {
 		va_list vl;
 		va_start(vl, format);
-		int Result = vsnwprintf(buff, len, format, vl);
+		int Result = _vsnwprintf(buff, len, format, vl);
 		va_end(vl);
 		return Result;
 	}

@@ -145,9 +145,9 @@ void find(bfd_ctx * b, DWORD offset, const char *& file, const char *& func, siz
 
 namespace Base {
 
-	static Base::Logger::Module_i * get_logger_module()
+	static Logger::Module_i * get_logger_module()
 	{
-		auto static module = Base::Logger::get_module(L"backtra");
+		auto static module = Logger::get_module(L"backtra");
 		return module;
 	}
 
@@ -182,7 +182,7 @@ namespace Base {
 		IMAGEHLP_MODULEW64 modinfo = {0};
 		modinfo.SizeOfStruct = sizeof(modinfo) - 8;
 		BOOL ret = SymGetModuleInfoW64(GetCurrentProcess(), frame, &modinfo);
-		LogErrorIf(ret == FALSE, L"%s\n", ErrAsStr().c_str());
+//		LogErrorIf(ret == FALSE, L"%s\n", ErrAsStr().c_str());
 		if (ret != FALSE) {
 			module = modinfo.ModuleName;
 			module_base = modinfo.BaseOfImage;

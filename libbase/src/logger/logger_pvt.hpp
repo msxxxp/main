@@ -3,29 +3,27 @@
 
 #include <libbase/logger.hpp>
 
-namespace Base {
-	namespace Logger {
+namespace Logger {
 
-		///================================================================================ Logger_i
-		struct Logger_i {
-			Module_i * get_module(PCWSTR name);
+	///================================================================================ Logger_i
+	struct Logger_i {
+		Module_i * get_module(PCWSTR name);
 
-			Module_i * register_module(PCWSTR name, const Target_t & target = get_default_target(), Level lvl = get_default_level());
+		Module_i * register_module(PCWSTR name, const Target_t & target = get_default_target(), Level lvl = get_default_level());
 
-			void free_module(Module_i * module);
+		void free_module(Module_i * module);
 
-			virtual ~Logger_i();
+		virtual ~Logger_i();
 
-		private:
-			virtual Module_i * get_module_(PCWSTR name) = 0;
+	private:
+		virtual Module_i * get_module_(PCWSTR name) = 0;
 
-			virtual Module_i * register_module_(PCWSTR name, const Target_t & target, Level lvl) = 0;
+	virtual Module_i * register_module_(PCWSTR name, const Target_t & target, Level lvl) = 0;
 
-			virtual void free_module_(Module_i * module) = 0;
-		};
+	virtual void free_module_(Module_i * module) = 0;
+	};
 
-		Logger_i & get_instance();
-	}
+	Logger_i & get_instance();
 }
 
 #endif

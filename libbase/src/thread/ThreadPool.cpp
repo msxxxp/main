@@ -1,11 +1,12 @@
 #include <libbase/ThreadPool.hpp>
 #include <libbase/err.hpp>
 #include <libbase/logger.hpp>
+#include <libbase/str.hpp>
 
 namespace Base {
-	static Base::Logger::Module_i * get_logger_module()
+	static Logger::Module_i * get_logger_module()
 	{
-		auto static module = Base::Logger::get_module(L"threads");
+		auto static module = Logger::get_module(L"threads");
 		return module;
 	}
 

@@ -7,9 +7,9 @@
 
 namespace Base {
 
-	static Base::Logger::Module_i * get_logger_module()
+	static Logger::Module_i * get_logger_module()
 	{
-		auto static module = Base::Logger::get_module(L"message");
+		auto static module = Logger::get_module(L"message");
 		return module;
 	}
 

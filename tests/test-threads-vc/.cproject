@@ -74,9 +74,25 @@
 							<tool id="org.eclipse.cdt.msvc.cl.exe.release.645437816" name="C++ Compiler (cl)" superClass="org.eclipse.cdt.msvc.cl.exe.release">
 								<option id="org.eclipse.cdt.msvc.cl.option.optimization.1564754463" name="Optimization" superClass="org.eclipse.cdt.msvc.cl.option.optimization"/>
 								<option id="org.eclipse.cdt.msvc.cl.option.debugFormat.426172826" name="Debug Information Format" superClass="org.eclipse.cdt.msvc.cl.option.debugFormat"/>
+								<option id="org.eclipse.cdt.msvc.cl.option.macros.853585510" name="Defines (/D)" superClass="org.eclipse.cdt.msvc.cl.option.macros" valueType="definedSymbols">
+									<listOptionValue builtIn="false" value="UNICODE"/>
+									<listOptionValue builtIn="false" value="_UNICODE"/>
+								</option>
+								<option id="org.eclipse.cdt.msvc.cl.option.includes.1330767003" name="Include Path (/I)" superClass="org.eclipse.cdt.msvc.cl.option.includes" valueType="includePath">
+									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/libbase_vc/include}&quot;"/>
+								</option>
 								<inputType id="org.eclipse.cdt.msvc.cl.inputType.268329648" superClass="org.eclipse.cdt.msvc.cl.inputType"/>
 							</tool>
 							<tool id="org.eclipse.cdt.msvc.link.exe.release.1495506179" name="Linker (link)" superClass="org.eclipse.cdt.msvc.link.exe.release">
+								<option id="org.eclipse.cdt.msvc.link.option.libraries.979702938" name="Libraries" superClass="org.eclipse.cdt.msvc.link.option.libraries" valueType="libs">
+									<listOptionValue builtIn="false" value="libbase_vc.lib"/>
+									<listOptionValue builtIn="false" value="dbghelp.lib"/>
+									<listOptionValue builtIn="false" value="ntdll.lib"/>
+									<listOptionValue builtIn="false" value="msvcrt.lib"/>
+								</option>
+								<option id="org.eclipse.cdt.msvc.link.option.libpath.110892997" name="Additional Libpath (/libpath)" superClass="org.eclipse.cdt.msvc.link.option.libpath" valueType="stringList">
+									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/libbase_vc/Release}&quot;"/>
+								</option>
 								<inputType id="org.eclipse.cdt.msvc.link.inputType.692985125" superClass="org.eclipse.cdt.msvc.link.inputType"/>
 							</tool>
 							<tool id="org.eclipse.cdt.msvc.rc.exe.release.1774045959" name="Resource Compiler (rc)" superClass="org.eclipse.cdt.msvc.rc.exe.release">

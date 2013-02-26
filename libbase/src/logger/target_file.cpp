@@ -3,70 +3,68 @@
 #include <libbase/lock.hpp>
 #include <libbase/memory.hpp>
 
-namespace Base {
-	namespace Logger {
+namespace Logger {
 
-		struct LogToFile: public Target_i {
-			~LogToFile();
+	struct LogToFile: public Target_i {
+		~LogToFile();
 
-			LogToFile(PCWSTR path);
+		LogToFile(PCWSTR path);
 
-			void out(const Module_i * lgr, Level lvl, PCWSTR str, size_t size) const override;
+		void out(const Module_i * lgr, Level lvl, PCWSTR str, size_t size) const override;
 
-			void out(PCWSTR str, size_t size) const override;
+		void out(PCWSTR str, size_t size) const override;
 
-			void lock() const override;
+		void lock() const override;
 
-			void unlock() const override;
+		void unlock() const override;
 
-		private:
-			Base::auto_destroy<Lock::SyncUnit_i*> m_sync;
-			auto_close<HANDLE> m_file;
-		};
+	private:
+		Base::auto_destroy<Base::Lock::SyncUnit_i*> m_sync;
+		Base::auto_close<HANDLE> m_file;
+	};
 
-		LogToFile::~LogToFile()
-		{
-		}
-
-		LogToFile::LogToFile(PCWSTR path) :
-			m_sync(Lock::get_CritSection()),
-			m_file(::CreateFileW(path, GENERIC_WRITE, FILE_SHARE_READ, nullptr, OPEN_ALWAYS, FILE_ATTRIBUTE_NORMAL, nullptr))
-		{
-			if (m_file.is_valid()) {
-				::SetFilePointer(m_file, 0, nullptr, FILE_END);
-			}
-		}
-
-		void LogToFile::out(const Module_i * /*lgr*/, Level /*lvl*/, PCWSTR str, size_t size) const
-		{
-			out(str, size);
-		}
-
-		void LogToFile::out(PCWSTR str, size_t size) const
-		{
-			if (m_file.is_valid()) {
-				DWORD written = 0;
-				auto lk(m_sync->lock_scope());
-				::WriteFile(m_file, str, size * sizeof(wchar_t), &written, nullptr);
-			}
-		}
-
-		void LogToFile::lock() const
-		{
-			m_sync->lock();
-		}
-
-		void LogToFile::unlock() const
-		{
-			m_sync->release();
-		}
-
-		Target_t get_TargetToFile(PCWSTR path)
-		{
-			return Target_t(new LogToFile(path));
-		}
-
+	LogToFile::~LogToFile()
+	{
 	}
+
+	LogToFile::LogToFile(PCWSTR path) :
+				m_sync(Base::Lock::get_CritSection()),
+				m_file(::CreateFileW(path, GENERIC_WRITE, FILE_SHARE_READ, nullptr, OPEN_ALWAYS, FILE_ATTRIBUTE_NORMAL, nullptr))
+	{
+		if (m_file.is_valid()) {
+			::SetFilePointer(m_file, 0, nullptr, FILE_END);
+		}
+	}
+
+	void LogToFile::out(const Module_i * /*lgr*/, Level /*lvl*/, PCWSTR str, size_t size) const
+	{
+		out(str, size);
+	}
+
+	void LogToFile::out(PCWSTR str, size_t size) const
+	{
+		if (m_file.is_valid()) {
+			DWORD written = 0;
+			auto lk(m_sync->lock_scope());
+			::WriteFile(m_file, str, size * sizeof(wchar_t), &written, nullptr);
+		}
+	}
+
+	void LogToFile::lock() const
+	{
+		m_sync->lock();
+	}
+
+	void LogToFile::unlock() const
+	{
+		m_sync->release();
+	}
+
+	Target_t get_TargetToFile(PCWSTR path)
+	{
+		return Target_t(new LogToFile(path));
+	}
+
 }
 
 ///========================================================================================= Logging

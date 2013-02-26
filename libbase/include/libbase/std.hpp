@@ -28,6 +28,9 @@
 
 #include <cstdint>
 #include <windows.h>
+#include <stdio.h>
+
+#include <type_traits>
 
 #ifdef _MSC_VER
 	typedef int WINBOOL;
@@ -36,23 +39,136 @@
 #define __PRETTY_FUNCTION__ __FUNCSIG__
 #endif
 
-#ifdef NoStdNew
-inline void * operator new(size_t size) noexcept {
-	return ::HeapAlloc(::GetProcessHeap(), HEAP_ZERO_MEMORY, size);
+namespace Memory {
+#ifdef DEBUG
+	namespace Watchdog
+	{
+		typedef void (*pfunc)();
+		extern size_t allocations;
+		extern size_t deletions;
+		extern uint64_t allocations_size;
+		extern uint64_t deletions_size;
+
+		extern pfunc on_delete;
+	};
+
+#endif
+
+	typedef HANDLE Heap_t;
+
+	inline Memory::Heap_t get_heap()
+	{
+		return ::GetProcessHeap();
+	}
+
+	template<typename Pointer>
+	inline size_t size(Pointer in)
+	{
+		static_assert(std::is_pointer<Pointer>::value, "Pointer type is required");
+		return (in) ? ::HeapSize(get_heap(), 0, (PVOID)in) : 0;
+	}
+
+	template<typename Pointer>
+	inline Pointer alloc(size_t size, DWORD flags = HEAP_ZERO_MEMORY)
+	{
+#ifdef DEBUG
+		Watchdog::allocations++;
+		Watchdog::allocations_size += size;
+#endif
+		static_assert(std::is_pointer<Pointer>::value, "Pointer type is required");
+		return static_cast<Pointer>(::HeapAlloc(get_heap(), flags, size));
+	}
+
+	template<typename Pointer>
+	inline void free(Pointer & in)
+	{
+#ifdef DEBUG
+		Watchdog::deletions++;
+		Watchdog::deletions_size += Memory::size(in);
+		if (Watchdog::deletions_size == Watchdog::allocations_size && Watchdog::deletions == Watchdog::allocations)
+			printf("There is no leaks\n");
+#endif
+		static_assert(std::is_pointer<Pointer>::value, "Pointer type is required");
+		::HeapFree(get_heap(), 0, (PVOID)in);
+		in = nullptr;
+	}
+
+	template<typename Pointer>
+	inline void realloc(Pointer & in, size_t size, DWORD flags = HEAP_ZERO_MEMORY)
+	{
+#ifdef DEBUG
+		if (in) {
+			Watchdog::deletions++;
+			Watchdog::deletions_size += Memory::size(in);
+		}
+		Watchdog::allocations++;
+		Watchdog::allocations_size += size;
+#endif
+		static_assert(std::is_pointer<Pointer>::value, "Pointer type is required");
+		in = static_cast<Pointer>((in) ? ::HeapReAlloc(get_heap(), flags, (PVOID)in, size) : ::HeapAlloc(get_heap(), flags, size));
+	}
+
+	template<typename Pointer1, typename Pointer2>
+	inline bool compare(Pointer1 m1, Pointer2 m2, size_t size)
+	{
+		static_assert(std::is_pointer<Pointer1>::value, "Pointer type is required");
+		static_assert(std::is_pointer<Pointer2>::value, "Pointer type is required");
+		return ::memcmp((PVOID)m1, (PVOID)m2, size) == 0;
+	}
+
+	template<typename Pointer1, typename Pointer2>
+	inline Pointer1 copy(Pointer1 dest, Pointer2 sour, size_t size)
+	{
+		static_assert(std::is_pointer<Pointer1>::value, "Pointer type is required");
+		static_assert(std::is_pointer<Pointer2>::value, "Pointer type is required");
+		//return ::memcpy_s(dest, sour, size);
+		return static_cast<Pointer1>(::memcpy((PVOID)dest, (PVOID)sour, size));
+	}
+
+	template<typename Pointer>
+	inline Pointer fill(Pointer in, size_t size, char fill = 0)
+	{
+		static_assert(std::is_pointer<Pointer>::value, "Pointer type is required");
+		return static_cast<Pointer>(::memset((PVOID)in, (int)fill, size));
+	}
+
+	template<typename Pointer>
+	inline Pointer zero(Pointer in, size_t size)
+	{
+		static_assert(std::is_pointer<Pointer>::value, "Pointer type is required");
+		return static_cast<Pointer>(::memset((PVOID)in, 0, size));
+	}
+
+	template<typename NotPointer>
+	inline void zero(NotPointer & in)
+	{
+		static_assert(!std::is_pointer<NotPointer>::value, "Nonpointer type is required");
+		::memset((PVOID)&in, 0, sizeof(in));
+	}
+
 }
 
-inline void * operator new [](size_t size) noexcept {
+//#ifdef NoStdNew
+inline void * operator new(size_t size) noexcept
+{
+	return Memory::alloc<PVOID>(size, HEAP_ZERO_MEMORY);
+}
+
+inline void * operator new [](size_t size) noexcept
+{
 	return ::operator new(size);
 }
 
-inline void operator delete(void * in) noexcept {
-	::HeapFree(::GetProcessHeap(), 0, (PVOID)in);
+inline void operator delete(void * in) noexcept
+{
+	Memory::free(in);
 }
 
-inline void operator delete [](void * ptr) noexcept {
+inline void operator delete [](void * ptr) noexcept
+{
 	::operator delete(ptr);
 }
-#endif
+//#endif
 
 #include <algorithm>
 

@@ -43,6 +43,7 @@
 									<listOptionValue builtIn="false" value="libbase"/>
 									<listOptionValue builtIn="false" value="msvcrt"/>
 									<listOptionValue builtIn="false" value="ntdll"/>
+									<listOptionValue builtIn="false" value="dbghelp"/>
 								</option>
 								<option id="gnu.cpp.link.option.flags.1762000261" name="Linker flags" superClass="gnu.cpp.link.option.flags" value="-Wl,-Map=test-minimum.exe.map" valueType="string"/>
 								<option id="gnu.cpp.link.option.shared.96677685" name="Shared (-shared)" superClass="gnu.cpp.link.option.shared" value="false" valueType="boolean"/>

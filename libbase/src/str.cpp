@@ -351,13 +351,12 @@ namespace Base {
 		size_t strsize = str.size();
 		if (strsize % 2 == 0) {
 			size = strsize / 2;
-			if (Memory::alloc(hash, size)) {
-				for (size_t i = 0; i < size; ++i) {
-					astring tmp = str.substr(i * 2, 2);
-					((PBYTE)hash)[i] = (BYTE)Str::to_int32(tmp.c_str(), 16);
-				}
-				return true;
+			hash = Memory::alloc<PVOID>(size);
+			for (size_t i = 0; i < size; ++i) {
+				astring tmp = str.substr(i * 2, 2);
+				((PBYTE)hash)[i] = (BYTE)Str::to_int32(tmp.c_str(), 16);
 			}
+			return true;
 		}
 		return false;
 	}

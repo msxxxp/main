@@ -63,7 +63,7 @@ public:
 			if (m_data->m_ref > 1) {
 				this_type(capa, this).swap(*this);
 			} else {
-				Base::Memory::realloc(m_data, sizeof(*m_data) + capa * sizeof(Type));
+				Memory::realloc(m_data, sizeof(*m_data) + capa * sizeof(Type));
 				m_data->m_capa = capa;
 			}
 		}
@@ -107,7 +107,7 @@ public:
 	{
 		if (n) {
 			reserve(size() + n);
-			Base::Memory::copy(m_data->m_str + size(), s, n * sizeof(Type));
+			Memory::copy(m_data->m_str + size(), s, n * sizeof(Type));
 			m_data->m_size += n;
 			m_data->m_str[size()] = (Type)0;
 		}
@@ -139,7 +139,7 @@ public:
 	{
 		if (n) {
 			reserve(n);
-			Base::Memory::copy(m_data->m_str, s, n * sizeof(Type));
+			Memory::copy(m_data->m_str, s, n * sizeof(Type));
 			m_data->m_size = n;
 			m_data->m_str[size()] = (Type)0;
 		}
@@ -419,7 +419,7 @@ private:
 	void delRef()
 	{
 		if (m_data && --m_data->m_ref == 0) {
-			Base::Memory::free(m_data);
+			Memory::free(m_data);
 		}
 	}
 
@@ -439,14 +439,14 @@ private:
 
 	void init(const Type * in, size_t len)
 	{
-		Base::Memory::copy(m_data->m_str, in, len * sizeof(Type));
+		Memory::copy(m_data->m_str, in, len * sizeof(Type));
 		m_data->m_size = len;
 		m_data->m_str[len] = (Type)0;
 	}
 
 	Cont * alloc_cstr(size_t capa)
 	{
-		Cont * ret = (Cont *)Base::Memory::alloc(sizeof(Cont) + capa * sizeof(Type));
+		Cont * ret = Memory::alloc<Cont*>(sizeof(Cont) + capa * sizeof(Type));
 		ret->m_ref = 1;
 		ret->m_capa = capa;
 		return ret;
@@ -469,11 +469,11 @@ private:
 		m_data(alloc_cstr(size1 + size2 + 1))
 	{
 		if (size1) {
-			Base::Memory::copy(m_data->m_str, str1, size1 * sizeof(Type));
+			Memory::copy(m_data->m_str, str1, size1 * sizeof(Type));
 			m_data->m_size = size1;
 		}
 		if (size2) {
-			Base::Memory::copy(m_data->m_str + size1, str2, size2 * sizeof(Type));
+			Memory::copy(m_data->m_str + size1, str2, size2 * sizeof(Type));
 			m_data->m_size += size2;
 		}
 	}

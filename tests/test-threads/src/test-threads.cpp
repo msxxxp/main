@@ -13,7 +13,7 @@
 namespace {
 	void setup_logger()
 	{
-		using namespace Base::Logger;
+		using namespace Logger;
 		set_default_level(Level::Trace);
 		set_default_prefix(Prefix::Medium | Prefix::Place | Prefix::Module | Prefix::Thread);
 		set_default_target(get_TargetToConsole());
@@ -45,7 +45,6 @@ private:
 	ssize_t m_num;
 };
 
-
 int main()
 {
 	setup_logger();
@@ -72,7 +71,6 @@ int main()
 	threads[1].resume();
 	while (threads.wait_all(1000) != Base::WaitResult_t::SUCCESS)
 		;
-
 
 	LogInfo(L"threads[0] exited: %d\n", threads[0].get_exitcode());
 	LogInfo(L"threads[1] exited: %d\n", threads[1].get_exitcode());

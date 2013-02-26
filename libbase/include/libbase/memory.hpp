@@ -5,113 +5,6 @@
 #include <libbase/uncopyable.hpp>
 
 namespace Base {
-	namespace Memory {
-
-//		template<typename Type>
-//		struct PtrHolder: private Uncopyable {
-//			PtrHolder(Type ptr) :
-//				m_ptr(ptr)
-//			{
-//			}
-//
-//			~PtrHolder()
-//			{
-//				delete m_ptr;
-//			}
-//
-//			PtrHolder(PtrHolder && rhs):
-//				m_ptr(nullptr)
-//			{
-//				swap(rhs);
-//			}
-//
-//			PtrHolder & operator = (PtrHolder && rhs)
-//			{
-//				if (this != &rhs)
-//					PtrHolder(std::move(rhs)).swap(*this);
-//				return *this;
-//			}
-//
-//			Type operator -> () const
-//			{
-//				return m_ptr;
-//			}
-//
-//			Type get() const
-//			{
-//				return m_ptr;
-//			}
-//
-//			void swap(PtrHolder & rhs)
-//			{
-//				Type tmp = m_ptr;
-//				m_ptr = rhs.m_ptr;
-//				rhs.m_ptr = tmp;
-//			}
-//
-//		private:
-//			Type m_ptr;
-//		};
-
-		template<typename Type>
-		inline bool alloc(Type & in, size_t size, DWORD flags = HEAP_ZERO_MEMORY)
-		{
-			in = static_cast<Type>(::HeapAlloc(::GetProcessHeap(), flags, size));
-			return in != nullptr;
-		}
-
-		inline PVOID alloc(size_t size, DWORD flags = HEAP_ZERO_MEMORY)
-		{
-			return ::HeapAlloc(::GetProcessHeap(), flags, size);
-		}
-
-		PVOID realloc_v(PVOID in, size_t size, DWORD flags = HEAP_ZERO_MEMORY);
-
-		inline void free_v(PVOID in)
-		{
-			::HeapFree(::GetProcessHeap(), 0, in);
-		}
-
-		template<typename Type>
-		inline bool realloc(Type & in, size_t size, DWORD flags = HEAP_ZERO_MEMORY)
-		{
-			in = (Type)realloc_v(in, size, flags);
-			return in != nullptr;
-		}
-
-		template<typename Type>
-		inline void free(Type & in)
-		{
-			free_v((PVOID)in);
-			in = nullptr;
-		}
-
-		inline size_t size(PCVOID in)
-		{
-			return (in) ? ::HeapSize(::GetProcessHeap(), 0, in) : 0;
-		}
-
-		inline bool compare(PCVOID m1, PCVOID m2, size_t size)
-		{
-			return ::memcmp(m1, m2, size) == 0;
-		}
-
-		inline PVOID copy(PVOID dest, PCVOID sour, size_t size)
-		{
-			//			return ::memcpy_s(dest, sour, size);
-			return ::memcpy(dest, sour, size);
-		}
-
-		inline PVOID fill(PVOID in, size_t size, char fill)
-		{
-			return ::memset(in, (int)fill, size);
-		}
-
-		inline void zero(PVOID in, size_t size)
-		{
-			fill(in, size, 0);
-		}
-	}
 
 	template<typename Type>
 	inline Type & reverse_bytes(Type & inout)
@@ -178,7 +71,7 @@ namespace Base {
 		}
 
 		explicit auto_buf(size_type size) :
-			m_ptr((value_type)Memory::alloc(size, 0))
+			m_ptr(Memory::alloc<value_type>(size, 0))
 		{
 		}
 
@@ -282,13 +175,13 @@ namespace Base {
 		}
 
 		explicit auto_array(size_type size) :
-			m_ptr((pointer_type)Memory::alloc(size * sizeof(Type), 0)),
+			m_ptr(Memory::alloc<pointer_type>(size * sizeof(Type), 0)),
 			m_size(size)
 		{
 		}
 
 		auto_array(size_type size, const Type * data) :
-			m_ptr((pointer_type)Memory::alloc(size * sizeof(Type), 0)),
+			m_ptr(Memory::alloc<pointer_type>(size * sizeof(Type), 0)),
 			m_size(size)
 		{
 			if (data)

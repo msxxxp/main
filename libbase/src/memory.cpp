@@ -1,15 +1,20 @@
 ﻿#include <libbase/memory.hpp>
 
+#ifdef DEBUG
+namespace Memory {
+	namespace Watchdog
+	{
+		size_t allocations = 0;
+		size_t deletions = 0;
+		uint64_t allocations_size = 0;
+		uint64_t deletions_size = 0;
+
+		pfunc on_delete = nullptr;
+	};
+}
+#endif
 
 namespace Base {
-
-	namespace Memory {
-
-		PVOID realloc_v(PVOID in, size_t size, DWORD flags) {
-			return in ? ::HeapReAlloc(::GetProcessHeap(), flags, in, size) : ::HeapAlloc(::GetProcessHeap(), flags, size);
-		}
-
-	}
 
 	auto_close<HANDLE>::auto_close(const this_type & rhs):
 		m_ptr(nullptr) {

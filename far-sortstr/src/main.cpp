@@ -28,13 +28,15 @@
 namespace {
 	void setup_logger()
 	{
-		using namespace Base::Logger;
+		using namespace Logger;
 		set_default_level(Level::Trace);
+		set_default_prefix(Prefix::Medium | Prefix::Place);
 		set_default_target(get_TargetToFile(L"D:/projects/~test/sortstr.log"));
 
-		auto module  = create_module(L"threads");
+//		set_module_enabled(false, get_module(L"threads"));
 	}
 }
+
 
 ///========================================================================================== Export
 /// GlobalInfo

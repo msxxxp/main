@@ -335,11 +335,6 @@ void process()
 		{0, Far::get_msg(lbDelBlock), {0}},
 		{0, Far::get_msg(lbDelSparse), {0}},
 	};
-	static FarList cbList = {
-		sizeof(cbList),
-		Base::lengthof(cbItems),
-		cbItems
-	};
 
 	using namespace Far;
 	auto Builder = create_dialog_builder(DialogGuid, get_msg(DlgTitle));
@@ -355,7 +350,7 @@ void process()
 	Builder->add_item(create_checkbox(&get_global_info()->cbValue_AsEmpty, cbAsEmpty, (get_global_info()->get_block_type() != BTYPE_COLUMN) ? DIF_DISABLE : 0));
 	Builder->add_item(create_separator());
 	Builder->add_item(create_label(txOperation));
-	Builder->add_item(create_combobox(&get_global_info()->cbValue_Operation, &cbList, DIF_DROPDOWNLIST | DIF_LISTNOAMPERSAND));
+	Builder->add_item(create_combobox(&get_global_info()->cbValue_Operation, cbItems, Base::lengthof(cbItems), DIF_DROPDOWNLIST | DIF_LISTNOAMPERSAND));
 	Builder->add_item(create_separator());
 	Builder->add_OKCancel(get_msg(txtBtnOk), get_msg(txtBtnCancel));
 	if (Builder->show()) {

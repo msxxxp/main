@@ -71,26 +71,49 @@ namespace Memory {
 	template<typename Pointer>
 	inline Pointer alloc(size_t size, DWORD flags = HEAP_ZERO_MEMORY)
 	{
+		static_assert(std::is_pointer<Pointer>::value, "Pointer type is required");
 #ifdef DEBUG
 		Watchdog::allocations++;
 		Watchdog::allocations_size += size;
 #endif
-		static_assert(std::is_pointer<Pointer>::value, "Pointer type is required");
 		return static_cast<Pointer>(::HeapAlloc(get_heap(), flags, size));
+	}
+
+	template<typename Pointer>
+	inline Pointer malloc(size_t size, DWORD flags = HEAP_ZERO_MEMORY)
+	{
+		static_assert(std::is_pointer<Pointer>::value, "Pointer type is required");
+#ifdef DEBUG
+		Watchdog::allocations++;
+		Watchdog::allocations_size += size;
+#endif
+		return static_cast<Pointer>(::HeapAlloc(get_heap(), flags, size));
+	}
+
+	template<typename Pointer>
+	inline Pointer calloc(size_t count, DWORD flags = HEAP_ZERO_MEMORY)
+	{
+		static_assert(std::is_pointer<Pointer>::value, "Pointer type is required");
+		Pointer tmp_ptr = nullptr;
+#ifdef DEBUG
+		Watchdog::allocations++;
+		Watchdog::allocations_size += sizeof(*tmp_ptr) * count;
+#endif
+		return static_cast<Pointer>(::HeapAlloc(get_heap(), flags, sizeof(*tmp_ptr) * count));
 	}
 
 	template<typename Pointer>
 	inline void free(Pointer & in)
 	{
+		static_assert(std::is_pointer<Pointer>::value, "Pointer type is required");
 #ifdef DEBUG
 		Watchdog::deletions++;
 		Watchdog::deletions_size += Memory::size(in);
 		if (Watchdog::deletions_size == Watchdog::allocations_size && Watchdog::deletions == Watchdog::allocations)
 			printf("There is no leaks\n");
 #endif
-		static_assert(std::is_pointer<Pointer>::value, "Pointer type is required");
-		::HeapFree(get_heap(), 0, (PVOID)in);
-		in = nullptr;
+		::HeapFree(get_heap(), 0, *(PVOID*)(&in));
+		*(PVOID*)(&in) = nullptr;
 	}
 
 	template<typename Pointer>

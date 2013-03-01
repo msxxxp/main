@@ -98,10 +98,10 @@ Far::Plugin_i * FarGlobalInfo::CreatePlugin(const PluginStartupInfo * Info) cons
 void FarGlobalInfo::load_settings() {
 	LogTrace();
 	Far::Settings_t m_settings(*get_guid());
-	addToPluginsMenu = m_settings.get(L"AddToPluginsMenu", addToPluginsMenu);
-	addToDisksMenu = m_settings.get(L"AddToDisksMenu", addToDisksMenu);
-	waitForState = m_settings.get(L"waitForState", waitForState);
-	waitTimeout = m_settings.get(L"waitTimeout", waitTimeout);
+	addToPluginsMenu = m_settings.get(L"AddToPluginsMenu", (int64_t)addToPluginsMenu);
+	addToDisksMenu = m_settings.get(L"AddToDisksMenu", (int64_t)addToDisksMenu);
+	waitForState = m_settings.get(L"waitForState", (int64_t)waitForState);
+	waitTimeout = m_settings.get(L"waitTimeout", (int64_t)waitTimeout);
 	Base::Str::copy(prefix, m_settings.get(L"Prefix", L"svcmgr"));
 
 	set_changed(true);
@@ -111,10 +111,10 @@ void FarGlobalInfo::load_settings() {
 void FarGlobalInfo::save_settings() const {
 	LogTrace();
 	Far::Settings_t m_settings(*get_guid());
-	m_settings.set(L"AddToPluginsMenu", addToPluginsMenu);
-	m_settings.set(L"AddToDisksMenu", addToDisksMenu);
-	m_settings.set(L"waitForState", waitForState);
-	m_settings.set(L"waitTimeout", waitTimeout);
+	m_settings.set(L"AddToPluginsMenu", (int64_t)addToPluginsMenu);
+	m_settings.set(L"AddToDisksMenu", (int64_t)addToDisksMenu);
+	m_settings.set(L"waitForState", (int64_t)waitForState);
+	m_settings.set(L"waitTimeout", (int64_t)waitTimeout);
 	m_settings.set(L"Prefix", prefix);
 
 	set_changed(true);

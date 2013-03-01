@@ -190,7 +190,7 @@ ustring	parse_info(const Ext::Service::Info_t & info) {
 		Result += info.serviceStartName;
 		Result += L"\n\n";
 		Result += Far::get_msg(infoTag);
-		Result += Base::as_str(info.tagId);
+		Result += Base::to_str(info.tagId);
 		Result += L"\n\n";
 		Result += Far::get_msg(infoDependencies);
 		for (size_t i = 0; i < info.dependencies.size(); ++i) {
@@ -322,13 +322,13 @@ ssize_t PanelController::GetFindData(GetFindDataInfo * Info) try {
 	if (!m_model->is_drivers()) {
 		++i;
 		Info->ItemsNumber = m_model->size() + 1;
-		Base::Memory::alloc(Info->PanelItem, sizeof(*Info->PanelItem) * Info->ItemsNumber);
+		Info->PanelItem = Memory::calloc<PluginPanelItem*>(Info->ItemsNumber);
 		Info->PanelItem[0].FileName = Far::get_msg(txtDevices);
 		Info->PanelItem[0].AlternateFileName = Far::get_msg(txtDevices);
 		Info->PanelItem[0].FileAttributes = FILE_ATTRIBUTE_DIRECTORY;
 	} else {
 		Info->ItemsNumber = m_model->size();
-		Base::Memory::alloc(Info->PanelItem, sizeof(*Info->PanelItem) * Info->ItemsNumber);
+		Info->PanelItem = Memory::calloc<PluginPanelItem*>(Info->ItemsNumber);
 	}
 
 	for (PanelModel::iterator it = m_model->begin(); it != m_model->end(); ++it, ++i) {
@@ -347,16 +347,14 @@ ssize_t PanelController::GetFindData(GetFindDataInfo * Info) try {
 		if (it->is_disabled()) {
 			Info->PanelItem[i].FileAttributes = FILE_ATTRIBUTE_HIDDEN;
 		}
-		PCWSTR * CustomColumnData;
-		if (Base::Memory::alloc(CustomColumnData, 5 * sizeof(PCWSTR))) {
-			CustomColumnData[0] = it->name.c_str();
-			CustomColumnData[1] = it->displayName.c_str();
-			CustomColumnData[2] = state_as_str(it->status.dwCurrentState);
-			CustomColumnData[3] = start_type_as_str(it->startType);
-			CustomColumnData[4] = it->binaryPathName.c_str();
-			Info->PanelItem[i].CustomColumnData = CustomColumnData;
-			Info->PanelItem[i].CustomColumnNumber = 5;
-		}
+		PCWSTR * CustomColumnData = Memory::calloc<PCWSTR*>(5);
+		CustomColumnData[0] = it->name.c_str();
+		CustomColumnData[1] = it->displayName.c_str();
+		CustomColumnData[2] = state_as_str(it->status.dwCurrentState);
+		CustomColumnData[3] = start_type_as_str(it->startType);
+		CustomColumnData[4] = it->binaryPathName.c_str();
+		Info->PanelItem[i].CustomColumnData = CustomColumnData;
+		Info->PanelItem[i].CustomColumnNumber = 5;
 	}
 	return true;
 } catch (Ext::AbstractError & e) {
@@ -367,9 +365,9 @@ ssize_t PanelController::GetFindData(GetFindDataInfo * Info) try {
 void PanelController::FreeFindData(const FreeFindDataInfo * Info) {
 	LogTrace();
 	for (size_t i = 0; i < Info->ItemsNumber; ++i) {
-		Base::Memory::free(Info->PanelItem[i].CustomColumnData);
+		Memory::free(Info->PanelItem[i].CustomColumnData);
 	}
-	Base::Memory::free_v(Info->PanelItem);
+	Memory::free(Info->PanelItem);
 }
 
 ssize_t PanelController::Compare(const CompareInfo * Info) {
@@ -472,10 +470,9 @@ bool PanelController::view() {
 				CheckApi(::WriteFile(hfile, info.c_str(), info.size() * sizeof(WCHAR), &bytesWritten, nullptr));
 				::CloseHandle(hfile);
 				LogDebug(L"start view\n");
-				intptr_t ret = Far::psi().Viewer(tmp_file, nullptr, 0, 0, -1, -1,
+				Far::psi().Viewer(tmp_file, nullptr, 0, 0, -1, -1,
 				           VF_DELETEONLYFILEONCLOSE | VF_ENABLE_F6 | VF_DISABLEHISTORY |
 				           VF_NONMODAL | VF_IMMEDIATERETURN, CP_DEFAULT);
-				LogDebug(L"viewer api ret: %Id\n", ret);
 			}
 		}
 	}

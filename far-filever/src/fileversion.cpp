@@ -77,7 +77,7 @@ FileVersion::FileVersion(PCWSTR path): m_data(nullptr) {
 			WCHAR tmp[4] = {0};
 			DWORD err = 0;
 			_snwprintf(tmp, lengthof(tmp), L"%04x", translate->wCodePage);
-			err = Base::Str::as_uint32(tmp);
+			err = Base::Str::to_uint32(tmp);
 			_snwprintf(m_lngIderr, lengthof(m_lngIderr), L"%04x%04x", translate->wLanguage, err);
 		}
 	} else {

@@ -49,7 +49,7 @@ namespace Logger {
 		return Level::Atten;
 	}
 
-	void set_default_level(Level /*lvl*/)
+	inline void set_default_level(Level /*lvl*/)
 	{
 	}
 

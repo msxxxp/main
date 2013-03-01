@@ -94,7 +94,7 @@ namespace Memory {
 	}
 
 	template<typename Pointer>
-	inline void realloc(Pointer & in, size_t size, DWORD flags = HEAP_ZERO_MEMORY)
+	inline bool realloc(Pointer & in, size_t size, DWORD flags = HEAP_ZERO_MEMORY)
 	{
 #ifdef DEBUG
 		if (in) {
@@ -105,7 +105,7 @@ namespace Memory {
 		Watchdog::allocations_size += size;
 #endif
 		static_assert(std::is_pointer<Pointer>::value, "Pointer type is required");
-		in = static_cast<Pointer>((in) ? ::HeapReAlloc(get_heap(), flags, (PVOID)in, size) : ::HeapAlloc(get_heap(), flags, size));
+		return (in = static_cast<Pointer>((in) ? ::HeapReAlloc(get_heap(), flags, (PVOID)in, size) : ::HeapAlloc(get_heap(), flags, size)));
 	}
 
 	template<typename Pointer1, typename Pointer2>

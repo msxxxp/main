@@ -306,10 +306,10 @@
 		<project id="far-sortstr.cdt.managedbuild.target.gnu.mingw.exe.1977911092" name="Executable" projectType="cdt.managedbuild.target.gnu.mingw.exe"/>
 	</storageModule>
 	<storageModule moduleId="refreshScope" versionNumber="2">
-		<configuration configurationName="Debug-x32">
+		<configuration configurationName="FAR2-Release-x32">
 			<resource resourceType="PROJECT" workspacePath="/far-sortstr"/>
 		</configuration>
-		<configuration configurationName="FAR2-Release-x32">
+		<configuration configurationName="Debug-x32">
 			<resource resourceType="PROJECT" workspacePath="/far-sortstr"/>
 		</configuration>
 		<configuration configurationName="Release-x32"/>

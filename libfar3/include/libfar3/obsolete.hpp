@@ -35,7 +35,7 @@ namespace Far {
 	inline void InitDialogItemsF(const InitDialogItemF * Init, FarDialogItem * Item, int ItemsNumber)
 	{
 		for (int i = 0; i < ItemsNumber; ++i) {
-			Base::Memory::zero(&Item[i], sizeof(Item[i]));
+			Memory::zero(Item[i]);
 			Item[i].Type = Init[i].Type;
 			Item[i].X1 = Init[i].X1;
 			Item[i].Y1 = Init[i].Y1;

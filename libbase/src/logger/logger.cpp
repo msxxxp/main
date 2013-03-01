@@ -1,4 +1,5 @@
-﻿#include <libbase/logger.hpp>
+﻿#ifndef NO_LOGGER
+#include <libbase/logger.hpp>
 #include "logger_pvt.hpp"
 
 #include <libbase/lock.hpp>
@@ -446,3 +447,4 @@ namespace Logger {
 	}
 
 }
+#endif

@@ -41,7 +41,7 @@ struct version_dll: private Base::DynamicLibrary {
 
 	static version_dll & inst();
 
-	bool is_valid() const;
+	bool is_valid() const noexcept;
 
 private:
 	version_dll();

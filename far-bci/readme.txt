@@ -7,5 +7,5 @@
 	mailto: andrew.grechkin@gmail.com
 	jabber: andrew.grechkin@gmail.com
 
-Исходный код
-	http://code.google.com/p/andrew-grechkin
+Исходный код:
+	https://github.com/andrew-grechkin/main

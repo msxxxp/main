@@ -13,4 +13,4 @@
 	jabber:
 
 Исходный код:
-	http://code.google.com/p/andrew-grechkin
+	https://github.com/andrew-grechkin/main

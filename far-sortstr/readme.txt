@@ -95,4 +95,4 @@ VictorVG - написание русского lng файла.
 	jabber: andrew.grechkin@gmail.com
 
 Исходный код:
-	http://code.google.com/p/andrew-grechkin
+	https://github.com/andrew-grechkin/main

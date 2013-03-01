@@ -24,22 +24,28 @@
 
 #include <libfar3/helper.hpp>
 #include <libfar3/plugin_i.hpp>
-#include <libfar3/panelcontroller_i.hpp>
-
 #include <libbase/logger.hpp>
+
+#include <libfar3/panelcontroller_i.hpp>
+namespace {
+	void setup_logger()
+	{
+		using namespace Logger;
+		set_default_level(Level::Trace);
+		set_default_prefix(Prefix::Medium | Prefix::Place);
+		set_default_target(get_TargetToFile(L"D:/projects/~test/svcmgr.log"));
+	}
+}
+
 
 ///========================================================================================== Export
 /// GlobalInfo
 void WINAPI GetGlobalInfoW(GlobalInfo * Info)
 {
-	Base::Logger::set_target(Base::Logger::get_TargetToFile(L"D:/projects/~test/svcmgr.log"));
-	Base::Logger::set_level(Base::Logger::Level::Trace);
+	setup_logger();
 
 	LogTrace();
-	LogDebug(L"==========================================================================\n");
-
 	Far::helper_t::inst().init(new FarGlobalInfo);
-
 	get_global_info()->GetGlobalInfoW(Info);
 }
 

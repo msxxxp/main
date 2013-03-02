@@ -69,7 +69,7 @@ namespace Memory {
 	}
 
 	template<typename Pointer>
-	inline Pointer alloc(size_t size, DWORD flags = HEAP_ZERO_MEMORY)
+	inline Pointer malloc(size_t size, DWORD flags = 0/*HEAP_ZERO_MEMORY*/)
 	{
 		static_assert(std::is_pointer<Pointer>::value, "Pointer type is required");
 #ifdef DEBUG
@@ -80,18 +80,7 @@ namespace Memory {
 	}
 
 	template<typename Pointer>
-	inline Pointer malloc(size_t size, DWORD flags = HEAP_ZERO_MEMORY)
-	{
-		static_assert(std::is_pointer<Pointer>::value, "Pointer type is required");
-#ifdef DEBUG
-		Watchdog::allocations++;
-		Watchdog::allocations_size += size;
-#endif
-		return static_cast<Pointer>(::HeapAlloc(get_heap(), flags, size));
-	}
-
-	template<typename Pointer>
-	inline Pointer calloc(size_t count, DWORD flags = HEAP_ZERO_MEMORY)
+	inline Pointer calloc(size_t count, DWORD flags = 0)
 	{
 		static_assert(std::is_pointer<Pointer>::value, "Pointer type is required");
 		Pointer tmp_ptr = nullptr;
@@ -99,7 +88,19 @@ namespace Memory {
 		Watchdog::allocations++;
 		Watchdog::allocations_size += sizeof(*tmp_ptr) * count;
 #endif
-		return static_cast<Pointer>(::HeapAlloc(get_heap(), flags, sizeof(*tmp_ptr) * count));
+		return static_cast<Pointer>(::HeapAlloc(get_heap(), flags | HEAP_ZERO_MEMORY, sizeof(*tmp_ptr) * count));
+	}
+
+	template<typename Pointer>
+	inline Pointer ealloc(DWORD flags = 0)
+	{
+		static_assert(std::is_pointer<Pointer>::value, "Pointer type is required");
+		Pointer tmp_ptr = nullptr;
+#ifdef DEBUG
+		Watchdog::allocations++;
+		Watchdog::allocations_size += sizeof(*tmp_ptr);
+#endif
+		return static_cast<Pointer>(::HeapAlloc(get_heap(), flags | HEAP_ZERO_MEMORY, sizeof(*tmp_ptr)));
 	}
 
 	template<typename Pointer>
@@ -140,12 +141,20 @@ namespace Memory {
 	}
 
 	template<typename Pointer1, typename Pointer2>
-	inline Pointer1 copy(Pointer1 dest, Pointer2 sour, size_t size)
+	inline Pointer1 copy(Pointer1 dest, Pointer2 src, size_t size)
 	{
 		static_assert(std::is_pointer<Pointer1>::value, "Pointer type is required");
 		static_assert(std::is_pointer<Pointer2>::value, "Pointer type is required");
 		//return ::memcpy_s(dest, sour, size);
-		return static_cast<Pointer1>(::memcpy((PVOID)dest, (PVOID)sour, size));
+		return static_cast<Pointer1>(::memcpy((PVOID)dest, (PVOID)src, size));
+	}
+
+	template<typename Pointer1, typename Pointer2>
+	inline Pointer1 dup(Pointer2 src, size_t size, DWORD flags = 0/*HEAP_ZERO_MEMORY*/)
+	{
+		static_assert(std::is_pointer<Pointer1>::value, "Pointer type is required");
+		static_assert(std::is_pointer<Pointer2>::value, "Pointer type is required");
+		return Memory::copy(Memory::malloc<Pointer1>(size, flags), src, size);
 	}
 
 	template<typename Pointer>
@@ -174,7 +183,7 @@ namespace Memory {
 #ifdef NoStdNew
 inline void * operator new(size_t size) noexcept
 {
-	return Memory::alloc<PVOID>(size, HEAP_ZERO_MEMORY);
+	return Memory::malloc<PVOID>(size, HEAP_ZERO_MEMORY);
 }
 
 inline void * operator new [](size_t size) noexcept

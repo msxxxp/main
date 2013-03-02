@@ -38,7 +38,7 @@ namespace Base {
 		}
 		m_capa = ptr - in;
 		if (m_capa) {
-			m_data = Memory::alloc<PWSTR>(m_capa * sizeof(wchar_t));
+			m_data = Memory::calloc<wchar_t*>(m_capa);
 			Memory::copy(m_data, in, m_capa * sizeof(wchar_t));
 		}
 	}

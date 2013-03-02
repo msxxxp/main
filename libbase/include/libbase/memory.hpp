@@ -71,7 +71,7 @@ namespace Base {
 		}
 
 		explicit auto_buf(size_type size) :
-			m_ptr(Memory::alloc<value_type>(size, 0))
+			m_ptr(Memory::malloc<value_type>(size, 0))
 		{
 		}
 
@@ -175,13 +175,13 @@ namespace Base {
 		}
 
 		explicit auto_array(size_type size) :
-			m_ptr(Memory::alloc<pointer_type>(size * sizeof(Type), 0)),
+			m_ptr(Memory::calloc<pointer_type>(size, 0)),
 			m_size(size)
 		{
 		}
 
 		auto_array(size_type size, const Type * data) :
-			m_ptr(Memory::alloc<pointer_type>(size * sizeof(Type), 0)),
+			m_ptr(Memory::calloc<pointer_type>(size, 0)),
 			m_size(size)
 		{
 			if (data)

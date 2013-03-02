@@ -446,7 +446,7 @@ private:
 
 	Cont * alloc_cstr(size_t capa)
 	{
-		Cont * ret = Memory::alloc<Cont*>(sizeof(Cont) + capa * sizeof(Type));
+		Cont * ret = Memory::malloc<Cont*>(sizeof(Cont) + capa * sizeof(Type));
 		ret->m_ref = 1;
 		ret->m_capa = capa;
 		return ret;

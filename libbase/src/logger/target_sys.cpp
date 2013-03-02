@@ -91,11 +91,13 @@ namespace Logger {
 			fullpath = (PWSTR)path;
 		}
 
-		wchar_t key[Base::MAX_PATH_LEN];
-		Base::Str::copy(key, L"SYSTEM\\CurrentControlSet\\Services\\EventLog\\Application\\", Base::lengthof(key));
-		Base::Str::cat(key, name, Base::lengthof(key));
+		auto key1 = L"SYSTEM\\CurrentControlSet\\Services\\EventLog\\Application\\";
+		auto key_length = Base::Str::length(key1);
+		wchar_t value[Base::MAX_PATH_LEN];
+		Base::Str::copy(value, Base::lengthof(value), key1);
+		Base::Str::cat(value, Base::lengthof(value) - key_length, name);
 		HKEY hKey = nullptr;
-		::RegCreateKeyW(HKEY_LOCAL_MACHINE, key, &hKey);
+		::RegCreateKeyW(HKEY_LOCAL_MACHINE, value, &hKey);
 		// Add the Event ID message-file name to the subkey.
 		::RegSetValueExW(hKey, L"EventMessageFile", 0, REG_EXPAND_SZ, (LPBYTE)fullpath, (DWORD)((Base::Str::length(fullpath) + 1) * sizeof(wchar_t)));
 		// Set the supported types flags.

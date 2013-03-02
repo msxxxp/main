@@ -85,6 +85,11 @@ namespace Base {
 			return ::CompareStringW(0, NORM_IGNORECASE | NORM_STOP_ON_NULL | SORT_STRINGSORT, in1, n, in2, n) - CSTR_EQUAL;
 		}
 
+		template<typename Char>
+		inline Char * dup(const Char * src) {
+			return src ? Memory::dup<Char*>(src, (length(src) + 1) * sizeof(Char)) : nullptr;
+		}
+
 		inline PSTR copy(PSTR dest, PCSTR src) {
 			return ::strcpy(dest, src);
 		}
@@ -93,11 +98,13 @@ namespace Base {
 			return ::wcscpy(dest, src);
 		}
 
-		inline PSTR copy(PSTR dest, PCSTR src, size_t size) {
+		inline PSTR copy(PSTR dest, size_t size, PCSTR src) {
+			dest[--size] = 0;
 			return ::strncpy(dest, src, size);
 		}
 
-		inline PWSTR copy(PWSTR dest, PCWSTR src, size_t size) {
+		inline PWSTR copy(PWSTR dest, size_t size, PCWSTR src) {
+			dest[--size] = 0;
 			return ::wcsncpy(dest, src, size);
 		}
 
@@ -109,11 +116,11 @@ namespace Base {
 			return ::wcscat(dest, src);
 		}
 
-		inline PSTR cat(PSTR dest, PCSTR src, size_t size) {
+		inline PSTR cat(PSTR dest, size_t size, PCSTR src) {
 			return ::strncat(dest, src, size);
 		}
 
-		inline PWSTR cat(PWSTR dest, PCWSTR src, size_t size) {
+		inline PWSTR cat(PWSTR dest, size_t size, PCWSTR src) {
 			return ::wcsncat(dest, src, size);
 		}
 
@@ -121,7 +128,7 @@ namespace Base {
 			return (PSTR)::strstr(where, what);
 		}
 
-		inline PCSTR find(PCSTR where, CHAR what) {
+		inline PCSTR find(PCSTR where, char what) {
 			return ::strchr(where, what);
 		}
 

@@ -72,7 +72,7 @@ namespace Http {
 	}
 
 	bool HttpBindIP::copy(HTTP_SERVICE_CONFIG_SSL_KEY & out) const {
-		out.pIpPort = Memory::alloc<PSOCKADDR>(sizeof(SOCKADDR));
+		out.pIpPort = Memory::malloc<PSOCKADDR>(sizeof(SOCKADDR), HEAP_ZERO_MEMORY);
 		Memory::copy(out.pIpPort, pIpPort, sizeof(*pIpPort));
 		return true;
 	}
@@ -123,7 +123,7 @@ namespace Http {
 		out.pSslCertStoreName = (PWSTR)L"MY";
 
 		out.SslHashLength = SslHashLength;
-		out.pSslHash = Memory::alloc<PVOID>(out.SslHashLength);
+		out.pSslHash = Memory::malloc<PVOID>(out.SslHashLength, HEAP_ZERO_MEMORY);
 		Memory::copy(out.pSslHash, pSslHash, out.SslHashLength);
 		return true;
 	}

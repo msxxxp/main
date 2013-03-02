@@ -5,7 +5,6 @@
 #include <libbase/shared_ptr.hpp>
 
 namespace Logger {
-	struct Logger_i;
 	struct Module_i;
 	struct Target_i;
 }
@@ -27,18 +26,18 @@ namespace Logger {
 	};
 
 	namespace Prefix {
-		typedef size_t type;
-		const static size_t Function = 0x0001;
-		const static size_t Level    = 0x0002;
-		const static size_t Module   = 0x0004;
-		const static size_t Place    = 0x0008;
-		const static size_t Thread   = 0x0010;
-		const static size_t Time     = 0x0020;
-		const static size_t Date     = 0x0040;
+		typedef size_t flags;
+		const static flags Function = 0x0001;
+		const static flags Level    = 0x0002;
+		const static flags Module   = 0x0004;
+		const static flags Place    = 0x0008;
+		const static flags Thread   = 0x0010;
+		const static flags Time     = 0x0020;
+		const static flags Date     = 0x0040;
 
-		const static size_t Lite     = Time | Level;
-		const static size_t Medium   = Time | Level | Function;
-		const static size_t Full     = Date | Time | Level | Function | Module | Thread | Place;
+		const static flags Lite     = Time | Level;
+		const static flags Medium   = Time | Level | Function;
+		const static flags Full     = Date | Time | Level | Function | Module | Thread | Place;
 	};
 
 #ifdef NO_LOGGER
@@ -93,7 +92,7 @@ namespace Logger {
 	{
 	}
 
-	inline Prefix::type get_module_prefix(Module_i * /*module*/)
+	inline Prefix::flags get_module_prefix(Module_i * /*module*/)
 	{
 		return 0;
 	}
@@ -136,7 +135,7 @@ namespace Logger {
 #else
 	typedef Base::shared_ptr<Target_i> Target_t;
 
-	///================================================================================ Module_i
+	///==================================================================================== Module_i
 	struct Module_i {
 		virtual ~Module_i();
 
@@ -161,19 +160,6 @@ namespace Logger {
 		virtual void out(PCSTR file, int line, PCSTR func, Level lvl, PCWSTR format, ...) const = 0;
 
 		virtual void out(Level lvl, PCWSTR format, ...) const = 0;
-
-		virtual void lock() const = 0;
-
-		virtual void unlock() const = 0;
-	};
-
-	///================================================================================ Target_i
-	struct Target_i {
-		virtual ~Target_i();
-
-		virtual void out(const Module_i * module, Level lvl, PCWSTR str, size_t size) const = 0;
-
-		virtual void out(PCWSTR str, size_t size) const = 0;
 
 		virtual void lock() const = 0;
 
@@ -211,7 +197,7 @@ namespace Logger {
 		module->set_prefix(prefix);
 	}
 
-	inline Prefix::type get_module_prefix(Module_i * module)
+	inline Prefix::flags get_module_prefix(Module_i * module)
 	{
 		return module->get_prefix();
 	}
@@ -235,6 +221,19 @@ namespace Logger {
 	{
 		module->unlock();
 	}
+
+	///==================================================================================== Target_i
+	struct Target_i {
+		virtual ~Target_i();
+
+		virtual void out(const Module_i * module, Level lvl, PCWSTR str, size_t size) const = 0;
+
+		virtual void out(PCWSTR str, size_t size) const = 0;
+
+		virtual void lock() const = 0;
+
+		virtual void unlock() const = 0;
+	};
 
 	Target_t get_TargetToNull();
 
@@ -268,25 +267,9 @@ inline Logger::Module_i * get_logger_module()
 #   define LogErrorIf(condition, format, args ...) (condition)
 #   define LogFatal(format, args ...)
 #else
-#   ifdef NO_TRACE
-#       define LogTrace()
-#       define LogTraceIf(condition) (condition)
-#       define LogNoise(format, args ...)
-#       define LogNoiseIf(condition) (condition)
-#       define LogDebug(format, args ...)
-#       define LogDebugIf(condition, format, args ...) (condition)
-#       define LogInfo(format, args ...)	           get_logger_module()->out(Logger::Level::Info, format, ##args)
-#       define LogReport(format, args ...)	           get_logger_module()->out(Logger::Level::Report, format, ##args)
-#       define LogAtten(format, args ...)	           get_logger_module()->out(Logger::Level::Atten, format, ##args)
-#       define LogWarn(format, args ...)	           get_logger_module()->out(Logger::Level::Warn, format, ##args)
-#       define LogWarnIf(condition, format, args ...)  if (condition) get_logger_module()->out(Logger::Level::Warn, format, ##args)
-#       define LogError(format, args ...)	           get_logger_module()->out(Logger::Level::Error, format, ##args)
-#       define LogErrorIf(condition, format, args ...) if (condition) get_logger_module()->out(Logger::Level::Error, format, ##args)
-#       define LogFatal(format, args ...)	           get_logger_module()->out(Logger::Level::Fatal, format, ##args)
-#   else
 #       define LogTrace()                         get_logger_module()->out(THIS_PLACE, Logger::Level::Trace, L"\n")
 #       define LogTraceIf(condition)              if (condition) get_logger_module()->out(THIS_PLACE, Logger::Level::Trace, L"\n")
-#ifdef _MSC_VER
+#   ifdef _MSC_VER
 #       define LogNoise(format, ...)              get_logger_module()->out(THIS_PLACE, Logger::Level::Trace, format, __VA_ARGS__)
 #       define LogNoiseIf(condition, format, ...) if (condition) get_logger_module()->out(THIS_PLACE, Logger::Level::Trace, format, __VA_ARGS__)
 #       define LogDebug(format, ...)	          get_logger_module()->out(THIS_PLACE, Logger::Level::Debug, format, __VA_ARGS__)
@@ -299,7 +282,7 @@ inline Logger::Module_i * get_logger_module()
 #       define LogError(format, ...)	          get_logger_module()->out(THIS_PLACE, Logger::Level::Error, format, __VA_ARGS__)
 #       define LogErrorIf(condition, format, ...) if (condition) get_logger_module()->out(THIS_PLACE, Logger::Level::Error, format, __VA_ARGS__)
 #       define LogFatal(format, ...)	          get_logger_module()->out(THIS_PLACE, Logger::Level::Fatal, format, __VA_ARGS__)
-#else
+#   else
 #       define LogNoise(format, args ...)	           get_logger_module()->out(THIS_PLACE, Logger::Level::Trace, format, ##args)
 #       define LogNoiseIf(condition, format, args ...) if (condition) get_logger_module()->out(THIS_PLACE, Logger::Level::Trace, format, ##args)
 #       define LogDebug(format, args ...)	           get_logger_module()->out(THIS_PLACE, Logger::Level::Debug, format, ##args)
@@ -312,7 +295,6 @@ inline Logger::Module_i * get_logger_module()
 #       define LogError(format, args ...)	           get_logger_module()->out(THIS_PLACE, Logger::Level::Error, format, ##args)
 #       define LogErrorIf(condition, format, args ...) if (condition) get_logger_module()->out(THIS_PLACE, Logger::Level::Error, format, ##args)
 #       define LogFatal(format, args ...)	           get_logger_module()->out(THIS_PLACE, Logger::Level::Fatal, format, ##args)
-#endif
 #   endif
 #endif
 

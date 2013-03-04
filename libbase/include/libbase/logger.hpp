@@ -242,6 +242,9 @@ namespace Logger {
 	Target_t get_TargetToFile(PCWSTR path);
 
 	Target_t get_TargetToSys(PCWSTR name, PCWSTR path = nullptr);
+
+	Target_t get_TargetToMult(const Target_t & first, const Target_t & second);
+
 #endif
 
 }

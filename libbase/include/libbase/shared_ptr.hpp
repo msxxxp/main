@@ -2,6 +2,7 @@
 #define _LIBBASE_SHARED_PTR_HPP_
 
 #include <libbase/std.hpp>
+#include <libbase/ref_cnt.hpp>
 
 namespace Base {
 
@@ -18,7 +19,7 @@ namespace Base {
 			reset();
 		}
 
-		shared_ptr() :
+		shared_ptr() noexcept :
 			m_impl(nullptr)
 		{
 		}
@@ -39,7 +40,7 @@ namespace Base {
 		{
 			if (sh_ptr.m_impl) {
 				m_impl = sh_ptr.m_impl;
-				m_impl->inc_ref();
+				m_impl->increase_ref();
 			}
 		}
 
@@ -60,7 +61,7 @@ namespace Base {
 		void reset()
 		{
 			if (m_impl) {
-				m_impl->dec_ref();
+				m_impl->decrease_ref();
 				m_impl = nullptr;
 			}
 		}
@@ -93,12 +94,12 @@ namespace Base {
 
 		bool unique() const
 		{
-			return !m_impl || m_impl->refcnt() == 1;
+			return !m_impl || m_impl->count() == 1;
 		}
 
 		size_type use_count() const
 		{
-			return (m_impl) ? m_impl->refcnt() : 0;
+			return (m_impl) ? m_impl->count() : 0;
 		}
 
 		operator bool() const
@@ -113,44 +114,22 @@ namespace Base {
 		}
 
 	private:
-		struct shared_ptr_impl {
-			virtual ~shared_ptr_impl() {}
+		struct shared_ptr_impl: public ref_counter {
+			shared_ptr_impl(element_type * ptr) : m_ptr(ptr) {}
 
-			shared_ptr_impl(element_type * ptr) :
-				m_ptr(ptr),
-				m_refcnt(1)
-			{
-			}
-
-			virtual void del_ptr() {delete m_ptr;}
-
-			void inc_ref() { m_refcnt++;}
-
-			void dec_ref() {
-				if (--m_refcnt == 0) {
-					del_ptr();
-					delete this;
-				}
-			}
-
-			size_type refcnt() const {return m_refcnt;}
+			void destroy() override {delete m_ptr;}
 
 			element_type * get() const {return m_ptr;}
 
-		protected:
+		private:
 			element_type * m_ptr;
-			size_type m_refcnt;
 		};
 
 		template<typename Deleter>
 		struct shared_ptr_impl_deleter: public shared_ptr_impl {
-			shared_ptr_impl_deleter(element_type * ptr, Deleter d) :
-				shared_ptr_impl(ptr),
-				m_deleter(d)
-			{
-			}
+			shared_ptr_impl_deleter(element_type * ptr, Deleter d) : shared_ptr_impl(ptr), m_deleter(d) {}
 
-			void del_ptr() {m_deleter(this->m_ptr);}
+			void destroy() override {m_deleter(get());}
 
 		private:
 			Deleter m_deleter;

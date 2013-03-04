@@ -12,13 +12,9 @@ namespace Base {
 
 		ref_counter();
 
-//		ref_counter(const ref_counter &rhs);
-//
-//		ref_counter& operator=(const ref_counter &rhs);
+		void increase_ref() {++m_refcnt;}
 
-		void add_ref() {++m_refcnt;}
-
-		void del_ref();
+		void decrease_ref();
 
 		void mark_unshareable() {m_shareable = false;}
 
@@ -29,64 +25,68 @@ namespace Base {
 		size_t count() const {return m_refcnt;}
 
 	private:
+		ref_counter(const ref_counter & rhs);
+
+		ref_counter & operator = (const ref_counter & rhs);
+
 		size_t m_refcnt;
 		bool m_shareable;
 	};
 
-	template<class Type>
-	struct rc_ptr {
-		~rc_ptr()
-		{
-			static_assert(std::is_base_of<ref_counter, Type>::value, "Type must be derived from ref_counter");
-			if (m_ptr)
-				m_ptr->del_ref();
-		}
-
-		rc_ptr(Type* ptr = nullptr) :
-			m_ptr(ptr)
-		{
-			init();
-		}
-
-		rc_ptr(const rc_ptr &rhs) :
-			m_ptr(rhs.m_ptr)
-		{
-			init();
-		}
-
-		rc_ptr& operator=(const rc_ptr &rhs)
-		{
-			if (m_ptr != rhs.m_ptr) {
-				if (m_ptr)
-					m_ptr->del_ref();
-				m_ptr = rhs.m_ptr;
-				init();
-			}
-			return *this;
-		}
-
-		Type* operator->() const
-		{
-			return m_ptr;
-		}
-
-		Type& operator*() const
-		{
-			return *m_ptr;
-		}
-
-	private:
-		void init()
-		{
-			if (!m_ptr)
-				return;
-			if (!m_ptr->is_shareable())
-				m_ptr = new Type(*m_ptr);
-			m_ptr->add_ref();
-		}
-
-		Type* m_ptr;
-	};
+//	template<class Type>
+//	struct rc_ptr {
+//		~rc_ptr()
+//		{
+//			static_assert(std::is_base_of<ref_counter, Type>::value, "Type must be derived from ref_counter");
+//			if (m_ptr)
+//				m_ptr->del_ref();
+//		}
+//
+//		rc_ptr(Type* ptr = nullptr) :
+//			m_ptr(ptr)
+//		{
+//			init();
+//		}
+//
+//		rc_ptr(const rc_ptr &rhs) :
+//			m_ptr(rhs.m_ptr)
+//		{
+//			init();
+//		}
+//
+//		rc_ptr& operator=(const rc_ptr &rhs)
+//		{
+//			if (m_ptr != rhs.m_ptr) {
+//				if (m_ptr)
+//					m_ptr->del_ref();
+//				m_ptr = rhs.m_ptr;
+//				init();
+//			}
+//			return *this;
+//		}
+//
+//		Type* operator->() const
+//		{
+//			return m_ptr;
+//		}
+//
+//		Type& operator*() const
+//		{
+//			return *m_ptr;
+//		}
+//
+//	private:
+//		void init()
+//		{
+//			if (!m_ptr)
+//				return;
+//			if (!m_ptr->is_shareable())
+//				m_ptr = new Type(*m_ptr);
+//			m_ptr->add_ref();
+//		}
+//
+//		Type* m_ptr;
+//	};
 
 }
 

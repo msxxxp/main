@@ -23,7 +23,7 @@ namespace Base {
 //		return *this;
 //	}
 
-	void ref_counter::del_ref()
+	void ref_counter::decrease_ref()
 	{
 		if (--m_refcnt == 0) {
 			destroy();

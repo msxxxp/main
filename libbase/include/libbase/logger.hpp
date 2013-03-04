@@ -132,6 +132,11 @@ namespace Logger {
 	{
 		return Target_t();
 	}
+
+	inline Target_t get_TargetToMult(const Target_t & /*first*/, const Target_t & /*second*/)
+	{
+		return Target_t();
+	}
 #else
 	typedef Base::shared_ptr<Target_i> Target_t;
 
@@ -244,7 +249,6 @@ namespace Logger {
 	Target_t get_TargetToSys(PCWSTR name, PCWSTR path = nullptr);
 
 	Target_t get_TargetToMult(const Target_t & first, const Target_t & second);
-
 #endif
 
 }

@@ -114,9 +114,7 @@ namespace Base {
 
 	private:
 		struct shared_ptr_impl {
-			virtual ~shared_ptr_impl()
-			{
-			}
+			virtual ~shared_ptr_impl() {}
 
 			shared_ptr_impl(element_type * ptr) :
 				m_ptr(ptr),
@@ -124,33 +122,20 @@ namespace Base {
 			{
 			}
 
-			virtual void del_ptr()
-			{
-				delete m_ptr;
-			}
+			virtual void del_ptr() {delete m_ptr;}
 
-			void inc_ref()
-			{
-				m_refcnt++;
-			}
+			void inc_ref() { m_refcnt++;}
 
-			void dec_ref()
-			{
+			void dec_ref() {
 				if (--m_refcnt == 0) {
 					del_ptr();
 					delete this;
 				}
 			}
 
-			size_type refcnt() const
-			{
-				return m_refcnt;
-			}
+			size_type refcnt() const {return m_refcnt;}
 
-			element_type * get() const
-			{
-				return m_ptr;
-			}
+			element_type * get() const {return m_ptr;}
 
 		protected:
 			element_type * m_ptr;
@@ -165,10 +150,7 @@ namespace Base {
 			{
 			}
 
-			void del_ptr()
-			{
-				m_deleter(this->m_ptr);
-			}
+			void del_ptr() {m_deleter(this->m_ptr);}
 
 		private:
 			Deleter m_deleter;

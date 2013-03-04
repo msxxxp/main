@@ -5,75 +5,55 @@
 
 namespace Base {
 
-	class ref_counter {
-	public:
-		virtual ~ref_counter()
-		{
-		}
+	struct ref_counter {
+		virtual ~ref_counter();
 
-		ref_counter() :
-			m_cnt(0), m_shareable(true)
-		{
-		}
-		ref_counter(const ref_counter &rhs) :
-			m_cnt(0), m_shareable(true)
-		{
-		}
+		virtual void destroy() = 0;
 
-		ref_counter& operator=(const ref_counter &rhs)
-		{
-			return *this;
-		}
+		ref_counter();
 
-		void add_ref()
-		{
-			++m_cnt;
-		}
+//		ref_counter(const ref_counter &rhs);
+//
+//		ref_counter& operator=(const ref_counter &rhs);
 
-		void del_ref()
-		{
-			if (--m_cnt == 0)
-				delete this;
-		}
+		void add_ref() {++m_refcnt;}
 
-		void mark_unshareable()
-		{
-			m_shareable = false;
-		}
+		void del_ref();
 
-		bool is_shareable() const
-		{
-			return m_shareable;
-		}
+		void mark_unshareable() {m_shareable = false;}
 
-		bool is_shared() const
-		{
-			return m_cnt > 1;
-		}
+		bool is_shareable() const {return m_shareable;}
+
+		bool is_shared() const {return m_refcnt > 1;}
+
+		size_t count() const {return m_refcnt;}
 
 	private:
-		size_t m_cnt;
+		size_t m_refcnt;
 		bool m_shareable;
 	};
 
 	template<class Type>
-	class rc_ptr {
-	public:
+	struct rc_ptr {
 		~rc_ptr()
 		{
+			static_assert(std::is_base_of<ref_counter, Type>::value, "Type must be derived from ref_counter");
 			if (m_ptr)
 				m_ptr->del_ref();
 		}
+
 		rc_ptr(Type* ptr = nullptr) :
 			m_ptr(ptr)
 		{
 			init();
 		}
+
 		rc_ptr(const rc_ptr &rhs) :
 			m_ptr(rhs.m_ptr)
 		{
 			init();
 		}
+
 		rc_ptr& operator=(const rc_ptr &rhs)
 		{
 			if (m_ptr != rhs.m_ptr) {
@@ -89,10 +69,12 @@ namespace Base {
 		{
 			return m_ptr;
 		}
+
 		Type& operator*() const
 		{
 			return *m_ptr;
 		}
+
 	private:
 		void init()
 		{
@@ -102,6 +84,7 @@ namespace Base {
 				m_ptr = new Type(*m_ptr);
 			m_ptr->add_ref();
 		}
+
 		Type* m_ptr;
 	};
 

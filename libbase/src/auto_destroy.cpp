@@ -1,4 +1,4 @@
-#include <libbase/auto_destroy.hpp>
+#include <libbase/memory.hpp>
 
 namespace Base {
 

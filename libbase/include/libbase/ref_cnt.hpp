@@ -8,8 +8,6 @@ namespace Base {
 	struct ref_counter {
 		virtual ~ref_counter();
 
-		virtual void destroy() = 0;
-
 		ref_counter();
 
 		void increase_ref() {++m_refcnt;}
@@ -25,6 +23,10 @@ namespace Base {
 		size_t count() const {return m_refcnt;}
 
 	private:
+		virtual void destroy();
+
+		virtual void free();
+
 		ref_counter(const ref_counter & rhs);
 
 		ref_counter & operator = (const ref_counter & rhs);

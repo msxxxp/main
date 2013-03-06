@@ -479,11 +479,11 @@ private:
 	}
 
 	template<typename Type1>
-	friend AutoSTR<Type1> operator +(const Type1 * lhs, const AutoSTR<Type1> & rhs);
+	friend AutoSTR<Type1> operator + (const Type1 * lhs, const AutoSTR<Type1> & rhs);
 };
 
 template<typename Type>
-inline AutoSTR<Type> operator +(const Type * lhs, const AutoSTR<Type> & rhs)
+inline AutoSTR<Type> operator + (const Type * lhs, const AutoSTR<Type> & rhs)
 {
 	return AutoSTR<Type>(lhs, Base::Str::length(lhs), rhs.c_str(), rhs.size());
 }

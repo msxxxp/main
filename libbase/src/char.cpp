@@ -3,22 +3,10 @@
 
 namespace Base {
 
-	namespace Inplace {
 
-		wchar_t & to_upper(wchar_t & in)
-		{
-			::CharUpperBuffW(&in, 1);
-			return in;
-		}
+	///=============================================================================================
 
-		wchar_t & to_lower(wchar_t & in)
-		{
-			::CharLowerBuffW(&in, 1);
-			return in;
-		}
-
-	}
-
+	///=============================================================================================
 	ssize_t get_type_of_char(wchar_t in)
 	{
 		WORD Result[2] = {0};

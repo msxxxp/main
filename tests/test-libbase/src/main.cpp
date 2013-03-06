@@ -1,82 +1,110 @@
-﻿#include <libbase/logger.hpp>
-#include <libbase/bit.hpp>
-#include <libbase/backtrace.hpp>
+﻿#include <libbase/std.hpp>
+#include <libbase/string.hpp>
+#include <libbase/str.hpp>
 
-//void test_ustring() {
-//	PCWSTR pcwstr = L"PCWSTR";
-//	PWSTR pwstr = (PWSTR)L"pwstr";
-//	ustring str1(6, L'h');
-//	ustring str2(pcwstr);
-//	ustring str3 = pwstr;
-//
-//	printf(L"str1: %s\n", str1.c_str());
-//	printf(L"str2: %s\n", str2.c_str());
-//	printf(L"str3: %s\n\n", str3.c_str());
-//
-//	str1 = L"que1";
-//	str2 = str3;
-//	str3 = pwstr;
-//
-//	printf(L"str1: %s\n", str1.c_str());
-//	printf(L"str2: %s\n", str2.c_str());
-//	printf(L"str3: %s\n", str3.c_str());
-//
-//}
-using namespace Base;
+#include <libbase/logger.hpp>
 
-DWORD thread(void * /*tgt*/) {
-//	Logger::Target_i * con = (Logger::Target_i *)tgt;
-	LogTrace();
-	for (size_t i = 0; i < 100; ++i) {
-//		tgt->out(L"a", 1);
-		LogDebug(L"i: %Id\n", i);
-//		::Sleep(100);
-	}
-	LogTrace();
-//	con->out(L"t\n", 2);
-	return 0;
-}
-
-
-void test_backtrace() {
-	LogTrace();
-	Base::Backtrace bt;
-	for (auto it = bt.begin(); it != bt.end(); ++it) {
-		LogInfo(L"%s\n", it->AsStr().c_str());
+namespace {
+	void setup_logger()
+	{
+		using namespace Logger;
+		set_default_level(Level::Trace);
+		set_default_prefix(Prefix::Medium | Prefix::Place);
+		set_default_target(get_TargetToConsole());
 	}
 }
 
-void test_logger() {
-	Base::Logger::set_target(Base::Logger::get_TargetToConsole());
-	Base::Logger::set_level(Base::Logger::Level::Info);
-	Logger::set_color_mode(true);
-	LogTrace();
-////	Logger::set_target(Logger::get_TargetToFile(L"c:/qwe.log"));
-//	Logger::set_target(Logger::get_TargetToConsole());
-//	Logger::set_level(Logger::LVL_TRACE);
-//	Logger::set_wideness(Logger::WIDE_FULL);
-//	LogTrace();
-//	LogDebug(L"sasdasd\n");
-//	LogInfo(L"sasdasd\n");
-//	LogReport(L"sasdasd\n");
-//	LogAtten(L"sasdasd\n");
-//	LogWarn(L"QWQWeqweqw\n");
-//	LogError(L"QWQWeqweqw\n");
-//	LogFatal(L"zxczxcx\n");
-//
-//	HANDLE th_id[2] {
-//		::CreateThread(nullptr, 0, &thread, nullptr, 0, nullptr),
-//		::CreateThread(nullptr, 0, &thread, nullptr, 0, nullptr),
-//	};
-//
-//	LogTrace();
-//	::WaitForMultipleObjects(2, th_id, TRUE, INFINITE);
-//	LogTrace();
+#include <stdio.h>
+#include <cassert>
+
+void test_ustring()
+{
+		t_ustring str1(5, L'h');
+		printf("str1: '%S' size: %d\n", str1.c_str(), (int)str1.size());
+		assert(Base::Str::compare(str1.c_str(), L"hhhhh") == 0);
+		assert(str1.size() == 5);
+		assert(*(str1.cend()-1) == L'h');
+		assert(*str1.cend() == 0);
+		assert(*str1.cbegin() == L'h');
+
+		PCWSTR pcwstr = L"PCWSTR";
+		t_ustring str2(pcwstr);
+		printf("str2: '%S' size: %d\n", str2.c_str(), (int)str2.size());
+		assert(Base::Str::compare(str2.c_str(), pcwstr) == 0);
+		assert(str2.size() == 6);
+		assert(*(str2.cend()-1) == L'R');
+		assert(*str2.cend() == 0);
+		assert(*str2.cbegin() == L'P');
+
+		PWSTR pwstr = (PWSTR)L"1pwstr2";
+		t_ustring str3 = pwstr;
+		printf("str3: '%S' size: %d\n\n", str3.c_str(), (int)str3.size());
+		assert(Base::Str::compare(str3.c_str(), pwstr) == 0);
+		assert(str3.size() == 7);
+		assert(*(str3.cend()-1) == L'2');
+		assert(*str3.cend() == 0);
+		assert(*str3.cbegin() == L'1');
+
+		str1 = L"que1";
+		printf("str1: '%S' size: %d\n", str1.c_str(), (int)str1.size());
+		assert(Base::Str::compare(str1.c_str(), L"que1") == 0);
+		assert(str1.size() == 4);
+		assert(*(str1.cend()-1) == L'1');
+		assert(*str1.cend() == 0);
+		assert(*str1.cbegin() == L'q');
+
+		str2 = str1;
+		printf("str2: '%S' size: %d\n", str2.c_str(), (int)str2.size());
+		assert(Base::Str::compare(str2.c_str(), L"que1") == 0);
+		assert(str2.size() == 4);
+		assert(*(str2.cend()-1) == L'1');
+		assert(*str2.cend() == 0);
+		assert(*str2.cbegin() == L'q');
+		assert(str1.c_str() == str2.c_str());
+
+		str3.clear();
+		printf("str3: '%S' size: %d\n\n", str3.c_str(), (int)str3.size());
+		assert(Base::Str::compare(str3.c_str(), L"") == 0);
+		assert(str3.size() == 0);
+//		assert(*(str3.cend()-1) == L'2');
+		assert(*str3.cend() == 0);
+		assert(*str3.cbegin() == 0);
+		assert(str3.empty());
+		assert(str3.cbegin() == str3.cend());
+
+		str2.append(str1);
+		printf("str2: '%S' size: %d\n", str2.c_str(), (int)str2.size());
+		assert(Base::Str::compare(str2.c_str(), L"que1que1") == 0);
+		assert(str2.size() == 8);
+		assert(*(str2.cend()-1) == L'1');
+		assert(*str2.cend() == 0);
+		assert(*str2.cbegin() == L'q');
+		assert(str1.c_str() != str2.c_str());
+
+		str2.replace(4, 1, L"test2");
+		printf("str2: '%S' size: %d\n", str2.c_str(), (int)str2.size());
+		assert(Base::Str::compare(str2.c_str(), L"que1test2ue1") == 0);
+		assert(str2.size() == 12);
+		assert(*(str2.cend()-1) == L'1');
+		assert(*str2.cend() == 0);
+		assert(*str2.cbegin() == L'q');
+		assert(str2.find(L"tes") == 4);
+		assert(str2.find(L"teqs") == t_ustring::npos);
+		assert(str2.find(L"ue") == 1);
+		assert(str2.rfind(L'u') == 9);
+		assert(str2.find_first_of(L"12") == 3);
+		assert(str2.find_first_not_of(L"12") == 0);
+		assert(str2.find_first_of(L"21") == 3);
+		assert(str2.find_first_not_of(L"21") == 0);
+		assert(str2.find_first_not_of(L"que1") == 4);
+		assert(str2.find_last_of(L"12") == 11);
+		assert(str2.find_last_of(L"2d") == 8);
+		assert(str2.find_last_not_of(L"2d") == 11);
 }
 
-int main() {
-//	test_ustring();
-	test_logger();
-	test_backtrace();
+int main()
+{
+	setup_logger();
+	test_ustring();
 	return 0;
 }

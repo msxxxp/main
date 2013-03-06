@@ -158,10 +158,10 @@ namespace Memory {
 	}
 
 	template<typename Pointer>
-	inline Pointer fill(Pointer in, size_t size, char fill = 0)
+	inline Pointer fill(Pointer in, size_t size, int fill = 0)
 	{
 		static_assert(std::is_pointer<Pointer>::value, "Pointer type is required");
-		return static_cast<Pointer>(::memset((PVOID)in, (int)fill, size));
+		return static_cast<Pointer>(::memset((PVOID)in, fill, size));
 	}
 
 	template<typename Pointer>

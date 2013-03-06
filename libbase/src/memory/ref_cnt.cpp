@@ -13,7 +13,16 @@ namespace Base {
 	{
 	}
 
-//	ref_counter::ref_counter(const ref_counter &/*rhs*/) :
+	void ref_counter::destroy()
+	{
+	}
+
+	void ref_counter::free()
+	{
+		delete this;
+	}
+
+	//	ref_counter::ref_counter(const ref_counter &/*rhs*/) :
 //		m_refcnt(0), m_shareable(true)
 //	{
 //	}
@@ -27,7 +36,7 @@ namespace Base {
 	{
 		if (--m_refcnt == 0) {
 			destroy();
-			delete this;
+			free();
 		}
 	}
 

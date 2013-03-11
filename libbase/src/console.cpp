@@ -4,43 +4,29 @@
 
 namespace Base {
 
-	int fileout(HANDLE hndl, PCWSTR str, size_t len) {
+	size_t fileout(PCWSTR str, size_t len, HANDLE hndl)
+	{
 		DWORD written = 0;
-		if (hndl && hndl != INVALID_HANDLE_VALUE) {
-			::WriteFile(hndl, str, len * sizeof(*str), &written, nullptr);
-			written /= sizeof(*str);
-		}
+		::WriteFile(hndl, str, len * sizeof(*str), &written, nullptr);
+		written /= sizeof(*str);
 		return written;
 	}
 
-	int consoleout(PCSTR in, size_t len, DWORD nStdHandle) {
+	size_t consoleout(PCSTR str, size_t len, DWORD nStdHandle)
+	{
 		DWORD written = 0;
-		if (len) {
-			HANDLE hStdOut = ::GetStdHandle(nStdHandle);
-			if (hStdOut != INVALID_HANDLE_VALUE && !::WriteConsoleA(hStdOut, in, len, &written, nullptr)) {
-				::WriteFile(hStdOut, in, len * sizeof(*in), &written, nullptr);
-				written /= sizeof(*in);
-			}
-		}
+		(len && !::WriteConsoleA(::GetStdHandle(nStdHandle), str, len, &written, nullptr));
 		return written;
 	}
 
-	int consoleout(wchar_t in, DWORD nStdHandle) {
+	size_t consoleout(wchar_t in, DWORD nStdHandle)
+	{
 		wchar_t out[] = {in, STR_END};
 		return consoleout(out, nStdHandle);
 	}
 
-	int consoleoutonly(PCWSTR in, size_t len) {
-		DWORD written = 0;
-		if (len) {
-			HANDLE hStdOut = ::GetStdHandle(STD_OUTPUT_HANDLE);
-			if (hStdOut != INVALID_HANDLE_VALUE)
-				::WriteConsoleW(hStdOut, in, len, &written, nullptr);
-		}
-		return written;
-	}
-
-	int stdprintf(DWORD nStdHandle, PCWSTR format, ...) {
+	int stdprintf(DWORD nStdHandle, PCWSTR format, ...)
+	{
 		va_list vl;
 		va_start(vl, format);
 		int Result = stdvprintf(nStdHandle, format, vl);
@@ -48,15 +34,17 @@ namespace Base {
 		return Result;
 	}
 
-	int snprintf(PWSTR buff, size_t len, PCWSTR format, ...) {
+	int snprintf(PWSTR buff, size_t len, PCWSTR format, ...)
+	{
 		va_list vl;
 		va_start(vl, format);
-		int Result = _vsnwprintf(buff, len, format, vl);
+		int ret = safe_vsnprintf(buff, len, format, vl);
 		va_end(vl);
-		return Result;
+		return ret;
 	}
 
-	void errx(int eval, PCSTR format, ...) {
+	void errx(int eval, PCSTR format, ...)
+	{
 		va_list vl;
 		va_start(vl, format);
 		::vprintf(format, vl);

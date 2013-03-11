@@ -1,27 +1,22 @@
 ﻿#include <libbase/console.hpp>
+#include <libbase/memory.hpp>
 
 namespace Base {
 
-	int consoleout(PCWSTR in, size_t len, DWORD nStdHandle) {
+	size_t consoleout(PCWSTR in, size_t len, DWORD nStdHandle) {
 		DWORD written = 0;
-		if (len) {
-			HANDLE hStdOut = ::GetStdHandle(nStdHandle);
-			if (hStdOut != INVALID_HANDLE_VALUE && !::WriteConsoleW(hStdOut, in, len, &written, nullptr)) {
-				::WriteFile(hStdOut, in, len * sizeof(*in), &written, nullptr);
-				written /= sizeof(*in);
-			}
-		}
+		(len && !::WriteConsoleW(::GetStdHandle(nStdHandle), in, len, &written, nullptr));
 		return written;
 	}
 
-	int vsnprintf(PWSTR buf, size_t len, PCWSTR format, va_list vl) {
-		buf[len - 1] = 0;
-		return ::_vsnwprintf(buf, len - 1, format, vl);
+	int safe_vsnprintf(PWSTR buf, size_t len, PCWSTR format, va_list vl) {
+		buf[--len] = 0;
+		return ::_vsnwprintf(buf, len, format, vl);
 	}
 
 	int stdvprintf(DWORD nStdHandle, PCWSTR format, va_list vl) {
 		auto_array<wchar_t> buf(64 * 1024);
-		vsnprintf(buf.data(), buf.size(), format, vl);
+		safe_vsnprintf(buf.data(), buf.size(), format, vl);
 		return consoleout(buf.data(), Str::length(buf.data()), nStdHandle);
 	}
 

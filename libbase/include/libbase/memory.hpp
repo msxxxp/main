@@ -174,23 +174,23 @@ namespace Base {
 			Memory::free(m_ptr);
 		}
 
-		explicit auto_array(size_type size) :
-			m_ptr(Memory::calloc<pointer_type>(size, 0)),
-			m_size(size)
+		explicit auto_array(size_type count) :
+			m_ptr(Memory::calloc<pointer_type>(count)),
+			m_count(count)
 		{
 		}
 
-		auto_array(size_type size, const Type * data) :
-			m_ptr(Memory::calloc<pointer_type>(size, 0)),
-			m_size(size)
+		auto_array(size_type count, const Type * data) :
+			m_ptr(Memory::calloc<pointer_type>(count)),
+			m_count(count)
 		{
 			if (data)
-				std::copy(data, data + m_size, m_ptr);
+				std::copy(data, data + m_count, m_ptr);
 		}
 
 		auto_array(this_type && rhs):
 			m_ptr(nullptr),
-			m_size(0)
+			m_count(0)
 		{
 			swap(rhs);
 		}
@@ -207,18 +207,18 @@ namespace Base {
 			if (size() < nsize)
 			{
 				Memory::realloc(m_ptr, nsize * sizeof(Type));
-				m_size = nsize;
+				m_count = nsize;
 			}
 		}
 
 		size_type size() const
 		{
-			return m_size;
+			return m_count;
 		}
 
 		size_type size_in_bytes() const
 		{
-			return m_size * sizeof(Type);
+			return m_count * sizeof(Type);
 		}
 
 		operator pointer_type() const
@@ -243,8 +243,8 @@ namespace Base {
 
 		bool operator ==(const this_type & rhs) const
 		{
-			return (m_size == rhs.m_size) ?
-				std::equal(m_ptr, m_ptr + m_size, rhs.m_ptr)
+			return (m_count == rhs.m_count) ?
+				std::equal(m_ptr, m_ptr + m_count, rhs.m_ptr)
 			:
 				false;
 		}
@@ -252,21 +252,21 @@ namespace Base {
 		void detach(pointer_type & ptr, size_t & size)
 		{
 			ptr = m_ptr;
-			size = m_size;
+			size = m_count;
 			m_ptr = nullptr;
-			m_size = 0;
+			m_count = 0;
 		}
 
 		void swap(this_type & rhs)
 		{
 			using std::swap;
 			swap(m_ptr, rhs.m_ptr);
-			swap(m_size, rhs.m_size);
+			swap(m_count, rhs.m_count);
 		}
 
 	private:
 		pointer_type m_ptr;
-		size_type m_size;
+		size_type m_count;
 	};
 
 	template<typename Type>

@@ -2,19 +2,17 @@
 #define _LIBBASE_CONSOLE_HPP_
 
 #include <libbase/std.hpp>
-#include <libbase/str.hpp>
+#include <libbase/pcstr.hpp>
 
 namespace Base {
 
-	int fileout(HANDLE hndl, PCWSTR str, size_t len);
+	size_t fileout(PCWSTR str, size_t len, HANDLE hndl);
 
-	int consoleout(PCSTR in, size_t len, DWORD nStdHandle = STD_OUTPUT_HANDLE);
+	size_t consoleout(PCWSTR in, size_t len, DWORD nStdHandle = STD_OUTPUT_HANDLE);
 
-	int consoleout(PCWSTR in, size_t len, DWORD nStdHandle = STD_OUTPUT_HANDLE);
+	size_t consoleout(PCSTR in, size_t len, DWORD nStdHandle = STD_OUTPUT_HANDLE);
 
-	int consoleout(wchar_t in, DWORD nStdHandle = STD_OUTPUT_HANDLE);
-
-	int consoleoutonly(PCWSTR in, size_t len);
+	size_t consoleout(wchar_t in, DWORD nStdHandle = STD_OUTPUT_HANDLE);
 
 	inline int consoleout(PCWSTR in, DWORD nStdHandle = STD_OUTPUT_HANDLE) {
 		return consoleout(in, Str::length(in), nStdHandle);
@@ -24,24 +22,20 @@ namespace Base {
 		return consoleout(in.c_str(), nStdHandle);
 	}
 
-	inline int consoleoutonly(PCWSTR in) {
-		return consoleoutonly(in, Str::length(in));
-	}
-
 	///================================================================================= Console out
-	int vsnprintf(PWSTR buf, size_t len, PCWSTR format, va_list vl);
+	int safe_vsnprintf(PWSTR buf, size_t len, PCWSTR format, va_list vl);
+
+	int snprintf(PWSTR buff, size_t len, PCWSTR format, ...);
+
+	int printf(PCWSTR format, ...);
 
 	int stdvprintf(DWORD nStdHandle, PCWSTR format, va_list vl);
 
 	int stdprintf(DWORD nStdHandle, PCWSTR format, ...);
 
-	int printf(PCWSTR format, ...);
-
 	inline int vprintf(PCWSTR format, va_list vl) {
 		return stdvprintf(STD_OUTPUT_HANDLE, format, vl);
 	}
-
-	int snprintf(PWSTR buff, size_t len, PCWSTR format, ...);
 
 	void errx(int eval, PCSTR format, ...);
 

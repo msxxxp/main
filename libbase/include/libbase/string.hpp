@@ -51,34 +51,33 @@ namespace Base {
 			m_data->init(in, count);
 		}
 
-		bool empty() const {return m_data->m_size == 0;}
+		bool empty() const {return m_data->size() == 0;}
 
-		size_type capacity() const {return m_data->m_capa;}
+		size_type capacity() const {return m_data->capacity();}
 
-		size_t size() const {return m_data->m_size;}
+		size_t size() const {return m_data->size();}
 
-		const CharType * c_str() const {return m_data->m_str;}
+		const CharType * c_str() const {return cbegin();}
 
 		void swap(this_type & in) {using std::swap; swap(m_data, in.m_data);}
 
-		iterator begin() {return (iterator)c_str();}
+		const_iterator cbegin() const {return const_iterator(m_data->c_str());}
 
-		const_iterator begin() const {return c_str();}
+		const_iterator begin() const {return const_iterator(m_data->c_str());}
 
-		const_iterator cbegin() const {return c_str();}
+		iterator begin() {return iterator(m_data->c_str());}
 
-		iterator end() {return (iterator)(c_str() + size());}
+		const_iterator cend() const {return const_iterator(m_data->c_str()) + size();}
 
-		const_iterator end() const {return c_str() + size();}
+		const_iterator end() const {return const_iterator(m_data->c_str()) + size();}
 
-		const_iterator cend() const {return c_str() + size();}
+		iterator end() {return iterator(m_data->c_str()) + size();}
 
 		void clear()
 		{
 			if (!empty()) {
 				split();
-				m_data->m_str[0] = 0;
-				m_data->m_size = 0;
+				m_data->set_size(0);
 			}
 		}
 
@@ -86,10 +85,10 @@ namespace Base {
 		{
 			if (capacity() < capa) {
 				if (m_data->is_shared()) {
-					this_type(c_str(), size(), capacity()).swap(*this);
+					this_type(cbegin(), size(), capa).swap(*this);
 				} else {
 					Memory::realloc(m_data, sizeof(*m_data) + capa * sizeof(CharType));
-					m_data->m_capa = capa;
+					m_data->set_capacity(capa);
 				}
 			}
 		}
@@ -108,11 +107,9 @@ namespace Base {
 
 		this_type & append(const CharType * str, size_type count)
 		{
-			if (count) {
+			if (str && count) {
 				reserve(size() + count);
-				Traits::copy(&m_data->m_str[size()], str, count);
-				m_data->m_size += count;
-				m_data->m_str[size()] = 0;
+				m_data->append(str, count);
 			}
 			return *this;
 		}
@@ -151,37 +148,37 @@ namespace Base {
 
 		this_type operator +(CharType ch) const {return this_type(c_str(), size(), size() + 1) += ch;}
 
-		bool operator ==(const this_type & in) const {return Traits::compare(c_str(), in.c_str()) == 0;}
+		bool operator ==(const this_type & str) const {return Traits::compare(c_str(), str.c_str(), std::min(size(), str.size())) == 0;}
 
-		bool operator ==(const CharType * in) const {return Traits::compare(c_str(), in) == 0;}
+		bool operator ==(const CharType * str) const {return Traits::compare(c_str(), str, std::min(size(), Traits::length(str))) == 0;}
 
 		bool operator !=(const this_type & in) const {return !operator ==(in);}
 
 		bool operator !=(const CharType * in) const {return !operator ==(in);}
 
-		bool operator <(const this_type & in) const {return Traits::compare(c_str(), in.c_str()) < 0;}
+		bool operator <(const this_type & str) const {return Traits::compare(c_str(), str.c_str(), std::min(size(), str.size())) < 0;}
 
-		bool operator <(const CharType * in) const {return Traits::compare(c_str(), in) < 0;}
+		bool operator <(const CharType * str) const {return Traits::compare(c_str(), str, std::min(size(), Traits::length(str))) < 0;}
 
-		bool operator >(const this_type & in) const {return Traits::compare(c_str(), in.c_str()) > 0;}
+		bool operator >(const this_type & str) const {return Traits::compare(c_str(), str.c_str(), std::min(size(), str.size())) > 0;}
 
-		bool operator >(const CharType * in) const {return Traits::compare(c_str(), in) > 0;}
+		bool operator >(const CharType * str) const {return Traits::compare(c_str(), str, std::min(size(), Traits::length(str))) > 0;}
 
-		bool operator <=(const this_type & in) const {return Traits::compare(c_str(), in.c_str()) <= 0;}
+		bool operator <=(const this_type & str) const {return Traits::compare(c_str(), str.c_str(), std::min(size(), str.size())) <= 0;}
 
-		bool operator <=(const CharType * in) const {return Traits::compare(c_str(), in) <= 0;}
+		bool operator <=(const CharType * str) const {return Traits::compare(c_str(), str, std::min(size(), Traits::length(str))) <= 0;}
 
-		bool operator >=(const this_type & in) const {return Traits::compare(c_str(), in.c_str()) >= 0;}
+		bool operator >=(const this_type & str) const {return Traits::compare(c_str(), str.c_str(), std::min(size(), str.size())) >= 0;}
 
-		bool operator >=(const CharType * in) const {return Traits::compare(c_str(), in) >= 0;}
+		bool operator >=(const CharType * str) const {return Traits::compare(c_str(), str, std::min(size(), Traits::length(str))) >= 0;}
 
-		const CharType & operator [](size_type in) const {return m_data->m_str[in];}
+		const CharType & operator [](size_type in) const {return *(cbegin() + in);}
 
-		CharType & operator [](size_type in) {split(); return m_data->m_str[in];}
+		CharType & operator [](size_type in) {split(); return *(begin() + in);}
 
-		const CharType & at(size_type in) const {return m_data->m_str[in];}
+		const CharType & at(size_type in) const {return *(cbegin() + in);}
 
-		CharType & at(size_type in) {split(); return m_data->m_str[in];}
+		CharType & at(size_type in) {split(); return *(begin() + in);}
 
 		this_type & replace(size_type pos, size_type len, const this_type & str) {return replace(pos, len, str.c_str(), str.size());}
 
@@ -192,24 +189,25 @@ namespace Base {
 		this_type & replace(size_type pos, size_type len, const CharType * str, size_type count)
 		{
 			pos = std::min(pos, size());
-			this_type tmp(nullptr, 0, size() + count);
-			tmp.append(m_data->m_str, pos);
+			this_type tmp(cbegin(), pos, size() - len + count);
 			tmp.append(str, count);
 			pos = std::min(pos + len, size());
-			tmp.append(&m_data->m_str[pos], size() - pos);
+			tmp.append(cbegin() + pos, size() - pos);
 			swap(tmp);
 			return *this;
 		}
 
 		this_type & replace(size_type pos, size_type len, size_type count, CharType ch) {return replace(pos, len, this_type(count, ch));}
 
-		this_type substr(size_t pos = 0, size_t n = npos) const {return this_type(&m_data->m_str[pos], n);}
+		this_type substr(size_t pos = 0, size_t n = npos) const {return this_type(cbegin() + pos, n);}
 
 		this_type & erase(size_type pos = 0, size_type count = npos)
 		{
 			if (pos < size()) {
-				size_type size2 = count == npos ? size() : std::min(size(), pos + count);
-				this_type(c_str(), pos, c_str() + size2, size() - size2).swap(*this);
+				size_type last = (count == npos) ? size() : std::min(size(), pos + count);
+				this_type tmp(cbegin(), pos, capacity());
+				tmp.append(cbegin() + last, size() - last);
+				tmp.swap(*this);
 			}
 			return *this;
 		}
@@ -218,14 +216,14 @@ namespace Base {
 
 		size_type find(const CharType * str, size_type pos = 0) const
 		{
-			auto find = Traits::find(c_str() + pos, str);
-			return (find) ? find - c_str() : npos;
+			auto find = Traits::find(cbegin() + pos, str);
+			return (find) ? find - cbegin() : npos;
 		}
 
 		size_type find(CharType ch, size_type pos = 0) const
 		{
-			auto find = Traits::find(c_str() + pos, size(), ch);
-			return (find) ? find - c_str() : npos;
+			auto find = Traits::find(cbegin() + pos, size(), ch);
+			return (find) ? find - cbegin() : npos;
 		}
 
 		size_t rfind(const this_type & str, size_type pos = npos) const
@@ -287,10 +285,6 @@ namespace Base {
 
 	private:
 		struct string_impl: public Base::ref_counter {
-			size_type m_capa;
-			size_type m_size;
-			value_type m_str[1];
-
 			void free() override {
 				this->~string_impl();
 				Memory::free(this);
@@ -303,28 +297,46 @@ namespace Base {
 			{
 				if (count) {
 					Traits::assign(m_str, count, ch);
-					m_size = count;
-					m_str[count] = 0;
+					set_size(count);
 				}
 			}
 
 			void init(const CharType * str, size_type count)
 			{
-				if (str) {
+				if (str && count) {
 					Traits::copy(m_str, str, count);
-					m_str[count] = 0;
-					m_size = count;
+					set_size(count);
 				}
 			}
+
+			void append(const CharType * str, size_type count)
+			{
+				if (str && count) {
+					Traits::copy(m_str + m_size, str, count);
+					set_size(m_size += count);
+				}
+			}
+
+			void set_size(size_type new_size) {m_size = new_size; m_str[m_size] = 0;}
+
+			void set_capacity(size_type new_capacity) {m_capa = new_capacity;}
+
+			size_type capacity() const {return m_capa;}
+
+			size_type size() const {return m_size;}
+
+			void * c_str() const {return (void*)m_str;}
 
 //			void print() {
 //				LogNoise(L"this: %p, sizeof: %Id\n", this, sizeof(*this));
 //				LogNoise(L"capa: %Id, size: %Id, ref: %Id, str: '%s'\n", m_capa, m_size, count(), m_str);
 //			}
-
 		private:
 			~string_impl() {}
 
+			size_type m_capa;
+			size_type m_size;
+			value_type m_str[1];
 		} * m_data;
 
 		string_impl * allocate_impl(size_t capa, size_type sizeOfChar)
@@ -337,21 +349,8 @@ namespace Base {
 		void split()
 		{
 			if (m_data->is_shared())
-				this_type(c_str(), size(), capacity()).swap(*this);
+				this_type(cbegin(), size(), capacity()).swap(*this);
 		}
-
-//		basic_string(const Type * str1, size_t size1, const Type * str2, size_t size2) :
-//			m_data(alloc_cstr(size1 + size2 + 1))
-//		{
-//			if (size1) {
-//				Memory::copy(m_data->m_str, str1, size1 * sizeof(Type));
-//				m_data->m_size = size1;
-//			}
-//			if (size2) {
-//				Memory::copy(m_data->m_str + size1, str2, size2 * sizeof(Type));
-//				m_data->m_size += size2;
-//			}
-//		}
 
 		basic_string(const CharType * str, size_type count, size_type capacity) :
 			m_data(allocate_impl(capacity, sizeof(CharType)))

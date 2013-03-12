@@ -6,20 +6,26 @@
 
 namespace Base {
 
+	size_t fileout(PCSTR str, size_t len, HANDLE hndl);
+
 	size_t fileout(PCWSTR str, size_t len, HANDLE hndl);
 
-	size_t consoleout(PCWSTR in, size_t len, DWORD nStdHandle = STD_OUTPUT_HANDLE);
+	size_t fileout(wchar_t ch, size_t len, HANDLE hndl);
 
-	size_t consoleout(PCSTR in, size_t len, DWORD nStdHandle = STD_OUTPUT_HANDLE);
+	size_t consoleout(PCSTR in, size_t len, DWORD nStdHandle = STD_OUTPUT_HANDLE );
 
-	size_t consoleout(wchar_t in, DWORD nStdHandle = STD_OUTPUT_HANDLE);
+	size_t consoleout(PCWSTR in, size_t len, DWORD nStdHandle = STD_OUTPUT_HANDLE );
 
-	inline int consoleout(PCWSTR in, DWORD nStdHandle = STD_OUTPUT_HANDLE) {
-		return consoleout(in, Str::length(in), nStdHandle);
+	size_t consoleout(wchar_t ch, DWORD nStdHandle = STD_OUTPUT_HANDLE );
+
+	inline int consoleout(PCWSTR str, DWORD nStdHandle = STD_OUTPUT_HANDLE )
+	{
+		return consoleout(str, Str::length(str), nStdHandle);
 	}
 
-	inline int consoleout(const ustring &in, DWORD nStdHandle = STD_OUTPUT_HANDLE/*STD_ERROR_HANDLE*/) {
-		return consoleout(in.c_str(), nStdHandle);
+	inline int consoleout(const ustring & str, DWORD nStdHandle = STD_OUTPUT_HANDLE /*STD_ERROR_HANDLE*/)
+	{
+		return consoleout(str.c_str(), nStdHandle);
 	}
 
 	///================================================================================= Console out
@@ -29,11 +35,12 @@ namespace Base {
 
 	int printf(PCWSTR format, ...);
 
-	int stdvprintf(DWORD nStdHandle, PCWSTR format, va_list vl);
+	size_t stdvprintf(DWORD nStdHandle, PCWSTR format, va_list vl);
 
 	int stdprintf(DWORD nStdHandle, PCWSTR format, ...);
 
-	inline int vprintf(PCWSTR format, va_list vl) {
+	inline int vprintf(PCWSTR format, va_list vl)
+	{
 		return stdvprintf(STD_OUTPUT_HANDLE, format, vl);
 	}
 
@@ -54,26 +61,26 @@ namespace Base {
 	};
 
 /*
-#ifndef NDEBUG
-	extern PCSTR FUNC_ENTER_FORMAT;
-	extern PCSTR FUNC_LEAVE_FORMAT;
-	extern PCSTR FUNC_TRACE_FORMAT;
+ #ifndef NDEBUG
+ extern PCSTR FUNC_ENTER_FORMAT;
+ extern PCSTR FUNC_LEAVE_FORMAT;
+ extern PCSTR FUNC_TRACE_FORMAT;
 
-#define FuncLogger() struct FL_struc__ { \
+ #define FuncLogger() struct FL_struc__ { \
 	FL_struc__(const char * fl, int l, const char * f):_fn(f) {printf(FUNC_ENTER_FORMAT, _fn, fl, l);} \
 	~FL_struc__() {printf(FUNC_LEAVE_FORMAT, _fn);} \
 	const char * _fn; \
 } tmp_struct(THIS_FILE, __LINE__, __PRETTY_FUNCTION__);
 
-#define FuncTrace() printf(FUNC_TRACE_FORMAT, __PRETTY_FUNCTION__, THIS_FILE, __LINE__);
+ #define FuncTrace() printf(FUNC_TRACE_FORMAT, __PRETTY_FUNCTION__, THIS_FILE, __LINE__);
 
-#else
+ #else
 
-#define FuncLogger()
-#define FuncTrace()
+ #define FuncLogger()
+ #define FuncTrace()
 
-#endif
-*/
+ #endif
+ */
 
 }
 

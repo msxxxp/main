@@ -174,13 +174,7 @@ namespace Base {
 			Memory::free(m_ptr);
 		}
 
-		explicit auto_array(size_type count) :
-			m_ptr(Memory::calloc<pointer_type>(count)),
-			m_count(count)
-		{
-		}
-
-		auto_array(size_type count, const Type * data) :
+		explicit auto_array(size_type count, const Type * data = nullptr) :
 			m_ptr(Memory::calloc<pointer_type>(count)),
 			m_count(count)
 		{
@@ -198,16 +192,16 @@ namespace Base {
 		this_type & operator =(this_type && rhs)
 		{
 			if (this != &rhs)
-				this_type(rhs).swap(*this);
+				this_type(std::move(rhs)).swap(*this);
 			return *this;
 		}
 
-		void reserve(size_type nsize)
+		void reserve(size_type new_count)
 		{
-			if (size() < nsize)
+			if (size() < new_count)
 			{
-				Memory::realloc(m_ptr, nsize * sizeof(Type));
-				m_count = nsize;
+				Memory::realloc(m_ptr, new_count * sizeof(Type), HEAP_ZERO_MEMORY);
+				m_count = new_count;
 			}
 		}
 

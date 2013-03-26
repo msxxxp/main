@@ -94,8 +94,8 @@ namespace Logger {
 		auto key1 = L"SYSTEM\\CurrentControlSet\\Services\\EventLog\\Application\\";
 		auto key_length = Base::Str::length(key1);
 		wchar_t value[Base::MAX_PATH_LEN];
-		Base::Str::copy(value, Base::lengthof(value), key1);
-		Base::Str::cat(value, Base::lengthof(value) - key_length, name);
+		Base::Str::copy(value, key1, Base::lengthof(value));
+		Base::Str::cat(value, name, Base::lengthof(value) - key_length);
 		HKEY hKey = nullptr;
 		::RegCreateKeyW(HKEY_LOCAL_MACHINE, value, &hKey);
 		// Add the Event ID message-file name to the subkey.

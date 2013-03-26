@@ -23,11 +23,6 @@ namespace Base {
 		return consoleout(str, Str::length(str), nStdHandle);
 	}
 
-	inline int consoleout(const ustring & str, DWORD nStdHandle = STD_OUTPUT_HANDLE /*STD_ERROR_HANDLE*/)
-	{
-		return consoleout(str.c_str(), nStdHandle);
-	}
-
 	///================================================================================= Console out
 	int safe_vsnprintf(PWSTR buf, size_t len, PCWSTR format, va_list vl);
 

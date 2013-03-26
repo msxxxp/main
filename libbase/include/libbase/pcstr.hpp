@@ -98,12 +98,12 @@ namespace Base {
 			return ::wcscpy(dest, src);
 		}
 
-		inline PSTR copy(PSTR dest, size_t size, PCSTR src) {
+		inline PSTR copy(PSTR dest, PCSTR src, size_t size) {
 			dest[--size] = 0;
 			return ::strncpy(dest, src, size);
 		}
 
-		inline PWSTR copy(PWSTR dest, size_t size, PCWSTR src) {
+		inline PWSTR copy(PWSTR dest, PCWSTR src, size_t size) {
 			dest[--size] = 0;
 			return ::wcsncpy(dest, src, size);
 		}
@@ -116,11 +116,11 @@ namespace Base {
 			return ::wcscat(dest, src);
 		}
 
-		inline PSTR cat(PSTR dest, size_t size, PCSTR src) {
+		inline PSTR cat(PSTR dest, PCSTR src, size_t size) {
 			return ::strncat(dest, src, size);
 		}
 
-		inline PWSTR cat(PWSTR dest, size_t size, PCWSTR src) {
+		inline PWSTR cat(PWSTR dest, PCWSTR src, size_t size) {
 			return ::wcsncat(dest, src, size);
 		}
 

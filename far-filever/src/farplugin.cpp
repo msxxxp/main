@@ -97,6 +97,7 @@ void FarPlugin::GetPluginInfo(PluginInfo * Info)
 
 Far::PanelController_i * FarPlugin::Open(const OpenInfo * Info)
 {
+	LogNoise(L"OpenFrom: %d\n", (int)Info->OpenFrom);
 	if (!version_dll::inst().is_valid()) {
 		Far::ebox(L"Can't load version.dll");
 		return (Far::PanelController_i * )INVALID_HANDLE_VALUE;
@@ -119,11 +120,14 @@ Far::PanelController_i * FarPlugin::Open(const OpenInfo * Info)
 			}
 		}
 	} else if (Info->OpenFrom == OPEN_COMMANDLINE) {
-		Base::Str::copy(buf, (PCWSTR)Info->Data, Base::lengthof(buf));
+		OpenCommandLineInfo * info = (OpenCommandLineInfo*)Info->Data;
+		Base::Str::copy(buf, info->CommandLine, Base::lengthof(buf));
 	}
+	LogNoise(L"buf: %s\n", buf);
 	Far::fsf().Trim(buf);
 	Far::fsf().Unquote(buf);
 
+	LogNoise(L"buf: %s\n", buf);
 	FileVersion fv(buf);
 	if (fv.is_ok()) {
 		FVI fvi(fv);

@@ -57,7 +57,7 @@ void FarPlugin::GetPluginInfo(PluginInfo * Info)
 	Info->Flags = PF_DISABLEPANELS | PF_EDITOR;
 
 	static GUID PluginMenuGuids[] = {MenuGuid,};
-	static PCWSTR PluginMenuStrings[] = {Far::get_msg(Far::MenuTitle),};
+	static PCWSTR PluginMenuStrings[1];
 	PluginMenuStrings[0] = Far::get_msg(Far::MenuTitle);
 
 	Info->PluginMenu.Guids = PluginMenuGuids;

@@ -203,22 +203,7 @@ inline void operator delete [](void * ptr) noexcept
 #endif
 
 #include <algorithm>
-
-#ifdef NoStlString
-template<typename Type>
-struct AutoSTR;
-
-typedef AutoSTR<char> astring;
-typedef AutoSTR<wchar_t> ustring;
-#else
-#ifdef _MSC_VER
-	#include <string>
-#else
-#include <iosfwd>
-#endif
-typedef std::string astring;
-typedef std::wstring ustring;
-#endif
+#include "fwd.hpp"
 
 typedef const void * PCVOID;
 

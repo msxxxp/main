@@ -18,11 +18,6 @@ namespace Base {
 		typedef mbstate_t  state_type;
 	};
 
-	template<typename CharType>
-	struct char_traits
-	{
-	};
-
 	template<>
 	struct char_traits<char>
 	{

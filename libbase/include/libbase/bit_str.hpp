@@ -3,11 +3,10 @@
 
 #include <libbase/std.hpp>
 #include <libbase/bit.hpp>
-#include <libbase/str.hpp>
+#include <libbase/string.hpp>
 
 namespace Base {
 
-	///===================================================================================== BitMask
 	template<typename Type>
 	struct BitMask {
 		static Type from_str(const ustring & in, size_t lim = 0)

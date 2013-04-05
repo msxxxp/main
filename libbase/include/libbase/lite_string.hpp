@@ -226,7 +226,7 @@ namespace Base {
 			return (find) ? find - cbegin() : npos;
 		}
 
-		size_t rfind(const this_type & str, size_type pos = npos) const
+		size_t rfind(const this_type & /*str*/, size_type /*pos*/ = npos) const
 		{
 //			pos = std::min(pos, size());
 //			while (pos > 0)
@@ -235,7 +235,7 @@ namespace Base {
 			return npos;
 		}
 
-		size_t rfind(const CharType * str, size_type pos = npos) const
+		size_t rfind(const CharType * /*str*/, size_type /*pos*/ = npos) const
 		{
 			return npos;
 		}

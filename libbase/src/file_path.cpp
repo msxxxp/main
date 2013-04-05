@@ -5,9 +5,9 @@
 
 namespace Base {
 
-extern "C" {
-	BOOL WINAPI SHGetSpecialFolderPathW(HWND, LPWSTR, int, BOOL);
-}
+	extern "C" {
+		BOOL WINAPI SHGetSpecialFolderPathW(HWND, LPWSTR, int, BOOL);
+	}
 
 	ustring MakePath(PCWSTR path, PCWSTR name) {
 		ustring Result(PathNice(SlashAdd(path)));

@@ -2,7 +2,7 @@
 
 #include <libbase/err.hpp>
 #include <libbase/logger.hpp>
-#include <libbase/str.hpp>
+#include <libbase/string.hpp>
 
 namespace Base {
 	static Logger::Module_i * get_logger_module()

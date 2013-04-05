@@ -2,7 +2,7 @@
 
 #include <libbase/err.hpp>
 #include <libbase/logger.hpp>
-#include <libbase/str.hpp>
+#include <libbase/string.hpp>
 
 #if !defined(_AMD64_) && defined(__GNUC__)
 #include <bfd.h>

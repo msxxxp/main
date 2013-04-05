@@ -1,8 +1,5 @@
 ﻿#include <libbase/std.hpp>
-#include <libbase/pcstr.hpp>
-#include <libbase/str.hpp>
-
-//#include <array>
+#include <libbase/string.hpp>
 
 namespace Base {
 

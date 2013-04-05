@@ -1,5 +1,5 @@
-#ifndef _LIBBASE_STRING_HPP_
-#define _LIBBASE_STRING_HPP_
+#ifndef _LIBBASE_LITE_STRING_HPP_
+#define _LIBBASE_LITE_STRING_HPP_
 
 #include <libbase/std.hpp>
 #include <libbase/char.hpp>
@@ -359,8 +359,5 @@ namespace Base {
 		}
 	};
 }
-
-typedef Base::basic_string<char> t_astring;
-typedef Base::basic_string<wchar_t> t_ustring;
 
 #endif

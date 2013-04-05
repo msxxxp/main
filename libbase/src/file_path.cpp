@@ -1,6 +1,6 @@
 ﻿#include <libbase/std.hpp>
 #include <libbase/path.hpp>
-#include <libbase/str.hpp>
+#include <libbase/string.hpp>
 #include <libbase/win64.hpp>
 
 namespace Base {

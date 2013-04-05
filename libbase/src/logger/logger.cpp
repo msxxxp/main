@@ -2,7 +2,7 @@
 #include "logger_pvt.hpp"
 
 #include <libbase/lock.hpp>
-#include <libbase/str.hpp>
+#include <libbase/string.hpp>
 
 #include <vector>
 

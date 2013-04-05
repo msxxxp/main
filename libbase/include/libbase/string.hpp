@@ -1,10 +1,28 @@
-﻿#ifndef _LIBBASE_STR_HPP_
-#define _LIBBASE_STR_HPP_
+﻿#ifndef _LIBBASE_STRING_HPP_
+#define _LIBBASE_STRING_HPP_
 
 #include <libbase/std.hpp>
+
+#if defined(NoStlString) || defined(USE_LITE_STRING)
+#include "lite_string.hpp"
+typedef Base::basic_string<char> astring;
+typedef Base::basic_string<wchar_t> ustring;
+#else
+#include <string>
+typedef std::string astring;
+typedef std::wstring ustring;
+#endif
+
 #include <libbase/pcstr.hpp>
 #include <libbase/memory.hpp>
-#include <libbase/autoutf.hpp>
+
+namespace Base {
+
+	astring w2cp(PCWSTR in, UINT cp);
+
+	ustring cp2w(PCSTR in, UINT cp);
+
+}
 
 namespace Base {
 

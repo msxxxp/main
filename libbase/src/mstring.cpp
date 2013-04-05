@@ -2,7 +2,7 @@
 
 #include <libbase/memory.hpp>
 #include <libbase/logger.hpp>
-#include <libbase/str.hpp>
+#include <libbase/string.hpp>
 
 namespace Base {
 

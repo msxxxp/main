@@ -66,7 +66,8 @@ namespace Base {
 	}
 
 	mstring::mstring(mstring && rhs):
-	m_str(rhs.m_str) {
+		m_str(rhs.m_str)
+	{
 		rhs.m_str = nullptr;
 	}
 

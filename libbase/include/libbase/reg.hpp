@@ -6,22 +6,26 @@
 namespace Base {
 
 	struct Register: private Uncopyable {
-		~Register() {
+		~Register()
+		{
 			close();
 		}
 
 		Register() :
-			m_key(nullptr) {
+			m_key(nullptr)
+		{
 		}
 
-		void close() {
+		void close()
+		{
 			if (m_key) {
 				::RegCloseKey(m_key);
 				m_key = nullptr;
 			}
 		}
 
-		bool open_key(ACCESS_MASK acc, PCWSTR path, HKEY key = HKEY_CURRENT_USER) {
+		bool open_key(ACCESS_MASK acc, PCWSTR path, HKEY key = HKEY_CURRENT_USER )
+		{
 			close();
 			bool ret = false;
 			if (acc & KEY_WRITE)
@@ -31,11 +35,13 @@ namespace Base {
 			return ret;
 		}
 
-		bool del(PCWSTR name) const {
+		bool del(PCWSTR name) const
+		{
 			return ::RegDeleteValueW(m_key, name) == ERROR_SUCCESS;
 		}
 
-		uint64_t get(PCWSTR name, uint64_t def) const {
+		uint64_t get(PCWSTR name, uint64_t def) const
+		{
 			if (m_key) {
 				uint64_t value;
 				DWORD size = sizeof(def);
@@ -45,7 +51,8 @@ namespace Base {
 			return def;
 		}
 
-		bool get(PCWSTR name, PWSTR value, DWORD size) const {
+		bool get(PCWSTR name, PWSTR value, DWORD size) const
+		{
 			if (m_key) {
 				size *= sizeof(wchar_t);
 				return ::RegQueryValueExW(m_key, name, nullptr, nullptr, (PBYTE)value, &size) == ERROR_SUCCESS;
@@ -53,22 +60,26 @@ namespace Base {
 			return false;
 		}
 
-		bool set(PCWSTR name, PCVOID value, size_t size, DWORD type = REG_BINARY) const {
+		bool set(PCWSTR name, PCVOID value, size_t size, DWORD type = REG_BINARY) const
+		{
 			if (m_key) {
 				return ::RegSetValueExW(m_key, name, 0, type, (PBYTE)value, size) == ERROR_SUCCESS;
 			}
 			return false;
 		}
 
-		void set(PCWSTR name, uint64_t value) const {
+		void set(PCWSTR name, uint64_t value) const
+		{
 			set(name, &value, sizeof(value), REG_QWORD);
 		}
 
-		void set(PCWSTR name, uint32_t value) const {
+		void set(PCWSTR name, uint32_t value) const
+		{
 			set(name, &value, sizeof(value), REG_DWORD);
 		}
 
-		void set(PCWSTR name, PCWSTR value) const {
+		void set(PCWSTR name, PCWSTR value) const
+		{
 			set(name, value, sizeof(wchar_t) * (wcslen(value) + 1), REG_SZ);
 		}
 

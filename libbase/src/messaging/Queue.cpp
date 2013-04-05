@@ -14,12 +14,12 @@ namespace Base {
 	}
 
 	struct Queue::Queue_impl: private Lock::CriticalSection, private Lock::Semaphore, private std::deque<Message> {
-		void post_message(value_type const& message);
+		void put_message(value_type const& message);
 
 		WaitResult_t get_message(value_type & message, size_t timeout_msec);
 	};
 
-	void Queue::Queue_impl::post_message(const value_type & message)
+	void Queue::Queue_impl::put_message(const value_type & message)
 	{
 		CriticalSection::lock();
 		emplace_back(message);
@@ -73,7 +73,7 @@ namespace Base {
 	void Queue::put_message(const Message & message)
 	{
 		LogNoise(L"Queue: %p Message(type: %Id, code: %Id, param: %Id, data: %p)\n", m_impl, message.get_type(), message.get_code(), message.get_param(), message.get_data());
-		return m_impl->post_message(message);
+		return m_impl->put_message(message);
 	}
 
 	WaitResult_t Queue::get_message(Message & message, Timeout_t timeout_msec)

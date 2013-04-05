@@ -22,7 +22,7 @@ namespace Base {
 		delete this;
 	}
 
-	//	ref_counter::ref_counter(const ref_counter &/*rhs*/) :
+//	ref_counter::ref_counter(const ref_counter &/*rhs*/) :
 //		m_refcnt(0), m_shareable(true)
 //	{
 //	}

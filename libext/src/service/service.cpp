@@ -7,6 +7,10 @@
 
 using namespace Base;
 
+namespace {
+	const size_t SERVICE_CONFIG_DELAYED_AUTO_START_INFO = 3;
+}
+
 namespace Ext {
 
 	Service::Create_t::Create_t(const ustring & _name, const ustring & _binaryPathName):

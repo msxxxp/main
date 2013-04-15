@@ -11,7 +11,7 @@ namespace Base {
 
 	ustring MakePath(PCWSTR path, PCWSTR name) {
 		ustring Result(PathNice(SlashAdd(path)));
-		return AddWordEx(Result, name, PATH_SEPARATOR);
+		return String::AddWordEx(Result, name, PATH_SEPARATOR);
 	}
 
 	ustring Expand(PCWSTR path) {
@@ -71,25 +71,25 @@ namespace Base {
 
 	ustring PathUnix(PCWSTR path) {
 		ustring Result(path);
-		return ReplaceAll(Result, L"\\", L"/");
+		return String::replace_all(Result, L"\\", L"/");
 	}
 
 	ustring PathWin(PCWSTR path) {
 		ustring Result(path);
-		return ReplaceAll(Result, L"/", L"\\");
+		return String::replace_all(Result, L"/", L"\\");
 	}
 
 	ustring Secure(PCWSTR path) {
 		ustring Result(path);
-		ReplaceAll(Result, L"..", L"");
-		ReplaceAll(Result, L"%", L"");
+		String::replace_all(Result, L"..", L"");
+		String::replace_all(Result, L"%", L"");
 		return Validate(Result);
 	}
 
 	ustring Validate(PCWSTR path) {
 		ustring Result(Canonicalize(Expand(path)));
-		ReplaceAll(Result, L"...", L"");
-		ReplaceAll(Result, L"\\\\", L"\\");
+		String::replace_all(Result, L"...", L"");
+		String::replace_all(Result, L"\\\\", L"\\");
 		if (Result == L"\\")
 			Result.clear();
 		return Result;

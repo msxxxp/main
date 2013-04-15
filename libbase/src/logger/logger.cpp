@@ -187,21 +187,21 @@ namespace Logger {
 		if (m_prefix & Prefix::Date) {
 			SYSTEMTIME time;
 			::GetLocalTime(&time);
-			prefix += Base::format_str(L"%04u-%02u-%02u ", time.wYear, time.wMonth, time.wDay);
+			prefix += Base::String::format(L"%04u-%02u-%02u ", time.wYear, time.wMonth, time.wDay);
 		}
 		if (m_prefix & Prefix::Time) {
 			SYSTEMTIME time;
 			::GetLocalTime(&time);
-			prefix += Base::format_str(L"%02u:%02u:%02u.%03u ", time.wHour, time.wMinute, time.wSecond, time.wMilliseconds);
+			prefix += Base::String::format(L"%02u:%02u:%02u.%03u ", time.wHour, time.wMinute, time.wSecond, time.wMilliseconds);
 		}
 		if (m_prefix & Prefix::Level) {
-			prefix += Base::format_str(L"%s ", LogLevelNames[(int)lvl]);
+			prefix += Base::String::format(L"%s ", LogLevelNames[(int)lvl]);
 		}
 		if (m_prefix & Prefix::Module) {
-			prefix += Base::format_str(L"{%s} ", m_name.c_str());
+			prefix += Base::String::format(L"{%s} ", m_name.c_str());
 		}
 		if (m_prefix & Prefix::Thread) {
-			prefix += Base::format_str(L"<%05u> ", ::GetCurrentThreadId());
+			prefix += Base::String::format(L"<%05u> ", ::GetCurrentThreadId());
 		}
 		return prefix;
 	}
@@ -209,10 +209,10 @@ namespace Logger {
 	ustring & Module_impl::add_place(ustring & prefix, PCSTR file, int line, PCSTR func) const
 	{
 		if (m_prefix & Prefix::Place) {
-			prefix += Base::format_str(L"%14.14S:%4d ", file, line);
+			prefix += Base::String::format(L"%14.14S:%4d ", file, line);
 		}
 		if (m_prefix & Prefix::Function) {
-			prefix += Base::format_str(L"[%S] ", func);
+			prefix += Base::String::format(L"[%S] ", func);
 		}
 		return prefix;
 	}
@@ -220,7 +220,7 @@ namespace Logger {
 	void Module_impl::out_args(Level lvl, const ustring & prefix, PCWSTR format, va_list args) const
 	{
 		ustring tmp(prefix);
-		tmp += Base::format_str(format, args);
+		tmp += Base::String::format(format, args);
 		lock();
 		m_target->out(this, lvl, tmp.c_str(), tmp.size());
 		unlock();

@@ -16,7 +16,7 @@ namespace Base {
 			intmax_t bit = 0;
 			ustring tmp(in);
 			lim = Bits::Limit<Type>(lim);
-			while (Cut(tmp, bit)) {
+			while (Base::String::Cut(tmp, bit)) {
 				if (Bits::GOOD_BIT<Type>(--bit))
 					Bits::set(Result, bit);
 			}
@@ -30,7 +30,7 @@ namespace Base {
 			intmax_t bit = 0;
 			ustring tmp(in);
 			lim = Bits::Limit < Type > (lim);
-			while (Cut(tmp, bit)) {
+			while (Base::String::Cut(tmp, bit)) {
 				if (Bits::GOOD_BIT< Type > (bit))
 					Bits::set(Result, bit);
 			}
@@ -44,7 +44,7 @@ namespace Base {
 			lim = Bits::Limit < Type > (lim);
 			for (size_t bit = 0; bit < lim; ++bit) {
 				if (Bits::check(in, bit)) {
-					Add(Result, to_str(bit + 1), L",");
+					Base::String::Inplace::add_word(Result, to_str(bit + 1), L",");
 				}
 			}
 			return Result;
@@ -57,7 +57,7 @@ namespace Base {
 			lim = Bits::Limit < Type > (lim);
 			for (size_t bit = 0; bit < lim; ++bit) {
 				if (Bits::check(in, bit)) {
-					Add(Result, to_str(bit), L",");
+					Base::String::Inplace::add_word(Result, to_str(bit), L",");
 				}
 			}
 			return Result;
@@ -82,7 +82,7 @@ namespace Base {
 				if (Flags::check(in, (Type)flag)) {
 					wchar_t buf[64];
 					Base::Str::convert_num(buf, flag);
-					Add(Result, buf, L",");
+					Base::String::Inplace::add_word(Result, buf, L",");
 				}
 				flag >>= 1;
 			}

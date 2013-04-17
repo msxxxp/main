@@ -3,7 +3,7 @@
 #include <libext/exception.hpp>
 #include <libbase/std.hpp>
 #include <libbase/logger.hpp>
-#include <libbase/str.hpp>
+#include <libbase/string.hpp>
 
 using namespace Base;
 

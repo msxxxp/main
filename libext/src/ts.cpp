@@ -1,5 +1,5 @@
 ﻿#include <libbase/std.hpp>
-#include <libbase/str.hpp>
+#include <libbase/string.hpp>
 #include <libext/dll.hpp>
 #include <libext/ts.hpp>
 #include <libext/exception.hpp>

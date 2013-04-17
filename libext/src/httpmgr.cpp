@@ -9,7 +9,7 @@
 
 #include <libext/httpmgr.hpp>
 #include <libbase/std.hpp>
-#include <libbase/str.hpp>
+#include <libbase/string.hpp>
 #include <libext/exception.hpp>
 
 using namespace Base;
@@ -25,7 +25,7 @@ namespace Http {
 	HttpBindIP::HttpBindIP(const ustring & ipport) {
 		pIpPort = new (sockaddr);
 		ustring	port = ipport;
-		ustring	ip = CutWord(port, L":");
+		ustring	ip = Base::String::CutWord(port, L":");
 		Assign(ip, port);
 	}
 

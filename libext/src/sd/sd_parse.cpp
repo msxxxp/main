@@ -4,7 +4,7 @@
 #include <libbase/logger.hpp>
 #include <libbase/bit.hpp>
 #include <libbase/bit_str.hpp>
-#include <libbase/str.hpp>
+#include <libbase/string.hpp>
 
 namespace Ext {
 

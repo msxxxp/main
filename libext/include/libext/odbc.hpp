@@ -7,7 +7,7 @@
 #define WIN_ODBC_HPP
 
 #include <libbase/std.hpp>
-#include <libbase/str.hpp>
+#include <libbase/string.hpp>
 #include <libbase/memory.hpp>
 
 #include <sql.h>
@@ -62,7 +62,7 @@ struct OdbcError {
 
 	OdbcError(DWORD code, SQLSMALLINT type, SQLHANDLE hndl): m_code(code) {
 		Memory::zero(m_state, sizeof(m_state));
-		m_msg = Base::copy_after_last(ODBC_base::GetState(type, hndl, 1, m_state), L"]");
+		m_msg = Base::String::copy_after_last(ODBC_base::GetState(type, hndl, 1, m_state), L"]");
 	}
 
 	ustring	msg(PCWSTR msg) {

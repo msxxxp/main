@@ -4,7 +4,7 @@
 	@link (odbc32)
 **/
 #include <libext/odbc.hpp>
-#include <libbase/str.hpp>
+#include <libbase/string.hpp>
 
 using namespace Base;
 
@@ -63,37 +63,38 @@ ustring ODBC_base::GetState(SQLSMALLINT type, SQLHANDLE handle, SQLSMALLINT RecN
 }
 
 ustring ODBC_base::MakeConnStr(const ustring & drv, const ustring &host, const ustring &port, const ustring &schm, const ustring &name, const ustring &pass, const ustring &add) {
+	using namespace Base::String::Inplace;
 	ustring Result(L"Driver");
-	Add(Result, drv, L"={");
-	Add(Result, L"}");
+	add_word(Result, drv, L"={");
+	add_word(Result, L"}");
 	if (!host.empty()) {
-		Add(Result, L"Server", L";");
-		Add(Result, host, L"=");
+		add_word(Result, L"Server", L";");
+		add_word(Result, host, L"=");
 	}
 	if (!port.empty()) {
-		Add(Result, port, L",");
+		add_word(Result, port, L",");
 	}
 	if (!schm.empty()) {
-		Add(Result, L"Database", L";");
-		Add(Result, schm, L"=");
+		add_word(Result, L"Database", L";");
+		add_word(Result, schm, L"=");
 	}
 	if (!name.empty()) {
-		Add(Result, L"Uid", L";");
-		Add(Result, name, L"=");
+		add_word(Result, L"Uid", L";");
+		add_word(Result, name, L"=");
 	}
 	if (!pass.empty()) {
-		Add(Result, L"Pwd", L";");
-		Add(Result, pass, L"=");
+		add_word(Result, L"Pwd", L";");
+		add_word(Result, pass, L"=");
 	}
 	if (!add.empty()) {
-		Add(Result, add, L";");
+		add_word(Result, add, L";");
 	}
 	return Result;
 }
 
 ustring ODBC_base::MakeConnStr(DBServer srv, const ustring &host, const ustring &schm, const ustring &name, const ustring &pass, bool tc) {
 	ustring tp(host);
-	ustring th = CutWord(tp, L":");
+	ustring th = Base::String::CutWord(tp, L":");
 
 	ustring Result;
 	switch (srv) {

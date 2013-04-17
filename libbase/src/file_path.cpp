@@ -11,7 +11,7 @@ namespace Base {
 
 	ustring MakePath(PCWSTR path, PCWSTR name) {
 		ustring Result(PathNice(SlashAdd(path)));
-		return String::AddWordEx(Result, name, PATH_SEPARATOR);
+		return String::Inplace::add_word(Result, name, PATH_SEPARATOR);
 	}
 
 	ustring Expand(PCWSTR path) {

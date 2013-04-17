@@ -66,8 +66,38 @@ namespace Base {
 				return str;
 			}
 
-		}
+			ustring & to_lower(ustring & inout)
+			{
+				if (!inout.empty()) {
+					::CharLowerW((wchar_t*)inout.c_str());
+				}
+				return inout;
+			}
 
+			ustring & to_upper(ustring & inout)
+			{
+				if (!inout.empty()) {
+					::CharUpperW((wchar_t*)inout.c_str());
+				}
+				return inout;
+			}
+
+			ustring & add_word(ustring & inout, const ustring & add, const ustring & delim)
+			{
+				// добаваляет строку через разделитель кроме случаев
+				// 1) исходная строка пуста
+				// 2) если добавляемая строка пуста
+				// 3) если разделитель есть в конце исходной строки
+				// 4) если разделитель есть в начале добавляемой
+				ustring::size_type pos = inout.size() - delim.size();
+				if (!(add.empty() || delim.empty() || inout.empty() || (inout.rfind(delim) == pos) || (add.find(delim) == 0)))
+					inout += delim;
+				if (!add.empty())
+					inout += add;
+				return inout;
+			}
+
+		}
 
 		ustring GetWord(const ustring &str, wchar_t d)
 		{
@@ -75,67 +105,6 @@ namespace Base {
 			if (pos != ustring::npos)
 				return str.substr(0, pos);
 			return str;
-		}
-
-		astring& AddWord(astring &inout, const astring &add, const astring &delim)
-		{
-			astring::size_type pos = inout.size() - delim.size();
-			if (!(delim.empty() || inout.empty() || (inout.rfind(delim) == pos) || (add.find(delim) == 0)))
-				inout += delim;
-			if (!add.empty())
-				inout += add;
-			return inout;
-		}
-
-		ustring& AddWord(ustring &inout, const ustring &add, const ustring &delim)
-		{
-			// добаваляет строку через разделитель кроме случаев
-			// 1) исходная строка пуста
-			// 2) если разделитель есть в конце исходной строки
-			// 3) если разделитель есть в начале добавляемой
-			ustring::size_type pos = inout.size() - delim.size();
-			if (!(delim.empty() || inout.empty() || (inout.rfind(delim) == pos) || (add.find(delim) == 0)))
-				inout += delim;
-			if (!add.empty())
-				inout += add;
-			return inout;
-		}
-
-		astring& AddWordEx(astring &inout, const astring &add, const astring &delim)
-		{
-			astring::size_type pos = inout.size() - delim.size();
-			if (!(add.empty() || delim.empty() || inout.empty() || (inout.rfind(delim) == pos) || (add.find(delim) == 0)))
-				inout += delim;
-			if (!add.empty())
-				inout += add;
-			return inout;
-		}
-
-		ustring& AddWordEx(ustring &inout, const ustring &add, const ustring &delim)
-		{
-			// добаваляет строку через разделитель кроме случаев
-			// 1) исходная строка пуста
-			// 2) если добавляемая строка пуста
-			// 3) если разделитель есть в конце исходной строки
-			// 4) если разделитель есть в начале добавляемой
-			ustring::size_type pos = inout.size() - delim.size();
-			if (!(add.empty() || delim.empty() || inout.empty() || (inout.rfind(delim) == pos) || (add.find(delim) == 0)))
-				inout += delim;
-			if (!add.empty())
-				inout += add;
-			return inout;
-		}
-
-		astring CutWord(astring &inout, const astring &delim, bool delDelim)
-		{
-			astring::size_type pos = inout.find_first_of(delim);
-			astring Result(inout.substr(0, pos));
-			if (delDelim && pos != astring::npos)
-				//	pos = inout.find_first_not_of(delim, pos);
-				++pos;
-			inout.erase(0, pos);
-			Inplace::trim_left(inout);
-			return Inplace::trim(Result);
 		}
 
 		ustring CutWord(ustring &inout, const ustring &delim, bool delDelim)
@@ -146,16 +115,6 @@ namespace Base {
 				//		pos = inout.find_first_not_of(delim, pos);
 				++pos;
 			}
-			inout.erase(0, pos);
-			return Inplace::trim(Result);
-		}
-
-		astring CutWordEx(astring &inout, const astring &delim, bool delDelim)
-		{
-			astring::size_type pos = inout.find(delim);
-			astring Result = inout.substr(0, pos);
-			if (delDelim && pos != astring::npos)
-				pos += delim.size();
 			inout.erase(0, pos);
 			return Inplace::trim(Result);
 		}
@@ -197,6 +156,7 @@ namespace Base {
 			}
 			return 0;
 		}
+
 		UINT IsUTF8(const PVOID buf, size_t size)
 		{
 			bool Ascii = true;
@@ -223,6 +183,7 @@ namespace Base {
 			}
 			return (Octets > 0 || Ascii) ? 0 : CP_UTF8;
 		}
+
 		bool GetCP(HANDLE hFile, UINT &cp, bool bUseHeuristics)
 		{
 			DWORD dwTemp = 0;
@@ -286,182 +247,135 @@ namespace Base {
 			return nCodePage;
 		}
 
-	}
-
-	///====================================================================== Функции работы со строками
-	/*
-	 PWSTR				CharFirstOf(PCWSTR in, PCWSTR mask) {
-	 size_t	lin = Len(in);
-	 size_t	len = Len(mask);
-	 for (size_t i = 0; i < lin; ++i) {
-	 for (size_t j = 0; j < len; ++j) {
-	 if (in[i] == mask[j])
-	 return (PWSTR)&in[i];
-	 }
-	 }
-	 return nullptr;
-	 }
-	 PWSTR				CharFirstNotOf(PCWSTR in, PCWSTR mask) {
-	 size_t	lin = Len(in);
-	 size_t	len = Len(mask);
-	 for (size_t i = 0; i < lin; ++i) {
-	 for (size_t j = 0; j < len; ++j) {
-	 if (in[i] == mask[j])
-	 break;
-	 if (j == len - 1)
-	 return (PWSTR)&in[i];
-	 }
-	 }
-	 return nullptr;
-	 }
-	 */
-
-	auto_array<BYTE> to_hash(const ustring & str)
-	{
-		size_t size = str.size() / 2;
-		auto_array<BYTE> ret(size);
-		for (size_t i = 0; i < size; ++i) {
-			ustring tmp = str.substr(i * 2, 2);
-			ret[i] = (BYTE)Str::to_int32(tmp.c_str(), 16);
+		ustring copy_after_last(const ustring & in, const ustring & delim)
+		{
+			ustring::size_type pos = in.find_last_of(delim);
+			return (pos != ustring::npos) ? in.substr(pos + 1) : ustring();
 		}
-		return ret;
-	}
 
-	void to_hash(const ustring & str, PBYTE & buf, size_t & size)
-	{
-		auto_array<BYTE>(to_hash(str)).detach(buf, size);
-	}
-
-	astring Hash2Str(const PBYTE hash, size_t size)
-	{
-		Base::auto_array<char> buf((size + 1) * 2);
-		PSTR tmp = buf.data();
-		for (size_t i = 0; i < size; ++i) {
-			_snprintf(tmp, buf.size() - i * 2, "%02x", hash[i]);
-			tmp += 2;
+		ustring & Add(ustring & str, const wchar_t add)
+		{
+			auto pos = str.size() - 1;
+			if (!(str.empty() || (str.at(pos) == add)))
+				str += add;
+			return str;
 		}
-		return astring(buf.data());
-	}
 
-	astring Hash2StrNum(const PBYTE hash, size_t size)
-	{
-		Base::auto_array<char> buf((size + 1) * 4);
-		PSTR tmp = buf.data();
-		for (size_t i = 0; i < size; ++i) {
-			tmp += _snprintf(tmp, buf.size() - i * 2, "%02i ", hash[i]);
+		ustring & Add(ustring & str, const ustring & add)
+		{
+			auto pos = str.size() - add.size();
+			if (!(add.empty() || str.empty() || (str.rfind(add) == pos)))
+				str += add;
+			return str;
 		}
-		return astring(buf.data());
-	}
 
-	bool Str2Hash(const astring &str, PVOID &hash, ULONG &size)
-	{
-		size_t strsize = str.size();
-		if (strsize % 2 == 0) {
-			size = strsize / 2;
-			hash = Memory::malloc<PVOID>(size);
-			for (size_t i = 0; i < size; ++i) {
-				astring tmp = str.substr(i * 2, 2);
-				((PBYTE)hash)[i] = (BYTE)Str::to_int32(tmp.c_str(), 16);
+		ustring & Cut(ustring & str, const ustring & sub)
+		{
+			auto pos = str.find(sub);
+			if (pos != ustring::npos) {
+				str.erase(pos, sub.size());
 			}
+			return str;
+		}
+
+		bool Cut(ustring & str, intmax_t & num, int base)
+		{
+			auto pos1 = str.find_first_of(L"0123456789");
+			if (pos1 == ustring::npos)
+				return false;
+			auto pos2 = str.find_first_not_of(L"0123456789", pos1);
+			if (pos1 > 0 && str[pos1 - 1] == L'-')
+				--pos1;
+			ustring tmp(str.substr(pos1, pos2 - pos1));
+			num = Str::to_int64(tmp.c_str(), base);
+			str.erase(0, pos2);
 			return true;
 		}
-		return false;
-	}
 
-	ustring copy_after_last(const ustring & in, const ustring & delim)
-	{
-		ustring::size_type pos = in.find_last_of(delim);
-		return (pos != ustring::npos) ? in.substr(pos + 1) : ustring();
-	}
+		//bool		Cut(ustring &inout, intmax_t &num, int base) {
+		//	return inout.Cut(num, base);
+		//}
+		//
+		//ustring&	CutAfter(ustring &inout, const ustring &delim) {
+		//	ustring::size_type pos = inout.find_first_of(delim);
+		//	if (pos != ustring::npos) {
+		//		inout.erase(pos);
+		//	}
+		//	return inout;
+		//}
+		//
+		//ustring&	CutBefore(ustring &inout, const ustring &delim) {
+		//	size_t	pos = inout.find_first_of(delim);
+		//	if (pos != 0) {
+		//		inout.erase(0, pos);
+		//	}
+		//	return inout;
+		//}
 
-	ustring & to_lower(ustring & inout)
-	{
-		if (!inout.empty()) {
-			ustring temp(inout.c_str(), inout.size()); // make copy
-			::CharLowerW((wchar_t*)temp.c_str());
-			inout = temp;
+		/*
+		 PWSTR				CharFirstOf(PCWSTR in, PCWSTR mask) {
+		 size_t	lin = Len(in);
+		 size_t	len = Len(mask);
+		 for (size_t i = 0; i < lin; ++i) {
+		 for (size_t j = 0; j < len; ++j) {
+		 if (in[i] == mask[j])
+		 return (PWSTR)&in[i];
+		 }
+		 }
+		 return nullptr;
+		 }
+		 PWSTR				CharFirstNotOf(PCWSTR in, PCWSTR mask) {
+		 size_t	lin = Len(in);
+		 size_t	len = Len(mask);
+		 for (size_t i = 0; i < lin; ++i) {
+		 for (size_t j = 0; j < len; ++j) {
+		 if (in[i] == mask[j])
+		 break;
+		 if (j == len - 1)
+		 return (PWSTR)&in[i];
+		 }
+		 }
+		 return nullptr;
+		 }
+		 */
+
+		astring Hash2Str(const PBYTE hash, size_t size)
+		{
+			Base::auto_array<char> buf((size + 1) * 2);
+			PSTR tmp = buf.data();
+			for (size_t i = 0; i < size; ++i) {
+				_snprintf(tmp, buf.size() - i * 2, "%02x", hash[i]);
+				tmp += 2;
+			}
+			return astring(buf.data());
 		}
-		return inout;
-	}
 
-	ustring & to_upper(ustring & inout)
-	{
-		if (!inout.empty()) {
-			ustring temp(inout.c_str(), inout.size()); // make copy
-			::CharUpperW((wchar_t*)inout.c_str());
-			inout = temp;
+		astring Hash2StrNum(const PBYTE hash, size_t size)
+		{
+			Base::auto_array<char> buf((size + 1) * 4);
+			PSTR tmp = buf.data();
+			for (size_t i = 0; i < size; ++i) {
+				tmp += _snprintf(tmp, buf.size() - i * 2, "%02i ", hash[i]);
+			}
+			return astring(buf.data());
 		}
-		return inout;
-	}
 
-	ustring & Add(ustring & str, const wchar_t add)
-	{
-		auto pos = str.size() - 1;
-		if (!(str.empty() || (str.at(pos) == add)))
-			str += add;
-		return str;
-	}
-
-	ustring & Add(ustring & str, const ustring & add)
-	{
-		auto pos = str.size() - add.size();
-		if (!(add.empty() || str.empty() || (str.rfind(add) == pos)))
-			str += add;
-		return str;
-	}
-
-	ustring & Add(ustring & str, const ustring & add, const ustring & delim, bool chkEmpty)
-	{
-		auto pos = str.size() - delim.size();
-		if (!(add.empty() || delim.empty() || (chkEmpty && str.empty()) || (str.rfind(delim) == pos) || (add.find(delim) == 0)))
-			str += delim;
-		if (!add.empty())
-			str += add;
-		return str;
-	}
-
-	ustring & Cut(ustring & str, const ustring & sub)
-	{
-		auto pos = str.find(sub);
-		if (pos != ustring::npos) {
-			str.erase(pos, sub.size());
-		}
-		return str;
-	}
-
-	bool Cut(ustring & str, intmax_t & num, int base)
-	{
-		auto pos1 = str.find_first_of(L"0123456789");
-		if (pos1 == ustring::npos)
+		bool Str2Hash(const astring &str, PVOID &hash, ULONG &size)
+		{
+			size_t strsize = str.size();
+			if (strsize % 2 == 0) {
+				size = strsize / 2;
+				hash = Memory::malloc<PVOID>(size);
+				for (size_t i = 0; i < size; ++i) {
+					astring tmp = str.substr(i * 2, 2);
+					((PBYTE)hash)[i] = (BYTE)Str::to_int32(tmp.c_str(), 16);
+				}
+				return true;
+			}
 			return false;
-		auto pos2 = str.find_first_not_of(L"0123456789", pos1);
-		if (pos1 > 0 && str[pos1 - 1] == L'-')
-			--pos1;
-		ustring tmp(str.substr(pos1, pos2 - pos1));
-		num = Str::to_int64(tmp.c_str(), base);
-		str.erase(0, pos2);
-		return true;
-	}
+		}
 
-//bool		Cut(ustring &inout, intmax_t &num, int base) {
-//	return inout.Cut(num, base);
-//}
-//
-//ustring&	CutAfter(ustring &inout, const ustring &delim) {
-//	ustring::size_type pos = inout.find_first_of(delim);
-//	if (pos != ustring::npos) {
-//		inout.erase(pos);
-//	}
-//	return inout;
-//}
-//
-//ustring&	CutBefore(ustring &inout, const ustring &delim) {
-//	size_t	pos = inout.find_first_of(delim);
-//	if (pos != 0) {
-//		inout.erase(0, pos);
-//	}
-//	return inout;
-//}
+	}
 
 	ustring to_str(const SYSTEMTIME & in, bool tolocal)
 	{
@@ -492,6 +406,22 @@ namespace Base {
 			tmp += 2;
 		}
 		return ustring(buf.data());
+	}
+
+	auto_array<BYTE> to_hash(const ustring & str)
+	{
+		size_t size = str.size() / 2;
+		auto_array<BYTE> ret(size);
+		for (size_t i = 0; i < size; ++i) {
+			ustring tmp = str.substr(i * 2, 2);
+			ret[i] = (BYTE)Str::to_int32(tmp.c_str(), 16);
+		}
+		return ret;
+	}
+
+	void to_hash(const ustring & str, PBYTE & buf, size_t & size)
+	{
+		auto_array<BYTE>(to_hash(str)).detach(buf, size);
 	}
 
 }

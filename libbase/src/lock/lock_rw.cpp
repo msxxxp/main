@@ -108,7 +108,7 @@ namespace Base {
 					::SetEvent(m_EventAllowRead);	// release all readers
 					::ResetEvent(m_EventAllowRead);
 				} else {
-					// There are no threads waiting at all; no semaphore gets released
+					// There are no threads waiting at all; nothing to release
 				}
 			}
 			CriticalSection::release();

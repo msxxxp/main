@@ -34,15 +34,24 @@ namespace Base {
 
 		namespace Inplace {
 			astring & trim_left(astring & str, const astring & chrs = " \t\r\n");
+
 			ustring & trim_left(ustring & str, const ustring & chrs = L" \t\r\n");
 
 			astring & trim_right(astring & str, const astring & chrs = " \t\r\n");
+
 			ustring & trim_right(ustring & str, const ustring & chrs = L" \t\r\n");
 
 			astring & trim(astring & str, const astring & chrs = " \t\r\n");
+
 			ustring & trim(ustring & str, const ustring & chrs = L" \t\r\n");
 
 			ustring & replace_all(ustring & str, const ustring & from, const ustring & to);
+
+			ustring & to_lower(ustring & inout);
+
+			ustring & to_upper(ustring & inout);
+
+			ustring & add_word(ustring & inout, const ustring & add, const ustring & delim = ustring());
 
 		}
 
@@ -51,6 +60,7 @@ namespace Base {
 			astring tmp(str);
 			return Inplace::trim(tmp, chrs);
 		}
+
 		ustring trim(const ustring & str, const ustring & chrs = L" \t\r\n")
 		{
 			ustring tmp(str);
@@ -63,21 +73,21 @@ namespace Base {
 			return Inplace::replace_all(ret, from, to);
 		}
 
+		ustring to_lower(const ustring & str)
+		{
+			ustring ret(str);
+			return Inplace::to_lower(ret);
+		}
+
+		ustring to_upper(const ustring & str)
+		{
+			ustring ret(str);
+			return Inplace::to_upper(ret);
+		}
+
 		ustring GetWord(const ustring &str, wchar_t d = PATH_SEPARATOR_C);
 
-		astring & AddWord(astring &inout, const astring &add, const astring &delim = "");
-
-		ustring & AddWord(ustring &inout, const ustring &add, const ustring &delim = L"");
-
-		astring & AddWordEx(astring &inout, const astring &add, const astring &delim = "");
-
-		ustring & AddWordEx(ustring &inout, const ustring &add, const ustring &delim = L"");
-
-		astring CutWord(astring &inout, const astring &delim = "\t ", bool delDelim = true);
-
 		ustring CutWord(ustring & inout, const ustring &delim = L"\t ", bool delDelim = true);
-
-		astring CutWordEx(astring & inout, const astring & delim, bool delDelim = true);
 
 		ustring CutWordEx(ustring & inout, const ustring & delim, bool delDelim = true);
 
@@ -85,28 +95,23 @@ namespace Base {
 
 		ustring & Add(ustring & str, const ustring & add);
 
-		ustring & Add(ustring & str, const ustring & add, const ustring & delim, bool chkEmpty = true);
-
 		ustring & Cut(ustring & str, const ustring & sub);
 
 		bool Cut(ustring & str, intmax_t & num, int base = 10);
 
-		auto_array<BYTE> to_hash(const ustring & str);
-
-		void to_hash(const ustring & str, PBYTE & buf, size_t & size);
-
 		astring Hash2Str(const PBYTE buf, size_t size);
+
 		astring Hash2StrNum(const PBYTE buf, size_t size);
+
 		bool Str2Hash(const astring & str, PVOID & hash, ULONG & size);
 
 		UINT CheckUnicode(const PVOID buf, size_t size);
+
 		UINT IsUTF8(const PVOID buf, size_t size);
+
 		bool GetCP(HANDLE hFile, UINT & cp, bool bUseHeuristics = false);
 
 		ustring copy_after_last(const ustring & in, const ustring & delim);
-
-		ustring & to_lower(ustring & inout);
-		ustring & to_upper(ustring & inout);
 
 	}
 
@@ -183,9 +188,8 @@ namespace Base {
 	//	}
 	//}
 
-	//#include <tr1/functional>
-	//using std::tr1::placeholders::_1;
-	//using std::tr1::placeholders::_2;
+	//using std::placeholders::_1;
+	//using std::placeholders::_2;
 	//
 	//template<typename Type>
 	//const Type * find_first_of(const Type * where, const Type * what) {
@@ -240,6 +244,10 @@ namespace Base {
 	ustring to_str(const PBYTE buf, size_t size);
 
 	ustring to_str(auto_array<BYTE> buf);
+
+	auto_array<BYTE> to_hash(const ustring & str);
+
+	void to_hash(const ustring & str, PBYTE & buf, size_t & size);
 
 }
 

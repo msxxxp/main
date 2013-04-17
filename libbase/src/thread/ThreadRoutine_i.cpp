@@ -1,6 +1,7 @@
 #include <libbase/thread.hpp>
 
 #include <libbase/logger.hpp>
+#include <libbase/messaging.hpp>
 
 namespace Base {
 	static Logger::Module_i * get_logger_module()
@@ -44,7 +45,7 @@ namespace Base {
 		return 0;
 	}
 
-	void ThreadRoutine_i::post_message(const Message & message) const
+	void ThreadRoutine_i::post_message(const Message & message)
 	{
 		(void)message;
 		LogNoise(L"type: %Id, code: %Id, param: %Id, data: %p\n", message.get_type(), message.get_code(), message.get_param(), message.get_data());

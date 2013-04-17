@@ -42,10 +42,10 @@ namespace Base {
 		void set_data(const data_t & in);
 
 	private:
-		type_t m_type;
-		code_t m_code;
+		type_t  m_type;
+		code_t  m_code;
 		param_t m_param;
-		data_t m_data;
+		data_t  m_data;
 	};
 
 	///======================================================================================= Queue

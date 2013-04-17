@@ -3,9 +3,29 @@
 
 #include <libbase/std.hpp>
 #include <libbase/uncopyable.hpp>
-#include <libbase/thread/ThreadRoutine_i.hpp>
 
 namespace Base {
+
+	///======================================================================== Forward declarations
+	struct Message;
+
+	///=============================================================================================
+	struct ThreadRoutine_i {
+		static DWORD WINAPI run_thread(void * routine);
+
+		static VOID WINAPI alert_thread(ULONG_PTR routine);
+
+	public:
+		ThreadRoutine_i();
+
+		virtual ~ThreadRoutine_i() noexcept;
+
+		virtual void alert(void * data);
+
+		virtual size_t run(void * data);
+
+		virtual void post_message(const Message & message);
+	};
 
 //	template <typename Type, size_t (Type::*mem_func)(void *)>
 //	DWORD WINAPI member_thunk(void * ptr)

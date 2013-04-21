@@ -3,7 +3,7 @@
 #include <libbase/pcstr.hpp>
 #include <libbase/memory.hpp>
 #include <libext/dll.hpp>
-#include <libext/file.hpp>
+#include <libext/filesystem.hpp>
 #include <libext/exception.hpp>
 
 namespace Ext {

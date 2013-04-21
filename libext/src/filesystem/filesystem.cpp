@@ -1,4 +1,5 @@
 #include <libbase/std.hpp>
+#include <libbase/filesystem.hpp>
 #include <libbase/memory.hpp>
 #include <libbase/path.hpp>
 #include <libbase/pcstr.hpp>
@@ -86,11 +87,6 @@ namespace Fsys {
 		return false;
 	}
 
-	DWORD get_attr_nt(PCWSTR path)
-	{
-		return ::GetFileAttributesW(path);
-	}
-
 	DWORD get_attr(PCWSTR path)
 	{
 		DWORD ret = get_attr_nt(path);
@@ -139,19 +135,6 @@ namespace Fsys {
 	void del_on_reboot(PCWSTR path)
 	{
 		CheckApi(::MoveFileExW(path, nullptr, MOVEFILE_DELAY_UNTIL_REBOOT));
-	}
-
-	bool del_nt(PCWSTR path)
-	{
-		DWORD attr = get_attr_nt(path);
-		if (attr != INVALID_FILE_ATTRIBUTES ) {
-			if (attr & FILE_ATTRIBUTE_DIRECTORY) {
-				return Directory::del_nt(path);
-			} else {
-				return File::del_nt(path);
-			}
-		}
-		return false;
 	}
 
 	void del(PCWSTR path)

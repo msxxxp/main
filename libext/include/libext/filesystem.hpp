@@ -2,6 +2,7 @@
 #define _LIBEXT_FILESYSTEM_HPP
 
 #include <libbase/std.hpp>
+#include <libbase/filesystem.hpp>
 #include <libbase/shared_ptr.hpp>
 #include <libbase/command_p.hpp>
 #include <libbase/uncopyable.hpp>
@@ -10,11 +11,6 @@ namespace Fsys {
 	bool is_exist(PCWSTR path);
 	inline bool is_exist(const ustring & path) {
 		return is_exist(path.c_str());
-	}
-
-	DWORD get_attr_nt(PCWSTR path);
-	inline DWORD get_attr_nt(const ustring & path) {
-		return get_attr_nt(path.c_str());
 	}
 
 	DWORD get_attr(PCWSTR path);
@@ -35,11 +31,6 @@ namespace Fsys {
 	bool is_dir(PCWSTR path);
 	inline bool is_dir(const ustring &path) {
 		return is_dir(path.c_str());
-	}
-
-	bool del_nt(PCWSTR path);
-	inline bool del_nt(const ustring &path) {
-		return del_nt(path.c_str());
 	}
 
 	void del(PCWSTR path);
@@ -342,31 +333,12 @@ namespace Fsys {
 			create_hardlink(path.c_str(), new_path.c_str());
 		}
 
-		bool del_nt(PCWSTR path);
-		inline bool del_nt(const ustring &path) {
-			return del_nt(path.c_str());
-		}
-
 		void del(PCWSTR path);
 		inline void del(const ustring &path) {
 			del(path.c_str());
 		}
 
 		bool wipe(PCWSTR path);
-
-		inline bool copy(PCWSTR path, PCWSTR dest) {
-			return ::CopyFileW(path, dest, true) != 0;
-		}
-		inline bool copy(const ustring & path, const ustring & dest) {
-			return copy(path.c_str(), dest.c_str());
-		}
-
-		inline bool move(PCWSTR path, PCWSTR dest, DWORD flag = 0) {
-			return ::MoveFileExW(path, dest, flag);
-		}
-		inline bool move(const ustring & path, const ustring & dest, DWORD flag = 0) {
-			return move(path.c_str(), dest.c_str(), flag);
-		}
 
 		void replace(PCWSTR from, PCWSTR to, PCWSTR backup = nullptr);
 		inline void replace(const ustring & from, const ustring & to, PCWSTR backup = nullptr) {
@@ -581,11 +553,6 @@ namespace Fsys {
 		bool create_dir(PCWSTR path, LPSECURITY_ATTRIBUTES lpsa = nullptr);
 		inline bool create_dir(const ustring &path, LPSECURITY_ATTRIBUTES lpsa = nullptr) {
 			return create_dir(path.c_str(), lpsa);
-		}
-
-		bool del_nt(PCWSTR path);
-		inline bool del_nt(const ustring &path) {
-			return del_nt(path.c_str());
 		}
 
 		void del(PCWSTR path);

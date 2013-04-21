@@ -1,4 +1,5 @@
 ﻿#include <libbase/std.hpp>
+#include <libbase/filesystem.hpp>
 #include <libbase/path.hpp>
 #include <libbase/pcstr.hpp>
 #include <libbase/memory.hpp>
@@ -54,28 +55,6 @@ namespace Fsys {
 
 		void create_hardlink(PCWSTR path, PCWSTR new_path) {
 			CheckApi(::CreateHardLinkW(new_path, path, nullptr));
-		}
-
-		bool del_simple_nt(PCWSTR path)
-		{
-			return ::DeleteFileW(path);
-		}
-
-		bool del_attrcheck_nt(PCWSTR path)
-		{
-			DWORD attr = ::GetFileAttributesW(path);
-			if (attr != INVALID_FILE_ATTRIBUTES && ::SetFileAttributesW(path, FILE_ATTRIBUTE_NORMAL)) {
-				if (del_simple_nt(path))
-					return true;
-				else
-					::SetFileAttributesW(path, attr);
-			}
-			return false;
-		}
-
-		bool del_nt(PCWSTR path)
-		{
-			return del_simple_nt(path) || del_attrcheck_nt(path);
 		}
 
 		void del(PCWSTR path) {

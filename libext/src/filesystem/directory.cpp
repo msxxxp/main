@@ -1,4 +1,5 @@
 #include <libbase/std.hpp>
+#include <libbase/filesystem.hpp>
 #include <libbase/memory.hpp>
 #include <libbase/path.hpp>
 #include <libbase/pcstr.hpp>
@@ -15,10 +16,6 @@ namespace Fsys {
 	namespace Directory {
 		bool is_exist(PCWSTR path) {
 			return Fsys::is_exist(path) && Fsys::is_dir(path);
-		}
-
-		bool create_nt(PCWSTR path, LPSECURITY_ATTRIBUTES lpsa) {
-			return ::CreateDirectoryW(path, lpsa) || (::GetLastError() == ERROR_ALREADY_EXISTS && Fsys::is_dir(path));
 		}
 
 		void create(PCWSTR path, LPSECURITY_ATTRIBUTES lpsa) {
@@ -62,28 +59,6 @@ namespace Fsys {
 
 		bool create_dir(PCWSTR path, LPSECURITY_ATTRIBUTES lpsa) {
 			return ::SHCreateDirectoryExW(nullptr, path, lpsa) == ERROR_SUCCESS;
-		}
-
-		bool del_simple_nt(PCWSTR path)
-		{
-			return ::RemoveDirectoryW(path);
-		}
-
-		bool del_attrcheck_nt(PCWSTR path)
-		{
-			DWORD attr = ::GetFileAttributesW(path);
-			if (attr != INVALID_FILE_ATTRIBUTES && ::SetFileAttributesW(path, FILE_ATTRIBUTE_NORMAL)) {
-				if (del_simple_nt(path))
-					return true;
-				else
-					::SetFileAttributesW(path, attr);
-			}
-			return false;
-		}
-
-		bool del_nt(PCWSTR path)
-		{
-			return del_simple_nt(path) || del_attrcheck_nt(path);
 		}
 
 		void del(PCWSTR path) {

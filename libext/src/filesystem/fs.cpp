@@ -32,7 +32,7 @@ namespace Fsys {
 				}
 				if (wfd.dwFileAttributes & FILE_ATTRIBUTE_DIRECTORY) {
 					del_by_mask(MakePath(path, L"*"));
-					Result = Directory::del_nt(path);
+					Result = Directory::del_nt(path.c_str());
 				} else {
 					Result = File::del_nt(path);
 				}
@@ -65,6 +65,12 @@ namespace Fsys {
 		set_security(dest, sd, SE_FILE_OBJECT);
 	}
 
+	namespace File {
+		void replace(PCWSTR from, PCWSTR to, PCWSTR backup) {
+			CheckApi(::ReplaceFileW(from, to, backup, 0, nullptr, nullptr));
+		}
+	}
+
 	namespace Directory {
 		bool remove_dir(PCWSTR path, bool follow_links) {
 			bool Result = false;
@@ -95,19 +101,9 @@ namespace Fsys {
 		}
 	}
 
-}
-
-namespace Ext {
-
-	namespace File {
-		void replace(PCWSTR from, PCWSTR to, PCWSTR backup) {
-			CheckApi(::ReplaceFileW(from, to, backup, 0, nullptr, nullptr));
-		}
-	}
-
 	void SetOwnerRecur(const ustring &path, PSID owner, SE_OBJECT_TYPE type) {
 		try {
-			set_owner(path.c_str(), owner, type);
+			Ext::set_owner(path.c_str(), owner, type);
 		} catch (...) {
 		}
 		if (Fsys::is_dir(path)) {
@@ -117,13 +113,16 @@ namespace Ext {
 					SetOwnerRecur(it.path(), owner, type);
 				} else {
 					try {
-						set_owner(it.path().c_str(), owner, type);
+						Ext::set_owner(it.path().c_str(), owner, type);
 					} catch (...) {
 					}
 				}
 			}
 		}
 	}
+}
+
+namespace Ext {
 
 	///========================================================================================== WinVol
 	//void WinVol::Close() {

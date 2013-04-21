@@ -1,318 +1,314 @@
-﻿#ifndef _LIBEXT_FILE_HPP
-#define _LIBEXT_FILE_HPP
+﻿#ifndef _LIBEXT_FILESYSTEM_HPP
+#define _LIBEXT_FILESYSTEM_HPP
 
 #include <libbase/std.hpp>
 #include <libbase/shared_ptr.hpp>
 #include <libbase/command_p.hpp>
 #include <libbase/uncopyable.hpp>
 
-namespace Ext {
-
-	namespace FS {
-		bool is_exist(PCWSTR path);
-		inline bool is_exist(const ustring & path) {
-			return is_exist(path.c_str());
-		}
-
-		DWORD get_attr_nt(PCWSTR path);
-		inline DWORD get_attr_nt(const ustring & path) {
-			return get_attr_nt(path.c_str());
-		}
-
-		DWORD get_attr(PCWSTR path);
-		inline DWORD get_attr(const ustring & path) {
-			return get_attr(path.c_str());
-		}
-
-		void set_attr(PCWSTR path, DWORD attr);
-		inline void set_attr(const ustring & path, DWORD attr) {
-			return set_attr(path.c_str(), attr);
-		}
-
-		bool is_file(PCWSTR path);
-		inline bool is_file(const ustring &path) {
-			return is_file(path.c_str());
-		}
-
-		bool is_dir(PCWSTR path);
-		inline bool is_dir(const ustring &path) {
-			return is_dir(path.c_str());
-		}
-
-		bool del_nt(PCWSTR path);
-		inline bool del_nt(const ustring &path) {
-			return del_nt(path.c_str());
-		}
-
-		void del(PCWSTR path);
-		inline void del(const ustring &path) {
-			del(path.c_str());
-		}
-
-		void del_sh(PCWSTR path);
-		inline void del_sh(const ustring &path) {
-			del_sh(path.c_str());
-		}
-
-		void del_recycle(PCWSTR path);
-		inline void del_recycle(const ustring &path) {
-			del_recycle(path.c_str());
-		}
-
-		void del_on_reboot(PCWSTR path);
-		inline void del_on_reboot(const ustring & path) {
-			del_on_reboot(path.c_str());
-		}
-
-		bool del_by_mask(PCWSTR mask);
-		inline bool del_by_mask(const ustring &mask) {
-			return del_by_mask(mask.c_str());
-		}
-
-		bool is_link(PCWSTR path);
-		inline bool is_link(const ustring &path) {
-			return is_link(path.c_str());
-		}
-
-		bool is_symlink(PCWSTR path);
-		inline bool is_symlink(const ustring &path) {
-			return is_symlink(path.c_str());
-		}
-
-		bool is_junction(PCWSTR path);
-		inline bool is_junction(const ustring &path) {
-			return is_junction(path.c_str());
-		}
-
-		ustring device_path_to_disk(PCWSTR path);
-
-		ustring get_path(HANDLE path);
-
-		struct DeleteCmd: public Base::Command_p {
-			DeleteCmd(const ustring &path):
-				m_path(path) {
-			}
-			bool Execute() const {
-				del(m_path);
-				return true;
-			}
-		private:
-			ustring m_path;
-		};
-
-		HANDLE HandleRead(PCWSTR path);
-
-		HANDLE HandleWrite(PCWSTR path);
-
-		inline HANDLE HandleRead(const ustring &path) {
-			return HandleRead(path.c_str());
-		}
-
-		inline HANDLE HandleWrite(const ustring &path) {
-			return HandleWrite(path.c_str());
-		}
-
-		///==================================================================================== Stat
-		struct Stat: private BY_HANDLE_FILE_INFORMATION {
-			Stat(HANDLE hndl)
-			{
-				refresh(hndl);
-			}
-
-			Stat(PCWSTR path);
-
-			Stat & operator =(HANDLE hndl);
-
-			Stat & operator =(PCWSTR path);
-
-			bool refresh(HANDLE hndl);
-
-			DWORD attr() const
-			{
-				return dwFileAttributes;
-			}
-
-			uint64_t ctime() const
-			{
-				return Base::make_uint64(ftCreationTime.dwHighDateTime, ftCreationTime.dwLowDateTime);
-			}
-
-			uint64_t atime() const
-			{
-				return Base::make_uint64(ftLastAccessTime.dwHighDateTime, ftLastAccessTime.dwLowDateTime);
-			}
-
-			uint64_t mtime() const
-			{
-				return Base::make_uint64(ftLastWriteTime.dwHighDateTime, ftLastWriteTime.dwLowDateTime);
-			}
-
-			FILETIME ctime_ft() const
-			{
-				return ftCreationTime;
-			}
-
-			FILETIME atime_ft() const
-			{
-				return ftLastAccessTime;
-			}
-
-			FILETIME mtime_ft() const
-			{
-				return ftLastWriteTime;
-			}
-
-			uint64_t size() const
-			{
-				return Base::make_uint64(nFileSizeHigh, nFileSizeLow);
-			}
-
-			DWORD device() const
-			{
-				return dwVolumeSerialNumber;
-			}
-
-			size_t num_links() const
-			{
-				return nNumberOfLinks;
-			}
-
-			int64_t inode() const
-			{
-				return Base::make_uint64(nFileIndexHigh, nFileIndexLow) & 0x0000FFFFFFFFFFFFLL;
-			}
-
-			bool is_dir() const
-			{
-				return !(dwFileAttributes & FILE_ATTRIBUTE_REPARSE_POINT) && (dwFileAttributes & FILE_ATTRIBUTE_DIRECTORY);
-			}
-
-			bool is_dir_or_link() const
-			{
-				return dwFileAttributes & FILE_ATTRIBUTE_DIRECTORY;
-			}
-
-			bool is_file() const
-			{
-				return !(dwFileAttributes & FILE_ATTRIBUTE_REPARSE_POINT) && !(dwFileAttributes & FILE_ATTRIBUTE_DIRECTORY);
-			}
-
-			bool is_file_or_link() const
-			{
-				return !(dwFileAttributes & FILE_ATTRIBUTE_DIRECTORY);
-			}
-
-			bool is_lnk() const
-			{
-				return dwFileAttributes & FILE_ATTRIBUTE_REPARSE_POINT;
-			}
-
-			bool operator ==(const Stat & rhs) const
-			{
-				return device() == rhs.device() && inode() == rhs.inode();
-			}
-
-		protected:
-			Stat()
-			{
-			}
-		};
-
-		inline bool operator ==(const Stat & f1, const Stat & f2) {
-			return f1.operator ==(f2);
-		}
-
-		///================================================================================ Sequence
-		class Sequence: private Base::Uncopyable {
-			class const_input_iterator;
-			typedef Sequence this_type;
-
-		public:
-			typedef Stat   value_type;
-			typedef size_t size_type;
-			typedef int    flags_type;
-			typedef const_input_iterator iterator;
-			typedef const_input_iterator const_iterator;
-
-			enum search_flags {
-				incDots		=   0x0001,
-				skipDirs	=   0x0002,
-				skipFiles	=   0x0004,
-				skipLinks	=   0x0008,
-				skipHidden	=   0x0010,
-			};
-
-			Sequence(const ustring & path, flags_type flags = 0);
-
-			Sequence(const ustring & path, const ustring & mask, flags_type flags = 0);
-
-			const_iterator begin() const;
-
-			const_iterator end() const;
-
-			bool empty() const;
-
-			ustring path() const {
-				return m_path;
-			}
-
-			ustring mask() const {
-				return m_mask;
-			}
-
-			flags_type flags() const {
-				return m_flags;
-			}
-
-		private:
-			ustring m_path;
-			ustring m_mask;
-			flags_type m_flags;
-		};
-
-		class Sequence::const_input_iterator {
-			typedef const_input_iterator this_type;
-
-		public:
-			this_type & operator ++();
-
-			this_type operator ++(int);
-
-			const value_type operator *() const;
-
-			PCWSTR name() const;
-			ustring path() const;
-			uint64_t size() const;
-			size_t attr() const;
-			bool is_file() const;
-			bool is_dir() const;
-			bool is_link() const;
-			bool is_link_file() const;
-			bool is_link_dir() const;
-
-			bool operator ==(const this_type & rhs) const;
-			bool operator !=(const this_type & rhs) const;
-
-		private:
-			const_input_iterator();
-			const_input_iterator(const Sequence & seq);
-
-			struct impl {
-				~impl() throw();
-				impl();
-				impl(const Sequence & seq);
-
-				const Sequence *m_seq;
-				HANDLE		m_handle;
-				WIN32_FIND_DATAW m_stat;
-			};
-
-			Base::shared_ptr<impl> m_impl;
-
-			friend class Sequence;
-		};
-
+namespace Fsys {
+	bool is_exist(PCWSTR path);
+	inline bool is_exist(const ustring & path) {
+		return is_exist(path.c_str());
 	}
+
+	DWORD get_attr_nt(PCWSTR path);
+	inline DWORD get_attr_nt(const ustring & path) {
+		return get_attr_nt(path.c_str());
+	}
+
+	DWORD get_attr(PCWSTR path);
+	inline DWORD get_attr(const ustring & path) {
+		return get_attr(path.c_str());
+	}
+
+	void set_attr(PCWSTR path, DWORD attr);
+	inline void set_attr(const ustring & path, DWORD attr) {
+		return set_attr(path.c_str(), attr);
+	}
+
+	bool is_file(PCWSTR path);
+	inline bool is_file(const ustring &path) {
+		return is_file(path.c_str());
+	}
+
+	bool is_dir(PCWSTR path);
+	inline bool is_dir(const ustring &path) {
+		return is_dir(path.c_str());
+	}
+
+	bool del_nt(PCWSTR path);
+	inline bool del_nt(const ustring &path) {
+		return del_nt(path.c_str());
+	}
+
+	void del(PCWSTR path);
+	inline void del(const ustring &path) {
+		del(path.c_str());
+	}
+
+	void del_sh(PCWSTR path);
+	inline void del_sh(const ustring &path) {
+		del_sh(path.c_str());
+	}
+
+	void del_recycle(PCWSTR path);
+	inline void del_recycle(const ustring &path) {
+		del_recycle(path.c_str());
+	}
+
+	void del_on_reboot(PCWSTR path);
+	inline void del_on_reboot(const ustring & path) {
+		del_on_reboot(path.c_str());
+	}
+
+	bool del_by_mask(PCWSTR mask);
+	inline bool del_by_mask(const ustring &mask) {
+		return del_by_mask(mask.c_str());
+	}
+
+	bool is_link(PCWSTR path);
+	inline bool is_link(const ustring &path) {
+		return is_link(path.c_str());
+	}
+
+	bool is_symlink(PCWSTR path);
+	inline bool is_symlink(const ustring &path) {
+		return is_symlink(path.c_str());
+	}
+
+	bool is_junction(PCWSTR path);
+	inline bool is_junction(const ustring &path) {
+		return is_junction(path.c_str());
+	}
+
+	ustring device_path_to_disk(PCWSTR path);
+
+	ustring get_path(HANDLE path);
+
+	struct DeleteCmd: public Base::Command_p {
+		DeleteCmd(const ustring &path):
+			m_path(path) {
+		}
+		bool Execute() const {
+			del(m_path);
+			return true;
+		}
+	private:
+		ustring m_path;
+	};
+
+	HANDLE HandleRead(PCWSTR path);
+
+	HANDLE HandleWrite(PCWSTR path);
+
+	inline HANDLE HandleRead(const ustring &path) {
+		return HandleRead(path.c_str());
+	}
+
+	inline HANDLE HandleWrite(const ustring &path) {
+		return HandleWrite(path.c_str());
+	}
+
+	///======================================================================================== Stat
+	struct Stat: private BY_HANDLE_FILE_INFORMATION {
+		Stat(HANDLE hndl)
+		{
+			refresh(hndl);
+		}
+
+		Stat(PCWSTR path);
+
+		Stat & operator =(HANDLE hndl);
+
+		Stat & operator =(PCWSTR path);
+
+		bool refresh(HANDLE hndl);
+
+		DWORD attr() const
+		{
+			return dwFileAttributes;
+		}
+
+		uint64_t ctime() const
+		{
+			return Base::make_uint64(ftCreationTime.dwHighDateTime, ftCreationTime.dwLowDateTime);
+		}
+
+		uint64_t atime() const
+		{
+			return Base::make_uint64(ftLastAccessTime.dwHighDateTime, ftLastAccessTime.dwLowDateTime);
+		}
+
+		uint64_t mtime() const
+		{
+			return Base::make_uint64(ftLastWriteTime.dwHighDateTime, ftLastWriteTime.dwLowDateTime);
+		}
+
+		FILETIME ctime_ft() const
+		{
+			return ftCreationTime;
+		}
+
+		FILETIME atime_ft() const
+		{
+			return ftLastAccessTime;
+		}
+
+		FILETIME mtime_ft() const
+		{
+			return ftLastWriteTime;
+		}
+
+		uint64_t size() const
+		{
+			return Base::make_uint64(nFileSizeHigh, nFileSizeLow);
+		}
+
+		DWORD device() const
+		{
+			return dwVolumeSerialNumber;
+		}
+
+		size_t num_links() const
+		{
+			return nNumberOfLinks;
+		}
+
+		int64_t inode() const
+		{
+			return Base::make_uint64(nFileIndexHigh, nFileIndexLow) & 0x0000FFFFFFFFFFFFLL;
+		}
+
+		bool is_dir() const
+		{
+			return !(dwFileAttributes & FILE_ATTRIBUTE_REPARSE_POINT) && (dwFileAttributes & FILE_ATTRIBUTE_DIRECTORY);
+		}
+
+		bool is_dir_or_link() const
+		{
+			return dwFileAttributes & FILE_ATTRIBUTE_DIRECTORY;
+		}
+
+		bool is_file() const
+		{
+			return !(dwFileAttributes & FILE_ATTRIBUTE_REPARSE_POINT) && !(dwFileAttributes & FILE_ATTRIBUTE_DIRECTORY);
+		}
+
+		bool is_file_or_link() const
+		{
+			return !(dwFileAttributes & FILE_ATTRIBUTE_DIRECTORY);
+		}
+
+		bool is_lnk() const
+		{
+			return dwFileAttributes & FILE_ATTRIBUTE_REPARSE_POINT;
+		}
+
+		bool operator ==(const Stat & rhs) const
+				{
+			return device() == rhs.device() && inode() == rhs.inode();
+				}
+
+	protected:
+		Stat()
+	{
+	}
+	};
+
+	inline bool operator ==(const Stat & f1, const Stat & f2) {
+		return f1.operator ==(f2);
+	}
+
+	///==================================================================================== Sequence
+	class Sequence: private Base::Uncopyable {
+		class const_input_iterator;
+		typedef Sequence this_type;
+
+	public:
+		typedef Stat   value_type;
+		typedef size_t size_type;
+		typedef int    flags_type;
+		typedef const_input_iterator iterator;
+		typedef const_input_iterator const_iterator;
+
+		enum search_flags {
+			incDots		=   0x0001,
+			skipDirs	=   0x0002,
+			skipFiles	=   0x0004,
+			skipLinks	=   0x0008,
+			skipHidden	=   0x0010,
+		};
+
+		Sequence(const ustring & path, flags_type flags = 0);
+
+		Sequence(const ustring & path, const ustring & mask, flags_type flags = 0);
+
+		const_iterator begin() const;
+
+		const_iterator end() const;
+
+		bool empty() const;
+
+		ustring path() const {
+			return m_path;
+		}
+
+		ustring mask() const {
+			return m_mask;
+		}
+
+		flags_type flags() const {
+			return m_flags;
+		}
+
+	private:
+		ustring m_path;
+		ustring m_mask;
+		flags_type m_flags;
+	};
+
+	class Sequence::const_input_iterator {
+		typedef const_input_iterator this_type;
+
+	public:
+		this_type & operator ++();
+
+		this_type operator ++(int);
+
+		const value_type operator *() const;
+
+		PCWSTR name() const;
+		ustring path() const;
+		uint64_t size() const;
+		size_t attr() const;
+		bool is_file() const;
+		bool is_dir() const;
+		bool is_link() const;
+		bool is_link_file() const;
+		bool is_link_dir() const;
+
+		bool operator ==(const this_type & rhs) const;
+		bool operator !=(const this_type & rhs) const;
+
+	private:
+		const_input_iterator();
+		const_input_iterator(const Sequence & seq);
+
+		struct impl {
+			~impl() throw();
+			impl();
+			impl(const Sequence & seq);
+
+			const Sequence *m_seq;
+			HANDLE		m_handle;
+			WIN32_FIND_DATAW m_stat;
+		};
+
+		Base::shared_ptr<impl> m_impl;
+
+		friend class Sequence;
+	};
 
 	namespace File {
 		bool is_exist(PCWSTR path);
@@ -417,7 +413,7 @@ namespace Ext {
 		};
 
 		///=========================================================================================
-		struct Facade: public FS::Stat, private Base::Uncopyable {
+		struct Facade: public Fsys::Stat, private Base::Uncopyable {
 			~Facade();
 
 			Facade(const ustring & path, bool write = false);
@@ -459,7 +455,7 @@ namespace Ext {
 			}
 
 			void refresh() {
-				FS::Stat::refresh(m_hndl);
+				Fsys::Stat::refresh(m_hndl);
 			}
 
 			template<typename Type>
@@ -477,7 +473,7 @@ namespace Ext {
 			HANDLE m_hndl;
 		};
 
-		///===================================================================================== FileMap
+		///=============================================================================== File::Map
 		/// Отображение файла в память блоками
 		class Map: private Base::Uncopyable {
 			class file_map_iterator;
@@ -560,9 +556,9 @@ namespace Ext {
 
 			friend class Map;
 		};
-
 	}
 
+	///=================================================================================== Directory
 	namespace Directory {
 		bool is_exist(PCWSTR path);
 		inline bool is_exist(const ustring & path) {
@@ -659,6 +655,9 @@ namespace Ext {
 		copy_file_security(path.c_str(), dest.c_str());
 	}
 
+}
+
+namespace Ext {
 	///========================================================================================== WinVol
 	//class WinVol: private Uncopyable, public WinErrorCheck {
 	//public:

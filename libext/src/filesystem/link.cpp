@@ -9,7 +9,7 @@
 
 using namespace Base;
 
-namespace Ext {
+namespace Fsys {
 
 	///======================================================================================== Link
 	//#ifndef SE_CREATE_SYMBOLIC_LINK_NAME
@@ -66,7 +66,7 @@ namespace Ext {
 		class REPARSE_BUF{
 		public:
 			REPARSE_BUF(PCWSTR path) {
-				DWORD attr = FS::get_attr(path);
+				DWORD attr = Fsys::get_attr(path);
 				if (!(attr & FILE_ATTRIBUTE_REPARSE_POINT)) {
 					CheckApiError(ERROR_NOT_A_REPARSE_POINT);
 				}
@@ -111,12 +111,12 @@ namespace Ext {
 			bool set(PCWSTR path) const {
 				bool ret = false;
 				if (IsReparseTagValid(rdb.ReparseTag)) {
-					DWORD attr = FS::get_attr(path);
+					DWORD attr = Fsys::get_attr(path);
 					if (attr != INVALID_FILE_ATTRIBUTES) {
 						if (attr & FILE_ATTRIBUTE_READONLY) {
-							FS::set_attr(path, attr & ~FILE_ATTRIBUTE_READONLY);
+							Fsys::set_attr(path, attr & ~FILE_ATTRIBUTE_READONLY);
 						}
-						Privilege CreateSymlinkPrivilege(SE_CREATE_SYMBOLIC_LINK_NAME);
+						Ext::Privilege CreateSymlinkPrivilege(SE_CREATE_SYMBOLIC_LINK_NAME);
 						auto_close<HANDLE> hLink(OpenLinkHandle(path, GENERIC_WRITE));
 						if (hLink) {
 							DWORD dwBytesReturned;
@@ -124,7 +124,7 @@ namespace Ext {
 							                        nullptr, 0, &dwBytesReturned, nullptr);
 						}
 						if (attr & FILE_ATTRIBUTE_READONLY) {
-							FS::set_attr(path, attr);
+							Fsys::set_attr(path, attr);
 						}
 					}
 				}
@@ -154,47 +154,45 @@ namespace Ext {
 		};
 	}
 
-	namespace FS {
-		bool is_link(PCWSTR path) {
-			try {
-				REPARSE_BUF rdb(path);
-				return rdb->ReparseTag == IO_REPARSE_TAG_MOUNT_POINT || rdb->ReparseTag == IO_REPARSE_TAG_SYMLINK;
-			} catch (...) {
-			}
-			return false;
+	bool is_link(PCWSTR path) {
+		try {
+			REPARSE_BUF rdb(path);
+			return rdb->ReparseTag == IO_REPARSE_TAG_MOUNT_POINT || rdb->ReparseTag == IO_REPARSE_TAG_SYMLINK;
+		} catch (...) {
 		}
+		return false;
+	}
 
-		bool is_symlink(PCWSTR path) {
-			return REPARSE_BUF(path).is_symlink();
-		}
+	bool is_symlink(PCWSTR path) {
+		return REPARSE_BUF(path).is_symlink();
+	}
 
-		bool is_junction(PCWSTR path) {
-			return REPARSE_BUF(path).is_junction();
-		}
+	bool is_junction(PCWSTR path) {
+		return REPARSE_BUF(path).is_junction();
 	}
 
 	namespace Link {
 		void copy(PCWSTR from, PCWSTR to) {
 			REPARSE_BUF rdb(from);
-			DWORD attr = FS::get_attr(from);
+			DWORD attr = Fsys::get_attr(from);
 			if (attr & FILE_ATTRIBUTE_DIRECTORY) {
 				Directory::create(to);
 			} else {
 				File::create(to);
 			}
 			rdb.set(to);
-			FS::set_attr(to, attr);
+			Fsys::set_attr(to, attr);
 		}
 
 		bool create_sym(PCWSTR path, PCWSTR new_path) {
-			if (Base::Str::is_empty(path) || !FS::is_exist(path)) {
+			if (Base::Str::is_empty(path) || !Fsys::is_exist(path)) {
 				return false;
 			}
 
-			if (Base::Str::is_empty(new_path) || FS::is_exist(new_path))
+			if (Base::Str::is_empty(new_path) || Fsys::is_exist(new_path))
 				return false;
 
-			if (FS::is_dir(path))
+			if (Fsys::is_dir(path))
 				Directory::create(new_path);
 			else
 				File::create(new_path);
@@ -207,16 +205,16 @@ namespace Ext {
 					return true;
 				}
 			}
-			FS::del_nt(new_path);
+			Fsys::del_nt(new_path);
 			return false;
 		}
 
 		bool create_junc(PCWSTR path, PCWSTR new_path) {
-			if (Str::is_empty(path)/* || !FS::is_exists(dest)*/) {
+			if (Str::is_empty(path)/* || !Fsys::is_exists(dest)*/) {
 				return false;
 			}
 
-			if (Str::is_empty(new_path) || FS::is_exist(new_path))
+			if (Str::is_empty(new_path) || Fsys::is_exist(new_path))
 				return false;
 
 			Directory::create(new_path);
@@ -234,22 +232,21 @@ namespace Ext {
 
 		void del(PCWSTR path) {
 			break_link(path);
-			FS::del(path);
+			Fsys::del(path);
 		}
 
 		void break_link(PCWSTR path) {
-			DWORD attr = FS::get_attr(path);
+			DWORD attr = Fsys::get_attr(path);
 			if (!(attr & FILE_ATTRIBUTE_REPARSE_POINT)) {
 				CheckApiError(ERROR_NOT_A_REPARSE_POINT);
 			}
 
 			REPARSE_BUF rdb(path);
 			if (attr & FILE_ATTRIBUTE_READONLY) {
-				FS::set_attr(path, attr & ~FILE_ATTRIBUTE_READONLY);
+				Fsys::set_attr(path, attr & ~FILE_ATTRIBUTE_READONLY);
 			}
 
-
-			Privilege CreateSymlinkPrivilege(SE_CREATE_SYMBOLIC_LINK_NAME);
+			Ext::Privilege CreateSymlinkPrivilege(SE_CREATE_SYMBOLIC_LINK_NAME);
 			auto_close<HANDLE> hLink(OpenLinkHandle(path, GENERIC_WRITE));
 			if (hLink) {
 				REPARSE_GUID_DATA_BUFFER rgdb = {0};
@@ -259,7 +256,7 @@ namespace Ext {
 				                  REPARSE_GUID_DATA_BUFFER_HEADER_SIZE, nullptr, 0, &dwBytesReturned, 0);
 			}
 			if (attr & FILE_ATTRIBUTE_READONLY) {
-				FS::set_attr(path, attr);
+				Fsys::set_attr(path, attr);
 			}
 		}
 

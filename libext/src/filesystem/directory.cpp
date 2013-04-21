@@ -10,14 +10,15 @@ extern "C" {
 	INT WINAPI SHCreateDirectoryExW(HWND, PCWSTR, PSECURITY_ATTRIBUTES);
 }
 
-namespace Ext {
+namespace Fsys {
+
 	namespace Directory {
 		bool is_exist(PCWSTR path) {
-			return FS::is_exist(path) && FS::is_dir(path);
+			return Fsys::is_exist(path) && Fsys::is_dir(path);
 		}
 
 		bool create_nt(PCWSTR path, LPSECURITY_ATTRIBUTES lpsa) {
-			return ::CreateDirectoryW(path, lpsa) || (::GetLastError() == ERROR_ALREADY_EXISTS && FS::is_dir(path));
+			return ::CreateDirectoryW(path, lpsa) || (::GetLastError() == ERROR_ALREADY_EXISTS && Fsys::is_dir(path));
 		}
 
 		void create(PCWSTR path, LPSECURITY_ATTRIBUTES lpsa) {
@@ -49,7 +50,7 @@ namespace Ext {
 					if (!create_nt(tmp.c_str(), sa))
 						return false;
 				} while (pos != ustring::npos);
-			} catch (AbstractError & e) {
+			} catch (Ext::AbstractError & e) {
 				return false;
 			}
 			return true;

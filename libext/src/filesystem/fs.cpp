@@ -15,73 +15,69 @@ extern "C" {
 	INT WINAPI SHCreateDirectoryExW(HWND, PCWSTR, PSECURITY_ATTRIBUTES);
 }
 
-namespace Ext {
-
-	namespace FS {
-		bool del_by_mask(PCWSTR mask) {
-			bool Result = false;
-			WIN32_FIND_DATAW wfd;
-			HANDLE hFind = ::FindFirstFileW(mask, &wfd);
-			if (hFind != INVALID_HANDLE_VALUE) {
-				Result = true;
-				ustring fullpath = Path::extract_from_mask(mask);
-				do {
-					if (!Filename::is_valid(wfd.cFileName))
-						continue;
-					ustring path = MakePath(fullpath, wfd.cFileName);
-					if (wfd.dwFileAttributes & FILE_ATTRIBUTE_REPARSE_POINT) {
-						Link::del(path);
-					}
-					if (wfd.dwFileAttributes & FILE_ATTRIBUTE_DIRECTORY) {
-						del_by_mask(MakePath(path, L"*"));
-						Result = Directory::del_nt(path);
-					} else {
-						Result = File::del_nt(path);
-					}
-				} while (::FindNextFileW(hFind, &wfd));
-				::FindClose(hFind);
-			}
-			return Result;
+namespace Fsys {
+	bool del_by_mask(PCWSTR mask) {
+		bool Result = false;
+		WIN32_FIND_DATAW wfd;
+		HANDLE hFind = ::FindFirstFileW(mask, &wfd);
+		if (hFind != INVALID_HANDLE_VALUE) {
+			Result = true;
+			ustring fullpath = Path::extract_from_mask(mask);
+			do {
+				if (!Filename::is_valid(wfd.cFileName))
+					continue;
+				ustring path = MakePath(fullpath, wfd.cFileName);
+				if (wfd.dwFileAttributes & FILE_ATTRIBUTE_REPARSE_POINT) {
+					Fsys::Link::del(path);
+				}
+				if (wfd.dwFileAttributes & FILE_ATTRIBUTE_DIRECTORY) {
+					del_by_mask(MakePath(path, L"*"));
+					Result = Directory::del_nt(path);
+				} else {
+					Result = File::del_nt(path);
+				}
+			} while (::FindNextFileW(hFind, &wfd));
+			::FindClose(hFind);
 		}
-
-		HANDLE HandleRead(PCWSTR path) {
-			// Obtain backup/restore privilege in case we don't have it
-			Privilege priv(SE_BACKUP_NAME);
-
-			return CheckHandle(::CreateFileW(path, GENERIC_READ, FILE_SHARE_DELETE | FILE_SHARE_READ,
-			                                 nullptr, OPEN_EXISTING,
-			                                 FILE_FLAG_OPEN_REPARSE_POINT | FILE_FLAG_BACKUP_SEMANTICS,
-			                                 nullptr));
-		}
-
-		HANDLE HandleWrite(PCWSTR path) {
-			Privilege priv(SE_RESTORE_NAME);
-
-			return CheckHandle(::CreateFileW(path, GENERIC_READ | GENERIC_WRITE, 0, nullptr,
-			                                 OPEN_EXISTING, FILE_FLAG_OPEN_REPARSE_POINT | FILE_FLAG_BACKUP_SEMANTICS,
-			                                 nullptr));
-		}
+		return Result;
 	}
 
-	namespace File {
-		void replace(PCWSTR from, PCWSTR to, PCWSTR backup) {
-			CheckApi(::ReplaceFileW(from, to, backup, 0, nullptr, nullptr));
-		}
+	HANDLE HandleRead(PCWSTR path) {
+		// Obtain backup/restore privilege in case we don't have it
+		Ext::Privilege priv(SE_BACKUP_NAME);
+
+		return CheckHandle(::CreateFileW(path, GENERIC_READ, FILE_SHARE_DELETE | FILE_SHARE_READ,
+		                                 nullptr, OPEN_EXISTING,
+		                                 FILE_FLAG_OPEN_REPARSE_POINT | FILE_FLAG_BACKUP_SEMANTICS,
+		                                 nullptr));
+	}
+
+	HANDLE HandleWrite(PCWSTR path) {
+		Ext::Privilege priv(SE_RESTORE_NAME);
+
+		return CheckHandle(::CreateFileW(path, GENERIC_READ | GENERIC_WRITE, 0, nullptr,
+		                                 OPEN_EXISTING, FILE_FLAG_OPEN_REPARSE_POINT | FILE_FLAG_BACKUP_SEMANTICS,
+		                                 nullptr));
+	}
+
+	void copy_file_security(PCWSTR path, PCWSTR dest) {
+		Ext::WinSDW sd(path);
+		set_security(dest, sd, SE_FILE_OBJECT);
 	}
 
 	namespace Directory {
 		bool remove_dir(PCWSTR path, bool follow_links) {
 			bool Result = false;
 			if (Path::is_mask(path)) {
-				Result = FS::del_by_mask(path);
+				Result = Fsys::del_by_mask(path);
 			} else {
-				if (!FS::is_exist(path))
+				if (!Fsys::is_exist(path))
 					return true;
-				if (FS::is_dir(path)) {
-					if (!follow_links && FS::is_link(path)) {
-						Link::del(path);
+				if (Fsys::is_dir(path)) {
+					if (!follow_links && Fsys::is_link(path)) {
+						Fsys::Link::del(path);
 					} else {
-						FS::del_by_mask(MakePath(path, L"*"));
+						Fsys::del_by_mask(MakePath(path, L"*"));
 						Result = Directory::del_nt(path);
 					}
 				} else {
@@ -99,9 +95,14 @@ namespace Ext {
 		}
 	}
 
-	void copy_file_security(PCWSTR path, PCWSTR dest) {
-		WinSDW sd(path);
-		set_security(dest, sd, SE_FILE_OBJECT);
+}
+
+namespace Ext {
+
+	namespace File {
+		void replace(PCWSTR from, PCWSTR to, PCWSTR backup) {
+			CheckApi(::ReplaceFileW(from, to, backup, 0, nullptr, nullptr));
+		}
 	}
 
 	void SetOwnerRecur(const ustring &path, PSID owner, SE_OBJECT_TYPE type) {
@@ -109,8 +110,8 @@ namespace Ext {
 			set_owner(path.c_str(), owner, type);
 		} catch (...) {
 		}
-		if (FS::is_dir(path)) {
-			FS::Sequence dir(path);
+		if (Fsys::is_dir(path)) {
+			Fsys::Sequence dir(path);
 			for (auto it = dir.begin(); it != dir.end(); ++it) {
 				if (it.is_dir() || it.is_link_dir()) {
 					SetOwnerRecur(it.path(), owner, type);

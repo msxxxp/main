@@ -8,11 +8,11 @@
 
 #include <wchar.h>
 
-namespace Ext {
+namespace Fsys {
 
 	namespace File {
 		bool is_exist(PCWSTR path) {
-			return FS::is_exist(path) && FS::is_file(path);
+			return Fsys::is_exist(path) && Fsys::is_file(path);
 		}
 
 		uint64_t get_size(PCWSTR path) {

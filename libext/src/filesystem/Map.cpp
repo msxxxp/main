@@ -6,7 +6,7 @@
 #include <libext/filesystem.hpp>
 #include <libext/exception.hpp>
 
-namespace Ext {
+namespace Fsys {
 
 	namespace File {
 

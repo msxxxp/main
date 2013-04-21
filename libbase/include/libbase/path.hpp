@@ -2,7 +2,102 @@
 #define _LIBBASE_PATH_HPP_
 
 #include <libbase/std.hpp>
-#include <libbase/string.hpp>
+
+namespace Base {
+	namespace Filename {
+		bool is_valid(PCWSTR name);
+		inline bool is_valid(const ustring & name)
+		{
+			return is_valid(name.c_str());
+		}
+
+		ustring extract(const ustring & path);
+
+	}
+
+	namespace Path {
+		namespace Inplace {
+			ustring & remove_prefix(ustring & path, const ustring & pref = ustring(PATH_PREFIX_NT));
+
+			ustring & ensure_prefix(ustring & path, const ustring & pref = ustring(PATH_PREFIX_NT));
+
+			ustring & ensure_end_separator(ustring & path, wchar_t sep = PATH_SEPARATOR_C);
+
+			ustring & ensure_no_end_separator(ustring & path);
+
+		}
+
+		inline ustring remove_prefix(const ustring & path, const ustring & pref = ustring(PATH_PREFIX_NT))
+		{
+			ustring tmp(path);
+			return Inplace::remove_prefix(tmp, pref);
+		}
+
+		inline ustring ensure_prefix(const ustring & path, const ustring & pref = ustring(PATH_PREFIX_NT))
+		{
+			ustring tmp(path);
+			return Inplace::ensure_prefix(tmp, pref);
+		}
+
+		inline ustring ensure_end_separator(const ustring & path, wchar_t sep = PATH_SEPARATOR_C)
+		{
+			ustring tmp(path);
+			return Inplace::ensure_end_separator(tmp, sep);
+		}
+
+		inline ustring ensure_no_end_separator(const ustring & path)
+		{
+			ustring tmp(path);
+			return Inplace::ensure_no_end_separator(tmp);
+		}
+
+		ustring get_root(PCWSTR path);
+		inline ustring get_root(const ustring & path)
+		{
+			return get_root(path.c_str());
+		}
+
+		ustring get_work_directory();
+
+		bool set_work_directory(PCWSTR path);
+		inline bool set_work_directory(const ustring & path)
+		{
+			return set_work_directory(path.c_str());
+		}
+
+		bool is_mask(PCWSTR path);
+		inline bool is_mask(const ustring & path)
+		{
+			return is_mask(path.c_str());
+		}
+
+		ustring expand(PCWSTR path);
+		inline ustring expand(const ustring & path)
+		{
+			return expand(path.c_str());
+		}
+
+		ustring unexpand(PCWSTR path);
+		inline ustring unexpand(const ustring & path)
+		{
+			return unexpand(path.c_str());
+		}
+
+		ustring extract_from_mask(const ustring & path);
+
+		ustring extract(const ustring & path);
+
+		ustring get_special(int csidl, bool create = true);
+
+		ustring get_fullpath(PCWSTR path);
+		inline ustring get_fullpath(const ustring &path) {
+			return get_fullpath(path.c_str());
+		}
+
+	}
+
+}
+
 
 namespace Base {
 
@@ -11,39 +106,15 @@ namespace Base {
 		return Canonicalize(path.c_str());
 	}
 
-	ustring Expand(PCWSTR path);
-	inline ustring Expand(const ustring &path) {
-		return Expand(path.c_str());
-	}
-
-	ustring UnExpand(PCWSTR path);
-	inline ustring UnExpand(const ustring &path) {
-		return UnExpand(path.c_str());
-	}
-
-	ustring MakeGoodPath(PCWSTR path);
-	inline ustring MakeGoodPath(const ustring path) {
-		return MakeGoodPath(path.c_str());
-	}
-
-	ustring get_fullpath(PCWSTR path);
-	inline ustring get_fullpath(const ustring &path) {
-		return get_fullpath(path.c_str());
-	}
-
 	ustring PathNice(PCWSTR path);
 	inline ustring PathNice(const ustring &path) {
-		return Canonicalize(Expand(path.c_str()));
+		return Canonicalize(Path::expand(path.c_str()));
 	}
 
 	ustring path_compact(PCWSTR path, size_t size);
 	inline ustring path_compact(const ustring &path, size_t size) {
 		return path_compact(path.c_str(), size);
 	}
-
-	ustring& ensure_end_path_separator(ustring &path, wchar_t sep = PATH_SEPARATOR_C);
-
-	ustring& ensure_no_end_path_separator(ustring &path);
 
 	ustring Secure(PCWSTR path);
 	inline ustring Secure(const ustring &path) {
@@ -55,69 +126,17 @@ namespace Base {
 		return Validate(path.c_str());
 	}
 
-	ustring SlashAdd(const ustring &path, wchar_t sep = PATH_SEPARATOR_C);
-	ustring SlashDel(const ustring &path);
-
-	bool IsPathUnix(PCWSTR path);
-	inline bool IsPathUnix(const ustring &path) {
-		return IsPathUnix(path.c_str());
-	}
-
-	ustring ExtractFile(const ustring &path);
-
-	ustring ExtractPath(const ustring &path);
-
-	ustring GetSpecialPath(int csidl, bool create = true);
-
 	bool MaskMatch(PCWSTR path, PCWSTR mask, DWORD flags = 0);
 
 	ustring MakePath(PCWSTR path, PCWSTR name);
-	inline ustring MakePath(const ustring &path, const ustring &name) {
+	inline ustring MakePath(const ustring & path, const ustring &name) {
 		return MakePath(path.c_str(), name.c_str());
 	}
-
-	ustring PathUnix(PCWSTR path);
-	inline ustring PathUnix(const ustring &path) {
-		return PathUnix(path.c_str());
-	}
-
-	ustring PathWin(PCWSTR path);
-	inline ustring PathWin(const ustring &path) {
-		return PathWin(path.c_str());
-	}
-
-	ustring GetWorkDirectory();
-
-	bool SetWorkDirectory(PCWSTR path);
-	inline bool SetWorkDirectory(const ustring &path) {
-		return SetWorkDirectory(path.c_str());
-	}
-
-	ustring get_root(PCWSTR path);
-	inline ustring get_root(const ustring &path) {
-		return get_root(path.c_str());
-	}
-
-	bool is_path_mask(PCWSTR path);
-	inline bool is_path_mask(const ustring &path) {
-		return is_path_mask(path.c_str());
-	}
-
-	bool is_valid_filename(PCWSTR name);
-	inline bool is_valid_filename(const ustring &name) {
-		return is_valid_filename(name.c_str());
-	}
-
-	ustring remove_path_prefix(const ustring &path, PCWSTR pref = PATH_PREFIX_NT);
-
-	ustring ensure_path_prefix(const ustring &path, PCWSTR pref = PATH_PREFIX_NT);
-
-	ustring get_path_from_mask(const ustring &mask);
 
 	ustring TempDir();
 
 	ustring TempFile(PCWSTR path);
-	inline ustring TempFile(const ustring &path) {
+	inline ustring TempFile(const ustring & path) {
 		return TempFile(path.c_str());
 	}
 

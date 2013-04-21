@@ -24,9 +24,9 @@ namespace Ext {
 			HANDLE hFind = ::FindFirstFileW(mask, &wfd);
 			if (hFind != INVALID_HANDLE_VALUE) {
 				Result = true;
-				ustring fullpath = get_path_from_mask(mask);
+				ustring fullpath = Path::extract_from_mask(mask);
 				do {
-					if (!is_valid_filename(wfd.cFileName))
+					if (!Filename::is_valid(wfd.cFileName))
 						continue;
 					ustring path = MakePath(fullpath, wfd.cFileName);
 					if (wfd.dwFileAttributes & FILE_ATTRIBUTE_REPARSE_POINT) {
@@ -72,7 +72,7 @@ namespace Ext {
 	namespace Directory {
 		bool remove_dir(PCWSTR path, bool follow_links) {
 			bool Result = false;
-			if (is_path_mask(path)) {
+			if (Path::is_mask(path)) {
 				Result = FS::del_by_mask(path);
 			} else {
 				if (!FS::is_exist(path))
@@ -110,8 +110,8 @@ namespace Ext {
 		} catch (...) {
 		}
 		if (FS::is_dir(path)) {
-			WinDir dir(path);
-			for (WinDir::iterator it = dir.begin(); it != dir.end(); ++it) {
+			FS::Sequence dir(path);
+			for (auto it = dir.begin(); it != dir.end(); ++it) {
 				if (it.is_dir() || it.is_link_dir()) {
 					SetOwnerRecur(it.path(), owner, type);
 				} else {
@@ -122,103 +122,6 @@ namespace Ext {
 				}
 			}
 		}
-	}
-
-	///========================================================================================= WinFile
-	WinFile::~WinFile() {
-		::CloseHandle(m_hndl);
-	}
-
-	WinFile::WinFile(const ustring & path, bool write) :
-		m_path(path),
-		m_hndl(Open(m_path, write)) {
-		refresh();
-	}
-
-	WinFile::WinFile(const ustring & path, ACCESS_MASK access, DWORD share, PSECURITY_ATTRIBUTES sa, DWORD creat, DWORD flags) :
-		m_path(path),
-		m_hndl(Open(m_path, access, share, sa, creat, flags)) {
-		refresh();
-	}
-
-	uint64_t WinFile::size() const {
-		uint64_t ret = 0;
-		CheckApi(size_nt(ret));
-		return ret;
-	}
-
-	bool WinFile::size_nt(uint64_t & size) const {
-		LARGE_INTEGER fs;
-		if (::GetFileSizeEx(m_hndl, &fs)) {
-			size = fs.QuadPart;
-			return true;
-		}
-		return false;
-	}
-
-	DWORD WinFile::read(PVOID data, size_t size) {
-		DWORD read;
-		CheckApi(read_nt(data, size, read));
-		return read;
-	}
-
-	bool WinFile::read_nt(PVOID buf, size_t size, DWORD & read) {
-		return ::ReadFile(m_hndl, buf, size, &read, nullptr);
-	}
-
-	DWORD WinFile::write(PCVOID buf, size_t size) {
-		DWORD written;
-		CheckApi(write_nt(buf, size, written));
-		return written;
-	}
-
-	bool WinFile::write_nt(PCVOID buf, size_t size, DWORD & written) {
-		return ::WriteFile(m_hndl, buf, size, &written, nullptr);
-	}
-
-	bool WinFile::set_attr(DWORD at) {
-		return ::SetFileAttributesW(m_path.c_str(), at);
-	}
-
-	uint64_t WinFile::get_position() const {
-		LARGE_INTEGER tmp, np;
-		tmp.QuadPart = 0;
-		CheckApi(::SetFilePointerEx(m_hndl, tmp, &np, FILE_CURRENT));
-		return np.QuadPart;
-	}
-
-	void WinFile::set_position(int64_t dist, DWORD method) {
-		CheckApi(set_position_nt(dist, method));
-	}
-
-	bool WinFile::set_position_nt(int64_t dist, DWORD method) {
-		LARGE_INTEGER tmp;
-		tmp.QuadPart = dist;
-		return ::SetFilePointerEx(m_hndl, tmp, nullptr, method);
-	}
-
-	bool WinFile::set_eof() {
-		return ::SetEndOfFile(m_hndl);
-	}
-
-	bool WinFile::set_time(const FILETIME & ctime, const FILETIME & atime, const FILETIME & mtime) {
-		return ::SetFileTime(m_hndl, &ctime, &atime, &mtime);
-	}
-
-	bool WinFile::set_mtime(const FILETIME & mtime) {
-		return ::SetFileTime(m_hndl, nullptr, nullptr, &mtime);
-	}
-
-	HANDLE WinFile::Open(const ustring & path, bool write) {
-		ACCESS_MASK access = (write) ? GENERIC_READ | GENERIC_WRITE : GENERIC_READ;
-		DWORD share = (write) ? 0 : FILE_SHARE_DELETE | FILE_SHARE_READ;
-		DWORD creat = (write) ? OPEN_ALWAYS : OPEN_EXISTING;
-		DWORD flags = (write) ? FILE_ATTRIBUTE_NORMAL : FILE_FLAG_OPEN_REPARSE_POINT | FILE_FLAG_BACKUP_SEMANTICS;
-		return Open(path, access, share, nullptr, creat, flags);
-	}
-
-	HANDLE WinFile::Open(const ustring & path, ACCESS_MASK access, DWORD share, PSECURITY_ATTRIBUTES sa, DWORD creat, DWORD flags) {
-		return CheckHandleErr(::CreateFileW(path.c_str(), access, share, sa, creat, flags, nullptr));
 	}
 
 	///========================================================================================== WinVol

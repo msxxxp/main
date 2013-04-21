@@ -78,9 +78,10 @@ namespace Base {
 
 	WaitResult_t Queue::get_message(Message & message, Timeout_t timeout_msec)
 	{
+		LogNoise(L"Queue: %p wait: %Id\n", m_impl, timeout_msec);
 		auto ret = m_impl->get_message(message, timeout_msec);
-		LogNoiseIf(ret != WaitResult_t::SUCCESS, L"Queue: %p wait: %Id ret: '%s'\n", m_impl, timeout_msec, to_str(ret));
-		LogNoiseIf(ret == WaitResult_t::SUCCESS, L"Queue: %p wait: %Id ret: '%s' Message(type: %Id, code: %Id, param: %Id, data: %p)\n", m_impl, timeout_msec, to_str(ret), message.get_type(), message.get_code(), message.get_param(), message.get_data());
+		LogNoiseIf(ret != WaitResult_t::SUCCESS, L"ret: '%s'\n", to_str(ret));
+		LogNoiseIf(ret == WaitResult_t::SUCCESS, L"ret: '%s' Message(type: %Id, code: %Id, param: %Id, data: %p)\n", to_str(ret), message.get_type(), message.get_code(), message.get_param(), message.get_data());
 		return ret;
 	}
 

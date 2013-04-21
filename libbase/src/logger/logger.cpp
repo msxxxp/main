@@ -87,7 +87,7 @@ namespace Logger {
 		m_color(1),
 		m_enabled(1)
 	{
-		//			out(Level::Logger, L"Logger module has been created\n");
+//		out(Level::Logger, L"Logger module has been created\n");
 	}
 
 	Module_impl::~Module_impl()
@@ -184,15 +184,15 @@ namespace Logger {
 	ustring Module_impl::create_prefix(Level lvl) const
 	{
 		ustring prefix;
-		if (m_prefix & Prefix::Date) {
+		if (m_prefix & (Prefix::Date | Prefix::Time)) {
 			SYSTEMTIME time;
 			::GetLocalTime(&time);
-			prefix += Base::String::format(L"%04u-%02u-%02u ", time.wYear, time.wMonth, time.wDay);
-		}
-		if (m_prefix & Prefix::Time) {
-			SYSTEMTIME time;
-			::GetLocalTime(&time);
-			prefix += Base::String::format(L"%02u:%02u:%02u.%03u ", time.wHour, time.wMinute, time.wSecond, time.wMilliseconds);
+			if (m_prefix & Prefix::Date) {
+				prefix += Base::String::format(L"%04u-%02u-%02u ", time.wYear, time.wMonth, time.wDay);
+			}
+			if (m_prefix & Prefix::Time) {
+				prefix += Base::String::format(L"%02u:%02u:%02u.%03u ", time.wHour, time.wMinute, time.wSecond, time.wMilliseconds);
+			}
 		}
 		if (m_prefix & Prefix::Level) {
 			prefix += Base::String::format(L"%s ", LogLevelNames[(int)lvl]);
@@ -226,12 +226,14 @@ namespace Logger {
 		unlock();
 	}
 
-	struct pModule_PCWSTR_less: public std::binary_function<const Module_i *, PCWSTR, bool> {
+	struct pModule_less: public std::binary_function<const Module_i *, const Module_i *, bool> {
 		bool operator ()(const Module_i * lhs, const Module_i * rhs) const
 		{
 			return Base::Str::compare(lhs->get_name(), rhs->get_name()) < 0;
 		}
+	};
 
+	struct pModule_PCWSTR_less {
 		bool operator ()(const Module_i * lhs, PCWSTR rhs) const
 		{
 			return Base::Str::compare(lhs->get_name(), rhs) < 0;
@@ -314,9 +316,11 @@ namespace Logger {
 		}
 
 	private:
+		typedef std::vector<Module_i*> ModulesArray;
+
 		Logger_impl();
 
-		std::vector<Module_i*> m_modules;
+		ModulesArray m_modules;
 		Base::auto_destroy<Base::Lock::SyncUnit_i*> m_sync;
 
 		static Level defLevel;
@@ -337,6 +341,7 @@ namespace Logger {
 	Logger_impl::Logger_impl() :
 		m_sync(Base::Lock::get_ReadWrite())
 	{
+		auto lk(m_sync->lock_scope());
 		defModule = register_module_(defModuleName, defTarget, defLevel);
 		auto prefix = defModule->get_prefix();
 		defModule->set_prefix(Prefix::Thread | Prefix::Time | Prefix::Date);
@@ -350,7 +355,8 @@ namespace Logger {
 		defModule->set_prefix(Prefix::Thread | Prefix::Time | Prefix::Date);
 		defModule->out(Level::Logger, L"Logger is being destroyed\n");
 		while (!m_modules.empty()) {
-			free_module_(m_modules.back());
+			delete m_modules.back();
+			m_modules.pop_back();
 		}
 	}
 
@@ -371,14 +377,14 @@ namespace Logger {
 			return *range.first;
 		}
 		Module_i * module = new Module_impl(name, target, lvl);
-		m_modules.emplace(std::upper_bound(m_modules.begin(), m_modules.end(), module, pModule_PCWSTR_less()), module);
+		m_modules.emplace(range.second, module);
 		return module;
 	}
 
 	void Logger_impl::free_module_(Module_i * module)
 	{
 		auto lk(m_sync->lock_scope());
-		auto range = std::equal_range(m_modules.begin(), m_modules.end(), module, pModule_PCWSTR_less());
+		auto range = std::equal_range(m_modules.begin(), m_modules.end(), module, pModule_less());
 		for_each(range.first, range.second, [](Module_i * found_module) {
 			delete found_module;
 		});
@@ -421,12 +427,12 @@ namespace Logger {
 		return Logger_impl::get_default_module();
 	}
 
-	//		Module_i * get_module(PCSTR name, const Target_t & target, Level lvl)
-	//		{
-	//			wchar_t buf[MAX_PATH_LEN];
-	//			Str::convert(buf, lengthof(buf), name, CP_ACP);
-	//			return get_module(buf, target, lvl);
-	//		}
+//	Module_i * get_module(PCSTR name, const Target_t & target, Level lvl)
+//	{
+//		wchar_t buf[MAX_PATH_LEN];
+//		Str::convert(buf, lengthof(buf), name, CP_ACP);
+//		return get_module(buf, target, lvl);
+//	}
 
 	Module_i * get_module(PCWSTR name, const Target_t & target, Level lvl)
 	{

@@ -55,31 +55,31 @@ namespace Base {
 
 		}
 
-		astring trim(const astring & str, const astring & chrs = " \t\r\n")
+		inline astring trim(const astring & str, const astring & chrs = " \t\r\n")
 		{
 			astring tmp(str);
 			return Inplace::trim(tmp, chrs);
 		}
 
-		ustring trim(const ustring & str, const ustring & chrs = L" \t\r\n")
+		inline ustring trim(const ustring & str, const ustring & chrs = L" \t\r\n")
 		{
 			ustring tmp(str);
 			return Inplace::trim(tmp, chrs);
 		}
 
-		ustring replace_all(const ustring & str, const ustring & from, const ustring & to)
+		inline ustring replace_all(const ustring & str, const ustring & from, const ustring & to)
 		{
 			ustring ret(str);
 			return Inplace::replace_all(ret, from, to);
 		}
 
-		ustring to_lower(const ustring & str)
+		inline ustring to_lower(const ustring & str)
 		{
 			ustring ret(str);
 			return Inplace::to_lower(ret);
 		}
 
-		ustring to_upper(const ustring & str)
+		inline ustring to_upper(const ustring & str)
 		{
 			ustring ret(str);
 			return Inplace::to_upper(ret);

@@ -1,27 +1,22 @@
-﻿/**
-	win_file
-
-	@classes	()
-	@author		© 2009 Andrew Grechkin
-	@link		()
- **/
-
-#ifndef WIN_FILE_HPP
-#define WIN_FILE_HPP
+﻿#ifndef _LIBEXT_FILE_HPP
+#define _LIBEXT_FILE_HPP
 
 #include <libbase/std.hpp>
+#include <libbase/shared_ptr.hpp>
 #include <libbase/command_p.hpp>
 #include <libbase/uncopyable.hpp>
 
-#include <tr1/memory>
-
 namespace Ext {
 
-	///===================================================================================== File system
 	namespace FS {
 		bool is_exist(PCWSTR path);
 		inline bool is_exist(const ustring & path) {
 			return is_exist(path.c_str());
+		}
+
+		DWORD get_attr_nt(PCWSTR path);
+		inline DWORD get_attr_nt(const ustring & path) {
+			return get_attr_nt(path.c_str());
 		}
 
 		DWORD get_attr(PCWSTR path);
@@ -116,6 +111,207 @@ namespace Ext {
 		inline HANDLE HandleWrite(const ustring &path) {
 			return HandleWrite(path.c_str());
 		}
+
+		///==================================================================================== Stat
+		struct Stat: private BY_HANDLE_FILE_INFORMATION {
+			Stat(HANDLE hndl)
+			{
+				refresh(hndl);
+			}
+
+			Stat(PCWSTR path);
+
+			Stat & operator =(HANDLE hndl);
+
+			Stat & operator =(PCWSTR path);
+
+			bool refresh(HANDLE hndl);
+
+			DWORD attr() const
+			{
+				return dwFileAttributes;
+			}
+
+			uint64_t ctime() const
+			{
+				return Base::make_uint64(ftCreationTime.dwHighDateTime, ftCreationTime.dwLowDateTime);
+			}
+
+			uint64_t atime() const
+			{
+				return Base::make_uint64(ftLastAccessTime.dwHighDateTime, ftLastAccessTime.dwLowDateTime);
+			}
+
+			uint64_t mtime() const
+			{
+				return Base::make_uint64(ftLastWriteTime.dwHighDateTime, ftLastWriteTime.dwLowDateTime);
+			}
+
+			FILETIME ctime_ft() const
+			{
+				return ftCreationTime;
+			}
+
+			FILETIME atime_ft() const
+			{
+				return ftLastAccessTime;
+			}
+
+			FILETIME mtime_ft() const
+			{
+				return ftLastWriteTime;
+			}
+
+			uint64_t size() const
+			{
+				return Base::make_uint64(nFileSizeHigh, nFileSizeLow);
+			}
+
+			DWORD device() const
+			{
+				return dwVolumeSerialNumber;
+			}
+
+			size_t num_links() const
+			{
+				return nNumberOfLinks;
+			}
+
+			int64_t inode() const
+			{
+				return Base::make_uint64(nFileIndexHigh, nFileIndexLow) & 0x0000FFFFFFFFFFFFLL;
+			}
+
+			bool is_dir() const
+			{
+				return !(dwFileAttributes & FILE_ATTRIBUTE_REPARSE_POINT) && (dwFileAttributes & FILE_ATTRIBUTE_DIRECTORY);
+			}
+
+			bool is_dir_or_link() const
+			{
+				return dwFileAttributes & FILE_ATTRIBUTE_DIRECTORY;
+			}
+
+			bool is_file() const
+			{
+				return !(dwFileAttributes & FILE_ATTRIBUTE_REPARSE_POINT) && !(dwFileAttributes & FILE_ATTRIBUTE_DIRECTORY);
+			}
+
+			bool is_file_or_link() const
+			{
+				return !(dwFileAttributes & FILE_ATTRIBUTE_DIRECTORY);
+			}
+
+			bool is_lnk() const
+			{
+				return dwFileAttributes & FILE_ATTRIBUTE_REPARSE_POINT;
+			}
+
+			bool operator ==(const Stat & rhs) const
+			{
+				return device() == rhs.device() && inode() == rhs.inode();
+			}
+
+		protected:
+			Stat()
+			{
+			}
+		};
+
+		inline bool operator ==(const Stat & f1, const Stat & f2) {
+			return f1.operator ==(f2);
+		}
+
+		///================================================================================ Sequence
+		class Sequence: private Base::Uncopyable {
+			class const_input_iterator;
+			typedef Sequence this_type;
+
+		public:
+			typedef Stat   value_type;
+			typedef size_t size_type;
+			typedef int    flags_type;
+			typedef const_input_iterator iterator;
+			typedef const_input_iterator const_iterator;
+
+			enum search_flags {
+				incDots		=   0x0001,
+				skipDirs	=   0x0002,
+				skipFiles	=   0x0004,
+				skipLinks	=   0x0008,
+				skipHidden	=   0x0010,
+			};
+
+			Sequence(const ustring & path, flags_type flags = 0);
+
+			Sequence(const ustring & path, const ustring & mask, flags_type flags = 0);
+
+			const_iterator begin() const;
+
+			const_iterator end() const;
+
+			bool empty() const;
+
+			ustring path() const {
+				return m_path;
+			}
+
+			ustring mask() const {
+				return m_mask;
+			}
+
+			flags_type flags() const {
+				return m_flags;
+			}
+
+		private:
+			ustring m_path;
+			ustring m_mask;
+			flags_type m_flags;
+		};
+
+		class Sequence::const_input_iterator {
+			typedef const_input_iterator this_type;
+
+		public:
+			this_type & operator ++();
+
+			this_type operator ++(int);
+
+			const value_type operator *() const;
+
+			PCWSTR name() const;
+			ustring path() const;
+			uint64_t size() const;
+			size_t attr() const;
+			bool is_file() const;
+			bool is_dir() const;
+			bool is_link() const;
+			bool is_link_file() const;
+			bool is_link_dir() const;
+
+			bool operator ==(const this_type & rhs) const;
+			bool operator !=(const this_type & rhs) const;
+
+		private:
+			const_input_iterator();
+			const_input_iterator(const Sequence & seq);
+
+			struct impl {
+				~impl() throw();
+				impl();
+				impl(const Sequence & seq);
+
+				const Sequence *m_seq;
+				HANDLE		m_handle;
+				WIN32_FIND_DATAW m_stat;
+			};
+
+			Base::shared_ptr<impl> m_impl;
+
+			friend class Sequence;
+		};
+
 	}
 
 	namespace File {
@@ -219,6 +415,152 @@ namespace Ext {
 		private:
 			ustring m_path, m_dest;
 		};
+
+		///=========================================================================================
+		struct Facade: public FS::Stat, private Base::Uncopyable {
+			~Facade();
+
+			Facade(const ustring & path, bool write = false);
+
+			Facade(const ustring & path, ACCESS_MASK access, DWORD share, PSECURITY_ATTRIBUTES sa, DWORD creat, DWORD flags);
+
+			uint64_t size() const;
+
+			bool size_nt(uint64_t & size) const;
+
+			DWORD read(PVOID data, size_t size);
+
+			bool read_nt(PVOID buf, size_t size, DWORD & read);
+
+			DWORD write(PCVOID buf, size_t size);
+
+			bool write_nt(PCVOID buf, size_t size, DWORD & written);
+
+			bool set_attr(DWORD at);
+
+			uint64_t get_position() const;
+
+			void set_position(int64_t dist, DWORD method = FILE_BEGIN);
+
+			bool set_position_nt(int64_t dist, DWORD method = FILE_BEGIN);
+
+			bool set_eof();
+
+			bool set_time(const FILETIME & ctime, const FILETIME & atime, const FILETIME & mtime);
+
+			bool set_mtime(const FILETIME & mtime);
+
+			ustring path() const {
+				return m_path;
+			}
+
+			operator HANDLE() const {
+				return m_hndl;
+			}
+
+			void refresh() {
+				FS::Stat::refresh(m_hndl);
+			}
+
+			template<typename Type>
+			bool io_control_out_nt(DWORD code, Type & data) throw() {
+				DWORD size_ret;
+				return ::DeviceIoControl(m_hndl, code, nullptr, 0, &data, sizeof(Type), &size_ret, nullptr) != 0;
+			}
+
+			static HANDLE Open(const ustring & path, bool write = false);
+
+			static HANDLE Open(const ustring & path, ACCESS_MASK access, DWORD share, PSECURITY_ATTRIBUTES sa, DWORD creat, DWORD flags);
+
+		private:
+			ustring m_path;
+			HANDLE m_hndl;
+		};
+
+		///===================================================================================== FileMap
+		/// Отображение файла в память блоками
+		class Map: private Base::Uncopyable {
+			class file_map_iterator;
+			typedef Map this_type;
+
+		public:
+			typedef uint64_t size_type;
+			typedef file_map_iterator iterator;
+			typedef const file_map_iterator const_iterator;
+
+			~Map();
+
+			Map(const Facade & wf, size_type size = (size_type)-1, bool write = false);
+
+			HANDLE map() const {
+				return m_map;
+			}
+
+			size_type size() const {
+				return m_size;
+			}
+
+			size_type get_frame() const {
+				return m_frame;
+			}
+
+			size_type set_frame(size_type size);
+
+			bool is_writeble() const {
+				return m_write;
+			}
+
+			iterator begin();
+
+			iterator end();
+
+			const_iterator begin() const;
+
+			const_iterator end() const;
+
+			bool empty() const;
+
+		private:
+			static const size_type DEFAULT_FRAME = 1024 * 1024;
+
+			size_type check_frame(size_type mul) const;
+
+			size_type m_size;
+			size_type m_frame;
+			HANDLE m_map;
+			bool m_write;
+		};
+
+		class Map::file_map_iterator {
+			typedef file_map_iterator this_type;
+
+		public:
+			this_type & operator ++();
+
+			this_type operator ++(int);
+
+			void * operator *() const;
+
+			void * data() const;
+
+			size_type size() const;
+
+			size_type offset() const;
+
+			bool operator ==(const this_type & rhs) const;
+
+			bool operator !=(const this_type & rhs) const;
+
+		private:
+			file_map_iterator();
+			file_map_iterator(const Map * seq);
+
+			struct impl;
+			Base::shared_ptr<impl> m_impl;
+
+			friend class Map;
+		};
+
 	}
 
 	namespace Directory {
@@ -266,7 +608,7 @@ namespace Ext {
 		}
 	}
 
-	///============================================================================================ Link
+	///======================================================================================== Link
 	namespace Link {
 		void copy(PCWSTR from, PCWSTR to);
 		inline void copy(const ustring & from, const ustring & to) {
@@ -311,337 +653,11 @@ namespace Ext {
 		};
 	}
 
-	///=================================================================================================
+	///=============================================================================================
 	void copy_file_security(PCWSTR path, PCWSTR dest);
 	inline void copy_file_security(const ustring & path, const ustring & dest) {
 		copy_file_security(path.c_str(), dest.c_str());
 	}
-
-	///===================================================================================== WinFileInfo
-	struct WinFileInfo: public BY_HANDLE_FILE_INFORMATION {
-		WinFileInfo(HANDLE hndl) {
-			refresh(hndl);
-		}
-
-		WinFileInfo(PCWSTR path);
-
-		WinFileInfo & operator =(HANDLE hndl);
-
-		WinFileInfo & operator =(PCWSTR path);
-
-		bool refresh(HANDLE hndl);
-
-		DWORD attr() const {
-			return dwFileAttributes;
-		}
-
-		uint64_t ctime() const {
-			return Base::make_uint64(ftCreationTime.dwHighDateTime, ftCreationTime.dwLowDateTime);
-		}
-
-		uint64_t atime() const {
-			return Base::make_uint64(ftLastAccessTime.dwHighDateTime, ftLastAccessTime.dwLowDateTime);
-		}
-
-		uint64_t mtime() const {
-			return Base::make_uint64(ftLastWriteTime.dwHighDateTime, ftLastWriteTime.dwLowDateTime);
-		}
-
-		FILETIME ctime_ft() const {
-			return ftCreationTime;
-		}
-
-		FILETIME atime_ft() const {
-			return ftLastAccessTime;
-		}
-
-		FILETIME mtime_ft() const {
-			return ftLastWriteTime;
-		}
-
-		uint64_t size() const {
-			return Base::make_uint64(nFileSizeHigh, nFileSizeLow);
-		}
-
-		DWORD dev() const {
-			return dwVolumeSerialNumber;
-		}
-
-		size_t nlink() const {
-			return nNumberOfLinks;
-		}
-
-		int64_t ino() const {
-			return Base::make_uint64(nFileIndexHigh, nFileIndexLow) & 0x0000FFFFFFFFFFFFLL;
-		}
-
-		bool is_dir() const {
-			return !(dwFileAttributes & FILE_ATTRIBUTE_REPARSE_POINT) && (dwFileAttributes & FILE_ATTRIBUTE_DIRECTORY);
-		}
-
-		bool is_dir_or_link() const {
-			return dwFileAttributes & FILE_ATTRIBUTE_DIRECTORY;
-		}
-
-		bool is_file() const {
-			return !(dwFileAttributes & FILE_ATTRIBUTE_REPARSE_POINT) && !(dwFileAttributes & FILE_ATTRIBUTE_DIRECTORY);
-		}
-
-		bool is_file_or_link() const {
-			return !(dwFileAttributes & FILE_ATTRIBUTE_DIRECTORY);
-		}
-
-		bool is_lnk() const {
-			return dwFileAttributes & FILE_ATTRIBUTE_REPARSE_POINT;
-		}
-
-		bool operator ==(const WinFileInfo & rhs) const {
-			return dev() == rhs.dev() && ino() == rhs.ino();
-		}
-
-	protected:
-		WinFileInfo() {
-		}
-	};
-
-	inline bool operator ==(const WinFileInfo & f1, const WinFileInfo & f2) {
-		return f1.operator ==(f2);
-	}
-
-	///========================================================================================= WinFile
-	struct WinFile: public WinFileInfo, private Base::Uncopyable {
-		~WinFile();
-
-		WinFile(const ustring & path, bool write = false);
-
-		WinFile(const ustring & path, ACCESS_MASK access, DWORD share, PSECURITY_ATTRIBUTES sa, DWORD creat, DWORD flags);
-
-		uint64_t size() const;
-
-		bool size_nt(uint64_t & size) const;
-
-		DWORD read(PVOID data, size_t size);
-
-		bool read_nt(PVOID buf, size_t size, DWORD & read);
-
-		DWORD write(PCVOID buf, size_t size);
-
-		bool write_nt(PCVOID buf, size_t size, DWORD & written);
-
-		bool set_attr(DWORD at);
-
-		uint64_t get_position() const;
-
-		void set_position(int64_t dist, DWORD method = FILE_BEGIN);
-
-		bool set_position_nt(int64_t dist, DWORD method = FILE_BEGIN);
-
-		bool set_eof();
-
-		bool set_time(const FILETIME & ctime, const FILETIME & atime, const FILETIME & mtime);
-
-		bool set_mtime(const FILETIME & mtime);
-
-		ustring path() const {
-			return m_path;
-		}
-
-		operator HANDLE() const {
-			return m_hndl;
-		}
-
-		void refresh() {
-			WinFileInfo::refresh(m_hndl);
-		}
-
-		template<typename Type>
-		bool io_control_out_nt(DWORD code, Type & data) throw() {
-			DWORD size_ret;
-			return ::DeviceIoControl(m_hndl, code, nullptr, 0, &data, sizeof(Type), &size_ret, nullptr) != 0;
-		}
-
-		static HANDLE Open(const ustring & path, bool write = false);
-
-		static HANDLE Open(const ustring & path, ACCESS_MASK access, DWORD share, PSECURITY_ATTRIBUTES sa, DWORD creat, DWORD flags);
-
-	private:
-		ustring m_path;
-		HANDLE m_hndl;
-	};
-
-	///========================================================================================= FileMap
-	/// Отображение файла в память блоками
-	class File_map: private Base::Uncopyable {
-		class file_map_iterator;
-		typedef File_map this_type;
-
-	public:
-		typedef uint64_t size_type;
-		typedef file_map_iterator iterator;
-		typedef const file_map_iterator const_iterator;
-
-		~File_map();
-
-		File_map(const WinFile & wf, size_type size = (size_type)-1, bool write = false);
-
-		HANDLE map() const {
-			return m_map;
-		}
-
-		size_type size() const {
-			return m_size;
-		}
-
-		size_type get_frame() const {
-			return m_frame;
-		}
-
-		size_type set_frame(size_type size);
-
-		bool is_writeble() const {
-			return m_write;
-		}
-
-		iterator begin();
-
-		iterator end();
-
-		const_iterator begin() const;
-
-		const_iterator end() const;
-
-		bool empty() const;
-
-	private:
-		static const size_type DEFAULT_FRAME = 1024 * 1024;
-
-		size_type check_frame(size_type mul) const;
-
-		size_type m_size;
-		size_type m_frame;
-		HANDLE m_map;
-		bool m_write;
-	};
-
-	class File_map::file_map_iterator {
-		typedef file_map_iterator this_type;
-
-	public:
-		this_type & operator ++();
-
-		this_type operator ++(int);
-
-		void * operator *() const;
-
-		void * data() const;
-
-		size_type size() const;
-
-		size_type offset() const;
-
-		bool operator ==(const this_type & rhs) const;
-
-		bool operator !=(const this_type & rhs) const;
-
-	private:
-		file_map_iterator();
-		file_map_iterator(const File_map * seq);
-
-		struct impl;
-		std::tr1::shared_ptr<impl> m_impl;
-
-		friend class File_map;
-	};
-
-	///========================================================================================== WinDir
-	class WinDir: private Base::Uncopyable {
-		class const_input_iterator;
-		typedef WinDir this_type;
-
-	public:
-		typedef WinFileInfo				value_type;
-		typedef size_t					size_type;
-		typedef int						flags_type;
-		typedef const_input_iterator	iterator;
-		typedef const_input_iterator	const_iterator;
-
-		enum search_flags {
-			incDots		=   0x0001,
-			skipDirs	=   0x0002,
-			skipFiles	=   0x0004,
-			skipLinks	=   0x0008,
-			skipHidden	=   0x0010,
-		};
-
-		WinDir(const ustring & path, flags_type flags = 0);
-
-		WinDir(const ustring & path, const ustring & mask, flags_type flags = 0);
-
-		const_iterator begin() const;
-
-		const_iterator end() const;
-
-		bool empty() const;
-
-		ustring path() const {
-			return m_path;
-		}
-
-		ustring mask() const {
-			return m_mask;
-		}
-
-		flags_type flags() const {
-			return m_flags;
-		}
-
-	private:
-		ustring m_path;
-		ustring m_mask;
-		flags_type m_flags;
-	};
-
-	class WinDir::const_input_iterator {
-		typedef const_input_iterator this_type;
-
-	public:
-		this_type & operator ++();
-
-		this_type operator ++(int);
-
-		const value_type operator *() const;
-
-		PCWSTR name() const;
-		ustring path() const;
-		uint64_t size() const;
-		size_t attr() const;
-		bool is_file() const;
-		bool is_dir() const;
-		bool is_link() const;
-		bool is_link_file() const;
-		bool is_link_dir() const;
-
-		bool operator ==(const this_type & rhs) const;
-		bool operator !=(const this_type & rhs) const;
-
-	private:
-		const_input_iterator();
-		const_input_iterator(const WinDir & seq);
-
-		struct impl {
-			~impl() throw();
-			impl();
-			impl(const WinDir & seq);
-
-			const WinDir *m_seq;
-			HANDLE		m_handle;
-			WIN32_FIND_DATAW m_stat;
-		};
-
-		std::tr1::shared_ptr<impl> m_impl;
-
-		friend class WinDir;
-	};
 
 	///========================================================================================== WinVol
 	//class WinVol: private Uncopyable, public WinErrorCheck {

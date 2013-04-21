@@ -66,8 +66,8 @@ namespace Base {
 	Thread::~Thread() noexcept
 	{
 		if (m_handle) {
+			LogNoise(L"id: %u, exitcode: %Iu\n", m_id, get_exitcode());
 			::CloseHandle(m_handle);
-			LogNoise(L"id: %u\n", m_id);
 		}
 	}
 
@@ -126,9 +126,10 @@ namespace Base {
 
 	size_t Thread::get_exitcode() const
 	{
-		LogNoise(L"id: %u\n", m_id);
 		DWORD ret;
-		LogErrorIf(!::GetExitCodeThread(m_handle, &ret), L"%s\n", ErrAsStr(ret).c_str());
+		WINBOOL good = ::GetExitCodeThread(m_handle, &ret);
+		LogNoiseIf(good,  L"id: %u code: %u\n", m_id, ret);
+		LogErrorIf(!good, L"id: %u %s\n", ErrAsStr().c_str());
 		return ret;
 	}
 

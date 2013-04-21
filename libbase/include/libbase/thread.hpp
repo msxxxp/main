@@ -24,7 +24,7 @@ namespace Base {
 
 		virtual size_t run(void * data);
 
-		virtual void post_message(const Message & message);
+		virtual void put_message(const Base::Message & message);
 	};
 
 //	template <typename Type, size_t (Type::*mem_func)(void *)>

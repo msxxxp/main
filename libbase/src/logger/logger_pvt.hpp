@@ -5,7 +5,7 @@
 
 namespace Logger {
 
-	///================================================================================ Logger_i
+	///==================================================================================== Logger_i
 	struct Logger_i {
 		Module_i * get_module(PCWSTR name);
 
@@ -18,9 +18,9 @@ namespace Logger {
 	private:
 		virtual Module_i * get_module_(PCWSTR name) = 0;
 
-	virtual Module_i * register_module_(PCWSTR name, const Target_t & target, Level lvl) = 0;
+		virtual Module_i * register_module_(PCWSTR name, const Target_t & target, Level lvl) = 0;
 
-	virtual void free_module_(Module_i * module) = 0;
+		virtual void free_module_(Module_i * module) = 0;
 	};
 
 	Logger_i & get_instance();

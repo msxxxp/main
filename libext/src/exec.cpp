@@ -1,4 +1,5 @@
 ﻿#include <libbase/std.hpp>
+#include <libbase/memory.hpp>
 #include <libbase/path.hpp>
 #include <libext/exception.hpp>
 #include <libext/exec.hpp>
@@ -28,7 +29,7 @@ namespace Ext {
 		DWORD Result = 0;
 
 		// Pipe for read stdout
-		auto_close<HANDLE> hPipeOutRead, hPipeOutWrite;
+		Base::auto_close<HANDLE> hPipeOutRead, hPipeOutWrite;
 		//	WinHandle hPipeOutRead, hPipeOutWrite;
 		CheckApi(::CreatePipe(&hPipeOutRead, &hPipeOutWrite, nullptr, 0));
 		CheckApi(::SetHandleInformation(hPipeOutWrite, HANDLE_FLAG_INHERIT, HANDLE_FLAG_INHERIT));
@@ -47,7 +48,7 @@ namespace Ext {
 		                          CREATE_DEFAULT_ERROR_MODE, nullptr, nullptr, &si, &pi));
 		hPipeOutWrite.close();
 		::CloseHandle(pi.hThread);
-		auto_close<HANDLE> hProc(pi.hProcess);
+		Base::auto_close<HANDLE> hProc(pi.hProcess);
 		DWORD timeout = TIMEOUT;
 		out.clear();
 		CHAR buf[1024 * 1024];
@@ -80,7 +81,7 @@ namespace Ext {
 		DWORD Result = 0;
 
 		// Pipe for write stdin
-		auto_close<HANDLE> hPipeInRead, hPipeInWrite;
+		Base::auto_close<HANDLE> hPipeInRead, hPipeInWrite;
 		CheckApi(::CreatePipe(&hPipeInRead, &hPipeInWrite, nullptr, in.size() + 1));
 		CheckApi(::SetHandleInformation(hPipeInRead, HANDLE_FLAG_INHERIT, HANDLE_FLAG_INHERIT));
 
@@ -88,7 +89,7 @@ namespace Ext {
 		CheckApi(::WriteFile(hPipeInWrite, in.c_str(), in.size(), &dwWritten, nullptr));
 
 		// Pipe for read stdout
-		auto_close<HANDLE> hPipeOutRead, hPipeOutWrite;
+		Base::auto_close<HANDLE> hPipeOutRead, hPipeOutWrite;
 		CheckApi(::CreatePipe(&hPipeOutRead, &hPipeOutWrite, nullptr, 0));
 		CheckApi(::SetHandleInformation(hPipeOutWrite, HANDLE_FLAG_INHERIT, HANDLE_FLAG_INHERIT));
 
@@ -110,7 +111,7 @@ namespace Ext {
 		hPipeOutWrite.close();
 		::CloseHandle(pi.hThread);
 
-		auto_close<HANDLE> hProc(pi.hProcess);
+		Base::auto_close<HANDLE> hProc(pi.hProcess);
 		DWORD timeout = TIMEOUT;
 		CHAR buf[1024 * 1024];
 		DWORD dwRead;
@@ -153,7 +154,7 @@ namespace Ext {
 		CheckApi(::CreateProcessW(nullptr, (PWSTR)app.c_str(), nullptr, nullptr, true,
 		                          CREATE_DEFAULT_ERROR_MODE, nullptr, nullptr, &si, &pi));
 		::CloseHandle(pi.hThread);
-		auto_close<HANDLE> hProc(pi.hProcess);
+		Base::auto_close<HANDLE> hProc(pi.hProcess);
 		if (::WaitForSingleObject(hProc, wait) == WAIT_OBJECT_0) {
 			::GetExitCodeProcess(hProc, &Result);
 		} else {
@@ -191,7 +192,7 @@ namespace Ext {
 		DWORD Result = 0;
 
 		// Pipe for write stdin
-		auto_close<HANDLE> hPipeInRead, hPipeInWrite;
+		Base::auto_close<HANDLE> hPipeInRead, hPipeInWrite;
 		CheckApi(::CreatePipe(&hPipeInRead, &hPipeInWrite, nullptr, in.size() + 1));
 		CheckApi(::SetHandleInformation(hPipeInRead, HANDLE_FLAG_INHERIT, HANDLE_FLAG_INHERIT));
 

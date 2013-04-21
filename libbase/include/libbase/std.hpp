@@ -234,6 +234,8 @@ namespace Base {
 	const wchar_t PATH_SEPARATOR_C = L'\\';
 	const wchar_t STR_END = L'\0';
 	const wchar_t SPACE_C = L' ';
+	const wchar_t MASK_CHARS[] = L"*?";
+
 
 	const uint32_t BOM_UTF32le = 0x0000FEFF;
 	const uint32_t BOM_UTF32be = 0xFFFE0000;

@@ -45,7 +45,7 @@ namespace Base {
 		return 0;
 	}
 
-	void ThreadRoutine_i::post_message(const Message & message)
+	void ThreadRoutine_i::put_message(const Base::Message & message)
 	{
 		(void)message;
 		LogNoise(L"type: %Id, code: %Id, param: %Id, data: %p\n", message.get_type(), message.get_code(), message.get_param(), message.get_data());

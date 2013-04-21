@@ -3,6 +3,7 @@
 #include <libext/priv.hpp>
 #include <libbase/std.hpp>
 #include <libbase/path.hpp>
+#include <libbase/pcstr.hpp>
 
 #include <wchar.h>
 
@@ -186,11 +187,11 @@ namespace Ext {
 		}
 
 		bool create_sym(PCWSTR path, PCWSTR new_path) {
-			if (Str::is_empty(path) || !FS::is_exist(path)) {
+			if (Base::Str::is_empty(path) || !FS::is_exist(path)) {
 				return false;
 			}
 
-			if (Str::is_empty(new_path) || FS::is_exist(new_path))
+			if (Base::Str::is_empty(new_path) || FS::is_exist(new_path))
 				return false;
 
 			if (FS::is_dir(path))
@@ -200,8 +201,8 @@ namespace Ext {
 
 			auto_close<HANDLE> hLink(OpenLinkHandle(new_path, GENERIC_WRITE));
 			if (hLink) {
-				ustring SubstituteName (ustring(L"\\??\\") + remove_path_prefix(path));
-				REPARSE_BUF rdb(IO_REPARSE_TAG_SYMLINK, path, Str::length(path), SubstituteName.c_str(), SubstituteName.size());
+				ustring SubstituteName (ustring(L"\\??\\") + Path::remove_prefix(path));
+				REPARSE_BUF rdb(IO_REPARSE_TAG_SYMLINK, path, Base::Str::length(path), SubstituteName.c_str(), SubstituteName.size());
 				if (rdb.set(new_path)) {
 					return true;
 				}
@@ -221,7 +222,7 @@ namespace Ext {
 			Directory::create(new_path);
 			auto_close<HANDLE> hLink(OpenLinkHandle(new_path, GENERIC_WRITE));
 			if (hLink) {
-				ustring SubstituteName (ustring(L"\\??\\") + remove_path_prefix(path));
+				ustring SubstituteName (ustring(L"\\??\\") + Path::remove_prefix(path));
 				REPARSE_BUF rdb(IO_REPARSE_TAG_MOUNT_POINT, path, Str::length(path), SubstituteName.c_str(), SubstituteName.size());
 				if (rdb.set(new_path)) {
 					return true;

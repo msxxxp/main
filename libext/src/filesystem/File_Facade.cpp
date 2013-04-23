@@ -16,15 +16,17 @@ namespace Fsys {
 		}
 
 		Facade::Facade(const ustring & path, bool write) :
-			m_path(path), m_hndl(Open(m_path, write))
+			m_hndl(Open(m_path, write)),
+			m_path(path)
 		{
-			refresh();
+			Fsys::Stat::refresh(m_hndl);
 		}
 
 		Facade::Facade(const ustring & path, ACCESS_MASK access, DWORD share, PSECURITY_ATTRIBUTES sa, DWORD creat, DWORD flags) :
-			m_path(path), m_hndl(Open(m_path, access, share, sa, creat, flags))
+			m_hndl(Open(m_path, access, share, sa, creat, flags)),
+			m_path(path)
 		{
-			refresh();
+			Fsys::Stat::refresh(m_hndl);
 		}
 
 		uint64_t Facade::size() const
@@ -70,7 +72,10 @@ namespace Fsys {
 
 		bool Facade::set_attr(DWORD at)
 		{
-			return ::SetFileAttributesW(m_path.c_str(), at);
+			bool ret = ::SetFileAttributesW(m_path.c_str(), at);
+			if (ret)
+				dwFileAttributes = at;
+			return ret;
 		}
 
 		uint64_t Facade::get_position() const
@@ -100,12 +105,22 @@ namespace Fsys {
 
 		bool Facade::set_time(const FILETIME & ctime, const FILETIME & atime, const FILETIME & mtime)
 		{
-			return ::SetFileTime(m_hndl, &ctime, &atime, &mtime);
+			bool ret = ::SetFileTime(m_hndl, &ctime, &atime, &mtime);
+			if (ret) {
+				ftCreationTime = ctime;
+				ftLastAccessTime = atime;
+				ftLastWriteTime = mtime;
+			}
+			return ret;
 		}
 
 		bool Facade::set_mtime(const FILETIME & mtime)
 		{
-			return ::SetFileTime(m_hndl, nullptr, nullptr, &mtime);
+			bool ret = ::SetFileTime(m_hndl, nullptr, nullptr, &mtime);
+			if (ret) {
+				ftLastWriteTime = mtime;
+			}
+			return ret;
 		}
 
 		HANDLE Facade::Open(const ustring & path, bool write)

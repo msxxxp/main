@@ -8,6 +8,10 @@
 #include <libbase/uncopyable.hpp>
 
 namespace Fsys {
+	namespace File {
+		struct Facade;
+	}
+
 	bool is_exist(PCWSTR path);
 	inline bool is_exist(const ustring & path) {
 		return is_exist(path.c_str());
@@ -114,8 +118,6 @@ namespace Fsys {
 
 		Stat & operator =(PCWSTR path);
 
-		bool refresh(HANDLE hndl);
-
 		DWORD attr() const
 		{
 			return dwFileAttributes;
@@ -197,14 +199,18 @@ namespace Fsys {
 		}
 
 		bool operator ==(const Stat & rhs) const
-				{
+		{
 			return device() == rhs.device() && inode() == rhs.inode();
-				}
+		}
 
-	protected:
+	private:
 		Stat()
-	{
-	}
+		{
+		}
+
+		bool refresh(HANDLE hndl);
+
+		friend struct File::Facade;
 	};
 
 	inline bool operator ==(const Stat & f1, const Stat & f2) {
@@ -217,18 +223,74 @@ namespace Fsys {
 		typedef Sequence this_type;
 
 	public:
-		typedef Stat   value_type;
-		typedef size_t size_type;
-		typedef int    flags_type;
+		struct FindStat {
+			PCWSTR name() const
+			{
+				return m_stat.cFileName;
+			}
+
+			ustring full_path() const;
+
+			uint64_t size() const
+			{
+				return Base::make_uint64(m_stat.nFileSizeHigh, m_stat.nFileSizeLow);
+			}
+
+			size_t attr() const
+			{
+				return m_stat.dwFileAttributes;
+			}
+
+			FILETIME ctime_ft() const
+			{
+				return m_stat.ftCreationTime;
+			}
+
+			FILETIME atime_ft() const
+			{
+				return m_stat.ftLastAccessTime;
+			}
+
+			FILETIME mtime_ft() const
+			{
+				return m_stat.ftLastWriteTime;
+			}
+
+			bool is_file() const
+			{
+				return !is_dir();
+			}
+
+			bool is_dir() const
+			{
+				return m_stat.dwFileAttributes & FILE_ATTRIBUTE_DIRECTORY;
+			}
+
+			bool is_link() const
+			{
+				return m_stat.dwFileAttributes & FILE_ATTRIBUTE_REPARSE_POINT;
+			}
+
+		private:
+			WIN32_FIND_DATAW m_stat;
+			ustring          m_path;
+			friend struct const_input_iterator;
+		};
+
+	public:
+		typedef FindStat value_type;
+		typedef size_t   size_type;
+		typedef size_t   flags_type;
 		typedef const_input_iterator iterator;
 		typedef const_input_iterator const_iterator;
 
-		enum search_flags {
-			incDots		=   0x0001,
-			skipDirs	=   0x0002,
-			skipFiles	=   0x0004,
-			skipLinks	=   0x0008,
-			skipHidden	=   0x0010,
+		enum SearchFlags_t {
+			incDots     = 0x0001,
+			skipDirs    = 0x0002,
+			skipFiles   = 0x0004,
+			skipLinks   = 0x0008,
+			skipHidden  = 0x0010,
+			skipSystem  = 0x0020,
 		};
 
 		Sequence(const ustring & path, flags_type flags = 0);
@@ -241,21 +303,24 @@ namespace Fsys {
 
 		bool empty() const;
 
-		ustring path() const {
+		ustring path() const
+		{
 			return m_path;
 		}
 
-		ustring mask() const {
+		ustring mask() const
+		{
 			return m_mask;
 		}
 
-		flags_type flags() const {
+		flags_type flags() const
+		{
 			return m_flags;
 		}
 
 	private:
-		ustring m_path;
-		ustring m_mask;
+		ustring    m_path;
+		ustring    m_mask;
 		flags_type m_flags;
 	};
 
@@ -267,33 +332,27 @@ namespace Fsys {
 
 		this_type operator ++(int);
 
-		const value_type operator *() const;
+		const value_type & operator *() const;
 
-		PCWSTR name() const;
-		ustring path() const;
-		uint64_t size() const;
-		size_t attr() const;
-		bool is_file() const;
-		bool is_dir() const;
-		bool is_link() const;
-		bool is_link_file() const;
-		bool is_link_dir() const;
+		const value_type * operator -> () const;
 
 		bool operator ==(const this_type & rhs) const;
+
 		bool operator !=(const this_type & rhs) const;
 
 	private:
 		const_input_iterator();
+
 		const_input_iterator(const Sequence & seq);
 
 		struct impl {
-			~impl() throw();
-			impl();
-			impl(const Sequence & seq);
+			~impl() noexcept;
+			impl() noexcept;
+			impl(const Sequence & seq) noexcept;
 
-			const Sequence *m_seq;
-			HANDLE		m_handle;
-			WIN32_FIND_DATAW m_stat;
+			const Sequence * m_seq;
+			HANDLE           m_find_handle;
+			FindStat         m_stat;
 		};
 
 		Base::shared_ptr<impl> m_impl;
@@ -385,7 +444,7 @@ namespace Fsys {
 		};
 
 		///=========================================================================================
-		struct Facade: public Fsys::Stat, private Base::Uncopyable {
+		struct Facade: private Fsys::Stat, private Base::Uncopyable {
 			~Facade();
 
 			Facade(const ustring & path, bool write = false);
@@ -426,10 +485,6 @@ namespace Fsys {
 				return m_hndl;
 			}
 
-			void refresh() {
-				Fsys::Stat::refresh(m_hndl);
-			}
-
 			template<typename Type>
 			bool io_control_out_nt(DWORD code, Type & data) throw() {
 				DWORD size_ret;
@@ -441,8 +496,8 @@ namespace Fsys {
 			static HANDLE Open(const ustring & path, ACCESS_MASK access, DWORD share, PSECURITY_ATTRIBUTES sa, DWORD creat, DWORD flags);
 
 		private:
-			ustring m_path;
 			HANDLE m_hndl;
+			ustring m_path;
 		};
 
 		///=============================================================================== File::Map

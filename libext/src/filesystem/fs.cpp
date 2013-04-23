@@ -109,11 +109,11 @@ namespace Fsys {
 		if (Fsys::is_dir(path)) {
 			Fsys::Sequence dir(path);
 			for (auto it = dir.begin(); it != dir.end(); ++it) {
-				if (it.is_dir() || it.is_link_dir()) {
-					SetOwnerRecur(it.path(), owner, type);
+				if (it->is_dir()) {
+					SetOwnerRecur(it->full_path(), owner, type);
 				} else {
 					try {
-						Ext::set_owner(it.path().c_str(), owner, type);
+						Ext::set_owner(it->full_path().c_str(), owner, type);
 					} catch (...) {
 					}
 				}

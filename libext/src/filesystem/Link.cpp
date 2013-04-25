@@ -5,16 +5,13 @@
 #include <libbase/path.hpp>
 #include <libbase/pcstr.hpp>
 
-#include <wchar.h>
-
-using namespace Base;
-
 namespace Fsys {
 
-	///======================================================================================== Link
-	//#ifndef SE_CREATE_SYMBOLIC_LINK_NAME
-	//#define SE_CREATE_SYMBOLIC_LINK_NAME      L"SeCreateSymbolicLinkPrivilege"
-	//#endif
+//#ifndef SE_CREATE_SYMBOLIC_LINK_NAME
+//#define SE_CREATE_SYMBOLIC_LINK_NAME      L"SeCreateSymbolicLinkPrivilege"
+//#endif
+//	Ext::Privilege CreateSymlinkPrivilege(SE_CREATE_SYMBOLIC_LINK_NAME);
+//	Ext::Privilege CreateSymlinkPrivilege(SE_CREATE_SYMBOLIC_LINK_NAME);
 
 #ifndef IO_REPARSE_TAG_VALID_VALUES
 #define IO_REPARSE_TAG_VALID_VALUES 0xF000FFFF
@@ -56,105 +53,120 @@ namespace Fsys {
 #define REPARSE_DATA_BUFFER_HEADER_SIZE FIELD_OFFSET(REPARSE_DATA_BUFFER,GenericReparseBuffer)
 #endif
 
-		HANDLE OpenLinkHandle(PCWSTR path, ACCESS_MASK acc = 0, DWORD create = OPEN_EXISTING) {
-			return ::CreateFileW(path, acc, FILE_SHARE_READ | FILE_SHARE_WRITE | FILE_SHARE_DELETE,
-			                     nullptr, create,
-			                     FILE_FLAG_OPEN_REPARSE_POINT | FILE_FLAG_BACKUP_SEMANTICS,
-			                     nullptr);
+		HANDLE OpenLinkHandle(PCWSTR path, ACCESS_MASK acc = 0, DWORD create = OPEN_EXISTING)
+		{
+			return ::CreateFileW(path, acc, FILE_SHARE_READ | FILE_SHARE_WRITE | FILE_SHARE_DELETE, nullptr, create, FILE_FLAG_OPEN_REPARSE_POINT | FILE_FLAG_BACKUP_SEMANTICS, nullptr);
 		}
 
-		class REPARSE_BUF{
-		public:
-			REPARSE_BUF(PCWSTR path) {
-				DWORD attr = Fsys::get_attr(path);
-				if (!(attr & FILE_ATTRIBUTE_REPARSE_POINT)) {
-					CheckApiError(ERROR_NOT_A_REPARSE_POINT);
-				}
-				auto_close<HANDLE> link(CheckHandle(OpenLinkHandle(path)));
-				DWORD returned;
-				CheckApi(::DeviceIoControl(link, FSCTL_GET_REPARSE_POINT, nullptr, 0, buf, size(), &returned, nullptr) && IsReparseTagValid(rdb.ReparseTag));
-			}
+		struct REPARSE_BUF {
+			REPARSE_BUF(PCWSTR path);
 
-			REPARSE_BUF(ULONG tag, PCWSTR PrintName, size_t PrintNameLength, PCWSTR SubstituteName, size_t SubstituteNameLength) {
-				rdb.Reserved = 0;
-				rdb.ReparseTag = tag;
+			REPARSE_BUF(ULONG tag, PCWSTR PrintName, size_t PrintNameLength, PCWSTR SubstituteName, size_t SubstituteNameLength);
 
-				switch (rdb.ReparseTag) {
-					case IO_REPARSE_TAG_MOUNT_POINT:
-						rdb.MountPointReparseBuffer.SubstituteNameOffset=0;
-						rdb.MountPointReparseBuffer.SubstituteNameLength=static_cast<WORD>(SubstituteNameLength*sizeof(wchar_t));
-						rdb.MountPointReparseBuffer.PrintNameOffset=rdb.MountPointReparseBuffer.SubstituteNameLength+2;
-						rdb.MountPointReparseBuffer.PrintNameLength=static_cast<WORD>(PrintNameLength*sizeof(wchar_t));
-						rdb.ReparseDataLength=FIELD_OFFSET(REPARSE_DATA_BUFFER,MountPointReparseBuffer.PathBuffer)+rdb.MountPointReparseBuffer.PrintNameOffset+rdb.MountPointReparseBuffer.PrintNameLength+1*sizeof(wchar_t)-REPARSE_DATA_BUFFER_HEADER_SIZE;
+			void set_to(PCWSTR path) const;
 
-						if (rdb.ReparseDataLength+REPARSE_DATA_BUFFER_HEADER_SIZE<=static_cast<USHORT>(MAXIMUM_REPARSE_DATA_BUFFER_SIZE/sizeof(wchar_t))) {
-							wmemcpy(&rdb.MountPointReparseBuffer.PathBuffer[rdb.MountPointReparseBuffer.SubstituteNameOffset/sizeof(wchar_t)],SubstituteName,SubstituteNameLength+1);
-							wmemcpy(&rdb.MountPointReparseBuffer.PathBuffer[rdb.MountPointReparseBuffer.PrintNameOffset/sizeof(wchar_t)],PrintName,PrintNameLength+1);
-						}
+			bool is_symlink() const;
 
-						break;
-					case IO_REPARSE_TAG_SYMLINK:
-						rdb.SymbolicLinkReparseBuffer.PrintNameOffset=0;
-						rdb.SymbolicLinkReparseBuffer.PrintNameLength=static_cast<WORD>(PrintNameLength*sizeof(wchar_t));
-						rdb.SymbolicLinkReparseBuffer.SubstituteNameOffset=rdb.MountPointReparseBuffer.PrintNameLength;
-						rdb.SymbolicLinkReparseBuffer.SubstituteNameLength=static_cast<WORD>(SubstituteNameLength*sizeof(wchar_t));
-						rdb.ReparseDataLength=FIELD_OFFSET(REPARSE_DATA_BUFFER,SymbolicLinkReparseBuffer.PathBuffer)+rdb.SymbolicLinkReparseBuffer.SubstituteNameOffset+rdb.SymbolicLinkReparseBuffer.SubstituteNameLength-REPARSE_DATA_BUFFER_HEADER_SIZE;
+			bool is_junction() const;
 
-						if (rdb.ReparseDataLength+REPARSE_DATA_BUFFER_HEADER_SIZE<=static_cast<USHORT>(MAXIMUM_REPARSE_DATA_BUFFER_SIZE/sizeof(wchar_t))) {
-							wmemcpy(&rdb.SymbolicLinkReparseBuffer.PathBuffer[rdb.SymbolicLinkReparseBuffer.SubstituteNameOffset/sizeof(wchar_t)],SubstituteName,SubstituteNameLength);
-							wmemcpy(&rdb.SymbolicLinkReparseBuffer.PathBuffer[rdb.SymbolicLinkReparseBuffer.PrintNameOffset/sizeof(wchar_t)],PrintName,PrintNameLength);
-						}
-						break;
-				}
-			}
+			size_t size() const;
 
-			bool set(PCWSTR path) const {
-				bool ret = false;
-				if (IsReparseTagValid(rdb.ReparseTag)) {
-					DWORD attr = Fsys::get_attr(path);
-					if (attr != INVALID_FILE_ATTRIBUTES) {
-						if (attr & FILE_ATTRIBUTE_READONLY) {
-							Fsys::set_attr(path, attr & ~FILE_ATTRIBUTE_READONLY);
-						}
-						Ext::Privilege CreateSymlinkPrivilege(SE_CREATE_SYMBOLIC_LINK_NAME);
-						auto_close<HANDLE> hLink(OpenLinkHandle(path, GENERIC_WRITE));
-						if (hLink) {
-							DWORD dwBytesReturned;
-							ret = ::DeviceIoControl(hLink, FSCTL_SET_REPARSE_POINT,(PVOID)&rdb, rdb.ReparseDataLength + REPARSE_DATA_BUFFER_HEADER_SIZE,
-							                        nullptr, 0, &dwBytesReturned, nullptr);
-						}
-						if (attr & FILE_ATTRIBUTE_READONLY) {
-							Fsys::set_attr(path, attr);
-						}
-					}
-				}
-				return ret;
-			}
+			PREPARSE_DATA_BUFFER operator ->() const;
 
-			bool is_symlink() const {
-				return rdb.ReparseTag == IO_REPARSE_TAG_SYMLINK;
-			}
-
-			bool is_junction() const {
-				return rdb.ReparseTag == IO_REPARSE_TAG_MOUNT_POINT;
-			}
-
-			size_t size() const {
-				return sizeofa(buf);
-			}
-
-			PREPARSE_DATA_BUFFER operator->() const {
-				return (PREPARSE_DATA_BUFFER)&rdb;
-			}
 		private:
 			union {
-				BYTE				buf[MAXIMUM_REPARSE_DATA_BUFFER_SIZE];
-				REPARSE_DATA_BUFFER	rdb;
+				BYTE buf[MAXIMUM_REPARSE_DATA_BUFFER_SIZE];
+				REPARSE_DATA_BUFFER rdb;
 			};
 		};
 	}
 
-	bool is_link(PCWSTR path) {
+	REPARSE_BUF::REPARSE_BUF(PCWSTR path)
+	{
+		DWORD attr = Fsys::get_attr(path);
+		if (!(attr & FILE_ATTRIBUTE_REPARSE_POINT)) {
+			CheckApiError(ERROR_NOT_A_REPARSE_POINT);
+		}
+		Base::auto_close<HANDLE> link(CheckHandle(OpenLinkHandle(path)));
+		DWORD returned;
+		CheckApi(::DeviceIoControl(link, FSCTL_GET_REPARSE_POINT, nullptr, 0, buf, size(),
+		                           &returned, nullptr) && IsReparseTagValid(rdb.ReparseTag));
+	}
+
+	REPARSE_BUF::REPARSE_BUF(ULONG tag, PCWSTR PrintName, size_t PrintNameLength, PCWSTR SubstituteName, size_t SubstituteNameLength)
+	{
+		rdb.Reserved = 0;
+		rdb.ReparseTag = tag;
+
+		switch (rdb.ReparseTag) {
+			case IO_REPARSE_TAG_MOUNT_POINT:
+				rdb.MountPointReparseBuffer.SubstituteNameOffset = 0;
+				rdb.MountPointReparseBuffer.SubstituteNameLength = static_cast<WORD>(SubstituteNameLength * sizeof(wchar_t));
+				rdb.MountPointReparseBuffer.PrintNameOffset = rdb.MountPointReparseBuffer.SubstituteNameLength + 2;
+				rdb.MountPointReparseBuffer.PrintNameLength = static_cast<WORD>(PrintNameLength * sizeof(wchar_t));
+				rdb.ReparseDataLength = FIELD_OFFSET(REPARSE_DATA_BUFFER,MountPointReparseBuffer.PathBuffer) + rdb.MountPointReparseBuffer.PrintNameOffset
+				    + rdb.MountPointReparseBuffer.PrintNameLength + 1 * sizeof(wchar_t) - REPARSE_DATA_BUFFER_HEADER_SIZE;
+
+				if (rdb.ReparseDataLength + REPARSE_DATA_BUFFER_HEADER_SIZE <= static_cast<USHORT>(MAXIMUM_REPARSE_DATA_BUFFER_SIZE / sizeof(wchar_t))) {
+					wmemcpy(&rdb.MountPointReparseBuffer.PathBuffer[rdb.MountPointReparseBuffer.SubstituteNameOffset / sizeof(wchar_t)], SubstituteName, SubstituteNameLength + 1);
+					wmemcpy(&rdb.MountPointReparseBuffer.PathBuffer[rdb.MountPointReparseBuffer.PrintNameOffset / sizeof(wchar_t)], PrintName, PrintNameLength + 1);
+				}
+
+				break;
+			case IO_REPARSE_TAG_SYMLINK:
+				rdb.SymbolicLinkReparseBuffer.PrintNameOffset = 0;
+				rdb.SymbolicLinkReparseBuffer.PrintNameLength = static_cast<WORD>(PrintNameLength * sizeof(wchar_t));
+				rdb.SymbolicLinkReparseBuffer.SubstituteNameOffset = rdb.MountPointReparseBuffer.PrintNameLength;
+				rdb.SymbolicLinkReparseBuffer.SubstituteNameLength = static_cast<WORD>(SubstituteNameLength * sizeof(wchar_t));
+				rdb.ReparseDataLength = FIELD_OFFSET(REPARSE_DATA_BUFFER,SymbolicLinkReparseBuffer.PathBuffer) + rdb.SymbolicLinkReparseBuffer.SubstituteNameOffset
+				    + rdb.SymbolicLinkReparseBuffer.SubstituteNameLength - REPARSE_DATA_BUFFER_HEADER_SIZE;
+
+				if (rdb.ReparseDataLength + REPARSE_DATA_BUFFER_HEADER_SIZE <= static_cast<USHORT>(MAXIMUM_REPARSE_DATA_BUFFER_SIZE / sizeof(wchar_t))) {
+					wmemcpy(&rdb.SymbolicLinkReparseBuffer.PathBuffer[rdb.SymbolicLinkReparseBuffer.SubstituteNameOffset / sizeof(wchar_t)], SubstituteName, SubstituteNameLength);
+					wmemcpy(&rdb.SymbolicLinkReparseBuffer.PathBuffer[rdb.SymbolicLinkReparseBuffer.PrintNameOffset / sizeof(wchar_t)], PrintName, PrintNameLength);
+				}
+				break;
+		}
+	}
+
+	void REPARSE_BUF::set_to(PCWSTR path) const
+	{
+		DWORD attr = Fsys::get_attr(path);
+		if (attr & FILE_ATTRIBUTE_READONLY) {
+			Fsys::set_attr(path, attr & ~FILE_ATTRIBUTE_READONLY);
+		}
+
+		Base::auto_close<HANDLE> hLink(CheckHandle(OpenLinkHandle(path, GENERIC_WRITE)));
+		DWORD dwBytesReturned;
+		CheckApi(::DeviceIoControl(hLink, FSCTL_SET_REPARSE_POINT, (PVOID)&rdb, rdb.ReparseDataLength + REPARSE_DATA_BUFFER_HEADER_SIZE, nullptr, 0, &dwBytesReturned, nullptr));
+
+		if (attr & FILE_ATTRIBUTE_READONLY) {
+			Fsys::set_attr(path, attr);
+		}
+	}
+
+	bool REPARSE_BUF::is_symlink() const
+	{
+		return rdb.ReparseTag == IO_REPARSE_TAG_SYMLINK;
+	}
+
+	bool REPARSE_BUF::is_junction() const
+	{
+		return rdb.ReparseTag == IO_REPARSE_TAG_MOUNT_POINT;
+	}
+
+	size_t REPARSE_BUF::size() const
+	{
+		return Base::lengthof(buf);
+	}
+
+	PREPARSE_DATA_BUFFER REPARSE_BUF::operator ->() const
+	{
+		return (PREPARSE_DATA_BUFFER)&rdb;
+	}
+
+	bool is_link(PCWSTR path)
+	{
 		try {
 			REPARSE_BUF rdb(path);
 			return rdb->ReparseTag == IO_REPARSE_TAG_MOUNT_POINT || rdb->ReparseTag == IO_REPARSE_TAG_SYMLINK;
@@ -163,16 +175,19 @@ namespace Fsys {
 		return false;
 	}
 
-	bool is_symlink(PCWSTR path) {
+	bool is_symlink(PCWSTR path)
+	{
 		return REPARSE_BUF(path).is_symlink();
 	}
 
-	bool is_junction(PCWSTR path) {
+	bool is_junction(PCWSTR path)
+	{
 		return REPARSE_BUF(path).is_junction();
 	}
 
 	namespace Link {
-		void copy(PCWSTR from, PCWSTR to) {
+		void copy(PCWSTR from, PCWSTR to)
+		{
 			REPARSE_BUF rdb(from);
 			DWORD attr = Fsys::get_attr(from);
 			if (attr & FILE_ATTRIBUTE_DIRECTORY) {
@@ -180,62 +195,44 @@ namespace Fsys {
 			} else {
 				File::create(to);
 			}
-			rdb.set(to);
+			rdb.set_to(to);
 			Fsys::set_attr(to, attr);
 		}
 
-		bool create_sym(PCWSTR path, PCWSTR new_path) {
-			if (Base::Str::is_empty(path) || !Fsys::is_exist(path)) {
-				return false;
-			}
-
-			if (Base::Str::is_empty(new_path) || Fsys::is_exist(new_path))
-				return false;
-
+		void create_sym(PCWSTR path, PCWSTR new_path)
+		{
 			if (Fsys::is_dir(path))
 				Directory::create(new_path);
 			else
 				File::create(new_path);
 
-			auto_close<HANDLE> hLink(OpenLinkHandle(new_path, GENERIC_WRITE));
-			if (hLink) {
-				ustring SubstituteName (ustring(L"\\??\\") + Path::remove_prefix(path));
-				REPARSE_BUF rdb(IO_REPARSE_TAG_SYMLINK, path, Base::Str::length(path), SubstituteName.c_str(), SubstituteName.size());
-				if (rdb.set(new_path)) {
-					return true;
-				}
+			Base::auto_close<HANDLE> hLink(CheckHandle(OpenLinkHandle(new_path, GENERIC_WRITE)));
+			ustring SubstituteName(ustring(Base::REPARSE_PREFIX) + Base::Path::remove_prefix(path));
+			REPARSE_BUF rdb(IO_REPARSE_TAG_SYMLINK, path, Base::Str::length(path), SubstituteName.c_str(), SubstituteName.size());
+			try {
+				rdb.set_to(new_path);
+			} catch (...) {
+				Fsys::del_nt(new_path);
+				throw;
 			}
-			Fsys::del_nt(new_path);
-			return false;
 		}
 
-		bool create_junc(PCWSTR path, PCWSTR new_path) {
-			if (Str::is_empty(path)/* || !Fsys::is_exists(dest)*/) {
-				return false;
-			}
-
-			if (Str::is_empty(new_path) || Fsys::is_exist(new_path))
-				return false;
-
+		void create_junc(PCWSTR path, PCWSTR new_path)
+		{
 			Directory::create(new_path);
-			auto_close<HANDLE> hLink(OpenLinkHandle(new_path, GENERIC_WRITE));
-			if (hLink) {
-				ustring SubstituteName (ustring(L"\\??\\") + Path::remove_prefix(path));
-				REPARSE_BUF rdb(IO_REPARSE_TAG_MOUNT_POINT, path, Str::length(path), SubstituteName.c_str(), SubstituteName.size());
-				if (rdb.set(new_path)) {
-					return true;
-				}
+			Base::auto_close<HANDLE> hLink(CheckHandle(OpenLinkHandle(new_path, GENERIC_WRITE)));
+			ustring SubstituteName(ustring(Base::REPARSE_PREFIX) + Base::Path::remove_prefix(path));
+			REPARSE_BUF rdb(IO_REPARSE_TAG_MOUNT_POINT, path, Base::Str::length(path), SubstituteName.c_str(), SubstituteName.size());
+			try {
+				rdb.set_to(new_path);
+			} catch (...) {
+				Directory::del_nt(new_path);
+				throw;
 			}
-			Directory::del_nt(new_path);
-			return false;
 		}
 
-		void del(PCWSTR path) {
-			break_link(path);
-			Fsys::del(path);
-		}
-
-		void break_link(PCWSTR path) {
+		void break_link(PCWSTR path)
+		{
 			DWORD attr = Fsys::get_attr(path);
 			if (!(attr & FILE_ATTRIBUTE_REPARSE_POINT)) {
 				CheckApiError(ERROR_NOT_A_REPARSE_POINT);
@@ -246,21 +243,26 @@ namespace Fsys {
 				Fsys::set_attr(path, attr & ~FILE_ATTRIBUTE_READONLY);
 			}
 
-			Ext::Privilege CreateSymlinkPrivilege(SE_CREATE_SYMBOLIC_LINK_NAME);
-			auto_close<HANDLE> hLink(OpenLinkHandle(path, GENERIC_WRITE));
-			if (hLink) {
-				REPARSE_GUID_DATA_BUFFER rgdb = {0};
-				rgdb.ReparseTag = rdb->ReparseTag;
-				DWORD dwBytesReturned;
-				::DeviceIoControl(hLink, FSCTL_DELETE_REPARSE_POINT, &rgdb,
-				                  REPARSE_GUID_DATA_BUFFER_HEADER_SIZE, nullptr, 0, &dwBytesReturned, 0);
-			}
+			Base::auto_close<HANDLE> hLink(CheckHandle(OpenLinkHandle(path, GENERIC_WRITE)));
+
+			REPARSE_GUID_DATA_BUFFER rgdb = {0};
+			rgdb.ReparseTag = rdb->ReparseTag;
+			DWORD dwBytesReturned;
+			CheckApi(::DeviceIoControl(hLink, FSCTL_DELETE_REPARSE_POINT, &rgdb, REPARSE_GUID_DATA_BUFFER_HEADER_SIZE, nullptr, 0, &dwBytesReturned, 0));
+
 			if (attr & FILE_ATTRIBUTE_READONLY) {
 				Fsys::set_attr(path, attr);
 			}
 		}
 
-		ustring read(PCWSTR path) {
+		void del(PCWSTR path)
+		{
+			break_link(path);
+			Fsys::del(path);
+		}
+
+		ustring read(PCWSTR path)
+		{
 			ustring ret;
 			REPARSE_BUF rdb(path);
 			size_t NameLength = 0;
@@ -276,7 +278,7 @@ namespace Fsys {
 				NameLength = rdb->MountPointReparseBuffer.PrintNameLength / sizeof(wchar_t);
 				if (NameLength) {
 					ret.assign(&rdb->MountPointReparseBuffer.PathBuffer[rdb->MountPointReparseBuffer.PrintNameOffset / sizeof(wchar_t)], NameLength);
-				} else 	{
+				} else {
 					NameLength = rdb->MountPointReparseBuffer.SubstituteNameLength / sizeof(wchar_t);
 					ret.assign(&rdb->MountPointReparseBuffer.PathBuffer[rdb->MountPointReparseBuffer.SubstituteNameOffset / sizeof(wchar_t)], NameLength);
 				}

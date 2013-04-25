@@ -633,24 +633,24 @@ namespace Fsys {
 			copy(from, to);
 		}
 
-		bool create_sym(PCWSTR path, PCWSTR new_path);
-		inline bool	create_sym(const ustring & path, const ustring & new_path) {
-			return create_sym(path.c_str(), new_path.c_str());
+		void create_sym(PCWSTR path, PCWSTR new_path);
+		inline void	create_sym(const ustring & path, const ustring & new_path) {
+			create_sym(path.c_str(), new_path.c_str());
 		}
 
-		bool create_junc(PCWSTR path, PCWSTR new_path);
-		inline bool	create_junc(const ustring & path, const ustring & new_path) {
+		void create_junc(PCWSTR path, PCWSTR new_path);
+		inline void	create_junc(const ustring & path, const ustring & new_path) {
 			return create_junc(path.c_str(), new_path.c_str());
-		}
-
-		void del(PCWSTR path);
-		inline void del(const ustring & path) {
-			del(path.c_str());
 		}
 
 		void break_link(PCWSTR path);
 		inline void break_link(const ustring & path) {
 			break_link(path.c_str());
+		}
+
+		void del(PCWSTR path);
+		inline void del(const ustring & path) {
+			del(path.c_str());
 		}
 
 		ustring	read(PCWSTR path);
@@ -659,12 +659,13 @@ namespace Fsys {
 		}
 
 		struct CreateSymCmd: public Base::Command_p {
-			CreateSymCmd(const ustring &path, const ustring &new_path):
+			CreateSymCmd(const ustring & path, const ustring & new_path):
 				m_path(path),
 				m_new_path(new_path) {
 			}
 			bool Execute() const {
-				return create_sym(m_path, m_new_path);
+				create_sym(m_path, m_new_path);
+				return true;
 			}
 		private:
 			ustring m_path, m_new_path;

@@ -13,7 +13,7 @@ namespace Fsys {
 		return attr != INVALID_FILE_ATTRIBUTES && (attr & FILE_ATTRIBUTE_DIRECTORY);
 	}
 
-	inline bool del_nt(PCWSTR path)
+	bool del_nt(PCWSTR path)
 	{
 		DWORD attr = get_attr_nt(path);
 		if (attr != INVALID_FILE_ATTRIBUTES ) {

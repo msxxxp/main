@@ -229,6 +229,7 @@ namespace Base {
 	PCWSTR const PATH_SEPARATOR = L"\\"; // Path separator in the file system
 	PCWSTR const PATH_SEPARATORS = L"\\/";
 	PCWSTR const PATH_PREFIX_NT = L"\\\\?\\"; // Prefix to put ahead of a long path for Windows API
+	PCWSTR const REPARSE_PREFIX = L"\\??\\";
 	PCWSTR const NETWORK_PATH_PREFIX = L"\\\\";
 
 	const wchar_t PATH_SEPARATOR_C = L'\\';

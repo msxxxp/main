@@ -2,9 +2,7 @@
 #define _LIBBASE_THREADPOOL_HPP_
 
 #include <libbase/std.hpp>
-#include <libbase/uncopyable.hpp>
 #include <libbase/thread.hpp>
-#include <libbase/logger.hpp>
 
 #include <vector>
 

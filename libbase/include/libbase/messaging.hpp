@@ -1,9 +1,7 @@
 #ifndef _LIBBASE_MESSAGING_HPP_
 #define _LIBBASE_MESSAGING_HPP_
 
-#include <stdint.h>
 #include <libbase/std.hpp>
-#include <libbase/uncopyable.hpp>
 
 namespace Base {
 

@@ -2,7 +2,6 @@
 #define _LIBBASE_MSTRING_HPP_
 
 #include <libbase/std.hpp>
-#include <libbase/uncopyable.hpp>
 
 namespace Base {
 

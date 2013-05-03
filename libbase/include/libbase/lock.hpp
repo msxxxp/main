@@ -3,7 +3,6 @@
 
 #include <libbase/std.hpp>
 #include <libbase/memory.hpp>
-#include <libbase/uncopyable.hpp>
 
 namespace Base {
 	namespace Lock {

@@ -60,6 +60,7 @@
 									<listOptionValue builtIn="false" value="gcc"/>
 									<listOptionValue builtIn="false" value="msvcrt"/>
 									<listOptionValue builtIn="false" value="kernel32"/>
+									<listOptionValue builtIn="false" value="shell32"/>
 									<listOptionValue builtIn="false" value="ntdll"/>
 								</option>
 								<option id="gnu.cpp.link.option.userobjs.412422368" name="Other objects" superClass="gnu.cpp.link.option.userobjs" valueType="userObjs">
@@ -167,8 +168,13 @@
 	<storageModule moduleId="cdtBuildSystem" version="4.0.0">
 		<project id="far-filever.cdt.managedbuild.target.gnu.mingw.exe.1977911092" name="Executable" projectType="cdt.managedbuild.target.gnu.mingw.exe"/>
 	</storageModule>
-	<storageModule moduleId="refreshScope" versionNumber="1">
-		<resource resourceType="PROJECT" workspacePath="/far-filever"/>
+	<storageModule moduleId="refreshScope" versionNumber="2">
+		<configuration configurationName="Release-x32">
+			<resource resourceType="PROJECT" workspacePath="/far-filever"/>
+		</configuration>
+		<configuration configurationName="Release-x64">
+			<resource resourceType="PROJECT" workspacePath="/far-filever"/>
+		</configuration>
 	</storageModule>
 	<storageModule moduleId="org.eclipse.cdt.internal.ui.text.commentOwnerProjectMappings"/>
 	<storageModule moduleId="scannerConfiguration">

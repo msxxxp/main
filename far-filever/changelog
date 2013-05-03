@@ -1,3 +1,11 @@
+03 May 2013
+   released version 1.1.16 of filever
+
+     Change log:
+        -Fixed: Запуск из комстроки теперь понимает относительные пути и
+                переменные среды
+        -Added: Запуск из просмотрщика
+
 26 March 2013
    released version 1.0.15 of filever
 

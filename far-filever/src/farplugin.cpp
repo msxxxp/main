@@ -23,10 +23,12 @@
 
 #include <libfar3/helper.hpp>
 #include <libfar3/panel.hpp>
+#include <libfar3/viewer.hpp>
 #include <libfar3/obsolete.hpp>
 #include <libbase/logger.hpp>
 #include <libbase/memory.hpp>
 #include <libbase/pcstr.hpp>
+#include <libbase/path.hpp>
 
 #include <globalinfo.hpp>
 #include <guid.hpp>
@@ -82,7 +84,7 @@ FarPlugin::~FarPlugin()
 void FarPlugin::GetPluginInfo(PluginInfo * Info)
 {
 	LogTrace();
-	Info->Flags = PF_NONE;
+	Info->Flags = PF_VIEWER;
 
 	static GUID PluginMenuGuids[] = {MenuGuid,};
 	static PCWSTR PluginMenuStrings[] = {Far::get_msg(Far::MenuTitle),};
@@ -103,32 +105,53 @@ Far::PanelController_i * FarPlugin::Open(const OpenInfo * Info)
 		return (Far::PanelController_i * )INVALID_HANDLE_VALUE;
 	}
 
-	WCHAR buf[Base::MAX_PATH_LEN] = {0};
+	WCHAR buf1[Base::MAX_PATH_LEN] = {0};
+	WCHAR buf2[Base::MAX_PATH_LEN] = {0};
 	if (Info->OpenFrom == OPEN_PLUGINSMENU || Info->OpenFrom == OPEN_FROMMACRO) {
 		Far::Panel pi(PANEL_ACTIVE);
 		if (pi.is_ok()) {
 			const PluginPanelItem * ppi = pi.get_current();
 			PCWSTR fileName = ppi->FileName;
-			if (Base::Str::find(fileName, Base::PATH_SEPARATOR)) {
-				Base::Str::copy(buf, fileName, Base::lengthof(buf));
+			LogNoise(L"ppi->FileName: '%s'\n", ppi->FileName);
+			if (Base::Str::find(fileName, Base::PATH_SEPARATORS)) {
+				Base::Str::copy(buf2, fileName, Base::lengthof(buf2));
 			} else {
-				Base::Str::copy(buf, pi.get_current_directory(), Base::lengthof(buf));
-				if (!Base::Str::is_empty(buf)) {
-					Far::fsf().AddEndSlash(buf);
+				Base::Str::copy(buf2, pi.get_current_directory(), Base::lengthof(buf2));
+				if (!Base::Str::is_empty(buf2)) {
+					Far::fsf().AddEndSlash(buf2);
 				}
-				Base::Str::cat(buf, fileName, Base::lengthof(buf));
+				Base::Str::cat(buf2, fileName, Base::lengthof(buf2));
 			}
 		}
 	} else if (Info->OpenFrom == OPEN_COMMANDLINE) {
 		OpenCommandLineInfo * info = (OpenCommandLineInfo*)Info->Data;
-		Base::Str::copy(buf, info->CommandLine, Base::lengthof(buf));
-	}
-	LogNoise(L"buf: %s\n", buf);
-	Far::fsf().Trim(buf);
-	Far::fsf().Unquote(buf);
+		LogNoise(L"comline: %s\n", info->CommandLine);
+		Base::Path::expand(buf1, Base::lengthof(buf1), info->CommandLine);
+		LogNoise(L"buf: '%s'\n", buf1);
 
-	LogNoise(L"buf: %s\n", buf);
-	FileVersion fv(buf);
+		if (Base::Path::is_relative(buf1)) {
+			LogNoise(L"is relative\n");
+			fsf().GetCurrentDirectoryW(Base::lengthof(buf2), buf2);
+			if (!Base::Str::is_empty(buf2)) {
+				Far::fsf().AddEndSlash(buf2);
+			}
+			Base::Str::cat(buf2, buf1, Base::lengthof(buf2));
+		} else {
+			LogNoise(L"is absolute\n");
+			Base::Str::copy(buf2, buf1, Base::lengthof(buf2));
+		}
+	} else if (Info->OpenFrom == OPEN_VIEWER) {
+		Far::Viewer::get_filename(buf2, Base::lengthof(buf2));
+	}
+
+	LogNoise(L"buf: '%s'\n", buf2);
+	Far::fsf().Trim(buf2);
+	Far::fsf().Unquote(buf2);
+
+	LogNoise(L"buf: '%s'\n", buf2);
+	Base::Path::canonicalize(buf1, buf2);
+	LogNoise(L"buf: '%s'\n", buf1);
+	FileVersion fv(buf1);
 	if (fv.is_ok()) {
 		FVI fvi(fv);
 			int i = 0, x = 70, y = 2;

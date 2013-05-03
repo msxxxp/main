@@ -6,8 +6,9 @@
 #include <libbase/ref_cnt.hpp>
 
 namespace Base {
-	template<typename CharType, typename Traits = char_traits<CharType> >
-	class basic_string {
+	template<typename CharType, typename Traits/* = char_traits<CharType> */>
+	class basic_string
+	{
 		static const size_t MIN_ALLOC_BLOCK = 16;
 		typedef basic_string this_type;
 
@@ -57,6 +58,8 @@ namespace Base {
 
 		size_t size() const {return m_data->size();}
 
+		size_t length() const {return m_data->size();}
+
 		const CharType * c_str() const {return cbegin();}
 
 		void swap(this_type & in) {using std::swap; swap(m_data, in.m_data);}
@@ -93,6 +96,16 @@ namespace Base {
 			}
 		}
 
+		int compare(const CharType * str) const noexcept {return compare(c_str(), length(), str, traits_type::length(str));}
+
+		int compare(const this_type & str) const noexcept {return compare(c_str(), length(), str.c_str(), str.length());}
+
+		int compare(size_type pos1, size_type count1, const this_type & str) const noexcept {return compare(&c_str()[pos1], count1, str.c_str(), str.length());}
+
+		int compare(size_type pos1, size_type count1, const CharType * str) const noexcept {return compare(&c_str()[pos1], count1, str, traits_type::length(str));}
+
+		int compare(size_type pos1, size_type count1, const CharType * str, size_type count2) const noexcept {return compare(&c_str()[pos1], count1, str, count2);}
+
 		this_type & append(size_type count, CharType ch) {return append(this_type(count, ch));}
 
 		this_type & append(const this_type & str)
@@ -127,6 +140,8 @@ namespace Base {
 		this_type & assign(const CharType * str, size_type count) {this_type(str, count).swap(*this); return *this;}
 
 		this_type & assign(const CharType * str) {this_type(str).swap(*this); return *this;}
+
+		this_type & insert(size_type index, const this_type & str) {return replace(index, 0, str.c_str(), str.length());}
 
 		this_type & operator =(const this_type & right) {return assign(right);}
 
@@ -284,6 +299,18 @@ namespace Base {
 		}
 
 	private:
+		int compare(const CharType * str1, size_type count1, const CharType * str2, size_type count2) const noexcept
+		{
+		    int result = traits_type::compare(str1, str2, std::min(count1, count2));
+		    if (result != 0)
+		        return result;
+		    if (count1 < count2)
+		        return -1;
+		    if (count1 > count2)
+		        return 1;
+		    return 0;
+		}
+
 		struct string_impl: public Base::ref_counter {
 			void free() override {
 				this->~string_impl();

@@ -2,6 +2,7 @@
 #define _LIBBASE_FILESYSTEM_HPP
 
 #include <libbase/std.hpp>
+/*?*/#include <libbase/string.hpp>
 
 namespace Fsys {
 	DWORD get_attr_nt(PCWSTR path);

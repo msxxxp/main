@@ -11,7 +11,7 @@ namespace Base {
 	}
 
 	ustring PathNice(PCWSTR path) {
-		return Canonicalize(Path::expand(path));
+		return Path::canonicalize(Path::expand(path));
 	}
 
 	ustring Secure(PCWSTR path) {
@@ -22,7 +22,7 @@ namespace Base {
 	}
 
 	ustring Validate(PCWSTR path) {
-		ustring Result(Canonicalize(Path::expand(path)));
+		ustring Result(Path::canonicalize(Path::expand(path)));
 		String::replace_all(Result, L"...", L"");
 		String::replace_all(Result, L"\\\\", L"\\");
 		if (Result == L"\\")

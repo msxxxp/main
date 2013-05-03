@@ -56,6 +56,10 @@ namespace Base {
 			return Str::is_empty(path) ? false : ::SetCurrentDirectoryW(path);
 		}
 
+		extern "C" {
+			BOOL WINAPI SHGetSpecialFolderPathW(HWND, LPWSTR, int, BOOL);
+		}
+
 		bool is_mask(PCWSTR path)
 		{
 			ustring tmp(path);
@@ -65,7 +69,7 @@ namespace Base {
 		ustring expand(PCWSTR path)
 		{
 			wchar_t ret[MAX_PATH_LEN];
-			return ::ExpandEnvironmentStringsW(path, ret, Base::lengthof(ret)) ? ustring(ret) : ustring(path);
+			return expand(ret, Base::lengthof(ret), path) ? ustring(ret) : ustring(path);
 		}
 
 		ustring extract_from_mask(const ustring & path)
@@ -80,10 +84,6 @@ namespace Base {
 		ustring extract(const ustring & path)
 		{
 			return path.substr(0, path.find_last_of(PATH_SEPARATORS));
-		}
-
-		extern "C" {
-			BOOL WINAPI SHGetSpecialFolderPathW(HWND, LPWSTR, int, BOOL);
 		}
 
 		ustring get_special(int csidl, bool create)

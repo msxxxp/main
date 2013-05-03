@@ -5,8 +5,10 @@
 
 #if defined(NoStlString) || defined(USE_LITE_STRING)
 #include "lite_string.hpp"
-typedef Base::basic_string<char> astring;
-typedef Base::basic_string<wchar_t> ustring;
+//typedef Base::basic_string<char> astring;
+//typedef Base::basic_string<wchar_t> ustring;
+typedef Base::basic_string<char, Base::char_traits<char> > astring;
+typedef Base::basic_string<wchar_t, Base::char_traits<wchar_t> > ustring;
 #else
 #include <string>
 typedef std::string astring;

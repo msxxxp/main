@@ -6,11 +6,12 @@ namespace Base {
 	namespace Filename {
 		bool is_valid(PCWSTR name)
 		{
-	//		const wchar_t invalidCharsInName[] = L"\\\"<>:/|?*";
+			//		const wchar_t invalidCharsInName[] = L"\\\"<>:/|?*";
 			return Str::compare(name, L".") && Str::compare(name, L"..") && Str::compare(name, L"...");
 		}
 
-		ustring extract(const ustring & path) {
+		ustring extract(const ustring & path)
+		{
 			return path.substr(path.find_last_of(PATH_SEPARATORS));
 		}
 

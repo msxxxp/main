@@ -13,7 +13,7 @@ namespace Base {
 	struct Char_types
 	{
 		typedef uint32_t   int_type;
-	//	typedef std::streampos  pos_type;
+		//	typedef std::streampos  pos_type;
 		typedef std::streamoff  off_type;
 		typedef mbstate_t  state_type;
 	};
@@ -23,8 +23,8 @@ namespace Base {
 	{
 		typedef char              char_type;
 		typedef int               int_type;
-	//	typedef streampos         pos_type;
-	//	typedef streamoff         off_type;
+		//	typedef streampos         pos_type;
+		//	typedef streamoff         off_type;
 		typedef mbstate_t         state_type;
 
 		static void assign(char_type & c1, const char_type & c2) noexcept {c1 = c2;}
@@ -70,8 +70,8 @@ namespace Base {
 	{
 		typedef wchar_t           char_type;
 		typedef wint_t            int_type;
-	//	typedef streamoff         off_type;
-	//	typedef wstreampos        pos_type;
+		//	typedef streamoff         off_type;
+		//	typedef wstreampos        pos_type;
 		typedef mbstate_t         state_type;
 
 		static void assign(char_type & c1, const char_type & c2) noexcept {c1 = c2;}

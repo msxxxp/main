@@ -2,6 +2,7 @@
 #define _LIBBASE_PATH_HPP_
 
 #include <libbase/std.hpp>
+/*?*/#include <libbase/string.hpp>
 
 namespace Base {
 	namespace Filename {
@@ -65,22 +66,36 @@ namespace Base {
 			return set_work_directory(path.c_str());
 		}
 
+		bool is_relative(PCWSTR path);
+		inline bool is_relative(const ustring & path)
+		{
+			return is_relative(path.c_str());
+		}
+
 		bool is_mask(PCWSTR path);
 		inline bool is_mask(const ustring & path)
 		{
 			return is_mask(path.c_str());
 		}
 
+		bool expand(PWSTR dest, size_t length, PCWSTR path);
 		ustring expand(PCWSTR path);
 		inline ustring expand(const ustring & path)
 		{
 			return expand(path.c_str());
 		}
 
+		bool unexpand(PWSTR dest, size_t length, PCWSTR path);
 		ustring unexpand(PCWSTR path);
 		inline ustring unexpand(const ustring & path)
 		{
 			return unexpand(path.c_str());
+		}
+
+		bool compact(PWSTR dest, size_t length, PCWSTR path);
+		ustring compact(PCWSTR path, size_t size);
+		inline ustring compact(const ustring & path, size_t size) {
+			return compact(path.c_str(), size);
 		}
 
 		ustring extract_from_mask(const ustring & path);
@@ -94,6 +109,12 @@ namespace Base {
 			return get_fullpath(path.c_str());
 		}
 
+		bool canonicalize(PWSTR dest, PCWSTR path);
+		ustring canonicalize(PCWSTR path);
+		inline ustring canonicalize(const ustring &path) {
+			return canonicalize(path.c_str());
+		}
+
 	}
 
 }
@@ -101,19 +122,9 @@ namespace Base {
 
 namespace Base {
 
-	ustring Canonicalize(PCWSTR path);
-	inline ustring Canonicalize(const ustring &path) {
-		return Canonicalize(path.c_str());
-	}
-
 	ustring PathNice(PCWSTR path);
 	inline ustring PathNice(const ustring &path) {
-		return Canonicalize(Path::expand(path.c_str()));
-	}
-
-	ustring path_compact(PCWSTR path, size_t size);
-	inline ustring path_compact(const ustring &path, size_t size) {
-		return path_compact(path.c_str(), size);
+		return Path::canonicalize(Path::expand(path.c_str()));
 	}
 
 	ustring Secure(PCWSTR path);

@@ -94,7 +94,8 @@ namespace Base {
 
 		bool compact(PWSTR dest, size_t length, PCWSTR path);
 		ustring compact(PCWSTR path, size_t size);
-		inline ustring compact(const ustring & path, size_t size) {
+		inline ustring compact(const ustring & path, size_t size)
+		{
 			return compact(path.c_str(), size);
 		}
 
@@ -105,49 +106,55 @@ namespace Base {
 		ustring get_special(int csidl, bool create = true);
 
 		ustring get_fullpath(PCWSTR path);
-		inline ustring get_fullpath(const ustring &path) {
+		inline ustring get_fullpath(const ustring &path)
+		{
 			return get_fullpath(path.c_str());
 		}
 
 		bool canonicalize(PWSTR dest, PCWSTR path);
 		ustring canonicalize(PCWSTR path);
-		inline ustring canonicalize(const ustring &path) {
+		inline ustring canonicalize(const ustring &path)
+		{
 			return canonicalize(path.c_str());
 		}
+
+		bool is_mask_match(PCWSTR path, PCWSTR mask, DWORD flags = 0);
 
 	}
 
 }
 
-
 namespace Base {
 
 	ustring PathNice(PCWSTR path);
-	inline ustring PathNice(const ustring &path) {
+	inline ustring PathNice(const ustring &path)
+	{
 		return Path::canonicalize(Path::expand(path.c_str()));
 	}
 
 	ustring Secure(PCWSTR path);
-	inline ustring Secure(const ustring &path) {
+	inline ustring Secure(const ustring &path)
+	{
 		return Secure(path.c_str());
 	}
 
 	ustring Validate(PCWSTR path);
-	inline ustring Validate(const ustring &path) {
+	inline ustring Validate(const ustring &path)
+	{
 		return Validate(path.c_str());
 	}
 
-	bool MaskMatch(PCWSTR path, PCWSTR mask, DWORD flags = 0);
-
 	ustring MakePath(PCWSTR path, PCWSTR name);
-	inline ustring MakePath(const ustring & path, const ustring &name) {
+	inline ustring MakePath(const ustring & path, const ustring &name)
+	{
 		return MakePath(path.c_str(), name.c_str());
 	}
 
 	ustring TempDir();
 
 	ustring TempFile(PCWSTR path);
-	inline ustring TempFile(const ustring & path) {
+	inline ustring TempFile(const ustring & path)
+	{
 		return TempFile(path.c_str());
 	}
 

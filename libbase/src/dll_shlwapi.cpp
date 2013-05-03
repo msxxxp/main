@@ -1,17 +1,16 @@
 ﻿#include <libbase/std.hpp>
 #include <libbase/dll.hpp>
-//#include <libbase/memory.hpp>
 
 namespace Base {
 
 	namespace {
 		struct shlwapi_dll: private Base::DynamicLibrary {
-			typedef HRESULT (*FPathMatchSpecExW)(PCWSTR, PCWSTR, DWORD);
-			typedef WINBOOL (*FPathCanonicalizeW)(PWSTR, PCWSTR);
-			typedef WINBOOL (*FPathCompactPathExW)(PWSTR, PCWSTR, UINT, DWORD);
-			typedef WINBOOL (*FPathIsDirectoryEmptyW)(PCWSTR);
-			typedef WINBOOL (*FPathUnExpandEnvStringsW)(PCWSTR, PWSTR, UINT);
-			typedef WINBOOL (*FPathIsRelativeW)(PCWSTR);
+			typedef HRESULT WINAPI (*FPathMatchSpecExW)(PCWSTR, PCWSTR, DWORD);
+			typedef WINBOOL WINAPI (*FPathCanonicalizeW)(PWSTR, PCWSTR);
+			typedef WINBOOL WINAPI (*FPathCompactPathExW)(PWSTR, PCWSTR, UINT, DWORD);
+			typedef WINBOOL WINAPI (*FPathIsDirectoryEmptyW)(PCWSTR);
+			typedef WINBOOL WINAPI (*FPathUnExpandEnvStringsW)(PCWSTR, PWSTR, UINT);
+			typedef WINBOOL WINAPI (*FPathIsRelativeW)(PCWSTR);
 
 			DEFINE_FUNC(PathMatchSpecExW);
 			DEFINE_FUNC(PathCanonicalizeW);
@@ -66,6 +65,11 @@ namespace Base {
 			return shlwapi_dll::inst().PathCompactPathExW(dest, path, length, 0);
 		}
 
+		bool is_mask_match(PCWSTR path, PCWSTR mask, DWORD flags)
+		{
+			return shlwapi_dll::inst().PathMatchSpecExW(path, mask, flags) == S_OK ;
+		}
+
 	}
 
 	namespace Directory {
@@ -73,11 +77,6 @@ namespace Base {
 		{
 			return shlwapi_dll::inst().PathIsDirectoryEmptyW(path);
 		}
-	}
-
-	bool MaskMatch(PCWSTR path, PCWSTR mask, DWORD flags)
-	{
-		return shlwapi_dll::inst().PathMatchSpecExW(path, mask, flags) == S_OK ;
 	}
 
 }

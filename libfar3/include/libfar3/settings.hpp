@@ -21,7 +21,6 @@
 
 #include <libfar3/plugin.hpp>
 #include <libbase/std.hpp>
-#include <libbase/uncopyable.hpp>
 
 namespace Far {
 

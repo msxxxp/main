@@ -34,7 +34,7 @@ namespace Fsys {
 					del_by_mask(MakePath(path, L"*"));
 					Result = Directory::del_nt(path.c_str());
 				} else {
-					Result = File::del_nt(path);
+					Result = File::del_nt(path.c_str());
 				}
 			} while (::FindNextFileW(hFind, &wfd));
 			::FindClose(hFind);

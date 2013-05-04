@@ -5,7 +5,6 @@
 #include <libbase/filesystem.hpp>
 #include <libbase/shared_ptr.hpp>
 #include <libbase/command_p.hpp>
-#include <libbase/uncopyable.hpp>
 
 namespace Fsys {
 	namespace File {
@@ -425,7 +424,7 @@ namespace Fsys {
 				m_dest(dest) {
 			}
 			bool Execute() const {
-				return copy(m_path, m_dest);
+				return copy(m_path.c_str(), m_dest.c_str());
 			}
 		private:
 			ustring m_path, m_dest;
@@ -437,7 +436,7 @@ namespace Fsys {
 				m_dest(dest) {
 			}
 			bool Execute() const {
-				return move(m_path, m_dest);
+				return move(m_path.c_str(), m_dest.c_str());
 			}
 		private:
 			ustring m_path, m_dest;

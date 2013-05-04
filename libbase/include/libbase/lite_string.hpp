@@ -318,6 +318,7 @@ namespace Base {
 			}
 
 			string_impl(): m_capa(1), m_size(0) {m_str[0] = 0;}
+
 			string_impl(size_type capa): m_capa(capa), m_size(0) {m_str[0] = 0;}
 
 			void init(CharType ch, size_type count)
@@ -340,7 +341,7 @@ namespace Base {
 			{
 				if (str && count) {
 					Traits::copy(m_str + m_size, str, count);
-					set_size(m_size += count);
+					set_size(m_size + count);
 				}
 			}
 

@@ -2,7 +2,7 @@
 #include <libcom/safearray.hpp>
 #include <libext/exception.hpp>
 #include <libbase/shared_ptr.hpp>
-#include <libbase/str.hpp>
+#include <libbase/string.hpp>
 
 
 namespace Com {

@@ -3,7 +3,7 @@
 #include <libbase/memory.hpp>
 #include <libbase/pcstr.hpp>
 #include <libbase/bit.hpp>
-#include <libbase/str.hpp>
+#include <libbase/string.hpp>
 
 namespace Com {
 #define MY_ENCODING_TYPE  (PKCS_7_ASN_ENCODING | X509_ASN_ENCODING)

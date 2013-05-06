@@ -1,4 +1,4 @@
-/**
+﻿/**
  © 2012 Andrew Grechkin
  Source code: <http://code.google.com/p/andrew-grechkin>
 

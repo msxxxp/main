@@ -12,7 +12,8 @@ namespace Base {
 
 		ustring extract(const ustring & path)
 		{
-			return path.substr(path.find_last_of(PATH_SEPARATORS));
+			auto pos = path.find_last_of(PATH_SEPARATORS);
+			return (pos != ustring::npos) ? path.substr(++pos) : ustring();
 		}
 
 	}

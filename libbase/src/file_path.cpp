@@ -7,8 +7,7 @@ namespace Base {
 
 	ustring MakePath(PCWSTR path, PCWSTR name)
 	{
-		ustring Result(PathNice(Path::ensure_end_separator(path)));
-		return String::Inplace::add_word(Result, name, PATH_SEPARATOR);
+		return Path::ensure_end_separator(path) + name;
 	}
 
 	ustring PathNice(PCWSTR path)

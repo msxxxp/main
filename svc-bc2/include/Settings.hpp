@@ -11,6 +11,7 @@ struct Settings
 	Settings():
 		m_isNetworkAllowed(false),
 		m_isSystem(false),
+		m_copyLinkItself(true),
 		m_numberOfErrorsToStop(20),
 		m_numberOfListeners(0),
 		m_numberOfWorkers(1),
@@ -38,6 +39,11 @@ struct Settings
 		return	m_isNetworkAllowed;
 	}
 
+	bool isCopyLinkItself() const
+	{
+		return m_copyLinkItself;
+	}
+
 	size_t numberOfListeners() const
 	{
 		return	m_numberOfListeners;
@@ -63,7 +69,6 @@ struct Settings
 		return	m_workerIoPriority;
 	}
 
-
 private:
 	void init_from_commline(PCWSTR commandLine)
 	{
@@ -77,6 +82,7 @@ private:
 
 	uint64_t m_isNetworkAllowed:1;
 	uint64_t m_isSystem:1;
+	uint64_t m_copyLinkItself :1;
 	size_t m_numberOfErrorsToStop;
 	size_t m_numberOfListeners;
 	size_t m_numberOfWorkers;

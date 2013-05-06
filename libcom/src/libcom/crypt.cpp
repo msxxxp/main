@@ -176,14 +176,14 @@ namespace Crypt {
 	Hash::Hash(const Ext::WinFile & wf, uint64_t size):
 		m_handle((HCRYPTHASH)nullptr)
 	{
-		Hash(Ext::File_map(wf, size)).swap(*this);
+		Hash(Ext::Map(wf, size)).swap(*this);
 	}
 
-	Hash::Hash(const Ext::File_map & file):
+	Hash::Hash(const Ext::Map & file):
 		m_handle((HCRYPTHASH)nullptr)
 	{
 		bool ret = true;
-		for (Ext::File_map::iterator it = file.begin(); ret && it != file.end(); ++it) {
+		for (Ext::Map::iterator it = file.begin(); ret && it != file.end(); ++it) {
 			ret = ::CryptHashData(m_handle, (PBYTE)it.data(), it.size(), 0);
 		}
 		CheckApi(ret);
@@ -247,9 +247,9 @@ namespace Crypt {
 
 	ustring CertificateStore::import_pfx(const ustring & path, const ustring & pass, const ustring & friendly_name) const {
 		ustring ret;
-		Ext::File_map pfx(path);
+		Ext::Map pfx(path);
 		if (pfx.size() == pfx.set_frame(pfx.size())) {
-			Ext::File_map::iterator it = pfx.begin();
+			Ext::Map::iterator it = pfx.begin();
 			CRYPT_DATA_BLOB blob = {(DWORD)it.size(), (PBYTE)it.data()};
 			CheckApiThrowError(::PFXIsPFXBlob(&blob), ERROR_INVALID_DATA);
 			HCERTSTORE tmpStore = CheckHandle(::PFXImportCertStore(&blob, pass.c_str(), CRYPT_MACHINE_KEYSET | CRYPT_EXPORTABLE));

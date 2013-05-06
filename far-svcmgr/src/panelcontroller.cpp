@@ -35,7 +35,7 @@
 #include <libfar3/panel.hpp>
 #include <libbase/logger.hpp>
 #include <libbase/pcstr.hpp>
-#include <libbase/str.hpp>
+#include <libbase/string.hpp>
 
 
 using Far::get_msg;
@@ -280,9 +280,9 @@ void PanelController::GetOpenPanelInfo(OpenPanelInfo * Info) {
 		Info->CurDir = L"";
 	Info->Format = get_global_info()->prefix;
 	if (m_model->get_host().empty()) {
-		PanelTitle = Base::format_str(L"%s", get_global_info()->prefix);
+		PanelTitle = Base::String::format(L"%s", get_global_info()->prefix);
 	} else {
-		PanelTitle = Base::format_str(L"%s: %s", get_global_info()->prefix, m_model->get_host().c_str());
+		PanelTitle = Base::String::format(L"%s: %s", get_global_info()->prefix, m_model->get_host().c_str());
 	}
 	Info->PanelTitle = PanelTitle.c_str();
 	Info->StartPanelMode = ViewMode;

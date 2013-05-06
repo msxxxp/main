@@ -4,6 +4,21 @@
 #include <libbase/std.hpp>
 
 namespace Fsys {
+	inline bool is_file(DWORD attr)
+	{
+		return !(attr & FILE_ATTRIBUTE_DIRECTORY);
+	}
+
+	inline bool is_dir(DWORD attr)
+	{
+		return attr & FILE_ATTRIBUTE_DIRECTORY;
+	}
+
+	inline bool is_link(DWORD attr)
+	{
+		return attr & FILE_ATTRIBUTE_REPARSE_POINT;
+	}
+
 	DWORD get_attr_nt(PCWSTR path);
 
 	bool is_dir_nt(PCWSTR path);
@@ -25,6 +40,10 @@ namespace Fsys {
 	///=================================================================================== Directory
 	namespace Directory {
 		bool create_nt(PCWSTR path, LPSECURITY_ATTRIBUTES lpsa = nullptr);
+
+		inline bool copy(PCWSTR path, PCWSTR dest, LPSECURITY_ATTRIBUTES lpsa = nullptr) {
+			return ::CreateDirectoryExW(path, dest, lpsa);
+		}
 
 		bool del_nt(PCWSTR path);
 	}

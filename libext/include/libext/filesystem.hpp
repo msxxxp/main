@@ -105,6 +105,16 @@ namespace Fsys {
 	}
 
 	///======================================================================================== Stat
+	typedef struct _EXT_FILE_ID_128 {
+	  ULONGLONG LowPart;
+	  ULONGLONG HighPart;
+	} EXT_FILE_ID_128, *PEXT_FILE_ID_128;
+
+	typedef struct _FILE_ID_INFO {
+	  ULONGLONG       VolumeSerialNumber;
+	  EXT_FILE_ID_128 FileId;
+	} FILE_ID_INFO, *PFILE_ID_INFO;
+
 	struct Stat: private BY_HANDLE_FILE_INFORMATION {
 		Stat(HANDLE hndl)
 		{
@@ -174,27 +184,17 @@ namespace Fsys {
 
 		bool is_dir() const
 		{
-			return !(dwFileAttributes & FILE_ATTRIBUTE_REPARSE_POINT) && (dwFileAttributes & FILE_ATTRIBUTE_DIRECTORY);
-		}
-
-		bool is_dir_or_link() const
-		{
-			return dwFileAttributes & FILE_ATTRIBUTE_DIRECTORY;
+			return Fsys::is_dir(dwFileAttributes);
 		}
 
 		bool is_file() const
 		{
-			return !(dwFileAttributes & FILE_ATTRIBUTE_REPARSE_POINT) && !(dwFileAttributes & FILE_ATTRIBUTE_DIRECTORY);
-		}
-
-		bool is_file_or_link() const
-		{
-			return !(dwFileAttributes & FILE_ATTRIBUTE_DIRECTORY);
+			return Fsys::is_file(dwFileAttributes);
 		}
 
 		bool is_lnk() const
 		{
-			return dwFileAttributes & FILE_ATTRIBUTE_REPARSE_POINT;
+			return Fsys::is_link(dwFileAttributes);
 		}
 
 		bool operator ==(const Stat & rhs) const
@@ -207,7 +207,11 @@ namespace Fsys {
 		{
 		}
 
-		bool refresh(HANDLE hndl);
+		void refresh(HANDLE hndl);
+
+		FILE_BASIC_INFO    m_basic_info;
+		FILE_STANDARD_INFO m_standard_info;
+		FILE_ID_INFO       m_id_info;
 
 		friend struct File::Facade;
 	};
@@ -257,17 +261,17 @@ namespace Fsys {
 
 			bool is_file() const
 			{
-				return !is_dir();
+				return !Fsys::is_dir(m_stat.dwFileAttributes);
 			}
 
 			bool is_dir() const
 			{
-				return m_stat.dwFileAttributes & FILE_ATTRIBUTE_DIRECTORY;
+				return Fsys::is_dir(m_stat.dwFileAttributes);
 			}
 
 			bool is_link() const
 			{
-				return m_stat.dwFileAttributes & FILE_ATTRIBUTE_REPARSE_POINT;
+				return Fsys::is_link(m_stat.dwFileAttributes);
 			}
 
 		private:
@@ -424,7 +428,7 @@ namespace Fsys {
 				m_dest(dest) {
 			}
 			bool Execute() const {
-				return copy(m_path.c_str(), m_dest.c_str());
+				return Fsys::File::copy(m_path.c_str(), m_dest.c_str());
 			}
 		private:
 			ustring m_path, m_dest;
@@ -436,7 +440,7 @@ namespace Fsys {
 				m_dest(dest) {
 			}
 			bool Execute() const {
-				return move(m_path.c_str(), m_dest.c_str());
+				return Fsys::File::move(m_path.c_str(), m_dest.c_str());
 			}
 		private:
 			ustring m_path, m_dest;

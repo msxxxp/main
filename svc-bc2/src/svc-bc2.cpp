@@ -5,7 +5,10 @@
 #include <libbase/ThreadPool.hpp>
 #include <libbase/command_p.hpp>
 #include <libbase/string.hpp>
+#include <libbase/path.hpp>
+#include <libbase/err.hpp>
 #include <libext/filesystem.hpp>
+#include <libext/priv.hpp>
 
 #include <GlobalData.hpp>
 #include <Settings.hpp>
@@ -61,7 +64,8 @@ ForwardIt copy_remove_if(ForwardIt first, ForwardIt last, OutputIt d_first, Unar
 
 struct WorkingTask: public Base::Command_p {
 	typedef std::deque<ustring> PathsArray;
-	WorkingTask(PCWSTR name, PathsArray paths) :
+
+	WorkingTask(PCWSTR name, const PathsArray & paths) :
 		requestedPaths(paths), m_name(name)
 	{
 		LogNoise(L"name: '%s'\n", m_name.c_str());
@@ -75,9 +79,6 @@ protected:
 			if (Fsys::is_dir(*it))
 				expand_dir_depth(*it);
 		}
-
-		for (auto it = expandedPaths.begin(); it != expandedPaths.end(); ++it)
-			LogNoise(L"'%s'\n", it->c_str());
 	}
 
 	void expandAllPaths_breadth()
@@ -103,9 +104,6 @@ protected:
 		while (!layer.empty()) {
 			expand_dir_breadth(layer);
 		}
-
-		for (auto it = expandedPaths.begin(); it != expandedPaths.end(); ++it)
-			LogNoise(L"'%s'\n", it->c_str());
 	}
 
 protected:
@@ -141,20 +139,65 @@ private:
 	ustring m_name;
 };
 
-struct Remove: public WorkingTask {
-	Remove(WorkingTask::PathsArray paths) :
-		WorkingTask(L"remove", paths)
+struct CopyTask: public WorkingTask {
+	CopyTask(const WorkingTask::PathsArray & paths, const ustring & destPath) :
+		WorkingTask(L"copy", paths),
+		m_destPath(Base::Path::ensure_prefix(destPath))
 	{
+		LogNoise(L"Destination: '%s'\n", m_destPath.c_str());
 	}
 
 	ssize_t execute() override
 	{
-		expandAllPaths_depth();
+		for (auto it = requestedPaths.begin(); it != requestedPaths.end(); ++it) {
+			Base::Path::Inplace::ensure_prefix(*it);
+			process_path(*it, Fsys::get_attr(*it), Base::MakePath(m_destPath, Base::Filename::extract(*it)));
+		}
 		return 0;
 	}
 
 private:
+	ssize_t process_path(const ustring & sourcePath, DWORD attr, const ustring & destPath)
+	{
+		DoAction(sourcePath, attr, destPath);
+		if (Fsys::is_dir(attr)) {
+			if (!Fsys::is_link(attr) || !Settings::inst().isCopyLinkItself()) {
+				DoRecursiveAction(sourcePath, attr, destPath);
+			}
+		}
+		return 0;
+	}
 
+	ssize_t DoRecursiveAction(const ustring & sourcePath, DWORD /*attr*/, const ustring & destPath)
+	{
+		Fsys::Sequence seq(sourcePath);
+		for (auto it = seq.begin(); it != seq.end(); ++it) {
+//			LogInfo(L"'%20.20s' isDir: %d isLink: %d size: %I64u\n", it->name(), it->is_dir(), it->is_link(), it->size());
+			process_path(it->full_path(), it->attr(), Base::MakePath(destPath, it->name()));
+		}
+		return 0;
+	}
+
+	ssize_t DoAction(const ustring & sourcePath, DWORD attr, const ustring & destPath)
+	{
+		LogNoise(L"Copy '%s' to '%s'\n", sourcePath.c_str(), destPath.c_str());
+		if (Fsys::is_dir(attr)) {
+			if (Fsys::is_link(attr) && !Settings::inst().isCopyLinkItself()) {
+				LogErrorIf(!Fsys::Directory::create_nt(destPath.c_str()), L"%s\n", Base::ErrAsStr().c_str());
+			} else {
+				LogErrorIf(!Fsys::Directory::copy(sourcePath.c_str(), destPath.c_str()), L"%s\n", Base::ErrAsStr().c_str());
+			}
+		} else {
+			if (Fsys::is_link(attr) && Settings::inst().isCopyLinkItself()) {
+				Fsys::Link::copy(sourcePath.c_str(), destPath.c_str());
+			} else {
+				Fsys::File::copy(sourcePath.c_str(), destPath.c_str());
+			}
+		}
+		return 0;
+	}
+
+	ustring m_destPath;
 };
 
 namespace {
@@ -162,7 +205,7 @@ namespace {
 	{
 		using namespace Logger;
 		set_default_level(Level::Trace);
-		set_default_prefix(Prefix::Medium | Prefix::Place | Prefix::Thread | Prefix::Module);
+		set_default_prefix(Prefix::Medium/* | Prefix::Place | Prefix::Thread | Prefix::Module*/);
 //		set_default_target(get_TargetToConsole());
 		set_default_target(get_TargetToFile(L".\\log.log"));
 
@@ -175,9 +218,15 @@ int main()
 	setup_logger();
 
 	LogTrace();
+	Ext::Privilege CreateSymlinkPrivilege(SE_CREATE_SYMBOLIC_LINK_NAME);
 
 	Settings::inst().init(L"");
 	GlobalData::inst();
+
+	Fsys::Stat fil(L"C:/tmp/-/111/tools.rar");
+
+	return 0;
+
 
 	Listener listenerRoutine;
 	Worker workerRoutine(GlobalData::inst().get_WorkerTasksQueue());
@@ -200,11 +249,13 @@ int main()
 	}
 
 	WorkingTask::PathsArray paths;
-	paths.emplace_back(L"c:\\xld");
-	paths.emplace_back(L"c:\\FaceProv.log");
-	paths.emplace_back(L"c:\\tools");
 	paths.emplace_back(L"c:\\Intel");
-	Base::Command_p * task = new Remove(paths);
+	paths.emplace_back(L"c:\\mingw");
+	paths.emplace_back(L"c:\\Recovery");
+	paths.emplace_back(L"c:\\tmp");
+	paths.emplace_back(L"c:\\tools");
+	paths.emplace_back(L"c:\\FaceProv.log");
+	Base::Command_p * task = new CopyTask(paths, L"c:\\tmp1\\");
 	Base::Message message;
 	message.set_data(task);
 	GlobalData::inst().get_WorkerTasksQueue()->put_message(message);

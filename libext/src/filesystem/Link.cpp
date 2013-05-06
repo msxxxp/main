@@ -1,7 +1,8 @@
 ﻿#include <libext/filesystem.hpp>
 #include <libext/exception.hpp>
-#include <libext/priv.hpp>
+//#include <libext/priv.hpp>
 #include <libbase/std.hpp>
+#include <libbase/memory.hpp>
 #include <libbase/path.hpp>
 #include <libbase/pcstr.hpp>
 
@@ -188,15 +189,13 @@ namespace Fsys {
 	namespace Link {
 		void copy(PCWSTR from, PCWSTR to)
 		{
+			Stat stat(from);
 			REPARSE_BUF rdb(from);
-			DWORD attr = Fsys::get_attr(from);
-			if (attr & FILE_ATTRIBUTE_DIRECTORY) {
-				Directory::create(to);
-			} else {
+			if (!(stat.attr() & FILE_ATTRIBUTE_DIRECTORY)) {
 				File::create(to);
 			}
 			rdb.set_to(to);
-			Fsys::set_attr(to, attr);
+			Fsys::set_attr(to, stat.attr());
 		}
 
 		void create_sym(PCWSTR path, PCWSTR new_path)

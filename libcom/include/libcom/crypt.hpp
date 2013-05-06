@@ -104,7 +104,7 @@ namespace Crypt {
 
 		Hash(const Ext::WinFile & wf, uint64_t size = (uint64_t) - 1);
 
-		Hash(const Ext::File_map & file);
+		Hash(const Ext::Map & file);
 
 		Hash(const Hash & in);
 

@@ -40,7 +40,7 @@
 #endif
 
 namespace Memory {
-#ifdef DEBUG
+#ifdef MEMORY_DEBUG
 	namespace Watchdog
 	{
 		typedef void (*pfunc)();
@@ -72,7 +72,7 @@ namespace Memory {
 	inline Pointer malloc(size_t size, DWORD flags = 0/*HEAP_ZERO_MEMORY*/)
 	{
 		static_assert(std::is_pointer<Pointer>::value, "Pointer type is required");
-#ifdef DEBUG
+#ifdef MEMORY_DEBUG
 		Watchdog::allocations++;
 		Watchdog::allocations_size += size;
 #endif
@@ -84,7 +84,7 @@ namespace Memory {
 	{
 		static_assert(std::is_pointer<Pointer>::value, "Pointer type is required");
 		Pointer tmp_ptr = nullptr;
-#ifdef DEBUG
+#ifdef MEMORY_DEBUG
 		Watchdog::allocations++;
 		Watchdog::allocations_size += sizeof(*tmp_ptr) * count;
 #endif
@@ -96,7 +96,7 @@ namespace Memory {
 	{
 		static_assert(std::is_pointer<Pointer>::value, "Pointer type is required");
 		Pointer tmp_ptr = nullptr;
-#ifdef DEBUG
+#ifdef MEMORY_DEBUG
 		Watchdog::allocations++;
 		Watchdog::allocations_size += sizeof(*tmp_ptr);
 #endif
@@ -107,7 +107,7 @@ namespace Memory {
 	inline void free(Pointer & in)
 	{
 		static_assert(std::is_pointer<Pointer>::value, "Pointer type is required");
-#ifdef DEBUG
+#ifdef MEMORY_DEBUG
 		Watchdog::deletions++;
 		Watchdog::deletions_size += Memory::size(in);
 		if (Watchdog::deletions_size == Watchdog::allocations_size && Watchdog::deletions == Watchdog::allocations)
@@ -120,7 +120,7 @@ namespace Memory {
 	template<typename Pointer>
 	inline bool realloc(Pointer & in, size_t size, DWORD flags = HEAP_ZERO_MEMORY)
 	{
-#ifdef DEBUG
+#ifdef MEMORY_DEBUG
 		if (in) {
 			Watchdog::deletions++;
 			Watchdog::deletions_size += Memory::size(in);

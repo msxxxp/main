@@ -1,6 +1,6 @@
 ﻿#include <libbase/memory.hpp>
 
-#ifdef DEBUG
+#ifdef MEMORY_DEBUG
 namespace Memory {
 	namespace Watchdog
 	{
@@ -42,7 +42,6 @@ namespace Base {
 		close();
 		return &m_ptr;
 	}
-
 
 	void auto_close<HANDLE>::close() {
 		if (is_valid()) {

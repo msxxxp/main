@@ -204,6 +204,7 @@ namespace Base {
 		this_type & replace(size_type pos, size_type len, const CharType * str, size_type count)
 		{
 			pos = std::min(pos, size());
+			len = std::min(len, size() - pos);
 			this_type tmp(cbegin(), pos, size() - len + count);
 			tmp.append(str, count);
 			pos = std::min(pos + len, size());
@@ -241,19 +242,21 @@ namespace Base {
 			return (find) ? find - cbegin() : npos;
 		}
 
-		size_t rfind(const this_type & /*str*/, size_type /*pos*/ = npos) const
+		size_t rfind(const this_type & str, size_type pos = npos) const {return rfind(str.c_str(), pos, str.length());}
+
+		size_t rfind(const CharType * str, size_type pos, size_type count) const
 		{
-//			pos = std::min(pos, size());
-//			while (pos > 0)
-//				if (Traits::eq(at(--pos), ch))
-//					return pos;
+			pos = std::min(pos, size());
+			if (count != 0 && count <= pos) {
+				pos -= (count - 1);
+				while (pos > 0)
+					if (Traits::find(cbegin() + --pos, str))
+						return pos;
+			}
 			return npos;
 		}
 
-		size_t rfind(const CharType * /*str*/, size_type /*pos*/ = npos) const
-		{
-			return npos;
-		}
+		size_t rfind(const CharType * str, size_type pos = npos) const {return rfind(str, pos, Traits::length(str));}
 
 		size_type rfind(CharType ch, size_type pos = npos) const
 		{

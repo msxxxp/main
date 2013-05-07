@@ -23,7 +23,6 @@
 
 #include <libfar3/globalinfo_i.hpp>
 #include <libbase/std.hpp>
-#include <libbase/uncopyable.hpp>
 
 struct FarGlobalInfo: public Far::GlobalInfo_i, private Base::Uncopyable {
 	~FarGlobalInfo();

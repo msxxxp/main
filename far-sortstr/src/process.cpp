@@ -27,7 +27,7 @@
 #include <libfar3/editor.hpp>
 #include <libfar3/dialog_builder.hpp>
 #include <libbase/std.hpp>
-#include <libbase/str.hpp>
+#include <libbase/string.hpp>
 #include <libbase/logger.hpp>
 
 #include <functional>

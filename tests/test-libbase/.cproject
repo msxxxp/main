@@ -155,7 +155,7 @@
 							</tool>
 							<tool command="g++" commandLinePattern="${COMMAND} ${FLAGS} ${OUTPUT_FLAG} ${OUTPUT_PREFIX}${OUTPUT} ${INPUTS}" errorParsers="org.eclipse.cdt.core.GLDErrorParser" id="cdt.managedbuild.tool.gnu.cpp.linker.mingw.exe.debug.1792621054" name="MinGW C++ Linker" superClass="cdt.managedbuild.tool.gnu.cpp.linker.mingw.exe.debug">
 								<option id="gnu.cpp.link.option.paths.1088915127" name="Library search path (-L)" superClass="gnu.cpp.link.option.paths" valueType="libPaths">
-									<listOptionValue builtIn="false" value="${workspace_loc:/libbase/Debug-x64}"/>
+									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/libbase/Release-x64-NoStr}&quot;"/>
 								</option>
 								<option id="gnu.cpp.link.option.flags.1855535187" name="Linker flags" superClass="gnu.cpp.link.option.flags" value="-Wl,-Map=test-libbase.exe.map" valueType="string"/>
 								<option id="gnu.cpp.link.option.libs.1504780276" name="Libraries (-l)" superClass="gnu.cpp.link.option.libs" valueType="libs">
@@ -208,8 +208,6 @@
 									<listOptionValue builtIn="false" value="_UNICODE"/>
 									<listOptionValue builtIn="false" value="NDEBUG"/>
 									<listOptionValue builtIn="false" value="NO_LOGGER"/>
-									<listOptionValue builtIn="false" value="NoStdNew"/>
-									<listOptionValue builtIn="false" value="NoStlString"/>
 								</option>
 								<option id="gnu.cpp.compiler.option.other.other.562381201" name="Other flags" superClass="gnu.cpp.compiler.option.other.other" value="-c -fmessage-length=0 -fno-exceptions -fno-rtti -fno-threadsafe-statics -std=c++11" valueType="string"/>
 								<inputType id="cdt.managedbuild.tool.gnu.cpp.compiler.input.70513673" superClass="cdt.managedbuild.tool.gnu.cpp.compiler.input"/>

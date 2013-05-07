@@ -42,7 +42,8 @@ struct SelInfo {
 	ssize_t count;
 	SelInfo(ssize_t s = -1, ssize_t c = -1):
 		start(s),
-		count(c) {
+		count(c)
+	{
 	};
 };
 
@@ -239,7 +240,7 @@ bool Execute() {
 			break;
 
 		ustring	tmp(egs.StringText, egs.StringLength);
-//		LogDebug(L"str[%Id]: '%s'\n", y, tmp.c_str());
+		LogDebug(L"str[%Id]: egs.SelStart: %Id, egs.SelEnd: %Id, egs.StringLength: %Id '%s'\n", y, egs.SelStart, egs.SelEnd, egs.StringLength, tmp.c_str());
 
 		ssize_t	SelLen = -2;
 		switch (get_global_info()->get_block_type()) {
@@ -247,21 +248,22 @@ bool Execute() {
 				if (egs.SelStart < egs.StringLength) {
 					SelLen = std::min(egs.SelEnd, egs.StringLength) - std::min(egs.SelStart, egs.StringLength);
 				}
+				LogDebug(L"SelLen: %Id\n", SelLen);
 				if (SelLen != -2) {
 					sortdata.emplace_back(ustring(egs.StringText + egs.SelStart, SelLen), y - get_global_info()->get_first_line());
 //					sortdata.push_back(sortpair(ustring(egs.StringText + egs.SelStart, SelLen), y - get_global_info()->get_first_line()));
 					if (get_global_info()->cbValue_Numeric) {
 						sortdata.back().second.num = FindNum(sortdata.back().first.c_str());
 					}
+					LogDebug(L"sortdata.back().second.line: %Id, sortdata.back().second.num: %f, sortdata.back().first: '%s'\n", sortdata.back().second.line, (double)sortdata.back().second.num, sortdata.back().first.c_str());
 				} else if (get_global_info()->cbValue_AsEmpty) {
 					sortdata.emplace_back(ustring(), y - get_global_info()->get_first_line());
+					LogDebug(L"sortdata.back().second.line: %Id, sortdata.back().second.num: %f, sortdata.back().first: '%s'\n", sortdata.back().second.line, (double)sortdata.back().second.num, sortdata.back().first.c_str());
 //					sortdata.push_back(sortpair(ustring(), y - get_global_info()->get_first_line()));
 				}
 				data.emplace_back(tmp, SelInfo(egs.SelStart, SelLen));
 //				data.push_back(data_vector::value_type(tmp, SelInfo(egs.SelStart, SelLen)));
-				LogDebug(L"egs.SelStart: %Id, egs.StringLength: %Id, SelLen: %Id\n", egs.SelStart, egs.StringLength, SelLen);
-				LogDebug(L"data.back().first: '%s', data.back().second.start: %Id, data.back().second.count: %Id\n", data.back().first.c_str(), data.back().second.start, data.back().second.count);
-				LogDebug(L"sortdata.back().first: '%s', sortdata.back().second.line: %Id, sortdata.back().second.num: %f\n", sortdata.back().first.c_str(), sortdata.back().second.line, (double)sortdata.back().second.num);
+				LogDebug(L"data.back().second.start: %Id, data.back().second.count: %Id, data.back().first: '%s'\n", data.back().second.start, data.back().second.count, data.back().first.c_str());
 				break;
 			}
 			case BTYPE_STREAM:
@@ -273,6 +275,8 @@ bool Execute() {
 				if (get_global_info()->cbValue_Numeric) {
 					sortdata.back().second.num = FindNum(sortdata.back().first.c_str());
 				}
+				LogDebug(L"sortdata.back().second.line: %Id, sortdata.back().second.num: %f, sortdata.back().first: '%s'\n", sortdata.back().second.line, (double)sortdata.back().second.num, sortdata.back().first.c_str());
+				LogDebug(L"data.back().second.start: %Id, data.back().second.count: %Id, data.back().first: '%s'\n", data.back().second.start, data.back().second.count, data.back().first.c_str());
 			}
 			break;
 		}

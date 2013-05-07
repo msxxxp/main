@@ -35,6 +35,8 @@
 #include <lang.hpp>
 #include <fileversion.hpp>
 
+#include <time.h>
+
 
 Base::NamedValues<WORD> Machines[] = {
 	{ L"UNKNOWN", IMAGE_FILE_MACHINE_UNKNOWN },
@@ -154,50 +156,54 @@ Far::PanelController_i * FarPlugin::Open(const OpenInfo * Info)
 	FileVersion fv(buf1);
 	if (fv.is_ok()) {
 		FVI fvi(fv);
-			int i = 0, x = 70, y = 2;
-			Far::InitDialogItemF Items[] = {
-				{DI_TEXT, 5, y, 26, 0,          0,            (PCWSTR)MtxtFileFullVer},
-				{DI_EDIT, 28, y++, x - 2, 0,    DIF_READONLY, fv.ver()},
-				{DI_TEXT, 5, y, 26, 0,          0,            (PCWSTR)MtxtFileLang},
-				{DI_EDIT, 28, y++, x - 2, 0,    DIF_READONLY, fv.lng()},
-				{DI_TEXT, 5, y, 26, 0,          0,            (PCWSTR)fvi[i].msgTxt},
-				{DI_EDIT, 28, y++, x - 2, 0,    DIF_READONLY, fvi[i++].data},
-				{DI_TEXT, 5, y, 26, 0,          0,            (PCWSTR)fvi[i].msgTxt},
-				{DI_EDIT, 28, y++, x - 2, 0,    DIF_READONLY, fvi[i++].data},
-				{DI_TEXT, 5, y, 26, 0,          0,            (PCWSTR)MtxtMachine},
-				{DI_EDIT, 28, y++, x - 2, 0,    DIF_READONLY, Base::NamedValues<WORD>::GetName(Machines, lengthof(Machines), fv.machine())},
-				{DI_TEXT, 5, y++, 0, 0,         DIF_SEPARATOR, L""},
-				{DI_TEXT, 5, y, 26, 0,          0,            (PCWSTR)fvi[i].msgTxt},
-				{DI_EDIT, 28, y++, x - 2, 0,    DIF_READONLY, fvi[i++].data},
-				{DI_TEXT, 5, y, 26, 0,          0,            (PCWSTR)fvi[i].msgTxt},
-				{DI_EDIT, 28, y++, x - 2, 0,    DIF_READONLY, fvi[i++].data},
-				{DI_TEXT, 5, y, 26, 0,          0,            (PCWSTR)fvi[i].msgTxt},
-				{DI_EDIT, 28, y++, x - 2, 0,    DIF_READONLY, fvi[i++].data},
-				{DI_TEXT, 5, y, 26, 0,          0,            (PCWSTR)fvi[i].msgTxt},
-				{DI_EDIT, 28, y++, x - 2, 0,    DIF_READONLY, fvi[i++].data},
-				{DI_TEXT, 5, y, 26, 0,          0,            (PCWSTR)fvi[i].msgTxt},
-				{DI_EDIT, 28, y++, x - 2, 0,    DIF_READONLY, fvi[i++].data},
-				{DI_TEXT, 5, y, 26, 0,          0,            (PCWSTR)fvi[i].msgTxt},
-				{DI_EDIT, 28, y++, x - 2, 0,    DIF_READONLY, fvi[i++].data},
-				{DI_TEXT, 5, y, 26, 0,          0,            (PCWSTR)fvi[i].msgTxt},
-				{DI_EDIT, 28, y++, x - 2, 0,    DIF_READONLY, fvi[i++].data},
-				{DI_TEXT, 5, y, 26, 0,          0,            (PCWSTR)fvi[i].msgTxt},
-				{DI_EDIT, 28, y++, x - 2, 0,    DIF_READONLY, fvi[i++].data},
-				{DI_TEXT, 5, y, 26, 0,          0,            (PCWSTR)fvi[i].msgTxt},
-				{DI_EDIT, 28, y++, x - 2, 0,    DIF_READONLY, fvi[i++].data},
-				{DI_TEXT, 5, y, 26, 0,          0,            (PCWSTR)fvi[i].msgTxt},
-				{DI_EDIT, 28, y++, x - 2, 0,    DIF_READONLY, fvi[i++].data},
-				{DI_TEXT, 5, y++, 0, 0,         DIF_SEPARATOR, L""},
-				{DI_BUTTON, 0, y++, 0, 0,       DIF_CENTERGROUP, (PCWSTR)Far::txtBtnOk},
-				{DI_DOUBLEBOX, 3, 1, x, y,      0,               (PCWSTR)Far::DlgTitle},
-			};
+		wchar_t timeBuf[32] = {0};
+		_vsnwprintf(timeBuf, Base::lengthof(timeBuf), L"%S", ctime(&fv.created()));
+		int i = 0, x = 70, y = 2;
+		Far::InitDialogItemF Items[] = {
+			{DI_TEXT, 5, y, 26, 0,          0,            (PCWSTR)MtxtFileFullVer},
+			{DI_EDIT, 28, y++, x - 2, 0,    DIF_READONLY, fv.ver()},
+			{DI_TEXT, 5, y, 26, 0,          0,            (PCWSTR)MtxtFileLang},
+			{DI_EDIT, 28, y++, x - 2, 0,    DIF_READONLY, fv.lng()},
+			{DI_TEXT, 5, y, 26, 0,          0,            (PCWSTR)fvi[i].msgTxt},
+			{DI_EDIT, 28, y++, x - 2, 0,    DIF_READONLY, fvi[i++].data},
+			{DI_TEXT, 5, y, 26, 0,          0,            (PCWSTR)fvi[i].msgTxt},
+			{DI_EDIT, 28, y++, x - 2, 0,    DIF_READONLY, fvi[i++].data},
+			{DI_TEXT, 5, y, 26, 0,          0,            (PCWSTR)MtxtMachine},
+			{DI_EDIT, 28, y++, x - 2, 0,    DIF_READONLY, Base::NamedValues<WORD>::GetName(Machines, lengthof(Machines), fv.machine())},
+			{DI_TEXT, 5, y, 26, 0,          0,            (PCWSTR)MtxtCreated},
+			{DI_EDIT, 28, y++, x - 2, 0,    DIF_READONLY, timeBuf},
+			{DI_TEXT, 5, y++, 0, 0,         DIF_SEPARATOR, L""},
+			{DI_TEXT, 5, y, 26, 0,          0,            (PCWSTR)fvi[i].msgTxt},
+			{DI_EDIT, 28, y++, x - 2, 0,    DIF_READONLY, fvi[i++].data},
+			{DI_TEXT, 5, y, 26, 0,          0,            (PCWSTR)fvi[i].msgTxt},
+			{DI_EDIT, 28, y++, x - 2, 0,    DIF_READONLY, fvi[i++].data},
+			{DI_TEXT, 5, y, 26, 0,          0,            (PCWSTR)fvi[i].msgTxt},
+			{DI_EDIT, 28, y++, x - 2, 0,    DIF_READONLY, fvi[i++].data},
+			{DI_TEXT, 5, y, 26, 0,          0,            (PCWSTR)fvi[i].msgTxt},
+			{DI_EDIT, 28, y++, x - 2, 0,    DIF_READONLY, fvi[i++].data},
+			{DI_TEXT, 5, y, 26, 0,          0,            (PCWSTR)fvi[i].msgTxt},
+			{DI_EDIT, 28, y++, x - 2, 0,    DIF_READONLY, fvi[i++].data},
+			{DI_TEXT, 5, y, 26, 0,          0,            (PCWSTR)fvi[i].msgTxt},
+			{DI_EDIT, 28, y++, x - 2, 0,    DIF_READONLY, fvi[i++].data},
+			{DI_TEXT, 5, y, 26, 0,          0,            (PCWSTR)fvi[i].msgTxt},
+			{DI_EDIT, 28, y++, x - 2, 0,    DIF_READONLY, fvi[i++].data},
+			{DI_TEXT, 5, y, 26, 0,          0,            (PCWSTR)fvi[i].msgTxt},
+			{DI_EDIT, 28, y++, x - 2, 0,    DIF_READONLY, fvi[i++].data},
+			{DI_TEXT, 5, y, 26, 0,          0,            (PCWSTR)fvi[i].msgTxt},
+			{DI_EDIT, 28, y++, x - 2, 0,    DIF_READONLY, fvi[i++].data},
+			{DI_TEXT, 5, y, 26, 0,          0,            (PCWSTR)fvi[i].msgTxt},
+			{DI_EDIT, 28, y++, x - 2, 0,    DIF_READONLY, fvi[i++].data},
+			{DI_TEXT, 5, y++, 0, 0,         DIF_SEPARATOR, L""},
+			{DI_BUTTON, 0, y++, 0, 0,       DIF_CENTERGROUP, (PCWSTR)Far::txtBtnOk},
+			{DI_DOUBLEBOX, 3, 1, x, y,      0,               (PCWSTR)Far::DlgTitle},
+		};
 
-			size_t size = Base::lengthof(Items);
-			FarDialogItem FarItems[size];
-			InitDialogItemsF(Items, FarItems, size);
-			HANDLE hndl = Far::psi().DialogInit(Far::get_plugin_guid(), &DialogGuid, -1, -1, x + 4, y + 2, L"Contents", FarItems, size, 0, 0, nullptr, 0);
-			Far::psi().DialogRun(hndl);
-			Far::psi().DialogFree(hndl);
+		size_t size = Base::lengthof(Items);
+		FarDialogItem FarItems[size];
+		InitDialogItemsF(Items, FarItems, size);
+		HANDLE hndl = Far::psi().DialogInit(Far::get_plugin_guid(), &DialogGuid, -1, -1, x + 4, y + 2, L"Contents", FarItems, size, 0, 0, nullptr, 0);
+		Far::psi().DialogRun(hndl);
+		Far::psi().DialogFree(hndl);
 	}
 	return nullptr;
 }

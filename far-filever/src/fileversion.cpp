@@ -1,23 +1,23 @@
 ﻿/**
-	filever: File Version FAR plugin
-	Displays version information from file resource in dialog
-	FAR3 plugin
+ filever: File Version FAR plugin
+ Displays version information from file resource in dialog
+ FAR3 plugin
 
-	© 2013 Andrew Grechkin
+ © 2013 Andrew Grechkin
 
-	This program is free software: you can redistribute it and/or modify
-	it under the terms of the GNU General Public License as published by
-	the Free Software Foundation, either version 3 of the License, or
-	(at your option) any later version.
+ This program is free software: you can redistribute it and/or modify
+ it under the terms of the GNU General Public License as published by
+ the Free Software Foundation, either version 3 of the License, or
+ (at your option) any later version.
 
-	This program is distributed in the hope that it will be useful,
-	but WITHOUT ANY WARRANTY; without even the implied warranty of
-	MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-	GNU General Public License for more details.
+ This program is distributed in the hope that it will be useful,
+ but WITHOUT ANY WARRANTY; without even the implied warranty of
+ MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ GNU General Public License for more details.
 
-	You should have received a copy of the GNU General Public License
-	along with this program.  If not, see <http://www.gnu.org/licenses/>.
-**/
+ You should have received a copy of the GNU General Public License
+ along with this program.  If not, see <http://www.gnu.org/licenses/>.
+ **/
 
 #include "fileversion.hpp"
 
@@ -31,28 +31,34 @@
 
 using namespace Base;
 
-version_dll & version_dll::inst() {
+version_dll & version_dll::inst()
+{
 	static version_dll ret;
 	return ret;
 }
 
-bool version_dll::is_valid() const {
+bool version_dll::is_valid() const
+{
 	return DynamicLibrary::is_valid() && GetFileVersionInfoSizeW && VerLanguageNameW && GetFileVersionInfoW && VerQueryValueW;
 }
 
-version_dll::version_dll():
-	DynamicLibrary(L"version.dll") {
+version_dll::version_dll() :
+	DynamicLibrary(L"version.dll")
+{
 	GET_DLL_FUNC(GetFileVersionInfoSizeW);
 	GET_DLL_FUNC(VerLanguageNameW);
 	GET_DLL_FUNC(GetFileVersionInfoW);
 	GET_DLL_FUNC(VerQueryValueW);
 }
 
-FileVersion::~FileVersion() {
+FileVersion::~FileVersion()
+{
 	Memory::free(m_data);
 }
 
-FileVersion::FileVersion(PCWSTR path): m_data(nullptr) {
+FileVersion::FileVersion(PCWSTR path) :
+	m_data(nullptr)
+{
 	Memory::zero(this, sizeof(*this));
 
 	DWORD hndl;
@@ -70,7 +76,7 @@ FileVersion::FileVersion(PCWSTR path): m_data(nullptr) {
 		struct LANGANDCODEPAGE {
 			WORD wLanguage;
 			WORD wCodePage;
-		} * translate;
+		}* translate;
 		if (version_dll::inst().VerQueryValueW(m_data, (PWSTR)L"\\VarFileInfo\\Translation", (PCWSTR*)&translate, &buf_len)) {
 			version_dll::inst().VerLanguageNameW(translate->wLanguage, m_lng, lengthof(m_lng));
 			_snwprintf(m_lngId, lengthof(m_lngId), L"%04x%04x", translate->wLanguage, translate->wCodePage);
@@ -97,24 +103,15 @@ FileVersion::FileVersion(PCWSTR path): m_data(nullptr) {
 		}
 		m_machine = pPEHeader->FileHeader.Machine;
 		m_flags = pPEHeader->FileHeader.Characteristics;
+		m_created = pPEHeader->FileHeader.TimeDateStamp;
 	}
 }
 
-FVI::FVI(const FileVersion & in) {
-	FileVerInfo_ tmp[] = {
-		{L"", L"FileDescription", MtxtFileDesc},
-		{L"", L"LegalCopyright", MtxtFileCopyright},
-		{L"", L"Comments", MtxtFileComment},
-		{L"", L"CompanyName", MtxtFileCompany},
-		{L"", L"FileVersion", MtxtFileVer},
-		{L"", L"InternalName", MtxtFileInternal},
-		{L"", L"LegalTrademarks", MtxtFileTrade},
-		{L"", L"OriginalFilename", MtxtFileOriginal},
-		{L"", L"PrivateBuild", MtxtFilePrivate},
-		{L"", L"ProductName", MtxtFileProductName},
-		{L"", L"ProductVersion", MtxtFileProductVer},
-		{L"", L"SpecialBuild", MtxtFileSpecial},
-	};
+FVI::FVI(const FileVersion & in)
+{
+	FileVerInfo_ tmp[] = {{L"", L"FileDescription", MtxtFileDesc}, {L"", L"LegalCopyright", MtxtFileCopyright}, {L"", L"Comments", MtxtFileComment}, {L"", L"CompanyName", MtxtFileCompany}, {
+	    L"", L"FileVersion", MtxtFileVer}, {L"", L"InternalName", MtxtFileInternal}, {L"", L"LegalTrademarks", MtxtFileTrade}, {L"", L"OriginalFilename", MtxtFileOriginal}, {
+	    L"", L"PrivateBuild", MtxtFilePrivate}, {L"", L"ProductName", MtxtFileProductName}, {L"", L"ProductVersion", MtxtFileProductVer}, {L"", L"SpecialBuild", MtxtFileSpecial}, };
 	m_data = tmp;
 	m_size = lengthof(tmp);
 	if (in.is_ok()) {

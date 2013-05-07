@@ -39,6 +39,7 @@ enum FarMessage {
 	MtxtFileProductVer,
 	MtxtFileSpecial,
 	MtxtMachine,
+	MtxtCreated,
 };
 
 #endif

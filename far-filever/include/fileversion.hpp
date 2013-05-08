@@ -28,10 +28,10 @@
 #include "lang.hpp"
 
 struct version_dll: private Base::DynamicLibrary {
-	typedef DWORD (WINAPI *FGetFileVersionInfoSizeW)(LPCWSTR, LPDWORD);
-	typedef DWORD (WINAPI *FVerLanguageNameW)(DWORD, LPWSTR, DWORD);
-	typedef WINBOOL (WINAPI *FGetFileVersionInfoW)(LPCWSTR, DWORD, DWORD, LPVOID);
-	typedef WINBOOL (WINAPI *FVerQueryValueW)(PCVOID, LPCWSTR, PCWSTR *, PUINT);
+	typedef DWORD WINAPI   (*FGetFileVersionInfoSizeW)(LPCWSTR, LPDWORD);
+	typedef DWORD WINAPI   (*FVerLanguageNameW)(DWORD, LPWSTR, DWORD);
+	typedef WINBOOL WINAPI (*FGetFileVersionInfoW)(LPCWSTR, DWORD, DWORD, LPVOID);
+	typedef WINBOOL WINAPI (*FVerQueryValueW)(PCVOID, LPCWSTR, PCWSTR *, PUINT);
 
 	DEFINE_FUNC(GetFileVersionInfoSizeW);
 	DEFINE_FUNC(VerLanguageNameW);
@@ -106,7 +106,6 @@ struct FileVersion {
 	{
 		return m_machine == IMAGE_FILE_MACHINE_IA64 || m_machine == IMAGE_FILE_MACHINE_AMD64;
 	}
-	;
 
 private:
 	WCHAR m_ver[32];

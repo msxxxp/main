@@ -128,7 +128,12 @@ Far::PanelController_i * FarPlugin::Open(const OpenInfo * Info)
 	} else if (Info->OpenFrom == OPEN_COMMANDLINE) {
 		OpenCommandLineInfo * info = (OpenCommandLineInfo*)Info->Data;
 		LogNoise(L"comline: %s\n", info->CommandLine);
-		Base::Path::expand(buf1, Base::lengthof(buf1), info->CommandLine);
+		Base::Str::copy(buf2, info->CommandLine, Base::lengthof(buf2));
+		Far::fsf().Trim(buf2);
+		Far::fsf().Unquote(buf2);
+		Far::fsf().Trim(buf2);
+
+		Base::Path::expand(buf1, Base::lengthof(buf1), buf2);
 		LogNoise(L"buf: '%s'\n", buf1);
 
 		if (Base::Path::is_relative(buf1)) {
@@ -149,6 +154,7 @@ Far::PanelController_i * FarPlugin::Open(const OpenInfo * Info)
 	LogNoise(L"buf: '%s'\n", buf2);
 	Far::fsf().Trim(buf2);
 	Far::fsf().Unquote(buf2);
+	Far::fsf().Trim(buf2);
 
 	LogNoise(L"buf: '%s'\n", buf2);
 	Base::Path::canonicalize(buf1, buf2);

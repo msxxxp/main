@@ -249,7 +249,6 @@ int main()
 	}
 
 	WorkingTask::PathsArray paths;
-	paths.emplace_back(L"c:\\Intel");
 	paths.emplace_back(L"c:\\mingw");
 	paths.emplace_back(L"c:\\Recovery");
 	paths.emplace_back(L"c:\\tmp");

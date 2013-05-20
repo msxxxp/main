@@ -88,18 +88,19 @@ struct FileVersion {
 
 	uint64_t created() const
 	{
-		const SYSTEMTIME base = {
-			1970,
-			1,
-			0,
-			1,
-			0,
-			0,
-			0,
-			0,
-		};
-		FILETIME ft;
-		return (uint64_t)m_created * 10 000 000 + ::SystemTimeToFileTime(&base, &ft);
+//		const SYSTEMTIME base = {
+//			1970,
+//			1,
+//			0,
+//			1,
+//			0,
+//			0,
+//			0,
+//			0,
+//		};
+//		FILETIME ft;
+//		return (uint64_t)m_created * 10 000 000 + ::SystemTimeToFileTime(&base, &ft);
+		return 0;
 	}
 
 	bool Is64Bit() const

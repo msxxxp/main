@@ -6,7 +6,7 @@
 #include <libbase/ref_cnt.hpp>
 
 namespace Base {
-	template<typename CharType, typename Traits/* = char_traits<CharType> */>
+	template<typename CharType, typename Traits>
 	class basic_string
 	{
 		static const size_t MIN_ALLOC_BLOCK = 16;
@@ -30,7 +30,7 @@ namespace Base {
 		}
 
 		basic_string() :
-			m_data(allocate_impl(MIN_ALLOC_BLOCK, sizeof(CharType)))
+			m_data(allocate_impl(MIN_ALLOC_BLOCK))
 		{
 		}
 
@@ -41,13 +41,13 @@ namespace Base {
 		}
 
 		basic_string(size_type count, CharType in) :
-			m_data(allocate_impl(count + 1, sizeof(CharType)))
+			m_data(allocate_impl(count + 1))
 		{
 			m_data->init(in, count);
 		}
 
 		basic_string(const CharType * in, size_type count = npos) :
-			m_data(allocate_impl(((in && count == npos) ? (count = Traits::length(in)) : count) + 1, sizeof(CharType)))
+			m_data(allocate_impl(((in && count == npos) ? (count = Traits::length(in)) : count) + 1))
 		{
 			m_data->init(in, count);
 		}
@@ -370,9 +370,9 @@ namespace Base {
 			value_type m_str[1];
 		} * m_data;
 
-		string_impl * allocate_impl(size_t capa, size_type sizeOfChar)
+		string_impl * allocate_impl(size_t capa)
 		{
-			string_impl * impl = Memory::malloc<string_impl*>(sizeof(string_impl) + capa * sizeOfChar);
+			string_impl * impl = Memory::malloc<string_impl*>(sizeof(string_impl) + capa * sizeof(CharType));
 			new (impl) string_impl(capa);
 			return impl;
 		}
@@ -384,7 +384,7 @@ namespace Base {
 		}
 
 		basic_string(const CharType * str, size_type count, size_type capacity) :
-			m_data(allocate_impl(capacity, sizeof(CharType)))
+			m_data(allocate_impl(capacity))
 		{
 			m_data->init(str, count);
 		}

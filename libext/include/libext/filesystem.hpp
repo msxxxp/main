@@ -209,9 +209,9 @@ namespace Fsys {
 
 		void refresh(HANDLE hndl);
 
-		FILE_BASIC_INFO    m_basic_info;
-		FILE_STANDARD_INFO m_standard_info;
-		FILE_ID_INFO       m_id_info;
+//		FILE_BASIC_INFO    m_basic_info;
+//		FILE_STANDARD_INFO m_standard_info;
+//		FILE_ID_INFO       m_id_info;
 
 		friend struct File::Facade;
 	};
@@ -633,7 +633,7 @@ namespace Fsys {
 	namespace Link {
 		void copy(PCWSTR from, PCWSTR to);
 		inline void copy(const ustring & from, const ustring & to) {
-			copy(from, to);
+			copy(from.c_str(), to.c_str());
 		}
 
 		void create_sym(PCWSTR path, PCWSTR new_path);

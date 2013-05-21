@@ -32,6 +32,13 @@ namespace Fsys {
 			return ::CopyFileW(path, dest, true) != 0;
 		}
 
+		inline bool copy_link(PCWSTR path, PCWSTR dest) {
+			return ::CopyFileExW(path, dest, nullptr, nullptr, nullptr,
+			                     COPY_FILE_ALLOW_DECRYPTED_DESTINATION |
+			                     COPY_FILE_COPY_SYMLINK |
+			                     COPY_FILE_FAIL_IF_EXISTS) != 0;
+		}
+
 		inline bool move(PCWSTR path, PCWSTR dest, DWORD flag = 0) {
 			return ::MoveFileExW(path, dest, flag);
 		}
@@ -39,13 +46,13 @@ namespace Fsys {
 
 	///=================================================================================== Directory
 	namespace Directory {
+		bool del_nt(PCWSTR path);
+
 		bool create_nt(PCWSTR path, LPSECURITY_ATTRIBUTES lpsa = nullptr);
 
-		inline bool copy(PCWSTR path, PCWSTR dest, LPSECURITY_ATTRIBUTES lpsa = nullptr) {
+		inline bool copy_link(PCWSTR path, PCWSTR dest, LPSECURITY_ATTRIBUTES lpsa = nullptr) {
 			return ::CreateDirectoryExW(path, dest, lpsa);
 		}
-
-		bool del_nt(PCWSTR path);
 	}
 }
 

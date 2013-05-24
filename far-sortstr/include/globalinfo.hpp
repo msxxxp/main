@@ -59,6 +59,16 @@ struct FarGlobalInfo: public Far::GlobalInfo_i, private Base::Uncopyable {
 		return m_ei.TotalLines;
 	}
 
+	size_t get_current_line() const
+	{
+		return m_ei.CurLine;
+	}
+
+	size_t get_current_column() const
+	{
+		return m_ei.CurPos;
+	}
+
 	ssize_t get_block_type() const
 	{
 		return m_ei.BlockType;

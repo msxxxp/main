@@ -21,7 +21,7 @@
 #ifndef _LANG_HPP_
 #define _LANG_HPP_
 
-enum {
+enum FarMessage {
 	cbInvert = 5,
 	cbSensitive,
 	cbNumeric,

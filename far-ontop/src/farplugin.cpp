@@ -22,6 +22,7 @@
 #include <farplugin.hpp>
 
 #include <libfar3/helper.hpp>
+
 #include <libbase/logger.hpp>
 
 #include <globalinfo.hpp>
@@ -52,11 +53,13 @@ FarPlugin::FarPlugin(const PluginStartupInfo * Info):
 	LogTrace();
 }
 
-FarPlugin::~FarPlugin() {
+FarPlugin::~FarPlugin()
+{
 	LogTrace();
 }
 
-void FarPlugin::GetPluginInfo(PluginInfo * Info) {
+void FarPlugin::GetPluginInfo(PluginInfo * Info)
+{
 	LogTrace();
 	Info->Flags = PF_EDITOR | PF_VIEWER | PF_DIALOG;
 
@@ -86,10 +89,12 @@ Far::PanelController_i * FarPlugin::Open(const OpenInfo * /*Info*/)
 }
 
 ///=================================================================================================
-Far::Plugin_i * create_FarPlugin(const PluginStartupInfo * psi) {
+Far::Plugin_i * create_FarPlugin(const PluginStartupInfo * psi)
+{
 	return new FarPlugin(psi);
 }
 
-void destroy(Far::Plugin_i * plugin) {
+void destroy(Far::Plugin_i * plugin)
+{
 	delete plugin;
 }

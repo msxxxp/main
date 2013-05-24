@@ -135,9 +135,9 @@ void FarGlobalInfo::load_editor_info()
 	Far::Editor::get_info(m_ei);
 
 	if (m_ei.BlockType == BTYPE_STREAM || m_ei.BlockType == BTYPE_COLUMN)
-	m_first_line = m_ei.BlockStartLine;
+		m_first_line = m_ei.BlockStartLine;
 	else
-	m_first_line = 0;
+		m_first_line = 0;
 }
 
 FarGlobalInfo * get_global_info()

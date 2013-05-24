@@ -27,7 +27,6 @@
 
 #include <libbase/std.hpp>
 #include <libbase/messaging.hpp>
-#include <libbase/uncopyable.hpp>
 
 struct FarGlobalInfo: public Far::GlobalInfo_i, public Base::Observable, private Base::Uncopyable {
 	~FarGlobalInfo();

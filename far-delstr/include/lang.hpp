@@ -21,7 +21,7 @@
 #ifndef _LANG_HPP_
 #define _LANG_HPP_
 
-enum {
+enum FarMessage {
 	rbDelAll = 5,
 	rbDelRepeated,
 	rbDelWithText,

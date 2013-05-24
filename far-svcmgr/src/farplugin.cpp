@@ -53,16 +53,19 @@ FarPlugin::FarPlugin(const PluginStartupInfo * Info):
 	LogTrace();
 }
 
-FarPlugin::~FarPlugin() {
+FarPlugin::~FarPlugin()
+{
 	LogTrace();
 }
 
-void FarPlugin::GetPluginInfo(PluginInfo * Info) {
+void FarPlugin::GetPluginInfo(PluginInfo * Info)
+{
 	LogTrace();
 	Info->Flags = PF_NONE;
 
 	static GUID PluginMenuGuids[] = {MenuGuid,};
-	static PCWSTR PluginMenuStrings[] = {Far::get_msg(Far::MenuTitle),};
+	static PCWSTR PluginMenuStrings[1];
+	PluginMenuStrings[0] = Far::get_msg(Far::MenuTitle);
 
 	if (get_global_info()->addToPluginsMenu) {
 		Info->PluginMenu.Guids = PluginMenuGuids;
@@ -70,7 +73,8 @@ void FarPlugin::GetPluginInfo(PluginInfo * Info) {
 		Info->PluginMenu.Count = Base::lengthof(PluginMenuStrings);
 	}
 
-	static PCWSTR DiskStrings[] = {Far::get_msg(Far::DiskTitle),};
+	static PCWSTR DiskStrings[1];
+	DiskStrings[0] = Far::get_msg(Far::DiskTitle);
 	if (get_global_info()->addToDisksMenu) {
 		Info->DiskMenu.Guids = PluginMenuGuids;
 		Info->DiskMenu.Strings = DiskStrings;
@@ -90,10 +94,12 @@ Far::PanelController_i * FarPlugin::Open(const OpenInfo * Info)
 }
 
 ///=================================================================================================
-Far::Plugin_i * create_FarPlugin(const PluginStartupInfo * psi) {
+Far::Plugin_i * create_FarPlugin(const PluginStartupInfo * psi)
+{
 	return new FarPlugin(psi);
 }
 
-void destroy(Far::Plugin_i * plugin) {
+void destroy(Far::Plugin_i * plugin)
+{
 	delete plugin;
 }

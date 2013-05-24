@@ -37,46 +37,56 @@ FarGlobalInfo::FarGlobalInfo()
 	Base::Str::copy(prefix, L"ontop");
 }
 
-FarGlobalInfo::~FarGlobalInfo() {
+FarGlobalInfo::~FarGlobalInfo()
+{
 	LogTrace();
 }
 
-PCWSTR FarGlobalInfo::get_author() const {
+PCWSTR FarGlobalInfo::get_author() const
+{
 	return L"© 2013 Andrew Grechkin";
 }
 
-PCWSTR FarGlobalInfo::get_description() const {
+PCWSTR FarGlobalInfo::get_description() const
+{
 	return L"Always on top FAR3 plugin";
 }
 
-const GUID * FarGlobalInfo::get_guid() const {
+const GUID * FarGlobalInfo::get_guid() const
+{
 	return &PluginGuid;
 }
 
-PCWSTR FarGlobalInfo::get_title() const {
+PCWSTR FarGlobalInfo::get_title() const
+{
 	return L"ontop";
 }
 
-VersionInfo FarGlobalInfo::get_version() const {
+VersionInfo FarGlobalInfo::get_version() const
+{
 	using namespace AutoVersion;
 	return MAKEFARVERSION(MAJOR, MINOR, BUILD, FARMANAGERVERSION_BUILD, VS_RELEASE);
 }
 
-VersionInfo FarGlobalInfo::get_min_version() const {
+VersionInfo FarGlobalInfo::get_min_version() const
+{
 	return MAKEFARVERSION(3, 0, 0, 3000, VS_RELEASE);
 }
 
-Far::Plugin_i * FarGlobalInfo::CreatePlugin(const PluginStartupInfo * Info) const {
+Far::Plugin_i * FarGlobalInfo::CreatePlugin(const PluginStartupInfo * Info) const
+{
 	LogTrace();
 	Far::Plugin_i * plugin = create_FarPlugin(Info);
 	return plugin;
 }
 
-void FarGlobalInfo::load_settings() {
+void FarGlobalInfo::load_settings()
+{
 	LogTrace();
 }
 
-void FarGlobalInfo::save_settings() const {
+void FarGlobalInfo::save_settings() const
+{
 	LogTrace();
 }
 

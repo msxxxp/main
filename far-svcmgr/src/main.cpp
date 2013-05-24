@@ -24,9 +24,9 @@
 
 #include <libfar3/helper.hpp>
 #include <libfar3/plugin_i.hpp>
+#include <libfar3/panelcontroller_i.hpp>
 #include <libbase/logger.hpp>
 
-#include <libfar3/panelcontroller_i.hpp>
 namespace {
 	void setup_logger()
 	{
@@ -34,6 +34,8 @@ namespace {
 		set_default_level(Level::Trace);
 		set_default_prefix(Prefix::Medium | Prefix::Place);
 		set_default_target(get_TargetToFile(L"D:/projects/~test/svcmgr.log"));
+
+//		set_module_enabled(false, get_module(L"threads"));
 	}
 }
 

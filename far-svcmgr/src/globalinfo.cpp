@@ -43,32 +43,39 @@ FarGlobalInfo::FarGlobalInfo()
 	Base::Str::copy(prefix, L"svcmgr");
 }
 
-FarGlobalInfo::~FarGlobalInfo() {
+FarGlobalInfo::~FarGlobalInfo()
+{
 	LogTrace();
 }
 
-PCWSTR FarGlobalInfo::get_author() const {
+PCWSTR FarGlobalInfo::get_author() const
+{
 	return L"© 2013 Andrew Grechkin";
 }
 
-PCWSTR FarGlobalInfo::get_description() const {
+PCWSTR FarGlobalInfo::get_description() const
+{
 	return L"Windows services manager. FAR3 plugin";
 }
 
-const GUID * FarGlobalInfo::get_guid() const {
+const GUID * FarGlobalInfo::get_guid() const
+{
 	return &PluginGuid;
 }
 
-PCWSTR FarGlobalInfo::get_title() const {
+PCWSTR FarGlobalInfo::get_title() const
+{
 	return L"svcmgr";
 }
 
-VersionInfo FarGlobalInfo::get_version() const {
+VersionInfo FarGlobalInfo::get_version() const
+{
 	using namespace AutoVersion;
 	return MAKEFARVERSION(MAJOR, MINOR, BUILD, FARMANAGERVERSION_BUILD, VS_RELEASE);
 }
 
-VersionInfo FarGlobalInfo::get_min_version() const {
+VersionInfo FarGlobalInfo::get_min_version() const
+{
 	return MAKEFARVERSION(3, 0, 0, 3000, VS_RELEASE);
 }
 
@@ -91,11 +98,13 @@ intptr_t FarGlobalInfo::Configure(const ConfigureInfo * /*Info*/) {
 
 Far::Plugin_i * FarGlobalInfo::CreatePlugin(const PluginStartupInfo * Info) const
 {
+	LogTrace();
 	Far::Plugin_i * plugin = create_FarPlugin(Info);
 	return plugin;
 }
 
-void FarGlobalInfo::load_settings() {
+void FarGlobalInfo::load_settings()
+{
 	LogTrace();
 	Far::Settings_t m_settings(*get_guid());
 	addToPluginsMenu = m_settings.get(L"AddToPluginsMenu", (int64_t)addToPluginsMenu);
@@ -108,7 +117,8 @@ void FarGlobalInfo::load_settings() {
 	notify_all(Base::Message(0, 0, 0, this));
 }
 
-void FarGlobalInfo::save_settings() const {
+void FarGlobalInfo::save_settings() const
+{
 	LogTrace();
 	Far::Settings_t m_settings(*get_guid());
 	m_settings.set(L"AddToPluginsMenu", (int64_t)addToPluginsMenu);

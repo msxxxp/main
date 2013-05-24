@@ -1,6 +1,6 @@
 ﻿/**
-	sortstr: Sort strings in editor
-	FAR3 plugin
+	delstr: Delete strings in editor
+	FAR3lua plugin
 
 	© 2013 Andrew Grechkin
 

@@ -87,6 +87,10 @@ int main()
 	}
 
 	{
+		Fsys::Directory::create_nt(L"c:\\tmp1\\");
+	}
+
+	{
 		WorkingTask::PathsArray paths;
 		paths.emplace_back(L"c:\\mingw");
 		paths.emplace_back(L"c:\\Recovery");

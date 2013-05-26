@@ -245,6 +245,7 @@ namespace Ext {
 	{
 		if (it != end()) {
 			LogNoise(L"%s\n", it->name.c_str());
+			info.log();
 			*it = Service::Info_t(it->name.c_str(), Service::set_config(m_filter->get_read_manager(), it->name.c_str(), info));
 			notify_changed();
 		}

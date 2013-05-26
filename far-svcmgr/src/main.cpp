@@ -3,7 +3,7 @@
  Allow to manage windows services
  FAR3 plugin
 
-	© 2013 Andrew Grechkin
+ © 2013 Andrew Grechkin
 
  This program is free software: you can redistribute it and/or modify
  it under the terms of the GNU General Public License as published by
@@ -38,7 +38,6 @@ namespace {
 //		set_module_enabled(false, get_module(L"threads"));
 	}
 }
-
 
 ///========================================================================================== Export
 /// GlobalInfo

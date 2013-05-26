@@ -1,23 +1,23 @@
 ﻿/**
-	svcmgr: Manage services
-	Allow to manage windows services
-	FAR3 plugin
+ svcmgr: Manage services
+ Allow to manage windows services
+ FAR3 plugin
 
-	© 2013 Andrew Grechkin
+ © 2013 Andrew Grechkin
 
-	This program is free software: you can redistribute it and/or modify
-	it under the terms of the GNU General Public License as published by
-	the Free Software Foundation, either version 3 of the License, or
-	(at your option) any later version.
+ This program is free software: you can redistribute it and/or modify
+ it under the terms of the GNU General Public License as published by
+ the Free Software Foundation, either version 3 of the License, or
+ (at your option) any later version.
 
-	This program is distributed in the hope that it will be useful,
-	but WITHOUT ANY WARRANTY; without even the implied warranty of
-	MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-	GNU General Public License for more details.
+ This program is distributed in the hope that it will be useful,
+ but WITHOUT ANY WARRANTY; without even the implied warranty of
+ MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ GNU General Public License for more details.
 
-	You should have received a copy of the GNU General Public License
-	along with this program.  If not, see <http://www.gnu.org/licenses/>.
-**/
+ You should have received a copy of the GNU General Public License
+ along with this program.  If not, see <http://www.gnu.org/licenses/>.
+ **/
 
 #include <panelcontroller.hpp>
 
@@ -37,20 +37,21 @@
 #include <libbase/pcstr.hpp>
 #include <libbase/string.hpp>
 
-
 using Far::get_msg;
 using Base::lengthof;
 
-
-PCWSTR state_as_str(DWORD state) {
+PCWSTR state_as_str(DWORD state)
+{
 	return Far::get_msg(state + txtStopped - SERVICE_STOPPED);
 }
 
-PCWSTR error_control_as_str(Ext::Service::Error_t err) {
+PCWSTR error_control_as_str(Ext::Service::Error_t err)
+{
 	return Far::get_msg((ssize_t)err + txtIgnore - SERVICE_ERROR_IGNORE);
 }
 
-ssize_t svc_type_to_radio_button(Ext::Service::Type_t svc_type) {
+ssize_t svc_type_to_radio_button(Ext::Service::Type_t svc_type)
+{
 	ssize_t ret = 2;
 	switch (svc_type) {
 		case Ext::Service::Type_t::KERNEL_DRIVER:
@@ -72,7 +73,8 @@ ssize_t svc_type_to_radio_button(Ext::Service::Type_t svc_type) {
 	return ret;
 }
 
-ssize_t svc_start_type_to_radio_button(Ext::Service::Start_t svc_start_type) {
+ssize_t svc_start_type_to_radio_button(Ext::Service::Start_t svc_start_type)
+{
 	ssize_t ret;
 	switch (svc_start_type) {
 		case Ext::Service::Start_t::BOOT:
@@ -100,19 +102,23 @@ ssize_t svc_start_type_to_radio_button(Ext::Service::Start_t svc_start_type) {
 	return ret;
 }
 
-PCWSTR start_type_as_str(Ext::Service::Start_t svc_start_type) {
+PCWSTR start_type_as_str(Ext::Service::Start_t svc_start_type)
+{
 	return Far::get_msg(svc_start_type_to_radio_button(svc_start_type) + txtBoot);
 }
 
-PCWSTR start_type_as_full_str(Ext::Service::Start_t svc_start_type) {
+PCWSTR start_type_as_full_str(Ext::Service::Start_t svc_start_type)
+{
 	return Far::get_msg(svc_start_type_to_radio_button(svc_start_type) + txtDlgBoot);
 }
 
-ssize_t svc_error_control_to_radio_button(Ext::Service::Error_t svc_error_control) {
+ssize_t svc_error_control_to_radio_button(Ext::Service::Error_t svc_error_control)
+{
 	return (ssize_t)svc_error_control;
 }
 
-Ext::Service::Type_t radio_button_to_svc_type(ssize_t btn_index) {
+Ext::Service::Type_t radio_button_to_svc_type(ssize_t btn_index)
+{
 	Ext::Service::Type_t ret = Ext::Service::Type_t::WIN32_OWN_PROCESS;
 	switch (btn_index) {
 		case 0:
@@ -134,7 +140,8 @@ Ext::Service::Type_t radio_button_to_svc_type(ssize_t btn_index) {
 	return ret;
 }
 
-Ext::Service::Start_t radio_button_to_svc_start_type(ssize_t btn_index) {
+Ext::Service::Start_t radio_button_to_svc_start_type(ssize_t btn_index)
+{
 	Ext::Service::Start_t ret = Ext::Service::Start_t::DISABLED;
 	switch (btn_index) {
 		case 0:
@@ -160,43 +167,44 @@ Ext::Service::Start_t radio_button_to_svc_start_type(ssize_t btn_index) {
 	return ret;
 }
 
-ustring	parse_info(const Ext::Service::Info_t & info) {
-	ustring	Result;
+ustring parse_info(const Ext::Service::Info_t & info)
+{
+	ustring Result;
 	Result += Far::get_msg(infoServiceName);
-		Result += info.name;
-		Result += L"\n\n";
-		Result += Far::get_msg(infoDisplayName);
-		Result += info.displayName;
-		Result += L"\n\n";
-		Result += Far::get_msg(infoDescription);
-		Result += info.description;
-		Result += L"\n\n";
-		Result += Far::get_msg(infoPath);
-		Result += info.binaryPathName;
-		Result += L"\n\n";
-		Result += Far::get_msg(infoState);
-		Result += state_as_str(info.status.dwCurrentState);
-		Result += L"\n\n";
-		Result += Far::get_msg(infoStartupType);
-		Result += start_type_as_full_str(info.startType);
-		Result += L"\n\n";
-		Result += Far::get_msg(infoErrorControl);
-		Result += error_control_as_str(info.errorControl);
-		Result += L"\n\n";
-		Result += Far::get_msg(infoOrderGroup);
-		Result += info.loadOrderGroup;
-		Result += L"\n\n";
-		Result += Far::get_msg(infoStartName);
-		Result += info.serviceStartName;
-		Result += L"\n\n";
-		Result += Far::get_msg(infoTag);
-		Result += Base::to_str(info.tagId);
-		Result += L"\n\n";
-		Result += Far::get_msg(infoDependencies);
-		for (size_t i = 0; i < info.dependencies.size(); ++i) {
-			Result += info.dependencies[i];
-			Result += L"\n               ";
-		}
+	Result += info.name;
+	Result += L"\n\n";
+	Result += Far::get_msg(infoDisplayName);
+	Result += info.displayName;
+	Result += L"\n\n";
+	Result += Far::get_msg(infoDescription);
+	Result += info.description;
+	Result += L"\n\n";
+	Result += Far::get_msg(infoPath);
+	Result += info.binaryPathName;
+	Result += L"\n\n";
+	Result += Far::get_msg(infoState);
+	Result += state_as_str(info.status.dwCurrentState);
+	Result += L"\n\n";
+	Result += Far::get_msg(infoStartupType);
+	Result += start_type_as_full_str(info.startType);
+	Result += L"\n\n";
+	Result += Far::get_msg(infoErrorControl);
+	Result += error_control_as_str(info.errorControl);
+	Result += L"\n\n";
+	Result += Far::get_msg(infoOrderGroup);
+	Result += info.loadOrderGroup;
+	Result += L"\n\n";
+	Result += Far::get_msg(infoStartName);
+	Result += info.serviceStartName;
+	Result += L"\n\n";
+	Result += Far::get_msg(infoTag);
+	Result += Base::to_str(info.tagId);
+	Result += L"\n\n";
+	Result += Far::get_msg(infoDependencies);
+	for (size_t i = 0; i < info.dependencies.size(); ++i) {
+		Result += info.dependencies[i];
+		Result += L"\n               ";
+	}
 	return Result;
 }
 
@@ -206,8 +214,7 @@ void TrunCopy(PWSTR cpDest, PCWSTR cpSrc, size_t size, size_t max_len)
 	Far::fsf().TruncStr(cpDest, max_len);
 
 	size_t iLen = Base::Str::length(cpDest);
-	if (iLen < max_len)
-	{
+	if (iLen < max_len) {
 		::wmemset(&cpDest[iLen], L' ', max_len - iLen);
 		cpDest[max_len] = L'\0';
 	}
@@ -218,17 +225,13 @@ void ShowMessage(PCWSTR title, PCWSTR name)
 	LogTrace();
 	WCHAR TruncName[MAX_PATH];
 	TrunCopy(TruncName, name, lengthof(TruncName), 60);
-	PCWSTR MsgItems[] =
-	{
-		title,
-		TruncName,
-	};
+	PCWSTR MsgItems[] = {title, TruncName, };
 	Far::psi().Message(Far::get_plugin_guid(), nullptr, 0, nullptr, MsgItems, Base::lengthof(MsgItems), 0);
 }
 
-
 ///=================================================================================================
-PanelController::~PanelController() {
+PanelController::~PanelController()
+{
 	LogTrace();
 	get_global_info()->unregister_observer(this);
 	m_model->unregister_observer(this);
@@ -236,14 +239,36 @@ PanelController::~PanelController() {
 	delete m_model;
 }
 
-PanelController::PanelController():
-	m_model(new PanelModel),
-	actions(new PanelActions),
-	ViewMode(L'3')
+PanelController::PanelController() :
+	m_model(new PanelModel), actions(new PanelActions), ViewMode(L'3')
 {
 	LogTrace();
 	m_model->update();
 
+	get_global_info()->register_observer(this);
+	m_model->register_observer(this);
+}
+
+void PanelController::GetOpenPanelInfo(OpenPanelInfo * Info)
+{
+	Info->StructSize = sizeof(*Info);
+	Info->Flags = OPIF_ADDDOTS | OPIF_SHOWNAMESONLY | OPIF_USEATTRHIGHLIGHTING;
+	Info->HostFile = nullptr;
+	if (m_model->is_drivers())
+		Info->CurDir = get_msg(txtDevices);
+	else
+		Info->CurDir = L"";
+	Info->Format = get_global_info()->prefix;
+	if (m_model->get_host().empty()) {
+		PanelTitle = Base::String::format(L"%s", get_global_info()->prefix);
+	} else {
+		PanelTitle = Base::String::format(L"%s: %s", get_global_info()->prefix, m_model->get_host().c_str());
+	}
+	Info->PanelTitle = PanelTitle.c_str();
+	Info->StartPanelMode = ViewMode;
+	Info->StartSortMode = SM_DEFAULT;
+
+	actions->clear();
 	actions->add(VK_F1, SHIFT_PRESSED, L"");
 	actions->add(VK_F2, SHIFT_PRESSED, L"");
 	actions->add(VK_F3, 0, nullptr, &PanelController::view);
@@ -262,58 +287,61 @@ PanelController::PanelController():
 	actions->add(VK_F7, SHIFT_PRESSED, get_msg(txtBtnContin), &PanelController::contin);
 	actions->add(VK_F8, 0, get_msg(txtBtnStop), &PanelController::stop);
 	actions->add(VK_F8, SHIFT_PRESSED, get_msg(txtBtnDelete), &PanelController::del);
-
 	actions->add('R', LEFT_CTRL_PRESSED, nullptr, &PanelController::refresh);
 	actions->add('R', RIGHT_CTRL_PRESSED, nullptr, &PanelController::refresh);
 
-	get_global_info()->register_observer(this);
-	m_model->register_observer(this);
-}
-
-void PanelController::GetOpenPanelInfo(OpenPanelInfo * Info) {
-	Info->StructSize = sizeof(*Info);
-	Info->Flags = OPIF_ADDDOTS | OPIF_SHOWNAMESONLY | OPIF_USEATTRHIGHLIGHTING;
-	Info->HostFile = nullptr;
-	if (m_model->is_drivers())
-		Info->CurDir = get_msg(txtDevices);
-	else
-		Info->CurDir = L"";
-	Info->Format = get_global_info()->prefix;
-	if (m_model->get_host().empty()) {
-		PanelTitle = Base::String::format(L"%s", get_global_info()->prefix);
-	} else {
-		PanelTitle = Base::String::format(L"%s: %s", get_global_info()->prefix, m_model->get_host().c_str());
-	}
-	Info->PanelTitle = PanelTitle.c_str();
-	Info->StartPanelMode = ViewMode;
-	Info->StartSortMode = SM_DEFAULT;
 /// PanelModes
-	static PCWSTR colTitles0[] = {get_msg(txtClmDisplayName), L"Info", L"Info"};
-	static PCWSTR colTitles3[] = {get_msg(txtClmDisplayName), get_msg(txtClmStatus), get_msg(txtClmStart)};
-	static PCWSTR colTitles4[] = {get_msg(txtClmDisplayName), get_msg(txtClmStatus)};
-	static PCWSTR colTitles5[] = {nullptr, get_msg(txtClmDisplayName), get_msg(txtClmStatus), get_msg(txtClmStart), nullptr};
-	static PCWSTR colTitles6[] = {get_msg(txtClmName), get_msg(txtClmDisplayName)};
-	static PCWSTR colTitles7[] = {get_msg(txtClmDisplayName), get_msg(txtClmStatus), nullptr};
-	static PCWSTR colTitles8[] = {get_msg(txtClmDisplayName), get_msg(txtClmLogon)};
-	static PCWSTR colTitles9[] = {get_msg(txtClmName), get_msg(txtClmStatus), get_msg(txtClmDep)};
-	static PanelMode CustomPanelModes[] = {
-		{L"NM,C6,C7", L"0,8,8", colTitles0, L"C1", L"0", 0},
-		{L"N,N,N", L"0,0,0", nullptr, L"C1", L"0", 0},
-		{L"N,N", L"0,0", nullptr, L"C1", L"0", 0},
-		{L"N,C2,C3", L"0,7,6", colTitles3, L"C0", L"0", 0},
-		{L"N,C2", L"0,7", colTitles4, L"C0,C2", L"0,6", 0},
-		{L"N,C1,C2,C3,DM", L"0,0,7,6,11", colTitles5, L"C3", L"0", PMFLAGS_FULLSCREEN},
-		{L"N,C1", L"40%,0", colTitles6, L"C2,C3", L"0,0", 0},
-		{L"N,C2,Z", L"40%,1,0", colTitles7, L"C3", L"0", PMFLAGS_FULLSCREEN},
-		{L"N,O", L"0,40%", colTitles8, L"C0", L"0", 0},
-		{L"N,C2,LN", L"0,7,3", colTitles9, L"N", L"0", 0},
-	};
+	static PCWSTR colTitles0[3];
+	static PCWSTR colTitles3[3];
+	static PCWSTR colTitles4[2];
+	static PCWSTR colTitles5[5];
+	static PCWSTR colTitles6[2];
+	static PCWSTR colTitles7[3];
+	static PCWSTR colTitles8[2];
+	static PCWSTR colTitles9[3];
+
+	colTitles0[0] = get_msg(txtClmDisplayName);
+	colTitles0[1] = L"Info";
+	colTitles0[2] = L"Info";
+	colTitles3[0] = get_msg(txtClmDisplayName);
+	colTitles3[1] = get_msg(txtClmStatus);
+	colTitles3[2] = get_msg(txtClmStart);
+	colTitles4[0] = get_msg(txtClmDisplayName);
+	colTitles4[1] = get_msg(txtClmStatus);
+	colTitles5[0] = nullptr;
+	colTitles5[1] = get_msg(txtClmDisplayName);
+	colTitles5[2] = get_msg(txtClmStatus);
+	colTitles5[3] = get_msg(txtClmStart);
+	colTitles5[4] = nullptr;
+	colTitles6[0] = get_msg(txtClmName);
+	colTitles6[1] = get_msg(txtClmDisplayName);
+	colTitles7[0] = get_msg(txtClmDisplayName);
+	colTitles7[1] = get_msg(txtClmStatus);
+	colTitles7[2] = nullptr;
+	colTitles8[0] = get_msg(txtClmDisplayName);
+	colTitles8[1] = get_msg(txtClmLogon);
+	colTitles9[0] = get_msg(txtClmName);
+	colTitles9[1] = get_msg(txtClmStatus);
+	colTitles9[2] = get_msg(txtClmDep);
+
+	static PanelMode CustomPanelModes[10];
+	CustomPanelModes[0] = {L"NM,C6,C7", L"0,8,8", colTitles0, L"C1", L"0", 0};
+	CustomPanelModes[1] = {L"N,N,N", L"0,0,0", nullptr, L"C1", L"0", 0};
+	CustomPanelModes[2] = {L"N,N", L"0,0", nullptr, L"C1", L"0", 0};
+	CustomPanelModes[3] = {L"N,C2,C3", L"0,7,6", colTitles3, L"C0", L"0", 0};
+	CustomPanelModes[4] = {L"N,C2", L"0,7", colTitles4, L"C0,C2", L"0,6", 0};
+	CustomPanelModes[5] = {L"N,C1,C2,C3,DM", L"0,0,7,6,11", colTitles5, L"C3", L"0", PMFLAGS_FULLSCREEN};
+	CustomPanelModes[6] = {L"N,C1", L"40%,0", colTitles6, L"C2,C3", L"0,0", 0};
+	CustomPanelModes[7] = {L"N,C2,Z", L"40%,1,0", colTitles7, L"C3", L"0", PMFLAGS_FULLSCREEN};
+	CustomPanelModes[8] = {L"N,O", L"0,40%", colTitles8, L"C0", L"0", 0};
+	CustomPanelModes[9] = {L"N,C2,LN", L"0,7,3", colTitles9, L"N", L"0", 0};
 	Info->PanelModesArray = CustomPanelModes;
 	Info->PanelModesNumber = lengthof(CustomPanelModes);
 	Info->KeyBar = actions->get_titles();
 }
 
-ssize_t PanelController::GetFindData(GetFindDataInfo * Info) try {
+ssize_t PanelController::GetFindData(GetFindDataInfo * Info)
+try {
 	LogTrace();
 	Info->ItemsNumber = 0;
 	Info->PanelItem = nullptr;
@@ -358,11 +386,13 @@ ssize_t PanelController::GetFindData(GetFindDataInfo * Info) try {
 	}
 	return true;
 } catch (Ext::AbstractError & e) {
+	LogError(L"%s\n", e.what().c_str());
 	Far::ebox(e.format_error());
 	return false;
 }
 
-void PanelController::FreeFindData(const FreeFindDataInfo * Info) {
+void PanelController::FreeFindData(const FreeFindDataInfo * Info)
+{
 	LogTrace();
 	for (size_t i = 0; i < Info->ItemsNumber; ++i) {
 		Memory::free(Info->PanelItem[i].CustomColumnData);
@@ -370,7 +400,8 @@ void PanelController::FreeFindData(const FreeFindDataInfo * Info) {
 	Memory::free(Info->PanelItem);
 }
 
-ssize_t PanelController::Compare(const CompareInfo * Info) {
+ssize_t PanelController::Compare(const CompareInfo * Info)
+{
 	PanelModel::const_iterator it1 = m_model->find(Info->Item1->CustomColumnData[0]);
 	PanelModel::const_iterator it2 = m_model->find(Info->Item2->CustomColumnData[0]);
 	if (it1 != m_model->end() && it2 != m_model->end()) {
@@ -399,7 +430,9 @@ ssize_t PanelController::Compare(const CompareInfo * Info) {
 	return -2;
 }
 
-ssize_t PanelController::SetDirectory(const SetDirectoryInfo * Info) try {
+ssize_t PanelController::SetDirectory(const SetDirectoryInfo * Info)
+try
+{
 	LogTrace();
 	if (Base::Str::compare_ci(Info->Dir, get_msg(txtDevices)) == 0) {
 		m_model->set_type(Ext::Service::EnumerateType_t::DRIVERS);
@@ -407,12 +440,15 @@ ssize_t PanelController::SetDirectory(const SetDirectoryInfo * Info) try {
 		m_model->set_type(Ext::Service::EnumerateType_t::SERVICES);
 	}
 	return true;
-} catch (Ext::AbstractError & e) {
+}
+catch (Ext::AbstractError & e) {
+	LogError(L"%s\n", e.what().c_str());
 	Far::ebox(e.format_error());
 	return false;
 }
 
-ssize_t PanelController::ProcessEvent(const ProcessPanelEventInfo * Info) {
+ssize_t PanelController::ProcessEvent(const ProcessPanelEventInfo * Info)
+{
 	if (Info->Event == FE_CHANGEVIEWMODE) {
 		set_view_mode(Far::Panel(this).view_mode()) && update();
 		return true;
@@ -422,18 +458,19 @@ ssize_t PanelController::ProcessEvent(const ProcessPanelEventInfo * Info) {
 	return false;
 }
 
-ssize_t PanelController::ProcessInput(const ProcessPanelInputInfo * Info) {
+ssize_t PanelController::ProcessInput(const ProcessPanelInputInfo * Info)
+{
 //	LogDebug(L"type: 0x%x\n", (int)rec.EventType);
 	INPUT_RECORD rec = Info->Rec;
 	if (rec.EventType != KEY_EVENT && rec.EventType != FARMACRO_KEY_EVENT)
 		return false;
 
-	LogDebug(L"type: 0x%x, code: 0x%x, state: 0x%x\n", (int)rec.EventType, (int)rec.Event.KeyEvent.wVirtualKeyCode, rec.Event.KeyEvent.dwControlKeyState);
+	LogNoise(L"type: 0x%x, code: 0x%x, state: 0x%x\n", (int )rec.EventType, (int )rec.Event.KeyEvent.wVirtualKeyCode, rec.Event.KeyEvent.dwControlKeyState);
 	return actions->exec_func(this, rec.Event.KeyEvent.wVirtualKeyCode, rec.Event.KeyEvent.dwControlKeyState);
 }
 
-
-void PanelController::notify(const Base::Message & event) {
+void PanelController::notify(const Base::Message & event)
+{
 	const FarGlobalInfo * info = (const FarGlobalInfo *)event.get_data();
 	if (info == get_global_info()) {
 		LogTrace();
@@ -446,8 +483,8 @@ void PanelController::notify(const Base::Message & event) {
 	}
 }
 
-
-bool PanelController::view() {
+bool PanelController::view()
+{
 	LogTrace();
 	Far::Panel info(this, FCTL_GETPANELINFO);
 	if (info.size() && info.selected() && info.get_current()->CustomColumnNumber) {
@@ -464,22 +501,21 @@ bool PanelController::view() {
 			LogDebug(L"temp_file: '%s'\n", tmp_file);
 			HANDLE hfile = ::CreateFileW(tmp_file, GENERIC_WRITE, 0, nullptr, CREATE_ALWAYS, FILE_ATTRIBUTE_NORMAL, nullptr);
 			LogDebug(L"temp_file handel: %p\n", hfile);
-			if (hfile != INVALID_HANDLE_VALUE) {
+			if (hfile != INVALID_HANDLE_VALUE ) {
 				ustring info(parse_info(*it));
 				DWORD bytesWritten = 0;
 				CheckApi(::WriteFile(hfile, info.c_str(), info.size() * sizeof(WCHAR), &bytesWritten, nullptr));
 				::CloseHandle(hfile);
 				LogDebug(L"start view\n");
-				Far::psi().Viewer(tmp_file, nullptr, 0, 0, -1, -1,
-				           VF_DELETEONLYFILEONCLOSE | VF_ENABLE_F6 | VF_DISABLEHISTORY |
-				           VF_NONMODAL | VF_IMMEDIATERETURN, CP_DEFAULT);
+				Far::psi().Viewer(tmp_file, nullptr, 0, 0, -1, -1, VF_DELETEONLYFILEONCLOSE | VF_ENABLE_F6 | VF_DISABLEHISTORY | VF_NONMODAL | VF_IMMEDIATERETURN, CP_DEFAULT );
 			}
 		}
 	}
 	return true;
 }
 
-bool PanelController::edit() {
+bool PanelController::edit()
+{
 	LogTrace();
 	Far::Panel info(this, FCTL_GETPANELINFO);
 	if (info.size() && info.selected() && info.get_current()->CustomColumnNumber) {
@@ -491,13 +527,15 @@ bool PanelController::edit() {
 	return true;
 }
 
-bool PanelController::create_service() {
+bool PanelController::create_service()
+{
 	LogTrace();
 	show_dlg_edit_service(m_model->end());
 	return true;
 }
 
-bool PanelController::change_logon() {
+bool PanelController::change_logon()
+{
 	LogTrace();
 	Far::Panel info(this, FCTL_GETPANELINFO);
 	if (!m_model->is_drivers() && info.size() && info.selected()) {
@@ -506,23 +544,27 @@ bool PanelController::change_logon() {
 	return true;
 }
 
-bool PanelController::start() {
+bool PanelController::start()
+{
 	LogTrace();
 	return action_process(&PanelModel::start, Far::get_msg(txtStartingService));
 }
 
-bool PanelController::restart() {
+bool PanelController::restart()
+{
 	LogTrace();
 	return action_process(&PanelModel::restart, Far::get_msg(txtRestartingService));
 }
 
-bool PanelController::change_connection() {
+bool PanelController::change_connection()
+{
 	LogTrace();
 	show_dlg_connection();
 	return true;
 }
 
-bool PanelController::local_connection() {
+bool PanelController::local_connection()
+{
 	LogTrace();
 	if (!m_model->get_host().empty()) {
 		try {
@@ -534,34 +576,41 @@ bool PanelController::local_connection() {
 	return true;
 }
 
-bool PanelController::pause() {
+bool PanelController::pause()
+{
 	LogTrace();
 	return action_process(&PanelModel::pause, Far::get_msg(txtPausingService));
 }
 
-bool PanelController::contin() {
+bool PanelController::contin()
+{
 	LogTrace();
 	return action_process(&PanelModel::contin, Far::get_msg(txtContinueService));
 }
 
-bool PanelController::stop() {
+bool PanelController::stop()
+{
 	LogTrace();
 	return action_process(&PanelModel::stop, Far::get_msg(txtStoppingService));
 }
 
-bool PanelController::del() {
+bool PanelController::del()
+{
 	LogTrace();
 	show_dlg_delete();
 	return true;
 }
 
-bool PanelController::refresh() {
+bool PanelController::refresh()
+{
 	LogTrace();
 	m_model->update();
 	return false;
 }
 
-bool PanelController::action_process(ModelFunc func, PCWSTR title) {
+bool PanelController::action_process(ModelFunc func, PCWSTR title)
+{
+	LogTrace();
 	Far::Panel panel(this, FCTL_GETPANELINFO);
 	if (panel.size()) {
 		m_model->start_batch();
@@ -582,6 +631,7 @@ bool PanelController::action_process(ModelFunc func, PCWSTR title) {
 				}
 			}
 		} catch (Ext::AbstractError & e) {
+			LogError(L"%s\n", e.what().c_str());
 			Far::ebox(e.format_error());
 		}
 		panel.CommitSelection();
@@ -592,7 +642,8 @@ bool PanelController::action_process(ModelFunc func, PCWSTR title) {
 }
 
 /// dialogs
-void PanelController::show_dlg_edit_service(const PanelModel::iterator & it) {
+void PanelController::show_dlg_edit_service(const PanelModel::iterator & it)
+{
 	using Base::lengthof;
 	using Base::Str::copy;
 	using namespace Far;
@@ -641,7 +692,7 @@ void PanelController::show_dlg_edit_service(const PanelModel::iterator & it) {
 	Builder->add_item(create_label(txtDlgStartupType));
 	FarListItem cbBoot[] = {
 		{fl4Dev, Far::get_msg(txtDlgBoot), {0}},
-		{LIF_NONE, Far::get_msg(txtDlgSystem), {0}},
+		{fl4Dev, Far::get_msg(txtDlgSystem), {0}},
 		{LIF_NONE, Far::get_msg(txtDlgAuto), {0}},
 		{LIF_NONE, Far::get_msg(txtDlgAutoDelayed), {0}},
 		{LIF_NONE, Far::get_msg(txtDlgManual), {0}},
@@ -672,7 +723,7 @@ void PanelController::show_dlg_edit_service(const PanelModel::iterator & it) {
 				conf.set_path(path, it->binaryPathName.c_str());
 				conf.set_start(radio_button_to_svc_start_type(start_type), it->startType);
 //				conf.set_tag();
-				conf.set_type((Ext::Service::Type_t)radio_button_to_svc_type(svc_type), (Ext::Service::Type_t)it->status.dwServiceType);
+				conf.set_type(radio_button_to_svc_type(svc_type), (Ext::Service::Type_t)it->status.dwServiceType);
 				m_model->set_config(it, conf);
 			} else {
 				Ext::Service::Create_t conf(name, path);
@@ -682,18 +733,21 @@ void PanelController::show_dlg_edit_service(const PanelModel::iterator & it) {
 				conf.set_group(group);
 				conf.set_start(radio_button_to_svc_start_type(start_type));
 //				conf.set_tag();
-				conf.set_type((Ext::Service::Type_t)radio_button_to_svc_type(svc_type));
+				conf.set_type(radio_button_to_svc_type(svc_type));
 				m_model->add(conf);
 			}
 			break;
 		} catch (Ext::AbstractError & e) {
+			LogError(L"%s\n", e.what().c_str());
+			LogError(L"%s\n", e.where());
 			Far::ebox(e.format_error());
 			continue;
 		}
 	}
 }
 
-void PanelController::show_dlg_logon_as(Far::Panel & panel) {
+void PanelController::show_dlg_logon_as(Far::Panel & panel)
+{
 	using Base::lengthof;
 	using Base::Str::compare_ci;
 	using Far::get_msg;
@@ -742,7 +796,7 @@ void PanelController::show_dlg_logon_as(Far::Panel & panel) {
 	Builder->add_item(Far::create_separator());
 	Builder->add_OKCancel(get_msg(Far::txtBtnOk), get_msg(Far::txtBtnCancel));
 	if (Builder->show()) {
-		ustring	username;
+		ustring username;
 		switch (logonType) {
 			case 0:
 				username = NetworkService;
@@ -773,6 +827,7 @@ void PanelController::show_dlg_logon_as(Far::Panel & panel) {
 				}
 			}
 		} catch (Ext::AbstractError & e) {
+			LogError(L"%s\n", e.what().c_str());
 			Far::ebox(e.format_error());
 		}
 		panel.CommitSelection();
@@ -781,7 +836,9 @@ void PanelController::show_dlg_logon_as(Far::Panel & panel) {
 	}
 }
 
-void PanelController::show_dlg_connection() {
+void PanelController::show_dlg_connection()
+{
+	LogTrace();
 	WCHAR host[MAX_PATH] = {0};
 	WCHAR user[MAX_PATH] = {0};
 	WCHAR pass[MAX_PATH] = {0};
@@ -803,12 +860,15 @@ void PanelController::show_dlg_connection() {
 			m_model->set_host(host, user, pass);
 			break;
 		} catch (Ext::AbstractError & e) {
+			LogError(L"%s\n", e.what().c_str());
 			Far::ebox(e.format_error());
 		}
 	}
 }
 
-void PanelController::show_dlg_delete() {
+void PanelController::show_dlg_delete()
+{
+	LogTrace();
 	if (Far::question(Far::get_msg(txtAreYouSure), Far::get_msg(txtDeleteService))) {
 		Far::Panel panel(this, FCTL_GETPANELINFO);
 		if (panel.size() && panel.selected()) {
@@ -820,13 +880,15 @@ void PanelController::show_dlg_delete() {
 					if (panel.get_selected(0)->CustomColumnNumber && panel.get_selected(0)->CustomColumnData[0]) {
 						auto it = m_model->find(panel.get_selected(0)->CustomColumnData[0]);
 						if (it != m_model->end()) {
-							ShowMessage(Far::get_msg(txtDeletingService), panel.get_selected(0)->CustomColumnData[1]);
+//							ShowMessage(Far::get_msg(txtDeletingService), panel.get_selected(0)->CustomColumnData[1]);
+							ShowMessage(Far::get_msg(txtDeletingService), it->displayName.c_str());
 							m_model->del(it);
 							panel.clear_selection(0);
 						}
 					}
 				}
 			} catch (Ext::AbstractError & e) {
+				LogError(L"%s\n", e.what().c_str());
 				Far::ebox(e.format_error());
 			}
 			panel.CommitSelection();
@@ -836,7 +898,8 @@ void PanelController::show_dlg_delete() {
 	}
 }
 
-bool PanelController::set_view_mode(int mode) {
+bool PanelController::set_view_mode(int mode)
+{
 	if (ViewMode != mode) {
 		ViewMode = mode;
 		return true;
@@ -844,16 +907,18 @@ bool PanelController::set_view_mode(int mode) {
 	return false;
 }
 
-bool PanelController::is_name_mode() const {
+bool PanelController::is_name_mode() const
+{
 	return ViewMode == 1 || ViewMode == 2 || ViewMode == 5 || ViewMode == 6 || ViewMode == 9;
 }
 
 ///=================================================================================================
-Far::PanelController_i * create_FarPanel(const OpenInfo * /*Info*/) {
+Far::PanelController_i * create_FarPanel(const OpenInfo * /*Info*/)
+{
 	try {
 		return new PanelController;
 	} catch (Ext::AbstractError & e) {
-		LogDebug(L"%s\n", e.what().c_str());
+		LogError(L"%s\n", e.what().c_str());
 		Far::ebox(e.format_error());
 	}
 	return nullptr;

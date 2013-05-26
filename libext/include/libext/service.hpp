@@ -83,6 +83,8 @@ namespace Ext {
 
 			void set_display_name(PCWSTR n);
 
+			void set_delayed_start(DWORD n);
+
 			PCWSTR get_name() const;
 
 		private:
@@ -95,6 +97,7 @@ namespace Ext {
 			PDWORD tagId;
 			PCWSTR dependencies;
 			PCWSTR displayName;
+			DWORD delayedStart;
 
 			friend struct Service::Manager;
 		};
@@ -119,6 +122,10 @@ namespace Ext {
 
 			void set_display_name(PCWSTR n, PCWSTR o);
 
+			void set_delayed_start(DWORD n, DWORD o);
+
+			void log() const;
+
 		private:
 			DWORD serviceType;
 			DWORD startType;
@@ -128,6 +135,7 @@ namespace Ext {
 			PDWORD tagId;
 			PCWSTR dependencies;
 			PCWSTR displayName;
+			DWORD delayedStart;
 
 			friend struct Service;
 		};

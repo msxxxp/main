@@ -1,23 +1,23 @@
 ﻿/**
-	svcmgr: Manage services
-	Allow to manage windows services
-	FAR3 plugin
+ svcmgr: Manage services
+ Allow to manage windows services
+ FAR3 plugin
 
-	© 2013 Andrew Grechkin
+ © 2013 Andrew Grechkin
 
-	This program is free software: you can redistribute it and/or modify
-	it under the terms of the GNU General Public License as published by
-	the Free Software Foundation, either version 3 of the License, or
-	(at your option) any later version.
+ This program is free software: you can redistribute it and/or modify
+ it under the terms of the GNU General Public License as published by
+ the Free Software Foundation, either version 3 of the License, or
+ (at your option) any later version.
 
-	This program is distributed in the hope that it will be useful,
-	but WITHOUT ANY WARRANTY; without even the implied warranty of
-	MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-	GNU General Public License for more details.
+ This program is distributed in the hope that it will be useful,
+ but WITHOUT ANY WARRANTY; without even the implied warranty of
+ MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ GNU General Public License for more details.
 
-	You should have received a copy of the GNU General Public License
-	along with this program.  If not, see <http://www.gnu.org/licenses/>.
-**/
+ You should have received a copy of the GNU General Public License
+ along with this program.  If not, see <http://www.gnu.org/licenses/>.
+ **/
 
 #include <panelactions.hpp>
 
@@ -25,13 +25,19 @@
 
 #include <libext/exception.hpp>
 
-
-PanelActions::PanelActions():
+PanelActions::PanelActions() :
 	m_titles({0})
 {
 }
 
-void PanelActions::add(WORD Key, DWORD Control, PCWSTR text, ptrToFunc func, PCWSTR long_text) {
+void PanelActions::clear()
+{
+	m_labels.clear();
+	m_actions.clear();
+}
+
+void PanelActions::add(WORD Key, DWORD Control, PCWSTR text, ptrToFunc func, PCWSTR long_text)
+{
 	if (text) {
 		m_labels.push_back(KeyBarLabel{FarKey{Key, Control}, text, long_text});
 	}
@@ -42,7 +48,8 @@ void PanelActions::add(WORD Key, DWORD Control, PCWSTR text, ptrToFunc func, PCW
 	m_titles.Labels = &m_labels[0];
 }
 
-bool PanelActions::exec_func(PanelController * panel, WORD Key, DWORD Control) const {
+bool PanelActions::exec_func(PanelController * panel, WORD Key, DWORD Control) const
+{
 //	LogDebug(L"panel = %p, key = %d, Control = %d\n", panel, (int32_t) Key, Control);
 	try {
 		for (size_t i = 0; i < m_actions.size(); ++i) {
@@ -56,6 +63,7 @@ bool PanelActions::exec_func(PanelController * panel, WORD Key, DWORD Control) c
 	return false;
 }
 
-const KeyBarTitles * PanelActions::get_titles() const {
+const KeyBarTitles * PanelActions::get_titles() const
+{
 	return &m_titles;
 }

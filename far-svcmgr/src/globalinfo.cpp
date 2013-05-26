@@ -1,23 +1,23 @@
 /**
-	svcmgr: Manage services
-	Allow to manage windows services
-	FAR3 plugin
+ svcmgr: Manage services
+ Allow to manage windows services
+ FAR3 plugin
 
-	© 2013 Andrew Grechkin
+ © 2013 Andrew Grechkin
 
-	This program is free software: you can redistribute it and/or modify
-	it under the terms of the GNU General Public License as published by
-	the Free Software Foundation, either version 3 of the License, or
-	(at your option) any later version.
+ This program is free software: you can redistribute it and/or modify
+ it under the terms of the GNU General Public License as published by
+ the Free Software Foundation, either version 3 of the License, or
+ (at your option) any later version.
 
-	This program is distributed in the hope that it will be useful,
-	but WITHOUT ANY WARRANTY; without even the implied warranty of
-	MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-	GNU General Public License for more details.
+ This program is distributed in the hope that it will be useful,
+ but WITHOUT ANY WARRANTY; without even the implied warranty of
+ MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ GNU General Public License for more details.
 
-	You should have received a copy of the GNU General Public License
-	along with this program.  If not, see <http://www.gnu.org/licenses/>.
-**/
+ You should have received a copy of the GNU General Public License
+ along with this program.  If not, see <http://www.gnu.org/licenses/>.
+ **/
 
 #include <globalinfo.hpp>
 #include <farplugin.hpp>
@@ -79,7 +79,8 @@ VersionInfo FarGlobalInfo::get_min_version() const
 	return MAKEFARVERSION(3, 0, 0, 3000, VS_RELEASE);
 }
 
-intptr_t FarGlobalInfo::Configure(const ConfigureInfo * /*Info*/) {
+intptr_t FarGlobalInfo::Configure(const ConfigureInfo * /*Info*/)
+{
 	using namespace Far;
 	auto builder = create_dialog_builder(ConfigDialogGuid, get_msg(DlgTitle));
 	builder->add_item(create_checkbox(&addToPluginsMenu, txtAddToPluginsMenu));

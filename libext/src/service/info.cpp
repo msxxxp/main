@@ -22,7 +22,7 @@ namespace Ext {
 			loadOrderGroup = conf->lpLoadOrderGroup;
 			dependencies = conf->lpDependencies;
 			serviceStartName = conf->lpServiceStartName;
-			startType = (Start_t)(conf->dwStartType | (svc.get_delayed() ? 0x10000 : 0));
+			startType = (Start_t)(conf->dwStartType | ((conf->dwStartType == (DWORD)Start_t::AUTO && svc.get_delayed()) ? 0x10000 : 0));
 			errorControl = (Error_t)conf->dwErrorControl;
 			tagId = conf->dwTagId;
 			description = svc.get_description();
@@ -49,7 +49,7 @@ namespace Ext {
 			loadOrderGroup = conf->lpLoadOrderGroup;
 			dependencies = conf->lpDependencies;
 			serviceStartName = conf->lpServiceStartName;
-			startType = (Start_t)(conf->dwStartType | (svc.get_delayed() ? 0x10000 : 0));
+			startType = (Start_t)(conf->dwStartType | ((conf->dwStartType == (DWORD)Start_t::AUTO && svc.get_delayed()) ? 0x10000 : 0));
 			errorControl = (Error_t)conf->dwErrorControl;
 			tagId = conf->dwTagId;
 			description = svc.get_description();

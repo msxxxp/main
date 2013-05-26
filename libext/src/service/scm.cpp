@@ -43,13 +43,12 @@ namespace Ext {
 	Service Service::Manager::create_service(const Service::Create_t & info) const
 	{
 		LogTrace();
-		bool delayed = info.startType & 0x10000;
 		SC_HANDLE hndl = CheckHandleErr(
 			::CreateServiceW(m_hndl, info.name.c_str(),
 				info.displayName,
 				SERVICE_ALL_ACCESS,
 				info.serviceType,
-				info.startType & 0x0000000F,
+				info.startType,
 				info.errorControl,
 				info.binaryPathName.c_str(),
 				info.loadOrderGroup,
@@ -59,8 +58,8 @@ namespace Ext {
 				nullptr)
 		);
 		Service tmp(hndl);
-		if (delayed)
-			tmp.set_delayed(delayed);
+		if (info.delayedStart)
+			tmp.set_delayed(info.delayedStart);
 		return std::move(tmp);
 	}
 

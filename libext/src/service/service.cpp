@@ -13,20 +13,6 @@ namespace {
 
 namespace Ext {
 
-	Service::Create_t::Create_t(const ustring & _name, const ustring & _binaryPathName):
-		name(_name),
-		serviceType(SERVICE_WIN32_OWN_PROCESS),
-		startType(SERVICE_DEMAND_START),
-		errorControl(SERVICE_ERROR_NORMAL),
-		binaryPathName(_binaryPathName),
-		loadOrderGroup(nullptr),
-		tagId(nullptr),
-		dependencies(nullptr),
-		displayName(_name.c_str())
-	{
-	}
-
-
 	Service::Logon_t::Logon_t():
 		serviceStartName(nullptr),
 		password(nullptr)
@@ -38,7 +24,6 @@ namespace Ext {
 		password(pass)
 	{
 	}
-
 
 	///===================================================================================== Service
 	Service::~Service() {
@@ -128,11 +113,10 @@ namespace Ext {
 	}
 
 	Service & Service::set_config(const Service::Config_t & info) {
-		bool delayed = info.startType & 0x10000;
 		CheckApi(::ChangeServiceConfigW(
 			m_hndl,
 			info.serviceType,
-			info.startType & 0x0000000F,
+			info.startType,
 			info.errorControl,
 			info.binaryPathName,
 			info.loadOrderGroup,
@@ -142,8 +126,8 @@ namespace Ext {
 			nullptr,
 			info.displayName
 		));
-		if (delayed)
-			set_delayed(delayed);
+		if (info.delayedStart != SERVICE_NO_CHANGE)
+			set_delayed(info.delayedStart);
 		return *this;
 	}
 
@@ -196,9 +180,14 @@ namespace Ext {
 	}
 
 	bool Service::get_delayed() const {
-		auto_buf<PBYTE> conf(QueryConfig2(SERVICE_CONFIG_DELAYED_AUTO_START_INFO));
-		LPSERVICE_DELAYED_AUTO_START_INFO lpsd = (LPSERVICE_DELAYED_AUTO_START_INFO)conf.data();
-		return lpsd->fDelayedAutostart;
+		bool ret = false;
+		try {
+			auto_buf<PBYTE> conf(QueryConfig2(SERVICE_CONFIG_DELAYED_AUTO_START_INFO));
+			LPSERVICE_DELAYED_AUTO_START_INFO lpsd = (LPSERVICE_DELAYED_AUTO_START_INFO)conf.data();
+			ret = lpsd->fDelayedAutostart;
+		} catch (Ext::AbstractError & e) {
+		}
+		return ret;
 	}
 
 	Service::Status_t Service::get_status() const {

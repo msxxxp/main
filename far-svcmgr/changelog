@@ -1,3 +1,12 @@
+26 May 2013
+   released version 2.2.14 of svcmgr
+
+     Change log:
+        -Added: Возможность выбрать "Delayed start" для сервиса
+        -Updated: Заменены диалоги редактирования и создания сервиса
+        -Fixed: Плагин не закрывал настройки до выхода, что блокировало базу настроек
+        -Fixed: Проблемы после переключения языка интерфейса в FAR
+
 18 October 2012
    released version 2.1.13 of svcmgr
 

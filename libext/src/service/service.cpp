@@ -1,14 +1,17 @@
 ﻿#include <libext/service.hpp>
 #include <libext/exception.hpp>
 #include <libext/rc.hpp>
+#include <libbase/std.hpp>
 #include <libbase/bit.hpp>
 #include <libbase/pcstr.hpp>
 #include <libbase/logger.hpp>
 
+#include <vector>
+
 using namespace Base;
 
 namespace {
-	const size_t SERVICE_CONFIG_DELAYED_AUTO_START_INFO = 3;
+//	const size_t SERVICE_CONFIG_DELAYED_AUTO_START_INFO = 3;
 }
 
 namespace Ext {

@@ -87,7 +87,7 @@ int main()
 	}
 
 	{
-		Fsys::Directory::create_nt(L"c:\\tmp1\\");
+		LogErrorIf(!Fsys::Directory::create_nt(L"c:\\tmp1\\"), L"%s\n", Base::ErrAsStr().c_str());
 	}
 
 	{

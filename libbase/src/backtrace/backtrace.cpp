@@ -5,7 +5,7 @@
 #include <libbase/string.hpp>
 
 #if !defined(_AMD64_) && defined(__GNUC__)
-#include <bfd.h>
+#include <bfd\bfd.h>
 #include <cxxabi.h>
 
 struct bfd_ctx {

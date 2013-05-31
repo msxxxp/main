@@ -98,13 +98,21 @@ int elevated()
 	LogTrace();
 
 	HANDLE procToken = nullptr;
-	CheckApi(::OpenProcessToken(::GetCurrentProcess(), GENERIC_ALL | TOKEN_QUERY | TOKEN_ADJUST_PRIVILEGES, &procToken));
+	CheckApi(::OpenProcessToken(::GetCurrentProcess(), MAXIMUM_ALLOWED, &procToken));
 	Ext::WinPriv::modify(procToken, SE_DEBUG_NAME, true);
 	Ext::WinPriv::modify(procToken, SE_ASSIGNPRIMARYTOKEN_NAME, true);
 	Ext::WinPriv::modify(procToken, SE_TCB_NAME, true);
 	Ext::WinPriv::modify(procToken, SE_SECURITY_NAME, true);
 	Ext::WinPriv::modify(procToken, SE_CREATE_TOKEN_NAME, true);
 	Ext::WinPriv::modify(procToken, SE_IMPERSONATE_NAME, true);
+
+	HANDLE restrictedToken = nullptr;
+	CheckApi(::CreateRestrictedToken(procToken, DISABLE_MAX_PRIVILEGE, 0, nullptr, 0, nullptr, 0, nullptr, &restrictedToken));
+	LogInfo(L"IsTokenRestricted: %d\n", ::IsTokenRestricted(restrictedToken));
+
+	CheckApi(::ImpersonateLoggedOnUser(restrictedToken));
+	CheckApi(Fsys::Directory::create_nt(L"c:\\Program Files\\~elevate1"));
+	CheckApi(::RevertToSelf());
 
 //	// Take a snapshot of all running threads
 //	HANDLE hThreadSnap = CheckHandle(::CreateToolhelp32Snapshot(TH32CS_SNAPTHREAD, 0));
@@ -122,17 +130,14 @@ int elevated()
 //	}
 
 
-	HANDLE token = nullptr;
-	CheckApi(::OpenProcessToken(::GetCurrentProcess(), GENERIC_ALL, &token));
-
 	TOKEN_ELEVATION t_TokenElevation;
 	DWORD dw_TokenLength = 0;
-	CheckApi(::GetTokenInformation(token, TokenElevation, &t_TokenElevation, sizeof(t_TokenElevation), &dw_TokenLength));
+	CheckApi(::GetTokenInformation(procToken, TokenElevation, &t_TokenElevation, sizeof(t_TokenElevation), &dw_TokenLength));
 	LogInfo(L"t_TokenElevation.TokenIsElevated: %u\n", t_TokenElevation.TokenIsElevated);
 	TOKEN_ELEVATION_TYPE e_ElevationType;
 	if (t_TokenElevation.TokenIsElevated != 0)
 	{
-		CheckApi(::GetTokenInformation(token, TokenElevationType, &e_ElevationType, sizeof(e_ElevationType), &dw_TokenLength));
+		CheckApi(::GetTokenInformation(procToken, TokenElevationType, &e_ElevationType, sizeof(e_ElevationType), &dw_TokenLength));
 		LogInfo(L"e_ElevationType: %d\n", (int)e_ElevationType);
 //		if (e_ElevationType == TokenElevationTypeFull || e_ElevationType == TokenElevationTypeDefault)
 //		{
@@ -148,9 +153,9 @@ int elevated()
 
 		HANDLE parentThread = CheckHandle(::OpenThread(THREAD_ALL_ACCESS, false, tid));
 
-		::DuplicateTokenEx(token, TOKEN_ALL_ACCESS, NULL, SecurityImpersonation, /*TokenPrimary*/ TokenImpersonation, &tokenDup);
+		::DuplicateTokenEx(procToken, TOKEN_ALL_ACCESS, NULL, SecurityImpersonation, /*TokenPrimary*/ TokenImpersonation, &tokenDup);
 
-		CheckApi(::SetThreadToken(&parentThread, tokenDup));
+		CheckApi(::SetThreadToken(&parentThread, restrictedToken));
 		Ext::WinPriv::modify(tokenDup, SE_DEBUG_NAME, true);
 		Ext::WinPriv::modify(tokenDup, SE_ASSIGNPRIMARYTOKEN_NAME, true);
 		Ext::WinPriv::modify(tokenDup, SE_TCB_NAME, true);
@@ -243,9 +248,9 @@ int base()
 	LogInfo(L"pid: %u\n", pid);
 	LogInfo(L"tid: %u\n", tid);
 
-	DWORD read = 0;
-	HANDLE target = nullptr;
-	CheckApi(::ReadFile(pipe, &target, sizeof(target), &read, nullptr));
+//	DWORD read = 0;
+//	HANDLE target = nullptr;
+//	CheckApi(::ReadFile(pipe, &target, sizeof(target), &read, nullptr));
 
 //	LogInfo(L"target: %Iu\n", target);
 
@@ -259,6 +264,7 @@ int base()
 
 //	CheckApi(::ImpersonateNamedPipeClient(pipe));
 
+	Sleep(3000);
 	{
 		HANDLE token = nullptr;
 		CheckApi(::OpenThreadToken(::GetCurrentThread(), /*GENERIC_ALL | */TOKEN_QUERY/* | TOKEN_ADJUST_PRIVILEGES*/, false, &token));

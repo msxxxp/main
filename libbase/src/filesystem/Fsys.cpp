@@ -7,6 +7,12 @@ namespace Fsys {
 		return ::GetFileAttributesW(path);
 	}
 
+	bool is_file_nt(PCWSTR path)
+	{
+		DWORD attr = get_attr_nt(path);
+		return attr != INVALID_FILE_ATTRIBUTES && !(attr & FILE_ATTRIBUTE_DIRECTORY);
+	}
+
 	bool is_dir_nt(PCWSTR path)
 	{
 		DWORD attr = get_attr_nt(path);

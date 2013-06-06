@@ -115,23 +115,25 @@ namespace Base {
 
 	private:
 		struct shared_ptr_impl: public ref_counter {
+			~shared_ptr_impl() {delete m_ptr;}
+
 			shared_ptr_impl(element_type * ptr) : m_ptr(ptr) {}
 
 			element_type * get() const {return m_ptr;}
 
 		private:
-			void destroy() override {delete m_ptr;}
+			void free() const override {delete this;}
 
 			element_type * m_ptr;
 		};
 
 		template<typename Deleter>
 		struct shared_ptr_impl_deleter: public shared_ptr_impl {
+			~shared_ptr_impl_deleter() {m_deleter(get());}
+
 			shared_ptr_impl_deleter(element_type * ptr, Deleter d) : shared_ptr_impl(ptr), m_deleter(d) {}
 
 		private:
-			void destroy() override {m_deleter(get());}
-
 			Deleter m_deleter;
 		};
 

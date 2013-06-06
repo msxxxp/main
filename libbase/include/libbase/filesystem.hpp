@@ -21,10 +21,13 @@ namespace Fsys {
 
 	DWORD get_attr_nt(PCWSTR path);
 
+	bool is_file_nt(PCWSTR path);
+
 	bool is_dir_nt(PCWSTR path);
 
 	bool del_nt(PCWSTR path);
 
+	///======================================================================================== File
 	namespace File {
 		bool del_nt(PCWSTR path);
 

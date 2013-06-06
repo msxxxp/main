@@ -315,7 +315,7 @@ namespace Base {
 		}
 
 		struct string_impl: public Base::ref_counter {
-			void free() override {
+			void free() const override {
 				this->~string_impl();
 				Memory::free(this);
 			}

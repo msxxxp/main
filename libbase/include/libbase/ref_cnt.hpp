@@ -23,16 +23,17 @@ namespace Base {
 		size_t count() const {return m_refcnt;}
 
 	private:
-		virtual void destroy();
+		virtual void cleenup() const;
 
-		virtual void free();
+		virtual void free() const = 0;
 
 		ref_counter(const ref_counter & rhs);
 
 		ref_counter & operator = (const ref_counter & rhs);
 
+	private:
 		size_t m_refcnt;
-		bool m_shareable;
+		size_t m_shareable:1;
 	};
 
 //	template<class Type>

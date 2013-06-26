@@ -1,0 +1,6 @@
+#ifndef SARALIB_STL_VECTOR_
+#define SARALIB_STL_VECTOR_
+
+#include "impl/impl_vector.hpp"
+
+#endif

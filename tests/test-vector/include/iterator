@@ -1,0 +1,6 @@
+#ifndef SARALIB_STL_ITERATOR_
+#define SARALIB_STL_ITERATOR_
+
+#include "impl/impl_iterator.hpp"
+
+#endif

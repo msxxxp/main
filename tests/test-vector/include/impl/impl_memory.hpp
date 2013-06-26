@@ -77,6 +77,7 @@ namespace sarastd {
 		::operator delete(p, sarastd::nothrow);
 	}
 
+	///=============================================================================================
 	template<typename Allocator>
 	struct allocator_traits {
 		typedef Allocator allocator_type;
@@ -91,6 +92,7 @@ namespace sarastd {
 		typedef const void* const_void_pointer;
 	};
 
+	///=============================================================================================
 	template<typename Type>
 	struct allocator {
 		typedef Type value_type;
@@ -147,6 +149,79 @@ namespace sarastd {
 	}
 
 	///=============================================================================================
+	template<typename Type>
+	struct movable_allocator {
+		typedef Type value_type;
+		typedef Type* pointer;
+		typedef const Type* const_pointer;
+		typedef Type& reference;
+		typedef const Type& const_reference;
+		typedef sarastd::size_t size_type;
+		typedef sarastd::ptrdiff_t difference_type;
+		typedef void* movable_handle;
+
+		~movable_allocator();
+		movable_allocator();
+
+		movable_handle allocate(size_type n);
+		void deallocate(movable_handle h);
+
+		pointer lock(movable_handle h) const;
+		void unlock(movable_handle h) const;
+
+		void construct(pointer p, const_reference val);
+		void destroy(pointer p);
+	};
+
+	template<typename Type>
+	movable_allocator<Type>::~movable_allocator()
+	{
+	}
+
+	template<typename Type>
+	movable_allocator<Type>::movable_allocator()
+	{
+	}
+
+	template<typename Type>
+	typename
+	movable_allocator<Type>::movable_handle movable_allocator<Type>::allocate(size_type n)
+	{
+		return (movable_handle)malloc(sizeof(Type) * n); // TODO
+	}
+
+	template<typename Type>
+	void movable_allocator<Type>::deallocate(movable_handle h)
+	{
+		free(h); // TODO
+	}
+
+	template<typename Type>
+	typename
+	movable_allocator<Type>::pointer movable_allocator<Type>::lock(movable_handle h) const
+	{
+		return (pointer)h; // TODO
+	}
+
+	template<typename Type>
+	void movable_allocator<Type>::unlock(movable_handle /*h*/) const
+	{
+		// TODO
+	}
+
+	template<typename Type>
+	void movable_allocator<Type>::construct(pointer p, const_reference val)
+	{
+		sarastd::_construct(p, val);
+	}
+
+	template<typename Type>
+	void movable_allocator<Type>::destroy(pointer p)
+	{
+		sarastd::_destroy(p);
+	}
+
+	///=============================================================================================
 	template<typename InputIt, typename ForwardIt>
 	ForwardIt uninitialized_copy(InputIt first, InputIt last, ForwardIt d_first)
 	{
@@ -181,6 +256,7 @@ namespace sarastd {
 		}
 	}
 
+	///=============================================================================================
 	template<typename OutputIterator, typename Type>
 	class raw_storage_iterator: public iterator<output_iterator_tag, void, void, void, void> {
 	public:

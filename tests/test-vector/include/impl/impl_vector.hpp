@@ -5,15 +5,16 @@
 #include "impl_algorithm_base.hpp"
 #include "impl_iterator.hpp"
 #include "impl_memory.hpp"
+#include "impl_vector_impl.hpp"
 
 namespace sarastd {
-	template<typename Type, typename Allocator_ = sarastd::allocator<Type> >
+	template<typename Type, typename Allocator = sarastd::allocator<Type> >
 	class vector {
 		typedef vector this_type;
 
 	public:
 		typedef Type value_type;
-		typedef sarastd::allocator<Type> allocator_type; // allocator is always standard
+		typedef Allocator allocator_type;
 		typedef sarastd::size_t size_type;
 		typedef allocator_traits<allocator_type> alloc_traits;
 		typedef typename alloc_traits::pointer pointer;
@@ -93,6 +94,13 @@ namespace sarastd {
 
 		void swap(this_type& other);
 
+	protected:
+		typedef _vector_impl<value_type, allocator_type> impl_type;
+		impl_type m_impl;
+
+//		void lock() const;
+//		void unlock() const;
+
 	private:
 		template<typename InputIt>
 		void _insert_back(InputIt first, InputIt last, sarastd::input_iterator_tag);
@@ -106,34 +114,16 @@ namespace sarastd {
 		template<typename ForwardIt>
 		iterator _insert(iterator pos, ForwardIt first, ForwardIt last, sarastd::forward_iterator_tag);
 
-		struct impl: private allocator_type {
-			typedef impl this_type;
-			typedef vector::value_type value_type;
-			typedef vector::allocator_type allocator_type;
-			typedef vector::size_type size_type;
-			typedef vector::pointer pointer;
+	};
 
-			pointer begin;
-			pointer end;
-			pointer end_of_storage;
-
-			~impl();
-			impl();
-			impl(size_type n);
-			impl(size_type n, const value_type& value);
-			impl(size_type n, pointer first, pointer last);
-			void swap(this_type& other);
-			void destroy_objects(pointer first, pointer last);
-			void reserve(size_type newCapacity);
-			void adjust_capacity(size_type add);
-			bool check_capacity(size_type add) const;
-			size_type get_new_capacity(size_type add) const;
-			size_type capacity() const;
-			size_type size() const;
-			size_type max_size() const;
-		private:
-			void create_storage(size_type n);
-		} m_impl;
+	///=============================================================================================
+	template<typename Type>
+	class movable_vector: public vector<Type, sarastd::movable_allocator<Type> >
+	{
+		typedef vector<Type, sarastd::movable_allocator<Type> > base_type;
+	public:
+		void lock() const;
+		void unlock() const;
 	};
 
 	///=============================================================================================
@@ -463,7 +453,7 @@ namespace sarastd {
 			m_impl.end += n;
 			return pos;
 		}
-		impl newImpl(m_impl.get_new_capacity(n), m_impl.begin, &*pos);
+		impl_type newImpl(m_impl.get_new_capacity(n), m_impl.begin, &*pos);
 		iterator ret(newImpl.end);
 		sarastd::uninitialized_fill_n(ret, n, value);
 		newImpl.end += n;
@@ -487,7 +477,7 @@ namespace sarastd {
 	{
 		sarastd::copy(last, end(), first);
 		size_type n = sarastd::distance(first, last);
-		m_impl.destroy_objects(m_impl.end - n, m_impl.end);
+		m_impl.destroy(m_impl.end - n, m_impl.end);
 		m_impl.end -= n;
 		return first;
 	}
@@ -534,6 +524,18 @@ namespace sarastd {
 	{
 		m_impl.swap(other.m_impl);
 	}
+
+//	template<typename Type, typename Allocator>
+//	void vector<Type, Allocator>::lock() const
+//	{
+//		m_impl.lock();
+//	}
+//
+//	template<typename Type, typename Allocator>
+//	void vector<Type, Allocator>::unlock() const
+//	{
+//		m_impl.unlock();
+//	}
 
 	template<typename Type, typename Allocator>
 	template<typename InputIt>
@@ -584,7 +586,7 @@ namespace sarastd {
 			m_impl.end += n;
 			return pos;
 		}
-		impl newImpl(m_impl.get_new_capacity(n), m_impl.begin, &*pos);
+		impl_type newImpl(m_impl.get_new_capacity(n), m_impl.begin, &*pos);
 		iterator ret(newImpl.end);
 		sarastd::uninitialized_copy(first, last, ret);
 		newImpl.end += n;
@@ -595,116 +597,16 @@ namespace sarastd {
 	}
 
 	///=============================================================================================
-	template<typename Type, typename Allocator>
-	vector<Type, Allocator>::impl::~impl()
+	template<typename Type>
+	void movable_vector<Type>::lock() const
 	{
-		if (begin)
-			allocator_type::deallocate(begin, capacity());
+		base_type::m_impl.lock();
 	}
 
-	template<typename Type, typename Allocator>
-	vector<Type, Allocator>::impl::impl() :
-		begin(0), end(0), end_of_storage(0)
+	template<typename Type>
+	void movable_vector<Type>::unlock() const
 	{
-	}
-
-	template<typename Type, typename Allocator>
-	vector<Type, Allocator>::impl::impl(size_type n) :
-		begin(0), end(0), end_of_storage(0)
-	{
-		create_storage(n);
-	}
-
-	template<typename Type, typename Allocator>
-	vector<Type, Allocator>::impl::impl(size_type n, const value_type& value) :
-		begin(0), end(0), end_of_storage(0)
-	{
-		create_storage(n);
-		sarastd::uninitialized_fill_n(begin, n, value);
-		end += n;
-	}
-
-	template<typename Type, typename Allocator>
-	vector<Type, Allocator>::impl::impl(size_type n, pointer first, pointer last) :
-		begin(0), end(0), end_of_storage(0)
-	{
-		create_storage(n);
-		sarastd::uninitialized_copy(first, last, end);
-		end += (last - first);
-	}
-
-	template<typename Type, typename Allocator>
-	void vector<Type, Allocator>::impl::swap(this_type& other)
-	{
-		using sarastd::swap;
-		swap(begin, other.begin);
-		swap(end, other.end);
-		swap(end_of_storage, other.end_of_storage);
-	}
-
-	template<typename Type, typename Allocator>
-	void vector<Type, Allocator>::impl::create_storage(size_type n)
-	{
-		begin = (n) ? allocator_type::allocate(n) : 0;
-		end = begin;
-		end_of_storage = begin + n;
-	}
-
-	template<typename Type, typename Allocator>
-	void vector<Type, Allocator>::impl::destroy_objects(pointer first, pointer last)
-	{
-		for (; first != last; ++first)
-			allocator_type::destroy(first);
-	}
-
-	template<typename Type, typename Allocator>
-	void vector<Type, Allocator>::impl::reserve(size_type newCapacity)
-	{
-		if (capacity() < newCapacity)
-			this_type(newCapacity, begin, end).swap(*this);
-	}
-
-	template<typename Type, typename Allocator>
-	typename
-	vector<Type, Allocator>::impl::size_type vector<Type, Allocator>::impl::size() const
-	{
-		return end - begin;
-	}
-
-	template<typename Type, typename Allocator>
-	typename
-	vector<Type, Allocator>::impl::size_type vector<Type, Allocator>::impl::max_size() const
-	{
-		return 0xFFFFFFFFu;
-	}
-
-	template<typename Type, typename Allocator>
-	typename
-	vector<Type, Allocator>::impl::size_type vector<Type, Allocator>::impl::capacity() const
-	{
-		return end_of_storage - begin;
-	}
-
-	template<typename Type, typename Allocator>
-	bool vector<Type, Allocator>::impl::check_capacity(size_type add) const
-	{
-		if ((size() + add) > capacity())
-			return false;
-		return true;
-	}
-
-	template<typename Type, typename Allocator>
-	typename
-	vector<Type, Allocator>::impl::size_type vector<Type, Allocator>::impl::get_new_capacity(size_type add) const
-	{
-		return size() + sarastd::max(size_type(4), sarastd::max(size(), add));
-	}
-
-	template<typename Type, typename Allocator>
-	void vector<Type, Allocator>::impl::adjust_capacity(size_type add)
-	{
-		if (!check_capacity(add))
-			reserve(get_new_capacity(add));
+		base_type::m_impl.unlock();
 	}
 
 }

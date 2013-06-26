@@ -262,7 +262,7 @@ namespace sarastd {
 		RanIt middle = _quick_sort_split(first, last);
 		for (RanIt it = first; it != last; ++it)
 		{
-			printf(" %d", it->value());
+			printf(" %Id", it->value());
 		}
 		printf("\n");
 		if (first < middle) {
@@ -278,7 +278,7 @@ namespace sarastd {
 	{
 		for (RanIt it = first; it != last; ++it)
 		{
-			printf(" %d", it->value());
+			printf(" %Id", it->value());
 		}
 		printf("\n");
 		_quick_sort(first, last);

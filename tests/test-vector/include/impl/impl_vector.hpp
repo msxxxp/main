@@ -136,7 +136,7 @@ namespace sarastd {
 	template<typename Type, typename Allocator>
 	bool operator !=(const vector<Type, Allocator>& lhs, const vector<Type, Allocator>& rhs)
 	{
-		return !(lhs == rhs);
+		return sarastd::rel_ops::operator !=(lhs, rhs);
 	}
 
 	template<typename Type, typename Allocator>
@@ -148,19 +148,19 @@ namespace sarastd {
 	template<typename Type, typename Allocator>
 	bool operator >(const vector<Type, Allocator>& lhs, const vector<Type, Allocator>& rhs)
 	{
-		return rhs < lhs;
+		return sarastd::rel_ops::operator >(lhs, rhs);
 	}
 
 	template<typename Type, typename Allocator>
 	bool operator <=(const vector<Type, Allocator>& lhs, const vector<Type, Allocator>& rhs)
 	{
-		return !(rhs < lhs);
+		return sarastd::rel_ops::operator <=(lhs, rhs);
 	}
 
 	template<typename Type, typename Allocator>
 	bool operator >=(const vector<Type, Allocator>& lhs, const vector<Type, Allocator>& rhs)
 	{
-		return !(lhs < rhs);
+		return sarastd::rel_ops::operator >=(lhs, rhs);
 	}
 
 	template<typename Type, typename Allocator>

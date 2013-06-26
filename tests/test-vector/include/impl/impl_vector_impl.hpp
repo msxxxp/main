@@ -89,7 +89,7 @@ namespace sarastd {
 	void _vector_impl<Type, Allocator>::create_storage(size_type capa)
 	{
 		end = begin = (capa) ? allocator_type::allocate(capa) : 0;
-		end_of_storage = begin + capa;
+		end_of_storage = begin + (begin ? capa : 0);
 	}
 
 	template<typename Type, typename Allocator>
@@ -251,7 +251,7 @@ namespace sarastd {
 	{
 		handle = (capa) ? allocator_type::allocate(capa) : 0;
 		end = begin = 0;
-		end_of_storage = begin + capa;
+		end_of_storage = begin + (handle ? capa : 0);
 	}
 
 	template<typename Type>

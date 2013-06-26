@@ -79,12 +79,12 @@ namespace sarastd {
 		void clear();
 
 		template<typename InputIt>
-		iterator insert(iterator pos, InputIt first, InputIt last);
-		iterator insert(iterator pos, const value_type& value);
-		iterator insert(iterator pos, size_type n, const value_type& value);
+		iterator insert(const_iterator pos, InputIt first, InputIt last);
+		iterator insert(const_iterator pos, const value_type& value);
+		iterator insert(const_iterator pos, size_type n, const value_type& value);
 
-		iterator erase(iterator first, iterator last);
-		iterator erase(iterator pos);
+		iterator erase(const_iterator first, const_iterator last);
+		iterator erase(const_iterator pos);
 
 		void push_back(const value_type& value);
 		void pop_back();
@@ -109,10 +109,10 @@ namespace sarastd {
 		void _insert_back(ForwardIt first, ForwardIt last, sarastd::forward_iterator_tag);
 
 		template<typename InputIt>
-		iterator _insert(iterator pos, InputIt first, InputIt last, sarastd::input_iterator_tag);
+		iterator _insert(const_iterator pos, InputIt first, InputIt last, sarastd::input_iterator_tag);
 
 		template<typename ForwardIt>
-		iterator _insert(iterator pos, ForwardIt first, ForwardIt last, sarastd::forward_iterator_tag);
+		iterator _insert(const_iterator pos, ForwardIt first, ForwardIt last, sarastd::forward_iterator_tag);
 
 	};
 
@@ -429,15 +429,17 @@ namespace sarastd {
 
 	template<typename Type, typename Allocator>
 	typename
-	vector<Type, Allocator>::iterator vector<Type, Allocator>::insert(iterator pos, const value_type& value)
+	vector<Type, Allocator>::iterator vector<Type, Allocator>::insert(const_iterator pos, const value_type& value)
 	{
 		return insert(pos, (size_type)1, value);
 	}
 
 	template<typename Type, typename Allocator>
 	typename
-	vector<Type, Allocator>::iterator vector<Type, Allocator>::insert(iterator pos, size_type n, const value_type& value)
+	vector<Type, Allocator>::iterator vector<Type, Allocator>::insert(const_iterator cpos, size_type n, const value_type& value)
 	{
+		iterator pos(begin());
+		sarastd::advance(pos, sarastd::distance<const_iterator>(begin(), cpos));
 		if (m_impl.check_capacity(n)) {
 			iterator oldEnd(end());
 			size_type elems_between = oldEnd - pos;
@@ -466,25 +468,29 @@ namespace sarastd {
 	template<typename Type, typename Allocator>
 	template<typename InputIt>
 	typename
-	vector<Type, Allocator>::iterator vector<Type, Allocator>::insert(iterator pos, InputIt first, InputIt last)
+	vector<Type, Allocator>::iterator vector<Type, Allocator>::insert(const_iterator pos, InputIt first, InputIt last)
 	{
 		return _insert(pos, first, last, _iterator_category(first));
 	}
 
 	template<typename Type, typename Allocator>
 	typename
-	vector<Type, Allocator>::iterator vector<Type, Allocator>::erase(iterator first, iterator last)
+	vector<Type, Allocator>::iterator vector<Type, Allocator>::erase(const_iterator cfirst, const_iterator clast)
 	{
+		iterator first(begin());
+		iterator last(begin());
+		sarastd::advance(first, sarastd::distance<const_iterator>(begin(), cfirst));
+		sarastd::advance(last, sarastd::distance<const_iterator>(begin(), clast));
 		sarastd::copy(last, end(), first);
 		size_type n = sarastd::distance(first, last);
 		m_impl.destroy(m_impl.end - n, m_impl.end);
 		m_impl.end -= n;
-		return first;
+		return iterator(first);
 	}
 
 	template<typename Type, typename Allocator>
 	typename
-	vector<Type, Allocator>::iterator vector<Type, Allocator>::erase(iterator pos)
+	vector<Type, Allocator>::iterator vector<Type, Allocator>::erase(const_iterator pos)
 	{
 		return erase(pos, pos + 1);
 	}
@@ -525,18 +531,6 @@ namespace sarastd {
 		m_impl.swap(other.m_impl);
 	}
 
-//	template<typename Type, typename Allocator>
-//	void vector<Type, Allocator>::lock() const
-//	{
-//		m_impl.lock();
-//	}
-//
-//	template<typename Type, typename Allocator>
-//	void vector<Type, Allocator>::unlock() const
-//	{
-//		m_impl.unlock();
-//	}
-
 	template<typename Type, typename Allocator>
 	template<typename InputIt>
 	void vector<Type, Allocator>::_insert_back(InputIt first, InputIt last, sarastd::input_iterator_tag)
@@ -555,9 +549,9 @@ namespace sarastd {
 	template<typename Type, typename Allocator>
 	template<typename InputIt>
 	typename
-	vector<Type, Allocator>::iterator vector<Type, Allocator>::_insert(iterator pos, InputIt first, InputIt last, sarastd::input_iterator_tag)
+	vector<Type, Allocator>::iterator vector<Type, Allocator>::_insert(const_iterator pos, InputIt first, InputIt last, sarastd::input_iterator_tag)
 	{
-		size_type distance = sarastd::distance(begin(), pos);
+		difference_type distance = sarastd::distance(cbegin(), pos);
 		sarastd::copy(first, last, sarastd::inserter(*this, pos));
 		return begin() + distance;
 	}
@@ -565,8 +559,10 @@ namespace sarastd {
 	template<typename Type, typename Allocator>
 	template<typename ForwardIt>
 	typename
-	vector<Type, Allocator>::iterator vector<Type, Allocator>::_insert(iterator pos, ForwardIt first, ForwardIt last, sarastd::forward_iterator_tag)
+	vector<Type, Allocator>::iterator vector<Type, Allocator>::_insert(const_iterator cpos, ForwardIt first, ForwardIt last, sarastd::forward_iterator_tag)
 	{
+		iterator pos(begin());
+		sarastd::advance(pos, sarastd::distance<const_iterator>(begin(), cpos));
 		size_type distance = sarastd::distance(begin(), pos);
 		size_type n = sarastd::distance(first, last);
 		iterator oldEnd(end());

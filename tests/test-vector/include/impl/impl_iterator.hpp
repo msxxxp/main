@@ -133,11 +133,11 @@ namespace sarastd
 	}
 
 	template<
-		typename Category,
-		typename Type,
-		typename Dist = sarastd::ptrdiff_t,
-		typename Pointer = Type*,
-		typename Reference = Type&>
+	typename Category,
+	typename Type,
+	typename Dist = sarastd::ptrdiff_t,
+	typename Pointer = Type*,
+	typename Reference = Type&>
 	struct iterator
 	{
 		typedef Category  iterator_category;
@@ -162,7 +162,15 @@ namespace sarastd
 		typedef typename traits_type::reference 	    reference;
 
 		normal_iterator() : current() {}
-		explicit normal_iterator(const Iterator & it) : current(it) {}
+		explicit normal_iterator(Iterator it) : current(it) {}
+		normal_iterator(const this_type& ri) : current(ri.current) {}
+
+		template <typename U>
+		normal_iterator(const normal_iterator<U>& ri) : current(ri.base()) {}
+
+		template <typename U>
+		normal_iterator<Iterator>& operator =(const normal_iterator<U>& ri) {current = ri.base(); return *this;}
+
 		iterator_type base() const     {return current;}
 
 		// Forward iterator requirements
@@ -195,7 +203,7 @@ namespace sarastd
 	template<typename Iterator1, typename Iterator2>
 	bool operator !=(const normal_iterator<Iterator1>& lhs, const normal_iterator<Iterator2>& rhs)
 	{
-		return lhs.base() != rhs.base();
+		return !(lhs.base() == rhs.base());
 	}
 
 	template<typename Iterator1, typename Iterator2>
@@ -207,19 +215,19 @@ namespace sarastd
 	template<typename Iterator1, typename Iterator2>
 	bool operator <=(const normal_iterator<Iterator1>& lhs, const normal_iterator<Iterator2>& rhs)
 	{
-		return lhs.base() <= rhs.base();
+		return !(rhs.base() < lhs.base());
 	}
 
 	template<typename Iterator1, typename Iterator2>
 	bool operator >(const normal_iterator<Iterator1>& lhs, const normal_iterator<Iterator2>& rhs)
 	{
-		return lhs.base() > rhs.base();
+		return rhs.base() < lhs.base();
 	}
 
 	template<typename Iterator1, typename Iterator2>
 	bool operator >=(const normal_iterator<Iterator1>& lhs, const normal_iterator<Iterator2>& rhs)
 	{
-		return lhs.base() >= rhs.base();
+		return !(lhs.base() < rhs.base());
 	}
 
 	template<typename Iterator>
@@ -250,7 +258,15 @@ namespace sarastd
 		typedef typename traits_type::pointer   	    pointer;
 
 		reverse_iterator() : current() {}
-		explicit reverse_iterator(const Iterator& current) : current(current) {}
+		explicit reverse_iterator(Iterator it) : current(it) {}
+		reverse_iterator(const this_type& ri) : current(ri.current) {}
+
+		template <typename U>
+		reverse_iterator(const reverse_iterator<U>& ri) : current(ri.base()) {}
+
+		template <typename U>
+		reverse_iterator<Iterator>& operator =(const reverse_iterator<U>& ri) {current = ri.base(); return *this;}
+
 		iterator_type base() const                         {return current;}
 
 		// Forward iterator requirements
@@ -283,7 +299,7 @@ namespace sarastd
 	template<typename Iterator1, typename Iterator2>
 	bool operator !=(const reverse_iterator<Iterator1>& lhs, const reverse_iterator<Iterator2>& rhs)
 	{
-		return lhs.base() != rhs.base();
+		return !(lhs.base() == rhs.base());
 	}
 
 	template<typename Iterator1, typename Iterator2>
@@ -295,19 +311,19 @@ namespace sarastd
 	template<typename Iterator1, typename Iterator2>
 	bool operator <=(const reverse_iterator<Iterator1>& lhs, const reverse_iterator<Iterator2>& rhs)
 	{
-		return lhs.base() <= rhs.base();
+		return !(rhs.base() < lhs.base());
 	}
 
 	template<typename Iterator1, typename Iterator2>
 	bool operator >(const reverse_iterator<Iterator1>& lhs, const reverse_iterator<Iterator2>& rhs)
 	{
-		return lhs.base() > rhs.base();
+		return rhs.base() < lhs.base();
 	}
 
 	template<typename Iterator1, typename Iterator2>
 	bool operator >=(const reverse_iterator<Iterator1>& lhs, const reverse_iterator<Iterator2>& rhs)
 	{
-		return lhs.base() >= rhs.base();
+		return !(lhs.base() < rhs.base());
 	}
 
 	template<typename Iterator>
@@ -328,7 +344,7 @@ namespace sarastd
 	{
 		typedef insert_iterator<Container> this_type;
 		typedef typename Container::value_type value_type;
-		typedef typename Container::iterator   iterator;
+		typedef typename Container::const_iterator iterator;
 	public:
 		typedef Container container_type;
 
@@ -349,13 +365,11 @@ namespace sarastd
 	{
 		typedef front_insert_iterator<Container> this_type;
 		typedef typename Container::value_type value_type;
-		typedef typename Container::iterator   iterator;
 
 	public:
 		typedef Container container_type;
 
 		explicit front_insert_iterator(container_type & c) : container(&c) {}
-		iterator    base() const {return container->begin();}
 		this_type & operator =(const value_type & value) {container->push_front(value); return *this;}
 		this_type & operator *()    {return *this;}
 		this_type & operator++()    {return *this;}
@@ -370,13 +384,11 @@ namespace sarastd
 	{
 		typedef back_insert_iterator<Container> this_type;
 		typedef typename Container::value_type value_type;
-		typedef typename Container::iterator   iterator;
 
 	public:
 		typedef Container container_type;
 
 		explicit back_insert_iterator(container_type & c) : container(&c) {}
-		iterator    base() const {return container->end();}
 		this_type & operator =(const value_type & value) {container->push_back(value); return *this;}
 		this_type & operator *()    {return *this;}
 		this_type & operator++()    {return *this;}

@@ -401,21 +401,33 @@ namespace sarastd
 
 	///=============================================================================================
 	template<typename Type>
-	struct _const_value_iterator : public iterator<forward_iterator_tag, void, void, void, void>
+	struct _const_value_iterator : public iterator<random_access_iterator_tag, void, void, void, void>
 	{
 		typedef _const_value_iterator this_type;
-		typedef forward_iterator_tag iterator_category;
+		typedef random_access_iterator_tag iterator_category;
 		typedef Type value_type;
 		typedef sarastd::ptrdiff_t 	difference_type;
 		typedef sarastd::size_t size_type;
 
 		_const_value_iterator(const Type * v): current(0), value(v) {}
 		_const_value_iterator(size_type n): current(n), value(0) {}
+		_const_value_iterator(size_type n, const Type * v): current(n), value(v) {}
 
 		const Type &  operator * () const {return *value;}
 		const Type *  operator ->() const {return value;}
 		this_type&    operator ++()       {++current; return *this;}
 		this_type     operator ++(int)    {this_type tmp = *this; ++current; return tmp;}
+
+		// Bidirectional iterator requirements
+		this_type&    operator --()       {--current; return *this;}
+		this_type     operator --(int)    {this_type tmp = *this; --current; return tmp;}
+
+		// Random access iterator requirements
+		const Type &  operator [](difference_type n) const {return *value;}
+		this_type     operator +(difference_type n) const  {return this_type(current + n, value);}
+		this_type&    operator +=(difference_type n)       {current += n; return *this;}
+		this_type     operator -(difference_type n) const  {return this_type(current - n, value);}
+		this_type&    operator -=(difference_type n)       {current -= n; return *this;}
 
 		bool          operator ==(const this_type& right) const {return current == right.current;}
 		bool          operator <(const this_type& right) const {return current < right.current;}
@@ -462,6 +474,19 @@ namespace sarastd
 	}
 
 	template<typename Type>
+	_const_value_iterator<Type> operator +(typename _const_value_iterator<Type>::difference_type n, const _const_value_iterator<Type> & it)
+	{
+		return it + n;
+	}
+
+	template<typename Type>
+	typename
+	_const_value_iterator<Type>::difference_type operator -(const _const_value_iterator<Type>& lhs, const _const_value_iterator<Type>& rhs)
+	{
+		return lhs - rhs;
+	}
+
+	template<typename Type>
 	class value_generator
 	{
 		typedef value_generator<Type> this_type;
@@ -470,7 +495,7 @@ namespace sarastd
 		typedef _const_value_iterator<Type> const_iterator;
 
 	public:
-		explicit value_generator(const value_type & v, size_type n) : value(v), cnt(n) {}
+		explicit value_generator(size_type n, const value_type & v) : value(v), cnt(n) {}
 		value_generator(const this_type & other) : value(other.value), cnt(other.cnt) {}
 
 		const_iterator begin() const {return _const_value_iterator<Type>(&value);}

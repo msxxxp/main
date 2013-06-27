@@ -20,7 +20,7 @@ namespace sarastd {
 		~_vector_impl();
 		_vector_impl();
 		_vector_impl(size_type capa);
-		_vector_impl(size_type capa, const value_type& value);
+//		_vector_impl(size_type capa, const value_type& value);
 		_vector_impl(size_type capa, pointer first, pointer last);
 		void swap(this_type& other);
 		void destroy(pointer first, pointer last);
@@ -58,15 +58,15 @@ namespace sarastd {
 		create_storage(capa);
 	}
 
-	template<typename Type, typename Allocator>
-	_vector_impl<Type, Allocator>::_vector_impl(size_type capa, const value_type& value) :
-		begin(0), end(0), end_of_storage(0)
-	{
-		create_storage(capa);
-		sarastd::uninitialized_fill_n(begin, capa, value);
-		end += capa;
-	}
-
+//	template<typename Type, typename Allocator>
+//	_vector_impl<Type, Allocator>::_vector_impl(size_type capa, const value_type& value) :
+//		begin(0), end(0), end_of_storage(0)
+//	{
+//		create_storage(capa);
+//		sarastd::uninitialized_fill_n(begin, capa, value);
+//		end += capa;
+//	}
+//
 	template<typename Type, typename Allocator>
 	_vector_impl<Type, Allocator>::_vector_impl(size_type capa, pointer first, pointer last) :
 		begin(0), end(0), end_of_storage(0)
@@ -166,7 +166,7 @@ namespace sarastd {
 		~_vector_impl();
 		_vector_impl();
 		_vector_impl(size_type capa);
-		_vector_impl(size_type capa, const value_type& value);
+//		_vector_impl(size_type capa, const value_type& value);
 		_vector_impl(size_type capa, pointer first, pointer last);
 		void swap(this_type& other);
 		void destroy(pointer first, pointer last);
@@ -214,17 +214,17 @@ namespace sarastd {
 		create_storage(capa);
 	}
 
-	template<typename Type>
-	_vector_impl<Type, movable_allocator<Type> >::_vector_impl(size_type capa, const value_type& value) :
-		begin(0), end(0), end_of_storage(0), handle(0)
-	{
-		create_storage(capa);
-		lock();
-		sarastd::uninitialized_fill_n(begin, capa, value);
-		end += capa;
-		unlock();
-	}
-
+//	template<typename Type>
+//	_vector_impl<Type, movable_allocator<Type> >::_vector_impl(size_type capa, const value_type& value) :
+//		begin(0), end(0), end_of_storage(0), handle(0)
+//	{
+//		create_storage(capa);
+//		lock();
+//		sarastd::uninitialized_fill_n(begin, capa, value);
+//		end += capa;
+//		unlock();
+//	}
+//
 	template<typename Type>
 	_vector_impl<Type, movable_allocator<Type> >::_vector_impl(size_type capa, pointer first, pointer last) :
 		begin(0), end(0), end_of_storage(0), handle(0)

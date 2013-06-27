@@ -183,7 +183,7 @@ namespace sarastd {
 		m_impl()
 //		m_impl(n, value_type())
 	{
-		sarastd::value_generator<Type> generator(value_type(), n);
+		sarastd::value_generator<Type> generator(n, value_type());
 		_insert_back(generator.begin(), generator.end(), _iterator_category(generator.begin()));
 	}
 
@@ -192,7 +192,7 @@ namespace sarastd {
 		m_impl()
 //		m_impl(n, val)
 	{
-		sarastd::value_generator<Type> generator(value, n);
+		sarastd::value_generator<Type> generator(n, value);
 		_insert_back(generator.begin(), generator.end(), _iterator_category(generator.begin()));
 	}
 

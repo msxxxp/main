@@ -214,7 +214,7 @@ namespace sarastd
 		template<typename Iterator1, typename Iterator2>
 		bool operator !=(const _normal_iterator<Iterator1>& lhs, const _normal_iterator<Iterator2>& rhs)
 		{
-			return sarastd::rel_ops::operator !=(lhs, rhs);
+			return sarastd::pvt::operator !=(lhs, rhs);
 		}
 
 		template<typename Iterator1, typename Iterator2>
@@ -226,19 +226,19 @@ namespace sarastd
 		template<typename Iterator1, typename Iterator2>
 		bool operator <=(const _normal_iterator<Iterator1>& lhs, const _normal_iterator<Iterator2>& rhs)
 		{
-			return sarastd::rel_ops::operator <=(lhs, rhs);
+			return sarastd::pvt::operator <=(lhs, rhs);
 		}
 
 		template<typename Iterator1, typename Iterator2>
 		bool operator >(const _normal_iterator<Iterator1>& lhs, const _normal_iterator<Iterator2>& rhs)
 		{
-			return sarastd::rel_ops::operator >(lhs, rhs);
+			return sarastd::pvt::operator >(lhs, rhs);
 		}
 
 		template<typename Iterator1, typename Iterator2>
 		bool operator >=(const _normal_iterator<Iterator1>& lhs, const _normal_iterator<Iterator2>& rhs)
 		{
-			return sarastd::rel_ops::operator >=(lhs, rhs);
+			return sarastd::pvt::operator >=(lhs, rhs);
 		}
 
 		template<typename Iterator>
@@ -312,7 +312,7 @@ namespace sarastd
 	template<typename Iterator1, typename Iterator2>
 	bool operator !=(const reverse_iterator<Iterator1>& lhs, const reverse_iterator<Iterator2>& rhs)
 	{
-		return sarastd::rel_ops::operator !=(lhs, rhs);
+		return sarastd::pvt::operator !=(lhs, rhs);
 	}
 
 	template<typename Iterator1, typename Iterator2>
@@ -324,19 +324,19 @@ namespace sarastd
 	template<typename Iterator1, typename Iterator2>
 	bool operator <=(const reverse_iterator<Iterator1>& lhs, const reverse_iterator<Iterator2>& rhs)
 	{
-		return sarastd::rel_ops::operator <=(lhs, rhs);
+		return sarastd::pvt::operator <=(lhs, rhs);
 	}
 
 	template<typename Iterator1, typename Iterator2>
 	bool operator >(const reverse_iterator<Iterator1>& lhs, const reverse_iterator<Iterator2>& rhs)
 	{
-		return sarastd::rel_ops::operator >(lhs, rhs);
+		return sarastd::pvt::operator >(lhs, rhs);
 	}
 
 	template<typename Iterator1, typename Iterator2>
 	bool operator >=(const reverse_iterator<Iterator1>& lhs, const reverse_iterator<Iterator2>& rhs)
 	{
-		return sarastd::rel_ops::operator >=(lhs, rhs);
+		return sarastd::pvt::operator >=(lhs, rhs);
 	}
 
 	template<typename Iterator>
@@ -461,7 +461,7 @@ namespace sarastd
 		template<typename Iterator>
 		bool operator !=(const _const_value_iterator<Iterator>& lhs, const _const_value_iterator<Iterator>& rhs)
 		{
-			return sarastd::rel_ops::operator !=(lhs, rhs);
+			return sarastd::pvt::operator !=(lhs, rhs);
 		}
 
 		template<typename Iterator>
@@ -473,19 +473,19 @@ namespace sarastd
 		template<typename Iterator>
 		bool operator <=(const _const_value_iterator<Iterator>& lhs, const _const_value_iterator<Iterator>& rhs)
 		{
-			return sarastd::rel_ops::operator <=(lhs, rhs);
+			return sarastd::pvt::operator <=(lhs, rhs);
 		}
 
 		template<typename Iterator>
 		bool operator >(const _const_value_iterator<Iterator>& lhs, const _const_value_iterator<Iterator>& rhs)
 		{
-			return sarastd::rel_ops::operator >(lhs, rhs);
+			return sarastd::pvt::operator >(lhs, rhs);
 		}
 
 		template<typename Iterator>
 		bool operator >=(const _const_value_iterator<Iterator>& lhs, const _const_value_iterator<Iterator>& rhs)
 		{
-			return sarastd::rel_ops::operator >=(lhs, rhs);
+			return sarastd::pvt::operator >=(lhs, rhs);
 		}
 
 		template<typename Iterator>

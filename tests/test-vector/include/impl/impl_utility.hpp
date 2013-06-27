@@ -5,7 +5,7 @@
 #include "impl_algorithm_base.hpp"
 
 namespace sarastd {
-	namespace rel_ops {
+	namespace pvt {
 		template<typename T1, typename T2>
 		bool operator !=(const T1& x, const T2& y)
 		{
@@ -117,7 +117,7 @@ namespace sarastd {
 	template<typename T1, typename T2>
 	bool operator !=(const pair<T1, T2>& lhs, const pair<T1, T2>& rhs)
 	{
-		return rel_ops::operator !=(lhs, rhs);
+		return pvt::operator !=(lhs, rhs);
 	}
 
 	template<typename T1, typename T2>
@@ -136,19 +136,19 @@ namespace sarastd {
 	template<typename T1, typename T2>
 	bool operator <=(const pair<T1, T2>& lhs, const pair<T1, T2>& rhs)
 	{
-		return rel_ops::operator <=(lhs, rhs);
+		return pvt::operator <=(lhs, rhs);
 	}
 
 	template<typename T1, typename T2>
 	bool operator >(const pair<T1, T2>& lhs, const pair<T1, T2>& rhs)
 	{
-		return rel_ops::operator >(lhs, rhs);
+		return pvt::operator >(lhs, rhs);
 	}
 
 	template<typename T1, typename T2>
 	bool operator >=(const pair<T1, T2>& lhs, const pair<T1, T2>& rhs)
 	{
-		return rel_ops::operator >=(lhs, rhs);
+		return pvt::operator >=(lhs, rhs);
 	}
 
 	template<typename T1, typename T2>

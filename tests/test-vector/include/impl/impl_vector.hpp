@@ -35,13 +35,13 @@ namespace sarastd {
 		vector(size_type n, const value_type& val);
 		vector(const this_type& other);
 
-		template<typename InputIt>
-		vector(InputIt first, InputIt last);
+		template<typename InputIterator>
+		vector(InputIterator first, InputIterator last);
 
 		this_type& operator =(const this_type& other);
 
-		template<typename InputIt>
-		void assign(InputIt first, InputIt last);
+		template<typename InputIterator>
+		void assign(InputIterator first, InputIterator last);
 		void assign(size_type n, const value_type& value);
 
 		reference operator [](size_type pos);
@@ -78,8 +78,8 @@ namespace sarastd {
 
 		void clear();
 
-		template<typename InputIt>
-		iterator insert(const_iterator pos, InputIt first, InputIt last);
+		template<typename InputIterator>
+		iterator insert(const_iterator pos, InputIterator first, InputIterator last);
 		iterator insert(const_iterator pos, const value_type& value);
 		iterator insert(const_iterator pos, size_type n, const value_type& value);
 
@@ -95,18 +95,18 @@ namespace sarastd {
 		void swap(this_type& other);
 
 	protected:
-		typedef _vector_impl<value_type, allocator_type> impl_type;
+		typedef sarastd::pvt::_vector_impl<value_type, allocator_type> impl_type;
 		impl_type m_impl;
 
 	private:
-		template<typename InputIt>
-		void _insert_back(InputIt first, InputIt last, sarastd::input_iterator_tag);
+		template<typename InputIterator>
+		void _insert_back(InputIterator first, InputIterator last, sarastd::input_iterator_tag);
 
 		template<typename ForwardIterator>
 		void _insert_back(ForwardIterator first, ForwardIterator last, sarastd::forward_iterator_tag);
 
-		template<typename InputIt>
-		iterator _insert(const_iterator pos, InputIt first, InputIt last, sarastd::input_iterator_tag);
+		template<typename InputIterator>
+		iterator _insert(const_iterator pos, InputIterator first, InputIterator last, sarastd::input_iterator_tag);
 
 		template<typename ForwardIterator>
 		iterator _insert(const_iterator pos, ForwardIterator first, ForwardIterator last, sarastd::forward_iterator_tag);
@@ -115,9 +115,9 @@ namespace sarastd {
 
 	///=============================================================================================
 	template<typename Type>
-	class movable_vector: public vector<Type, sarastd::movable_allocator<Type> >
+	class movable_vector: public vector<Type, sarastd::pvt::_movable_allocator<Type> >
 	{
-		typedef vector<Type, sarastd::movable_allocator<Type> > base_type;
+		typedef vector<Type, sarastd::pvt::_movable_allocator<Type> > base_type;
 	public:
 		void lock() const;
 		void unlock() const;
@@ -133,7 +133,7 @@ namespace sarastd {
 	template<typename Type, typename Allocator>
 	bool operator !=(const vector<Type, Allocator>& lhs, const vector<Type, Allocator>& rhs)
 	{
-		return sarastd::rel_ops::operator !=(lhs, rhs);
+		return sarastd::pvt::operator !=(lhs, rhs);
 	}
 
 	template<typename Type, typename Allocator>
@@ -145,19 +145,19 @@ namespace sarastd {
 	template<typename Type, typename Allocator>
 	bool operator >(const vector<Type, Allocator>& lhs, const vector<Type, Allocator>& rhs)
 	{
-		return sarastd::rel_ops::operator >(lhs, rhs);
+		return sarastd::pvt::operator >(lhs, rhs);
 	}
 
 	template<typename Type, typename Allocator>
 	bool operator <=(const vector<Type, Allocator>& lhs, const vector<Type, Allocator>& rhs)
 	{
-		return sarastd::rel_ops::operator <=(lhs, rhs);
+		return sarastd::pvt::operator <=(lhs, rhs);
 	}
 
 	template<typename Type, typename Allocator>
 	bool operator >=(const vector<Type, Allocator>& lhs, const vector<Type, Allocator>& rhs)
 	{
-		return sarastd::rel_ops::operator >=(lhs, rhs);
+		return sarastd::pvt::operator >=(lhs, rhs);
 	}
 
 	template<typename Type, typename Allocator>
@@ -197,8 +197,8 @@ namespace sarastd {
 	}
 
 	template<typename Type, typename Allocator>
-	template<typename InputIt>
-	vector<Type, Allocator>::vector(InputIt first, InputIt last) :
+	template<typename InputIterator>
+	vector<Type, Allocator>::vector(InputIterator first, InputIterator last) :
 		m_impl()
 	{
 		_insert_back(first, last, sarastd::pvt::_iterator_category(first));
@@ -225,8 +225,8 @@ namespace sarastd {
 	}
 
 	template<typename Type, typename Allocator>
-	template<typename InputIt>
-	void vector<Type, Allocator>::assign(InputIt first, InputIt last)
+	template<typename InputIterator>
+	void vector<Type, Allocator>::assign(InputIterator first, InputIterator last)
 	{
 		this_type(first, last).swap(*this);
 	}
@@ -471,9 +471,9 @@ namespace sarastd {
 	}
 
 	template<typename Type, typename Allocator>
-	template<typename InputIt>
+	template<typename InputIterator>
 	typename
-	vector<Type, Allocator>::iterator vector<Type, Allocator>::insert(const_iterator pos, InputIt first, InputIt last)
+	vector<Type, Allocator>::iterator vector<Type, Allocator>::insert(const_iterator pos, InputIterator first, InputIterator last)
 	{
 		return _insert(pos, first, last, sarastd::pvt::_iterator_category(first));
 	}
@@ -537,8 +537,8 @@ namespace sarastd {
 	}
 
 	template<typename Type, typename Allocator>
-	template<typename InputIt>
-	void vector<Type, Allocator>::_insert_back(InputIt first, InputIt last, sarastd::input_iterator_tag)
+	template<typename InputIterator>
+	void vector<Type, Allocator>::_insert_back(InputIterator first, InputIterator last, sarastd::input_iterator_tag)
 	{
 		sarastd::copy(first, last, sarastd::back_inserter(*this));
 	}
@@ -552,9 +552,9 @@ namespace sarastd {
 	}
 
 	template<typename Type, typename Allocator>
-	template<typename InputIt>
+	template<typename InputIterator>
 	typename
-	vector<Type, Allocator>::iterator vector<Type, Allocator>::_insert(const_iterator pos, InputIt first, InputIt last, sarastd::input_iterator_tag)
+	vector<Type, Allocator>::iterator vector<Type, Allocator>::_insert(const_iterator pos, InputIterator first, InputIterator last, sarastd::input_iterator_tag)
 	{
 		difference_type distance = sarastd::distance(cbegin(), pos);
 		sarastd::copy(first, last, sarastd::inserter(*this, pos));

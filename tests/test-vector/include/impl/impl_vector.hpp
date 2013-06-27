@@ -98,9 +98,6 @@ namespace sarastd {
 		typedef _vector_impl<value_type, allocator_type> impl_type;
 		impl_type m_impl;
 
-//		void lock() const;
-//		void unlock() const;
-
 	private:
 		template<typename InputIt>
 		void _insert_back(InputIt first, InputIt last, sarastd::input_iterator_tag);

@@ -398,6 +398,46 @@ namespace sarastd
 		container_type * container;
 	};
 
+	template<typename Type>
+	class value_generator
+	{
+		typedef value_generator<Type> this_type;
+		typedef Type value_type;
+		typedef sarastd::size_t size_type;
+
+		struct const_iterator : public iterator<output_iterator_tag, void, void, void, void>
+		{
+			typedef forward_iterator_tag iterator_category;
+			typedef typename value_generator::value_type    value_type;
+			typedef value_type&  reference;
+			typedef value_type*  pointer;
+
+			reference     operator * () const {return (reference)generator->get_value();}
+			pointer       operator ->() const {return &(operator*());}
+			this_type&    operator ++()       {++current; return *this;}
+			this_type     operator ++(int)    {this_type tmp = *this; ++current; return tmp;}
+		private:
+			const_iterator(const value_generator &g): current(0), generator(&g) {}
+
+			sarastd::size_t current;
+			value_generator * generator;
+		};
+
+	public:
+		explicit value_generator(const value_type & v, size_type n) : value(v), cnt(n) {}
+		value_generator(const this_type & other) : value(other.value), cnt(other.cnt) {}
+
+		const_iterator begin() const;
+		const_iterator end() const;
+
+		const value_type& get_value() const {return value;}
+
+	private:
+		value_type value;
+		size_type cnt;
+	};
+
+
 	template<typename Container>
 	insert_iterator<Container> inserter(Container & c, typename Container::iterator current)
 	{
@@ -417,10 +457,12 @@ namespace sarastd
 	}
 
 	template<typename Container>
-	typename Container::iterator begin(Container & c) {return c.begin();}
+	typename
+	Container::iterator begin(Container & c) {return c.begin();}
 
 	template<typename Container>
-	typename Container::const_iterator begin(const Container & c) {return c.begin();}
+	typename
+	Container::const_iterator begin(const Container & c) {return c.begin();}
 
 	template<typename Type, sarastd::size_t N>
 	Type* begin(Type (&array)[N]) {return array;}
@@ -429,13 +471,16 @@ namespace sarastd
 	const Type* cbegin(Type (&array)[N]) {return array;}
 
 	template<typename Container>
-	typename Container::const_iterator cbegin(const Container & c) {begin(c);}
+	typename
+	Container::const_iterator cbegin(const Container & c) {begin(c);}
 
 	template<typename Container>
-	typename Container::iterator end(Container & c) {return c.end();}
+	typename
+	Container::iterator end(Container & c) {return c.end();}
 
 	template<typename Container>
-	typename Container::const_iterator end(const Container & c) {return c.end();}
+	typename
+	Container::const_iterator end(const Container & c) {return c.end();}
 
 	template<typename Type, sarastd::size_t N>
 	Type* end(Type (&array)[N]) {return array + N;}
@@ -444,13 +489,16 @@ namespace sarastd
 	const Type* cend(Type (&array)[N]) {return array + N;}
 
 	template<typename Container>
-	typename Container::const_iterator cend(const Container & c) {end(c);}
+	typename
+	Container::const_iterator cend(const Container & c) {end(c);}
 
 	template<typename Container>
-	typename Container::reverse_iterator rbegin(Container & c) {return c.rbegin();}
+	typename
+	Container::reverse_iterator rbegin(Container & c) {return c.rbegin();}
 
 	template<typename Container>
-	typename Container::const_reverse_iterator rbegin(const Container & c) {return c.rbegin();}
+	typename
+	Container::const_reverse_iterator rbegin(const Container & c) {return c.rbegin();}
 
 	template<typename Type, sarastd::size_t N>
 	reverse_iterator<Type*> rbegin(Type (&array)[N]) {return reverse_iterator<Type*>(array + N);}
@@ -459,13 +507,16 @@ namespace sarastd
 	reverse_iterator<const Type*> crbegin(Type (&array)[N]) {return reverse_iterator<const Type*>(array + N);}
 
 	template<typename Container>
-	typename Container::const_reverse_iterator crbegin(const Container & c) {rbegin(c);}
+	typename
+	Container::const_reverse_iterator crbegin(const Container & c) {rbegin(c);}
 
 	template<typename Container>
-	typename Container::reverse_iterator rend(Container & c) {return c.rend();}
+	typename
+	Container::reverse_iterator rend(Container & c) {return c.rend();}
 
 	template<typename Container>
-	typename Container::const_reverse_iterator rend(const Container & c) {return c.rend();}
+	typename
+	Container::const_reverse_iterator rend(const Container & c) {return c.rend();}
 
 	template<typename Type, sarastd::size_t N>
 	reverse_iterator<Type*> rend(Type (&array)[N]) {return reverse_iterator<Type*>(array);}
@@ -474,7 +525,8 @@ namespace sarastd
 	reverse_iterator<const Type*> crend(Type (&array)[N]) {return reverse_iterator<const Type*>(array);}
 
 	template<typename Container>
-	typename Container::const_reverse_iterator crend(const Container & c) {rend(c);}
+	typename
+	Container::const_reverse_iterator crend(const Container & c) {rend(c);}
 }
 
 #endif

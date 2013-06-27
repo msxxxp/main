@@ -151,7 +151,7 @@ namespace sarastd {
 
 	///=============================================================================================
 	template<typename Type>
-	struct _vector_impl<Type, movable_allocator<Type> >: private movable_allocator<Type>  {
+	struct _vector_impl<Type, movable_allocator<Type> >: private movable_allocator<Type> {
 		typedef _vector_impl<Type, movable_allocator<Type> > this_type;
 		typedef Type value_type;
 		typedef movable_allocator<Type> allocator_type;

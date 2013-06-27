@@ -102,14 +102,14 @@ namespace sarastd {
 		template<typename InputIt>
 		void _insert_back(InputIt first, InputIt last, sarastd::input_iterator_tag);
 
-		template<typename ForwardIt>
-		void _insert_back(ForwardIt first, ForwardIt last, sarastd::forward_iterator_tag);
+		template<typename ForwardIterator>
+		void _insert_back(ForwardIterator first, ForwardIterator last, sarastd::forward_iterator_tag);
 
 		template<typename InputIt>
 		iterator _insert(const_iterator pos, InputIt first, InputIt last, sarastd::input_iterator_tag);
 
-		template<typename ForwardIt>
-		iterator _insert(const_iterator pos, ForwardIt first, ForwardIt last, sarastd::forward_iterator_tag);
+		template<typename ForwardIterator>
+		iterator _insert(const_iterator pos, ForwardIterator first, ForwardIterator last, sarastd::forward_iterator_tag);
 
 	};
 
@@ -444,7 +444,7 @@ namespace sarastd {
 		sarastd::value_generator<Type> generator(value, n);
 		return _insert(cpos, generator.begin(), generator.end(), _iterator_category(generator.begin()));
 //		iterator pos(begin());
-//		sarastd::advance(pos, sarastd::distance<const_iterator>(begin(), cpos));
+//		sarastd::advance(pos, sarastd::distance(cbegin(), cpos));
 //		if (m_impl.check_capacity(n)) {
 //			iterator oldEnd(end());
 //			size_type elems_between = oldEnd - pos;
@@ -484,10 +484,10 @@ namespace sarastd {
 	{
 		iterator first(begin());
 		iterator last(begin());
-		sarastd::advance(first, sarastd::distance<const_iterator>(begin(), cfirst));
-		sarastd::advance(last, sarastd::distance<const_iterator>(begin(), clast));
+		sarastd::advance(first, sarastd::distance(cbegin(), cfirst));
+		sarastd::advance(last, sarastd::distance(cbegin(), clast));
 		sarastd::copy(last, end(), first);
-		size_type n = sarastd::distance(first, last);
+		size_type n = sarastd::distance(cfirst, clast);
 		m_impl.destroy(m_impl.end - n, m_impl.end);
 		m_impl.end -= n;
 		return iterator(first);
@@ -544,8 +544,8 @@ namespace sarastd {
 	}
 
 	template<typename Type, typename Allocator>
-	template<typename ForwardIt>
-	void vector<Type, Allocator>::_insert_back(ForwardIt first, ForwardIt last, sarastd::forward_iterator_tag)
+	template<typename ForwardIterator>
+	void vector<Type, Allocator>::_insert_back(ForwardIterator first, ForwardIterator last, sarastd::forward_iterator_tag)
 	{
 		m_impl.adjust_capacity(sarastd::distance(first, last));
 		_insert_back(first, last, sarastd::input_iterator_tag());
@@ -562,19 +562,19 @@ namespace sarastd {
 	}
 
 	template<typename Type, typename Allocator>
-	template<typename ForwardIt>
+	template<typename ForwardIterator>
 	typename
-	vector<Type, Allocator>::iterator vector<Type, Allocator>::_insert(const_iterator cpos, ForwardIt first, ForwardIt last, sarastd::forward_iterator_tag)
+	vector<Type, Allocator>::iterator vector<Type, Allocator>::_insert(const_iterator cpos, ForwardIterator first, ForwardIterator last, sarastd::forward_iterator_tag)
 	{
 		iterator pos(begin());
-		sarastd::advance(pos, sarastd::distance<const_iterator>(begin(), cpos));
+		sarastd::advance(pos, sarastd::distance(cbegin(), cpos));
 		difference_type distance = sarastd::distance(begin(), pos);
 		difference_type n = sarastd::distance(first, last);
 		iterator oldEnd(end());
 		if (m_impl.check_capacity(n)) {
 			size_type elems_between = oldEnd - pos;
 			if (elems_between < n) {
-				ForwardIt mid(first);
+				ForwardIterator mid(first);
 				sarastd::advance(mid, elems_between);
 				sarastd::uninitialized_copy(mid, last, oldEnd);
 				sarastd::uninitialized_copy(pos, oldEnd, oldEnd + n - elems_between);

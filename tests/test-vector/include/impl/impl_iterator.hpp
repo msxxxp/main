@@ -58,16 +58,16 @@ namespace sarastd
 		typedef const Type&                reference;
 	};
 
-	template<typename It_t>
-	typename iterator_traits<It_t>::iterator_category _iterator_category(const It_t &)
+	template<typename Iterator>
+	typename iterator_traits<Iterator>::iterator_category _iterator_category(const Iterator &)
 	{
-		return typename iterator_traits<It_t>::iterator_category();
+		return typename iterator_traits<Iterator>::iterator_category();
 	}
 
-	template<typename InputIt>
-	typename iterator_traits<InputIt>::difference_type _distance(InputIt first, InputIt last, input_iterator_tag)
+	template<typename InputIterator>
+	typename iterator_traits<InputIterator>::difference_type _distance(InputIterator first, InputIterator last, input_iterator_tag)
 	{
-		typename iterator_traits<InputIt>::difference_type n = 0;
+		typename iterator_traits<InputIterator>::difference_type n = 0;
 		while (first != last)
 		{
 			++first;
@@ -76,27 +76,27 @@ namespace sarastd
 		return n;
 	}
 
-	template<typename RanIt_t>
-	typename iterator_traits<RanIt_t>::difference_type _distance(RanIt_t first, RanIt_t last, random_access_iterator_tag)
+	template<typename RandomIterator>
+	typename iterator_traits<RandomIterator>::difference_type _distance(RandomIterator first, RandomIterator last, random_access_iterator_tag)
 	{
 		return last - first;
 	}
 
-	template<typename InputIt>
-	typename iterator_traits<InputIt>::difference_type distance(InputIt first, InputIt last)
+	template<typename InputIterator>
+	typename iterator_traits<InputIterator>::difference_type distance(InputIterator first, InputIterator last)
 	{
 		return _distance(first, last, _iterator_category(first));
 	}
 
-	template<typename InputIt, typename Dist>
-	void _advance(InputIt& current, Dist n, input_iterator_tag)
+	template<typename InputIterator, typename Distance>
+	void _advance(InputIterator& current, Distance n, input_iterator_tag)
 	{
 		while (n--)
 			++current;
 	}
 
-	template<typename BiIt_t, typename Dist>
-	void _advance(BiIt_t & current, Dist n, bidirectional_iterator_tag)
+	template<typename BidirIterator, typename Distance>
+	void _advance(BidirIterator & current, Distance n, bidirectional_iterator_tag)
 	{
 		if (n > 0)
 			while (n--)
@@ -106,28 +106,28 @@ namespace sarastd
 				--current;
 	}
 
-	template<typename RanIt_t, typename Dist>
-	void _advance(RanIt_t & current, Dist n, random_access_iterator_tag)
+	template<typename RandomIterator, typename Distance>
+	void _advance(RandomIterator & current, Distance n, random_access_iterator_tag)
 	{
 		current += n;
 	}
 
-	template<typename InputIt, typename Dist>
-	void advance(InputIt & current, Dist n)
+	template<typename InputIterator, typename Distance>
+	void advance(InputIterator & current, Distance n)
 	{
-		typename iterator_traits<InputIt>::difference_type d = n;
+		typename iterator_traits<InputIterator>::difference_type d = n;
 		_advance(current, d, _iterator_category(current));
 	}
 
-	template<typename FoIt_t>
-	FoIt_t next(FoIt_t current, typename iterator_traits<FoIt_t>::difference_type n = 1)
+	template<typename ForwardIterator>
+	ForwardIterator next(ForwardIterator current, typename iterator_traits<ForwardIterator>::difference_type n = 1)
 	{
 		advance(current, n);
 		return current;
 	}
 
-	template<typename BiIt_t>
-	BiIt_t prev(BiIt_t current, typename iterator_traits<BiIt_t>::difference_type n = 1)
+	template<typename BidirIterator>
+	BidirIterator prev(BidirIterator current, typename iterator_traits<BidirIterator>::difference_type n = 1)
 	{
 		advance(current, -n);
 		return current;
@@ -136,14 +136,14 @@ namespace sarastd
 	template<
 	typename Category,
 	typename Type,
-	typename Dist = sarastd::ptrdiff_t,
+	typename Distance = sarastd::ptrdiff_t,
 	typename Pointer = Type*,
 	typename Reference = Type&>
 	struct iterator
 	{
 		typedef Category  iterator_category;
 		typedef Type      value_type;
-		typedef Dist      difference_type;
+		typedef Distance  difference_type;
 		typedef Pointer   pointer;
 		typedef Reference reference;
 	};
@@ -204,7 +204,7 @@ namespace sarastd
 	template<typename Iterator1, typename Iterator2>
 	bool operator !=(const normal_iterator<Iterator1>& lhs, const normal_iterator<Iterator2>& rhs)
 	{
-		return !(lhs.base() == rhs.base());
+		return sarastd::rel_ops::operator !=(lhs, rhs);
 	}
 
 	template<typename Iterator1, typename Iterator2>
@@ -216,19 +216,19 @@ namespace sarastd
 	template<typename Iterator1, typename Iterator2>
 	bool operator <=(const normal_iterator<Iterator1>& lhs, const normal_iterator<Iterator2>& rhs)
 	{
-		return !(rhs.base() < lhs.base());
+		return sarastd::rel_ops::operator <=(lhs, rhs);
 	}
 
 	template<typename Iterator1, typename Iterator2>
 	bool operator >(const normal_iterator<Iterator1>& lhs, const normal_iterator<Iterator2>& rhs)
 	{
-		return rhs.base() < lhs.base();
+		return sarastd::rel_ops::operator >(lhs, rhs);
 	}
 
 	template<typename Iterator1, typename Iterator2>
 	bool operator >=(const normal_iterator<Iterator1>& lhs, const normal_iterator<Iterator2>& rhs)
 	{
-		return !(lhs.base() < rhs.base());
+		return sarastd::rel_ops::operator >=(lhs, rhs);
 	}
 
 	template<typename Iterator>
@@ -300,7 +300,7 @@ namespace sarastd
 	template<typename Iterator1, typename Iterator2>
 	bool operator !=(const reverse_iterator<Iterator1>& lhs, const reverse_iterator<Iterator2>& rhs)
 	{
-		return !(lhs.base() == rhs.base());
+		return sarastd::rel_ops::operator !=(lhs, rhs);
 	}
 
 	template<typename Iterator1, typename Iterator2>
@@ -312,19 +312,19 @@ namespace sarastd
 	template<typename Iterator1, typename Iterator2>
 	bool operator <=(const reverse_iterator<Iterator1>& lhs, const reverse_iterator<Iterator2>& rhs)
 	{
-		return !(rhs.base() < lhs.base());
+		return sarastd::rel_ops::operator <=(lhs, rhs);
 	}
 
 	template<typename Iterator1, typename Iterator2>
 	bool operator >(const reverse_iterator<Iterator1>& lhs, const reverse_iterator<Iterator2>& rhs)
 	{
-		return rhs.base() < lhs.base();
+		return sarastd::rel_ops::operator >(lhs, rhs);
 	}
 
 	template<typename Iterator1, typename Iterator2>
 	bool operator >=(const reverse_iterator<Iterator1>& lhs, const reverse_iterator<Iterator2>& rhs)
 	{
-		return !(lhs.base() < rhs.base());
+		return sarastd::rel_ops::operator >=(lhs, rhs);
 	}
 
 	template<typename Iterator>
@@ -431,6 +431,7 @@ namespace sarastd
 
 		bool          operator ==(const this_type& right) const {return current == right.current;}
 		bool          operator <(const this_type& right) const {return current < right.current;}
+		difference_type operator -(const this_type& right) const {return current - right.current;}
 
 	private:
 		sarastd::size_t current;
@@ -483,7 +484,7 @@ namespace sarastd
 	typename
 	_const_value_iterator<Type>::difference_type operator -(const _const_value_iterator<Type>& lhs, const _const_value_iterator<Type>& rhs)
 	{
-		return lhs - rhs;
+		return lhs.operator -(rhs);
 	}
 
 	template<typename Type>

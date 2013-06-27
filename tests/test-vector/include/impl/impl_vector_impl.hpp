@@ -39,7 +39,6 @@ namespace sarastd {
 	template<typename Type, typename Allocator>
 	_vector_impl<Type, Allocator>::~_vector_impl()
 	{
-		printf("%s\n", __PRETTY_FUNCTION__);
 		if (begin)
 			allocator_type::deallocate(begin, capacity());
 	}
@@ -48,7 +47,6 @@ namespace sarastd {
 	_vector_impl<Type, Allocator>::_vector_impl() :
 		begin(0), end(0), end_of_storage(0)
 	{
-		printf("%s\n", __PRETTY_FUNCTION__);
 	}
 
 	template<typename Type, typename Allocator>
@@ -190,7 +188,6 @@ namespace sarastd {
 	template<typename Type>
 	_vector_impl<Type, movable_allocator<Type> >::~_vector_impl()
 	{
-		printf("%s\n", __PRETTY_FUNCTION__);
 		if (handle) {
 			lock();
 			while (end != begin)
@@ -204,7 +201,6 @@ namespace sarastd {
 	_vector_impl<Type, movable_allocator<Type> >::_vector_impl() :
 		begin(0), end(0), end_of_storage(0), handle(0)
 	{
-		printf("%s\n", __PRETTY_FUNCTION__);
 	}
 
 	template<typename Type>
@@ -318,7 +314,6 @@ namespace sarastd {
 	template<typename Type>
 	void _vector_impl<Type, movable_allocator<Type> >::lock() const
 	{
-		printf("%s\n", __PRETTY_FUNCTION__);
 		pointer oldBegin = begin;
 		begin = (pointer)allocator_type::lock(handle);
 		sarastd::ptrdiff_t diff = begin - oldBegin;
@@ -329,7 +324,6 @@ namespace sarastd {
 	template<typename Type>
 	void _vector_impl<Type, movable_allocator<Type> >::unlock() const
 	{
-		printf("%s\n", __PRETTY_FUNCTION__);
 		allocator_type::unlock(handle);
 	}
 

@@ -78,7 +78,7 @@
 									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/${ProjName}/include}&quot;"/>
 								</option>
 								<option id="gnu.cpp.compiler.option.warnings.extrawarn.1513759958" name="Extra warnings (-Wextra)" superClass="gnu.cpp.compiler.option.warnings.extrawarn" value="true" valueType="boolean"/>
-								<option id="gnu.cpp.compiler.option.warnings.toerrors.434543918" name="Warnings as errors (-Werror)" superClass="gnu.cpp.compiler.option.warnings.toerrors" value="true" valueType="boolean"/>
+								<option id="gnu.cpp.compiler.option.warnings.toerrors.434543918" name="Warnings as errors (-Werror)" superClass="gnu.cpp.compiler.option.warnings.toerrors" value="false" valueType="boolean"/>
 								<option id="gnu.cpp.compiler.option.other.other.102011472" name="Other flags" superClass="gnu.cpp.compiler.option.other.other" value="-Wno-missing-field-initializers -c -fmessage-length=0 -fno-exceptions -fno-rtti -fno-threadsafe-statics -m32" valueType="string"/>
 								<inputType id="cdt.managedbuild.tool.gnu.cpp.compiler.input.604894091" superClass="cdt.managedbuild.tool.gnu.cpp.compiler.input"/>
 							</tool>
@@ -89,9 +89,9 @@
 									<listOptionValue builtIn="false" value="kernel32"/>
 								</option>
 								<option id="gnu.cpp.link.option.flags.779498433" name="Linker flags" superClass="gnu.cpp.link.option.flags" value="-Wl,-Map=test_vector.map -m32 -static" valueType="string"/>
-								<option id="gnu.cpp.link.option.nostdlibs.625079968" superClass="gnu.cpp.link.option.nostdlibs" value="true" valueType="boolean"/>
-								<option id="gnu.cpp.link.option.nodeflibs.1417949882" superClass="gnu.cpp.link.option.nodeflibs" value="true" valueType="boolean"/>
-								<option id="gnu.cpp.link.option.nostart.32689926" superClass="gnu.cpp.link.option.nostart" value="true" valueType="boolean"/>
+								<option id="gnu.cpp.link.option.nostdlibs.625079968" name="No startup or default libs (-nostdlib)" superClass="gnu.cpp.link.option.nostdlibs" value="true" valueType="boolean"/>
+								<option id="gnu.cpp.link.option.nodeflibs.1417949882" name="Do not use default libraries (-nodefaultlibs)" superClass="gnu.cpp.link.option.nodeflibs" value="true" valueType="boolean"/>
+								<option id="gnu.cpp.link.option.nostart.32689926" name="Do not use standard start files (-nostartfiles)" superClass="gnu.cpp.link.option.nostart" value="true" valueType="boolean"/>
 								<inputType id="cdt.managedbuild.tool.gnu.cpp.linker.input.1393595484" superClass="cdt.managedbuild.tool.gnu.cpp.linker.input">
 									<additionalInput kind="additionalinputdependency" paths="$(USER_OBJS)"/>
 									<additionalInput kind="additionalinput" paths="$(LIBS)"/>

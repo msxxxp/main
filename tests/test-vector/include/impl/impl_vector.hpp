@@ -22,8 +22,8 @@ namespace sarastd {
 		typedef typename alloc_traits::reference reference;
 		typedef typename alloc_traits::const_reference const_reference;
 		typedef typename alloc_traits::difference_type difference_type;
-		typedef sarastd::normal_iterator<pointer> iterator;
-		typedef sarastd::normal_iterator<const_pointer> const_iterator;
+		typedef sarastd::pvt::_normal_iterator<pointer> iterator;
+		typedef sarastd::pvt::_normal_iterator<const_pointer> const_iterator;
 		typedef sarastd::reverse_iterator<iterator> reverse_iterator;
 		typedef sarastd::reverse_iterator<const_iterator> const_reverse_iterator;
 
@@ -183,8 +183,8 @@ namespace sarastd {
 		m_impl()
 //		m_impl(n, value_type())
 	{
-		sarastd::value_generator<Type> generator(n, value_type());
-		_insert_back(generator.begin(), generator.end(), _iterator_category(generator.begin()));
+		sarastd::pvt::value_generator<Type> generator(n, value_type());
+		_insert_back(generator.begin(), generator.end(), sarastd::pvt::_iterator_category(generator.begin()));
 	}
 
 	template<typename Type, typename Allocator>
@@ -192,8 +192,8 @@ namespace sarastd {
 		m_impl()
 //		m_impl(n, val)
 	{
-		sarastd::value_generator<Type> generator(n, value);
-		_insert_back(generator.begin(), generator.end(), _iterator_category(generator.begin()));
+		sarastd::pvt::value_generator<Type> generator(n, value);
+		_insert_back(generator.begin(), generator.end(), sarastd::pvt::_iterator_category(generator.begin()));
 	}
 
 	template<typename Type, typename Allocator>
@@ -201,7 +201,7 @@ namespace sarastd {
 	vector<Type, Allocator>::vector(InputIt first, InputIt last) :
 		m_impl()
 	{
-		_insert_back(first, last, _iterator_category(first));
+		_insert_back(first, last, sarastd::pvt::_iterator_category(first));
 	}
 
 	template<typename Type, typename Allocator>
@@ -441,8 +441,8 @@ namespace sarastd {
 	typename
 	vector<Type, Allocator>::iterator vector<Type, Allocator>::insert(const_iterator cpos, size_type n, const value_type& value)
 	{
-		sarastd::value_generator<Type> generator(value, n);
-		return _insert(cpos, generator.begin(), generator.end(), _iterator_category(generator.begin()));
+		sarastd::pvt::value_generator<Type> generator(value, n);
+		return _insert(cpos, generator.begin(), generator.end(), sarastd::pvt::_iterator_category(generator.begin()));
 //		iterator pos(begin());
 //		sarastd::advance(pos, sarastd::distance(cbegin(), cpos));
 //		if (m_impl.check_capacity(n)) {
@@ -475,7 +475,7 @@ namespace sarastd {
 	typename
 	vector<Type, Allocator>::iterator vector<Type, Allocator>::insert(const_iterator pos, InputIt first, InputIt last)
 	{
-		return _insert(pos, first, last, _iterator_category(first));
+		return _insert(pos, first, last, sarastd::pvt::_iterator_category(first));
 	}
 
 	template<typename Type, typename Allocator>

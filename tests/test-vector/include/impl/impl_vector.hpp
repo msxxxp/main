@@ -180,14 +180,20 @@ namespace sarastd {
 
 	template<typename Type, typename Allocator>
 	vector<Type, Allocator>::vector(size_type n) :
-		m_impl(n, value_type())
+		m_impl()
+//		m_impl(n, value_type())
 	{
+		sarastd::value_generator<Type> generator(value_type(), n);
+		_insert_back(generator.begin(), generator.end(), _iterator_category(generator.begin()));
 	}
 
 	template<typename Type, typename Allocator>
-	vector<Type, Allocator>::vector(size_type n, const value_type& val) :
-		m_impl(n, val)
+	vector<Type, Allocator>::vector(size_type n, const value_type& value) :
+		m_impl()
+//		m_impl(n, val)
 	{
+		sarastd::value_generator<Type> generator(value, n);
+		_insert_back(generator.begin(), generator.end(), _iterator_category(generator.begin()));
 	}
 
 	template<typename Type, typename Allocator>
@@ -435,31 +441,33 @@ namespace sarastd {
 	typename
 	vector<Type, Allocator>::iterator vector<Type, Allocator>::insert(const_iterator cpos, size_type n, const value_type& value)
 	{
-		iterator pos(begin());
-		sarastd::advance(pos, sarastd::distance<const_iterator>(begin(), cpos));
-		if (m_impl.check_capacity(n)) {
-			iterator oldEnd(end());
-			size_type elems_between = oldEnd - pos;
-			if (elems_between < n) {
-				sarastd::uninitialized_fill_n(oldEnd, n - elems_between, value);
-				sarastd::uninitialized_copy(pos, oldEnd, oldEnd + n - elems_between);
-				sarastd::fill_n(pos, elems_between, value);
-			} else {
-				sarastd::uninitialized_copy(end() - n, end(), end());
-				sarastd::copy_backward(pos, end() - n, end());
-				sarastd::fill(pos, pos + n, value);
-			}
-			m_impl.end += n;
-			return pos;
-		}
-		impl_type newImpl(m_impl.get_new_capacity(n), m_impl.begin, &*pos);
-		iterator ret(newImpl.end);
-		sarastd::uninitialized_fill_n(ret, n, value);
-		newImpl.end += n;
-		sarastd::uninitialized_copy(pos, end(), iterator(newImpl.end));
-		newImpl.end += (end() - pos);
-		newImpl.swap(m_impl);
-		return ret;
+		sarastd::value_generator<Type> generator(value, n);
+		return _insert(cpos, generator.begin(), generator.end(), _iterator_category(generator.begin()));
+//		iterator pos(begin());
+//		sarastd::advance(pos, sarastd::distance<const_iterator>(begin(), cpos));
+//		if (m_impl.check_capacity(n)) {
+//			iterator oldEnd(end());
+//			size_type elems_between = oldEnd - pos;
+//			if (elems_between < n) {
+//				sarastd::uninitialized_fill_n(oldEnd, n - elems_between, value);
+//				sarastd::uninitialized_copy(pos, oldEnd, oldEnd + n - elems_between);
+//				sarastd::fill_n(pos, elems_between, value);
+//			} else {
+//				sarastd::uninitialized_copy(end() - n, end(), end());
+//				sarastd::copy_backward(pos, end() - n, end());
+//				sarastd::fill(pos, pos + n, value);
+//			}
+//			m_impl.end += n;
+//			return pos;
+//		}
+//		impl_type newImpl(m_impl.get_new_capacity(n), m_impl.begin, &*pos);
+//		iterator ret(newImpl.end);
+//		sarastd::uninitialized_fill_n(ret, n, value);
+//		newImpl.end += n;
+//		sarastd::uninitialized_copy(pos, end(), iterator(newImpl.end));
+//		newImpl.end += (end() - pos);
+//		newImpl.swap(m_impl);
+//		return ret;
 	}
 
 	template<typename Type, typename Allocator>
@@ -560,8 +568,8 @@ namespace sarastd {
 	{
 		iterator pos(begin());
 		sarastd::advance(pos, sarastd::distance<const_iterator>(begin(), cpos));
-		size_type distance = sarastd::distance(begin(), pos);
-		size_type n = sarastd::distance(first, last);
+		difference_type distance = sarastd::distance(begin(), pos);
+		difference_type n = sarastd::distance(first, last);
 		iterator oldEnd(end());
 		if (m_impl.check_capacity(n)) {
 			size_type elems_between = oldEnd - pos;

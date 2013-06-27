@@ -330,10 +330,6 @@ namespace sarastd {
 	void _vector_impl<Type, movable_allocator<Type> >::unlock() const
 	{
 		printf("%s\n", __PRETTY_FUNCTION__);
-		sarastd::ptrdiff_t diff = begin - pointer(0);
-		end_of_storage -= diff;
-		end -= diff;
-		begin = 0;
 		allocator_type::unlock(handle);
 	}
 

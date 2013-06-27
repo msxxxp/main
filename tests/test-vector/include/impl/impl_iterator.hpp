@@ -2,6 +2,7 @@
 #define SARALIB_STL_ITERATOR_HPP_
 
 #include "impl_types.hpp"
+#include "impl_utility.hpp"
 
 namespace sarastd
 {
@@ -398,37 +399,82 @@ namespace sarastd
 		container_type * container;
 	};
 
+	///=============================================================================================
+	template<typename Type>
+	struct _const_value_iterator : public iterator<forward_iterator_tag, void, void, void, void>
+	{
+		typedef _const_value_iterator this_type;
+		typedef forward_iterator_tag iterator_category;
+		typedef Type value_type;
+		typedef sarastd::ptrdiff_t 	difference_type;
+		typedef sarastd::size_t size_type;
+
+		_const_value_iterator(const Type * v): current(0), value(v) {}
+		_const_value_iterator(size_type n): current(n), value(0) {}
+
+		const Type &  operator * () const {return *value;}
+		const Type *  operator ->() const {return value;}
+		this_type&    operator ++()       {++current; return *this;}
+		this_type     operator ++(int)    {this_type tmp = *this; ++current; return tmp;}
+
+		bool          operator ==(const this_type& right) const {return current == right.current;}
+		bool          operator <(const this_type& right) const {return current < right.current;}
+
+	private:
+		sarastd::size_t current;
+		const Type * value;
+	};
+
+	template<typename Type>
+	bool operator ==(const _const_value_iterator<Type>& lhs, const _const_value_iterator<Type>& rhs)
+	{
+		return lhs == rhs;
+	}
+
+	template<typename Type>
+	bool operator !=(const _const_value_iterator<Type>& lhs, const _const_value_iterator<Type>& rhs)
+	{
+		return sarastd::rel_ops::operator !=(lhs, rhs);
+	}
+
+	template<typename Type>
+	bool operator <(const _const_value_iterator<Type>& lhs, const _const_value_iterator<Type>& rhs)
+	{
+		return lhs < rhs;
+	}
+
+	template<typename Type>
+	bool operator <=(const _const_value_iterator<Type>& lhs, const _const_value_iterator<Type>& rhs)
+	{
+		return sarastd::rel_ops::operator <=(lhs, rhs);
+	}
+
+	template<typename Type>
+	bool operator >(const _const_value_iterator<Type>& lhs, const _const_value_iterator<Type>& rhs)
+	{
+		return sarastd::rel_ops::operator >(lhs, rhs);
+	}
+
+	template<typename Type>
+	bool operator >=(const _const_value_iterator<Type>& lhs, const _const_value_iterator<Type>& rhs)
+	{
+		return sarastd::rel_ops::operator >=(lhs, rhs);
+	}
+
 	template<typename Type>
 	class value_generator
 	{
 		typedef value_generator<Type> this_type;
 		typedef Type value_type;
 		typedef sarastd::size_t size_type;
-
-		struct const_iterator : public iterator<output_iterator_tag, void, void, void, void>
-		{
-			typedef forward_iterator_tag iterator_category;
-			typedef typename value_generator::value_type    value_type;
-			typedef value_type&  reference;
-			typedef value_type*  pointer;
-
-			reference     operator * () const {return (reference)generator->get_value();}
-			pointer       operator ->() const {return &(operator*());}
-			this_type&    operator ++()       {++current; return *this;}
-			this_type     operator ++(int)    {this_type tmp = *this; ++current; return tmp;}
-		private:
-			const_iterator(const value_generator &g): current(0), generator(&g) {}
-
-			sarastd::size_t current;
-			value_generator * generator;
-		};
+		typedef _const_value_iterator<Type> const_iterator;
 
 	public:
 		explicit value_generator(const value_type & v, size_type n) : value(v), cnt(n) {}
 		value_generator(const this_type & other) : value(other.value), cnt(other.cnt) {}
 
-		const_iterator begin() const;
-		const_iterator end() const;
+		const_iterator begin() const {return _const_value_iterator<Type>(&value);}
+		const_iterator end() const {return _const_value_iterator<Type>(cnt);}
 
 		const value_type& get_value() const {return value;}
 

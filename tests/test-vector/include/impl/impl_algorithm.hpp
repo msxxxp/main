@@ -61,6 +61,24 @@ namespace sarastd {
 		return ret;
 	}
 
+	template<class InputIt1, class InputIt2, class BinaryPredicate>
+	sarastd::pair<InputIt1, InputIt2> mismatch(InputIt1 first1, InputIt1 last1, InputIt2 first2, BinaryPredicate p)
+	{
+		while (first1 != last1 && p(*first1, *first2)) {
+			++first1, ++first2;
+		}
+		return sarastd::make_pair(first1, first2);
+	}
+
+	template<class InputIt1, class InputIt2>
+	sarastd::pair<InputIt1, InputIt2> mismatch(InputIt1 first1, InputIt1 last1, InputIt2 first2)
+	{
+		while (first1 != last1 && *first1 == *first2) {
+			++first1, ++first2;
+		}
+		return sarastd::make_pair(first1, first2);
+	}
+
 	template<typename InputIt, typename T>
 	InputIt find(InputIt first, InputIt last, const T& value)
 	{

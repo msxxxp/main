@@ -161,6 +161,14 @@ namespace sarastd {
 		return (first1 == last1) && (first2 != last2);
 	}
 
+	template<typename Size>
+	Size Log2(Size n)
+	{
+		int i;
+		for (i = 0; n; ++i)
+			n >>= 1;
+		return i - 1;
+	}
 }
 
 #endif

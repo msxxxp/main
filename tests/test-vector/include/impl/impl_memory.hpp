@@ -26,6 +26,13 @@ namespace sarastd {
 		{
 			pointer->~Type();
 		}
+
+		template<typename ForwardIterator, typename Type>
+		void _destroy(ForwardIterator first, ForwardIterator last)
+		{
+			for (; first != last; ++first)
+				first->~Type();
+		}
 	}
 
 //	template<bool>

@@ -6,28 +6,30 @@
 
 namespace sarastd {
 	namespace pvt {
-		template<typename T1, typename T2>
-		bool operator !=(const T1& x, const T2& y)
-		{
-			return !(x == y);
-		}
+		namespace ops {
+			template<typename T1, typename T2>
+			bool operator !=(const T1& x, const T2& y)
+			{
+				return !(x == y);
+			}
 
-		template<typename T1, typename T2>
-		bool operator >(const T1& x, const T2& y)
-		{
-			return (y < x);
-		}
+			template<typename T1, typename T2>
+			bool operator >(const T1& x, const T2& y)
+			{
+				return (y < x);
+			}
 
-		template<typename T1, typename T2>
-		bool operator <=(const T1& x, const T2& y)
-		{
-			return !(y < x);
-		}
+			template<typename T1, typename T2>
+			bool operator <=(const T1& x, const T2& y)
+			{
+				return !(y < x);
+			}
 
-		template<typename T1, typename T2>
-		bool operator >=(const T1& x, const T2& y)
-		{
-			return !(x < y);
+			template<typename T1, typename T2>
+			bool operator >=(const T1& x, const T2& y)
+			{
+				return !(x < y);
+			}
 		}
 	}
 
@@ -117,7 +119,7 @@ namespace sarastd {
 	template<typename T1, typename T2>
 	bool operator !=(const pair<T1, T2>& lhs, const pair<T1, T2>& rhs)
 	{
-		return pvt::operator !=(lhs, rhs);
+		return pvt::ops::operator !=(lhs, rhs);
 	}
 
 	template<typename T1, typename T2>
@@ -136,19 +138,19 @@ namespace sarastd {
 	template<typename T1, typename T2>
 	bool operator <=(const pair<T1, T2>& lhs, const pair<T1, T2>& rhs)
 	{
-		return pvt::operator <=(lhs, rhs);
+		return pvt::ops::operator <=(lhs, rhs);
 	}
 
 	template<typename T1, typename T2>
 	bool operator >(const pair<T1, T2>& lhs, const pair<T1, T2>& rhs)
 	{
-		return pvt::operator >(lhs, rhs);
+		return pvt::ops::operator >(lhs, rhs);
 	}
 
 	template<typename T1, typename T2>
 	bool operator >=(const pair<T1, T2>& lhs, const pair<T1, T2>& rhs)
 	{
-		return pvt::operator >=(lhs, rhs);
+		return pvt::ops::operator >=(lhs, rhs);
 	}
 
 	template<typename T1, typename T2>

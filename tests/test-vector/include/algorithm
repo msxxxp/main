@@ -2,6 +2,7 @@
 #define SARALIB_STL_ALGORITHM_
 
 #include "impl/impl_algorithm_base.hpp"
+#include "impl/impl_algorithm_heap.hpp"
 #include "impl/impl_algorithm_sort.hpp"
 #include "impl/impl_algorithm.hpp"
 

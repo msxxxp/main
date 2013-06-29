@@ -140,7 +140,7 @@ int wWinMain(const wchar_t * /*pCmdLine*/) {
 
 	typedef vector<Base>           vect;
 	typedef vector<Base>::iterator iter;
-	int m1[] = {0, 1, 2, 3, 4, 5};
+	ssize_t m1[] = {0, 1, 2, 3, 4, 5};
 	//printf("construct v1\n");
 	vect v1;
 	//	v1.resize(5);

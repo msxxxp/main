@@ -572,7 +572,7 @@ namespace sarastd {
 		difference_type n = sarastd::distance(first, last);
 		iterator oldEnd(end());
 		if (m_impl.check_capacity(n)) {
-			size_type elems_between = oldEnd - pos;
+			difference_type elems_between = oldEnd - pos;
 			if (elems_between < n) {
 				ForwardIterator mid(first);
 				sarastd::advance(mid, elems_between);

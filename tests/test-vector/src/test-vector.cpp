@@ -1,8 +1,8 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <time.h>
-#include <vector>
-#include <algorithm>
+#include <simstl/vector>
+#include <simstl/algorithm>
 
 class Base {
 public:

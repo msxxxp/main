@@ -43,14 +43,12 @@ namespace sarastd {
 
 		pair();
 		pair(const T1& x, const T2& y);
-		pair(const pair& p);
 
 		template<typename U1, typename U2>
 		pair(const pair<U1, U2>& p);
 
 		template<typename U1, typename U2>
 		pair& operator =(const pair<U1, U2>& other);
-		pair& operator =(const pair& other);
 
 		void swap(pair& other);
 	};
@@ -68,23 +66,10 @@ namespace sarastd {
 	}
 
 	template<typename T1, typename T2>
-	pair<T1, T2>::pair(const pair& p) :
-		first(p.first), second(p.second)
-	{
-	}
-
-	template<typename T1, typename T2>
 	template<typename U1, typename U2>
 	pair<T1, T2>::pair(const pair<U1, U2>& p) :
 		first(p.first), second(p.second)
 	{
-	}
-
-	template<typename T1, typename T2>
-	pair<T1, T2>& pair<T1, T2>::operator=(const pair& other)
-	{
-		pair(other).swap(*this);
-		return *this;
 	}
 
 	template<typename T1, typename T2>
@@ -125,14 +110,7 @@ namespace sarastd {
 	template<typename T1, typename T2>
 	bool operator <(const pair<T1, T2>& lhs, const pair<T1, T2>& rhs)
 	{
-		if (lhs.first < rhs.first)
-			return true;
-		else if (rhs.first < lhs.first)
-			return false;
-		else if (lhs.second < rhs.second)
-			return true;
-		else
-			return false;
+        return ((lhs.first < rhs.first) || (!(rhs.first < lhs.first) && (lhs.second < rhs.second)));
 	}
 
 	template<typename T1, typename T2>

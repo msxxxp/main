@@ -227,8 +227,7 @@ namespace sarastd {
 				RandomIterator end(current), prev(current);
 				const value_type value(*current);
 
-				for (--prev; compare(value, *prev); --end, --prev) // We skip checking for (prev >= first) because quick_sort (our caller) makes this unnecessary.
-				    {
+				for (--prev; compare(value, *prev); --end, --prev) { // We skip checking for (prev >= first) because quick_sort (our caller) makes this unnecessary.
 					*end = *prev;
 				}
 
@@ -334,29 +333,6 @@ namespace sarastd {
 			}
 		}
 
-		//	template<typename RandomIterator, typename _Size>
-		//	void _introselect(RandomIterator __first, RandomIterator __nth, RandomIterator __last, _Size __depth_limit)
-		//	{
-		//		typedef typename iterator_traits<RandomIterator>::value_type value_type;
-		//
-		//		while (__last - __first > 3) {
-		//			if (__depth_limit == 0) {
-		//				std::__heap_select(__first, __nth + 1, __last);
-		//
-		//				// Place the nth largest element in its final position.
-		//				sarastd::iter_swap(__first, __nth);
-		//				return;
-		//			}
-		//			--__depth_limit;
-		//			RandomIterator __cut = std::__unguarded_partition_pivot(__first, __last);
-		//			if (__cut <= __nth)
-		//				__first = __cut;
-		//			else
-		//				__last = __cut;
-		//		}
-		//		std::__insertion_sort(__first, __last);
-		//	}
-		//
 		//	template<typename RandomIterator, typename _Size, typename _Compare>
 		//	void _introselect(RandomIterator __first, RandomIterator __nth, RandomIterator __last, _Size __depth_limit, _Compare __comp)
 		//	{
@@ -379,17 +355,6 @@ namespace sarastd {
 		//		std::__insertion_sort(__first, __last, __comp);
 		//	}
 		//
-		//	template<typename RandomIterator>
-		//	void nth_element(RandomIterator __first, RandomIterator __nth, RandomIterator __last)
-		//	{
-		//		typedef typename iterator_traits<RandomIterator>::value_type value_type;
-		//
-		//		if (__first == __last || __nth == __last)
-		//			return;
-		//
-		//		sarastd::_introselect(__first, __nth, __last, std::_lg(__last - __first) * 2);
-		//	}
-		//
 		//	template<typename RandomIterator, typename _Compare>
 		//	void nth_element(RandomIterator __first, RandomIterator __nth, RandomIterator __last, _Compare __comp)
 		//	{
@@ -400,59 +365,6 @@ namespace sarastd {
 		//
 		//		std::__introselect(__first, __nth, __last, std::__lg(__last - __first) * 2, __comp);
 		//	}
-
-		template<typename BiIt, typename Compare>
-		void _insertion_sort(BiIt first, BiIt last, Compare predicate)
-		{
-			if (first == last)
-				return;
-
-			BiIt i = first;
-			for (++i; i != last; ++i) {
-				BiIt j = i, j1 = i;
-				for (; j != first && predicate(*j, *--j1); --j)
-					sarastd::iter_swap(j, j1);
-			}
-		}
-
-		template<typename RandomIterator, typename Compare>
-		pair<RandomIterator, RandomIterator> _partition(RandomIterator first, RandomIterator last, Compare predicate)
-		{
-			typedef typename sarastd::iterator_traits<RandomIterator>::value_type value_type;
-			value_type middle = *(first + ((last - first) / 2));
-
-			RandomIterator i = first;
-			for (RandomIterator k = i; k != last; ++k)
-				if (predicate(*k, middle)) {
-					sarastd::iter_swap(i, k);
-					++i;
-				}
-
-			RandomIterator j = i;
-			for (RandomIterator k = j; k != last; ++k)
-				if (!predicate(middle, *k)) {
-					sarastd::iter_swap(j, k);
-					++j;
-				}
-
-			return make_pair(i, j);
-		}
-
-		template<typename RandomIterator, typename Compare>
-		void _sort(RandomIterator first, RandomIterator last, Compare predicate)
-		{
-			while (last - first > ISORT_MAX) {
-				pair<RandomIterator, RandomIterator> middle = _partition(first, last, predicate);
-				if (middle.first - first >= last - middle.second) {
-					_sort(middle.second, last, predicate);
-					last = middle.first;
-				} else {
-					_sort(first, middle.first, predicate);
-					first = middle.second;
-				}
-			}
-			_insertion_sort(first, last, predicate);
-		}
 
 	}
 

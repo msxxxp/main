@@ -120,7 +120,7 @@ int wWinMain(const wchar_t * /*pCmdLine*/) {
 //		printf(" )\n");
 	}
 
-	return 0;
+//	return 0;
 
 	Base b1(1);
 	Base b2(2);

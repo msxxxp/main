@@ -2,6 +2,7 @@
 #define SARALIB_STL_NUMERIC_HPP_
 
 #include "impl_types.hpp"
+#include "impl_functional.hpp"
 #include "impl_utility.hpp"
 
 namespace sarastd {
@@ -104,11 +105,11 @@ namespace sarastd {
 		return ++d_first;
 	}
 
-//	template<typename InputIt, typename OutputIt>
-//	OutputIt partial_sum(InputIt first, InputIt last, OutputIt d_first)
-//	{
-//		return sarastd::partial_sum(first, last, d_first, sarastd::plus<InputIt, InputIt>());
-//	}
+	template<typename InputIt, typename OutputIt>
+	OutputIt partial_sum(InputIt first, InputIt last, OutputIt d_first)
+	{
+		return sarastd::partial_sum(first, last, d_first, sarastd::plus<typename sarastd::iterator_traits<InputIt>::value_type>());
+	}
 
 }
 

@@ -114,16 +114,6 @@ namespace sarastd {
 	};
 
 	///=============================================================================================
-	template<typename Type>
-	class movable_vector: public vector<Type, sarastd::pvt::_movable_allocator<Type> >
-	{
-		typedef vector<Type, sarastd::pvt::_movable_allocator<Type> > base_type;
-	public:
-		void lock() const;
-		void unlock() const;
-	};
-
-	///=============================================================================================
 	template<typename Type, typename Allocator>
 	bool operator ==(const vector<Type, Allocator>& lhs, const vector<Type, Allocator>& rhs)
 	{
@@ -183,7 +173,7 @@ namespace sarastd {
 		m_impl()
 //		m_impl(n, value_type())
 	{
-		sarastd::pvt::value_generator<Type> generator(n, value_type());
+		sarastd::pvt::_value_generator<Type> generator(n, value_type());
 		_insert_back(generator.begin(), generator.end(), sarastd::pvt::_iterator_category(generator.begin()));
 	}
 
@@ -192,7 +182,7 @@ namespace sarastd {
 		m_impl()
 //		m_impl(n, val)
 	{
-		sarastd::pvt::value_generator<Type> generator(n, value);
+		sarastd::pvt::_value_generator<Type> generator(n, value);
 		_insert_back(generator.begin(), generator.end(), sarastd::pvt::_iterator_category(generator.begin()));
 	}
 
@@ -441,7 +431,7 @@ namespace sarastd {
 	typename
 	vector<Type, Allocator>::iterator vector<Type, Allocator>::insert(const_iterator cpos, size_type n, const value_type& value)
 	{
-		sarastd::pvt::value_generator<Type> generator(value, n);
+		sarastd::pvt::_value_generator<Type> generator(value, n);
 		return _insert(cpos, generator.begin(), generator.end(), sarastd::pvt::_iterator_category(generator.begin()));
 //		iterator pos(begin());
 //		sarastd::advance(pos, sarastd::distance(cbegin(), cpos));
@@ -596,6 +586,16 @@ namespace sarastd {
 		newImpl.swap(m_impl);
 		return ret;
 	}
+
+	///=============================================================================================
+	template<typename Type>
+	class movable_vector: public vector<Type, sarastd::pvt::_movable_allocator<Type> >
+	{
+		typedef vector<Type, sarastd::pvt::_movable_allocator<Type> > base_type;
+	public:
+		void lock() const;
+		void unlock() const;
+	};
 
 	///=============================================================================================
 	template<typename Type>

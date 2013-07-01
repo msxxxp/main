@@ -15,6 +15,29 @@ extern "C" {
 	void free(void*);
 }
 
+inline void* operator new(sarastd::size_t size)
+{
+	return malloc(size);
+}
+
+inline void* operator new[](sarastd::size_t size)
+{
+	return ::operator new(size);
+}
+
+inline void operator delete(void* ptr)
+{
+	free(ptr);
+}
+
+inline void operator delete[](void * ptr)
+{
+	::operator delete(ptr);
+}
+
+
+
+
 inline void* operator new(sarastd::size_t size, const sarastd::nothrow_t&) throw()
 {
 	return malloc(size);

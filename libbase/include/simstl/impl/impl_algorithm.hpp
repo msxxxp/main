@@ -126,19 +126,6 @@ namespace sarastd {
 		return last;
 	}
 
-	template<typename ForwardIt>
-	ForwardIt adjacent_find(ForwardIt first, ForwardIt last)
-	{
-		if (first == last)
-			return last;
-		ForwardIt next = first;
-		++next;
-		for (; next != last; ++next, ++first)
-			if (*first == *next)
-				return first;
-		return last;
-	}
-
 	template<typename ForwardIt, typename BinaryPredicate>
 	ForwardIt adjacent_find(ForwardIt first, ForwardIt last, BinaryPredicate p)
 	{
@@ -152,20 +139,17 @@ namespace sarastd {
 		return last;
 	}
 
-	template<typename ForwardIt1, typename ForwardIt2>
-	ForwardIt1 search(ForwardIt1 first, ForwardIt1 last, ForwardIt2 s_first, ForwardIt2 s_last)
+	template<typename ForwardIt>
+	ForwardIt adjacent_find(ForwardIt first, ForwardIt last)
 	{
-		for (;; ++first) {
-			ForwardIt1 it = first;
-			for (ForwardIt2 s_it = s_first;; ++it, ++s_it) {
-				if (s_it == s_last)
-					return first;
-				if (it == last)
-					return last;
-				if (!(*it == *s_it))
-					break;
-			}
-		}
+		if (first == last)
+			return last;
+		ForwardIt next = first;
+		++next;
+		for (; next != last; ++next, ++first)
+			if (*first == *next)
+				return first;
+		return last;
 	}
 
 	template<typename ForwardIt1, typename ForwardIt2, typename BinaryPredicate>
@@ -184,24 +168,20 @@ namespace sarastd {
 		}
 	}
 
-	template<typename ForwardIt, typename Size, typename T>
-	ForwardIt search_n(ForwardIt first, ForwardIt last, Size count, const T& value)
+	template<typename ForwardIt1, typename ForwardIt2>
+	ForwardIt1 search(ForwardIt1 first, ForwardIt1 last, ForwardIt2 s_first, ForwardIt2 s_last)
 	{
-		Size curr_count = 0;
-		ForwardIt result, t_last = first;
-		sarastd::advance(t_last, sarastd::distance(first, last) - count + 1);
-
-		for (; first != t_last; ++first) {
-			curr_count = 0;
-			result = first;
-			while (*first == value) {
-				++curr_count;
-				if (curr_count == count)
-					return result;
-				++first;
+		for (;; ++first) {
+			ForwardIt1 it = first;
+			for (ForwardIt2 s_it = s_first;; ++it, ++s_it) {
+				if (s_it == s_last)
+					return first;
+				if (it == last)
+					return last;
+				if (!(*it == *s_it))
+					break;
 			}
 		}
-		return last;
 	}
 
 	template<typename ForwardIt, typename Size, typename T, typename BinaryPredicate>
@@ -215,6 +195,26 @@ namespace sarastd {
 			curr_count = 0;
 			result = first;
 			while (p(*first == value)) {
+				++curr_count;
+				if (curr_count == count)
+					return result;
+				++first;
+			}
+		}
+		return last;
+	}
+
+	template<typename ForwardIt, typename Size, typename T>
+	ForwardIt search_n(ForwardIt first, ForwardIt last, Size count, const T& value)
+	{
+		Size curr_count = 0;
+		ForwardIt result, t_last = first;
+		sarastd::advance(t_last, sarastd::distance(first, last) - count + 1);
+
+		for (; first != t_last; ++first) {
+			curr_count = 0;
+			result = first;
+			while (*first == value) {
 				++curr_count;
 				if (curr_count == count)
 					return result;
@@ -413,21 +413,6 @@ namespace sarastd {
 		}
 	}
 
-	template<typename ForwardIt>
-	ForwardIt unique(ForwardIt first, ForwardIt last)
-	{
-		if (first == last)
-			return last;
-
-		ForwardIt result = first;
-		while (++first != last) {
-			if (!(*result == *first)) {
-				*(++result) = *first;
-			}
-		}
-		return ++result;
-	}
-
 	template<typename ForwardIt, typename BinaryPredicate>
 	ForwardIt unique(ForwardIt first, ForwardIt last, BinaryPredicate p)
 	{
@@ -437,6 +422,22 @@ namespace sarastd {
 		ForwardIt result = first;
 		while (++first != last) {
 			if (!p(*result, *first)) {
+				*(++result) = *first;
+			}
+		}
+		return ++result;
+	}
+
+
+	template<typename ForwardIt>
+	ForwardIt unique(ForwardIt first, ForwardIt last)
+	{
+		if (first == last)
+			return last;
+
+		ForwardIt result = first;
+		while (++first != last) {
+			if (!(*result == *first)) {
 				*(++result) = *first;
 			}
 		}
@@ -473,18 +474,6 @@ namespace sarastd {
 		return ++d_first;
 	}
 
-	template<typename InputIt1, typename InputIt2>
-	bool includes(InputIt1 first1, InputIt1 last1, InputIt2 first2, InputIt2 last2)
-	{
-		for (; first2 != last2; ++first1) {
-			if (first1 == last1 || *first2 < *first1)
-				return false;
-			if (!(*first1 < *first2))
-				++first2;
-		}
-		return true;
-	}
-
 	template<typename InputIt1, typename InputIt2, typename Compare>
 	bool includes(InputIt1 first1, InputIt1 last1, InputIt2 first2, InputIt2 last2, Compare comp)
 	{
@@ -497,25 +486,16 @@ namespace sarastd {
 		return true;
 	}
 
-	template<typename InputIt1, typename InputIt2, typename OutputIt>
-	OutputIt set_difference(InputIt1 first1, InputIt1 last1, InputIt2 first2, InputIt2 last2, OutputIt d_first)
+	template<typename InputIt1, typename InputIt2>
+	bool includes(InputIt1 first1, InputIt1 last1, InputIt2 first2, InputIt2 last2)
 	{
-		while (first1 != last1) {
-			if (first2 == last2)
-				return sarastd::copy(first1, last1, d_first);
-
-			if (*first1 < *first2) {
-				*d_first = *first1;
-				++d_first;
-				++first1;
-			} else {
-				if (!(*first2 < *first1)) {
-					++first1;
-				}
+		for (; first2 != last2; ++first1) {
+			if (first1 == last1 || *first2 < *first1)
+				return false;
+			if (!(*first1 < *first2))
 				++first2;
-			}
 		}
-		return d_first;
+		return true;
 	}
 
 	template<typename InputIt1, typename InputIt2, typename OutputIt, typename Compare>
@@ -540,15 +520,18 @@ namespace sarastd {
 	}
 
 	template<typename InputIt1, typename InputIt2, typename OutputIt>
-	OutputIt set_intersection(InputIt1 first1, InputIt1 last1, InputIt2 first2, InputIt2 last2, OutputIt d_first)
+	OutputIt set_difference(InputIt1 first1, InputIt1 last1, InputIt2 first2, InputIt2 last2, OutputIt d_first)
 	{
-		while (first1 != last1 && first2 != last2) {
+		while (first1 != last1) {
+			if (first2 == last2)
+				return sarastd::copy(first1, last1, d_first);
+
 			if (*first1 < *first2) {
+				*d_first = *first1;
+				++d_first;
 				++first1;
 			} else {
 				if (!(*first2 < *first1)) {
-					*d_first = *first1;
-					++d_first;
 					++first1;
 				}
 				++first2;
@@ -576,27 +559,21 @@ namespace sarastd {
 	}
 
 	template<typename InputIt1, typename InputIt2, typename OutputIt>
-	OutputIt set_symmetric_difference(InputIt1 first1, InputIt1 last1, InputIt2 first2, InputIt2 last2, OutputIt d_first)
+	OutputIt set_intersection(InputIt1 first1, InputIt1 last1, InputIt2 first2, InputIt2 last2, OutputIt d_first)
 	{
-		while (first1 != last1) {
-			if (first2 == last2)
-				return sarastd::copy(first1, last1, d_first);
-
+		while (first1 != last1 && first2 != last2) {
 			if (*first1 < *first2) {
-				*d_first = *first1;
-				++d_first;
 				++first1;
 			} else {
-				if (*first2 < *first1) {
-					*d_first = *first2;
+				if (!(*first2 < *first1)) {
+					*d_first = *first1;
 					++d_first;
-				} else {
 					++first1;
 				}
 				++first2;
 			}
 		}
-		return sarastd::copy(first2, last2, d_first);
+		return d_first;
 	}
 
 	template<typename InputIt1, typename InputIt2, typename OutputIt, typename Compare>
@@ -624,19 +601,24 @@ namespace sarastd {
 	}
 
 	template<typename InputIt1, typename InputIt2, typename OutputIt>
-	OutputIt set_union(InputIt1 first1, InputIt1 last1, InputIt2 first2, InputIt2 last2, OutputIt d_first)
+	OutputIt set_symmetric_difference(InputIt1 first1, InputIt1 last1, InputIt2 first2, InputIt2 last2, OutputIt d_first)
 	{
-		for (; first1 != last1; ++d_first) {
+		while (first1 != last1) {
 			if (first2 == last2)
 				return sarastd::copy(first1, last1, d_first);
-			if (*first2 < *first1) {
-				*d_first = *first2;
-				++first2;
-			} else {
+
+			if (*first1 < *first2) {
 				*d_first = *first1;
-				if (!(*first1 < *first2))
-					++first2;
+				++d_first;
 				++first1;
+			} else {
+				if (*first2 < *first1) {
+					*d_first = *first2;
+					++d_first;
+				} else {
+					++first1;
+				}
+				++first2;
 			}
 		}
 		return sarastd::copy(first2, last2, d_first);
@@ -661,20 +643,23 @@ namespace sarastd {
 		return sarastd::copy(first2, last2, d_first);
 	}
 
-	template<typename ForwardIt>
-	ForwardIt max_element(ForwardIt first, ForwardIt last)
+	template<typename InputIt1, typename InputIt2, typename OutputIt>
+	OutputIt set_union(InputIt1 first1, InputIt1 last1, InputIt2 first2, InputIt2 last2, OutputIt d_first)
 	{
-		if (first == last) {
-			return last;
-		}
-		ForwardIt largest = first;
-		++first;
-		for (; first != last; ++first) {
-			if (*largest < *first) {
-				largest = first;
+		for (; first1 != last1; ++d_first) {
+			if (first2 == last2)
+				return sarastd::copy(first1, last1, d_first);
+			if (*first2 < *first1) {
+				*d_first = *first2;
+				++first2;
+			} else {
+				*d_first = *first1;
+				if (!(*first1 < *first2))
+					++first2;
+				++first1;
 			}
 		}
-		return largest;
+		return sarastd::copy(first2, last2, d_first);
 	}
 
 	template<typename ForwardIt, typename Compare>
@@ -694,19 +679,19 @@ namespace sarastd {
 	}
 
 	template<typename ForwardIt>
-	ForwardIt min_element(ForwardIt first, ForwardIt last)
+	ForwardIt max_element(ForwardIt first, ForwardIt last)
 	{
-		if (first == last)
+		if (first == last) {
 			return last;
-
-		ForwardIt smallest = first;
+		}
+		ForwardIt largest = first;
 		++first;
 		for (; first != last; ++first) {
-			if (*first < *smallest) {
-				smallest = first;
+			if (*largest < *first) {
+				largest = first;
 			}
 		}
-		return smallest;
+		return largest;
 	}
 
 	template<typename ForwardIt, typename Compare>
@@ -725,16 +710,32 @@ namespace sarastd {
 		return smallest;
 	}
 
-	template<typename T>
-	sarastd::pair<const T&, const T&> minmax(const T& a, const T& b)
+	template<typename ForwardIt>
+	ForwardIt min_element(ForwardIt first, ForwardIt last)
 	{
-		return (b < a) ? sarastd::make_pair(b, a) : sarastd::make_pair(a, b);
+		if (first == last)
+			return last;
+
+		ForwardIt smallest = first;
+		++first;
+		for (; first != last; ++first) {
+			if (*first < *smallest) {
+				smallest = first;
+			}
+		}
+		return smallest;
 	}
 
 	template<typename T, typename Compare>
 	sarastd::pair<const T&, const T&> minmax(const T& a, const T& b, Compare comp)
 	{
 		return comp(b, a) ? sarastd::make_pair(b, a) : sarastd::make_pair(a, b);
+	}
+
+	template<typename T>
+	sarastd::pair<const T&, const T&> minmax(const T& a, const T& b)
+	{
+		return (b < a) ? sarastd::make_pair(b, a) : sarastd::make_pair(a, b);
 	}
 
 	template<typename BidirIt>

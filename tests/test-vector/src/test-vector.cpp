@@ -1,26 +1,27 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <time.h>
-#include <simstl/vector>
 #include <simstl/algorithm>
+#include <simstl/vector>
+#include <simstl/memory>
 
 class Base {
 public:
 	~Base()
 	{
-		//printf("%s\n", __PRETTY_FUNCTION__);
+		printf("%s\n", __PRETTY_FUNCTION__);
 	}
 
 	Base():
 		m_val()
 	{
-		//printf("%s\n", __PRETTY_FUNCTION__);
+		printf("%s\n", __PRETTY_FUNCTION__);
 	}
 
 	Base(int val):
 		m_val(val)
 	{
-		//printf("%s\n", __PRETTY_FUNCTION__);
+		printf("%s\n", __PRETTY_FUNCTION__);
 	}
 
 	Base(const Base & other):
@@ -71,6 +72,13 @@ namespace hh {
 
 int wWinMain(const wchar_t * /*pCmdLine*/) {
 	using namespace sarastd;
+	printf("%s\n", __PRETTY_FUNCTION__);
+
+	{
+		auto_ptr<Base> a(new Base(5));
+	}
+	return 0;
+
 	srand(time(0));
 
 	printf("construct v\n");

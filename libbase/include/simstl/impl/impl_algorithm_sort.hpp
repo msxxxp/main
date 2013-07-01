@@ -6,6 +6,7 @@
 #include "impl_algorithm_heap.hpp"
 #include "impl_functional.hpp"
 #include "impl_iterator.hpp"
+#include "impl_memory.hpp"
 #include "impl_utility.hpp"
 
 namespace sarastd {
@@ -133,8 +134,8 @@ namespace sarastd {
 		return sarastd::copy(first2, last2, d_first);
 	}
 
-	//	template<typename InputIterator1, typename InputIterator2, typename OutputIterator, typename Compare>
-	//	OutputIterator merge(InputIterator1 first1, InputIterator1 last1, InputIterator2 first2, InputIterator2 last2, OutputIterator result, Compare compare)
+	//	template<typename InputIt1, typename InputIt2, typename OutputIt, typename Compare>
+	//	OutputIt merge(InputIt1 first1, InputIt1 last1, InputIt2 first2, InputIt2 last2, OutputIt result, Compare compare)
 	//	{
 	//		while ((first1 != last1) && (first2 != last2)) {
 	//			if (compare(*first2, *first1)) {
@@ -149,11 +150,11 @@ namespace sarastd {
 	//		return sarastd::copy(first2, last2, sarastd::copy(first1, last1, result));
 	//	}
 
-	template<typename InputIterator1, typename InputIterator2, typename OutputIterator>
-	OutputIterator merge(InputIterator1 first1, InputIterator1 last1, InputIterator2 first2, InputIterator2 last2, OutputIterator result)
+	template<typename InputIt1, typename InputIt2, typename OutputIt>
+	OutputIt merge(InputIt1 first1, InputIt1 last1, InputIt2 first2, InputIt2 last2, OutputIt result)
 	{
-		typedef sarastd::less<typename sarastd::iterator_traits<InputIterator1>::value_type> less;
-		return sarastd::merge<InputIterator1, InputIterator2, OutputIterator, less>(first1, last1, first2, last2, result, less());
+		typedef sarastd::less<typename sarastd::iterator_traits<InputIt1>::value_type> less;
+		return sarastd::merge<InputIt1, InputIt2, OutputIt, less>(first1, last1, first2, last2, result, less());
 	}
 
 	namespace pvt {
@@ -176,8 +177,8 @@ namespace sarastd {
 			return b;
 		}
 
-		template<typename RandomIterator, typename T, typename Compare>
-		RandomIterator get_partition(RandomIterator first, RandomIterator last, const T& pivotValue, Compare compare)
+		template<typename RandomIt, typename T, typename Compare>
+		RandomIt get_partition(RandomIt first, RandomIt last, const T& pivotValue, Compare compare)
 		{
 			const T pivotCopy(pivotValue);
 
@@ -218,13 +219,13 @@ namespace sarastd {
 			}
 		}
 
-		template<typename RandomIterator, typename Compare>
-		void insertion_sort_simple(RandomIterator first, RandomIterator last, Compare compare)
+		template<typename RandomIt, typename Compare>
+		void insertion_sort_simple(RandomIt first, RandomIt last, Compare compare)
 		{
-			for (RandomIterator current = first; current != last; ++current) {
-				typedef typename sarastd::iterator_traits<RandomIterator>::value_type value_type;
+			for (RandomIt current = first; current != last; ++current) {
+				typedef typename sarastd::iterator_traits<RandomIt>::value_type value_type;
 
-				RandomIterator end(current), prev(current);
+				RandomIt end(current), prev(current);
 				const value_type value(*current);
 
 				for (--prev; compare(value, *prev); --end, --prev) { // We skip checking for (prev >= first) because quick_sort (our caller) makes this unnecessary.
@@ -235,10 +236,10 @@ namespace sarastd {
 			}
 		}
 
-		template<typename RandomIterator, typename Compare>
-		void shell_sort(RandomIterator first, RandomIterator last, Compare compare)
+		template<typename RandomIt, typename Compare>
+		void shell_sort(RandomIt first, RandomIt last, Compare compare)
 		{
-			typedef typename sarastd::iterator_traits<RandomIterator>::difference_type difference_type;
+			typedef typename sarastd::iterator_traits<RandomIt>::difference_type difference_type;
 
 			// We use the Knuth 'h' sequence below, as it is easy to calculate at runtime.
 			// However, possibly we are better off using a different sequence based on a table.
@@ -247,7 +248,7 @@ namespace sarastd {
 			//    64769, 146305, 260609, 587521, 1045505, 2354689, 4188161, 9427969, 16764929
 
 			if (first != last) {
-				RandomIterator iCurrent, iBack, iSorted, iInsertFirst;
+				RandomIt iCurrent, iBack, iSorted, iInsertFirst;
 				difference_type nSize = last - first;
 				difference_type nSpace = 1; // nSpace is the 'h' value of the ShellSort algorithm.
 
@@ -271,53 +272,53 @@ namespace sarastd {
 			}
 		}
 
-		template<typename RandomIterator, typename Compare>
-		void heap_sort(RandomIterator first, RandomIterator last, Compare compare)
+		template<typename RandomIt, typename Compare>
+		void heap_sort(RandomIt first, RandomIt last, Compare compare)
 		{
 			// We simply call our heap algorithms to do the work for us.
-			sarastd::make_heap<RandomIterator, Compare>(first, last, compare);
-			sarastd::sort_heap<RandomIterator, Compare>(first, last, compare);
+			sarastd::make_heap<RandomIt, Compare>(first, last, compare);
+			sarastd::sort_heap<RandomIt, Compare>(first, last, compare);
 		}
 
-		template<typename RandomIterator, typename T, typename Compare>
-		void merge_sort_buffer(RandomIterator first, RandomIterator last, T* pBuffer, Compare compare)
+		template<typename RandomIt, typename T, typename Compare>
+		void merge_sort_buffer(RandomIt first, RandomIt last, T* pBuffer, Compare compare)
 		{
-			typedef typename sarastd::iterator_traits<RandomIterator>::difference_type difference_type;
+			typedef typename sarastd::iterator_traits<RandomIt>::difference_type difference_type;
 			const difference_type nCount = last - first;
 
 			if (nCount > 1) {
 				const difference_type nMid = nCount / 2;
-				RandomIterator half = first + nMid;
+				RandomIt half = first + nMid;
 
 				if (nMid > 1) {
 					const difference_type nQ1(nMid / 2);
-					RandomIterator part(first + nQ1);
+					RandomIt part(first + nQ1);
 
-					sarastd::pvt::merge_sort_buffer<RandomIterator, T, Compare>(first, part, pBuffer, compare);
-					sarastd::pvt::merge_sort_buffer<RandomIterator, T, Compare>(part, half, pBuffer + nQ1, compare);
-					sarastd::merge<RandomIterator, RandomIterator, T*, Compare>(first, part, part, half, pBuffer, compare);
+					sarastd::pvt::merge_sort_buffer<RandomIt, T, Compare>(first, part, pBuffer, compare);
+					sarastd::pvt::merge_sort_buffer<RandomIt, T, Compare>(part, half, pBuffer + nQ1, compare);
+					sarastd::merge<RandomIt, RandomIt, T*, Compare>(first, part, part, half, pBuffer, compare);
 				} else
 					*pBuffer = *first;
 
 				if ((nCount - nMid) > 1) {
 					const difference_type nQ3((nMid + nCount) / 2);
-					RandomIterator part(first + nQ3);
+					RandomIt part(first + nQ3);
 
-					sarastd::pvt::merge_sort_buffer<RandomIterator, T, Compare>(half, part, pBuffer + nMid, compare);
-					sarastd::pvt::merge_sort_buffer<RandomIterator, T, Compare>(part, last, pBuffer + nQ3, compare);
-					sarastd::merge<RandomIterator, RandomIterator, T*, Compare>(half, part, part, last, pBuffer + nMid, compare);
+					sarastd::pvt::merge_sort_buffer<RandomIt, T, Compare>(half, part, pBuffer + nMid, compare);
+					sarastd::pvt::merge_sort_buffer<RandomIt, T, Compare>(part, last, pBuffer + nQ3, compare);
+					sarastd::merge<RandomIt, RandomIt, T*, Compare>(half, part, part, last, pBuffer + nMid, compare);
 				} else
 					*(pBuffer + nMid) = *half;
 
-				sarastd::merge<T*, T*, RandomIterator, Compare>(pBuffer, pBuffer + nMid, pBuffer + nMid, pBuffer + nCount, first, compare);
+				sarastd::merge<T*, T*, RandomIt, Compare>(pBuffer, pBuffer + nMid, pBuffer + nMid, pBuffer + nCount, first, compare);
 			}
 		}
 
-		template<typename RandomIterator, typename Compare>
-		void merge_sort(RandomIterator first, RandomIterator last, Compare compare)
+		template<typename RandomIt, typename Compare>
+		void merge_sort(RandomIt first, RandomIt last, Compare compare)
 		{
-			typedef typename sarastd::iterator_traits<RandomIterator>::difference_type difference_type;
-			typedef typename sarastd::iterator_traits<RandomIterator>::value_type value_type;
+			typedef typename sarastd::iterator_traits<RandomIt>::difference_type difference_type;
+			typedef typename sarastd::iterator_traits<RandomIt>::value_type value_type;
 
 			const difference_type nCount = last - first;
 
@@ -326,17 +327,17 @@ namespace sarastd {
 				sarastd::pair<value_type*, sarastd::ptrdiff_t> pBuffer = sarastd::get_temporary_buffer(nCount);
 				sarastd::uninitialized_fill(pBuffer.first, pBuffer.first + nCount, value_type());
 
-				sarastd::pvt::merge_sort_buffer<RandomIterator, value_type, Compare>(first, last, pBuffer, compare);
+				sarastd::pvt::merge_sort_buffer<RandomIt, value_type, Compare>(first, last, pBuffer, compare);
 
 				sarastd::pvt::_destroy<value_type*, value_type>(pBuffer.first, pBuffer.first + nCount);
 				sarastd::return_temporary_buffer(pBuffer.first);
 			}
 		}
 
-		//	template<typename RandomIterator, typename _Size, typename _Compare>
-		//	void _introselect(RandomIterator __first, RandomIterator __nth, RandomIterator __last, _Size __depth_limit, _Compare __comp)
+		//	template<typename RandomIt, typename _Size, typename _Compare>
+		//	void _introselect(RandomIt __first, RandomIt __nth, RandomIt __last, _Size __depth_limit, _Compare __comp)
 		//	{
-		//		typedef typename iterator_traits<RandomIterator>::value_type value_type;
+		//		typedef typename iterator_traits<RandomIt>::value_type value_type;
 		//
 		//		while (__last - __first > 3) {
 		//			if (__depth_limit == 0) {
@@ -346,7 +347,7 @@ namespace sarastd {
 		//				return;
 		//			}
 		//			--__depth_limit;
-		//			RandomIterator __cut = std::__unguarded_partition_pivot(__first, __last, __comp);
+		//			RandomIt __cut = std::__unguarded_partition_pivot(__first, __last, __comp);
 		//			if (__cut <= __nth)
 		//				__first = __cut;
 		//			else
@@ -355,10 +356,10 @@ namespace sarastd {
 		//		std::__insertion_sort(__first, __last, __comp);
 		//	}
 		//
-		//	template<typename RandomIterator, typename _Compare>
-		//	void nth_element(RandomIterator __first, RandomIterator __nth, RandomIterator __last, _Compare __comp)
+		//	template<typename RandomIt, typename _Compare>
+		//	void nth_element(RandomIt __first, RandomIt __nth, RandomIt __last, _Compare __comp)
 		//	{
-		//		typedef typename iterator_traits<RandomIterator>::value_type value_type;
+		//		typedef typename iterator_traits<RandomIt>::value_type value_type;
 		//
 		//		if (__first == __last || __nth == __last)
 		//			return;
@@ -436,116 +437,116 @@ namespace sarastd {
 		return sarastd::is_sorted_until<ForwardIt, less>(first, last, less()) == last;
 	}
 
-	template<typename RandomIterator, typename Compare>
-	void partial_sort(RandomIterator first, RandomIterator middle, RandomIterator last, Compare compare)
+	template<typename RandomIt, typename Compare>
+	void partial_sort(RandomIt first, RandomIt middle, RandomIt last, Compare compare)
 	{
-		typedef typename sarastd::iterator_traits<RandomIterator>::difference_type difference_type;
-		typedef typename sarastd::iterator_traits<RandomIterator>::value_type value_type;
+		typedef typename sarastd::iterator_traits<RandomIt>::difference_type difference_type;
+		typedef typename sarastd::iterator_traits<RandomIt>::value_type value_type;
 
-		sarastd::make_heap<RandomIterator, Compare>(first, middle, compare);
+		sarastd::make_heap<RandomIt, Compare>(first, middle, compare);
 
-		for (RandomIterator i = middle; i < last; ++i) {
+		for (RandomIt i = middle; i < last; ++i) {
 			if (compare(*i, *first)) {
 				const value_type temp(*i);
 				*i = *first;
-				sarastd::pvt::adjust_heap<RandomIterator, difference_type, value_type, Compare>(first, difference_type(0), difference_type(middle - first), difference_type(0), temp, compare);
+				sarastd::pvt::adjust_heap<RandomIt, difference_type, value_type, Compare>(first, difference_type(0), difference_type(middle - first), difference_type(0), temp, compare);
 			}
 		}
 
-		sarastd::sort_heap<RandomIterator, Compare>(first, middle, compare);
+		sarastd::sort_heap<RandomIt, Compare>(first, middle, compare);
 	}
 
-	template<typename RandomIterator>
-	void partial_sort(RandomIterator first, RandomIterator middle, RandomIterator last)
+	template<typename RandomIt>
+	void partial_sort(RandomIt first, RandomIt middle, RandomIt last)
 	{
-		typedef sarastd::less<typename sarastd::iterator_traits<RandomIterator>::value_type> less;
-		sarastd::partial_sort<RandomIterator, less>(first, middle, last, less());
+		typedef sarastd::less<typename sarastd::iterator_traits<RandomIt>::value_type> less;
+		sarastd::partial_sort<RandomIt, less>(first, middle, last, less());
 	}
 
 	namespace pvt {
-		template<typename RandomIterator, typename Size, typename Compare>
-		void quick_sort_impl(RandomIterator first, RandomIterator last, Size kRecursionCount, Compare compare)
+		template<typename RandomIt, typename Size, typename Compare>
+		void quick_sort_impl(RandomIt first, RandomIt last, Size kRecursionCount, Compare compare)
 		{
-			typedef typename iterator_traits<RandomIterator>::value_type value_type;
+			typedef typename iterator_traits<RandomIt>::value_type value_type;
 
 			while (((last - first) > ISORT_MAX) && (kRecursionCount > 0)) {
-				const RandomIterator position(
-				    sarastd::pvt::get_partition<RandomIterator, value_type, Compare>(first, last,
+				const RandomIt position(
+				    sarastd::pvt::get_partition<RandomIt, value_type, Compare>(first, last,
 				                                                                     sarastd::pvt::median<value_type, Compare>(*first, *(first + (last - first) / 2), *(last - 1), compare), compare));
 
-				sarastd::pvt::quick_sort_impl<RandomIterator, Size, Compare>(position, last, --kRecursionCount, compare);
+				sarastd::pvt::quick_sort_impl<RandomIt, Size, Compare>(position, last, --kRecursionCount, compare);
 				last = position;
 			}
 
 			if (kRecursionCount == 0)
-				sarastd::partial_sort<RandomIterator, Compare>(first, last, last, compare);
+				sarastd::partial_sort<RandomIt, Compare>(first, last, last, compare);
 		}
 
-		template<typename RandomIterator, typename Compare>
-		void quick_sort(RandomIterator first, RandomIterator last, Compare compare)
+		template<typename RandomIt, typename Compare>
+		void quick_sort(RandomIt first, RandomIt last, Compare compare)
 		{
-			typedef typename sarastd::iterator_traits<RandomIterator>::difference_type difference_type;
+			typedef typename sarastd::iterator_traits<RandomIt>::difference_type difference_type;
 
 			if (first != last) {
-				sarastd::pvt::quick_sort_impl<RandomIterator, difference_type, Compare>(first, last, 2 * sarastd::Log2(last - first), compare);
+				sarastd::pvt::quick_sort_impl<RandomIt, difference_type, Compare>(first, last, 2 * sarastd::pvt::Log2(last - first), compare);
 
 				if ((last - first) > (difference_type)ISORT_MAX) {
-					sarastd::pvt::insertion_sort<RandomIterator, Compare>(first, first + ISORT_MAX, compare);
-					sarastd::pvt::insertion_sort_simple<RandomIterator, Compare>(first + ISORT_MAX, last, compare);
+					sarastd::pvt::insertion_sort<RandomIt, Compare>(first, first + ISORT_MAX, compare);
+					sarastd::pvt::insertion_sort_simple<RandomIt, Compare>(first + ISORT_MAX, last, compare);
 				} else
-					sarastd::pvt::insertion_sort<RandomIterator, Compare>(first, last, compare);
+					sarastd::pvt::insertion_sort<RandomIt, Compare>(first, last, compare);
 			}
 		}
 	}
 
-	template<typename RandomIterator, typename Compare>
-	void sort(RandomIterator first, RandomIterator last, Compare predicate)
+	template<typename RandomIt, typename Compare>
+	void sort(RandomIt first, RandomIt last, Compare predicate)
 	{
 		sarastd::pvt::quick_sort(first, last, predicate);
 	}
 
-	template<typename RandomIterator>
-	void sort(RandomIterator first, RandomIterator last)
+	template<typename RandomIt>
+	void sort(RandomIt first, RandomIt last)
 	{
-		typedef sarastd::less<typename sarastd::iterator_traits<RandomIterator>::value_type> less;
-		sarastd::sort<RandomIterator, less>(first, last, less());
+		typedef sarastd::less<typename sarastd::iterator_traits<RandomIt>::value_type> less;
+		sarastd::sort<RandomIt, less>(first, last, less());
 	}
 
-	template<typename RandomIterator, typename Compare>
-	void stable_sort(RandomIterator first, RandomIterator last, Compare compare)
+	template<typename RandomIt, typename Compare>
+	void stable_sort(RandomIt first, RandomIt last, Compare compare)
 	{
-		sarastd::pvt::merge_sort<RandomIterator, Compare>(first, last, compare);
+		sarastd::pvt::merge_sort<RandomIt, Compare>(first, last, compare);
 	}
 
-	template<typename RandomIterator>
-	void stable_sort(RandomIterator first, RandomIterator last)
+	template<typename RandomIt>
+	void stable_sort(RandomIt first, RandomIt last)
 	{
-		typedef sarastd::less<typename sarastd::iterator_traits<RandomIterator>::value_type> less;
-		sarastd::pvt::merge_sort<RandomIterator, less>(first, last, less());
+		typedef sarastd::less<typename sarastd::iterator_traits<RandomIt>::value_type> less;
+		sarastd::pvt::merge_sort<RandomIt, less>(first, last, less());
 	}
 
-	template<typename RandomIterator, typename Compare>
-	void nth_element(RandomIterator first, RandomIterator nth, RandomIterator last, Compare compare)
+	template<typename RandomIt, typename Compare>
+	void nth_element(RandomIt first, RandomIt nth, RandomIt last, Compare compare)
 	{
-		typedef typename iterator_traits<RandomIterator>::value_type value_type;
+		typedef typename iterator_traits<RandomIt>::value_type value_type;
 
 		while ((last - first) > 5) {
 			const value_type midValue(sarastd::pvt::median<value_type, Compare>(*first, *(first + (last - first) / 2), *(last - 1), compare));
-			const RandomIterator midPos(sarastd::pvt::get_partition<RandomIterator, value_type, Compare>(first, last, midValue, compare));
+			const RandomIt midPos(sarastd::pvt::get_partition<RandomIt, value_type, Compare>(first, last, midValue, compare));
 
 			if (midPos <= nth)
 				first = midPos;
 			else
 				last = midPos;
 		}
-		sarastd::pvt::insertion_sort<RandomIterator, Compare>(first, last, compare);
+		sarastd::pvt::insertion_sort<RandomIt, Compare>(first, last, compare);
 	}
 
-	template<typename RandomIterator>
-	void nth_element(RandomIterator first, RandomIterator nth, RandomIterator last)
+	template<typename RandomIt>
+	void nth_element(RandomIt first, RandomIt nth, RandomIt last)
 	{
-		typedef sarastd::less<typename sarastd::iterator_traits<RandomIterator>::value_type> less;
-		sarastd::nth_element<RandomIterator, less>(first, nth, last, less());
+		typedef sarastd::less<typename sarastd::iterator_traits<RandomIt>::value_type> less;
+		sarastd::nth_element<RandomIt, less>(first, nth, last, less());
 	}
 
 }

@@ -5,12 +5,6 @@
 
 namespace sarastd {
 	template<typename Type>
-	Type abs(Type a)
-	{
-		return (a <= 0) ? -a : a;
-	}
-
-	template<typename Type>
 	void swap(Type & a, Type & b)
 	{
 		Type tmp(a);
@@ -32,12 +26,6 @@ namespace sarastd {
 		swap(*a, *b);
 	}
 
-	template<typename T>
-	const T& max(const T& a, const T& b)
-	{
-		return (a < b) ? b : a;
-	}
-
 	template<typename T, typename Compare>
 	const T& max(const T& a, const T& b, Compare comp)
 	{
@@ -45,15 +33,21 @@ namespace sarastd {
 	}
 
 	template<typename T>
-	const T& min(const T& a, const T& b)
+	const T& max(const T& a, const T& b)
 	{
-		return (b < a) ? b : a;
+		return (a < b) ? b : a;
 	}
 
 	template<typename T, typename Compare>
 	const T& min(const T& a, const T& b, Compare comp)
 	{
 		return (comp(b, a)) ? b : a;
+	}
+
+	template<typename T>
+	const T& min(const T& a, const T& b)
+	{
+		return (b < a) ? b : a;
 	}
 
 	template<typename InputIt1, typename InputIt2>
@@ -137,18 +131,6 @@ namespace sarastd {
 		return first;
 	}
 
-	template<typename InputIt1, typename InputIt2>
-	bool lexicographical_compare(InputIt1 first1, InputIt1 last1, InputIt2 first2, InputIt2 last2)
-	{
-		for (; (first1 != last1) && (first2 != last2); ++first1, ++first2) {
-			if (*first1 < *first2)
-				return true;
-			if (*first2 < *first1)
-				return false;
-		}
-		return (first1 == last1) && (first2 != last2);
-	}
-
 	template<typename InputIt1, typename InputIt2, typename Compare>
 	bool lexicographical_compare(InputIt1 first1, InputIt1 last1, InputIt2 first2, InputIt2 last2, Compare comp)
 	{
@@ -161,13 +143,33 @@ namespace sarastd {
 		return (first1 == last1) && (first2 != last2);
 	}
 
-	template<typename Size>
-	Size Log2(Size n)
+	template<typename InputIt1, typename InputIt2>
+	bool lexicographical_compare(InputIt1 first1, InputIt1 last1, InputIt2 first2, InputIt2 last2)
 	{
-		int i;
-		for (i = 0; n; ++i)
-			n >>= 1;
-		return i - 1;
+		for (; (first1 != last1) && (first2 != last2); ++first1, ++first2) {
+			if (*first1 < *first2)
+				return true;
+			if (*first2 < *first1)
+				return false;
+		}
+		return (first1 == last1) && (first2 != last2);
+	}
+
+	namespace pvt {
+		template<typename Type>
+		Type abs(Type a)
+		{
+			return (a <= 0) ? -a : a;
+		}
+
+		template<typename Size>
+		Size Log2(Size n)
+		{
+			int i;
+			for (i = 0; n; ++i)
+				n >>= 1;
+			return i - 1;
+		}
 	}
 }
 

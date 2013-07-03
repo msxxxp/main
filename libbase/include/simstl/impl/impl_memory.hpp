@@ -15,6 +15,18 @@ namespace sarastd {
 			return reinterpret_cast<Type*>(&const_cast<char&>(reinterpret_cast<const volatile char&>(r)));
 		}
 
+		template<typename Type>
+		Type* _allocate(sarastd::size_t n)
+		{
+			return (Type*)::operator new(n * sizeof(Type), sarastd::nothrow);
+		}
+
+		template<typename Type>
+		void _deallocate(Type* ptr, sarastd::size_t /*n*/ = 0)
+		{
+			::operator delete(ptr, sarastd::nothrow);
+		}
+
 		template<typename Type1, typename Type2>
 		void _construct(Type1* p, const Type2& value)
 		{
@@ -33,6 +45,7 @@ namespace sarastd {
 			for (; first != last; ++first)
 				first->~Type();
 		}
+
 	}
 
 //	template<bool>
@@ -66,7 +79,7 @@ namespace sarastd {
 //		for (; first != last; ++first)
 //			alloc.destroy(sarastd::_addressof(*first));
 //	}
-
+//
 //	template<typename ForwardIterator, typename Type>
 //	void _destroy(ForwardIterator first, ForwardIterator last, allocator<Type>&)
 //	{
@@ -116,10 +129,10 @@ namespace sarastd {
 		allocator();
 
 		pointer allocate(size_type n);
-		void deallocate(pointer p, size_type /*n*/);
+		void deallocate(pointer ptr, size_type n);
 
-		void construct(pointer p, const_reference val);
-		void destroy(pointer p);
+		void construct(pointer ptr, const_reference val);
+		void destroy(pointer ptr);
 	};
 
 	template<typename Type>
@@ -135,25 +148,25 @@ namespace sarastd {
 	template<typename Type>
 	typename allocator<Type>::pointer allocator<Type>::allocate(size_type n)
 	{
-		return (pointer)::operator new(n * sizeof(Type), sarastd::nothrow);
+		return sarastd::pvt::_allocate<Type>(n);
 	}
 
 	template<typename Type>
-	void allocator<Type>::deallocate(pointer p, size_type /*n*/)
+	void allocator<Type>::deallocate(pointer ptr, size_type n)
 	{
-		::operator delete(p, sarastd::nothrow);
+		sarastd::pvt::_deallocate(ptr, n);
 	}
 
 	template<typename Type>
-	void allocator<Type>::construct(pointer p, const_reference val)
+	void allocator<Type>::construct(pointer ptr, const_reference val)
 	{
-		sarastd::pvt::_construct(p, val);
+		sarastd::pvt::_construct(ptr, val);
 	}
 
 	template<typename Type>
-	void allocator<Type>::destroy(pointer p)
+	void allocator<Type>::destroy(pointer ptr)
 	{
-		sarastd::pvt::_destroy(p);
+		sarastd::pvt::_destroy(ptr);
 	}
 
 	///=============================================================================================
@@ -344,12 +357,9 @@ namespace sarastd {
 		auto_ptr& operator =(auto_ptr& a) throw();
 		auto_ptr& operator =(auto_ptr_ref<element_type> ref) throw();
 
-		element_type& operator*() const throw();
-
+		element_type& operator *() const throw();
 		element_type* operator->() const throw();
-
 		element_type* get() const throw();
-
 		element_type* release() throw();
 
 		void reset(element_type* p = 0) throw();
@@ -459,6 +469,237 @@ namespace sarastd {
 			m_ptr = ref.m_ptr;
 		}
 		return *this;
+	}
+
+	namespace pvt {
+		class ref_counter {
+		public:
+			virtual ~ref_counter() {}
+
+			ref_counter() : m_refcnt(1) {}
+
+			void increase_ref() {++m_refcnt;}
+
+			void decrease_ref();
+
+			sarastd::size_t count() const {return m_refcnt;}
+
+		private:
+			virtual void destroy() const {}
+
+			virtual void deallocate() const = 0;
+
+			ref_counter(const ref_counter & rhs);
+
+			ref_counter & operator = (const ref_counter & rhs);
+
+		private:
+			sarastd::size_t m_refcnt;
+		};
+
+		void ref_counter::decrease_ref()
+		{
+			if (--m_refcnt == 0) {
+				destroy();
+				deallocate();
+			}
+		}
+	}
+
+	template<typename Type>
+	struct default_delete
+	{
+		void operator ()(Type * ptr) const
+		{
+			delete(ptr);
+		}
+	};
+
+	template<typename Type> struct default_delete<Type[]>
+	{
+		void operator ()(Type * ptr) const
+		{
+			delete [](ptr);
+		}
+	};
+
+	template<typename Type>
+	class shared_ptr {
+		typedef Type element_type;
+		typedef shared_ptr this_type;
+
+	public:
+		typedef size_t size_type;
+
+		~shared_ptr() throw()
+		{
+			reset();
+		}
+
+		shared_ptr() throw() :
+			m_impl(0)
+		{
+		}
+
+		explicit shared_ptr(element_type * ptr) :
+			m_impl(new shared_ptr_impl(ptr))
+		{
+		}
+
+		template<typename Deleter>
+		shared_ptr(element_type * ptr, Deleter d) :
+			m_impl(new shared_ptr_impl_deleter<Deleter>(ptr, d))
+		{
+		}
+
+		shared_ptr(const this_type & other) :
+			m_impl(0)
+		{
+			if (other.m_impl) {
+				m_impl = other.m_impl;
+				m_impl->increase_ref();
+			}
+		}
+
+		this_type & operator =(const this_type & other)
+		{
+			if (m_impl != other.m_impl) {
+				shared_ptr(other).swap(*this);
+			}
+			return *this;
+		}
+
+		template<typename newType>
+		operator shared_ptr<newType>()
+		{
+			return shared_ptr<newType>(m_impl); // TODO
+		}
+
+		void reset()
+		{
+			if (m_impl) {
+				m_impl->decrease_ref();
+				m_impl = 0;
+			}
+		}
+
+		void reset(element_type * ptr)
+		{
+			shared_ptr(ptr).swap(*this);
+		}
+
+		template<typename Deleter>
+		void reset(element_type * ptr, Deleter d)
+		{
+			shared_ptr(ptr, d).swap(*this);
+		}
+
+		element_type & operator *() const
+		{
+			return *(m_impl->get());
+		}
+
+		element_type * operator ->() const
+		{
+			return m_impl->get();
+		}
+
+		element_type * get() const
+		{
+			return (m_impl) ? m_impl->get() : 0;
+		}
+
+		bool unique() const
+		{
+			return !m_impl || m_impl->count() == 1;
+		}
+
+		size_type use_count() const
+		{
+			return (m_impl) ? m_impl->count() : 0;
+		}
+
+		operator bool() const
+		{
+			return m_impl && m_impl->get();
+		}
+
+		void swap(this_type & b) throw()
+		{
+			using sarastd::swap;
+			swap(m_impl, b.m_impl);
+		}
+
+	private:
+		typedef typename sarastd::default_delete<Type> default_deleter;
+
+		struct shared_ptr_impl: public pvt::ref_counter
+		{
+			shared_ptr_impl(element_type * ptr) : m_ptr(ptr) {}
+
+			element_type * get() const {return m_ptr;}
+
+		private:
+			void destroy() const {default_deleter()(m_ptr);}
+
+			void deallocate() const {delete this;}
+
+			element_type * m_ptr;
+		};
+
+		template<typename Deleter>
+		struct shared_ptr_impl_deleter: public shared_ptr_impl {
+			shared_ptr_impl_deleter(element_type * ptr, Deleter d) : shared_ptr_impl(ptr), m_deleter(d) {}
+
+		private:
+			void destroy() const {m_deleter(get());}
+
+			Deleter m_deleter;
+		};
+
+		shared_ptr_impl * m_impl;
+	};
+
+	template<typename T, typename U>
+	bool operator ==(const shared_ptr<T> & a, const shared_ptr<U> & b)
+	{
+		return a.get() == b.get();
+	}
+
+	template<typename T, typename U>
+	bool operator !=(const shared_ptr<T> & a, const shared_ptr<U> & b)
+	{
+		return sarastd::pvt::ops::operator !=(a, b);
+	}
+
+	template<typename T, typename U>
+	bool operator <(const shared_ptr<T> & a, const shared_ptr<U> & b)
+	{
+		return a.get() < b.get();
+	}
+
+	template<typename T, typename U>
+	bool operator >(const shared_ptr<T> & a, const shared_ptr<U> & b)
+	{
+		return sarastd::pvt::ops::operator >(a, b);
+	}
+
+	template<typename T, typename U>
+	bool operator <=(const shared_ptr<T> & a, const shared_ptr<U> & b)
+	{
+		return sarastd::pvt::ops::operator <=(a, b);
+	}
+
+	template<typename T, typename U>
+	bool operator >=(const shared_ptr<T> & a, const shared_ptr<U> & b)
+	{
+		return sarastd::pvt::ops::operator >=(a, b);
+	}
+
+	template<typename T>
+	void swap(shared_ptr<T> & a, shared_ptr<T> & b) throw()
+	{
+		a.swap(b);
 	}
 
 }

@@ -57,13 +57,21 @@ public:
 };
 
 namespace hh {
-	inline size_t random0()
+	inline ssize_t random0()
 	{
+		printf("%s\n", __PRETTY_FUNCTION__);
 		return rand() % 100;
 	}
 
-	inline size_t random1(size_t l)
+	inline sarastd::shared_ptr<ssize_t> random0p()
 	{
+		printf("%s\n", __PRETTY_FUNCTION__);
+		return sarastd::shared_ptr<ssize_t>(new ssize_t(rand() % 100));
+	}
+
+	inline ssize_t random1(ssize_t l)
+	{
+		printf("%s\n", __PRETTY_FUNCTION__);
 		return rand() % l;
 	}
 
@@ -72,51 +80,60 @@ namespace hh {
 
 int wWinMain(const wchar_t * /*pCmdLine*/) {
 	using namespace sarastd;
-	printf("%s\n", __PRETTY_FUNCTION__);
+	printf("%s begin\n", __PRETTY_FUNCTION__);
 
-	{
-		auto_ptr<Base> a(new Base(5));
-	}
-	return 0;
+//	{
+////		auto_ptr<Base> a(new Base(5));
+//		Base * b = new Base;
+//		printf("%s: b: %p\n", __PRETTY_FUNCTION__, b);
+////		shared_ptr<Base> s1(b);
+//		shared_ptr<Base> s1(b, sarastd::default_delete<Base[]>());
+//		shared_ptr<Base> s2(s1);
+//		printf("%s: get(): %p\n", __PRETTY_FUNCTION__, s1.get());
+//		printf("%s: count(): %Iu\n", __PRETTY_FUNCTION__, s1.use_count());
+//	}
+//	printf("%s end\n", __PRETTY_FUNCTION__);
+//	return 0;
 
 	srand(time(0));
 
 	printf("construct v\n");
-	vector<ssize_t> v(10);
+	typedef vector<shared_ptr<ssize_t> > vec_t;
+	vec_t v(10);
 	printf("generate v\n");
-	sarastd::generate(begin(v), end(v), hh::random0);
+	sarastd::generate(begin(v), end(v), hh::random0p);
 	printf("v.capa(): %Id, v.size(): %Id (", v.capacity(), v.size());
-	for (vector<ssize_t>::iterator it = begin(v); it != end(v); ++it)
+	for (vec_t::iterator it = begin(v); it != end(v); ++it)
 	{
-		printf(" %Id", *it);
+		printf(" %Id", *it->get());
 	}
 	printf(" )\n");
 	sarastd::sort(rbegin(v), rend(v));
 	printf("v.capa(): %Id, v.size(): %Id (", v.capacity(), v.size());
-	for (vector<ssize_t>::iterator it = begin(v); it != end(v); ++it)
+	for (vec_t::iterator it = begin(v); it != end(v); ++it)
 	{
-		printf(" %Id", *it);
+		printf(" %Id", *it->get());
 	}
 	printf(" )\n");
 	sarastd::nth_element(begin(v), begin(v) + 2, end(v));
 	printf("v.capa(): %Id, v.size(): %Id (", v.capacity(), v.size());
-	for (vector<ssize_t>::iterator it = begin(v); it != end(v); ++it)
+	for (vec_t::iterator it = begin(v); it != end(v); ++it)
 	{
-		printf(" %Id", *it);
+		printf(" %Id", *it->get());
 	}
 	printf(" )\n");
 	sarastd::random_shuffle(begin(v), end(v), hh::random1);
 	printf("v.capa(): %Id, v.size(): %Id (", v.capacity(), v.size());
-	for (vector<ssize_t>::iterator it = begin(v); it != end(v); ++it)
+	for (vec_t::iterator it = begin(v); it != end(v); ++it)
 	{
-		printf(" %Id", *it);
+		printf(" %Id", *it->get());
 	}
 	printf(" )\n");
 	sarastd::sort(begin(v), end(v));
 	printf("v.capa(): %Id, v.size(): %Id (", v.capacity(), v.size());
-	for (vector<ssize_t>::iterator it = begin(v); it != end(v); ++it)
+	for (vec_t::iterator it = begin(v); it != end(v); ++it)
 	{
-		printf(" %Id", *it);
+		printf(" %Id", *it->get());
 	}
 	printf(" )\n");
 	while (sarastd::next_permutation(begin(v), end(v))) {
@@ -248,14 +265,26 @@ int wWinMain(const wchar_t * /*pCmdLine*/) {
 
 
 #include <windows.h>
+#ifndef DEBUG
+extern "C" void __cxa_pure_virtual(void)
+{
+	printf("%s\n", __PRETTY_FUNCTION__);
+	//		::abort_message("pure virtual method called");
+}
+
 extern "C" int	WinMainCRTStartup() {
 	int		Result = 0;
 	STARTUPINFO StartupInfo = {sizeof(STARTUPINFO), 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0};
 	::GetStartupInfo(&StartupInfo);
 
-	printf("WinMainCRTStartup v\n");
+	printf("%s\n", __PRETTY_FUNCTION__);
 	Result = wWinMain(::GetCommandLineW());
 	::ExitProcess(Result);
 	return	Result;
 }
-
+#else
+int main()
+{
+	return wWinMain(::GetCommandLineW());
+}
+#endif

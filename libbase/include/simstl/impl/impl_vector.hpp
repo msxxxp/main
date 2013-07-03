@@ -44,39 +44,39 @@ namespace sarastd {
 		void assign(InputIterator first, InputIterator last);
 		void assign(size_type n, const value_type& value);
 
-		reference operator [](size_type pos);
+		reference       operator [](size_type pos);
 		const_reference operator [](size_type pos) const;
-		reference at(size_type pos);
+		reference       at(size_type pos);
 		const_reference at(size_type pos) const;
 
-		reference front();
-		const_reference front() const;
-		reference back();
-		const_reference back() const;
-		value_type* data();
+		reference         front();
+		const_reference   front() const;
+		reference         back();
+		const_reference   back() const;
+		value_type*       data();
 		const value_type* data() const;
 
-		iterator begin();
-		const_iterator begin() const;
-		const_iterator cbegin() const;
-		iterator end();
-		const_iterator end() const;
-		const_iterator cend() const;
-		reverse_iterator rbegin();
+		iterator               begin();
+		const_iterator         begin() const;
+		const_iterator         cbegin() const;
+		iterator               end();
+		const_iterator         end() const;
+		const_iterator         cend() const;
+		reverse_iterator       rbegin();
 		const_reverse_iterator rbegin() const;
 		const_reverse_iterator crbegin() const;
-		reverse_iterator rend();
+		reverse_iterator       rend();
 		const_reverse_iterator rend() const;
 		const_reverse_iterator crend() const;
 
-		bool empty() const;
+		bool      empty() const;
 		size_type size() const;
 		size_type max_size() const;
-		void reserve(size_type size);
+		void      reserve(size_type size);
 		size_type capacity() const;
-		void shrink_to_fit();
+		void      shrink_to_fit();
 
-		void clear();
+		void      clear();
 
 		template<typename InputIterator>
 		iterator insert(const_iterator pos, InputIterator first, InputIterator last);
@@ -86,13 +86,13 @@ namespace sarastd {
 		iterator erase(const_iterator first, const_iterator last);
 		iterator erase(const_iterator pos);
 
-		void push_back(const value_type& value);
-		void pop_back();
+		void     push_back(const value_type& value);
+		void     pop_back();
 
-		void resize(size_type count, const value_type& value);
-		void resize(size_type count);
+		void     resize(size_type count, const value_type& value);
+		void     resize(size_type count);
 
-		void swap(this_type& other);
+		void     swap(this_type& other);
 
 	protected:
 		typedef sarastd::pvt::_vector_impl<value_type, allocator_type> impl_type;
@@ -110,7 +110,6 @@ namespace sarastd {
 
 		template<typename ForwardIterator>
 		iterator _insert(const_iterator pos, ForwardIterator first, ForwardIterator last, sarastd::forward_iterator_tag);
-
 	};
 
 	///=============================================================================================
@@ -592,6 +591,7 @@ namespace sarastd {
 	class movable_vector: public vector<Type, sarastd::pvt::_movable_allocator<Type> >
 	{
 		typedef vector<Type, sarastd::pvt::_movable_allocator<Type> > base_type;
+
 	public:
 		void lock() const;
 		void unlock() const;

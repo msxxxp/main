@@ -56,6 +56,14 @@ public:
 	Derived(int val): Base(val) {}
 };
 
+typedef sarastd::shared_ptr<ssize_t> Value;
+typedef sarastd::vector<Value> vec_t;
+
+bool Less(const Value & a, const Value & b)
+{
+	return *a < *b;
+}
+
 namespace hh {
 	inline ssize_t random0()
 	{
@@ -65,13 +73,13 @@ namespace hh {
 
 	inline sarastd::shared_ptr<ssize_t> random0p()
 	{
-		printf("%s\n", __PRETTY_FUNCTION__);
+//		printf("%s\n", __PRETTY_FUNCTION__);
 		return sarastd::shared_ptr<ssize_t>(new ssize_t(rand() % 100));
 	}
 
 	inline ssize_t random1(ssize_t l)
 	{
-		printf("%s\n", __PRETTY_FUNCTION__);
+//		printf("%s\n", __PRETTY_FUNCTION__);
 		return rand() % l;
 	}
 
@@ -98,7 +106,6 @@ int wWinMain(const wchar_t * /*pCmdLine*/) {
 	srand(time(0));
 
 	printf("construct v\n");
-	typedef vector<shared_ptr<ssize_t> > vec_t;
 	vec_t v(10);
 	printf("generate v\n");
 	sarastd::generate(begin(v), end(v), hh::random0p);
@@ -108,20 +115,23 @@ int wWinMain(const wchar_t * /*pCmdLine*/) {
 		printf(" %Id", *it->get());
 	}
 	printf(" )\n");
-	sarastd::sort(rbegin(v), rend(v));
+	printf("nth_element:\n");
+	sarastd::nth_element(begin(v), begin(v) + 4, end(v), Less);
 	printf("v.capa(): %Id, v.size(): %Id (", v.capacity(), v.size());
 	for (vec_t::iterator it = begin(v); it != end(v); ++it)
 	{
 		printf(" %Id", *it->get());
 	}
 	printf(" )\n");
-	sarastd::nth_element(begin(v), begin(v) + 2, end(v));
+	printf("sorting back:\n");
+	sarastd::sort(rbegin(v), rend(v), Less);
 	printf("v.capa(): %Id, v.size(): %Id (", v.capacity(), v.size());
 	for (vec_t::iterator it = begin(v); it != end(v); ++it)
 	{
 		printf(" %Id", *it->get());
 	}
 	printf(" )\n");
+	printf("shuffling:\n");
 	sarastd::random_shuffle(begin(v), end(v), hh::random1);
 	printf("v.capa(): %Id, v.size(): %Id (", v.capacity(), v.size());
 	for (vec_t::iterator it = begin(v); it != end(v); ++it)
@@ -129,7 +139,8 @@ int wWinMain(const wchar_t * /*pCmdLine*/) {
 		printf(" %Id", *it->get());
 	}
 	printf(" )\n");
-	sarastd::sort(begin(v), end(v));
+	printf("sorting:\n");
+	sarastd::sort(begin(v), end(v), Less);
 	printf("v.capa(): %Id, v.size(): %Id (", v.capacity(), v.size());
 	for (vec_t::iterator it = begin(v); it != end(v); ++it)
 	{
@@ -138,14 +149,14 @@ int wWinMain(const wchar_t * /*pCmdLine*/) {
 	printf(" )\n");
 	while (sarastd::next_permutation(begin(v), end(v))) {
 //		printf("(");
-//		for (vector<ssize_t>::iterator it = begin(v); it != end(v); ++it)
+//		for (vec_t::iterator it = begin(v); it != end(v); ++it)
 //		{
-//			printf(" %Id", *it);
+//			printf(" %Id", *it->get());
 //		}
 //		printf(" )\n");
 	}
 
-//	return 0;
+	return 0;
 
 	Base b1(1);
 	Base b2(2);

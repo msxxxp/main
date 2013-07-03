@@ -4,7 +4,8 @@
 #include "impl_types.hpp"
 
 namespace sarastd {
-	struct nothrow_t {
+	struct nothrow_t
+	{
 	};
 
 	const nothrow_t nothrow;
@@ -15,29 +16,6 @@ extern "C" {
 	void free(void*);
 }
 
-inline void* operator new(sarastd::size_t size)
-{
-	return malloc(size);
-}
-
-inline void* operator new[](sarastd::size_t size)
-{
-	return ::operator new(size);
-}
-
-inline void operator delete(void* ptr)
-{
-	free(ptr);
-}
-
-inline void operator delete[](void * ptr)
-{
-	::operator delete(ptr);
-}
-
-
-
-
 inline void* operator new(sarastd::size_t size, const sarastd::nothrow_t&) throw()
 {
 	return malloc(size);
@@ -45,7 +23,7 @@ inline void* operator new(sarastd::size_t size, const sarastd::nothrow_t&) throw
 
 inline void* operator new[](sarastd::size_t size, const sarastd::nothrow_t& tag) throw()
 {
-	return ::operator new(size, tag);
+	return operator new(size, tag);
 }
 
 inline void operator delete(void* ptr, const sarastd::nothrow_t&) throw()
@@ -55,7 +33,27 @@ inline void operator delete(void* ptr, const sarastd::nothrow_t&) throw()
 
 inline void operator delete[](void * ptr, const sarastd::nothrow_t& tag) throw()
 {
-	::operator delete(ptr, tag);
+	operator delete(ptr, tag);
+}
+
+inline void* operator new(sarastd::size_t size)
+{
+	return operator new(size, sarastd::nothrow);
+}
+
+inline void* operator new[](sarastd::size_t size)
+{
+	return operator new(size);
+}
+
+inline void operator delete(void* ptr)
+{
+	free(ptr);
+}
+
+inline void operator delete[](void * ptr)
+{
+	operator delete(ptr, sarastd::nothrow);
 }
 
 // Default placement versions of operator new.

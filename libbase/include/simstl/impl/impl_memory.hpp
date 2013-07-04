@@ -45,7 +45,6 @@ namespace sarastd {
 			for (; first != last; ++first)
 				first->~Type();
 		}
-
 	}
 
 //	template<bool>
@@ -208,25 +207,25 @@ namespace sarastd {
 		template<typename Type>
 		typename _movable_allocator<Type>::movable_handle _movable_allocator<Type>::allocate(size_type n)
 		{
-			return (movable_handle)malloc(sizeof(Type) * n); // TODO
+			return (movable_handle)_system_movable_malloc(sizeof(Type) * n);
 		}
 
 		template<typename Type>
 		void _movable_allocator<Type>::deallocate(movable_handle h)
 		{
-			free(h); // TODO
+			_system_movable_free(h);
 		}
 
 		template<typename Type>
 		typename _movable_allocator<Type>::pointer _movable_allocator<Type>::lock(movable_handle h) const
 		{
-			return (pointer)h; // TODO
+			return (pointer)_system_movable_lock(h);
 		}
 
 		template<typename Type>
-		void _movable_allocator<Type>::unlock(movable_handle /*h*/) const
+		void _movable_allocator<Type>::unlock(movable_handle h) const
 		{
-			// TODO
+			_system_movable_unlock(h);
 		}
 
 		template<typename Type>

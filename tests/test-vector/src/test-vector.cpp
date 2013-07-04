@@ -6,6 +6,37 @@
 #include <simstl/memory>
 #include <simstl/iterator>
 
+extern "C" {
+	void* _system_malloc(sarastd::size_t size)
+	{
+		return malloc(size);
+	}
+
+	void _system_free(void * ptr)
+	{
+		free(ptr);
+	}
+
+	void* _system_movable_malloc(sarastd::size_t size)
+	{
+		return malloc(size);
+	}
+
+	void _system_movable_free(void * handle)
+	{
+		free(handle);
+	}
+
+	void* _system_movable_lock(void * handle)
+	{
+		return handle;
+	}
+
+	void _system_movable_unlock(void * /*handle*/)
+	{
+	}
+}
+
 class Base {
 public:
 	~Base()
@@ -58,7 +89,7 @@ public:
 };
 
 typedef sarastd::shared_ptr<ssize_t> Value;
-typedef sarastd::vector<Value> vec_t;
+typedef sarastd::movable_vector<Value> vec_t;
 
 bool Less(const Value & a, const Value & b)
 {

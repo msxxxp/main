@@ -69,10 +69,16 @@ namespace sarastd {
 		template<typename Type, typename Allocator>
 		void _vector_impl<Type, Allocator>::swap(this_type& other)
 		{
+#if _GNUC_ < 3
+			sarastd::swap(begin, other.begin);
+			sarastd::swap(end, other.end);
+			sarastd::swap(end_of_storage, other.end_of_storage);
+#else
 			using sarastd::swap;
 			swap(begin, other.begin);
 			swap(end, other.end);
 			swap(end_of_storage, other.end_of_storage);
+#endif
 		}
 
 		template<typename Type, typename Allocator>
@@ -215,11 +221,18 @@ namespace sarastd {
 		template<typename Type>
 		void _vector_impl<Type, sarastd::pvt::_movable_allocator<Type> >::swap(this_type& other)
 		{
+#if _GNUC_ < 3
+			sarastd::swap(begin, other.begin);
+			sarastd::swap(end, other.end);
+			sarastd::swap(end_of_storage, other.end_of_storage);
+			sarastd::swap(handle, other.handle);
+#else
 			using sarastd::swap;
 			swap(begin, other.begin);
 			swap(end, other.end);
 			swap(end_of_storage, other.end_of_storage);
 			swap(handle, other.handle);
+#endif
 		}
 
 		template<typename Type>

@@ -625,8 +625,12 @@ namespace sarastd {
 
 		void swap(this_type & b) throw()
 		{
+#if _GNUC_ < 3
+			sarastd::swap(m_impl, b.m_impl);
+#else
 			using sarastd::swap;
 			swap(m_impl, b.m_impl);
+#endif
 		}
 
 	private:

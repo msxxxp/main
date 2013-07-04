@@ -83,9 +83,14 @@ namespace sarastd {
 	template<typename T1, typename T2>
 	void pair<T1, T2>::swap(pair& other)
 	{
+#if _GNUC_ < 3
+		sarastd::swap(first, other.first);
+		sarastd::swap(second, other.second);
+#else
 		using sarastd::swap;
 		swap(first, other.first);
 		swap(second, other.second);
+#endif
 	}
 
 	///=============================================================================================

@@ -22,8 +22,12 @@ namespace sarastd {
 	template<typename ForwardIt1, typename ForwardIt2>
 	void iter_swap(ForwardIt1 a, ForwardIt2 b)
 	{
+#if _GNUC_ < 3
+		sarastd::swap(*a, *b);
+#else
 		using sarastd::swap;
 		swap(*a, *b);
+#endif
 	}
 
 	template<typename T, typename Compare>

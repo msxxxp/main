@@ -30,6 +30,11 @@ namespace sarastd {
 #endif
 	}
 
+#ifdef min
+#undef min
+#undef max
+#endif
+
 	template<typename T, typename Compare>
 	const T& max(const T& a, const T& b, Compare comp)
 	{

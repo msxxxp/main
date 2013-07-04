@@ -2,7 +2,7 @@
 #define SARALIB_STL_ALGORITHM_HPP_
 
 #include "impl_types.hpp"
-#include "impl_iterator.hpp"
+#include "impl_iterator_base.hpp"
 #include "impl_utility.hpp"
 
 namespace sarastd {

@@ -4,6 +4,7 @@
 #include <simstl/algorithm>
 #include <simstl/vector>
 #include <simstl/memory>
+#include <simstl/iterator>
 
 class Base {
 public:

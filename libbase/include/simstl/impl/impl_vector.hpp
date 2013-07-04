@@ -3,7 +3,12 @@
 
 #include "impl_types.hpp"
 #include "impl_algorithm_base.hpp"
-#include "impl_iterator.hpp"
+#include "impl_iterator_base.hpp"
+#include "impl_iterator_back_insert_iterator.hpp"
+#include "impl_iterator_insert_iterator.hpp"
+#include "impl_iterator_pvt_normal_iterator.hpp"
+#include "impl_iterator_pvt_const_value_iterator.hpp"
+#include "impl_iterator_reverse_iterator.hpp"
 #include "impl_memory.hpp"
 #include "impl_vector_impl.hpp"
 

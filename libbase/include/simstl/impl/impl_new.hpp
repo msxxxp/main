@@ -50,44 +50,55 @@ inline void operator delete[](void * ptr, const sarastd::nothrow_t&) throw()
 	_system_free(ptr);
 }
 
-///================================================================================== Default global
-inline void* operator new(sarastd::size_t size)
-{
-	return operator new(size, sarastd::nothrow);
-}
-
-inline void* operator new[](sarastd::size_t size)
-{
-	return operator new[](size, sarastd::nothrow);
-}
-
-inline void operator delete(void* ptr)
-{
-	operator delete(ptr, sarastd::nothrow);
-}
-
-inline void operator delete[](void * ptr)
-{
-	operator delete[](ptr, sarastd::nothrow);
-}
+///===================================================================== Default no exception global
+//inline void* operator new(sarastd::size_t size)
+//{
+//	return operator new(size, sarastd::nothrow);
+//}
+//
+//inline void* operator new[](sarastd::size_t size)
+//{
+//	return operator new[](size, sarastd::nothrow);
+//}
+//
+//inline void operator delete(void* ptr)
+//{
+//	operator delete(ptr, sarastd::nothrow);
+//}
+//
+//inline void operator delete[](void * ptr)
+//{
+//	operator delete[](ptr, sarastd::nothrow);
+//}
 
 ///=============================================================================== Default placement
-inline void* operator new(sarastd::size_t, void* p) throw()
+//inline void* operator new(sarastd::size_t, void* p) throw()
+//{
+//	return p;
+//}
+//
+//inline void* operator new[](sarastd::size_t, void* p) throw()
+//{
+//	return p;
+//}
+//
+//inline void operator delete(void*, void*) throw()
+//{
+//}
+//
+//inline void operator delete [](void*, void*) throw()
+//{
+//}
+
+///=============================================================================== Special placement
+inline void* operator new(sarastd::size_t, void* p, const sarastd::nothrow_t&) throw()
 {
 	return p;
 }
 
-inline void* operator new[](sarastd::size_t, void* p) throw()
+inline void* operator new[](sarastd::size_t, void* p, const sarastd::nothrow_t&) throw()
 {
 	return p;
-}
-
-inline void operator delete(void*, void*) throw()
-{
-}
-
-inline void operator delete [](void*, void*) throw()
-{
 }
 
 #endif

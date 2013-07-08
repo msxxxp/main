@@ -30,7 +30,7 @@ namespace sarastd {
 		template<typename Type1, typename Type2>
 		void _construct(Type1* p, const Type2& value)
 		{
-			::new (static_cast<void*>(p)) Type1(value);
+			::new (static_cast<void*>(p), sarastd::nothrow) Type1(value);
 		}
 
 		template<typename Type>

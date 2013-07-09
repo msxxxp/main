@@ -104,6 +104,8 @@ namespace sarastd {
 		impl_type m_impl;
 
 	private:
+		void _resize_increase(size_type count, const value_type& value);
+
 		template<typename InputIterator>
 		void _insert_back(InputIterator first, InputIterator last, sarastd::input_iterator_tag);
 
@@ -176,16 +178,14 @@ namespace sarastd {
 	vector<Type, Allocator>::vector(size_type n) :
 		m_impl()
 	{
-		sarastd::pvt::_value_generator<Type> generator(n, value_type());
-		_insert_back(generator.begin(), generator.end(), sarastd::pvt::_iterator_category(generator.begin()));
+		_resize_increase(n, value_type());
 	}
 
 	template<typename Type, typename Allocator>
 	vector<Type, Allocator>::vector(size_type n, const value_type& value) :
 		m_impl()
 	{
-		sarastd::pvt::_value_generator<Type> generator(n, value);
-		_insert_back(generator.begin(), generator.end(), sarastd::pvt::_iterator_category(generator.begin()));
+		_resize_increase(n, value);
 	}
 
 	template<typename Type, typename Allocator>
@@ -478,7 +478,7 @@ namespace sarastd {
 		iterator last(begin());
 		sarastd::advance(first, sarastd::distance(cbegin(), cfirst));
 		sarastd::advance(last, sarastd::distance(cbegin(), clast));
-		sarastd::copy(last, end(), first);
+		sarastd::move(last, end(), first);
 		size_type n = sarastd::distance(cfirst, clast);
 		m_impl.destroy(m_impl.end - n, m_impl.end);
 		m_impl.end -= n;
@@ -510,9 +510,9 @@ namespace sarastd {
 	void vector<Type, Allocator>::resize(size_type count, const value_type& value)
 	{
 		if (size() < count) {
-			reserve(count);
-			sarastd::uninitialized_fill_n(end(), count - size(), value);
-			m_impl.end += (count - size());
+			_resize_increase(count, value)
+		} else if (count < size()) {
+			erase(cbegin() + count, cend());
 		}
 	}
 
@@ -526,6 +526,14 @@ namespace sarastd {
 	void vector<Type, Allocator>::swap(this_type& other)
 	{
 		m_impl.swap(other.m_impl);
+	}
+
+	template<typename Type, typename Allocator>
+	void vector<Type, Allocator>::_resize_increase(size_type count, const value_type& value)
+	{
+		reserve(count);
+		sarastd::uninitialized_fill_n(end(), count - size(), value);
+		m_impl.end += (count - size());
 	}
 
 	template<typename Type, typename Allocator>

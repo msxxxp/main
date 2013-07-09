@@ -123,6 +123,17 @@ namespace sarastd {
 		return d_last;
 	}
 
+	template<typename InputIt, typename OutputIt>
+	OutputIt move(InputIt first, InputIt last, OutputIt d_first)
+	{// copy behavior
+		while (first != last) {
+			*d_first = *first;
+			++first;
+			++d_first;
+		}
+		return d_first;
+	}
+
 	template<typename ForwardIt, typename T>
 	void fill(ForwardIt first, ForwardIt last, const T& value)
 	{

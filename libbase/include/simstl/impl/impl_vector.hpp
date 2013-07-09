@@ -175,7 +175,6 @@ namespace sarastd {
 	template<typename Type, typename Allocator>
 	vector<Type, Allocator>::vector(size_type n) :
 		m_impl()
-//		m_impl(n, value_type())
 	{
 		sarastd::pvt::_value_generator<Type> generator(n, value_type());
 		_insert_back(generator.begin(), generator.end(), sarastd::pvt::_iterator_category(generator.begin()));
@@ -184,7 +183,6 @@ namespace sarastd {
 	template<typename Type, typename Allocator>
 	vector<Type, Allocator>::vector(size_type n, const value_type& value) :
 		m_impl()
-//		m_impl(n, val)
 	{
 		sarastd::pvt::_value_generator<Type> generator(n, value);
 		_insert_back(generator.begin(), generator.end(), sarastd::pvt::_iterator_category(generator.begin()));
@@ -236,7 +234,7 @@ namespace sarastd {
 	typename
 	vector<Type, Allocator>::const_reference vector<Type, Allocator>::operator [](size_type pos) const
 	{
-		return (*this)[pos];
+		return *(m_impl.begin + pos);
 	}
 
 	template<typename Type, typename Allocator>
@@ -250,7 +248,7 @@ namespace sarastd {
 	typename
 	vector<Type, Allocator>::const_reference vector<Type, Allocator>::at(size_type pos) const
 	{
-		return this->at(pos);
+		return *(m_impl.begin + pos);
 	}
 
 	template<typename Type, typename Allocator>
@@ -426,9 +424,9 @@ namespace sarastd {
 
 	template<typename Type, typename Allocator>
 	typename
-	vector<Type, Allocator>::iterator vector<Type, Allocator>::insert(const_iterator pos, const value_type& value)
+	vector<Type, Allocator>::iterator vector<Type, Allocator>::insert(const_iterator cpos, const value_type& value)
 	{
-		return insert(pos, (size_type)1, value);
+		return insert(cpos, (size_type)1, value);
 	}
 
 	template<typename Type, typename Allocator>
@@ -505,7 +503,7 @@ namespace sarastd {
 	template<typename Type, typename Allocator>
 	void vector<Type, Allocator>::pop_back()
 	{
-		erase(end() - 1);
+		erase(cend() - 1, cend());
 	}
 
 	template<typename Type, typename Allocator>

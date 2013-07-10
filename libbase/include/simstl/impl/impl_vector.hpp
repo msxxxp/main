@@ -510,7 +510,7 @@ namespace sarastd {
 	void vector<Type, Allocator>::resize(size_type count, const value_type& value)
 	{
 		if (size() < count) {
-			_resize_increase(count, value)
+			_resize_increase(count, value);
 		} else if (count < size()) {
 			erase(cbegin() + count, cend());
 		}

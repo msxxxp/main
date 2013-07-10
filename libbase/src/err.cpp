@@ -21,13 +21,13 @@ namespace Base {
 				return ErrAsStr(err);
 			} else {
 				wchar_t out[MAX_PATH];
-				_snwprintf(out, sizeofa(out), L"[0x%x] Unknown error", err);
+				_snwprintf(out, lengthof(out), L"[0x%x] Unknown error", err);
 				return ustring(out);
 			}
 		}
 
 		wchar_t out[MAX_PATH_LEN];
-		_snwprintf(out, sizeofa(out), L"[0x%x (%u)] %s", err, err, buf);
+		_snwprintf(out, lengthof(out), L"[0x%x (%u)] %s", err, err, buf);
 		::LocalFree(buf);
 
 		ustring ret(out);

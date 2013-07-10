@@ -1,4 +1,5 @@
 ﻿#include <libbase/io.hpp>
+#include <algorithm>
 
 namespace Base {
 

@@ -386,7 +386,7 @@ namespace Base {
 			stTime = in;
 		}
 		wchar_t buf[MAX_PATH];
-		_snwprintf(buf, sizeofa(buf), L"%04d-%02d-%02d %02d:%02d:%02d", stTime.wYear, stTime.wMonth, stTime.wDay, stTime.wHour, stTime.wMinute, stTime.wSecond);
+		_snwprintf(buf, lengthof(buf), L"%04d-%02d-%02d %02d:%02d:%02d", stTime.wYear, stTime.wMonth, stTime.wDay, stTime.wHour, stTime.wMinute, stTime.wSecond);
 		return buf;
 	}
 

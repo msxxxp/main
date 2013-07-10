@@ -2,6 +2,7 @@
 #define _LIBBASE_DLL_HPP_
 
 #include <libbase/std.hpp>
+#include <algorithm>
 
 namespace Base {
 

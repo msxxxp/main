@@ -95,7 +95,7 @@ namespace Base {
 		ustring get_fullpath(PCWSTR path)
 		{
 			wchar_t buf[MAX_PATH_LEN];
-			::GetFullPathNameW(path, sizeofa(buf), buf, nullptr);
+			::GetFullPathNameW(path, lengthof(buf), buf, nullptr);
 			return ustring(buf);
 		}
 

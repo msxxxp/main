@@ -12,7 +12,7 @@ namespace sarastd
 		class _normal_iterator
 		{
 			typedef Iterator                                iterator_type;
-			typedef _normal_iterator<Iterator>               this_type;
+			typedef _normal_iterator<Iterator>              this_type;
 			typedef iterator_traits<Iterator>               traits_type;
 
 		public:

@@ -1,226 +1,19 @@
 ﻿#ifndef _LIBBASE_STD_HPP_
 #define _LIBBASE_STD_HPP_
 
-#if (_WIN32_WINNT < 0x0600)
-#undef _WIN32_WINNT
-#endif
+#include "pvt/config.hpp"
+#include "pvt/memory.hpp"
+#include "pvt/fwd.hpp"
 
-#define _WIN32_WINNT 0x0600
-
-#if (WINVER < 0x0600)
-#undef WINVER
-#endif
-#ifndef WINVER
-#define WINVER 0x0600
-#endif
-
-#if (_WIN32_IE < 0x0600)
-#undef _WIN32_IE
-#endif
-#ifndef _WIN32_IE
-#define _WIN32_IE 0x0600
-#endif
-
-//#define WIN32_LEAN_AND_MEAN
-#define NOMCX
-#define NOIME
-#define NOMINMAX
-
-#include <cstdint>
-#include <windows.h>
-#include <stdio.h>
-
-#include <type_traits>
-
-#ifdef _MSC_VER
-	typedef int WINBOOL;
-	typedef SSIZE_T ssize_t;
-#define noexcept
-#define __PRETTY_FUNCTION__ __FUNCSIG__
-#endif
-
-namespace Memory {
-#ifdef MEMORY_DEBUG
-	namespace Watchdog
-	{
-		typedef void (*pfunc)();
-		extern size_t allocations;
-		extern size_t deletions;
-		extern uint64_t allocations_size;
-		extern uint64_t deletions_size;
-
-		extern pfunc on_delete;
-	};
-
-#endif
-
-	typedef HANDLE Heap_t;
-
-	inline Memory::Heap_t get_heap()
-	{
-		return ::GetProcessHeap();
-	}
-
-	template<typename Pointer>
-	inline size_t size(Pointer in)
-	{
-		static_assert(std::is_pointer<Pointer>::value, "Pointer type is required");
-		return (in) ? ::HeapSize(get_heap(), 0, (PVOID)in) : 0;
-	}
-
-	template<typename Pointer>
-	inline Pointer malloc(size_t size, DWORD flags = 0/*HEAP_ZERO_MEMORY*/)
-	{
-		static_assert(std::is_pointer<Pointer>::value, "Pointer type is required");
-#ifdef MEMORY_DEBUG
-		Watchdog::allocations++;
-		Watchdog::allocations_size += size;
-#endif
-		return static_cast<Pointer>(::HeapAlloc(get_heap(), flags, size));
-	}
-
-	template<typename Pointer>
-	inline Pointer calloc(size_t count, DWORD flags = 0)
-	{
-		static_assert(std::is_pointer<Pointer>::value, "Pointer type is required");
-		Pointer tmp_ptr = nullptr;
-#ifdef MEMORY_DEBUG
-		Watchdog::allocations++;
-		Watchdog::allocations_size += sizeof(*tmp_ptr) * count;
-#endif
-		return static_cast<Pointer>(::HeapAlloc(get_heap(), flags | HEAP_ZERO_MEMORY, sizeof(*tmp_ptr) * count));
-	}
-
-	template<typename Pointer>
-	inline Pointer ealloc(DWORD flags = 0)
-	{
-		static_assert(std::is_pointer<Pointer>::value, "Pointer type is required");
-		Pointer tmp_ptr = nullptr;
-#ifdef MEMORY_DEBUG
-		Watchdog::allocations++;
-		Watchdog::allocations_size += sizeof(*tmp_ptr);
-#endif
-		return static_cast<Pointer>(::HeapAlloc(get_heap(), flags | HEAP_ZERO_MEMORY, sizeof(*tmp_ptr)));
-	}
-
-	template<typename Pointer>
-	inline void free(Pointer & in)
-	{
-		static_assert(std::is_pointer<Pointer>::value, "Pointer type is required");
-#ifdef MEMORY_DEBUG
-		Watchdog::deletions++;
-		Watchdog::deletions_size += Memory::size(in);
-		if (Watchdog::deletions_size == Watchdog::allocations_size && Watchdog::deletions == Watchdog::allocations)
-			printf("There is no leaks\n");
-#endif
-		::HeapFree(get_heap(), 0, *(PVOID*)(&in));
-		*(PVOID*)(&in) = nullptr;
-	}
-
-	template<typename Pointer>
-	inline bool realloc(Pointer & in, size_t size, DWORD flags = HEAP_ZERO_MEMORY)
-	{
-#ifdef MEMORY_DEBUG
-		if (in) {
-			Watchdog::deletions++;
-			Watchdog::deletions_size += Memory::size(in);
-		}
-		Watchdog::allocations++;
-		Watchdog::allocations_size += size;
-#endif
-		static_assert(std::is_pointer<Pointer>::value, "Pointer type is required");
-		return (in = static_cast<Pointer>((in) ? ::HeapReAlloc(get_heap(), flags, (PVOID)in, size) : ::HeapAlloc(get_heap(), flags, size)));
-	}
-
-	template<typename Pointer1, typename Pointer2>
-	inline bool compare(Pointer1 m1, Pointer2 m2, size_t size)
-	{
-		static_assert(std::is_pointer<Pointer1>::value, "Pointer type is required");
-		static_assert(std::is_pointer<Pointer2>::value, "Pointer type is required");
-		return ::memcmp((PVOID)m1, (PVOID)m2, size) == 0;
-	}
-
-	template<typename Pointer1, typename Pointer2>
-	inline Pointer1 copy(Pointer1 dest, Pointer2 src, size_t size)
-	{
-		static_assert(std::is_pointer<Pointer1>::value, "Pointer type is required");
-		static_assert(std::is_pointer<Pointer2>::value, "Pointer type is required");
-		//return ::memcpy_s(dest, sour, size);
-		return static_cast<Pointer1>(::memcpy((PVOID)dest, (PVOID)src, size));
-	}
-
-	template<typename Pointer1, typename Pointer2>
-	inline Pointer1 dup(Pointer2 src, size_t size, DWORD flags = 0/*HEAP_ZERO_MEMORY*/)
-	{
-		static_assert(std::is_pointer<Pointer1>::value, "Pointer type is required");
-		static_assert(std::is_pointer<Pointer2>::value, "Pointer type is required");
-		return Memory::copy(Memory::malloc<Pointer1>(size, flags), src, size);
-	}
-
-	template<typename Pointer>
-	inline Pointer fill(Pointer in, size_t size, int fill = 0)
-	{
-		static_assert(std::is_pointer<Pointer>::value, "Pointer type is required");
-		return static_cast<Pointer>(::memset((PVOID)in, fill, size));
-	}
-
-	template<typename Pointer>
-	inline Pointer zero(Pointer in, size_t size)
-	{
-		static_assert(std::is_pointer<Pointer>::value, "Pointer type is required");
-		return static_cast<Pointer>(::memset((PVOID)in, 0, size));
-	}
-
-	template<typename NotPointer>
-	inline void zero(NotPointer & in)
-	{
-		static_assert(!std::is_pointer<NotPointer>::value, "Nonpointer type is required");
-		::memset((PVOID)&in, 0, sizeof(in));
-	}
-
-}
-
-#ifdef NoStdNew
-inline void * operator new(size_t size) noexcept
-{
-	return Memory::malloc<PVOID>(size, HEAP_ZERO_MEMORY);
-}
-
-inline void * operator new [](size_t size) noexcept
-{
-	return ::operator new(size);
-}
-
-inline void operator delete(void * in) noexcept
-{
-	Memory::free(in);
-}
-
-inline void operator delete [](void * ptr) noexcept
-{
-	::operator delete(ptr);
-}
-#endif
-
-#include <algorithm>
-#include "fwd.hpp"
-
-typedef const void * PCVOID;
-
-#define DEFINE_FUNC(name) F##name name
-#define GET_DLL_FUNC(name) name = (F##name)get_function(#name)
+#define DEFINE_FUNC(name)     F##name name
+#define GET_DLL_FUNC(name)    name = (F##name)get_function(#name)
 #define GET_DLL_FUNC_NT(name) name = (F##name)get_function_nt(#name)
 
-#define THIS_FILE Base::filename_only(__FILE__)
-#define THIS_PLACE THIS_FILE, __LINE__, __PRETTY_FUNCTION__
+#define THIS_FILE        Base::filename_only(__FILE__)
+#define THIS_PLACE       THIS_FILE, __LINE__, __PRETTY_FUNCTION__
+#define THIS_PLACE_SHORT THIS_FILE, __LINE__, __FUNCTION__
 
-#ifndef sizeofa
-#define sizeofa(array) (sizeof(array)/sizeof(0[array]))
-#endif
-
-#ifndef sizeofe
-#define sizeofe(array) (sizeof(0[array]))
-#endif
+typedef const void * PCVOID;
 
 namespace Base {
 
@@ -237,7 +30,6 @@ namespace Base {
 	const wchar_t SPACE_C = L' ';
 	const wchar_t MASK_CHARS[] = L"*?";
 
-
 	const uint32_t BOM_UTF32le = 0x0000FEFF;
 	const uint32_t BOM_UTF32be = 0xFFFE0000;
 	const uint32_t BOM_UTF16le = 0xFEFF;
@@ -252,6 +44,8 @@ namespace Base {
 //	const size_t CP_AUTODETECT = (UINT)-1;
 	const UINT DEFAULT_CP = CP_UTF8;
 
+	typedef ssize_t Timeout_t;
+
 	enum class WaitResult_t : size_t {
 		SUCCESS   = WAIT_OBJECT_0,
 		APC       = WAIT_IO_COMPLETION,
@@ -260,11 +54,9 @@ namespace Base {
 		ABANDONED = WAIT_ABANDONED,
 	};
 
+	const Timeout_t WAIT_FOREVER = INFINITE;
+
 	PCWSTR to_str(WaitResult_t waitResult);
-
-	typedef ssize_t Timeout_t;
-
-	static const Timeout_t WAIT_FOREVER = INFINITE;
 
 	template<typename Type, size_t N>
 	size_t lengthof(Type (&)[N])
@@ -344,7 +136,6 @@ namespace Base {
 		this_type & operator = (const this_type &) = delete;
 #endif
 	};
-
 }
 
 #endif

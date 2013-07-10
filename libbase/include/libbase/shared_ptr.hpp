@@ -3,6 +3,7 @@
 
 #include <libbase/std.hpp>
 #include <libbase/ref_cnt.hpp>
+#include <algorithm>
 
 namespace Base {
 

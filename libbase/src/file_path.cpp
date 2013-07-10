@@ -37,7 +37,7 @@ namespace Base {
 	{
 		wchar_t buf[MAX_PATH];
 		buf[0] = 0;
-		::GetTempPathW(sizeofa(buf), buf);
+		::GetTempPathW(lengthof(buf), buf);
 		return ustring(buf);
 	}
 

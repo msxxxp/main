@@ -234,12 +234,12 @@ namespace Logger {
 	};
 
 	struct pModule_PCWSTR_less {
-		bool operator ()(const Module_i * lhs, PCWSTR rhs) const
+		bool operator ()(Module_i * lhs, PCWSTR rhs) const
 		{
 			return Base::Str::compare(lhs->get_name(), rhs) < 0;
 		}
 
-		bool operator ()(PCWSTR left, const Module_i * right) const
+		bool operator ()(PCWSTR left, Module_i * right) const
 		{
 			return Base::Str::compare(left, right->get_name()) < 0;
 		}

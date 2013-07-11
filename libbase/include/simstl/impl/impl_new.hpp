@@ -51,25 +51,27 @@ inline void operator delete[](void * ptr, const sarastd::nothrow_t&) throw()
 }
 
 ///===================================================================== Default no exception global
-//inline void* operator new(sarastd::size_t size)
-//{
-//	return operator new(size, sarastd::nothrow);
-//}
-//
-//inline void* operator new[](sarastd::size_t size)
-//{
-//	return operator new[](size, sarastd::nothrow);
-//}
-//
-//inline void operator delete(void* ptr)
-//{
-//	operator delete(ptr, sarastd::nothrow);
-//}
-//
-//inline void operator delete[](void * ptr)
-//{
-//	operator delete[](ptr, sarastd::nothrow);
-//}
+#ifdef NO_STD_NEW
+inline void* operator new(sarastd::size_t size)
+{
+	return operator new(size, sarastd::nothrow);
+}
+
+inline void* operator new[](sarastd::size_t size)
+{
+	return operator new[](size, sarastd::nothrow);
+}
+
+inline void operator delete(void* ptr)
+{
+	operator delete(ptr, sarastd::nothrow);
+}
+
+inline void operator delete[](void * ptr)
+{
+	operator delete[](ptr, sarastd::nothrow);
+}
+#endif
 
 ///=============================================================================== Default placement
 //inline void* operator new(sarastd::size_t, void* p) throw()

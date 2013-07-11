@@ -471,30 +471,35 @@ namespace sarastd {
 	}
 
 	namespace pvt {
-		class ref_counter {
-		public:
-			virtual ~ref_counter() {}
+		struct ref_counter {
+			virtual ~ref_counter();
 
-			ref_counter() : m_refcnt(1) {}
+			ref_counter();
 
-			void increase_ref() {++m_refcnt;}
+			void increase_ref();
 
 			void decrease_ref();
 
-			sarastd::size_t count() const {return m_refcnt;}
+			sarastd::size_t count() const;
 
 		private:
-			virtual void destroy() const {}
+			virtual void destroy() const;
 
 			virtual void deallocate() const = 0;
 
-			ref_counter(const ref_counter & rhs);
+			ref_counter(const ref_counter & rhs); // forbidden
 
-			ref_counter & operator = (const ref_counter & rhs);
+			ref_counter & operator = (const ref_counter & rhs); // forbidden
 
 		private:
 			sarastd::size_t m_refcnt;
 		};
+
+		ref_counter::~ref_counter() {}
+
+		ref_counter::ref_counter() : m_refcnt(1) {}
+
+		void ref_counter::increase_ref() {++m_refcnt;}
 
 		void ref_counter::decrease_ref()
 		{
@@ -503,6 +508,10 @@ namespace sarastd {
 				deallocate();
 			}
 		}
+
+		sarastd::size_t ref_counter::count() const {return m_refcnt;}
+
+		void ref_counter::destroy() const {}
 	}
 
 	template<typename Type>

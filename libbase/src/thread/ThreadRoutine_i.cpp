@@ -34,21 +34,20 @@ namespace Base {
 
 	void ThreadRoutine_i::alert(void * data)
 	{
-		(void)data;
+		UNUSED(data);
 		LogNoise(L"data: %p\n", data);
 	}
 
 	size_t ThreadRoutine_i::run(void * data)
 	{
-		(void)data;
+		UNUSED(data);
 		LogNoise(L"data: %p\n", data);
 		return 0;
 	}
 
 	void ThreadRoutine_i::put_message(const Base::Message & message)
 	{
-		(void)message;
+		UNUSED(message);
 		LogNoise(L"type: %Id, code: %Id, param: %Id, data: %p\n", message.get_type(), message.get_code(), message.get_param(), message.get_data());
 	}
-
 }

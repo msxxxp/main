@@ -9,6 +9,7 @@
 #define GET_DLL_FUNC(name)    name = (F##name)get_function(#name)
 #define GET_DLL_FUNC_NT(name) name = (F##name)get_function_nt(#name)
 
+#define UNUSED(val)      ((void)val)
 #define THIS_FILE        Base::filename_only(__FILE__)
 #define THIS_PLACE       THIS_FILE, __LINE__, __PRETTY_FUNCTION__
 #define THIS_PLACE_SHORT THIS_FILE, __LINE__, __FUNCTION__

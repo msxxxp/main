@@ -104,14 +104,14 @@ namespace Base {
 	void Thread::alert()
 	{
 		LogNoise(L"id: %u\n", m_id);
-		LogErrorIf(!::QueueUserAPC(ThreadRoutine_i::alert_thread, m_handle, (ULONG_PTR)m_routine), L"%s\n", ErrAsStr().c_str());
+		LogErrorIf(!::QueueUserAPC(ThreadRoutine_i::alert_thread, m_handle, (ULONG_PTR)m_routine), L"-> %s\n", ErrAsStr().c_str());
 	}
 
 	bool Thread::set_priority(Thread::Priority_t prio)
 	{
 		LogNoise(L"id: %u, prio: %s\n", m_id, to_str(prio));
 		bool ret = ::SetThreadPriority(m_handle, (int)prio);
-		LogErrorIf(!ret, L"%s\n", ErrAsStr().c_str());
+		LogErrorIf(!ret, L"-> %s\n", ErrAsStr().c_str());
 		return ret;
 	}
 
@@ -120,7 +120,7 @@ namespace Base {
 		LogNoise(L"id: %u, prio: %s\n", m_id, to_str(prio));
 		ULONG p = (ULONG)prio;
 		NTSTATUS ret = NtSetInformationThread(m_handle, ThreadIoPriority, &p, sizeof(p));
-		LogErrorIf(ret, L"%s\n", NTStatusAsStr(ret).c_str());
+		LogErrorIf(ret, L"-> %s\n", NTStatusAsStr(ret).c_str());
 		return ret;
 	}
 
@@ -128,8 +128,8 @@ namespace Base {
 	{
 		DWORD ret;
 		WINBOOL good = ::GetExitCodeThread(m_handle, &ret);
-		LogNoiseIf(good,  L"id: %u code: %u\n", m_id, ret);
-		LogErrorIf(!good, L"id: %u %s\n", ErrAsStr().c_str());
+		LogNoiseIf(good,  L"id: %u -> %u\n", m_id, ret);
+		LogErrorIf(!good, L"id: %u -> %s\n", m_id, ErrAsStr().c_str());
 		return ret;
 	}
 
@@ -144,7 +144,7 @@ namespace Base {
 		LogNoise(L"id: %u\n", m_id);
 		ULONG p = 0;
 		NTSTATUS ret = NtQueryInformationThread(m_handle, ThreadIoPriority, &p, sizeof(p), nullptr);
-		LogErrorIf(ret, L"%s\n", NTStatusAsStr(ret).c_str());
+		LogErrorIf(ret, L"-> %s\n", NTStatusAsStr(ret).c_str());
 		return (Thread::IoPriority_t)p;
 	}
 
@@ -152,7 +152,7 @@ namespace Base {
 	{
 		LogNoise(L"id: %u\n", m_id);
 		bool ret = ::SuspendThread(m_handle) != (DWORD)-1;
-		LogErrorIf(!ret, L"%s\n", ErrAsStr().c_str());
+		LogErrorIf(!ret, L"-> %s\n", ErrAsStr().c_str());
 		return ret;
 	}
 
@@ -160,7 +160,7 @@ namespace Base {
 	{
 		LogNoise(L"id: %u\n", m_id);
 		bool ret = ::ResumeThread(m_handle) != (DWORD)-1;
-		LogErrorIf(!ret, L"%s\n", ErrAsStr().c_str());
+		LogErrorIf(!ret, L"-> %s\n", ErrAsStr().c_str());
 		return ret;
 	}
 

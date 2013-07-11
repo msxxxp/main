@@ -1,5 +1,5 @@
 #include <libbase/std.hpp>
-#include <libbase/ref_cnt.hpp>
+#include <libbase/pvt/ref_cnt.hpp>
 
 namespace Base {
 
@@ -13,7 +13,7 @@ namespace Base {
 	{
 	}
 
-	void ref_counter::cleenup() const
+	void ref_counter::destroy() const
 	{
 	}
 
@@ -35,8 +35,8 @@ namespace Base {
 	void ref_counter::decrease_ref()
 	{
 		if (--m_refcnt == 0) {
-			cleenup();
-			free();
+			destroy();
+			deallocate();
 		}
 	}
 

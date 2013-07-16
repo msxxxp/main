@@ -3,7 +3,8 @@
 
 #include <libbase/std.hpp>
 #include <libbase/char.hpp>
-#include <libbase/ref_cnt.hpp>
+#include <libbase/pvt/ref_cnt.hpp>
+#include <algorithm>
 
 namespace Base {
 	template<typename CharType, typename Traits>
@@ -315,7 +316,7 @@ namespace Base {
 		}
 
 		struct string_impl: public Base::ref_counter {
-			void free() const override {
+			void deallocate() const override {
 				this->~string_impl();
 				Memory::free(this);
 			}

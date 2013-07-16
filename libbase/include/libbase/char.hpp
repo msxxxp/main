@@ -2,6 +2,7 @@
 #define _LIBBASE_CHAR_HPP_
 
 #include <libbase/std.hpp>
+#include <wchar.h>
 
 namespace Base {
 
@@ -14,8 +15,8 @@ namespace Base {
 	{
 		typedef uint32_t   int_type;
 		//	typedef std::streampos  pos_type;
-		typedef std::streamoff  off_type;
-		typedef mbstate_t  state_type;
+		//	typedef std::streamoff  off_type;
+		//	typedef mbstate_t  state_type;
 	};
 
 	template<>
@@ -25,7 +26,7 @@ namespace Base {
 		typedef int               int_type;
 		//	typedef streampos         pos_type;
 		//	typedef streamoff         off_type;
-		typedef mbstate_t         state_type;
+		//	typedef mbstate_t         state_type;
 
 		static void assign(char_type & c1, const char_type & c2) noexcept {c1 = c2;}
 
@@ -72,7 +73,7 @@ namespace Base {
 		typedef wint_t            int_type;
 		//	typedef streamoff         off_type;
 		//	typedef wstreampos        pos_type;
-		typedef mbstate_t         state_type;
+		//	typedef mbstate_t         state_type;
 
 		static void assign(char_type & c1, const char_type & c2) noexcept {c1 = c2;}
 

@@ -10,36 +10,36 @@ namespace sarastd {
 
 	namespace pvt {
 		template<typename Type>
-		Type* _addressof(Type& r)
+		Type* _addressof(Type& ref)
 		{
-			return reinterpret_cast<Type*>(&const_cast<char&>(reinterpret_cast<const volatile char&>(r)));
+			return reinterpret_cast<Type*>(&const_cast<char&>(reinterpret_cast<const volatile char&>(ref)));
 		}
 
 		template<typename Type>
-		Type* _allocate(sarastd::size_t n)
+		Type* _allocate(sarastd::size_t cnt)
 		{
-			return (Type*)::operator new(n * sizeof(Type), sarastd::nothrow);
+			return (Type*)::operator new(sizeof(Type) * cnt, sarastd::nothrow);
 		}
 
 		template<typename Type>
-		void _deallocate(Type* ptr, sarastd::size_t /*n*/ = 0)
+		void _deallocate(Type* ptr, sarastd::size_t /*cnt*/ = 0)
 		{
 			::operator delete(ptr, sarastd::nothrow);
 		}
 
 		template<typename Type1, typename Type2>
-		void _construct(Type1* p, const Type2& value)
+		void _construct(Type1* ptr, const Type2& val)
 		{
-			::new (static_cast<void*>(p), sarastd::nothrow) Type1(value);
+			::new (static_cast<void*>(ptr), sarastd::nothrow) Type1(val);
 		}
 
 		template<typename Type>
-		void _destroy(Type* pointer)
+		void _destroy(Type* ptr)
 		{
-			pointer->~Type();
+			ptr->~Type();
 		}
 
-		template<typename ForwardIterator, typename Type>
+		template<typename Type, typename ForwardIterator>
 		void _destroy(ForwardIterator first, ForwardIterator last)
 		{
 			for (; first != last; ++first)
@@ -86,16 +86,16 @@ namespace sarastd {
 //	}
 
 	template<typename Type>
-	sarastd::pair<Type*, sarastd::ptrdiff_t> get_temporary_buffer(sarastd::ptrdiff_t count)
+	sarastd::pair<Type*, sarastd::ptrdiff_t> get_temporary_buffer(sarastd::ptrdiff_t cnt)
 	{
-		Type* ptr = static_cast<Type*>(::operator new(count * sizeof(Type), sarastd::nothrow));
-		return sarastd::pair<Type*, ptrdiff_t>(static_cast<Type*>(ptr), ptr ? count : 0);
+		Type* ptr = static_cast<Type*>(::operator new(sizeof(Type) * cnt, sarastd::nothrow));
+		return sarastd::pair<Type*, ptrdiff_t>(ptr, ptr ? cnt : 0);
 	}
 
 	template<typename Type>
-	void return_temporary_buffer(Type* p)
+	void return_temporary_buffer(Type* ptr)
 	{
-		::operator delete(p, sarastd::nothrow);
+		::operator delete(ptr, sarastd::nothrow);
 	}
 
 	///=============================================================================================
@@ -127,8 +127,8 @@ namespace sarastd {
 		~allocator();
 		allocator();
 
-		pointer allocate(size_type n);
-		void deallocate(pointer ptr, size_type n);
+		pointer allocate(size_type cnt);
+		void deallocate(pointer ptr, size_type cnt);
 
 		void construct(pointer ptr, const_reference val);
 		void destroy(pointer ptr);
@@ -145,15 +145,15 @@ namespace sarastd {
 	}
 
 	template<typename Type>
-	typename allocator<Type>::pointer allocator<Type>::allocate(size_type n)
+	typename allocator<Type>::pointer allocator<Type>::allocate(size_type cnt)
 	{
-		return sarastd::pvt::_allocate<Type>(n);
+		return sarastd::pvt::_allocate<Type>(cnt);
 	}
 
 	template<typename Type>
-	void allocator<Type>::deallocate(pointer ptr, size_type n)
+	void allocator<Type>::deallocate(pointer ptr, size_type cnt)
 	{
-		sarastd::pvt::_deallocate(ptr, n);
+		sarastd::pvt::_deallocate(ptr, cnt);
 	}
 
 	template<typename Type>
@@ -184,14 +184,14 @@ namespace sarastd {
 			~_movable_allocator();
 			_movable_allocator();
 
-			movable_handle allocate(size_type n);
-			void deallocate(movable_handle h);
+			movable_handle allocate(size_type cnt);
+			void deallocate(movable_handle hnd);
 
-			pointer lock(movable_handle h) const;
-			void unlock(movable_handle h) const;
+			pointer lock(movable_handle hnd) const;
+			void unlock(movable_handle hnd) const;
 
-			void construct(pointer p, const_reference val);
-			void destroy(pointer p);
+			void construct(pointer ptr, const_reference val);
+			void destroy(pointer ptr);
 		};
 
 		template<typename Type>
@@ -205,39 +205,39 @@ namespace sarastd {
 		}
 
 		template<typename Type>
-		typename _movable_allocator<Type>::movable_handle _movable_allocator<Type>::allocate(size_type n)
+		typename _movable_allocator<Type>::movable_handle _movable_allocator<Type>::allocate(size_type cnt)
 		{
-			return (movable_handle)_system_movable_malloc(sizeof(Type) * n);
+			return (movable_handle)_system_movable_malloc(sizeof(Type) * cnt);
 		}
 
 		template<typename Type>
-		void _movable_allocator<Type>::deallocate(movable_handle h)
+		void _movable_allocator<Type>::deallocate(movable_handle hnd)
 		{
-			_system_movable_free(h);
+			_system_movable_free(hnd);
 		}
 
 		template<typename Type>
-		typename _movable_allocator<Type>::pointer _movable_allocator<Type>::lock(movable_handle h) const
+		typename _movable_allocator<Type>::pointer _movable_allocator<Type>::lock(movable_handle hnd) const
 		{
-			return (pointer)_system_movable_lock(h);
+			return (pointer)_system_movable_lock(hnd);
 		}
 
 		template<typename Type>
-		void _movable_allocator<Type>::unlock(movable_handle h) const
+		void _movable_allocator<Type>::unlock(movable_handle hnd) const
 		{
-			_system_movable_unlock(h);
+			_system_movable_unlock(hnd);
 		}
 
 		template<typename Type>
-		void _movable_allocator<Type>::construct(pointer p, const_reference val)
+		void _movable_allocator<Type>::construct(pointer ptr, const_reference val)
 		{
-			sarastd::pvt::_construct(p, val);
+			sarastd::pvt::_construct(ptr, val);
 		}
 
 		template<typename Type>
-		void _movable_allocator<Type>::destroy(pointer p)
+		void _movable_allocator<Type>::destroy(pointer ptr)
 		{
-			sarastd::pvt::_destroy(p);
+			sarastd::pvt::_destroy(ptr);
 		}
 	}
 
@@ -252,27 +252,27 @@ namespace sarastd {
 	}
 
 	template<typename InputIt, typename Size, typename ForwardIt>
-	ForwardIt uninitialized_copy_n(InputIt first, Size count, ForwardIt d_first)
+	ForwardIt uninitialized_copy_n(InputIt first, Size cnt, ForwardIt d_first)
 	{
-		for (; count > 0; ++first, ++d_first, --count) {
+		for (; cnt > 0; ++first, ++d_first, --cnt) {
 			sarastd::pvt::_construct(sarastd::pvt::_addressof(*d_first), *first);
 		}
 		return d_first;
 	}
 
 	template<typename ForwardIt, typename T>
-	void uninitialized_fill(ForwardIt first, ForwardIt last, const T& value)
+	void uninitialized_fill(ForwardIt first, ForwardIt last, const T& val)
 	{
 		for (; first != last; ++first) {
-			sarastd::pvt::_construct(sarastd::pvt::_addressof(*first), value);
+			sarastd::pvt::_construct(sarastd::pvt::_addressof(*first), val);
 		}
 	}
 
 	template<typename ForwardIt, typename Size, typename T>
-	void uninitialized_fill_n(ForwardIt first, Size count, const T& value)
+	void uninitialized_fill_n(ForwardIt first, Size cnt, const T& val)
 	{
-		for (; count > 0; ++first, --count) {
-			sarastd::pvt::_construct(sarastd::pvt::_addressof(*first), value);
+		for (; cnt > 0; ++first, --cnt) {
+			sarastd::pvt::_construct(sarastd::pvt::_addressof(*first), val);
 		}
 	}
 
@@ -286,7 +286,7 @@ namespace sarastd {
 		raw_storage_iterator& operator =(const Type& element);
 
 		raw_storage_iterator& operator ++();
-		raw_storage_iterator operator ++(int);
+		raw_storage_iterator  operator ++(int);
 
 	protected:
 		OutputIterator _M_iter;
@@ -326,35 +326,20 @@ namespace sarastd {
 
 	///=============================================================================================
 	template<typename Type>
-	struct auto_ptr_ref {
-		explicit auto_ptr_ref(Type* p);
-
-		Type* m_ptr;
-	};
-
-	template<typename Type>
-	auto_ptr_ref<Type>::auto_ptr_ref(Type* p) :
-		m_ptr(p)
-	{
-	}
-
-	template<typename Type>
 	class auto_ptr {
 	public:
 		typedef Type element_type;
 
-		~auto_ptr();
+		~auto_ptr() throw();
 
 		template<typename U>
 		auto_ptr(auto_ptr<U>& a) throw();
 		auto_ptr(auto_ptr& a) throw();
 		explicit auto_ptr(element_type* p = 0) throw();
-		auto_ptr(auto_ptr_ref<element_type> ref) throw();
 
 		template<typename U>
 		auto_ptr& operator =(auto_ptr<U>& a) throw();
 		auto_ptr& operator =(auto_ptr& a) throw();
-		auto_ptr& operator =(auto_ptr_ref<element_type> ref) throw();
 
 		element_type& operator *() const throw();
 		element_type* operator->() const throw();
@@ -362,12 +347,6 @@ namespace sarastd {
 		element_type* release() throw();
 
 		void reset(element_type* p = 0) throw();
-
-		template<typename U>
-		operator auto_ptr_ref<U>() throw()
-		{
-			return auto_ptr_ref<U>(this->release());
-		}
 
 		template<typename U>
 		operator auto_ptr<U>() throw()
@@ -380,7 +359,7 @@ namespace sarastd {
 	};
 
 	template<typename Type>
-	auto_ptr<Type>::~auto_ptr()
+	auto_ptr<Type>::~auto_ptr() throw()
 	{
 		delete m_ptr;
 	}
@@ -452,22 +431,6 @@ namespace sarastd {
 			delete m_ptr;
 			m_ptr = p;
 		}
-	}
-
-	template<typename Type>
-	auto_ptr<Type>::auto_ptr(auto_ptr_ref<element_type> ref) throw() :
-		m_ptr(ref.m_ptr)
-	{
-	}
-
-	template<typename Type>
-	auto_ptr<Type>& auto_ptr<Type>::operator =(auto_ptr_ref<element_type> ref) throw()
-	{
-		if (ref.m_ptr != this->get()) {
-			delete m_ptr;
-			m_ptr = ref.m_ptr;
-		}
-		return *this;
 	}
 
 	namespace pvt {

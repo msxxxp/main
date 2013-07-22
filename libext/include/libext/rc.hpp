@@ -2,6 +2,7 @@
 #define _LIBEXT_RC_HPP_
 
 #include <libbase/std.hpp>
+#include <libbase/string.hpp>
 
 namespace Ext {
 

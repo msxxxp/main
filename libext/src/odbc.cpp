@@ -30,7 +30,7 @@ bool ODBC_base::FindAndSetDriver(SQLHENV conn, DBServer type, const ustring & ds
 
 	if (conn) {
 		SQLWCHAR szDriverDesc[SQL_MAX_MESSAGE_LENGTH];
-		SQLRETURN err = ::SQLDriversW(conn, SQL_FETCH_FIRST, szDriverDesc, sizeofa(szDriverDesc) - 1, 0, 0, -1, 0);
+		SQLRETURN err = ::SQLDriversW(conn, SQL_FETCH_FIRST, szDriverDesc, Base::lengthof(szDriverDesc) - 1, 0, 0, -1, 0);
 		while (SQL_SUCCEEDED(err)) {
 			ustring tmp(szDriverDesc);
 			if (tmp.find(ds) != ustring::npos) {
@@ -38,7 +38,7 @@ bool ODBC_base::FindAndSetDriver(SQLHENV conn, DBServer type, const ustring & ds
 				Result = true;
 				break;
 			}
-			err = ::SQLDriversW(conn, SQL_FETCH_NEXT, szDriverDesc, sizeofa(szDriverDesc) - 1, 0, 0, -1, 0);
+			err = ::SQLDriversW(conn, SQL_FETCH_NEXT, szDriverDesc, Base::lengthof(szDriverDesc) - 1, 0, 0, -1, 0);
 		}
 	}
 	return Result;
@@ -58,7 +58,7 @@ ustring ODBC_base::GetState(SQLSMALLINT type, SQLHANDLE handle, SQLSMALLINT RecN
 	SQLWCHAR Msg[SQL_MAX_MESSAGE_LENGTH];
 	SQLINTEGER NativeError;
 	SQLSMALLINT MsgLen;
-	::SQLGetDiagRecW(type, handle, RecNum, state, &NativeError, Msg, sizeofa(Msg), &MsgLen);
+	::SQLGetDiagRecW(type, handle, RecNum, state, &NativeError, Msg, Base::lengthof(Msg), &MsgLen);
 	return Msg;
 }
 
@@ -241,7 +241,7 @@ void ODBC_Conn::Exec(const ustring &query) const {
 		SQLSMALLINT MsgLen;
 		if ((err == SQL_SUCCESS_WITH_INFO) || (err == SQL_ERROR)) {
 			int i = 1;
-			while (::SQLGetDiagRecW(SQL_HANDLE_STMT, hstm, i++, errstate, &NativeError, Msg, sizeofa(Msg), &MsgLen) != SQL_NO_DATA) {
+			while (::SQLGetDiagRecW(SQL_HANDLE_STMT, hstm, i++, errstate, &NativeError, Msg, Base::lengthof(Msg), &MsgLen) != SQL_NO_DATA) {
 //				cout << "errstate: " << errstate << endl;
 //				cout << "Msg:      " << Msg << endl;
 			}
@@ -269,7 +269,7 @@ void ODBC_Conn::ExecAndWait(const ustring &query, DWORD wait) const {
 		if ((err == SQL_SUCCESS_WITH_INFO) || (err == SQL_ERROR)) {
 			int i = 1;
 			while (err != SQL_NO_DATA) {
-				err = ::SQLGetDiagRecW(SQL_HANDLE_STMT, hstm, i++, errstate, &NativeError, Msg, sizeofa(Msg), &MsgLen);
+				err = ::SQLGetDiagRecW(SQL_HANDLE_STMT, hstm, i++, errstate, &NativeError, Msg, Base::lengthof(Msg), &MsgLen);
 //				cout << "errstate: " << errstate << endl;
 //				cout << "Msg:      " << Msg << endl;
 			}

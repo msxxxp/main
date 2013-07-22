@@ -145,15 +145,15 @@ namespace Fsys {
 	ustring device_path_to_disk(PCWSTR path)
 	{
 		wchar_t local_disks[MAX_PATH] = {0}, *p = local_disks;
-		CheckApi(::GetLogicalDriveStringsW(sizeofa(local_disks) - 1, local_disks));
+		CheckApi(::GetLogicalDriveStringsW(Base::lengthof(local_disks) - 1, local_disks));
 		wchar_t drive[3] = L" :";
 		wchar_t device[MAX_PATH];
 		while (*p) {
 			*drive = *p;
-			CheckApi(::QueryDosDeviceW(drive, device, sizeofa(device)));
+			CheckApi(::QueryDosDeviceW(drive, device, Base::lengthof(device)));
 			if (Base::Str::find(path, device) == path) {
 				wchar_t new_path[Base::MAX_PATH_LEN];
-				_snwprintf(new_path, sizeofa(new_path), L"%s%s", drive, path + Base::Str::length(device));
+				_snwprintf(new_path, Base::lengthof(new_path), L"%s%s", drive, path + Base::Str::length(device));
 				return ustring(new_path);
 			}
 			while (*p++)
@@ -168,7 +168,7 @@ namespace Fsys {
 		Base::auto_close<HANDLE> hmap(CheckHandleErr(::CreateFileMappingW(hndl, nullptr, PAGE_READONLY, 0, 1, nullptr)));
 		Base::auto_close<PVOID const> view(CheckPointerErr(::MapViewOfFile(hmap, FILE_MAP_READ, 0, 0, 1)), ::UnmapViewOfFile);
 		wchar_t path[Base::MAX_PATH_LEN];
-		CheckApi(psapi_dll::inst().GetMappedFileNameW(::GetCurrentProcess(), view, path, sizeofa(path)));
+		CheckApi(psapi_dll::inst().GetMappedFileNameW(::GetCurrentProcess(), view, path, Base::lengthof(path)));
 		return device_path_to_disk(path);
 	}
 }

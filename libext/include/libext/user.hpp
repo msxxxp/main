@@ -2,6 +2,7 @@
 #define WIN_USER_HPP
 
 #include <libbase/std.hpp>
+#include <libbase/string.hpp>
 
 #include <vector>
 

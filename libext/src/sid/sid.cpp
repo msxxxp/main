@@ -117,6 +117,11 @@ namespace Ext {
 	//	FreeSid(psid);
 	//}
 
+	SidString::SidString(const ustring & str)
+	{
+		init(str.c_str());
+	}
+
 	void SidString::init(PCWSTR str) {
 		CheckApi(::ConvertStringSidToSidW((PWSTR)str, &m_sid));
 	}

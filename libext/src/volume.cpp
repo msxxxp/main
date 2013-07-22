@@ -89,13 +89,13 @@ namespace Ext {
 
 	ustring GetDrives() {
 		wchar_t	Result[MAX_PATH] = {0};
-		wchar_t	szTemp[::GetLogicalDriveStringsW(0, nullptr)];
-		if (::GetLogicalDriveStringsW(sizeofa(szTemp), szTemp)) {
+		wchar_t	szTemp[MAX_PATH_LEN];
+		if (::GetLogicalDriveStringsW(Base::lengthof(szTemp), szTemp)) {
 			bool	bFound = false;
 			wchar_t	*p = szTemp;
 			do {
-				Str::cat(Result, p, sizeofa(Result));
-				Str::cat(Result, L";", sizeofa(Result));
+				Str::cat(Result, p, Base::lengthof(Result));
+				Str::cat(Result, L";", Base::lengthof(Result));
 				while (*p++);
 			} while (!bFound && *p); // end of string
 		}

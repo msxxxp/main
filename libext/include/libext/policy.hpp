@@ -2,19 +2,20 @@
 #define WIN_NET_POLICY_HPP
 
 #include <libbase/std.hpp>
+#include <libbase/string.hpp>
 
 #include <ntsecapi.h>
 
 namespace Ext {
 
-	namespace WinPolicy {
-		void InitLsaString(LSA_UNICODE_STRING & lsaString, const ustring & in);
+	namespace Policy {
+		LSA_UNICODE_STRING ToLsaString(PCWSTR in);
 
-		LSA_HANDLE GetPolicyHandle(const ustring & dom = ustring());
+		LSA_HANDLE GetHandle(PCWSTR dom = Base::EMPTY_STR);
 
-		NTSTATUS AccountRightAdd(const ustring & name, const ustring & right, const ustring & dom = ustring());
+		void AccountRightAdd(PCWSTR right, PCWSTR name, PCWSTR dom = Base::EMPTY_STR);
 
-		NTSTATUS AccountRightDel(const ustring & name, const ustring & right, const ustring & dom = ustring());
+		void AccountRightDel(PCWSTR right, PCWSTR name, PCWSTR dom = Base::EMPTY_STR);
 
 		bool GetTokenUser(HANDLE hToken, ustring & name);
 	}

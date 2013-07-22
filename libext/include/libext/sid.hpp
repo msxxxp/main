@@ -107,10 +107,7 @@ namespace Ext {
 			init(str);
 		}
 
-		explicit SidString(const ustring & str)
-		{
-			init(str.c_str());
-		}
+		explicit SidString(const ustring & str);
 
 	private:
 		void init(PCWSTR str);

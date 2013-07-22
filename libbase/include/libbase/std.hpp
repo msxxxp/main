@@ -25,11 +25,11 @@ namespace Base {
 	PCWSTR const PATH_PREFIX_NT = L"\\\\?\\"; // Prefix to put ahead of a long path for Windows API
 	PCWSTR const REPARSE_PREFIX = L"\\??\\";
 	PCWSTR const NETWORK_PATH_PREFIX = L"\\\\";
+	PCWSTR const MASK_CHARS = L"*?";
 
 	const wchar_t PATH_SEPARATOR_C = L'\\';
-	const wchar_t STR_END = L'\0';
+	const wchar_t STR_END_C = L'\0';
 	const wchar_t SPACE_C = L' ';
-	const wchar_t MASK_CHARS[] = L"*?";
 
 	const uint32_t BOM_UTF32le = 0x0000FEFF;
 	const uint32_t BOM_UTF32be = 0xFFFE0000;
@@ -47,6 +47,8 @@ namespace Base {
 
 	typedef ssize_t Timeout_t;
 
+	const Timeout_t WAIT_FOREVER = INFINITE;
+
 	enum class WaitResult_t : size_t {
 		SUCCESS   = WAIT_OBJECT_0,
 		APC       = WAIT_IO_COMPLETION,
@@ -54,8 +56,6 @@ namespace Base {
 		FAILED    = WAIT_FAILED,
 		ABANDONED = WAIT_ABANDONED,
 	};
-
-	const Timeout_t WAIT_FOREVER = INFINITE;
 
 	PCWSTR to_str(WaitResult_t waitResult);
 
@@ -67,17 +67,17 @@ namespace Base {
 
 	inline uint64_t make_uint64(uint32_t high, uint32_t low)
 	{
-		return ((uint64_t)high) << 32 | low;
+		return uint64_t(high) << 32 | low;
 	}
 
 	inline uint32_t high_part_64(uint64_t arg64)
 	{
-		return (uint32_t)(arg64 >> 32);
+		return uint32_t(arg64 >> 32);
 	}
 
 	inline uint32_t low_part_64(uint64_t arg64)
 	{
-		return (uint32_t)(arg64 & 0xFFFFFFFFULL);
+		return uint32_t(arg64 & 0xFFFFFFFFULL);
 	}
 
 	inline PCSTR filename_only(PCSTR path, char ch = '\\')

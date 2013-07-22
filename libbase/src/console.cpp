@@ -21,7 +21,7 @@ namespace Base {
 
 	size_t consoleout(wchar_t in, DWORD nStdHandle)
 	{
-		wchar_t out[] = {in, STR_END};
+		wchar_t out[] = {in, STR_END_C};
 		return consoleout(out, nStdHandle);
 	}
 

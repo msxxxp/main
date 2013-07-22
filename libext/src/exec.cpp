@@ -64,8 +64,8 @@ namespace Ext {
 			}
 			while (::PeekNamedPipe(hPipeOutRead, nullptr, 0, nullptr, &dwAvail, nullptr) && dwAvail) {
 				while (::PeekNamedPipe(hPipeOutRead, nullptr, 0, nullptr, &dwAvail, nullptr) && dwAvail) {
-					Memory::zero(buf, sizeofa(buf));
-					::ReadFile(hPipeOutRead, buf, sizeofa(buf), &dwRead, nullptr);
+					Memory::zero(buf, Base::lengthof(buf));
+					::ReadFile(hPipeOutRead, buf, Base::lengthof(buf), &dwRead, nullptr);
 					out += buf;
 				}
 				::Sleep(TIMEOUT_DX / 20);

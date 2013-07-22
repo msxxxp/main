@@ -44,7 +44,7 @@ namespace Ext {
 		VS_FIXEDFILEINFO * ffi;
 		CheckApi(version_dll::inst().VerQueryValueW(data, L"\\", (PVOID*)&ffi, &bufLen));
 		wchar_t tmp[MAX_PATH];
-		_snwprintf(tmp, sizeofa(tmp), L"%d.%d"
+		_snwprintf(tmp, Base::lengthof(tmp), L"%d.%d"
 		           ,HIWORD(ffi->dwFileVersionMS)
 		           ,LOWORD(ffi->dwFileVersionMS)
 		           //	           ,HIWORD(ffi->dwFileVersionLS)

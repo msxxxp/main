@@ -79,7 +79,7 @@ namespace Fsys {
 	bool is_exist(PCWSTR path)
 	{
 		DWORD attr = ::GetFileAttributesW(path);
-		if (attr != INVALID_FILE_ATTRIBUTES )
+		if (attr != INVALID_FILE_ATTRIBUTES)
 			return true;
 		DWORD err = ::GetLastError();
 		if (err != ERROR_FILE_NOT_FOUND)

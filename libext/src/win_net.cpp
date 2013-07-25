@@ -10,8 +10,8 @@ namespace WinNet {
 	ustring		GetCompName(COMPUTER_NAME_FORMAT cnf) {
 		DWORD	size = 0;
 		::GetComputerNameExW(cnf, nullptr, &size);
-		wchar_t	buf[size];
-		::GetComputerNameExW(cnf, buf, &size);
+		Base::auto_array<wchar_t> buf(size);
+		::GetComputerNameExW(cnf, buf.data(), &size);
 		return buf;
 	}
 }

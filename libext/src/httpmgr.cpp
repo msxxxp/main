@@ -17,6 +17,7 @@ using namespace Base;
 namespace Ext {
 
 namespace Http {
+#ifndef _MSC_VER
 	///====================================================================================== HttpBindIP
 	HttpBindIP::~HttpBindIP() {
 		delete pIpPort;
@@ -222,6 +223,7 @@ namespace Http {
 		auto_buf<PHTTP_SERVICE_CONFIG_SSL_SET> info(512);
 		return get_ssl(HttpBindIP(ip, port), info) || get_ssl(HttpBindIP(L"0.0.0.0", port), info);
 	}
+#endif
 }
 
 }

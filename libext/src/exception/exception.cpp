@@ -59,6 +59,6 @@ namespace Ext {
 	Base::mstring AbstractError::format_error() const {
 		Base::mstring msg;
 		format_error(msg);
-		return msg;
+		return std::move(msg);
 	}
 }

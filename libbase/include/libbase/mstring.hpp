@@ -5,10 +5,14 @@
 
 namespace Base {
 
-	struct mstring: public Uncopyable {
+	struct mstring {
 		~mstring();
 
 		mstring(PCWSTR in = EMPTY_STR);
+
+		mstring(const mstring & other);
+
+		mstring & operator = (const mstring & other);
 
 		mstring(mstring && rhs);
 
@@ -23,6 +27,8 @@ namespace Base {
 		PCWSTR c_str() const;
 
 		PCWSTR operator [] (size_t index) const;
+
+		void swap(mstring & other);
 
 	private:
 		struct impl;

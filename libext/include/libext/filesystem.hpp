@@ -222,8 +222,8 @@ namespace Fsys {
 
 	///==================================================================================== Sequence
 	class Sequence: private Base::Uncopyable {
-		class const_input_iterator;
 		typedef Sequence this_type;
+		class const_input_iterator;
 
 	public:
 		struct FindStat {

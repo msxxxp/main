@@ -1,5 +1,6 @@
 ﻿#include <libext/sid.hpp>
 #include <libext/exception.hpp>
+#include <libbase/memory.hpp>
 
 namespace Ext {
 
@@ -12,10 +13,10 @@ namespace Ext {
 		// determine size of name
 		::LookupAccountSidW(srv, sid, nullptr, &size_nam, nullptr, &size_dom, &type);
 		CheckApi(::GetLastError() == ERROR_INSUFFICIENT_BUFFER);
-		wchar_t pName[size_nam];
-		wchar_t pDom[size_dom];
+		Base::auto_array<wchar_t> pName(size_nam);
+		Base::auto_array<wchar_t> pDom(size_dom);
 
-		CheckApi(::LookupAccountSidW(srv, sid, pName, &size_nam, pDom, &size_dom, &type));
+		CheckApi(::LookupAccountSidW(srv, sid, pName.data(), &size_nam, pDom.data(), &size_dom, &type));
 		name = pName;
 		dom = pDom;
 	}

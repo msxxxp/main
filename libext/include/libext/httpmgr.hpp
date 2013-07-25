@@ -20,6 +20,7 @@ using namespace Base;
 namespace Ext {
 
 namespace Http {
+#ifndef _MSC_VER
 	///====================================================================================== HttpBindIP
 	struct HttpBindIP: public HTTP_SERVICE_CONFIG_SSL_KEY {
 		~HttpBindIP();
@@ -104,6 +105,7 @@ namespace Http {
 
 		bool is_exist(const ustring & ip, const ustring & port);
 	};
+#endif
 }
 
 }

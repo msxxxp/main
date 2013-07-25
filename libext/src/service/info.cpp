@@ -37,10 +37,10 @@ namespace Ext {
 		name(_name),
 		startType(Start_t::DISABLED),
 		errorControl(Error_t::IGNORE_ERROR),
-		tagId(0),
-		status({0})
+		tagId(0)
 	{
 		LogTrace();
+		memset(&status, 0, sizeof(status));
 		try {
 			Base::auto_buf<LPQUERY_SERVICE_CONFIGW> conf(svc.QueryConfig());
 			displayName = conf->lpDisplayName;

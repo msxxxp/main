@@ -243,6 +243,11 @@ namespace Logger {
 		{
 			return Base::Str::compare(left, right->get_name()) < 0;
 		}
+
+		bool operator ()(const Module_i * lhs, const Module_i * rhs) const
+		{
+			return Base::Str::compare(lhs->get_name(), rhs->get_name()) < 0;
+		}
 	};
 
 	///================================================================================ Logger_i

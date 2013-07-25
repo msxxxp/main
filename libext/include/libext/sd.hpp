@@ -9,6 +9,10 @@
 #include <sys/types.h>
 #include <aclapi.h>
 
+#ifdef _MSC_VER
+	typedef uint32_t mode_t;
+#endif
+
 #ifndef S_IXUSR
 #define S_IFDIR 0x4000
 #define S_IRUSR 0x0100

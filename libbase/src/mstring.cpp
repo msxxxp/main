@@ -11,6 +11,8 @@ namespace Base {
 
 		explicit impl(PCWSTR in);
 
+		impl(const impl & other);
+
 		void push_back(PCWSTR str);
 
 	private:
@@ -43,6 +45,17 @@ namespace Base {
 		}
 	}
 
+	mstring::impl::impl(const impl & other) :
+		m_data(nullptr),
+		m_capa(other.m_capa),
+		m_size(other.m_size)
+	{
+		if (m_capa) {
+			m_data = Memory::calloc<wchar_t*>(m_capa);
+			Memory::copy(m_data, other.m_data, m_capa * sizeof(wchar_t));
+		}
+	}
+
 	void mstring::impl::push_back(PCWSTR str)
 	{
 		if (!Str::is_empty(str)) {
@@ -63,6 +76,18 @@ namespace Base {
 	mstring::mstring(PCWSTR in) :
 		m_str(new impl(in))
 	{
+	}
+
+	mstring::mstring(const mstring & other):
+		m_str(new impl(other))
+	{
+	}
+
+	mstring & mstring::operator =(const mstring & other)
+	{
+		if (this != &other)
+			mstring(other).swap(*this);
+		return *this;
 	}
 
 	mstring::mstring(mstring && rhs):
@@ -109,6 +134,12 @@ namespace Base {
 			ptr += (Str::length(ptr) + 1);
 		}
 		return ptr;
+	}
+
+	void mstring::swap(mstring & other)
+	{
+		using std::swap;
+		swap(m_str, other.m_str);
 	}
 
 }

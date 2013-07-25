@@ -214,7 +214,12 @@ namespace Ext {
 	}
 
 	ustring Service::get_user() const {
+#ifdef _MSC_VER
+		PCWSTR ret = QueryConfig()->lpServiceStartName ? QueryConfig()->lpServiceStartName : EMPTY_STR;
+		return ustring(ret);
+#else
 		return ustring((QueryConfig()->lpServiceStartName) ?: EMPTY_STR);
+#endif
 	}
 
 	void Service::del(SC_HANDLE scm, PCWSTR name) {

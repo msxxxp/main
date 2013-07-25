@@ -40,7 +40,7 @@ namespace Base {
 	struct must_be_pointer {
 		static bool constraints(const Type & type_is_not_pointer)
 		{
-			return sizeof(0[type_is_not_pointer]);
+			return (bool)sizeof(0[type_is_not_pointer]);
 		}
 	};
 

@@ -12,7 +12,7 @@ namespace WinNet {
 		::GetComputerNameExW(cnf, nullptr, &size);
 		Base::auto_array<wchar_t> buf(size);
 		::GetComputerNameExW(cnf, buf.data(), &size);
-		return buf;
+		return ustring(buf.data());
 	}
 }
 

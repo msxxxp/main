@@ -1,7 +1,5 @@
 ﻿#include <libbase/string.hpp>
 
-//#include <stdio.h>
-
 namespace Base {
 
 	namespace String {

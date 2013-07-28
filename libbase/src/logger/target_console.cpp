@@ -48,17 +48,17 @@ namespace Logger {
 	{
 		auto lk(m_sync->lock_scope());
 		if (lgr->is_color_mode()) {
-			Base::ConsoleColor color(LogLevelColors[(int)lvl]);
-			Base::consoleout(str, size);
+			Base::Console::Color color(LogLevelColors[(int)lvl]);
+			Base::Console::out(str, size);
 		} else {
-			Base::consoleout(str, size);
+			Base::Console::out(str, size);
 		}
 	}
 
 	void LogToConsole::out(PCWSTR str, size_t size) const
 	{
 		auto lk(m_sync->lock_scope());
-		Base::consoleout(str, size);
+		Base::Console::out(str, size);
 	}
 
 	void LogToConsole::lock() const

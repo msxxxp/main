@@ -14,8 +14,6 @@ namespace Base {
 				return L"FAILED";
 			case WaitResult_t::ABANDONED:
 				return L"ABANDONED";
-			default:
-				break;
 		}
 		return L"unknown";
 	}

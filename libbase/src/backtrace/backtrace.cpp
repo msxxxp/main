@@ -225,7 +225,7 @@ namespace Base {
 			info.SizeOfStruct = sizeof(info);
 			if (SymGetLineFromAddr64(GetCurrentProcess(), frame, &dummy, &info)) {
 				line = info.LineNumber;
-				source = cp2w(filename_only(info.FileName), CP_ACP);
+				source = String::cp2w(filename_only(info.FileName), CP_ACP);
 			}
 		}
 

@@ -5,6 +5,56 @@
 #include <libbase/pcstr.hpp>
 
 namespace Base {
+	ssize_t safe_vsnprintf(PWSTR buf, size_t len, PCWSTR format, va_list vl);
+
+	namespace Console {
+		enum class Handle : size_t {
+			INPUT  = STD_INPUT_HANDLE,
+			OUTPUT = STD_OUTPUT_HANDLE,
+			ERR    = STD_ERROR_HANDLE,
+		};
+
+		size_t out(Handle hnd, PCWSTR str, size_t len);
+
+		size_t vprintf(Handle hnd, PCWSTR format, va_list vl);
+
+		int printf(Handle hnd, PCWSTR format, ...);
+
+		int printf(PCWSTR format, ...);
+
+		inline size_t out(PCWSTR str, size_t len, Handle hnd = Handle::OUTPUT)
+		{
+			return out(hnd, str, len);
+		}
+
+		inline size_t out(PCWSTR str, Handle hnd = Handle::OUTPUT)
+		{
+			return out(hnd, str, Str::length(str));
+		}
+
+		size_t out(wchar_t ch, Handle hnd = Handle::OUTPUT);
+
+		size_t out(PCSTR str, size_t len, Handle hnd = Handle::OUTPUT);
+
+		inline size_t vprintf(PCWSTR format, va_list vl)
+		{
+			return vprintf(Handle::OUTPUT, format, vl);
+		}
+
+		///=================================================================================== Color
+		struct Color {
+			~Color();
+
+			Color(WORD color);
+
+			void restore();
+
+		private:
+			bool save();
+
+			WORD m_color;
+		};
+	}
 
 	size_t fileout(PCSTR str, size_t len, HANDLE hndl);
 
@@ -12,48 +62,10 @@ namespace Base {
 
 	size_t fileout(wchar_t ch, size_t len, HANDLE hndl);
 
-	size_t consoleout(PCSTR in, size_t len, DWORD nStdHandle = STD_OUTPUT_HANDLE );
-
-	size_t consoleout(PCWSTR in, size_t len, DWORD nStdHandle = STD_OUTPUT_HANDLE );
-
-	size_t consoleout(wchar_t ch, DWORD nStdHandle = STD_OUTPUT_HANDLE );
-
-	inline int consoleout(PCWSTR str, DWORD nStdHandle = STD_OUTPUT_HANDLE )
-	{
-		return consoleout(str, Str::length(str), nStdHandle);
-	}
-
 	///================================================================================= Console out
-	int safe_vsnprintf(PWSTR buf, size_t len, PCWSTR format, va_list vl);
-
 	int snprintf(PWSTR buff, size_t len, PCWSTR format, ...);
 
-	int printf(PCWSTR format, ...);
-
-	size_t stdvprintf(DWORD nStdHandle, PCWSTR format, va_list vl);
-
-	int stdprintf(DWORD nStdHandle, PCWSTR format, ...);
-
-	inline int vprintf(PCWSTR format, va_list vl)
-	{
-		return stdvprintf(STD_OUTPUT_HANDLE, format, vl);
-	}
-
 	void errx(int eval, PCSTR format, ...);
-
-	///================================================================================ ConsoleColor
-	struct ConsoleColor {
-		~ConsoleColor();
-
-		ConsoleColor(WORD color);
-
-		void restore();
-
-	private:
-		bool save();
-
-		WORD m_color;
-	};
 
 /*
  #ifndef NDEBUG

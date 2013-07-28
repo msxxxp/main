@@ -79,7 +79,7 @@ namespace Base {
 	}
 
 	mstring::mstring(const mstring & other):
-		m_str(new impl(other))
+		m_str(new impl(*other.m_str))
 	{
 	}
 

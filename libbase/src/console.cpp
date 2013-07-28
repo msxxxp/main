@@ -3,6 +3,30 @@
 #include <stdio.h>
 
 namespace Base {
+	namespace Console {
+		size_t out(wchar_t in, Handle hnd)
+		{
+			wchar_t str[] = {in, STR_END_C};
+			return out(str, hnd);
+		}
+
+		size_t out(PCSTR str, size_t len, Handle hnd)
+		{
+			DWORD written = 0;
+			(len && !::WriteConsoleA(::GetStdHandle((DWORD)hnd), str, len, &written, nullptr));
+			return written;
+		}
+
+		int printf(Handle hnd, PCWSTR format, ...)
+		{
+			va_list vl;
+			va_start(vl, format);
+			int Result = vprintf(hnd, format, vl);
+			va_end(vl);
+			return Result;
+		}
+
+	}
 
 	size_t fileout(PCWSTR str, size_t len, HANDLE hndl)
 	{
@@ -10,28 +34,6 @@ namespace Base {
 		::WriteFile(hndl, str, len * sizeof(*str), &written, nullptr);
 		written /= sizeof(*str);
 		return written;
-	}
-
-	size_t consoleout(PCSTR str, size_t len, DWORD nStdHandle)
-	{
-		DWORD written = 0;
-		(len && !::WriteConsoleA(::GetStdHandle(nStdHandle), str, len, &written, nullptr));
-		return written;
-	}
-
-	size_t consoleout(wchar_t in, DWORD nStdHandle)
-	{
-		wchar_t out[] = {in, STR_END_C};
-		return consoleout(out, nStdHandle);
-	}
-
-	int stdprintf(DWORD nStdHandle, PCWSTR format, ...)
-	{
-		va_list vl;
-		va_start(vl, format);
-		int Result = stdvprintf(nStdHandle, format, vl);
-		va_end(vl);
-		return Result;
 	}
 
 	int snprintf(PWSTR buff, size_t len, PCWSTR format, ...)

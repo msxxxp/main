@@ -10,7 +10,8 @@ namespace Base {
 	}
 
 	namespace String {
-		ustring format(PCWSTR fmt, ...) {
+		ustring format(PCWSTR fmt, ...)
+		{
 			va_list args;
 			va_start(args, fmt);
 			auto tmp = format(fmt, args);
@@ -18,11 +19,12 @@ namespace Base {
 			return tmp;
 		}
 
-		ustring format(PCWSTR format, va_list args) {
+		ustring format(PCWSTR fmt, va_list args)
+		{
 			wchar_t buf[default_buffer_size];
 			size_t size = lengthof(buf) - 1;
 			buf[size] = L'\0';
-			::_vsnwprintf(buf, size, format, args);
+			::_vsnwprintf(buf, size, fmt, args);
 			return ustring(buf);
 		}
 	}

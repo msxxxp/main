@@ -20,15 +20,11 @@ typedef std::wstring ustring;
 
 namespace Base {
 
-	astring w2cp(PCWSTR in, UINT cp);
-
-	ustring cp2w(PCSTR in, UINT cp);
-
-}
-
-namespace Base {
-
 	namespace String {
+
+		astring w2cp(PCWSTR in, UINT cp);
+
+		ustring cp2w(PCSTR in, UINT cp);
 
 		ustring format(PCWSTR format, ...);
 
@@ -143,42 +139,42 @@ namespace Base {
 
 	inline astring oem(PCWSTR in)
 	{
-		return w2cp(in, CP_OEMCP);
+		return String::w2cp(in, CP_OEMCP);
 	}
 
 	inline astring oem(const ustring &in)
 	{
-		return w2cp(in.c_str(), CP_OEMCP);
+		return String::w2cp(in.c_str(), CP_OEMCP);
 	}
 
 	inline astring ansi(PCWSTR in)
 	{
-		return w2cp(in, CP_ACP);
+		return String::w2cp(in, CP_ACP);
 	}
 
 	inline astring ansi(const ustring &in)
 	{
-		return w2cp(in.c_str(), CP_ACP);
+		return String::w2cp(in.c_str(), CP_ACP);
 	}
 
 	inline astring utf8(PCWSTR in)
 	{
-		return w2cp(in, CP_UTF8);
+		return String::w2cp(in, CP_UTF8);
 	}
 
 	inline astring utf8(const ustring &in)
 	{
-		return w2cp(in.c_str(), CP_UTF8);
+		return String::w2cp(in.c_str(), CP_UTF8);
 	}
 
 	inline ustring utf16(PCSTR in, UINT cp = CP_UTF8)
 	{
-		return cp2w(in, cp);
+		return String::cp2w(in, cp);
 	}
 
 	inline ustring utf16(const astring &in, UINT cp = CP_UTF8)
 	{
-		return cp2w(in.c_str(), cp);
+		return String::cp2w(in.c_str(), cp);
 	}
 
 	//template<typename Type>

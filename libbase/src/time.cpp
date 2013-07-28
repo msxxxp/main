@@ -4,34 +4,43 @@ namespace Base {
 
 	///==================================================================================== WinTimer
 	/// Оконный таймер
-	void WinTimer::Open() {
+	void WinTimer::Open()
+	{
 		Close();
 		hTimer = ::CreateWaitableTimer(nullptr, false, nullptr);
 	}
-	void WinTimer::Close() {
+
+	void WinTimer::Close()
+	{
 		if (hTimer) {
 			::CloseHandle(hTimer);
 			hTimer = nullptr;
 		}
 	}
 
-	WinTimer::~WinTimer() {
+	WinTimer::~WinTimer()
+	{
 		Stop();
 		Close();
 	}
+
 	WinTimer::WinTimer() :
-		hTimer(nullptr) {
+		hTimer(nullptr)
+	{
 		Open();
 		liUTC.QuadPart = 0LL;
 		lPeriod = 0L;
 	}
+
 	WinTimer::WinTimer(LONGLONG time, long period) :
-		hTimer(nullptr) {
+		hTimer(nullptr)
+	{
 		Open();
 		Set(time, period);
 	}
 
-	void WinTimer::Set(LONGLONG time, long period) {
+	void WinTimer::Set(LONGLONG time, long period)
+	{
 		if (time == 0LL) {
 			liUTC.QuadPart = -period * 10000LL;
 		} else {
@@ -39,15 +48,21 @@ namespace Base {
 		}
 		lPeriod = period;
 	}
-	void WinTimer::Start() {
+
+	void WinTimer::Start()
+	{
 		if (hTimer)
 			::SetWaitableTimer(hTimer, &liUTC, lPeriod, nullptr, nullptr, false);
 	}
-	void WinTimer::Stop() {
+
+	void WinTimer::Stop()
+	{
 		if (hTimer)
 			::CancelWaitableTimer(hTimer);
 	}
-	void WinTimer::StartTimer() {
+
+	void WinTimer::StartTimer()
+	{
 		// объявляем свои локальные переменные
 		FILETIME ftLocal;	//, ftUTC;
 		//	LARGE_INTEGER liUTC;

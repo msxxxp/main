@@ -53,7 +53,7 @@ int init_bfd_ctx(bfd_ctx * bc, PCWSTR procname)
 	bc->symbol = NULL;
 
 	LogTrace();
-	bfd *b = bfd_openr(Base::w2cp(procname, CP_OEMCP).c_str(), 0);
+	bfd *b = bfd_openr(Base::String::w2cp(procname, CP_OEMCP).c_str(), 0);
 	if (!b) {
 		LogFatal(L"Failed to open bfd from (%s)\n" , procname);
 		return 1;
@@ -251,14 +251,14 @@ namespace Base {
 			LogDebug(L"line: %d\n", line);
 
 			if (file)
-			source = cp2w(filename_only(filename_only(file), '/'), CP_OEMCP);
+			source = Base::String::cp2w(filename_only(filename_only(file), '/'), CP_OEMCP);
 			if (fun)
 			{
 				char buf[MAX_PATH];
 				size_t size = sizeof(buf);
 				int st = 0;
 				abi::__cxa_demangle(fun, buf, &size, &st);
-				func = cp2w(st ? fun : buf, CP_OEMCP);
+				func = Base::String::cp2w(st ? fun : buf, CP_OEMCP);
 			}
 		}
 		LogTrace();

@@ -51,12 +51,13 @@ namespace Far {
 
 	void ebox(const Base::mstring & msg, PCWSTR title)
 	{
-		PCWSTR tmp[msg.size() + 1];
+		size_t len = msg.size() + 1;
+		PCWSTR tmp[len];
 		tmp[0] = title;
 		for (size_t i = 0; i < msg.size(); ++i) {
 			tmp[i + 1] = msg[i];
 		}
-		psi().Message(get_plugin_guid(), nullptr, FMSG_WARNING | FMSG_MB_OK, nullptr, tmp, sizeofa(tmp), 1);
+		psi().Message(get_plugin_guid(), nullptr, FMSG_WARNING | FMSG_MB_OK, nullptr, tmp, len, 1);
 	}
 
 	void ebox(DWORD err)

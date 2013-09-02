@@ -12,7 +12,7 @@ namespace Base {
 		size_t out(Handle hnd, PCWSTR str, size_t len)
 		{
 			DWORD written = 0;
-			(len && !::WriteConsoleW(::GetStdHandle((DWORD)hnd), str, len, &written, nullptr));
+			(len && ::WriteConsoleW(::GetStdHandle((DWORD)hnd), str, len, &written, nullptr));
 			return written;
 		}
 

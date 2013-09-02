@@ -71,7 +71,7 @@ namespace Base {
 		}
 
 		explicit auto_buf(size_type size) :
-			m_ptr(Memory::malloc<value_type>(size, 0))
+			m_ptr(Memory::malloc<value_type>(size))
 		{
 		}
 
@@ -165,7 +165,10 @@ namespace Base {
 	class auto_array: private Uncopyable {
 		typedef auto_array this_type;
 		typedef Type value_type;
-		typedef Type * pointer_type;
+		typedef Type * pointer;
+		typedef const Type * const_pointer;
+		typedef Type & reference;
+		typedef const Type & const_reference;
 		typedef size_t size_type;
 
 	public:
@@ -174,12 +177,12 @@ namespace Base {
 			Memory::free(m_ptr);
 		}
 
-		explicit auto_array(size_type count, const Type * data = nullptr) :
-			m_ptr(Memory::calloc<pointer_type>(count)),
+		explicit auto_array(size_type count, const_pointer data = nullptr) :
+			m_ptr(Memory::calloc<pointer>(count)),
 			m_count(count)
 		{
 			if (data)
-				std::copy(data, data + m_count, m_ptr);
+				std::uninitialized_copy(data, data + m_count, m_ptr);
 		}
 
 		auto_array(this_type && rhs):
@@ -200,7 +203,7 @@ namespace Base {
 		{
 			if (size() < new_count)
 			{
-				Memory::realloc(m_ptr, new_count * sizeof(Type), HEAP_ZERO_MEMORY);
+				Memory::realloc(m_ptr, new_count * sizeof(value_type), HEAP_ZERO_MEMORY);
 				m_count = new_count;
 			}
 		}
@@ -212,25 +215,30 @@ namespace Base {
 
 		size_type size_in_bytes() const
 		{
-			return m_count * sizeof(Type);
+			return m_count * sizeof(value_type);
 		}
 
-		operator pointer_type() const
+		operator pointer() const
 		{
 			return m_ptr;
 		}
 
-		pointer_type data() const
+		pointer data()
 		{
 			return m_ptr;
 		}
 
-		value_type & operator [](int ind)
+		const_pointer data() const
+		{
+			return m_ptr;
+		}
+
+		reference operator [](int ind)
 		{
 			return m_ptr[ind];
 		}
 
-		const value_type & operator [](int ind) const
+		const_reference operator [](int ind) const
 		{
 			return m_ptr[ind];
 		}
@@ -243,7 +251,7 @@ namespace Base {
 				false;
 		}
 
-		void detach(pointer_type & ptr, size_t & size)
+		void detach(pointer & ptr, size_t & size)
 		{
 			ptr = m_ptr;
 			size = m_count;
@@ -259,7 +267,7 @@ namespace Base {
 		}
 
 	private:
-		pointer_type m_ptr;
+		pointer   m_ptr;
 		size_type m_count;
 	};
 

@@ -7,6 +7,12 @@
 #include <iosfwd>
 #include <vector>
 
+#ifdef NO_LOGGER
+#define LogBacktrace()
+#else
+#define LogBacktrace() Base::Backtrace().Print()
+#endif
+
 namespace Base {
 
 	struct FrameInfo
@@ -27,11 +33,11 @@ namespace Base {
 
 		size_t frame() const {return m_frame;}
 
-		ustring source() const;
+		const ustring & source() const;
 
-		ustring func() const;
+		const ustring & func() const;
 
-		ustring module() const;
+		const ustring & module() const;
 
 		size_t addr() const;
 
@@ -63,11 +69,8 @@ namespace Base {
 
 		void Print() const;
 	private:
-		static const size_t MAX_DEPTH = 128;
+		static const size_t MAX_DEPTH = 64;
 	};
-
-	#define LogBacktrace() Base::Backtrace().Print()
-
 }
 
 #endif

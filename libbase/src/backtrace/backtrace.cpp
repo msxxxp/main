@@ -4,7 +4,7 @@
 #include <libbase/logger.hpp>
 #include <libbase/string.hpp>
 
-#if !defined(_AMD64_) && defined(__GNUC__)
+#if defined(__GNUC__)
 #include <bfd\bfd.h>
 #include <cxxabi.h>
 
@@ -25,6 +25,7 @@ struct find_info {
 	const char *file;
 	const char *func;
 	unsigned line;
+	size_t displacement;
 };
 
 void close_bfd_ctx(bfd_ctx * bc)
@@ -37,7 +38,7 @@ void close_bfd_ctx(bfd_ctx * bc)
 
 void release_set(bfd_set * set)
 {
-	while(set) {
+	while (set) {
 		bfd_set * temp = set->next;
 		free((void*)set->name);
 		close_bfd_ctx(set->bc);
@@ -46,16 +47,14 @@ void release_set(bfd_set * set)
 	}
 }
 
-int init_bfd_ctx(bfd_ctx * bc, PCWSTR procname)
+int init_bfd_ctx(bfd_ctx * bc, PCWSTR image)
 {
-	LogTrace();
 	bc->handle = NULL;
 	bc->symbol = NULL;
 
-	LogTrace();
-	bfd *b = bfd_openr(Base::String::w2cp(procname, CP_OEMCP).c_str(), 0);
+	bfd *b = bfd_openr(Base::String::w2cp(image, CP_OEMCP).c_str(), 0);
 	if (!b) {
-		LogFatal(L"Failed to open bfd from (%s)\n" , procname);
+		LogFatal(L"Failed to open bfd from (%s)\n", image);
 		return 1;
 	}
 
@@ -65,7 +64,7 @@ int init_bfd_ctx(bfd_ctx * bc, PCWSTR procname)
 
 	if (!(r1 && r2 && r3)) {
 		bfd_close(b);
-		LogFatal(L"Failed to init bfd from (%s)\n", procname);
+		LogFatal(L"Failed to init bfd from (%s)\n", image);
 		return 1;
 	}
 
@@ -75,7 +74,7 @@ int init_bfd_ctx(bfd_ctx * bc, PCWSTR procname)
 		if (bfd_read_minisymbols(b, TRUE, &symbol_table, &dummy) < 0) {
 			free(symbol_table);
 			bfd_close(b);
-			LogFatal(L"Failed to read symbols from (%s)\n", procname);
+			LogFatal(L"Failed to read symbols from (%s)\n", image);
 			return 1;
 		}
 	}
@@ -86,25 +85,23 @@ int init_bfd_ctx(bfd_ctx * bc, PCWSTR procname)
 	return 0;
 }
 
-bfd_ctx * get_bc(bfd_set * set , PCWSTR procname)
+bfd_ctx * get_bc(bfd_set * set, PCWSTR image)
 {
-	LogTrace();
-	while(set->name) {
-		if (wcscmp(set->name , procname) == 0)
-		return set->bc;
+	while (set->name) {
+		if (wcscmp(set->name, image) == 0)
+			return set->bc;
 		set = set->next;
 	}
 
 	bfd_ctx bc;
-	if (init_bfd_ctx(&bc, procname )) {
+	if (init_bfd_ctx(&bc, image)) {
 		return NULL;
 	}
 
-	LogTrace();
 	set->next = (bfd_set*)calloc(1, sizeof(*set));
 	set->bc = (bfd_ctx*)malloc(sizeof(bfd_ctx));
 	memcpy(set->bc, &bc, sizeof(bc));
-	set->name = wcsdup(procname);
+	set->name = wcsdup(image);
 
 	return set->bc;
 }
@@ -114,21 +111,21 @@ void lookup_section(bfd * abfd, asection * sec, void * opaque_data)
 	find_info * data = (find_info*)opaque_data;
 
 	if (data->func)
-	return;
+		return;
 
 	if (!(bfd_get_section_flags(abfd, sec) & SEC_ALLOC))
-	return;
+		return;
 
 	bfd_vma vma = bfd_get_section_vma(abfd, sec);
 	if (data->counter < vma || vma + bfd_get_section_size(sec) <= data->counter)
-	return;
+		return;
 
-	bfd_find_nearest_line(abfd, sec, data->symbol, data->counter - vma, &(data->file), &(data->func), &(data->line));
+	data->displacement = data->counter - vma;
+	bfd_find_nearest_line(abfd, sec, data->symbol, data->displacement, &(data->file), &(data->func), &(data->line));
 }
 
-void find(bfd_ctx * b, DWORD offset, const char *& file, const char *& func, size_t & line)
+void find(bfd_ctx * b, size_t offset, const char *& file, const char *& func, size_t & line, size_t & displacement)
 {
-	LogTrace();
 	find_info data;
 	data.symbol = b->symbol;
 	data.counter = offset;
@@ -137,9 +134,11 @@ void find(bfd_ctx * b, DWORD offset, const char *& file, const char *& func, siz
 	data.line = 0;
 
 	bfd_map_over_sections(b->handle, &lookup_section, &data);
+
 	file = data.file;
 	func = data.func;
 	line = data.line;
+	displacement = 0; //data.displacement;
 }
 #endif
 
@@ -151,9 +150,7 @@ namespace Base {
 		return module;
 	}
 
-
-	struct FrameInfo::Data
-	{
+	struct FrameInfo::Data {
 		Data(size_t frame);
 
 		bool LoadFromPDB(size_t frame);
@@ -173,16 +170,12 @@ namespace Base {
 	};
 
 	FrameInfo::Data::Data(size_t frame) :
-		addr(0),
-		offset(0),
-		module_base(0),
-		line(0),
-		func(L"?")
+		addr(0), offset(0), module_base(0), line(0), func(L"?")
 	{
 		IMAGEHLP_MODULEW64 modinfo = {0};
 		modinfo.SizeOfStruct = sizeof(modinfo) - 8;
 		BOOL ret = SymGetModuleInfoW64(GetCurrentProcess(), frame, &modinfo);
-//		LogErrorIf(ret == FALSE, L"%s\n", ErrAsStr().c_str());
+		LogErrorIf(ret == FALSE, L"%s\n", ErrAsStr().c_str());
 		if (ret != FALSE) {
 			module = modinfo.ModuleName;
 			module_base = modinfo.BaseOfImage;
@@ -199,6 +192,7 @@ namespace Base {
 
 	bool FrameInfo::Data::LoadFromPDB(size_t frame)
 	{
+		LogTrace();
 		bool ret = false;
 
 		{
@@ -208,9 +202,9 @@ namespace Base {
 			m_syminfo->MaxNameLen = MAX_SYM_NAME;
 
 			DWORD64 displacement;
-			BOOL ret = SymFromAddrW(GetCurrentProcess(), frame, &displacement, m_syminfo);
-			LogErrorIf(ret == FALSE, L"%s\n", ErrAsStr().c_str());
-			if (ret != FALSE) {
+			BOOL err = SymFromAddrW(GetCurrentProcess(), frame, &displacement, m_syminfo);
+			LogErrorIf(err == FALSE, L"%s\n", ErrAsStr().c_str());
+			if (err != FALSE) {
 				addr = (size_t)m_syminfo->Address;
 				func = m_syminfo->Name;
 				offset = (size_t)displacement;
@@ -223,19 +217,20 @@ namespace Base {
 			DWORD dummy;
 			IMAGEHLP_LINE64 info;
 			info.SizeOfStruct = sizeof(info);
-			if (SymGetLineFromAddr64(GetCurrentProcess(), frame, &dummy, &info)) {
+			BOOL err = SymGetLineFromAddr64(GetCurrentProcess(), frame, &dummy, &info);
+//			LogErrorIf(err == FALSE, L"%s\n", ErrAsStr().c_str());
+			if (err != FALSE) {
 				line = info.LineNumber;
 				source = String::cp2w(filename_only(info.FileName), CP_ACP);
 			}
 		}
-
 		return ret;
 	}
 
 	bool FrameInfo::Data::LoadFromSymbols(size_t frame)
 	{
 		addr = frame;
-#if !defined(_AMD64_) && defined(__GNUC__)
+#if defined(__GNUC__)
 		LogTrace();
 		bfd_set * set = (bfd_set*)malloc(sizeof(*set));
 		memset(set, 0, sizeof(*set));
@@ -245,15 +240,14 @@ namespace Base {
 			const char * file = NULL;
 			const char * fun = NULL;
 
-			find(bc, frame, file, fun, line);
+			find(bc, frame, file, fun, line, offset);
 			LogDebug(L"file: '%S'\n", file);
 			LogDebug(L"func: '%S'\n", fun);
 			LogDebug(L"line: %d\n", line);
 
 			if (file)
-			source = Base::String::cp2w(filename_only(filename_only(file), '/'), CP_OEMCP);
-			if (fun)
-			{
+				source = Base::String::cp2w(filename_only(filename_only(file), '/'), CP_OEMCP);
+			if (fun) {
 				char buf[MAX_PATH];
 				size_t size = sizeof(buf);
 				int st = 0;
@@ -261,10 +255,7 @@ namespace Base {
 				func = Base::String::cp2w(st ? fun : buf, CP_OEMCP);
 			}
 		}
-		LogTrace();
 		release_set(set);
-
-		LogTrace();
 #endif
 		return false;
 	}
@@ -280,20 +271,17 @@ namespace Base {
 	}
 
 	FrameInfo::FrameInfo(size_t frame) :
-		m_frame(frame),
-		m_data(nullptr)
+		m_frame(frame), m_data(nullptr)
 	{
 	}
 
 	FrameInfo::FrameInfo(const FrameInfo & right) :
-		m_frame(right.m_frame),
-		m_data(nullptr)
+		m_frame(right.m_frame), m_data(nullptr)
 	{
 	}
 
-	FrameInfo::FrameInfo(FrameInfo && right):
-		m_frame(right.m_frame),
-		m_data(right.m_data)
+	FrameInfo::FrameInfo(FrameInfo && right) :
+		m_frame(right.m_frame), m_data(right.m_data)
 	{
 		right.m_data = nullptr;
 	}
@@ -319,19 +307,19 @@ namespace Base {
 		swap(m_data, right.m_data);
 	}
 
-	ustring FrameInfo::source() const
+	const ustring & FrameInfo::source() const
 	{
 		InitData();
 		return m_data->source;
 	}
 
-	ustring FrameInfo::func() const
+	const ustring & FrameInfo::func() const
 	{
 		InitData();
 		return m_data->func;
 	}
 
-	ustring FrameInfo::module() const
+	const ustring & FrameInfo::module() const
 	{
 		InitData();
 		return m_data->module;
@@ -364,7 +352,7 @@ namespace Base {
 	ustring FrameInfo::to_str() const
 	{
 		wchar_t buf[MAX_PATH];
-		if (line())
+		if (!source().empty())
 			_snwprintf(buf, Base::lengthof(buf), L"[%s] (%p) %s:0x%Ix {%s:%Iu}", module().c_str(), addr(), func().c_str(), offset(), source().c_str(), line());
 		else
 			_snwprintf(buf, Base::lengthof(buf), L"[%s] (%p) %s:0x%Ix", module().c_str(), addr(), func().c_str(), offset());
@@ -372,8 +360,7 @@ namespace Base {
 	}
 
 	///=============================================================================================
-	struct SymbolInit
-	{
+	struct SymbolInit {
 		static SymbolInit & inst(PCWSTR path = nullptr)
 		{
 			static SymbolInit instance(path);
@@ -388,10 +375,10 @@ namespace Base {
 
 		SymbolInit(PCWSTR path)
 		{
-			LogErrorIf(!SymInitializeW(GetCurrentProcess(), path, TRUE), L"%s\n", ErrAsStr().c_str());
 			SymSetOptions(SymGetOptions() | SYMOPT_FAIL_CRITICAL_ERRORS | SYMOPT_LOAD_LINES);
+			LogErrorIf(!SymInitializeW(GetCurrentProcess(), path, TRUE), L"%s\n", ErrAsStr().c_str());
 
-#if !defined(_AMD64_) && defined(__GNUC__)
+#if defined(__GNUC__)
 			bfd_init();
 #endif
 		}
@@ -404,6 +391,7 @@ namespace Base {
 
 	Backtrace::Backtrace(PCWSTR path, size_t depth)
 	{
+		LogNoise(L"path: '%s' depth: %Iu\n", path, depth);
 		SymbolInit::inst(path);
 
 		CONTEXT ctx = {0};
@@ -415,6 +403,7 @@ namespace Base {
 		 */
 		STACKFRAME64 sf;
 		memset(&sf, 0, sizeof(sf));
+
 		DWORD machine = 0;
 #ifdef _AMD64_
 		sf.AddrPC.Offset = ctx.Rip;
@@ -433,6 +422,7 @@ namespace Base {
 		sf.AddrStack.Mode = AddrModeFlat;
 		machine = IMAGE_FILE_MACHINE_I386;
 #endif
+
 		while (depth-- > 0) {
 			BOOL res = StackWalk64(machine, GetCurrentProcess(), GetCurrentThread(), &sf, (void*)&ctx, nullptr, &SymFunctionTableAccess64, &SymGetModuleBase64, nullptr);
 #ifdef _AMD64_
@@ -441,23 +431,26 @@ namespace Base {
 			emplace_back(sf.AddrReturn.Offset);
 #else
 			if (!res || sf.AddrPC.Offset == 0)
-				break;
+			break;
 			emplace_back((size_t)sf.AddrPC.Offset);
 #endif
 		}
-//		LogNoise(L"depth: %Iu\n", size());
+		LogNoise(L"depth: %Iu\n", size());
 	}
 
 	void Backtrace::Print() const
 	{
 		Logger::lock_module(get_logger_module());
 		Logger::set_module_color_mode(true, get_logger_module());
-		auto prefix = Logger::get_module_prefix(get_logger_module());
+		auto savedLevel = get_logger_module()->get_level();
+		auto savedPrefix = Logger::get_module_prefix(get_logger_module());
 		Logger::set_module_prefix(Logger::Prefix::Time | Logger::Prefix::Thread, get_logger_module());
-		LogInfo(L"Backtrace: [%Iu]\n", size());
+		Logger::set_module_level(Logger::Level::Force, get_logger_module());
+		LogForce(L"Backtrace: [%Iu]\n", size());
 		for (size_t i = 0; i < size(); ++i)
-			LogInfo(L"[%Iu] %s\n", i, operator[](i).to_str().c_str());
-		Logger::set_module_prefix(prefix, get_logger_module());
+			LogForce(L"[%02Iu] %s\n", size() - (i + 1), operator[](i).to_str().c_str());
+		Logger::set_module_level(savedLevel, get_logger_module());
+		Logger::set_module_prefix(savedPrefix, get_logger_module());
 		Logger::unlock_module(get_logger_module());
 	}
 

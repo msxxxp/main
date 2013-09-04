@@ -19,7 +19,7 @@
 //#define WIN32_LEAN_AND_MEAN
 #define NOMCX
 #define NOIME
-#define NOMINMAX
+//#define NOMINMAX
 
 #include <cstdint>
 #include <windows.h>

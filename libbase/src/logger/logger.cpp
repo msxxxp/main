@@ -10,7 +10,7 @@
 
 namespace Logger {
 
-	PCWSTR const LogLevelNames[(int)Level::Logger + 1] = {
+	PCWSTR const LogLevelNames[(int)Level::Force + 1] = {
 		L"TRACE",
 		L"DEBUG",
 		L"INFO ",
@@ -19,7 +19,7 @@ namespace Logger {
 		L"WARN ",
 		L"ERROR",
 		L"FATAL",
-		L"LOGGR",
+		L"     ",
 	};
 
 	struct FmtString {
@@ -350,7 +350,7 @@ namespace Logger {
 		defModule = register_module_(defModuleName, defTarget, defLevel);
 		auto prefix = defModule->get_prefix();
 		defModule->set_prefix(Prefix::Thread | Prefix::Time | Prefix::Date);
-		defModule->out(Level::Logger, L"Logger has been created\n");
+		defModule->out(Level::Force, L"Logger has been created\n");
 		defModule->set_prefix(prefix);
 	}
 
@@ -358,7 +358,7 @@ namespace Logger {
 	{
 		auto lk(m_sync->lock_scope());
 		defModule->set_prefix(Prefix::Thread | Prefix::Time | Prefix::Date);
-		defModule->out(Level::Logger, L"Logger is being destroyed\n");
+		defModule->out(Level::Force, L"Logger is being destroyed\n");
 		while (!m_modules.empty()) {
 			delete m_modules.back();
 			m_modules.pop_back();

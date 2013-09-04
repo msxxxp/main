@@ -6,7 +6,7 @@
 
 namespace Logger {
 
-	WORD LogLevelColors[(int)Level::Logger + 1] = {
+	WORD LogLevelColors[(int)Level::Force + 1] = {
 		0x8,
 		0x6,
 		0,

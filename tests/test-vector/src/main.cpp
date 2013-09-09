@@ -8,6 +8,7 @@
 #include <simstl/vector>
 #include <simstl/memory>
 #include <simstl/iterator>
+#include <simstl/string>
 
 
 class Base {
@@ -87,25 +88,21 @@ namespace hh {
 	bool Less(const Value & a, const Value & b);
 }
 
-
-int wWinMain(const wchar_t * /*pCmdLine*/) {
+void test_vector()
+{
 	using namespace sarastd;
-	printf("%s begin\n", __PRETTY_FUNCTION__);
-
-//	{
-////		auto_ptr<Base> a(new Base(5));
-//		Base * b = new Base;
-//		printf("%s: b: %p\n", __PRETTY_FUNCTION__, b);
-////		shared_ptr<Base> s1(b);
-//		shared_ptr<Base> s1(b, sarastd::default_delete<Base[]>());
-//		shared_ptr<Base> s2(s1);
-//		printf("%s: get(): %p\n", __PRETTY_FUNCTION__, s1.get());
-//		printf("%s: count(): %Iu\n", __PRETTY_FUNCTION__, s1.use_count());
-//	}
-//	printf("%s end\n", __PRETTY_FUNCTION__);
-//	return 0;
-
-	srand(time(0));
+	//	{
+	////		auto_ptr<Base> a(new Base(5));
+	//		Base * b = new Base;
+	//		printf("%s: b: %p\n", __PRETTY_FUNCTION__, b);
+	////		shared_ptr<Base> s1(b);
+	//		shared_ptr<Base> s1(b, sarastd::default_delete<Base[]>());
+	//		shared_ptr<Base> s2(s1);
+	//		printf("%s: get(): %p\n", __PRETTY_FUNCTION__, s1.get());
+	//		printf("%s: count(): %Iu\n", __PRETTY_FUNCTION__, s1.use_count());
+	//	}
+	//	printf("%s end\n", __PRETTY_FUNCTION__);
+	//	return 0;
 
 	printf("construct v\n");
 	vec_t v(10);
@@ -158,7 +155,7 @@ int wWinMain(const wchar_t * /*pCmdLine*/) {
 //		printf(" )\n");
 	}
 
-	return 0;
+	return;
 
 	Base b1(1);
 	Base b2(2);
@@ -211,7 +208,8 @@ int wWinMain(const wchar_t * /*pCmdLine*/) {
 		//printf(" %Id", it->value());
 	}
 	//printf(" )\n");
-	return 0;
+	return;
+
 	//printf("before v2.capa(): %Id, v2.size(): %Id (", v2.capacity(), v2.size());
 	for (iter it = begin(v2); it != end(v2); ++it)
 	{
@@ -269,8 +267,35 @@ int wWinMain(const wchar_t * /*pCmdLine*/) {
 		//printf(" %Id", it->value());
 	}
 	//printf(" ) %Id\n", it->value());
+}
 
+void test_string()
+{
+	using namespace sarastd;
 
+	const char * cc = "const char *";
+
+	string a;
+	string b("qwerty12345");
+	string c(b);
+
+	printf("cc: '%s'\n", cc);
+
+	printf("a (%Iu, %Iu): '%s'\n", a.size(), a.capacity(), a.c_str());
+	printf("b (%Iu, %Iu): '%s'\n", b.size(), b.capacity(), b.c_str());
+
+	a = b;
+	printf("c (%Iu, %Iu): '%s'\n", c.size(), c.capacity(), c.c_str());
+	printf("a (%Iu, %Iu): '%s'\n", a.size(), a.capacity(), a.c_str());
+
+}
+
+int wWinMain(const wchar_t * /*pCmdLine*/) {
+	printf("%s begin\n", __PRETTY_FUNCTION__);
+
+	srand(time(0));
+
+	test_string();
 
 	//printf("exit()\n");
 	return 0;

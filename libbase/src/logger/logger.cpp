@@ -60,9 +60,9 @@ namespace Logger {
 
 		void out(Level lvl, PCWSTR format, ...) const override;
 
-		void lock() const override;
+		void batch_lock() const override;
 
-		void unlock() const override;
+		void batch_unlock() const override;
 
 	private:
 		ustring create_prefix(Level lvl) const;
@@ -116,37 +116,37 @@ namespace Logger {
 
 	void Module_impl::set_level(Level lvl)
 	{
-		lock();
+		batch_lock();
 		m_lvl = lvl;
-		unlock();
+		batch_unlock();
 	}
 
 	void Module_impl::set_prefix(size_t prefix)
 	{
-		lock();
+		batch_lock();
 		m_prefix = prefix;
-		unlock();
+		batch_unlock();
 	}
 
 	void Module_impl::set_color_mode(bool mode)
 	{
-		lock();
+		batch_lock();
 		m_color = mode;
-		unlock();
+		batch_unlock();
 	}
 
 	void Module_impl::set_target(const Target_t & target)
 	{
-		lock();
+		batch_lock();
 		m_target = target;
-		unlock();
+		batch_unlock();
 	}
 
 	void Module_impl::set_enabled(bool enabled)
 	{
-		lock();
+		batch_lock();
 		m_enabled = enabled;
-		unlock();
+		batch_unlock();
 	}
 
 	void Module_impl::out(PCSTR file, int line, PCSTR func, Level lvl, PCWSTR format, ...) const
@@ -171,12 +171,12 @@ namespace Logger {
 		}
 	}
 
-	void Module_impl::lock() const
+	void Module_impl::batch_lock() const
 	{
 		m_target->lock();
 	}
 
-	void Module_impl::unlock() const
+	void Module_impl::batch_unlock() const
 	{
 		m_target->unlock();
 	}
@@ -221,9 +221,9 @@ namespace Logger {
 	{
 		ustring tmp(prefix);
 		tmp += Base::String::format(format, args);
-		lock();
+		batch_lock();
 		m_target->out(this, lvl, tmp.c_str(), tmp.size());
-		unlock();
+		batch_unlock();
 	}
 
 	struct pModule_less: public std::binary_function<const Module_i *, const Module_i *, bool> {

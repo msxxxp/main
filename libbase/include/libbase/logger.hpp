@@ -12,21 +12,21 @@
 #   define LogTrace()
 #   define LogTraceIf(condition) (condition)
 #   define LogNoise(format, args ...)
-#   define LogNoiseIf(condition, format, args ...) (condition)
+#   define LogNoiseIf(condition, format, ...) (condition)
 #   define LogDebug(format, args ...)
-#   define LogDebugIf(condition, format, args ...) (condition)
+#   define LogDebugIf(condition, format, ...) (condition)
 #   define LogInfo(format, args ...)
-#   define LogInfoIf(condition, format, args ...) (condition)
+#   define LogInfoIf(condition, format, ...) (condition)
 #   define LogReport(format, args ...)
-#   define LogReportIf(condition, format, args ...) (condition)
+#   define LogReportIf(condition, format, ...) (condition)
 #   define LogAtten(format, args ...)
-#   define LogAttenIf(condition, format, args ...) (condition)
+#   define LogAttenIf(condition, format, ...) (condition)
 #   define LogWarn(format, args ...)
-#   define LogWarnIf(condition, format, args ...) (condition)
+#   define LogWarnIf(condition, format, ...) (condition)
 #   define LogError(format, args ...)
-#   define LogErrorIf(condition, format, args ...) (condition)
+#   define LogErrorIf(condition, format, ...) (condition)
 #   define LogFatal(format, args ...)
-#   define LogFatalIf(condition, format, args ...) (condition)
+#   define LogFatalIf(condition, format, ...) (condition)
 #   define LogPrint(format, ...)
 #   define LogPrintIf(condition, format, ...) (condition)
 #else
@@ -62,8 +62,8 @@
 #       define LogErrorIf(condition, format, args ...) if (condition) get_logger_module()->out(THIS_PLACE, Logger::Level::Error, format, ##args)
 #       define LogFatal(format, args ...)              get_logger_module()->out(THIS_PLACE, Logger::Level::Fatal, format, ##args)
 #       define LogFatalIf(condition, format, args ...) if (condition) get_logger_module()->out(THIS_PLACE, Logger::Level::Fatal, format, ##args)
-#       define LogForce(format, ...)                  get_logger_module()->out(THIS_PLACE, Logger::Level::Force, format, ##__VA_ARGS__)
-#       define LogForceIf(condition, format, ...)     if (condition) get_logger_module()->out(THIS_PLACE, Logger::Level::Force, format, ##__VA_ARGS__)
+#       define LogForce(format, ...)                   get_logger_module()->out(THIS_PLACE, Logger::Level::Force, format, ##__VA_ARGS__)
+#       define LogForceIf(condition, format, ...)      if (condition) get_logger_module()->out(THIS_PLACE, Logger::Level::Force, format, ##__VA_ARGS__)
 #   endif
 #endif
 
@@ -229,9 +229,9 @@ namespace Logger {
 
 		virtual void out(Level lvl, PCWSTR format, ...) const = 0;
 
-		virtual void lock() const = 0;
+		virtual void batch_lock() const = 0;
 
-		virtual void unlock() const = 0;
+		virtual void batch_unlock() const = 0;
 	};
 
 	Level get_default_level();
@@ -282,12 +282,12 @@ namespace Logger {
 
 	inline void lock_module(Module_i * module)
 	{
-		module->lock();
+		module->batch_lock();
 	}
 
 	inline void unlock_module(Module_i * module)
 	{
-		module->unlock();
+		module->batch_unlock();
 	}
 
 	///==================================================================================== Target_i

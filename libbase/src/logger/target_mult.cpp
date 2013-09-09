@@ -19,7 +19,7 @@ namespace Logger {
 		Target_t m_second;
 	};
 
-	LogToMult::LogToMult(const Target_t & first, const Target_t & second):
+	LogToMult::LogToMult(const Target_t & first, const Target_t & second) :
 		m_first(first),
 		m_second(second)
 	{

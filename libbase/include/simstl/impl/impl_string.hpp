@@ -43,9 +43,7 @@ namespace sarastd {
 		bool empty() const;
 
 		size_type capacity() const;
-
 		size_type size() const;
-
 		size_type length() const;
 
 		const_pointer c_str() const;
@@ -53,15 +51,11 @@ namespace sarastd {
 		void swap(this_type & in);
 
 		const_iterator cbegin() const;
-
 		const_iterator begin() const;
-
 		iterator begin();
 
 		const_iterator cend() const;
-
 		const_iterator end() const;
-
 		iterator end();
 
 		void clear();
@@ -69,164 +63,228 @@ namespace sarastd {
 		void reserve(size_type capa);
 
 		int compare(const_pointer str) const;
-
 		int compare(const this_type & str) const;
-
 		int compare(size_type pos1, size_type count1, const this_type & str) const;
-
 		int compare(size_type pos1, size_type count1, const_pointer str) const;
-
 		int compare(size_type pos1, size_type count1, const_pointer str, size_type count2) const;
 
 		this_type & append(size_type count, value_type ch);
-
 		this_type & append(const this_type & str);
-
 		this_type & append(const this_type & str, size_type pos, size_type count);
-
 		this_type & append(const_pointer str, size_type count);
-
 		this_type & append(const_pointer str);
 
 		this_type & assign(size_type count, value_type ch);
-
 		this_type & assign(const this_type & str);
-
 		this_type & assign(const this_type & str, size_type pos, size_type count = npos);
-
 		this_type & assign(const_pointer str, size_type count);
-
 		this_type & assign(const_pointer str);
 
 		this_type & insert(size_type index, const this_type & str);
 
 		this_type & operator =(const this_type & right);
-
 		this_type & operator =(const_pointer right);
-
 		this_type & operator =(value_type ch);
 
 		this_type & operator +=(const this_type & str);
-
 		this_type & operator +=(const_pointer str);
-
 		this_type & operator +=(value_type ch);
 
 		this_type operator +(const this_type & str) const;
-
 		this_type operator +(const_pointer str) const;
-
 		this_type operator +(value_type ch) const;
 
 		bool operator ==(const this_type & str) const;
-
 		bool operator ==(const_pointer str) const;
 
 		bool operator !=(const this_type & in) const;
-
 		bool operator !=(const_pointer in) const;
 
 		bool operator <(const this_type & str) const;
-
 		bool operator <(const_pointer str) const;
 
 		bool operator >(const this_type & str) const;
-
 		bool operator >(const_pointer str) const;
 
 		bool operator <=(const this_type & str) const;
-
 		bool operator <=(const_pointer str) const;
 
 		bool operator >=(const this_type & str) const;
-
 		bool operator >=(const_pointer str) const;
 
 		const_reference operator [](size_type in) const;
-
 		reference operator [](size_type in);
 
 		const_reference at(size_type in) const;
-
 		reference at(size_type in);
 
 		this_type & replace(size_type pos, size_type len, const this_type & str);
-
 		this_type & replace(size_type pos, size_type len, const this_type & str, size_type subpos, size_type sublen);
-
 		this_type & replace(size_type pos, size_type len, const_pointer str);
-
 		this_type & replace(size_type pos, size_type len, const_pointer str, size_type count);
-
 		this_type & replace(size_type pos, size_type len, size_type count, value_type ch);
 
 		this_type substr(size_type pos = 0, size_type n = npos) const;
 
 		this_type & erase(size_type pos = 0, size_type count = npos);
+		iterator erase(const_iterator position);
+		iterator erase(const_iterator first, const_iterator last);
 
 		size_type find(const this_type & str, size_type pos = 0) const;
-
 		size_type find(const_pointer str, size_type pos = 0) const;
-
 		size_type find(value_type ch, size_type pos = 0) const;
 
 		size_type rfind(const this_type & str, size_type pos = npos) const;
-
 		size_type rfind(const_pointer str, size_type pos, size_type count) const;
-
 		size_type rfind(const_pointer str, size_type pos = npos) const;
-
 		size_type rfind(value_type ch, size_type pos = npos) const;
 
 		size_type find_first_of(const this_type & str, size_type pos = 0) const;
-
 		size_type find_last_of(const this_type & str, size_type pos = npos) const;
-
 		size_type find_first_not_of(const this_type & str, size_type pos = 0) const;
-
 		size_type find_last_not_of(const this_type & str, size_type pos = npos) const;
 
 	private:
-		struct string_impl: public sarastd::pvt::ref_counter {
-			static string_impl * allocate(size_type capa);
-
-			void deallocate() const;
-
-			string_impl();
-
-			string_impl(size_type capa);
-
-			void init(value_type ch, size_type count);
-
-			void init(const_pointer str, size_type count);
-
-			void append(const_pointer str, size_type count);
-
-			void set_size(size_type new_size);
-
-			void set_capacity(size_type new_capacity);
-
-			size_type capacity() const;
-
-			size_type size() const;
-
-			void * c_str() const;
-
-		private:
-			~string_impl();
-
-			size_type m_capa;
-			size_type m_size;
-			value_type m_str[1];
-		}* m_data;
+		struct string_impl;
+		string_impl * m_data;
 
 		basic_string(const_pointer str, size_type count, size_type capacity);
 
+		pointer _str() const;
+
 		void split();
 
-		typename traits_type::int_type compare(const_pointer str1, size_type count1, const_pointer str2, size_type count2) const;
+		int compare(const_pointer str1, size_type count1, const_pointer str2, size_type count2) const;
 	};
 
+	///=============================================================================================
+	template<typename Char, typename Traits>
+	struct basic_string<Char, Traits>::string_impl: public sarastd::pvt::ref_counter {
+		static string_impl * allocate(size_type capa);
+
+		void deallocate() const;
+
+		string_impl();
+
+		string_impl(size_type capa);
+
+		void init(value_type ch, size_type count);
+
+		void init(const_pointer str, size_type count);
+
+		void append(const_pointer str, size_type count);
+
+		void set_size(size_type new_size);
+
+		void set_capacity(size_type new_capacity);
+
+		size_type capacity() const;
+
+		size_type size() const;
+
+		void * c_str() const;
+
+	private:
+		~string_impl();
+
+		size_type m_capa;
+		size_type m_size;
+		value_type m_str[1];
+	};
+
+	template<typename Char, typename Traits>
+	typename basic_string<Char, Traits>::string_impl * basic_string<Char, Traits>::string_impl::allocate(size_type capa)
+	{
+		string_impl * impl = (string_impl*)sarastd::pvt::_allocate<char>(sizeof(string_impl) + capa * sizeof(value_type));
+		new (impl, sarastd::nothrow) string_impl(capa);
+		return impl;
+	}
+
+	template<typename Char, typename Traits>
+	void basic_string<Char, Traits>::string_impl::deallocate() const
+	{
+		this->~string_impl();
+		sarastd::pvt::_deallocate((char*)this);
+	}
+
+	template<typename Char, typename Traits>
+	basic_string<Char, Traits>::string_impl::string_impl() :
+		m_capa(1), m_size(0)
+	{
+		m_str[0] = 0;
+	}
+
+	template<typename Char, typename Traits>
+	basic_string<Char, Traits>::string_impl::string_impl(size_type capa) :
+		m_capa(capa), m_size(0)
+	{
+		m_str[0] = 0;
+	}
+
+	template<typename Char, typename Traits>
+	void basic_string<Char, Traits>::string_impl::init(value_type ch, size_type count)
+	{
+		if (count) {
+			traits_type::assign(m_str, count, ch);
+			set_size(count);
+		}
+	}
+
+	template<typename Char, typename Traits>
+	void basic_string<Char, Traits>::string_impl::init(const_pointer str, size_type count)
+	{
+		if (str && count) {
+			traits_type::copy(m_str, str, count);
+			set_size(count);
+		}
+	}
+
+	template<typename Char, typename Traits>
+	void basic_string<Char, Traits>::string_impl::append(const_pointer str, size_type count)
+	{
+		if (str && count) {
+			traits_type::copy(m_str + m_size, str, count);
+			set_size(m_size + count);
+		}
+	}
+
+	template<typename Char, typename Traits>
+	void basic_string<Char, Traits>::string_impl::set_size(size_type new_size)
+	{
+		m_size = new_size;
+		m_str[m_size] = 0;
+	}
+
+	template<typename Char, typename Traits>
+	void basic_string<Char, Traits>::string_impl::set_capacity(size_type new_capacity)
+	{
+		m_capa = new_capacity;
+	}
+
+	template<typename Char, typename Traits>
+	typename basic_string<Char, Traits>::size_type basic_string<Char, Traits>::string_impl::capacity() const
+	{
+		return m_capa;
+	}
+
+	template<typename Char, typename Traits>
+	typename basic_string<Char, Traits>::size_type basic_string<Char, Traits>::string_impl::size() const
+	{
+		return m_size;
+	}
+
+	template<typename Char, typename Traits>
+	void * basic_string<Char, Traits>::string_impl::c_str() const
+	{
+		return (void*)m_str;
+	}
+
+	template<typename Char, typename Traits>
+	basic_string<Char, Traits>::string_impl::~string_impl()
+	{
+	}
+
+	///=============================================================================================
 	template<typename Char, typename Traits>
 	basic_string<Char, Traits>::~basic_string()
 	{
@@ -300,7 +358,7 @@ namespace sarastd {
 	template<typename Char, typename Traits>
 	typename basic_string<Char, Traits>::const_iterator basic_string<Char, Traits>::cbegin() const
 	{
-		return const_iterator((const_pointer)m_data->c_str());
+		return const_iterator(c_str());
 	}
 
 	template<typename Char, typename Traits>
@@ -312,7 +370,7 @@ namespace sarastd {
 	template<typename Char, typename Traits>
 	typename basic_string<Char, Traits>::iterator basic_string<Char, Traits>::begin()
 	{
-		return iterator((pointer)m_data->c_str());
+		return iterator(_str());
 	}
 
 	template<typename Char, typename Traits>
@@ -346,7 +404,7 @@ namespace sarastd {
 	void basic_string<Char, Traits>::reserve(size_type capa)
 	{
 		if (capacity() < capa) {
-			this_type(cbegin(), size(), capa).swap(*this);
+			this_type(c_str(), size(), capa).swap(*this);
 		}
 	}
 
@@ -587,27 +645,27 @@ namespace sarastd {
 	template<typename Char, typename Traits>
 	typename basic_string<Char, Traits>::const_reference basic_string<Char, Traits>::operator [](size_type in) const
 	{
-		return *(cbegin() + in);
+		return *(c_str() + in);
 	}
 
 	template<typename Char, typename Traits>
 	typename basic_string<Char, Traits>::reference basic_string<Char, Traits>::operator [](size_type in)
 	{
 		split();
-		return *(begin() + in);
+		return *(_str() + in);
 	}
 
 	template<typename Char, typename Traits>
 	typename basic_string<Char, Traits>::const_reference basic_string<Char, Traits>::at(size_type in) const
 	{
-		return *(cbegin() + in);
+		return *(c_str() + in);
 	}
 
 	template<typename Char, typename Traits>
 	typename basic_string<Char, Traits>::reference basic_string<Char, Traits>::at(size_type in)
 	{
 		split();
-		return *(begin() + in);
+		return *(_str() + in);
 	}
 
 	template<typename Char, typename Traits>
@@ -633,10 +691,10 @@ namespace sarastd {
 	{
 		pos = sarastd::min(pos, size());
 		len = sarastd::min(len, size() - pos);
-		this_type tmp(cbegin(), pos, size() - len + count);
+		this_type tmp(c_str(), pos, size() - len + count);
 		tmp.append(str, count);
 		pos = sarastd::min(pos + len, size());
-		tmp.append(cbegin() + pos, size() - pos);
+		tmp.append(c_str() + pos, size() - pos);
 		swap(tmp);
 		return *this;
 	}
@@ -650,19 +708,43 @@ namespace sarastd {
 	template<typename Char, typename Traits>
 	typename basic_string<Char, Traits>::this_type basic_string<Char, Traits>::substr(size_type pos, size_type n) const
 	{
-		return this_type(cbegin() + pos, n);
+		return this_type(c_str() + pos, n);
 	}
 
 	template<typename Char, typename Traits>
 	typename basic_string<Char, Traits>::this_type & basic_string<Char, Traits>::erase(size_type pos, size_type count)
 	{
-		if (pos < size()) {
-			size_type last = (count == npos) ? size() : sarastd::min(size(), pos + count);
-			this_type tmp(cbegin(), pos, capacity());
-			tmp.append(cbegin() + last, size() - last);
-			tmp.swap(*this);
-		}
+//		if (pos < size()) {
+//			size_type last = (count == npos) ? size() : sarastd::min(size(), pos + count);
+//			this_type tmp(c_str(), pos, capacity());
+//			tmp.append(c_str() + last, size() - last);
+//			tmp.swap(*this);
+//		}
+		size_type last = (count == npos) ? size() : sarastd::min(size(), pos + count);
+		erase(sarastd::next(cbegin(), pos), sarastd::next(cbegin(), last));
 		return *this;
+	}
+
+	template<typename Char, typename Traits>
+	typename basic_string<Char, Traits>::iterator basic_string<Char, Traits>::erase(const_iterator position)
+	{
+		return erase(position, sarastd::next(position, 1));
+	}
+
+	template<typename Char, typename Traits>
+	typename basic_string<Char, Traits>::iterator basic_string<Char, Traits>::erase(const_iterator first, const_iterator last)
+	{
+		typename sarastd::iterator_traits<const_iterator>::difference_type posFirst = sarastd::distance(cbegin(), first);
+		typename sarastd::iterator_traits<const_iterator>::difference_type posLast = sarastd::distance(cbegin(), sarastd::min(last, cend()));
+		if (m_data->count() > 1) {
+			this_type tmp(c_str(), posFirst, capacity());
+			tmp.append(c_str() + posLast, size() - posLast);
+			tmp.swap(*this);
+		} else {
+			traits_type::move(_str() + posFirst, _str() + posLast, size() - posLast + 1);
+			m_data->set_size(size() - (posLast - posFirst));
+		}
+		return iterator(_str() + posFirst);
 	}
 
 	template<typename Char, typename Traits>
@@ -674,15 +756,15 @@ namespace sarastd {
 	template<typename Char, typename Traits>
 	typename basic_string<Char, Traits>::size_type basic_string<Char, Traits>::find(const_pointer str, size_type pos) const
 	{
-		const_pointer find = traits_type::find(cbegin() + pos, str);
-		return (find) ? find - cbegin() : npos;
+		const_pointer find = traits_type::find(c_str() + pos, str);
+		return (find) ? find - c_str() : npos;
 	}
 
 	template<typename Char, typename Traits>
 	typename basic_string<Char, Traits>::size_type basic_string<Char, Traits>::find(value_type ch, size_type pos) const
 	{
-		const_pointer find = traits_type::find(cbegin() + pos, size(), ch);
-		return (find) ? find - cbegin() : npos;
+		const_pointer find = traits_type::find(c_str() + pos, size(), ch);
+		return (find) ? find - c_str() : npos;
 	}
 
 	template<typename Char, typename Traits>
@@ -698,7 +780,7 @@ namespace sarastd {
 		if (count != 0 && count <= pos) {
 			pos -= (count - 1);
 			while (pos > 0)
-				if (traits_type::find(cbegin() + --pos, str))
+				if (traits_type::find(c_str() + --pos, str))
 					return pos;
 		}
 		return npos;
@@ -766,16 +848,22 @@ namespace sarastd {
 	}
 
 	template<typename Char, typename Traits>
-	void basic_string<Char, Traits>::split()
+	typename basic_string<Char, Traits>::pointer basic_string<Char, Traits>::_str() const
 	{
-		if (m_data->count() > 1)
-			this_type(cbegin(), size(), capacity()).swap(*this);
+		return (pointer)m_data->c_str();
 	}
 
 	template<typename Char, typename Traits>
-	typename basic_string<Char, Traits>::traits_type::int_type basic_string<Char, Traits>::compare(const_pointer str1, size_type count1, const_pointer str2, size_type count2) const
+	void basic_string<Char, Traits>::split()
 	{
-		typename traits_type::int_type result = traits_type::compare(str1, str2, sarastd::min(count1, count2));
+		if (m_data->count() > 1)
+			this_type(c_str(), size(), capacity()).swap(*this);
+	}
+
+	template<typename Char, typename Traits>
+	int basic_string<Char, Traits>::compare(const_pointer str1, size_type count1, const_pointer str2, size_type count2) const
+	{
+		int result = traits_type::compare(str1, str2, sarastd::min(count1, count2));
 		if (result != 0)
 			return result;
 		if (count1 < count2)
@@ -783,99 +871,6 @@ namespace sarastd {
 		if (count1 > count2)
 			return 1;
 		return 0;
-	}
-
-	///=============================================================================================
-	template<typename Char, typename Traits>
-	typename basic_string<Char, Traits>::string_impl * basic_string<Char, Traits>::string_impl::allocate(size_type capa)
-	{
-		string_impl * impl = (string_impl*)sarastd::pvt::_allocate<char>(sizeof(string_impl) + capa * sizeof(value_type));
-		new (impl, sarastd::nothrow) string_impl(capa);
-		return impl;
-	}
-
-	template<typename Char, typename Traits>
-	void basic_string<Char, Traits>::string_impl::deallocate() const
-	{
-		this->~string_impl();
-		sarastd::pvt::_deallocate((char*)this);
-	}
-
-	template<typename Char, typename Traits>
-	basic_string<Char, Traits>::string_impl::string_impl() :
-		m_capa(1), m_size(0)
-	{
-		m_str[0] = 0;
-	}
-
-	template<typename Char, typename Traits>
-	basic_string<Char, Traits>::string_impl::string_impl(size_type capa) :
-		m_capa(capa), m_size(0)
-	{
-		m_str[0] = 0;
-	}
-
-	template<typename Char, typename Traits>
-	void basic_string<Char, Traits>::string_impl::init(value_type ch, size_type count)
-	{
-		if (count) {
-			traits_type::assign(m_str, count, ch);
-			set_size(count);
-		}
-	}
-
-	template<typename Char, typename Traits>
-	void basic_string<Char, Traits>::string_impl::init(const_pointer str, size_type count)
-	{
-		if (str && count) {
-			traits_type::copy(m_str, str, count);
-			set_size(count);
-		}
-	}
-
-	template<typename Char, typename Traits>
-	void basic_string<Char, Traits>::string_impl::append(const_pointer str, size_type count)
-	{
-		if (str && count) {
-			traits_type::copy(m_str + m_size, str, count);
-			set_size(m_size + count);
-		}
-	}
-
-	template<typename Char, typename Traits>
-	void basic_string<Char, Traits>::string_impl::set_size(size_type new_size)
-	{
-		m_size = new_size;
-		m_str[m_size] = 0;
-	}
-
-	template<typename Char, typename Traits>
-	void basic_string<Char, Traits>::string_impl::set_capacity(size_type new_capacity)
-	{
-		m_capa = new_capacity;
-	}
-
-	template<typename Char, typename Traits>
-	typename basic_string<Char, Traits>::size_type basic_string<Char, Traits>::string_impl::capacity() const
-	{
-		return m_capa;
-	}
-
-	template<typename Char, typename Traits>
-	typename basic_string<Char, Traits>::size_type basic_string<Char, Traits>::string_impl::size() const
-	{
-		return m_size;
-	}
-
-	template<typename Char, typename Traits>
-	void * basic_string<Char, Traits>::string_impl::c_str() const
-	{
-		return (void*)m_str;
-	}
-
-	template<typename Char, typename Traits>
-	basic_string<Char, Traits>::string_impl::~string_impl()
-	{
 	}
 
 	///=============================================================================================

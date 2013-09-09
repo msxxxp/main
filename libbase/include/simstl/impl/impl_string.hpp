@@ -515,73 +515,73 @@ namespace sarastd {
 	template<typename Char, typename Traits>
 	bool basic_string<Char, Traits>::operator ==(const this_type & str) const
 	{
-		return traits_type::compare(c_str(), str.c_str(), sarastd::min(size(), str.size())) == 0;
+		return compare(c_str(), size(), str.c_str(), str.size()) == 0;
 	}
 
 	template<typename Char, typename Traits>
 	bool basic_string<Char, Traits>::operator ==(const_pointer str) const
 	{
-		return traits_type::compare(c_str(), str, sarastd::min(size(), traits_type::length(str))) == 0;
+		return compare(c_str(), size(), str, traits_type::length(str)) == 0;
 	}
 
 	template<typename Char, typename Traits>
-	bool basic_string<Char, Traits>::operator !=(const this_type & in) const
+	bool basic_string<Char, Traits>::operator !=(const this_type & str) const
 	{
-		return !operator ==(in);
+		return !operator ==(str);
 	}
 
 	template<typename Char, typename Traits>
-	bool basic_string<Char, Traits>::operator !=(const_pointer in) const
+	bool basic_string<Char, Traits>::operator !=(const_pointer str) const
 	{
-		return !operator ==(in);
+		return !operator ==(str);
 	}
 
 	template<typename Char, typename Traits>
 	bool basic_string<Char, Traits>::operator <(const this_type & str) const
 	{
-		return traits_type::compare(c_str(), str.c_str(), sarastd::min(size(), str.size())) < 0;
+		return compare(c_str(), size(), str.c_str(), str.size()) < 0;
 	}
 
 	template<typename Char, typename Traits>
 	bool basic_string<Char, Traits>::operator <(const_pointer str) const
 	{
-		return traits_type::compare(c_str(), str, sarastd::min(size(), traits_type::length(str))) < 0;
+		return compare(c_str(), size(), str, traits_type::length(str)) < 0;
 	}
 
 	template<typename Char, typename Traits>
 	bool basic_string<Char, Traits>::operator >(const this_type & str) const
 	{
-		return traits_type::compare(c_str(), str.c_str(), sarastd::min(size(), str.size())) > 0;
+		return compare(c_str(), size(), str.c_str(), str.size()) > 0;
 	}
 
 	template<typename Char, typename Traits>
 	bool basic_string<Char, Traits>::operator >(const_pointer str) const
 	{
-		return traits_type::compare(c_str(), str, sarastd::min(size(), traits_type::length(str))) > 0;
+		return compare(c_str(), size(), str, traits_type::length(str)) > 0;
 	}
 
 	template<typename Char, typename Traits>
 	bool basic_string<Char, Traits>::operator <=(const this_type & str) const
 	{
-		return traits_type::compare(c_str(), str.c_str(), sarastd::min(size(), str.size())) <= 0;
+		return compare(c_str(), size(), str.c_str(), str.size()) <= 0;
 	}
 
 	template<typename Char, typename Traits>
 	bool basic_string<Char, Traits>::operator <=(const_pointer str) const
 	{
-		return traits_type::compare(c_str(), str, sarastd::min(size(), traits_type::length(str))) <= 0;
+		return compare(c_str(), size(), str, traits_type::length(str)) <= 0;
 	}
 
 	template<typename Char, typename Traits>
 	bool basic_string<Char, Traits>::operator >=(const this_type & str) const
 	{
-		return traits_type::compare(c_str(), str.c_str(), sarastd::min(size(), str.size())) >= 0;
+		return compare(c_str(), size(), str.c_str(), str.size()) >= 0;
 	}
 
 	template<typename Char, typename Traits>
 	bool basic_string<Char, Traits>::operator >=(const_pointer str) const
 	{
-		return traits_type::compare(c_str(), str, sarastd::min(size(), traits_type::length(str))) >= 0;
+		return compare(c_str(), size(), str, traits_type::length(str)) >= 0;
 	}
 
 	template<typename Char, typename Traits>

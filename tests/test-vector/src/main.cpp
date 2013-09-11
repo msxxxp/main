@@ -377,39 +377,48 @@ void test_string()
 	assert(str2.find_last_not_of("2d") == 12);
 
 	str2.replace(4, 5, "TEST3");
-	printf("str2: '%s' size: %d\n", str2.c_str(), (int)str2.size());
+	printf("str2: '%s' size: %d capacity: %d\n", str2.c_str(), (int)str2.size(), (int)str2.capacity());
 	assert(Str_compare(str2.c_str(), "que1TEST3que1") == 0);
 	assert(str2.size() == 13);
 
 	str2.replace(0, 512, "T4");
-	printf("str2: '%s' size: %d\n", str2.c_str(), (int)str2.size());
+	printf("str2: '%s' size: %d capacity: %d\n", str2.c_str(), (int)str2.size(), (int)str2.capacity());
 	assert(Str_compare(str2.c_str(), "T4") == 0);
 	assert(str2.size() == 2);
 
 	str2.replace(2, 128, "testing5");
-	printf("str2: '%s' size: %d\n", str2.c_str(), (int)str2.size());
+	printf("str2: '%s' size: %d capacity: %d\n", str2.c_str(), (int)str2.size(), (int)str2.capacity());
 	assert(Str_compare(str2.c_str(), "T4testing5") == 0);
 	assert(str2.size() == 10);
 
 	str2.replace(0, 1024, "");
-	printf("str2: '%s' size: %d\n", str2.c_str(), (int)str2.size());
+	printf("str2: '%s' size: %d capacity: %d\n", str2.c_str(), (int)str2.size(), (int)str2.capacity());
 	assert(Str_compare(str2.c_str(), "") == 0);
 	assert(str2.size() == 0);
 
 	str2.replace(0, 1, "again6");
-	printf("str2: '%s' size: %d\n", str2.c_str(), (int)str2.size());
+	printf("str2: '%s' size: %d capacity: %d\n", str2.c_str(), (int)str2.size(), (int)str2.capacity());
 	assert(Str_compare(str2.c_str(), "again6") == 0);
 	assert(str2.size() == 6);
 
 	str2.erase(4, 20);
-	printf("str2: '%s' size: %d\n", str2.c_str(), (int)str2.size());
+	printf("str2: '%s' size: %d capacity: %d\n", str2.c_str(), (int)str2.size(), (int)str2.capacity());
 	assert(Str_compare(str2.c_str(), "agai") == 0);
 	assert(str2.size() == 4);
 
 	str2.erase(str2.cbegin() + 2);
-	printf("str2: '%s' size: %d\n", str2.c_str(), (int)str2.size());
+	printf("str2: '%s' size: %d capacity: %d\n", str2.c_str(), (int)str2.size(), (int)str2.capacity());
 	assert(Str_compare(str2.c_str(), "agi") == 0);
 	assert(str2.size() == 3);
+
+	str2.append(str2);
+	printf("str2: '%s' size: %d capacity: %d\n", str2.c_str(), (int)str2.size(), (int)str2.capacity());
+	str2.append(str2);
+	printf("str2: '%s' size: %d capacity: %d\n", str2.c_str(), (int)str2.size(), (int)str2.capacity());
+
+	const char * qqq = str2.c_str() + 3;
+	str2.append(qqq, 5);
+	printf("str2: '%s' size: %d capacity: %d\n", str2.c_str(), (int)str2.size(), (int)str2.capacity());
 }
 
 int wWinMain(const wchar_t * /*pCmdLine*/) {

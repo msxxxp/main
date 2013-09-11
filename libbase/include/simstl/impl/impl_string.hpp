@@ -158,7 +158,11 @@ namespace sarastd {
 
 		pointer _str() const;
 
-		void split();
+		size_type get_new_capacity(size_type capacity) const;
+
+		size_type get_necessary_capacity(size_type addToSize) const;
+
+		void split(size_type necessaryCapacity);
 
 		int compare(const_pointer str1, size_type count1, const_pointer str2, size_type count2) const;
 	};
@@ -270,7 +274,7 @@ namespace sarastd {
 
 	template<typename Char, typename Traits>
 	basic_string<Char, Traits>::basic_string() :
-		m_data(string_impl::allocate((size_type)MIN_ALLOC_BLOCK))
+		m_data(string_impl::allocate(get_new_capacity(0)))
 	{
 	}
 
@@ -283,14 +287,14 @@ namespace sarastd {
 
 	template<typename Char, typename Traits>
 	basic_string<Char, Traits>::basic_string(size_type count, value_type in) :
-		m_data(string_impl::allocate(count + 1))
+		m_data(string_impl::allocate(get_new_capacity(count)))
 	{
 		m_data->append(in, count);
 	}
 
 	template<typename Char, typename Traits>
 	basic_string<Char, Traits>::basic_string(const_pointer in, size_type count) :
-		m_data(string_impl::allocate(((in && count == npos) ? (count = traits_type::length(in)) : count) + 1))
+		m_data(string_impl::allocate(get_new_capacity((in && count == npos) ? count = traits_type::length(in) : count)))
 	{
 		m_data->append(in, count);
 	}
@@ -372,7 +376,7 @@ namespace sarastd {
 	void basic_string<Char, Traits>::clear()
 	{
 		if (!empty()) {
-			split();
+			split(capacity());
 			m_data->set_size(0);
 		}
 	}
@@ -424,8 +428,6 @@ namespace sarastd {
 	template<typename Char, typename Traits>
 	typename basic_string<Char, Traits>::this_type & basic_string<Char, Traits>::append(const this_type & str)
 	{
-		if (m_data == str.m_data)
-			this_type(c_str(), size(), size() + str.size()).swap(*this);
 		append(str.c_str(), str.size());
 		return *this;
 	}
@@ -440,9 +442,15 @@ namespace sarastd {
 	typename basic_string<Char, Traits>::this_type & basic_string<Char, Traits>::append(const_pointer str, size_type count)
 	{
 		if (str && count) {
-			reserve(size() + count);
-			split();
-			m_data->append(str, count);
+			if (c_str() <= str && str < (c_str() + size())) { // append to itself
+				printf("append to itself\n");
+				this_type tmp(c_str(), size(), get_necessary_capacity(count));
+				tmp.append(str, count);
+				tmp.swap(*this);
+			} else {
+				split(get_necessary_capacity(count));
+				m_data->append(str, count);
+			}
 		}
 		return *this;
 	}
@@ -837,7 +845,7 @@ namespace sarastd {
 	typename basic_string<Char, Traits>::size_type basic_string<Char, Traits>::find_first_not_of(const this_type & str, size_type pos) const
 	{
 		for (; pos < size(); ++pos)
-			if (traits_type::find(str.c_str(), str.size(), at(pos)) == NULL)
+			if (traits_type::find(str.c_str(), str.size(), at(pos)) == 0)
 				return pos;
 		return npos;
 	}
@@ -847,14 +855,14 @@ namespace sarastd {
 	{
 		pos = sarastd::min(pos, size());
 		while (pos > 0)
-			if (traits_type::find(str.c_str(), str.size(), at(--pos)) == NULL)
+			if (traits_type::find(str.c_str(), str.size(), at(--pos)) == 0)
 				return pos;
 		return npos;
 	}
 
 	template<typename Char, typename Traits>
 	basic_string<Char, Traits>::basic_string(const_pointer str, size_type count, size_type capacity) :
-		m_data(string_impl::allocate(capacity))
+		m_data(string_impl::allocate(get_new_capacity(capacity)))
 	{
 		m_data->append(str, count);
 	}
@@ -866,9 +874,25 @@ namespace sarastd {
 	}
 
 	template<typename Char, typename Traits>
-	void basic_string<Char, Traits>::split()
+	typename basic_string<Char, Traits>::size_type basic_string<Char, Traits>::get_new_capacity(size_type capacity) const
 	{
-		if (m_data->count() > 1)
+		return sarastd::max(size_type(MIN_ALLOC_BLOCK), capacity);
+	}
+
+	template<typename Char, typename Traits>
+	typename basic_string<Char, Traits>::size_type basic_string<Char, Traits>::get_necessary_capacity(size_type addToSize) const
+	{
+		if (capacity() < (size() + addToSize))
+			return size() + sarastd::max(size(), addToSize);
+		return capacity();
+	}
+
+	template<typename Char, typename Traits>
+	void basic_string<Char, Traits>::split(size_type necesseryCapacity)
+	{
+		if (capacity() < necesseryCapacity)
+			this_type(c_str(), size(), necesseryCapacity).swap(*this);
+		else if (m_data->count() > 1)
 			this_type(c_str(), size(), capacity()).swap(*this);
 	}
 

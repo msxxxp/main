@@ -26,9 +26,9 @@ namespace sarastd {
 			void swap(this_type& other);
 			void destroy(pointer first, pointer last);
 			void reserve(size_type newCapacity);
-			void adjust_capacity(size_type add);
-			bool check_capacity(size_type add) const;
-			size_type get_new_capacity(size_type add) const;
+			void adjust_capacity(size_type addToSize);
+			bool check_capacity(size_type addToSize) const;
+			size_type get_new_capacity(size_type addToSize) const;
 			size_type capacity() const;
 			size_type size() const;
 			size_type max_size() const;
@@ -124,25 +124,25 @@ namespace sarastd {
 		}
 
 		template<typename Type, typename Allocator>
-		bool _vector_impl<Type, Allocator>::check_capacity(size_type add) const
+		bool _vector_impl<Type, Allocator>::check_capacity(size_type addToSize) const
 		{
-			if ((size() + add) > capacity())
+			if ((size() + addToSize) > capacity())
 				return false;
 			return true;
 		}
 
 		template<typename Type, typename Allocator>
 		typename
-		_vector_impl<Type, Allocator>::size_type _vector_impl<Type, Allocator>::get_new_capacity(size_type add) const
+		_vector_impl<Type, Allocator>::size_type _vector_impl<Type, Allocator>::get_new_capacity(size_type addToSize) const
 		{
-			return size() + sarastd::max(size_type(4), sarastd::max(size(), add));
+			return size() + sarastd::max(size_type(4), sarastd::max(size(), addToSize));
 		}
 
 		template<typename Type, typename Allocator>
-		void _vector_impl<Type, Allocator>::adjust_capacity(size_type add)
+		void _vector_impl<Type, Allocator>::adjust_capacity(size_type addToSize)
 		{
-			if (!check_capacity(add))
-				reserve(get_new_capacity(add));
+			if (!check_capacity(addToSize))
+				reserve(get_new_capacity(addToSize));
 		}
 
 		///=========================================================================================
@@ -166,9 +166,9 @@ namespace sarastd {
 			void swap(this_type& other);
 			void destroy(pointer first, pointer last);
 			void reserve(size_type newCapacity);
-			void adjust_capacity(size_type add);
-			bool check_capacity(size_type add) const;
-			size_type get_new_capacity(size_type add) const;
+			void adjust_capacity(size_type addToSize);
+			bool check_capacity(size_type addToSize) const;
+			size_type get_new_capacity(size_type addToSize) const;
 			size_type capacity() const;
 			size_type size() const;
 			size_type max_size() const;
@@ -283,25 +283,25 @@ namespace sarastd {
 		}
 
 		template<typename Type>
-		bool _vector_impl<Type, sarastd::pvt::_movable_allocator<Type> >::check_capacity(size_type add) const
+		bool _vector_impl<Type, sarastd::pvt::_movable_allocator<Type> >::check_capacity(size_type addToSize) const
 		{
-			if ((size() + add) > capacity())
+			if ((size() + addToSize) > capacity())
 				return false;
 			return true;
 		}
 
 		template<typename Type>
 		typename
-		_vector_impl<Type, sarastd::pvt::_movable_allocator<Type> >::size_type _vector_impl<Type, sarastd::pvt::_movable_allocator<Type> >::get_new_capacity(size_type add) const
+		_vector_impl<Type, sarastd::pvt::_movable_allocator<Type> >::size_type _vector_impl<Type, sarastd::pvt::_movable_allocator<Type> >::get_new_capacity(size_type addToSize) const
 		{
-			return size() + sarastd::max(size_type(4), sarastd::max(size(), add));
+			return size() + sarastd::max(size_type(4), sarastd::max(size(), addToSize));
 		}
 
 		template<typename Type>
-		void _vector_impl<Type, sarastd::pvt::_movable_allocator<Type> >::adjust_capacity(size_type add)
+		void _vector_impl<Type, sarastd::pvt::_movable_allocator<Type> >::adjust_capacity(size_type addToSize)
 		{
-			if (!check_capacity(add))
-				reserve(get_new_capacity(add));
+			if (!check_capacity(addToSize))
+				reserve(get_new_capacity(addToSize));
 		}
 
 		template<typename Type>

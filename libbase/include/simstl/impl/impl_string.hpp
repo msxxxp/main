@@ -160,17 +160,26 @@ namespace sarastd {
 
 		size_type get_new_capacity(size_type capacity) const;
 
-		size_type get_necessary_capacity(size_type addToSize) const;
+		size_type get_necessary_capacity(sarastd::ptrdiff_t addToSize) const;
 
 		void split(size_type necessaryCapacity);
 
 		int compare(const_pointer str1, size_type count1, const_pointer str2, size_type count2) const;
+
+		bool is_same_str(const_pointer str) const;
+
+		bool is_shared() const;
 	};
 
 	///=============================================================================================
 	template<typename Char, typename Traits>
 	struct basic_string<Char, Traits>::string_impl: public sarastd::pvt::ref_counter {
-		static string_impl * allocate(size_type capa);
+		static string_impl * allocate(size_type capa)
+		{
+			string_impl * impl = (string_impl*)sarastd::pvt::_allocate<char>(sizeof(string_impl) + capa * sizeof(value_type));
+			new (impl, sarastd::nothrow) string_impl(capa);
+			return impl;
+		}
 
 		void append(const_pointer str, size_type count);
 
@@ -206,14 +215,6 @@ namespace sarastd {
 		size_type m_size;
 		value_type m_str[1];
 	};
-
-	template<typename Char, typename Traits>
-	typename basic_string<Char, Traits>::string_impl * basic_string<Char, Traits>::string_impl::allocate(size_type capa)
-	{
-		string_impl * impl = (string_impl*)sarastd::pvt::_allocate<char>(sizeof(string_impl) + capa * sizeof(value_type));
-		new (impl, sarastd::nothrow) string_impl(capa);
-		return impl;
-	}
 
 	template<typename Char, typename Traits>
 	void basic_string<Char, Traits>::string_impl::append(const_pointer str, size_type count)
@@ -442,8 +443,7 @@ namespace sarastd {
 	typename basic_string<Char, Traits>::this_type & basic_string<Char, Traits>::append(const_pointer str, size_type count)
 	{
 		if (str && count) {
-			if (c_str() <= str && str < (c_str() + size())) { // append to itself
-				printf("append to itself\n");
+			if (is_same_str(str)) {
 				this_type tmp(c_str(), size(), get_necessary_capacity(count));
 				tmp.append(str, count);
 				tmp.swap(*this);
@@ -677,7 +677,7 @@ namespace sarastd {
 	template<typename Char, typename Traits>
 	typename basic_string<Char, Traits>::reference basic_string<Char, Traits>::operator [](size_type in)
 	{
-		split();
+		split(capacity());
 		return *(_str() + in);
 	}
 
@@ -690,7 +690,7 @@ namespace sarastd {
 	template<typename Char, typename Traits>
 	typename basic_string<Char, Traits>::reference basic_string<Char, Traits>::at(size_type in)
 	{
-		split();
+		split(capacity());
 		return *(_str() + in);
 	}
 
@@ -715,13 +715,31 @@ namespace sarastd {
 	template<typename Char, typename Traits>
 	typename basic_string<Char, Traits>::this_type & basic_string<Char, Traits>::replace(size_type pos, size_type len, const_pointer str, size_type count)
 	{
-		pos = sarastd::min(pos, size());
-		len = sarastd::min(len, size() - pos);
-		this_type tmp(c_str(), pos, size() - len + count);
-		tmp.append(str, count);
-		pos = sarastd::min(pos + len, size());
-		tmp.append(c_str() + pos, size() - pos);
-		swap(tmp);
+		if (str && count) {
+//			printf("      (%Iu, %Iu): '%s'\n", size(), capacity(), c_str());
+			pos = sarastd::min(pos, size());
+			len = sarastd::min(len, size() - pos);
+			if (is_same_str(str) || is_shared()) {
+				this_type tmp(c_str(), pos, get_necessary_capacity(count - len));
+//				printf("      (%Iu, %Iu): '%s'\n", tmp.size(), tmp.capacity(), tmp.c_str());
+				tmp.append(str, count);
+//				printf("      (%Iu, %Iu): '%s'\n", tmp.size(), tmp.capacity(), tmp.c_str());
+				tmp.append(c_str() + pos, size() - pos);
+//				printf("      (%Iu, %Iu): '%s'\n", tmp.size(), tmp.capacity(), tmp.c_str());
+				tmp.swap(*this);
+			} else {
+				split(get_necessary_capacity(count - len));
+//				printf("      (%Iu, %Iu): '%s'\n", size(), capacity(), c_str());
+//				printf("replace before: '%s'\n", c_str());
+				traits_type::move(_str() + pos + count, _str() + pos + len, size() - (pos + len) + 1);
+//				traits_type::assign(_str() + pos, count, ' ');
+//				printf("replace after : '%s'\n", c_str());
+				traits_type::copy(_str() + pos, str, count);
+//				printf("replace after : '%s'\n", c_str());
+				m_data->set_size(size() + count - len);
+//				printf("      (%Iu, %Iu): '%s'\n", size(), capacity(), c_str());
+			}
+		}
 		return *this;
 	}
 
@@ -756,7 +774,7 @@ namespace sarastd {
 	{
 		typename sarastd::iterator_traits<const_iterator>::difference_type posFirst = sarastd::distance(cbegin(), first);
 		typename sarastd::iterator_traits<const_iterator>::difference_type posLast = sarastd::distance(cbegin(), sarastd::min(last, cend()));
-		if (m_data->count() > 1) {
+		if (is_shared()) {
 			this_type tmp(c_str(), posFirst, capacity());
 			tmp.append(c_str() + posLast, size() - posLast);
 			tmp.swap(*this);
@@ -880,10 +898,10 @@ namespace sarastd {
 	}
 
 	template<typename Char, typename Traits>
-	typename basic_string<Char, Traits>::size_type basic_string<Char, Traits>::get_necessary_capacity(size_type addToSize) const
+	typename basic_string<Char, Traits>::size_type basic_string<Char, Traits>::get_necessary_capacity(sarastd::ptrdiff_t addToSize) const
 	{
 		if (capacity() < (size() + addToSize))
-			return size() + sarastd::max(size(), addToSize);
+			return size() + sarastd::max((sarastd::ptrdiff_t)size(), addToSize);
 		return capacity();
 	}
 
@@ -892,7 +910,7 @@ namespace sarastd {
 	{
 		if (capacity() < necesseryCapacity)
 			this_type(c_str(), size(), necesseryCapacity).swap(*this);
-		else if (m_data->count() > 1)
+		else if (is_shared())
 			this_type(c_str(), size(), capacity()).swap(*this);
 	}
 
@@ -907,6 +925,18 @@ namespace sarastd {
 		if (count1 > count2)
 			return 1;
 		return 0;
+	}
+
+	template<typename Char, typename Traits>
+	bool basic_string<Char, Traits>::is_same_str(const_pointer str) const
+	{
+		return c_str() <= str && str < (c_str() + size()); // append to itself
+	}
+
+	template<typename Char, typename Traits>
+	bool basic_string<Char, Traits>::is_shared() const
+	{
+		return m_data->count_ref() > 1;
 	}
 
 	///=============================================================================================

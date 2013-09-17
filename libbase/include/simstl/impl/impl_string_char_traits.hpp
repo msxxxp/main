@@ -32,7 +32,7 @@ namespace sarastd
 
 		static const char_type * find(const char_type * s, size_t n, const char_type & a) {return (const char_type*)memchr(s, a, n);}
 
-		static char_type * move(char_type * s1, const char_type * s2, size_t n) {return (char_type*)memmove(s1, s2, n);}
+		static char_type * move(char_type * dest, const char_type * src, size_t count) {return (char_type*)memmove(dest, src, count);}
 
 		static char_type * copy(char_type * s1, const char_type * s2, size_t n) {return (char_type*)memcpy(s1, s2, n);}
 

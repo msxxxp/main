@@ -278,6 +278,39 @@ void test_string()
 {
 	using namespace sarastd;
 
+	{
+		string asd("newGoodString");
+		asd.replace(3, 4, "Super", 5);
+		printf("\n");
+	}
+	{
+		string asd("newGoodString");
+		asd.replace(3, 4, "Bad", 3);
+		printf("\n");
+	}
+	{
+		string asd("newGoodString");
+		asd.replace(3, 0, "Super", 5);
+		printf("\n");
+	}
+	{
+		string asd("Iam");
+		asd.replace(555, 444, "Super", 8);
+		printf("\n");
+	}
+	{
+		string asd("IamStar");
+		asd.replace(3, 0, "SuperStar", 5);
+		printf("\n");
+	}
+	{
+		string asd("IamSuperStar");
+		asd.replace(3, 0, asd.c_str() + 3, 5);
+		printf("\n");
+	}
+
+	return;
+
 	const char * cc = "const char *";
 
 	string a;

@@ -443,7 +443,7 @@ namespace sarastd {
 
 			void decrease_ref();
 
-			sarastd::size_t count() const;
+			sarastd::size_t count_ref() const;
 
 		private:
 			virtual void destroy() const;
@@ -472,7 +472,7 @@ namespace sarastd {
 			}
 		}
 
-		sarastd::size_t ref_counter::count() const {return m_refcnt;}
+		sarastd::size_t ref_counter::count_ref() const {return m_refcnt;}
 
 		void ref_counter::destroy() const {}
 	}

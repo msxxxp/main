@@ -10,8 +10,6 @@
 #include <simstl/memory>
 #include <simstl/iterator>
 #include <simstl/string>
-
-
 class Base {
 public:
 	~Base()
@@ -19,19 +17,19 @@ public:
 		printf("%s\n", __PRETTY_FUNCTION__);
 	}
 
-	Base():
+	Base() :
 		m_val()
 	{
 		printf("%s\n", __PRETTY_FUNCTION__);
 	}
 
-	Base(int val):
+	Base(int val) :
 		m_val(val)
 	{
 		printf("%s\n", __PRETTY_FUNCTION__);
 	}
 
-	Base(const Base & other):
+	Base(const Base & other) :
 		m_val(other.m_val)
 	{
 		//printf("%s\n", __PRETTY_FUNCTION__);
@@ -49,7 +47,10 @@ public:
 		return m_val;
 	}
 
-	bool operator < (const Base & right) const {return m_val < right.m_val;}
+	bool operator <(const Base & right) const
+	{
+		return m_val < right.m_val;
+	}
 
 private:
 	sarastd::ssize_t m_val;
@@ -57,10 +58,15 @@ private:
 
 //bool operator < (const Base & left, const Base & right) {return left.operator <(right);}
 
-class Derived : public Base {
+class Derived: public Base {
 public:
-	Derived() {}
-	Derived(int val): Base(val) {}
+	Derived()
+	{
+	}
+	Derived(int val) :
+		Base(val)
+	{
+	}
 };
 
 typedef sarastd::shared_ptr<ssize_t> Value;
@@ -110,40 +116,35 @@ void test_vector()
 	printf("generate v\n");
 	sarastd::generate(begin(v), end(v), hh::random0p);
 	printf("v.capa(): %Id, v.size(): %Id (", v.capacity(), v.size());
-	for (vec_t::iterator it = begin(v); it != end(v); ++it)
-	{
+	for (vec_t::iterator it = begin(v); it != end(v); ++it) {
 		printf(" %Id", *it->get());
 	}
 	printf(" )\n");
 	printf("nth_element:\n");
 	sarastd::nth_element(begin(v), begin(v) + 4, end(v), hh::Less);
 	printf("v.capa(): %Id, v.size(): %Id (", v.capacity(), v.size());
-	for (vec_t::iterator it = begin(v); it != end(v); ++it)
-	{
+	for (vec_t::iterator it = begin(v); it != end(v); ++it) {
 		printf(" %Id", *it->get());
 	}
 	printf(" )\n");
 	printf("sorting back:\n");
 	sarastd::sort(rbegin(v), rend(v), hh::Less);
 	printf("v.capa(): %Id, v.size(): %Id (", v.capacity(), v.size());
-	for (vec_t::iterator it = begin(v); it != end(v); ++it)
-	{
+	for (vec_t::iterator it = begin(v); it != end(v); ++it) {
 		printf(" %Id", *it->get());
 	}
 	printf(" )\n");
 	printf("shuffling:\n");
 	sarastd::random_shuffle(begin(v), end(v), hh::random1);
 	printf("v.capa(): %Id, v.size(): %Id (", v.capacity(), v.size());
-	for (vec_t::iterator it = begin(v); it != end(v); ++it)
-	{
+	for (vec_t::iterator it = begin(v); it != end(v); ++it) {
 		printf(" %Id", *it->get());
 	}
 	printf(" )\n");
 	printf("sorting:\n");
 	sarastd::sort(begin(v), end(v), hh::Less);
 	printf("v.capa(): %Id, v.size(): %Id (", v.capacity(), v.size());
-	for (vec_t::iterator it = begin(v); it != end(v); ++it)
-	{
+	for (vec_t::iterator it = begin(v); it != end(v); ++it) {
 		printf(" %Id", *it->get());
 	}
 	printf(" )\n");
@@ -173,8 +174,7 @@ void test_vector()
 	mv1.unlock();
 	//printf("mv1.capa(): %Id, mv1.size(): %Id\n", mv1.capacity(), mv1.size());
 
-
-	typedef vector<Base>           vect;
+	typedef vector<Base> vect;
 	typedef vector<Base>::iterator iter;
 	ssize_t m1[] = {0, 1, 2, 3, 4, 5};
 	//printf("construct v1\n");
@@ -196,39 +196,34 @@ void test_vector()
 	vect v4(m1, m1 + 6);
 	v4.insert(begin(v4), rbegin(m1), rend(m1));
 	//printf("v4.capa(): %Id, v4.size(): %Id (", v4.capacity(), v4.size());
-	for (iter it = begin(v4); it != end(v4); ++it)
-	{
+	for (iter it = begin(v4); it != end(v4); ++it) {
 		//printf(" %Id", it->value());
 	}
 	//printf(" )\n");
 	//printf("construct v5\n");
 	vect v5(v4);
 	//printf("v1.capa(): %Id, v1.size(): %Id (", v1.capacity(), v1.size());
-	for (iter it = begin(v1); it != end(v1); ++it)
-	{
+	for (iter it = begin(v1); it != end(v1); ++it) {
 		//printf(" %Id", it->value());
 	}
 	//printf(" )\n");
 	return;
 
 	//printf("before v2.capa(): %Id, v2.size(): %Id (", v2.capacity(), v2.size());
-	for (iter it = begin(v2); it != end(v2); ++it)
-	{
+	for (iter it = begin(v2); it != end(v2); ++it) {
 		//printf(" %Id", it->value());
 	}
 	//printf(" ) mid: %Id\n", (begin(v2) + v2.size() / 2)->value());
 	//	iter mid = sarastd::_quick_sort_split(begin(v2), end(v2));
 	sarastd::sort(begin(v2), end(v2));
 	//printf("after  v2.capa(): %Id, v2.size(): %Id (", v2.capacity(), v2.size());
-	for (iter it = begin(v2); it != end(v2); ++it)
-	{
+	for (iter it = begin(v2); it != end(v2); ++it) {
 		//printf(" %Id", it->value());
 	}
 	//	//printf(" ) mid: %Id\n", mid->value());
 	//printf(" )\n");
 	//printf("v3.capa(): %Id, v3.size(): %Id (", v3.capacity(), v3.size());
-	for (iter it = begin(v3); it != end(v3); ++it)
-	{
+	for (iter it = begin(v3); it != end(v3); ++it) {
 		//printf(" %Id", it->value());
 	}
 	//printf(" )\n");
@@ -240,8 +235,7 @@ void test_vector()
 	//	{
 	//		//printf("%Id\n", *it);
 	//	}
-	for (vect::reverse_iterator it = rbegin(v5); it != rend(v5); ++it)
-	{
+	for (vect::reverse_iterator it = rbegin(v5); it != rend(v5); ++it) {
 		//printf(" %Id", it->value());
 	}
 	//printf("\n");
@@ -250,8 +244,7 @@ void test_vector()
 	//printf("v5.erase\n");
 	v5.erase(v5.begin() + 2);
 	//printf("v5.capa(): %Id, v5.size(): %Id (", v5.capacity(), v5.size());
-	for (iter it = begin(v5); it != end(v5); ++it)
-	{
+	for (iter it = begin(v5); it != end(v5); ++it) {
 		//printf(" %Id", it->value());
 	}
 	//printf(" )\n");
@@ -263,14 +256,14 @@ void test_vector()
 	//	int m2[] = {2, 22, 222};
 	//	iter it = v5.insert(v5.begin() + 2, m2, m2 + 3);
 	//printf("v5.capa(): %Id, v5.size(): %Id (", v5.capacity(), v5.size());
-	for (iter it = begin(v5); it != end(v5); ++it)
-	{
+	for (iter it = begin(v5); it != end(v5); ++it) {
 		//printf(" %Id", it->value());
 	}
 	//printf(" ) %Id\n", it->value());
 }
 
-inline int Str_compare(const char * in1, const char * in2) {
+inline int Str_compare(const char * in1, const char * in2)
+{
 	return ::strcmp(in1, in2);
 }
 
@@ -330,7 +323,7 @@ void test_string()
 	printf("str1: '%s' size: %d\n", str1.c_str(), (int)str1.size());
 	assert(Str_compare(str1.c_str(), "hhhhh") == 0);
 	assert(str1.size() == 5);
-	assert(*(str1.cend()-1) == 'h');
+	assert(*(str1.cend() - 1) == 'h');
 	assert(*str1.cend() == 0);
 	assert(*str1.cbegin() == 'h');
 
@@ -339,7 +332,7 @@ void test_string()
 	printf("str2: '%s' size: %d\n", str2.c_str(), (int)str2.size());
 	assert(Str_compare(str2.c_str(), pcwstr) == 0);
 	assert(str2.size() == 6);
-	assert(*(str2.cend()-1) == 'R');
+	assert(*(str2.cend() - 1) == 'R');
 	assert(*str2.cend() == 0);
 	assert(*str2.cbegin() == 'P');
 
@@ -348,7 +341,7 @@ void test_string()
 	printf("str3: '%s' size: %d\n\n", str3.c_str(), (int)str3.size());
 	assert(Str_compare(str3.c_str(), pwstr) == 0);
 	assert(str3.size() == 7);
-	assert(*(str3.cend()-1) == '2');
+	assert(*(str3.cend() - 1) == '2');
 	assert(*str3.cend() == 0);
 	assert(*str3.cbegin() == '1');
 
@@ -356,7 +349,7 @@ void test_string()
 	printf("str1: '%s' size: %d\n", str1.c_str(), (int)str1.size());
 	assert(Str_compare(str1.c_str(), "que1") == 0);
 	assert(str1.size() == 4);
-	assert(*(str1.cend()-1) == '1');
+	assert(*(str1.cend() - 1) == '1');
 	assert(*str1.cend() == 0);
 	assert(*str1.cbegin() == 'q');
 
@@ -364,7 +357,7 @@ void test_string()
 	printf("str2: '%s' size: %d\n", str2.c_str(), (int)str2.size());
 	assert(Str_compare(str2.c_str(), "que1") == 0);
 	assert(str2.size() == 4);
-	assert(*(str2.cend()-1) == '1');
+	assert(*(str2.cend() - 1) == '1');
 	assert(*str2.cend() == 0);
 	assert(*str2.cbegin() == 'q');
 	assert(str1.c_str() == str2.c_str());
@@ -383,7 +376,7 @@ void test_string()
 	printf("str2: '%s' size: %d\n", str2.c_str(), (int)str2.size());
 	assert(Str_compare(str2.c_str(), "que1que1") == 0);
 	assert(str2.size() == 8);
-	assert(*(str2.cend()-1) == '1');
+	assert(*(str2.cend() - 1) == '1');
 	assert(*str2.cend() == 0);
 	assert(*str2.cbegin() == 'q');
 	assert(str1.c_str() != str2.c_str());
@@ -392,7 +385,7 @@ void test_string()
 	printf("str2: '%s' size: %d\n", str2.c_str(), (int)str2.size());
 	assert(Str_compare(str2.c_str(), "que1test2que1") == 0);
 	assert(str2.size() == 13);
-	assert(*(str2.cend()-1) == '1');
+	assert(*(str2.cend() - 1) == '1');
 	assert(*str2.cend() == 0);
 	assert(*str2.cbegin() == 'q');
 	assert(str2.find("tes") == 4);
@@ -454,7 +447,8 @@ void test_string()
 	printf("str2: '%s' size: %d capacity: %d\n", str2.c_str(), (int)str2.size(), (int)str2.capacity());
 }
 
-int wWinMain(const wchar_t * /*pCmdLine*/) {
+int wWinMain(const wchar_t * /*pCmdLine*/)
+{
 	printf("%s begin\n", __PRETTY_FUNCTION__);
 
 	srand(time(0));

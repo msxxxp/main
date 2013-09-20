@@ -1,8 +1,6 @@
 #ifndef _LIBBASE_MESSAGEMANAGER_PVT_HPP_
 #define _LIBBASE_MESSAGEMANAGER_PVT_HPP_
 
-#include <stdint.h>
-
 namespace Base {
 
 	struct Message;

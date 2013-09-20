@@ -443,6 +443,8 @@ namespace sarastd {
 
 			void decrease_ref();
 
+			bool is_shared() const {return m_refcnt > 1;}
+
 			sarastd::size_t count_ref() const;
 
 		private:
@@ -482,15 +484,16 @@ namespace sarastd {
 	{
 		void operator ()(Type * ptr) const
 		{
-			delete(ptr);
+			delete ptr;
 		}
 	};
 
-	template<typename Type> struct default_delete<Type[]>
+	template<typename Type>
+	struct default_delete<Type[]>
 	{
 		void operator ()(Type * ptr) const
 		{
-			delete [](ptr);
+			delete [] ptr;
 		}
 	};
 
@@ -582,12 +585,12 @@ namespace sarastd {
 
 		bool unique() const
 		{
-			return !m_impl || m_impl->count() == 1;
+			return !m_impl || m_impl->count_ref() == 1;
 		}
 
 		size_type use_count() const
 		{
-			return (m_impl) ? m_impl->count() : 0;
+			return (m_impl) ? m_impl->count_ref() : 0;
 		}
 
 		operator bool() const

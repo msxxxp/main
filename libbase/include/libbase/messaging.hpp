@@ -8,9 +8,9 @@ namespace Base {
 	///======================================================================== Forward declarations
 	struct Message;
 	struct MessageManager;
-	struct Queue;
-	struct Observer;
-	struct Observable;
+	class Queue;
+	class Observer;
+	class Observable;
 
 	///===================================================================================== Message
 	struct Message {
@@ -18,6 +18,9 @@ namespace Base {
 		typedef ssize_t code_t;
 		typedef ssize_t param_t;
 		typedef void * data_t;
+
+		static const type_t ALL_TYPES = ~(type_t)0;
+		static const code_t ALL_CODES = ~(code_t)0;
 
 		~Message();
 
@@ -47,7 +50,8 @@ namespace Base {
 	};
 
 	///======================================================================================= Queue
-	struct Queue: private Base::Uncopyable {
+	class Queue: private Base::Uncopyable {
+	public:
 		~Queue();
 
 		Queue();
@@ -71,12 +75,12 @@ namespace Base {
 	MessageManager * get_simple_message_manager();
 
 	///==================================================================================== Observer
-	struct Observer {
+	class Observer {
+	public:
 		virtual ~Observer();
 
 		virtual void notify(const Message & event) = 0;
 
-	public:
 		Observer():
 			m_manager(get_simple_message_manager())
 		{
@@ -92,10 +96,10 @@ namespace Base {
 	};
 
 	///================================================================================== Observable
-	struct Observable {
+	class Observable {
+	public:
 		virtual ~Observable();
 
-	public:
 		Observable():
 			m_manager(get_simple_message_manager()),
 			m_changed(false)
@@ -129,7 +133,7 @@ namespace Base {
 
 		typedef bool (*filter_t)(const Message & message);
 
-		SubscribtionId Subscribe(Queue * queue, Message::type_t type_mask, Message::code_t code_mask, filter_t filter = nullptr);
+		SubscribtionId Subscribe(Queue * queue, Message::type_t type_mask = Message::ALL_TYPES, Message::code_t code_mask = Message::ALL_CODES, filter_t filter = nullptr);
 
 		void Unsubscribe(SubscribtionId id);
 
@@ -137,21 +141,19 @@ namespace Base {
 
 		void SendRound(const Message & message);
 
-		struct Subscriber: private Queue {
-			Subscriber(Message::type_t type_mask, Message::code_t code_mask, filter_t filter = nullptr):
-				m_id(Subscribe(this, type_mask, code_mask, filter))
+		class Subscriber: private Queue {
+		public:
+			Subscriber(Message::type_t type_mask = Message::ALL_TYPES, Message::code_t code_mask = Message::ALL_CODES, filter_t filter = nullptr)
 			{
+				Subscribe(this, type_mask, code_mask, filter);
 			}
 
 			~Subscriber()
 			{
 				Unsubscribe(this);
 			}
-
-		private:
-			SubscribtionId m_id;
 		};
-};
+	}
 
 }
 

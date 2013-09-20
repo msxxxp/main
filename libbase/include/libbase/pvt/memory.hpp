@@ -31,7 +31,7 @@ namespace Memory {
 	inline size_t size(Pointer in)
 	{
 		static_assert(std::is_pointer<Pointer>::value, "Pointer type is required");
-		return (in) ? ::HeapSize(get_heap(), 0, (PVOID)in) : 0;
+		return (in) ? ::HeapSize(get_heap(), 0, (void*)in) : 0;
 	}
 
 	template<typename Pointer>
@@ -49,24 +49,24 @@ namespace Memory {
 	inline Pointer calloc(size_t count, DWORD flags = 0)
 	{
 		static_assert(std::is_pointer<Pointer>::value, "Pointer type is required");
-		Pointer tmp_ptr = nullptr;
+		typedef Pointer ptr_t;
 #ifdef MEMORY_DEBUG
 		Watchdog::allocations++;
 		Watchdog::allocations_size += sizeof(*tmp_ptr) * count;
 #endif
-		return static_cast<Pointer>(::HeapAlloc(get_heap(), flags | HEAP_ZERO_MEMORY, sizeof(*tmp_ptr) * count));
+		return static_cast<Pointer>(::HeapAlloc(get_heap(), flags | HEAP_ZERO_MEMORY, sizeof(ptr_t) * count));
 	}
 
 	template<typename Pointer>
 	inline Pointer ealloc(DWORD flags = 0)
 	{
 		static_assert(std::is_pointer<Pointer>::value, "Pointer type is required");
-		Pointer tmp_ptr = nullptr;
+		typedef Pointer ptr_t;
 #ifdef MEMORY_DEBUG
 		Watchdog::allocations++;
 		Watchdog::allocations_size += sizeof(*tmp_ptr);
 #endif
-		return static_cast<Pointer>(::HeapAlloc(get_heap(), flags | HEAP_ZERO_MEMORY, sizeof(*tmp_ptr)));
+		return static_cast<Pointer>(::HeapAlloc(get_heap(), flags | HEAP_ZERO_MEMORY, sizeof(ptr_t)));
 	}
 
 	template<typename Pointer>
@@ -79,8 +79,8 @@ namespace Memory {
 		if (Watchdog::deletions_size == Watchdog::allocations_size && Watchdog::deletions == Watchdog::allocations)
 			printf("There is no leaks\n");
 #endif
-		::HeapFree(get_heap(), 0, *(PVOID*)(&in));
-		*(PVOID*)(&in) = nullptr;
+		::HeapFree(get_heap(), 0, *(void**)(&in));
+		*(void**)(&in) = nullptr;
 	}
 
 	template<typename Pointer>
@@ -95,7 +95,7 @@ namespace Memory {
 		Watchdog::allocations_size += size;
 #endif
 		static_assert(std::is_pointer<Pointer>::value, "Pointer type is required");
-		return (in = static_cast<Pointer>((in) ? ::HeapReAlloc(get_heap(), flags, (PVOID)in, size) : ::HeapAlloc(get_heap(), flags, size)));
+		return (in = static_cast<Pointer>((in) ? ::HeapReAlloc(get_heap(), flags, (void*)in, size) : ::HeapAlloc(get_heap(), flags, size)));
 	}
 
 	template<typename Pointer1, typename Pointer2>
@@ -103,7 +103,7 @@ namespace Memory {
 	{
 		static_assert(std::is_pointer<Pointer1>::value, "Pointer type is required");
 		static_assert(std::is_pointer<Pointer2>::value, "Pointer type is required");
-		return ::memcmp((PVOID)m1, (PVOID)m2, size) == 0;
+		return ::memcmp((const void*)m1, (const void*)m2, size) == 0;
 	}
 
 	template<typename Pointer1, typename Pointer2>
@@ -112,43 +112,58 @@ namespace Memory {
 		static_assert(std::is_pointer<Pointer1>::value, "Pointer type is required");
 		static_assert(std::is_pointer<Pointer2>::value, "Pointer type is required");
 		//return ::memcpy_s(dest, sour, size);
-		return static_cast<Pointer1>(::memcpy((PVOID)dest, (PVOID)src, size));
+		return static_cast<Pointer1>(::memcpy((void*)dest, (void*)src, size));
 	}
 
 	template<typename Pointer1, typename Pointer2>
-	inline Pointer1 dup(Pointer2 src, size_t size, DWORD flags = 0/*HEAP_ZERO_MEMORY*/)
+	inline Pointer1 move(Pointer1 dest, Pointer2 src, size_t size)
 	{
 		static_assert(std::is_pointer<Pointer1>::value, "Pointer type is required");
 		static_assert(std::is_pointer<Pointer2>::value, "Pointer type is required");
-		return Memory::copy(Memory::malloc<Pointer1>(size, flags), src, size);
+		return static_cast<Pointer1>(::memmove((void*)dest, (void*)src, size));
+	}
+
+	template<typename Pointer1, typename Pointer2>
+	inline Pointer1 dup(Pointer2 src, size_t size)
+	{
+		static_assert(std::is_pointer<Pointer1>::value, "Pointer type is required");
+		static_assert(std::is_pointer<Pointer2>::value, "Pointer type is required");
+		return Memory::copy(Memory::malloc<Pointer1>(size), src, size);
 	}
 
 	template<typename Pointer>
-	inline Pointer fill(Pointer in, size_t size, int fill = 0)
+	inline Pointer fill(Pointer in, size_t bytes, int fill)
 	{
 		static_assert(std::is_pointer<Pointer>::value, "Pointer type is required");
-		return static_cast<Pointer>(::memset((PVOID)in, fill, size));
+		return static_cast<Pointer>(::memset((void*)in, fill, bytes));
+	}
+
+	template<typename NonPointer>
+	inline void fill(NonPointer in, int fill)
+	{
+		static_assert(!std::is_pointer<NonPointer>::value, "Nonpointer type is required");
+		::memset((void*)in, fill, sizeof(in));
 	}
 
 	template<typename Pointer>
-	inline Pointer zero(Pointer in, size_t size)
+	inline Pointer zero(Pointer in, size_t bytes)
 	{
 		static_assert(std::is_pointer<Pointer>::value, "Pointer type is required");
-		return static_cast<Pointer>(::memset((PVOID)in, 0, size));
+		return static_cast<Pointer>(::memset((void*)in, 0, bytes));
 	}
 
-	template<typename NotPointer>
-	inline void zero(NotPointer & in)
+	template<typename NonPointer>
+	inline void zero(NonPointer & in)
 	{
-		static_assert(!std::is_pointer<NotPointer>::value, "Nonpointer type is required");
-		::memset((PVOID)&in, 0, sizeof(in));
+		static_assert(!std::is_pointer<NonPointer>::value, "Nonpointer type is required");
+		::memset((void*)&in, 0, sizeof(in));
 	}
 }
 
 #if defined(NoStdNew) || defined(NO_STD_NEW)
 inline void * operator new(size_t size) noexcept
 {
-	return Memory::malloc<PVOID>(size, HEAP_ZERO_MEMORY);
+	return Memory::malloc<void*>(size, HEAP_ZERO_MEMORY);
 }
 
 inline void * operator new [](size_t size) noexcept

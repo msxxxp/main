@@ -64,9 +64,9 @@ namespace sarastd {
 
 		int compare(const_pointer str) const;
 		int compare(const this_type & str) const;
-		int compare(size_type pos1, size_type count1, const this_type & str) const;
-		int compare(size_type pos1, size_type count1, const_pointer str) const;
-		int compare(size_type pos1, size_type count1, const_pointer str, size_type count2) const;
+		int compare(size_type pos, size_type count, const this_type & str) const;
+		int compare(size_type pos, size_type count, const_pointer str) const;
+		int compare(size_type pos, size_type count, const_pointer str, size_type len) const;
 
 		this_type & append(size_type count, value_type ch);
 		this_type & append(const this_type & str);
@@ -205,9 +205,11 @@ namespace sarastd {
 		}
 
 	private:
-		~string_impl();
+		virtual ~string_impl();
 
 		string_impl(size_type capa = 1);
+
+		void destroy() const;
 
 		void deallocate() const;
 
@@ -253,9 +255,14 @@ namespace sarastd {
 	}
 
 	template<typename Char, typename Traits>
-	void basic_string<Char, Traits>::string_impl::deallocate() const
+	void basic_string<Char, Traits>::string_impl::destroy() const
 	{
 		this->~string_impl();
+	}
+
+	template<typename Char, typename Traits>
+	void basic_string<Char, Traits>::string_impl::deallocate() const
+	{
 		sarastd::pvt::_deallocate((char*)this);
 	}
 
@@ -403,21 +410,21 @@ namespace sarastd {
 	}
 
 	template<typename Char, typename Traits>
-	int basic_string<Char, Traits>::compare(size_type pos1, size_type count1, const this_type & str) const
+	int basic_string<Char, Traits>::compare(size_type pos, size_type count, const this_type & str) const
 	{
-		return compare(c_str() + pos1, count1, str.c_str(), str.length());
+		return compare(c_str() + pos, count, str.c_str(), str.length());
 	}
 
 	template<typename Char, typename Traits>
-	int basic_string<Char, Traits>::compare(size_type pos1, size_type count1, const_pointer str) const
+	int basic_string<Char, Traits>::compare(size_type pos, size_type count, const_pointer str) const
 	{
-		return compare(c_str() + pos1, count1, str, traits_type::length(str));
+		return compare(c_str() + pos, count, str, traits_type::length(str));
 	}
 
 	template<typename Char, typename Traits>
-	int basic_string<Char, Traits>::compare(size_type pos1, size_type count1, const_pointer str, size_type count2) const
+	int basic_string<Char, Traits>::compare(size_type pos, size_type count, const_pointer str, size_type len) const
 	{
-		return compare(c_str() + pos1, count1, str, count2);
+		return compare(c_str() + pos, count, str, len);
 	}
 
 	template<typename Char, typename Traits>

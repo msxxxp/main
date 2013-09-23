@@ -2,6 +2,7 @@
 #define _LIBCOM_STD_HPP_
 
 #include <libbase/std.hpp>
+#include <algorithm>
 
 namespace Com {
 

@@ -4,7 +4,7 @@
 namespace SevenZip {
 	///====================================================================================== Method
 	Method::Method(const Lib & arc_lib, size_t idx) {
-		PropVariant prop;
+		Com::PropVariant prop;
 		CheckApiError(arc_lib.GetMethodProperty(idx, 0, prop.ref()));
 		id = prop.as_uint();
 		CheckApiError(arc_lib.GetMethodProperty(idx, 1, prop.ref()));

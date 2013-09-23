@@ -1,6 +1,7 @@
 ﻿#include <libcom/guid.hpp>
 #include <libext/exception.hpp>
-#include <libbase/memory.hpp>
+#include <libbase/std.hpp>
+#include <libbase/string.hpp>
 
 namespace Com {
 
@@ -14,17 +15,12 @@ namespace Com {
 		CheckCom(::CLSIDFromString((PWSTR)str, this));
 	}
 
-	void WinGUID::init(const ustring & str)
-	{
-		CheckCom(::CLSIDFromString((PWSTR)str.c_str(), this));
-	}
-
 	void WinGUID::init(const PROPVARIANT & prop)
 	{
 		if (prop.vt == VT_BSTR) {
 			size_t len = ::SysStringByteLen(prop.bstrVal);
 			if (len == sizeof(*this)) {
-				Base::Memory::copy(this, prop.bstrVal, len);
+				Memory::copy(this, prop.bstrVal, len);
 				return;
 			}
 		}

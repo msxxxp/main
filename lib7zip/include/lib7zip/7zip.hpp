@@ -7,11 +7,15 @@
 #ifndef WIN_7ZIP_HPP
 #define WIN_7ZIP_HPP
 
-#include <libcom/win_com.hpp>
+#include <libcom/std.hpp>
+#include <libcom/guid.hpp>
+#include <libcom/propvariant.hpp>
+#include <libcom/unknown.hpp>
 #include <libext/dll.hpp>
 #include <libext/fileversion.hpp>
-#include <libext/file.hpp>
+#include <libext/filesystem.hpp>
 #include <libbase/std.hpp>
+#include <libbase/pcstr.hpp>
 
 #include <initguid.h>
 #include <shobjidl.h>
@@ -67,7 +71,7 @@ namespace SevenZip {
 
 	typedef std::vector<FailedFile> FailedFiles;
 
-	struct DirItem: public Ext::WinFileInfo {
+	struct DirItem: public Fsys::Stat {
 		ustring path;
 		ustring name;
 		DirItem(const ustring & file_path, const ustring & file_name);
@@ -93,14 +97,15 @@ namespace SevenZip {
 
 	///===================================================================================== Methods
 	struct Methods: private std::map<uint64_t, std::tr1::shared_ptr<Method> > {
-		typedef map::const_iterator iterator;
-		typedef map::const_iterator const_iterator;
+		typedef std::map<uint64_t, std::tr1::shared_ptr<Method> > base_type;
+		typedef base_type::const_iterator iterator;
+		typedef base_type::const_iterator const_iterator;
 
-		using map::begin;
-		using map::end;
-		using map::empty;
-		using map::size;
-		using map::at;
+		using base_type::begin;
+		using base_type::end;
+		using base_type::empty;
+		using base_type::size;
+		using base_type::at;
 
 		void cache(const Lib & lib);
 
@@ -117,7 +122,7 @@ namespace SevenZip {
 		ustring ext;
 		ustring add_ext;
 		ustring kAssociate;
-		WinGUID guid;
+		Com::WinGUID guid;
 		std::vector<BYTE> start_sign, finish_sign;
 		bool updatable;
 		bool kKeepName;
@@ -138,14 +143,15 @@ namespace SevenZip {
 
 	///====================================================================================== Codecs
 	struct Codecs: private std::map<ustring, std::tr1::shared_ptr<Codec> > {
-		typedef map::const_iterator iterator;
-		typedef map::const_iterator const_iterator;
+		typedef std::map<ustring, std::tr1::shared_ptr<Codec> > base_type;
+		typedef base_type::const_iterator iterator;
+		typedef base_type::const_iterator const_iterator;
 
-		using map::begin;
-		using map::end;
-		using map::empty;
-		using map::size;
-		using map::at;
+		using base_type::begin;
+		using base_type::end;
+		using base_type::empty;
+		using base_type::size;
+		using base_type::at;
 
 		void cache(const Lib & lib);
 
@@ -162,32 +168,33 @@ namespace SevenZip {
 	struct Prop {
 		ustring name;
 		PROPID id;
-		PropVariant prop;
+		Com::PropVariant prop;
 
 	private:
-		Prop(const ComObject<IInArchive> & arc, size_t idx);
+		Prop(const Com::ComObject<IInArchive> & arc, size_t idx);
 
 		friend class Props;
 	};
 
 	///======================================================================================= Props
 	struct Props: private std::vector<Prop> {
-		typedef vector::const_iterator iterator;
-		typedef vector::const_iterator const_iterator;
+		typedef std::vector<Prop> base_type;
+		typedef base_type::const_iterator iterator;
+		typedef base_type::const_iterator const_iterator;
 
-		using vector::begin;
-		using vector::end;
-		using vector::empty;
-		using vector::size;
-		using vector::at;
+		using base_type::begin;
+		using base_type::end;
+		using base_type::empty;
+		using base_type::size;
+		using base_type::at;
 
-		void cache(const ComObject<IInArchive> & arc);
+		void cache(const Com::ComObject<IInArchive> & arc);
 
 	private:
-		using vector::push_back;
+		using base_type::push_back;
 
 		Props();
-		Props(const ComObject<IInArchive> & arc);
+		Props(const Com::ComObject<IInArchive> & arc);
 
 		friend class Archive;
 	};
@@ -216,8 +223,8 @@ namespace SevenZip {
 		const Codecs & codecs() const;
 		const Methods & methods() const;
 
-		HRESULT get_prop(UInt32 index, PROPID prop_id, PropVariant & prop) const;
-		HRESULT get_prop(UInt32 index, PROPID prop_id, WinGUID & guid) const;
+		HRESULT get_prop(UInt32 index, PROPID prop_id, Com::PropVariant & prop) const;
+		HRESULT get_prop(UInt32 index, PROPID prop_id, Com::WinGUID & guid) const;
 		HRESULT get_prop(UInt32 index, PROPID prop_id, bool & value) const;
 		HRESULT get_prop(UInt32 index, PROPID prop_id, ustring & value) const;
 		HRESULT get_prop(UInt32 index, PROPID prop_id, std::vector<BYTE> & value) const;
@@ -241,7 +248,7 @@ namespace SevenZip {
 //	};
 
 	///============================================================================== FileReadStream
-	struct FileReadStream: public IInStream, private Ext::WinFile, private UnknownImp {
+	struct FileReadStream: public IInStream, private Fsys::File::Facade, private Com::UnknownImp {
 		virtual ~FileReadStream();
 
 		FileReadStream(const ustring & path);
@@ -259,7 +266,7 @@ namespace SevenZip {
 	};
 
 	///============================================================================= FileWriteStream
-	struct FileWriteStream: public IOutStream, private Ext::WinFile, private UnknownImp {
+	struct FileWriteStream: public IOutStream, private Fsys::File::Facade, private Com::UnknownImp {
 		virtual ~FileWriteStream();
 
 		FileWriteStream(const ustring & path, DWORD creat = CREATE_NEW);
@@ -276,11 +283,11 @@ namespace SevenZip {
 		virtual HRESULT WINAPI Seek(Int64 offset, UInt32 seekOrigin, UInt64 * newPosition);
 		virtual HRESULT WINAPI SetSize(UInt64 newSize);
 
-		using WinFile::set_mtime;
+		using Fsys::File::Facade::set_mtime;
 	};
 
 	///================================================================================ OpenCallback
-	struct OpenCallback: public IArchiveOpenCallback, public ICryptoGetTextPassword, private UnknownImp {
+	struct OpenCallback: public IArchiveOpenCallback, public ICryptoGetTextPassword, private Com::UnknownImp {
 		ustring Password;
 
 		virtual ~OpenCallback();
@@ -323,11 +330,11 @@ namespace SevenZip {
 
 		Archive(const Lib & lib, const ustring & path, const ustring & mask, flags_type flags = 0);
 
-		Archive(ComObject<IInArchive> arc, flags_type flags = 0);
+		Archive(Com::ComObject<IInArchive> arc, flags_type flags = 0);
 
 		const Codec & codec() const;
 
-		ComObject<IInArchive> operator ->() const;
+		Com::ComObject<IInArchive> operator ->() const;
 
 		const_iterator begin() const;
 
@@ -347,14 +354,14 @@ namespace SevenZip {
 
 		void extract(const ustring & dest) const;
 
-		operator ComObject<IInArchive>() const;
+		operator Com::ComObject<IInArchive>() const;
 
 	private:
 		void open_archive(const Lib & lib, const ustring & path);
 
 		void init_props();
 
-		ComObject<IInArchive> m_arc;
+		Com::ComObject<IInArchive> m_arc;
 		Codecs::const_iterator m_codec;
 		Props m_props;
 		UInt32 m_size;
@@ -384,7 +391,7 @@ namespace SevenZip {
 
 		bool get_prop_info(size_t index, ustring & name, PROPID & id) const;
 
-		PropVariant get_prop(PROPID id) const;
+		Com::PropVariant get_prop(PROPID id) const;
 
 		bool operator ==(const this_type & rhs) const;
 
@@ -403,7 +410,7 @@ namespace SevenZip {
 	};
 
 	///============================================================================= ExtractCallback
-	struct ExtractCallback: public IArchiveExtractCallback, public ICryptoGetTextPassword, private UnknownImp {
+	struct ExtractCallback: public IArchiveExtractCallback, public ICryptoGetTextPassword, private Com::UnknownImp {
 		FailedFiles failed_files;
 		ustring Password;
 
@@ -440,13 +447,14 @@ namespace SevenZip {
 
 	///=========================================================================== ArchiveProperties
 	struct CompressProperties: private std::vector<DirItem> {
-		typedef vector::const_iterator iterator;
+		typedef std::vector<DirItem> base_type;
+		typedef base_type::const_iterator iterator;
 
-		using vector::begin;
-		using vector::end;
-		using vector::empty;
-		using vector::size;
-		using vector::at;
+		using base_type::begin;
+		using base_type::end;
+		using base_type::empty;
+		using base_type::size;
+		using base_type::at;
 
 		std::vector<UInt64> VolumesSizes;
 		ustring VolName;
@@ -474,7 +482,7 @@ namespace SevenZip {
 	};
 
 	///============================================================================== UpdateCallback
-	struct UpdateCallback: public IArchiveUpdateCallback2, public ICryptoGetTextPassword2, private UnknownImp {
+	struct UpdateCallback: public IArchiveUpdateCallback2, public ICryptoGetTextPassword2, private Com::UnknownImp {
 		virtual ~UpdateCallback();
 
 		UpdateCallback(const CompressProperties & props, FailedFiles & ffiles);
@@ -519,7 +527,7 @@ namespace SevenZip {
 
 		const Lib & m_lib;
 		const ustring m_codec;
-		ComObject<IOutArchive> m_arc;
+		Com::ComObject<IOutArchive> m_arc;
 		FailedFiles m_ffiles;
 	};
 }

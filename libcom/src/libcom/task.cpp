@@ -178,7 +178,7 @@ void WinTask::run() const {
 
 void WinTask::set_flags(DWORD in, bool on) {
 	DWORD flags = get_flags();
-	Base::WinFlag::Switch(flags, in, on);
+	Base::Flags::set(flags, in, on);
 	CheckApiError(m_task->SetTaskFlags(flags));
 }
 

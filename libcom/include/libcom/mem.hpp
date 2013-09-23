@@ -2,7 +2,6 @@
 #define _LIBCOM_MEM_HPP_
 
 #include <libbase/std.hpp>
-#include <libbase/uncopyable.hpp>
 
 namespace Com {
 

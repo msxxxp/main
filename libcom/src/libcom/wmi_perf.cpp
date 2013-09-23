@@ -34,7 +34,7 @@ void		WmiPerfObjects::Close() {
 			apEnumAccess[i] = NULL;
 		}
 	}
-	Base::Memory::free(apEnumAccess);
+	Memory::free(apEnumAccess);
 	m_cnt = 0;
 }
 
@@ -43,7 +43,7 @@ void		WmiPerfObjects::Read() {
 	DWORD size = 0;
 	DWORD err = m_refr->GetObjects(0L, m_cnt, apEnumAccess, &size);
 	if (size && err == WBEM_E_BUFFER_TOO_SMALL) {
-		apEnumAccess = (IWbemObjectAccess**)Base::Memory::alloc(size * sizeof(PVOID), HEAP_GENERATE_EXCEPTIONS | HEAP_ZERO_MEMORY);
+		apEnumAccess = Memory::malloc<IWbemObjectAccess**>(size * sizeof(PVOID), HEAP_GENERATE_EXCEPTIONS | HEAP_ZERO_MEMORY);
 		m_cnt = size;
 		CheckWmi(m_refr->GetObjects(0L, m_cnt, apEnumAccess, &size));
 	} else {

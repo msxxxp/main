@@ -2,6 +2,7 @@
 #define _LIBCOM_GUID_HPP_
 
 #include <libbase/std.hpp>
+#include <libbase/string.hpp>
 
 namespace Com {
 

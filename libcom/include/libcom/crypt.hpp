@@ -102,9 +102,9 @@ namespace Crypt {
 
 		Hash(const PBYTE buf, size_t size);
 
-		Hash(const Ext::WinFile & wf, uint64_t size = (uint64_t) - 1);
+		Hash(const Fsys::File::Facade & wf, uint64_t size = (uint64_t) - 1);
 
-		Hash(const Ext::Map & file);
+		Hash(const Fsys::File::Map & file);
 
 		Hash(const Hash & in);
 
@@ -234,13 +234,14 @@ namespace Crypt {
 
 	///============================================================================= WinCertificates
 	struct Certificates: private std::map<ustring, Certificate> {
-		typedef std::map<ustring, Certificate> this_type;
+		typedef std::map<ustring, Certificate> base_type;
+		typedef Certificates this_type;
 		typedef this_type::value_type value_type;
 		typedef this_type::iterator iterator;
 		typedef this_type::const_iterator const_iterator;
-		using map::begin;
-		using map::end;
-		using map::size;
+		using base_type::begin;
+		using base_type::end;
+		using base_type::size;
 
 	public:
 		~Certificates() {

@@ -107,13 +107,13 @@ WmiConnection::WmiConnection(PCWSTR srv, PCWSTR namesp, PCWSTR user, PCWSTR pass
 		srv = L".";				// Empty srv means local computer
 
 	if (NORM_M_PREFIX(srv) || REV_M_PREFIX(srv))
-		srv += 2 * sizeofe(srv);
+		srv += 2 * sizeof(*srv);
 
 	if (user && !user[0])
 		user = pass = nullptr;	// Empty username means default security
 
 	wchar_t	Namespace[MAX_PATH];
-	::_snwprintf(Namespace, sizeofa(Namespace), L"\\\\%s\\root\\%s", srv, namesp);
+	::_snwprintf(Namespace, Base::lengthof(Namespace), L"\\\\%s\\root\\%s", srv, namesp);
 
 	CheckCom(wbemLocator->ConnectServer(Namespace, BStr(user), BStr(pass), nullptr, 0, nullptr, nullptr, &m_svc));
 	CheckCom(::CoSetProxyBlanket(m_svc, RPC_C_AUTHN_WINNT, RPC_C_AUTHZ_NONE,
@@ -273,7 +273,7 @@ ustring	WmiProcess::get_owner_sid() const {
 
 BStr WmiProcess::Path(DWORD id) const {
 	wchar_t	path[MAX_PATH];
-	::_snwprintf(path, sizeofa(path), L"Win32_Process.Handle=%d", id);
+	::_snwprintf(path, Base::lengthof(path), L"Win32_Process.Handle=%d", id);
 
 	return BStr(path);
 }
@@ -281,7 +281,7 @@ BStr WmiProcess::Path(DWORD id) const {
 ///==================================================================================== WmiProcessor
 BStr WmiProcessor::Path(DWORD id) const {
 	wchar_t	path[MAX_PATH];
-	::_snwprintf(path, sizeofa(path), L"Win32_Processor.DeviceID='CPU%d'", id);
+	::_snwprintf(path, Base::lengthof(path), L"Win32_Processor.DeviceID='CPU%d'", id);
 
 	return BStr(path);
 }
@@ -289,7 +289,7 @@ BStr WmiProcessor::Path(DWORD id) const {
 ///======================================================================================= WmiSystem
 BStr WmiSystem::Path(PCWSTR name) const {
 	wchar_t	path[MAX_PATH];
-	::_snwprintf(path, sizeofa(path), L"Win32_ComputerSystem", name);
+	::_snwprintf(path, Base::lengthof(path), L"Win32_ComputerSystem", name);
 
 	return BStr(path);
 }

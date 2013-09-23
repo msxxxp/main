@@ -1,6 +1,6 @@
 ﻿#include <libcom/shlink.hpp>
 #include <libext/exception.hpp>
-#include <libbase/str.hpp>
+#include <libbase/string.hpp>
 
 #include <shlguid.h>
 #include <Shobjidl.h>

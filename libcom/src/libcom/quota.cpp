@@ -5,7 +5,7 @@
 #include <libcom/quota.hpp>
 #include <libext/exception.hpp>
 #include <libext/sid.hpp>
-#include <libbase/str.hpp>
+#include <libbase/string.hpp>
 #include <libbase/bit.hpp>
 
 #include <dskquota.h>
@@ -54,19 +54,19 @@ ustring QuotaInfo::get_name() const {
 
 ustring QuotaInfo::get_used_text() const {
 	wchar_t buf[MAX_PATH];
-	CheckApiError(m_usr->GetQuotaUsedText(buf, sizeofa(buf)));
+	CheckApiError(m_usr->GetQuotaUsedText(buf, Base::lengthof(buf)));
 	return ustring(buf);
 }
 
 ustring QuotaInfo::get_limit_text() const {
 	wchar_t buf[MAX_PATH];
-	CheckApiError(m_usr->GetQuotaLimitText(buf, sizeofa(buf)));
+	CheckApiError(m_usr->GetQuotaLimitText(buf, Base::lengthof(buf)));
 	return ustring(buf);
 }
 
 ustring QuotaInfo::get_threshold_text() const {
 	wchar_t buf[MAX_PATH];
-	CheckApiError(m_usr->GetQuotaThresholdText(buf, sizeofa(buf)));
+	CheckApiError(m_usr->GetQuotaThresholdText(buf, Base::lengthof(buf)));
 	return ustring(buf);
 }
 
@@ -110,7 +110,7 @@ ustring QuotaInfo::get_name(const ComObject<IDiskQuotaUser> &usr) {
 bool DiskQuota::is_supported(const ustring &path) {
 	DWORD flags = 0;
 	::GetVolumeInformationW(path.c_str(), nullptr, 0, nullptr, nullptr, &flags, nullptr, 0);
-	return Base::WinFlag::Check(flags, FILE_VOLUME_QUOTAS);
+	return Base::Flags::check(flags, FILE_VOLUME_QUOTAS);
 }
 
 DiskQuota::~DiskQuota() {
@@ -176,11 +176,11 @@ DiskQuota::DiskQuotaState DiskQuota::get_state() const {
 
 //check state
 bool DiskQuota::is_log_limit() const {
-	return Base::WinFlag::Check(get_log_flags(), DISKQUOTA_LOGFLAG_USER_LIMIT);
+	return Base::Flags::check(get_log_flags(), DISKQUOTA_LOGFLAG_USER_LIMIT);
 }
 
 bool DiskQuota::is_log_threshold() const {
-	return Base::WinFlag::Check(get_log_flags(), DISKQUOTA_LOGFLAG_USER_THRESHOLD);
+	return Base::Flags::check(get_log_flags(), DISKQUOTA_LOGFLAG_USER_THRESHOLD);
 }
 
 //change limits
@@ -194,13 +194,13 @@ void DiskQuota::set_default_threshold(size_t in) const {
 
 void DiskQuota::set_log_limit(bool in) const {
 	DWORD flag = get_log_flags();
-	Base::WinFlag::Switch(flag, (DWORD)DISKQUOTA_LOGFLAG_USER_LIMIT, in);
+	Base::Flags::set(flag, (DWORD)DISKQUOTA_LOGFLAG_USER_LIMIT, in);
 	CheckApiError(m_control->SetQuotaLogFlags(flag));
 }
 
 void DiskQuota::set_log_threshold(bool in) const {
 	DWORD flag = get_log_flags();
-	Base::WinFlag::Switch(flag, (DWORD)DISKQUOTA_LOGFLAG_USER_THRESHOLD, in);
+	Base::Flags::set(flag, (DWORD)DISKQUOTA_LOGFLAG_USER_THRESHOLD, in);
 	CheckApiError(m_control->SetQuotaLogFlags(flag));
 }
 
@@ -224,27 +224,27 @@ size_t DiskQuota::get_default_threshold() const {
 
 ustring DiskQuota::get_default_limit_text() const {
 	wchar_t buf[MAX_PATH];
-	CheckApiError(m_control->GetDefaultQuotaLimitText(buf, sizeofa(buf)));
+	CheckApiError(m_control->GetDefaultQuotaLimitText(buf, Base::lengthof(buf)));
 	return ustring(buf);
 }
 
 ustring DiskQuota::get_default_threshold_text() const {
 	wchar_t buf[MAX_PATH];
-	CheckApiError(m_control->GetDefaultQuotaThresholdText(buf, sizeofa(buf)));
+	CheckApiError(m_control->GetDefaultQuotaThresholdText(buf, Base::lengthof(buf)));
 	return ustring(buf);
 }
 
 ustring DiskQuota::parse_state() const {
 	DWORD in = get_state_raw();
-	if (Base::WinFlag::Check(in, (DWORD)DISKQUOTA_STATE_ENFORCE))
+	if (Base::Flags::check(in, (DWORD)DISKQUOTA_STATE_ENFORCE))
 		return ustring(L"Quotas are enabled and the limit value is enforced. Users cannot exceed their quota limit.");
-	if (Base::WinFlag::Check(in, (DWORD)DISKQUOTA_STATE_TRACK))
+	if (Base::Flags::check(in, (DWORD)DISKQUOTA_STATE_TRACK))
 		return ustring(L"Quotas are enabled but the limit value is not being enforced. Users may exceed their quota limit.");
-	if (Base::WinFlag::Check(in, (DWORD)DISKQUOTA_FILESTATE_REBUILDING))
+	if (Base::Flags::check(in, (DWORD)DISKQUOTA_FILESTATE_REBUILDING))
 		return ustring(L"The volume is rebuilding its quota information.");
-	if (Base::WinFlag::Check(in, (DWORD)DISKQUOTA_FILESTATE_INCOMPLETE))
+	if (Base::Flags::check(in, (DWORD)DISKQUOTA_FILESTATE_INCOMPLETE))
 		return ustring(L"The volume's quota information is out of date. Quotas are probably disabled.");
-	if (Base::WinFlag::Check(in, (DWORD)DISKQUOTA_STATE_DISABLED))
+	if (Base::Flags::check(in, (DWORD)DISKQUOTA_STATE_DISABLED))
 		return ustring(L"Quotas are not enabled on the volume.");
 	return ustring(L"Unknown State");
 }

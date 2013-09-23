@@ -1,4 +1,5 @@
 #include <lib7zip/7zip.hpp>
+#include <libcom/bstr.hpp>
 #include <libext/exception.hpp>
 #include <libbase/path.hpp>
 
@@ -9,22 +10,23 @@ namespace SevenZip {
 	///============================================================================= ExtractCallback
 	struct ExtractCallback::CurrItem {
 		ustring path;
-		ComObject<FileWriteStream> stream;
+		Com::ComObject<FileWriteStream> stream;
 		Archive::iterator item;
 		Int32 mode;
 
-		CurrItem(Int32 m, const ustring & p, Archive::iterator i):
-			path(p + i.path()),
-			item(i),
-			mode(m) {
+		CurrItem(Int32 m, const ustring & p, Archive::iterator i) :
+			path(p + i.path()), item(i), mode(m)
+		{
 		}
 	};
 
-	ULONG WINAPI ExtractCallback::AddRef() {
+	ULONG WINAPI ExtractCallback::AddRef()
+	{
 		return UnknownImp::AddRef();
 	}
 
-	ULONG WINAPI ExtractCallback::Release() {
+	ULONG WINAPI ExtractCallback::Release()
+	{
 		return UnknownImp::Release();
 	}
 
@@ -35,26 +37,30 @@ namespace SevenZip {
 		return UnknownImp::QueryInterface(riid, object);
 	}
 
-	ExtractCallback::~ExtractCallback() {
+	ExtractCallback::~ExtractCallback()
+	{
 //		printf(L"ArchiveExtractCallback::~ArchiveExtractCallback()\n");
 	}
 
-	ExtractCallback::ExtractCallback(const Archive & arc, const ustring & dest_path, const ustring & pass):
+	ExtractCallback::ExtractCallback(const Archive & arc, const ustring & dest_path, const ustring & pass) :
 		Password(pass),
 		m_wa(arc),
-		m_dest(Base::MakeGoodPath(dest_path)) {
+		m_dest(/*Base::MakeGoodPath(*/dest_path)
+	{
 //		printf(L"ArchiveExtractCallback::ArchiveExtractCallback(%s)\n", dest_path.c_str());
-		Base::ensure_end_path_separator(m_dest);
+		Base::Path::ensure_end_separator(m_dest);
 	}
 
-	HRESULT WINAPI ExtractCallback::SetTotal(UInt64 /*size*/) {
+	HRESULT WINAPI ExtractCallback::SetTotal(UInt64 /*size*/)
+	{
 //		return total size
 //		printf(L"ArchiveExtractCallback::SetTotal(%d)\n", size);
 //		FuncLogger();
 		return S_OK;
 	}
 
-	HRESULT WINAPI ExtractCallback::SetCompleted(const UInt64 */*completeValue*/) {
+	HRESULT WINAPI ExtractCallback::SetCompleted(const UInt64 */*completeValue*/)
+	{
 //		return processed size
 //		if (completeValue) {
 //			printf(L"ArchiveExtractCallback::SetCompleted(%d)\n", *completeValue);
@@ -63,7 +69,8 @@ namespace SevenZip {
 		return S_OK;
 	}
 
-	HRESULT WINAPI ExtractCallback::GetStream(UInt32 index, ISequentialOutStream ** outStream, Int32 askExtractMode) {
+	HRESULT WINAPI ExtractCallback::GetStream(UInt32 index, ISequentialOutStream ** outStream, Int32 askExtractMode)
+	{
 //		FuncLogger();
 //		printf(L"ArchiveExtractCallback::GetStream(%d, %d)\n", index, askExtractMode);
 		*outStream = nullptr;
@@ -75,20 +82,20 @@ namespace SevenZip {
 
 		try {
 			if (m_curr->item.is_dir()) {
-				Ext::Directory::create_full(m_curr->path);
+				Fsys::Directory::create_full(m_curr->path);
 			} else {
 				// Create folders for file
 				size_t pos = m_curr->path.find_last_of(Base::PATH_SEPARATORS);
 				if (pos != ustring::npos) {
-					Ext::Directory::create_full(m_curr->path.substr(0, pos));
+					Fsys::Directory::create_full(m_curr->path.substr(0, pos));
 				}
 
-				if (Ext::File::is_exist(m_curr->path)) {
-					Ext::File::del(m_curr->path);
+				if (Fsys::File::is_exist(m_curr->path)) {
+					Fsys::File::del(m_curr->path);
 				}
 
 				FileWriteStream * tmp(new FileWriteStream(m_curr->path, true));
-				ComObject<FileWriteStream> stream(tmp);
+				Com::ComObject<FileWriteStream> stream(tmp);
 				m_curr->stream = stream;
 				stream.detach(tmp);
 				*outStream = tmp;
@@ -99,7 +106,8 @@ namespace SevenZip {
 		return S_OK;
 	}
 
-	HRESULT WINAPI ExtractCallback::PrepareOperation(Int32 askExtractMode) {
+	HRESULT WINAPI ExtractCallback::PrepareOperation(Int32 askExtractMode)
+	{
 //		FuncLogger();
 //		printf(L"ArchiveExtractCallback::PrepareOperation(%d)\n", askExtractMode);
 		switch (askExtractMode) {
@@ -116,7 +124,8 @@ namespace SevenZip {
 		return S_OK;
 	}
 
-	HRESULT WINAPI ExtractCallback::SetOperationResult(Int32 operationResult) {
+	HRESULT WINAPI ExtractCallback::SetOperationResult(Int32 operationResult)
+	{
 //		FuncLogger();
 //		printf(L"ArchiveExtractCallback::SetOperationResult(%d)\n", operationResult);
 
@@ -124,7 +133,7 @@ namespace SevenZip {
 			failed_files.push_back(FailedFile(m_curr->item.path(), operationResult));
 		} else {
 			if (m_curr->mode == NArchive::NExtract::NAskMode::kExtract) {
-				Ext::FS::set_attr(m_curr->path, m_curr->item.attr());
+				Fsys::set_attr(m_curr->path, m_curr->item.attr());
 				if (m_curr->stream) {
 					m_curr->stream->set_mtime(m_curr->item.mtime());
 				}
@@ -133,14 +142,15 @@ namespace SevenZip {
 		return S_OK;
 	}
 
-	HRESULT WINAPI ExtractCallback::CryptoGetTextPassword(BSTR *pass) {
+	HRESULT WINAPI ExtractCallback::CryptoGetTextPassword(BSTR *pass)
+	{
 //		printf(L"%S\n", __PRETTY_FUNCTION__);
 		if (Password.empty()) {
 			// You can ask real password here from user
 			// PrintError("Password is not defined");
 			//		return E_ABORT;
 		}
-		BStr(Password).detach(*pass);
+		Com::BStr(Password).detach(*pass);
 		return S_OK;
 	}
 }

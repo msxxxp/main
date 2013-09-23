@@ -1,4 +1,5 @@
 #include <lib7zip/7zip.hpp>
+#include <libcom/bstr.hpp>
 #include <libext/exception.hpp>
 
 namespace SevenZip {
@@ -15,15 +16,15 @@ namespace SevenZip {
 		init_props();
 	}
 
-	Archive::Archive(ComObject<IInArchive> arc, flags_type flags):
+	Archive::Archive(Com::ComObject<IInArchive> arc, flags_type flags):
 		m_arc(arc),
 		m_flags(flags) {
 		init_props();
 	}
 
 	void Archive::open_archive(const Lib & lib, const ustring & path) {
-		ComObject<IInStream> stream(new FileReadStream(path.c_str()));
-		ComObject<IArchiveOpenCallback> openCallback(new OpenCallback);
+		Com::ComObject<IInStream> stream(new FileReadStream(path.c_str()));
+		Com::ComObject<IArchiveOpenCallback> openCallback(new OpenCallback);
 		for (Codecs::const_iterator it = lib.codecs().begin(); it != lib.codecs().end(); ++it) {
 			CheckCom(lib.CreateObject(&it->second->guid, &IID_IInArchive, (PVOID*)&m_arc));
 			CheckCom(stream->Seek(0, STREAM_SEEK_SET, nullptr));
@@ -44,7 +45,7 @@ namespace SevenZip {
 		return *(m_codec->second);
 	}
 
-	ComObject<IInArchive> Archive::operator ->() const {
+	Com::ComObject<IInArchive> Archive::operator ->() const {
 		return m_arc;
 	}
 
@@ -80,17 +81,17 @@ namespace SevenZip {
 
 	size_t Archive::test() const {
 		ExtractCallback * callback(new ExtractCallback(*this));
-		ComObject<IArchiveExtractCallback> extractCallback(callback);
+		Com::ComObject<IArchiveExtractCallback> extractCallback(callback);
 		m_arc->Extract(nullptr, (UInt32)-1, true, extractCallback);
 		return callback->failed_files.size();
 	}
 
 	void Archive::extract(const ustring & dest) const {
-		ComObject<IArchiveExtractCallback> extractCallback(new ExtractCallback(*this, dest));
+		Com::ComObject<IArchiveExtractCallback> extractCallback(new ExtractCallback(*this, dest));
 		CheckCom(m_arc->Extract(nullptr, (UInt32)-1, false, extractCallback));
 	}
 
-	Archive::operator ComObject<IInArchive>() const {
+	Archive::operator Com::ComObject<IInArchive>() const {
 		return m_arc;
 	}
 
@@ -156,7 +157,7 @@ namespace SevenZip {
 	}
 
 	bool Archive::const_input_iterator::get_prop_info(size_t index, ustring & name, PROPID & id) const {
-		BStr m_nm;
+		Com::BStr m_nm;
 		VARTYPE type;
 		HRESULT err = m_seq->m_arc->GetPropertyInfo(index, &m_nm, &id, &type);
 		if (err == S_OK && m_nm)
@@ -164,8 +165,8 @@ namespace SevenZip {
 		return err == S_OK;
 	}
 
-	PropVariant Archive::const_input_iterator::get_prop(PROPID id) const {
-		PropVariant prop;
+	Com::PropVariant Archive::const_input_iterator::get_prop(PROPID id) const {
+		Com::PropVariant prop;
 		m_seq->m_arc->GetProperty(m_index, id, prop.ref());
 		return prop;
 	}

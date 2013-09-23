@@ -1,10 +1,11 @@
 ﻿#include <lib7zip/7zip.hpp>
+#include <libcom/bstr.hpp>
 #include <libext/exception.hpp>
 
 namespace SevenZip {
 	///======================================================================================== Prop
-	Prop::Prop(const ComObject<IInArchive> & arc, size_t idx) {
-		BStr m_nm;
+	Prop::Prop(const Com::ComObject<IInArchive> & arc, size_t idx) {
+		Com::BStr m_nm;
 		VARTYPE type;
 		CheckApiError(arc->GetArchivePropertyInfo(idx, &m_nm, &id, &type));
 		CheckApiError(arc->GetArchiveProperty(id, prop.ref()));
@@ -12,7 +13,7 @@ namespace SevenZip {
 	}
 
 	///======================================================================================= Props
-	void Props::cache(const ComObject<IInArchive> & arc) {
+	void Props::cache(const Com::ComObject<IInArchive> & arc) {
 		UInt32 num_props = 0;
 		CheckApiError(arc->GetNumberOfArchiveProperties(&num_props));
 		clear();
@@ -24,7 +25,7 @@ namespace SevenZip {
 	Props::Props() {
 	}
 
-	Props::Props(const ComObject<IInArchive> & arc) {
+	Props::Props(const Com::ComObject<IInArchive> & arc) {
 		cache(arc);
 	}
 
@@ -52,15 +53,15 @@ namespace SevenZip {
 		return m_methods;
 	}
 
-	HRESULT Lib::get_prop(UInt32 index, PROPID prop_id, PropVariant & prop) const {
+	HRESULT Lib::get_prop(UInt32 index, PROPID prop_id, Com::PropVariant & prop) const {
 		return GetHandlerProperty2 ?
 			GetHandlerProperty2(index, prop_id, prop.ref())
 		:
 			GetHandlerProperty(prop_id, prop.ref());
 	}
 
-	HRESULT Lib::get_prop(UInt32 index, PROPID prop_id, WinGUID & guid) const {
-		PropVariant prop;
+	HRESULT Lib::get_prop(UInt32 index, PROPID prop_id, Com::WinGUID & guid) const {
+		Com::PropVariant prop;
 		HRESULT res = get_prop(index, prop_id, prop);
 		if (res == S_OK)
 			guid.init(prop);
@@ -68,19 +69,19 @@ namespace SevenZip {
 	}
 
 	HRESULT Lib::get_prop(UInt32 index, PROPID prop_id, bool & value) const {
-		PropVariant prop;
+		Com::PropVariant prop;
 		HRESULT res = get_prop(index, prop_id, prop);
 		return res == S_OK ? prop.as_bool_nt(value) : res;
 	}
 
 	HRESULT Lib::get_prop(UInt32 index, PROPID prop_id, ustring & value) const {
-		PropVariant prop;
+		Com::PropVariant prop;
 		HRESULT res = get_prop(index, prop_id, prop);
 		return res == S_OK ? prop.as_str_nt(value) : res;
 	}
 
 	HRESULT Lib::get_prop(UInt32 index, PROPID prop_id, std::vector<BYTE> & value) const {
-		PropVariant prop;
+		Com::PropVariant prop;
 		HRESULT res = get_prop(index, prop_id, prop);
 		if (res != S_OK)
 			return res;

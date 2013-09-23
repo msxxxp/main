@@ -49,24 +49,24 @@ namespace Memory {
 	inline Pointer calloc(size_t count, DWORD flags = 0)
 	{
 		static_assert(std::is_pointer<Pointer>::value, "Pointer type is required");
-		typedef Pointer ptr_t;
+		Pointer tmp_ptr = nullptr;
 #ifdef MEMORY_DEBUG
 		Watchdog::allocations++;
 		Watchdog::allocations_size += sizeof(*tmp_ptr) * count;
 #endif
-		return static_cast<Pointer>(::HeapAlloc(get_heap(), flags | HEAP_ZERO_MEMORY, sizeof(ptr_t) * count));
+		return static_cast<Pointer>(::HeapAlloc(get_heap(), flags | HEAP_ZERO_MEMORY, sizeof(*tmp_ptr) * count));
 	}
 
 	template<typename Pointer>
 	inline Pointer ealloc(DWORD flags = 0)
 	{
 		static_assert(std::is_pointer<Pointer>::value, "Pointer type is required");
-		typedef Pointer ptr_t;
+		Pointer tmp_ptr = nullptr;
 #ifdef MEMORY_DEBUG
 		Watchdog::allocations++;
 		Watchdog::allocations_size += sizeof(*tmp_ptr);
 #endif
-		return static_cast<Pointer>(::HeapAlloc(get_heap(), flags | HEAP_ZERO_MEMORY, sizeof(ptr_t)));
+		return static_cast<Pointer>(::HeapAlloc(get_heap(), flags | HEAP_ZERO_MEMORY, sizeof(*tmp_ptr)));
 	}
 
 	template<typename Pointer>

@@ -21,7 +21,7 @@
 #define NOIME
 //#define NOMINMAX
 
-#include <cstdint>
+#include <stdint.h>
 #include <windows.h>
 
 #ifdef _MSC_VER

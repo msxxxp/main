@@ -1,6 +1,7 @@
 #include <libbase/window.hpp>
 #include <libbase/logger.hpp>
 #include <libbase/err.hpp>
+#include <libbase/string.hpp>
 #include <winuser.h>
 
 namespace Base {

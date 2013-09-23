@@ -16,9 +16,9 @@ namespace Com {
 
 		HRESULT WINAPI QueryInterface(REFIID riid, void ** ppvObject) override;
 
-	private:
-		ULONG m_ref_cnt;
-	};
+private:
+	ULONG m_ref_cnt;
+};
 
 }
 

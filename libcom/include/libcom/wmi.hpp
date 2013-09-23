@@ -9,255 +9,273 @@
 
 namespace Com {
 
-inline bool NORM_M_PREFIX(PCWSTR ptr) {
-	return *(PDWORD)ptr == 0x005c005c;
-}
+	inline bool NORM_M_PREFIX(PCWSTR ptr)
+	{
+		return *(PDWORD)ptr == 0x005c005c;
+	}
 
-inline bool REV_M_PREFIX(PCWSTR ptr) {
-	return *(PDWORD)ptr == 0x002f002f;
-}
+	inline bool REV_M_PREFIX(PCWSTR ptr)
+	{
+		return *(PDWORD)ptr == 0x002f002f;
+	}
 
-struct WmiObject: public ComObject<IWbemClassObject> {
-	typedef IWbemClassObject value_type;
-	typedef IWbemClassObject * pointer;
+	struct WmiObject: public Object<IWbemClassObject> {
+		typedef IWbemClassObject value_type;
+		typedef IWbemClassObject * pointer;
 
-	static Variant get_param(const pointer obj, PCWSTR param = L"ReturnValue");
-	static ustring get_class(const pointer obj);
-	static ustring get_path(const pointer obj);
-	static ustring get_server(const pointer obj);
+		static Variant get_param(const pointer obj, PCWSTR param = L"ReturnValue");
+		static ustring get_class(const pointer obj);
+		static ustring get_path(const pointer obj);
+		static ustring get_server(const pointer obj);
 
-	static WmiObject spawn_instance(const pointer obj);
-	static WmiObject clone(const pointer obj);
-	static WmiObject get_in_params(const pointer obj, PCWSTR method);
-	static void put_param(const pointer obj, PCWSTR name, const Variant & val);
+		static WmiObject spawn_instance(const pointer obj);
+		static WmiObject clone(const pointer obj);
+		static WmiObject get_in_params(const pointer obj, PCWSTR method);
+		static void put_param(const pointer obj, PCWSTR name, const Variant & val);
 
-	WmiObject();
-	WmiObject(const pointer p);
-	WmiObject(const Variant & param);
+		WmiObject();
+		WmiObject(const pointer p);
+		WmiObject(const Variant & param);
 
-	void Put(PCWSTR name, const Variant & val);
+		void Put(PCWSTR name, const Variant & val);
 
-	Variant Get(PCWSTR name) const;
-	WmiObject SpawnInstance() const;
-	WmiObject Clone() const;
-};
+		Variant Get(PCWSTR name) const;
+		WmiObject SpawnInstance() const;
+		WmiObject Clone() const;
+	};
 
 ///========================================================================================= WmiEnum
-struct WmiEnum: public ComObject<IEnumWbemClassObject> {
-	WmiEnum()
-	{
-	}
+	struct WmiEnum: public Object<IEnumWbemClassObject> {
+		WmiEnum()
+		{
+		}
 
-	WmiEnum(const IEnumWbemClassObject * en):
-		ComObject<IEnumWbemClassObject>(en),
-		m_end(false)
-	{
-	}
+		WmiEnum(const IEnumWbemClassObject * en) :
+			Object<IEnumWbemClassObject>(en), m_end(false)
+		{
+		}
 
-	operator bool() const {
-		return (bool)*this;
-	}
+		operator bool() const
+		{
+			return (bool)*this;
+		}
 
-	void Begin();
+		void Begin();
 
-	bool Next();
+		bool Next();
 
-	bool Next(WmiObject & obj);
+		bool Next(WmiObject & obj);
 
-	bool End();
+		bool End();
 
-	WmiObject Elem() const;
+		WmiObject Elem() const;
 
-private:
-	WmiObject m_element;
-	bool m_end;
-};
+	private:
+		WmiObject m_element;
+		bool m_end;
+	};
 
 ///=================================================================================== WmiConnection
-struct WmiConnection {
-	WmiConnection(PCWSTR srv = nullptr, PCWSTR namesp = L"cimv2", PCWSTR user = nullptr, PCWSTR pass = nullptr);
+	struct WmiConnection {
+		WmiConnection(PCWSTR srv = nullptr, PCWSTR namesp = L"cimv2", PCWSTR user = nullptr, PCWSTR pass = nullptr);
 
-	operator bool() const {
-		return m_svc;
-	}
+		operator bool() const
+		{
+			return m_svc;
+		}
 
 //	IWbemServices *	GetIWbemServices() const {
 //		return m_svc;
 //	}
 //
-	IWbemServices *	operator ->() const {
-		return m_svc;
-	}
-
-	WmiEnum	Query(PCWSTR query, ssize_t flags = WBEM_FLAG_FORWARD_ONLY | WBEM_FLAG_RETURN_IMMEDIATELY) const;
-
-	WmiEnum	Enum(PCWSTR path, ssize_t flags = WBEM_FLAG_SHALLOW | WBEM_FLAG_FORWARD_ONLY) const;
-
-	template<typename Functor>
-	void QueryExec(PCWSTR query, Functor Func, PVOID data = nullptr) {
-		WmiEnum	ewco(Query(query));
-
-		WmiObject	obj;
-		ULONG count = 0;
-		while (ewco && SUCCEEDED(ewco->Next(WBEM_INFINITE, 1, &obj, &count)) && count) {
-			if (!Func(*this, obj, data))
-				break;
+		IWbemServices * operator ->() const
+		{
+			return m_svc;
 		}
-	}
 
-	template<typename Functor>
-	void EnumExec(PCWSTR clname, Functor Func, PVOID data = nullptr) {
-		WmiEnum	ewco(Enum(clname));
+		WmiEnum Query(PCWSTR query, ssize_t flags = WBEM_FLAG_FORWARD_ONLY | WBEM_FLAG_RETURN_IMMEDIATELY) const;
 
-		WmiObject	obj;
-		ULONG count = 0;
-		while (ewco && SUCCEEDED(ewco->Next(WBEM_INFINITE, 1, &obj, &count)) && count) {
-			if (!Func(*this, obj, data))
-				break;
+		WmiEnum Enum(PCWSTR path, ssize_t flags = WBEM_FLAG_SHALLOW | WBEM_FLAG_FORWARD_ONLY) const;
+
+		template<typename Functor>
+		void QueryExec(PCWSTR query, Functor Func, PVOID data = nullptr)
+		{
+			WmiEnum ewco(Query(query));
+
+			WmiObject obj;
+			ULONG count = 0;
+			while (ewco && SUCCEEDED(ewco->Next(WBEM_INFINITE, 1, &obj, &count)) && count) {
+				if (!Func(*this, obj, data))
+					break;
+			}
 		}
-	}
 
-	template<typename Functor>
-	bool Exec(PCWSTR clname, Functor & Func, PVOID data = nullptr) {
-		return Func(get_object(clname), data);
-	}
+		template<typename Functor>
+		void EnumExec(PCWSTR clname, Functor Func, PVOID data = nullptr)
+		{
+			WmiEnum ewco(Enum(clname));
 
-	void DeleteInstance(PCWSTR path);
+			WmiObject obj;
+			ULONG count = 0;
+			while (ewco && SUCCEEDED(ewco->Next(WBEM_INFINITE, 1, &obj, &count)) && count) {
+				if (!Func(*this, obj, data))
+					break;
+			}
+		}
 
-	void DeleteInstance(const WmiObject & obj);
+		template<typename Functor>
+		bool Exec(PCWSTR clname, Functor & Func, PVOID data = nullptr)
+		{
+			return Func(get_object(clname), data);
+		}
 
-	void CreateInstance(const WmiObject & obj) const;
+		void DeleteInstance(PCWSTR path);
 
-	void UpdateInstance(const WmiObject & obj) const;
+		void DeleteInstance(const WmiObject & obj);
 
-	WmiObject get_object_class(const WmiObject & obj) const;
+		void CreateInstance(const WmiObject & obj) const;
 
-	WmiObject get_object(PCWSTR path) const;
+		void UpdateInstance(const WmiObject & obj) const;
 
-	WmiObject get_in_params(PCWSTR path, PCWSTR method) const;
+		WmiObject get_object_class(const WmiObject & obj) const;
 
-	void exec_method(PCWSTR path, PCWSTR method, const WmiObject & in_params) const;
+		WmiObject get_object(PCWSTR path) const;
 
-	Variant	exec_method_get_param(PCWSTR path, PCWSTR method, const WmiObject & in_params, PCWSTR ret_par) const;
+		WmiObject get_in_params(PCWSTR path, PCWSTR method) const;
 
-private:
-	ComObject<IWbemServices> m_svc;
-};
+		void exec_method(PCWSTR path, PCWSTR method, const WmiObject & in_params) const;
+
+		Variant exec_method_get_param(PCWSTR path, PCWSTR method, const WmiObject & in_params, PCWSTR ret_par) const;
+
+	private:
+		Object<IWbemServices> m_svc;
+	};
 
 ///========================================================================================= WmiBase
-struct WmiBase {
-	virtual ~WmiBase();
+	struct WmiBase {
+		virtual ~WmiBase();
 
-	WmiBase(const WmiConnection & conn, const BStr & path);
+		WmiBase(const WmiConnection & conn, const BStr & path);
 
-	WmiBase(const WmiConnection & conn, const WmiObject & obj);
+		WmiBase(const WmiConnection & conn, const WmiObject & obj);
 
-	Variant get_param(PCWSTR param) const;
+		Variant get_param(PCWSTR param) const;
 
-	void Delete();
+		void Delete();
 
-	void Save() const;
+		void Save() const;
 
-	ustring rel_path() const;
+		ustring rel_path() const;
 
-	const WmiConnection & conn() const {
-		return m_conn;
-	}
+		const WmiConnection & conn() const
+		{
+			return m_conn;
+		}
 
-	operator IUnknown *() const {
-		return (IWbemClassObject*)m_obj;
-	}
+		operator IUnknown *() const
+		{
+			return (IWbemClassObject*)m_obj;
+		}
 
-private:
-	const WmiConnection & m_conn;
+	private:
+		const WmiConnection & m_conn;
 
-protected:
-	WmiObject exec_method(PCWSTR method) const;
+	protected:
+		WmiObject exec_method(PCWSTR method) const;
 
-	WmiObject exec_method(PCWSTR method, const WmiObject & in_params) const;
+		WmiObject exec_method(PCWSTR method, const WmiObject & in_params) const;
 
-	WmiObject exec_method(PCWSTR method, PCWSTR param, const Variant & val) const;
+		WmiObject exec_method(PCWSTR method, PCWSTR param, const Variant & val) const;
 
-	Variant	exec_method_get_param(PCWSTR method, PCWSTR ret_par = L"ReturnValue") const;
+		Variant exec_method_get_param(PCWSTR method, PCWSTR ret_par = L"ReturnValue") const;
 
-	Variant	exec_method_get_param(PCWSTR method, const WmiObject & in_params, PCWSTR ret_par = L"ReturnValue") const;
+		Variant exec_method_get_param(PCWSTR method, const WmiObject & in_params, PCWSTR ret_par = L"ReturnValue") const;
 
-	Variant	exec_method_get_param(PCWSTR method, PCWSTR param, const Variant & val, PCWSTR ret_par = L"ReturnValue") const;
+		Variant exec_method_get_param(PCWSTR method, PCWSTR param, const Variant & val, PCWSTR ret_par = L"ReturnValue") const;
 
-	void refresh();
+		void refresh();
 
-	WmiObject m_obj;
-	BStr m_path;
-};
+		WmiObject m_obj;
+		BStr m_path;
+	};
 
 ///====================================================================================== WMIProcess
-struct WmiProcess: public WmiBase {
-	WmiProcess(const WmiConnection & conn, DWORD id):
-		WmiBase(conn, Path(id)) {
-	}
+	struct WmiProcess: public WmiBase {
+		WmiProcess(const WmiConnection & conn, DWORD id) :
+			WmiBase(conn, Path(id))
+		{
+		}
 
-	WmiProcess(const WmiConnection & conn, const WmiObject & obj):
-		WmiBase(conn, obj) {
-	}
+		WmiProcess(const WmiConnection & conn, const WmiObject & obj) :
+			WmiBase(conn, obj)
+		{
+		}
 
-	template<typename Functor>
-	bool exec(Functor Func, PCVOID data = nullptr) const {
-		return Func(*this, data);
-	}
+		template<typename Functor>
+		bool exec(Functor Func, PCVOID data = nullptr) const
+		{
+			return Func(*this, data);
+		}
 
-	int attach_debugger() const;
+		int attach_debugger() const;
 
-	int terminate() const;
+		int terminate() const;
 
-	int set_priority(DWORD pri);
+		int set_priority(DWORD pri);
 
-	ustring get_owner() const;
+		ustring get_owner() const;
 
-	ustring get_owner_dom() const;
+		ustring get_owner_dom() const;
 
-	ustring get_owner_sid() const;
+		ustring get_owner_sid() const;
 
-private:
-	BStr Path(DWORD id) const;
-};
+	private:
+		BStr Path(DWORD id) const;
+	};
 
 ///==================================================================================== WmiProcessor
-struct WmiProcessor: public WmiBase {
-	WmiProcessor(const WmiConnection & conn, DWORD id):
-		WmiBase(conn, Path(id)) {
-	}
+	struct WmiProcessor: public WmiBase {
+		WmiProcessor(const WmiConnection & conn, DWORD id) :
+			WmiBase(conn, Path(id))
+		{
+		}
 
-	WmiProcessor(const WmiConnection & conn, const WmiObject & obj):
-		WmiBase(conn, obj) {
-	}
+		WmiProcessor(const WmiConnection & conn, const WmiObject & obj) :
+			WmiBase(conn, obj)
+		{
+		}
 
-	template<typename Functor>
-	bool exec(Functor Func, PCVOID data = nullptr) const {
-		return Func(*this, data);
-	}
+		template<typename Functor>
+		bool exec(Functor Func, PCVOID data = nullptr) const
+		{
+			return Func(*this, data);
+		}
 
-private:
-	BStr Path(DWORD id) const;
-};
+	private:
+		BStr Path(DWORD id) const;
+	};
 
 ///======================================================================================= WmiSystem
-struct WmiSystem: public WmiBase {
-	WmiSystem(const WmiConnection & conn, PCWSTR name):
-		WmiBase(conn, Path(name)) {
-	}
+	struct WmiSystem: public WmiBase {
+		WmiSystem(const WmiConnection & conn, PCWSTR name) :
+			WmiBase(conn, Path(name))
+		{
+		}
 
-	WmiSystem(const WmiConnection & conn, const WmiObject & obj):
-		WmiBase(conn, obj) {
-	}
+		WmiSystem(const WmiConnection & conn, const WmiObject & obj) :
+			WmiBase(conn, obj)
+		{
+		}
 
-	template<typename Functor>
-	bool exec(Functor Func, PCVOID data = nullptr) const {
-		return Func(*this, data);
-	}
+		template<typename Functor>
+		bool exec(Functor Func, PCVOID data = nullptr) const
+		{
+			return Func(*this, data);
+		}
 
-private:
-	BStr Path(PCWSTR name) const;
-};
+	private:
+		BStr Path(PCWSTR name) const;
+	};
 }
 
 #endif

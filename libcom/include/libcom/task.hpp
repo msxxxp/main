@@ -17,7 +17,7 @@ namespace Com {
 	struct WinTrigger {
 		~WinTrigger();
 
-		WinTrigger(size_t index, const ComObject<ITaskTrigger> &trigger);
+		WinTrigger(size_t index, const Object<ITaskTrigger> &trigger);
 
 		operator _TASK_TRIGGER*() const
 		{
@@ -74,11 +74,11 @@ namespace Com {
 		ustring as_str() const;
 
 	private:
-		WinTrigger(size_t index, const ComObject<ITask> &task);
+		WinTrigger(size_t index, const Object<ITask> &task);
 
 		void save();
 
-		ComObject<ITaskTrigger> m_trigger;
+		Object<ITaskTrigger> m_trigger;
 		std::tr1::shared_ptr<_TASK_TRIGGER> m_info;
 		size_t m_index;
 
@@ -92,9 +92,9 @@ namespace Com {
 
 		explicit WinTask(const ustring &name, bool autocreate = true);
 
-		operator ComObject<ITask>() const;
+		operator Object<ITask>() const;
 
-		ComObject<ITask> operator->() const;
+		Object<ITask> operator->() const;
 
 		bool operator==(const ustring & name) const
 		{
@@ -179,7 +179,7 @@ namespace Com {
 
 	private:
 		ustring m_name;
-		ComObject<ITask> m_task;
+		Object<ITask> m_task;
 	};
 
 ///===================================================================================== WinTriggers

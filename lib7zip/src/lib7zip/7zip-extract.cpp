@@ -10,7 +10,7 @@ namespace SevenZip {
 	///============================================================================= ExtractCallback
 	struct ExtractCallback::CurrItem {
 		ustring path;
-		Com::ComObject<FileWriteStream> stream;
+		Com::Object<FileWriteStream> stream;
 		Archive::iterator item;
 		Int32 mode;
 
@@ -43,9 +43,7 @@ namespace SevenZip {
 	}
 
 	ExtractCallback::ExtractCallback(const Archive & arc, const ustring & dest_path, const ustring & pass) :
-		Password(pass),
-		m_wa(arc),
-		m_dest(/*Base::MakeGoodPath(*/dest_path)
+		Password(pass), m_wa(arc), m_dest(/*Base::MakeGoodPath(*/dest_path)
 	{
 //		printf(L"ArchiveExtractCallback::ArchiveExtractCallback(%s)\n", dest_path.c_str());
 		Base::Path::ensure_end_separator(m_dest);
@@ -95,7 +93,7 @@ namespace SevenZip {
 				}
 
 				FileWriteStream * tmp(new FileWriteStream(m_curr->path, true));
-				Com::ComObject<FileWriteStream> stream(tmp);
+				Com::Object<FileWriteStream> stream(tmp);
 				m_curr->stream = stream;
 				stream.detach(tmp);
 				*outStream = tmp;

@@ -2,25 +2,28 @@
 #include <libext/exception.hpp>
 #include <libbase/pcstr.hpp>
 
-
 namespace Com {
 
-	Variant::~Variant() {
+	Variant::~Variant()
+	{
 		::VariantClear(this);
 	}
 
-	Variant::Variant() {
+	Variant::Variant()
+	{
 		::VariantInit(this);
 	}
 
-	Variant::Variant(IUnknown * val) {
+	Variant::Variant(IUnknown * val)
+	{
 		::VariantInit(this);
 		vt = VT_UNKNOWN;
 		punkVal = val;
 		punkVal->AddRef();
 	}
 
-	Variant::Variant(PCWSTR val) {
+	Variant::Variant(PCWSTR val)
+	{
 		::VariantInit(this);
 		bstrVal = ::SysAllocStringLen(val, Base::Str::length(val));
 		if (bstrVal == nullptr) {
@@ -31,7 +34,8 @@ namespace Com {
 		}
 	}
 
-	Variant::Variant(PCWSTR val[], size_t cnt) {
+	Variant::Variant(PCWSTR val[], size_t cnt)
+	{
 		parray = CheckPointer(::SafeArrayCreateVector(VT_BSTR, 0, cnt));
 		vt = VT_ARRAY | VT_BSTR;
 		BSTR *data = (BSTR*)parray->pvData;
@@ -40,7 +44,8 @@ namespace Com {
 		}
 	}
 
-	Variant::Variant(size_t val[], size_t cnt, VARTYPE type) {
+	Variant::Variant(size_t val[], size_t cnt, VARTYPE type)
+	{
 		parray = CheckPointer(::SafeArrayCreateVector(type, 0, cnt));
 		vt = VT_ARRAY | type;
 		for (size_t i = 0; i < cnt; ++i) {
@@ -49,7 +54,8 @@ namespace Com {
 		}
 	}
 
-	Variant::Variant(const ustring & val) {
+	Variant::Variant(const ustring & val)
+	{
 		::VariantInit(this);
 		bstrVal = ::SysAllocStringLen(val.c_str(), val.size());
 		if (bstrVal == nullptr) {
@@ -60,7 +66,8 @@ namespace Com {
 		}
 	}
 
-	Variant::Variant(const ustring val[], size_t cnt) {
+	Variant::Variant(const ustring val[], size_t cnt)
+	{
 		parray = CheckPointer(::SafeArrayCreateVector(VT_BSTR, 0, cnt));
 		vt = VT_ARRAY | VT_BSTR;
 		BSTR *data = (BSTR*)parray->pvData;
@@ -69,63 +76,74 @@ namespace Com {
 		}
 	}
 
-	Variant::Variant(bool val) {
+	Variant::Variant(bool val)
+	{
 		::VariantInit(this);
 		vt = VT_BOOL;
 		boolVal = val ? VARIANT_TRUE : VARIANT_FALSE;
 	}
 
-	Variant::Variant(DWORD in) {
+	Variant::Variant(DWORD in)
+	{
 		::VariantInit(this);
-		vt = VT_I4;//VT_UINT;
+		vt = VT_I4; //VT_UINT;
 		lVal = in;
 	}
 
-	Variant::Variant(int64_t in) {
+	Variant::Variant(int64_t in)
+	{
 		::VariantInit(this);
 		vt = VT_I8;
 		llVal = in;
 	}
 
-	Variant::Variant(uint64_t in) {
+	Variant::Variant(uint64_t in)
+	{
 		::VariantInit(this);
 		vt = VT_UI8;
 		ullVal = in;
 	}
 
-	Variant::Variant(uint16_t in) {
+	Variant::Variant(uint16_t in)
+	{
 		::VariantInit(this);
 		vt = VT_I2;
 		iVal = in;
 	}
 
-	Variant::Variant(const base_type & in) {
+	Variant::Variant(const base_type & in)
+	{
 		::VariantInit(this);
-		CheckCom(::VariantCopy(this, (VARIANTARG*)&in));
+		CheckCom(::VariantCopy(this, (VARIANTARG* )&in));
 	}
 
-	const Variant::this_type & Variant::operator =(const base_type & rhs) {
+	const Variant::this_type & Variant::operator =(const base_type & rhs)
+	{
 		if (this != &rhs)
 			this_type(rhs).swap(*this);
 		return *this;
 	}
 
-	void Variant::change_type(DWORD type, DWORD flag) {
+	void Variant::change_type(DWORD type, DWORD flag)
+	{
 		CheckCom(::VariantChangeType(this, this, flag, type));
 	}
 
-	HRESULT Variant::change_type_nt(VARTYPE type, DWORD flag) throw() {
+	HRESULT Variant::change_type_nt(VARTYPE type, DWORD flag) throw()
+	{
 		return ::VariantChangeType(this, this, flag, type);
 	}
 
-	bool	Variant::as_bool() const {
+	bool Variant::as_bool() const
+	{
 		if (vt != VT_BOOL) {
 			CheckApiError(E_INVALIDARG);
 		}
 		return boolVal == VARIANT_TRUE;
 	}
 
-	int64_t	Variant::as_int() const {
+	int64_t Variant::as_int() const
+	{
 		switch (vt) {
 			case VT_I1:
 				return cVal;
@@ -152,11 +170,13 @@ namespace Com {
 		return 0;
 	}
 
-	uint64_t Variant::as_uint() const {
+	uint64_t Variant::as_uint() const
+	{
 		return as_int();
 	}
 
-	ustring	Variant::as_str() const {
+	ustring Variant::as_str() const
+	{
 		switch (vt) {
 			case VT_BSTR:
 				return ustring(bstrVal, ::SysStringLen(bstrVal));
@@ -165,7 +185,8 @@ namespace Com {
 		return ustring();
 	}
 
-	ustring	Variant::as_str() {
+	ustring Variant::as_str()
+	{
 		if (is_null() || is_empty())
 			return ustring();
 		else if (!is_str()) {
@@ -174,13 +195,15 @@ namespace Com {
 		return bstrVal;
 	}
 
-	Variant::pointer Variant::ref() {
+	Variant::pointer Variant::ref()
+	{
 		::VariantClear(this);
 		return this;
 	}
 
-	void Variant::swap(this_type & rhs) {
-		VARIANT & a(*this), & b(rhs);
+	void Variant::swap(this_type & rhs)
+	{
+		VARIANT & a(*this), &b(rhs);
 		using std::swap;
 		swap(a, b);
 	}

@@ -1,7 +1,6 @@
 #include <libcom/std.hpp>
 #include <libext/exception.hpp>
 
-
 namespace {
 
 	struct Initializer {
@@ -10,34 +9,36 @@ namespace {
 		Initializer();
 	};
 
-	Initializer::~Initializer() {
+	Initializer::~Initializer()
+	{
 		::CoUninitialize();
 	}
 
-	Initializer::Initializer() {
+	Initializer::Initializer()
+	{
 		CheckCom(::CoInitializeEx(nullptr, COINIT_MULTITHREADED));
-		CheckCom(::CoInitializeSecurity(
-			nullptr,
-			-1,		// COM negotiates service
-			nullptr,// Authentication services
-			nullptr,// Reserved
-			RPC_C_AUTHN_LEVEL_PKT_PRIVACY,// authentication
-			RPC_C_IMP_LEVEL_IMPERSONATE,// Impersonation
-			nullptr,// Authentication info
-			EOAC_STATIC_CLOAKING,// Additional capabilities
-			nullptr// Reserved
-		));
+		CheckCom(::CoInitializeSecurity( nullptr, -1,		// COM negotiates service
+		    nullptr,// Authentication services
+		    nullptr,// Reserved
+		    RPC_C_AUTHN_LEVEL_PKT_PRIVACY,// authentication
+		    RPC_C_IMP_LEVEL_IMPERSONATE,// Impersonation
+		    nullptr,// Authentication info
+		    EOAC_STATIC_CLOAKING,// Additional capabilities
+		    nullptr// Reserved
+		    ));
 	}
 
 }
 
 namespace Com {
 
-	void init() {
+	void init()
+	{
 		static Initializer com;
 	}
 
-	HRESULT ConvertBoolToHRESULT(bool result) {
+	HRESULT ConvertBoolToHRESULT(bool result)
+	{
 		if (result)
 			return S_OK;
 		DWORD lastError = ::GetLastError();

@@ -3,7 +3,8 @@
 
 namespace SevenZip {
 	///====================================================================================== Method
-	Method::Method(const Lib & arc_lib, size_t idx) {
+	Method::Method(const Lib & arc_lib, size_t idx)
+	{
 		Com::PropVariant prop;
 		CheckApiError(arc_lib.GetMethodProperty(idx, 0, prop.ref()));
 		id = prop.as_uint();
@@ -23,27 +24,33 @@ namespace SevenZip {
 		};
 	}
 
-	bool Method::operator <(const Method & rhs) const {
+	bool Method::operator <(const Method & rhs) const
+	{
 		return name < rhs.name;
 	}
 
-	bool Method::operator ==(const Method & rhs) const {
+	bool Method::operator ==(const Method & rhs) const
+	{
 		return name == rhs.name;
 	}
 
-	bool Method::operator !=(const Method & rhs) const {
+	bool Method::operator !=(const Method & rhs) const
+	{
 		return name != rhs.name;
 	}
 
 	///===================================================================================== Methods
-	Methods::Methods() {
+	Methods::Methods()
+	{
 	}
 
-	Methods::Methods(const Lib & lib) {
+	Methods::Methods(const Lib & lib)
+	{
 		cache(lib);
 	}
 
-	void Methods::cache(const Lib & lib) {
+	void Methods::cache(const Lib & lib)
+	{
 		clear();
 		UInt32 num_methods = 0;
 		CheckCom(lib.GetNumberOfMethods(&num_methods));

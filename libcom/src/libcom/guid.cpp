@@ -12,7 +12,7 @@ namespace Com {
 
 	void WinGUID::init(PCWSTR str)
 	{
-		CheckCom(::CLSIDFromString((PWSTR)str, this));
+		CheckCom(::CLSIDFromString((PWSTR )str, this));
 	}
 
 	void WinGUID::init(const PROPVARIANT & prop)

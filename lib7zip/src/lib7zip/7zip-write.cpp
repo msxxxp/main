@@ -9,9 +9,7 @@
 
 namespace SevenZip {
 	DirItem::DirItem(const ustring & file_path, const ustring & file_name) :
-		Fsys::Stat(Base::MakePath(file_path, file_name).c_str()),
-		path(file_path),
-		name(file_name)
+		Fsys::Stat(Base::MakePath(file_path, file_name).c_str()), path(file_path), name(file_name)
 	{
 	}
 
@@ -205,7 +203,7 @@ namespace SevenZip {
 
 		try {
 			FileReadStream * stream(new FileReadStream(Base::MakePath(dirItem.path, dirItem.name)));
-			Com::ComObject<ISequentialInStream>(stream).detach(*inStream);
+			Com::Object < ISequentialInStream > (stream).detach(*inStream);
 		} catch (Ext::AbstractError & e) {
 			m_ffiles.push_back(FailedFile(dirItem.name, e.code()));
 			m_props.writeln(e.what());
@@ -244,7 +242,7 @@ namespace SevenZip {
 		_snwprintf(vname, Base::lengthof(vname), VOLUME_FORMAT, m_props.VolName.c_str(), index + 1, m_props.VolExt.c_str());
 //		printf(L"%S [%d, %s]\n", __PRETTY_FUNCTION__, index, vname);
 		FileWriteStream * stream(new FileWriteStream(vname/*, CREATE_ALWAYS*/));
-		Com::ComObject<ISequentialOutStream>(stream).detach(*volumeStream);
+		Com::Object < ISequentialOutStream > (stream).detach(*volumeStream);
 		return S_OK;
 	}
 	catch (Ext::AbstractError & e) {
@@ -281,19 +279,19 @@ namespace SevenZip {
 	{
 		set_properties();
 
-		Com::ComObject<IOutStream> outStream(new FileWriteStream(path + L"." + m_codec, CREATE_NEW));
-		Com::ComObject<IArchiveUpdateCallback2> updateCallback(new UpdateCallback(*this, m_ffiles));
+		Com::Object<IOutStream> outStream(new FileWriteStream(path + L"." + m_codec, CREATE_NEW));
+		Com::Object<IArchiveUpdateCallback2> updateCallback(new UpdateCallback(*this, m_ffiles));
 
 		CheckCom(m_arc->UpdateItems(outStream, CompressProperties::size(), updateCallback));
 	}
 
-//	ComObject<IOutArchive> CreateArchive::operator ->() const {
+//	Object<IOutArchive> CreateArchive::operator ->() const {
 //		return m_arc;
 //	}
 
 	void CreateArchive::set_properties()
 	{
-		Com::ComObject<ISetProperties> setProperties;
+		Com::Object<ISetProperties> setProperties;
 		m_arc->QueryInterface(IID_ISetProperties, (PVOID*)&setProperties);
 		if (setProperties) {
 			std::vector<PCWSTR> prop_names;

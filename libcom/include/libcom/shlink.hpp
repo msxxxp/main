@@ -58,7 +58,7 @@ namespace Com {
 		ShellLink();
 
 		ustring m_path;
-		ComObject<IShellLinkW> m_lnk;
+		Object<IShellLinkW> m_lnk;
 	};
 }
 

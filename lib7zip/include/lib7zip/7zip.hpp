@@ -25,32 +25,32 @@
 #include <tr1/memory>
 
 namespace SevenZip {
-	#include <lib7zip/CPP/7zip/Archive/IArchive.h>
-	#include <lib7zip/CPP/7zip/IPassword.h>
+#include <lib7zip/CPP/7zip/Archive/IArchive.h>
+#include <lib7zip/CPP/7zip/IPassword.h>
 
 	class Lib;
 
 	const UInt64 max_check_size = 1024 * 1024;
 
 	enum CompressMethod {
-		metCopy	= 0,
+		metCopy = 0,
 		metDelta = 3,
 		met7zAES = 116459265,
 		metARM = 50529537,
-		metARMT	= 50530049,
+		metARMT = 50530049,
 		metBCJ = 50528515,
-		metBCJ2	= 50528539,
+		metBCJ2 = 50528539,
 		metBZip2 = 262658,
 		metDeflate = 262408,
 		metDeflate64 = 262409,
-		metIA64	= 50529281,
-		metLZMA	= 196865,
+		metIA64 = 50529281,
+		metLZMA = 196865,
 		metLZMA2 = 33,
 		metPPC = 50528773,
-		metPPMD	= 197633,
-		metRar1	= 262913,
-		metRar2	= 262914,
-		metRar3	= 262915,
+		metPPMD = 197633,
+		metRar1 = 262913,
+		metRar2 = 262914,
+		metRar3 = 262915,
 		metSPARC = 50530309,
 		metSwap2 = 131842,
 		metSwap4 = 131844,
@@ -63,9 +63,9 @@ namespace SevenZip {
 		ustring path;
 		HRESULT code;
 
-		FailedFile(const ustring & p, HRESULT h):
-			path(p),
-			code(h) {
+		FailedFile(const ustring & p, HRESULT h) :
+			path(p), code(h)
+		{
 		}
 	};
 
@@ -171,7 +171,7 @@ namespace SevenZip {
 		Com::PropVariant prop;
 
 	private:
-		Prop(const Com::ComObject<IInArchive> & arc, size_t idx);
+		Prop(const Com::Object<IInArchive> & arc, size_t idx);
 
 		friend class Props;
 	};
@@ -188,13 +188,13 @@ namespace SevenZip {
 		using base_type::size;
 		using base_type::at;
 
-		void cache(const Com::ComObject<IInArchive> & arc);
+		void cache(const Com::Object<IInArchive> & arc);
 
 	private:
 		using base_type::push_back;
 
 		Props();
-		Props(const Com::ComObject<IInArchive> & arc);
+		Props(const Com::Object<IInArchive> & arc);
 
 		friend class Archive;
 	};
@@ -210,13 +210,7 @@ namespace SevenZip {
 		typedef UInt32 (WINAPI *FSetLargePageMode)();
 
 	public:
-		DEFINE_FUNC(CreateObject);
-		DEFINE_FUNC(GetHandlerProperty);
-		DEFINE_FUNC(GetHandlerProperty2);
-		DEFINE_FUNC(GetMethodProperty);
-		DEFINE_FUNC(GetNumberOfFormats);
-		DEFINE_FUNC(GetNumberOfMethods);
-		DEFINE_FUNC(SetLargePageMode);
+		DEFINE_FUNC(CreateObject);DEFINE_FUNC(GetHandlerProperty);DEFINE_FUNC(GetHandlerProperty2);DEFINE_FUNC(GetMethodProperty);DEFINE_FUNC(GetNumberOfFormats);DEFINE_FUNC(GetNumberOfMethods);DEFINE_FUNC(SetLargePageMode);
 
 		Lib(PCWSTR path);
 
@@ -247,7 +241,7 @@ namespace SevenZip {
 //		unsigned find_by_name(const ustring & name) const;
 //	};
 
-	///============================================================================== FileReadStream
+///============================================================================== FileReadStream
 	struct FileReadStream: public IInStream, private Fsys::File::Facade, private Com::UnknownImp {
 		virtual ~FileReadStream();
 
@@ -330,11 +324,11 @@ namespace SevenZip {
 
 		Archive(const Lib & lib, const ustring & path, const ustring & mask, flags_type flags = 0);
 
-		Archive(Com::ComObject<IInArchive> arc, flags_type flags = 0);
+		Archive(Com::Object<IInArchive> arc, flags_type flags = 0);
 
 		const Codec & codec() const;
 
-		Com::ComObject<IInArchive> operator ->() const;
+		Com::Object<IInArchive> operator ->() const;
 
 		const_iterator begin() const;
 
@@ -354,14 +348,14 @@ namespace SevenZip {
 
 		void extract(const ustring & dest) const;
 
-		operator Com::ComObject<IInArchive>() const;
+		operator Com::Object<IInArchive>() const;
 
 	private:
 		void open_archive(const Lib & lib, const ustring & path);
 
 		void init_props();
 
-		Com::ComObject<IInArchive> m_arc;
+		Com::Object<IInArchive> m_arc;
 		Codecs::const_iterator m_codec;
 		Props m_props;
 		UInt32 m_size;
@@ -437,7 +431,7 @@ namespace SevenZip {
 		ExtractCallback(const Archive & arc, const ustring & dest_path = ustring(), const ustring & pass = ustring());
 
 		const Archive & m_wa;
-		ustring m_dest;				// Output directory
+		ustring m_dest;// Output directory
 
 		struct CurrItem;
 		std::tr1::shared_ptr<CurrItem> m_curr;
@@ -520,14 +514,14 @@ namespace SevenZip {
 
 		void compress(const ustring & path);
 
-//		ComObject<IOutArchive> operator ->() const;
+//		Object<IOutArchive> operator ->() const;
 
 	private:
 		void set_properties();
 
 		const Lib & m_lib;
 		const ustring m_codec;
-		Com::ComObject<IOutArchive> m_arc;
+		Com::Object<IOutArchive> m_arc;
 		FailedFiles m_ffiles;
 	};
 }

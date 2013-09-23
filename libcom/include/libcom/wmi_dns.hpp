@@ -9,213 +9,230 @@
 namespace Com {
 
 ///==================================================================================== WmiDnsServer
-class WmiDnsServer: public WmiBase {
-public:
-	WmiDnsServer(const WmiConnection & conn, PCWSTR name = L"."):
-		WmiBase(conn, Path(name)) {
-	}
+	class WmiDnsServer: public WmiBase {
+	public:
+		WmiDnsServer(const WmiConnection & conn, PCWSTR name = L".") :
+			WmiBase(conn, Path(name))
+		{
+		}
 
-	WmiDnsServer(const WmiConnection & conn, const WmiObject &obj):
-		WmiBase(conn, obj) {
-	}
+		WmiDnsServer(const WmiConnection & conn, const WmiObject &obj) :
+			WmiBase(conn, obj)
+		{
+		}
 
-	WmiObject CreateZone(const ustring & zone, DWORD type = 0,
-	                     const std::vector<ustring> & ip = std::vector<ustring>(),
-	                     const ustring & email = ustring(), bool integr = false) const;
+		WmiObject CreateZone(const ustring & zone, DWORD type = 0, const std::vector<ustring> & ip = std::vector<ustring>(), const ustring & email = ustring(), bool integr = false) const;
 
-	ustring name() const;
+		ustring name() const;
 
-private:
-	BStr Path(PCWSTR name) const;
-};
-
-///====================================================================================== WmiDnsZone
-class WmiDnsBase: public WmiBase {
-public:
-	WmiDnsBase(const WmiConnection & conn, const BStr & path):
-		WmiBase(conn, path) {
-	}
-
-	WmiDnsBase(const WmiConnection & conn, const WmiObject & obj):
-		WmiBase(conn, obj) {
-	}
-
-	ustring server() const;
-
-	ustring name() const;
-
-	ustring container() const;
-};
+	private:
+		BStr Path(PCWSTR name) const;
+	};
 
 ///====================================================================================== WmiDnsZone
-class WmiDnsZone: public WmiDnsBase {
-public:
-	WmiDnsZone(const WmiConnection & conn, PCWSTR srv, PCWSTR name):
-		WmiDnsBase(conn, Path(srv, name)) {
-	}
+	class WmiDnsBase: public WmiBase {
+	public:
+		WmiDnsBase(const WmiConnection & conn, const BStr & path) :
+			WmiBase(conn, path)
+		{
+		}
 
-	WmiDnsZone(const WmiConnection & conn, const WmiObject & obj):
-		WmiDnsBase(conn, obj) {
-	}
+		WmiDnsBase(const WmiConnection & conn, const WmiObject & obj) :
+			WmiBase(conn, obj)
+		{
+		}
 
-	void Save() const;
+		ustring server() const;
 
-	ustring file() const;
+		ustring name() const;
 
-	void CreateRecord(const ustring & txt);
+		ustring container() const;
+	};
 
-	void CreateRecordA(const ustring & name, const ustring & ip);
+///====================================================================================== WmiDnsZone
+	class WmiDnsZone: public WmiDnsBase {
+	public:
+		WmiDnsZone(const WmiConnection & conn, PCWSTR srv, PCWSTR name) :
+			WmiDnsBase(conn, Path(srv, name))
+		{
+		}
 
-	void CreateRecordAAAA(const ustring & name, const ustring & ip);
+		WmiDnsZone(const WmiConnection & conn, const WmiObject & obj) :
+			WmiDnsBase(conn, obj)
+		{
+		}
 
-	void CreateRecordCNAME(const ustring & name, const ustring & prim);
+		void Save() const;
 
-	void CreateRecordMX(const ustring & name, size_t pri, const ustring & exchange);
+		ustring file() const;
 
-	void CreateRecordNS(const ustring & name, const ustring & host);
+		void CreateRecord(const ustring & txt);
 
-	void CreateRecordPTR(const ustring & name, const ustring & dom);
+		void CreateRecordA(const ustring & name, const ustring & ip);
 
-	void CreateRecordSRV(const ustring & name, size_t prio, size_t weight, size_t port, const ustring & dom);
+		void CreateRecordAAAA(const ustring & name, const ustring & ip);
 
-	void CreateRecordTXT(const ustring & name, const ustring & txt);
+		void CreateRecordCNAME(const ustring & name, const ustring & prim);
 
-private:
-	BStr Path(PCWSTR srv, PCWSTR name) const;
-};
+		void CreateRecordMX(const ustring & name, size_t pri, const ustring & exchange);
+
+		void CreateRecordNS(const ustring & name, const ustring & host);
+
+		void CreateRecordPTR(const ustring & name, const ustring & dom);
+
+		void CreateRecordSRV(const ustring & name, size_t prio, size_t weight, size_t port, const ustring & dom);
+
+		void CreateRecordTXT(const ustring & name, const ustring & txt);
+
+	private:
+		BStr Path(PCWSTR srv, PCWSTR name) const;
+	};
 
 ///==================================================================================== WmiDnsRecord
-class WmiDnsRecord: public WmiDnsBase {
-public:
-	WmiDnsRecord(const WmiConnection & conn, const BStr & path):
-		WmiDnsBase(conn, path) {
-	}
+	class WmiDnsRecord: public WmiDnsBase {
+	public:
+		WmiDnsRecord(const WmiConnection & conn, const BStr & path) :
+			WmiDnsBase(conn, path)
+		{
+		}
 
-	WmiDnsRecord(const WmiConnection & conn, PCWSTR srv, PCWSTR zone, PCWSTR text):
-		WmiDnsBase(conn, Path(conn, srv, zone, text)) {
-	}
+		WmiDnsRecord(const WmiConnection & conn, PCWSTR srv, PCWSTR zone, PCWSTR text) :
+			WmiDnsBase(conn, Path(conn, srv, zone, text))
+		{
+		}
 
-	WmiDnsRecord(const WmiConnection & conn, const WmiObject & obj):
-		WmiDnsBase(conn, obj) {
-	}
+		WmiDnsRecord(const WmiConnection & conn, const WmiObject & obj) :
+			WmiDnsBase(conn, obj)
+		{
+		}
 
-	ustring domain() const;
+		ustring domain() const;
 
-	ustring name() const;
+		ustring name() const;
 
-	ustring data() const;
+		ustring data() const;
 
-	ustring text() const;
+		ustring text() const;
 
-	ustring type() const;
+		ustring type() const;
 
-	int ttl() const;
+		int ttl() const;
 
-private:
-	BStr Path(const WmiConnection & conn, PCWSTR srv, PCWSTR zone, PCWSTR text) const;
-};
+	private:
+		BStr Path(const WmiConnection & conn, PCWSTR srv, PCWSTR zone, PCWSTR text) const;
+	};
 
 ///=================================================================================== WmiDnsRecordA
-class WmiDnsRecordA: public WmiDnsRecord {
-public:
-	WmiDnsRecordA(const WmiConnection & conn, PCWSTR srv, PCWSTR zone, PCWSTR name):
-		WmiDnsRecord(conn, Path(srv, zone, name)) {
-	}
+	class WmiDnsRecordA: public WmiDnsRecord {
+	public:
+		WmiDnsRecordA(const WmiConnection & conn, PCWSTR srv, PCWSTR zone, PCWSTR name) :
+			WmiDnsRecord(conn, Path(srv, zone, name))
+		{
+		}
 
-	WmiDnsRecordA(const WmiConnection & conn, const WmiObject & obj):
-		WmiDnsRecord(conn, obj) {
-	}
+		WmiDnsRecordA(const WmiConnection & conn, const WmiObject & obj) :
+			WmiDnsRecord(conn, obj)
+		{
+		}
 
-	ustring ip() const;
+		ustring ip() const;
 
-	void Modify(const ustring & ip);
+		void Modify(const ustring & ip);
 
-private:
-	BStr Path(PCWSTR srv, PCWSTR zone, PCWSTR name) const;
-};
+	private:
+		BStr Path(PCWSTR srv, PCWSTR zone, PCWSTR name) const;
+	};
 
 ///================================================================================ WmiDnsRecordAAAA
-class WmiDnsRecordAAAA: public WmiDnsRecord {
-public:
-	WmiDnsRecordAAAA(const WmiConnection & conn, PCWSTR srv, PCWSTR zone, PCWSTR name):
-		WmiDnsRecord(conn, Path(srv, zone, name)) {
-	}
+	class WmiDnsRecordAAAA: public WmiDnsRecord {
+	public:
+		WmiDnsRecordAAAA(const WmiConnection & conn, PCWSTR srv, PCWSTR zone, PCWSTR name) :
+			WmiDnsRecord(conn, Path(srv, zone, name))
+		{
+		}
 
-	WmiDnsRecordAAAA(const WmiConnection & conn, const WmiObject & obj):
-		WmiDnsRecord(conn, obj) {
-	}
+		WmiDnsRecordAAAA(const WmiConnection & conn, const WmiObject & obj) :
+			WmiDnsRecord(conn, obj)
+		{
+		}
 
-	ustring ip() const;
+		ustring ip() const;
 
-	void Modify(const ustring & ip);
+		void Modify(const ustring & ip);
 
-private:
-	BStr Path(PCWSTR srv, PCWSTR zone, PCWSTR name) const;
-};
+	private:
+		BStr Path(PCWSTR srv, PCWSTR zone, PCWSTR name) const;
+	};
 
 ///================================================================================== WmiDnsRecordNS
-class WmiDnsRecordNS: public WmiDnsRecord {
-public:
-	WmiDnsRecordNS(const WmiConnection & conn, PCWSTR name):
-		WmiDnsRecord(conn, Path(name)) {
-	}
+	class WmiDnsRecordNS: public WmiDnsRecord {
+	public:
+		WmiDnsRecordNS(const WmiConnection & conn, PCWSTR name) :
+			WmiDnsRecord(conn, Path(name))
+		{
+		}
 
-	WmiDnsRecordNS(const WmiConnection & conn, const WmiObject & obj):
-		WmiDnsRecord(conn, obj) {
-	}
+		WmiDnsRecordNS(const WmiConnection & conn, const WmiObject & obj) :
+			WmiDnsRecord(conn, obj)
+		{
+		}
 
-	ustring host() const;
+		ustring host() const;
 
-private:
-	BStr Path(PCWSTR name) const;
-};
+	private:
+		BStr Path(PCWSTR name) const;
+	};
 
 ///================================================================================== WmiDnsRecordMX
-class WmiDnsRecordMX: public WmiDnsRecord {
-public:
-	WmiDnsRecordMX(const WmiConnection & conn, PCWSTR name):
-		WmiDnsRecord(conn, Path(name)) {
-	}
+	class WmiDnsRecordMX: public WmiDnsRecord {
+	public:
+		WmiDnsRecordMX(const WmiConnection & conn, PCWSTR name) :
+			WmiDnsRecord(conn, Path(name))
+		{
+		}
 
-	WmiDnsRecordMX(const WmiConnection & conn, const WmiObject & obj):
-		WmiDnsRecord(conn, obj) {
-	}
+		WmiDnsRecordMX(const WmiConnection & conn, const WmiObject & obj) :
+			WmiDnsRecord(conn, obj)
+		{
+		}
 
-	ustring addr() const;
+		ustring addr() const;
 
-	int priority() const;
+		int priority() const;
 
-private:
-	BStr Path(PCWSTR name) const;
-};
+	private:
+		BStr Path(PCWSTR name) const;
+	};
 
 ///================================================================================= WmiDnsRecordSRV
-class WmiDnsRecordSRV: public WmiDnsRecord {
-public:
-	WmiDnsRecordSRV(const WmiConnection & conn, PCWSTR srv, PCWSTR zone, PCWSTR name):
-		WmiDnsRecord(conn, Path(srv, zone, name)) {
-	}
+	class WmiDnsRecordSRV: public WmiDnsRecord {
+	public:
+		WmiDnsRecordSRV(const WmiConnection & conn, PCWSTR srv, PCWSTR zone, PCWSTR name) :
+			WmiDnsRecord(conn, Path(srv, zone, name))
+		{
+		}
 
-	WmiDnsRecordSRV(const WmiConnection & conn, const WmiObject & obj):
-		WmiDnsRecord(conn, obj) {
-	}
+		WmiDnsRecordSRV(const WmiConnection & conn, const WmiObject & obj) :
+			WmiDnsRecord(conn, obj)
+		{
+		}
 
-	ustring addr() const;
+		ustring addr() const;
 
-	int priority() const;
+		int priority() const;
 
-	int weight() const;
+		int weight() const;
 
-	int port() const;
+		int port() const;
 
-	void ModifyPort(size_t in);
+		void ModifyPort(size_t in);
 
-	void ModifyPriority(size_t in);
+		void ModifyPriority(size_t in);
 
-	void ModifyWeight(size_t in);
+		void ModifyWeight(size_t in);
 
-private:
-	BStr Path(PCWSTR srv, PCWSTR zone, PCWSTR name) const;
-};
+	private:
+		BStr Path(PCWSTR srv, PCWSTR zone, PCWSTR name) const;
+	};
 }
 #endif

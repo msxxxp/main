@@ -13,9 +13,9 @@ struct IEnumDiskQuotaUsers;
 namespace Com {
 	///=================================================================================== QuotaInfo
 	struct QuotaInfo {
-		QuotaInfo(const ComObject<IDiskQuotaControl> & ctrl, PCWSTR name);
-		QuotaInfo(const ComObject<IDiskQuotaUser> & usr);
-		QuotaInfo(const ComObject<IDiskQuotaUser> & usr, const ustring & name);
+		QuotaInfo(const Object<IDiskQuotaControl> & ctrl, PCWSTR name);
+		QuotaInfo(const Object<IDiskQuotaUser> & usr);
+		QuotaInfo(const Object<IDiskQuotaUser> & usr, const ustring & name);
 
 		ustring get_name() const;
 		ustring get_used_text() const;
@@ -30,9 +30,9 @@ namespace Com {
 		void set_threshold(size_t in);
 
 	private:
-		static ustring get_name(const ComObject<IDiskQuotaUser> &usr);
+		static ustring get_name(const Object<IDiskQuotaUser> &usr);
 
-		ComObject<IDiskQuotaUser> m_usr;
+		Object<IDiskQuotaUser> m_usr;
 		mutable ustring m_name;
 
 		friend class DiskQuotaUsers;
@@ -52,7 +52,7 @@ namespace Com {
 
 		DiskQuota(const ustring &path);
 
-		const ComObject<IDiskQuotaControl>& operator->() const;
+		const Object<IDiskQuotaControl>& operator->() const;
 
 		ustring path() const;
 
@@ -102,16 +102,16 @@ namespace Com {
 
 		DWORD get_log_flags() const;
 
-		ComObject<IDiskQuotaUser> get_user_raw(const ustring & name) const;
+		Object<IDiskQuotaUser> get_user_raw(const ustring & name) const;
 
-		ComObject<IDiskQuotaUser> add_raw(const ustring & name);
+		Object<IDiskQuotaUser> add_raw(const ustring & name);
 
-		ComObject<IDiskQuotaUser> add_raw(const ustring & name, size_t lim, size_t thr);
+		Object<IDiskQuotaUser> add_raw(const ustring & name, size_t lim, size_t thr);
 
-		void del(const ComObject<IDiskQuotaUser> & user);
+		void del(const Object<IDiskQuotaUser> & user);
 
 		ustring m_path;
-		ComObject<IDiskQuotaControl> m_control;
+		Object<IDiskQuotaControl> m_control;
 
 		friend class DiskQuotaUsers;
 	};

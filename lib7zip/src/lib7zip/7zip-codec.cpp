@@ -3,7 +3,8 @@
 
 namespace SevenZip {
 	///======================================================================================= Codec
-	Codec::Codec(const Lib & arc_lib, size_t idx) {
+	Codec::Codec(const Lib & arc_lib, size_t idx)
+	{
 		CheckApiError(arc_lib.get_prop(idx, NArchive::kClassID, guid));
 		CheckApiError(arc_lib.get_prop(idx, NArchive::kName, name));
 		CheckApiError(arc_lib.get_prop(idx, NArchive::kUpdate, updatable));
@@ -15,27 +16,33 @@ namespace SevenZip {
 		arc_lib.get_prop(idx, NArchive::kKeepName, kKeepName);
 	}
 
-	bool Codec::operator <(const Codec & rhs) const {
+	bool Codec::operator <(const Codec & rhs) const
+	{
 		return name < rhs.name;
 	}
 
-	bool Codec::operator ==(const Codec & rhs) const {
+	bool Codec::operator ==(const Codec & rhs) const
+	{
 		return name == rhs.name;
 	}
 
-	bool Codec::operator !=(const Codec & rhs) const {
+	bool Codec::operator !=(const Codec & rhs) const
+	{
 		return name != rhs.name;
 	}
 
 	///====================================================================================== Codecs
-	Codecs::Codecs() {
+	Codecs::Codecs()
+	{
 	}
 
-	Codecs::Codecs(const Lib & lib) {
+	Codecs::Codecs(const Lib & lib)
+	{
 		cache(lib);
 	}
 
-	void Codecs::cache(const Lib & lib) {
+	void Codecs::cache(const Lib & lib)
+	{
 		UInt32 num_formats = 0;
 		CheckCom(lib.GetNumberOfFormats(&num_formats));
 		clear();

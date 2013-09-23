@@ -10,35 +10,35 @@ namespace Com {
 
 	HRESULT ConvertBoolToHRESULT(bool result);
 
-	///=================================================================================== ComObject
+	///=================================================================================== Object
 	template<typename Interface>
-	class ComObject {
-		typedef ComObject this_type;
+	class Object {
+		typedef Object this_type;
 		typedef Interface * pointer;
 
 	public:
-		~ComObject()
+		~Object()
 		{
 			Release();
 		}
 
-		ComObject() :
+		Object() :
 			m_obj(nullptr)
 		{
 		}
 
-		explicit ComObject(const Interface * param) :
+		explicit Object(const Interface * param) :
 			m_obj((pointer)param)
 		{ // caller must not Release param
 		}
 
-		explicit ComObject(const VARIANT & param) :
+		explicit Object(const VARIANT & param) :
 			m_obj((pointer)param.ppunkVal)
 		{
 			m_obj->AddRef();
 		}
 
-		ComObject(const this_type & param) :
+		Object(const this_type & param) :
 			m_obj(param.m_obj)
 		{
 			if (m_obj) {

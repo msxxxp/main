@@ -6,17 +6,21 @@
 
 namespace SevenZip {
 	///================================================================================ OpenCallback
-	OpenCallback::~OpenCallback() {
+	OpenCallback::~OpenCallback()
+	{
 	}
 
-	OpenCallback::OpenCallback() {
+	OpenCallback::OpenCallback()
+	{
 	}
 
-	ULONG WINAPI OpenCallback::AddRef() {
+	ULONG WINAPI OpenCallback::AddRef()
+	{
 		return UnknownImp::AddRef();
 	}
 
-	ULONG WINAPI OpenCallback::Release() {
+	ULONG WINAPI OpenCallback::Release()
+	{
 		return UnknownImp::Release();
 	}
 
@@ -26,15 +30,18 @@ namespace SevenZip {
 		return UnknownImp::QueryInterface(riid, object);
 	}
 
-	HRESULT WINAPI OpenCallback::SetTotal(const UInt64 */*files*/, const UInt64 */*bytes*/) {
+	HRESULT WINAPI OpenCallback::SetTotal(const UInt64 */*files*/, const UInt64 */*bytes*/)
+	{
 		return S_OK;
 	}
 
-	HRESULT WINAPI OpenCallback::SetCompleted(const UInt64 */*files*/, const UInt64 */*bytes*/) {
+	HRESULT WINAPI OpenCallback::SetCompleted(const UInt64 */*files*/, const UInt64 */*bytes*/)
+	{
 		return S_OK;
 	}
 
-	HRESULT WINAPI OpenCallback::CryptoGetTextPassword(BSTR */*password*/) {
+	HRESULT WINAPI OpenCallback::CryptoGetTextPassword(BSTR */*password*/)
+	{
 //		printf(L"%S\n", __PRETTY_FUNCTION__);
 		if (Password.empty()) {
 			// You can ask real password here from user

@@ -162,7 +162,7 @@ struct CmdParser: public Command_p {
 
 private:
 	auto_close<PWSTR*> argv;
-	std::tr1::shared_ptr<Command_p> action;
+	std::shared_ptr<Command_p> action;
 	int argc;
 };
 

@@ -499,8 +499,8 @@ namespace Fsys {
 			static HANDLE Open(const ustring & path, ACCESS_MASK access, DWORD share, PSECURITY_ATTRIBUTES sa, DWORD creat, DWORD flags);
 
 		private:
-			HANDLE m_hndl;
 			ustring m_path;
+			HANDLE m_hndl;
 		};
 
 		///=============================================================================== File::Map

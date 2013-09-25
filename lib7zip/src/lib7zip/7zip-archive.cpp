@@ -1,12 +1,14 @@
 #include <lib7zip/7zip.hpp>
 #include <libcom/bstr.hpp>
 #include <libext/exception.hpp>
+#include <libbase/logger.hpp>
 
 namespace SevenZip {
 	///===================================================================================== Archive
 	Archive::Archive(const Lib & lib, const ustring & path, flags_type flags) :
 		m_flags(flags)
 	{
+		LogNoise(L"%p, '%s', 0x%Iu\n", &lib, path.c_str(), flags);
 		open_archive(lib, path);
 		init_props();
 	}
@@ -14,19 +16,23 @@ namespace SevenZip {
 	Archive::Archive(const Lib & lib, const ustring & path, const ustring & /*mask*/, flags_type flags) :
 		m_flags(flags)
 	{
+		LogNoise(L"%p, '%s', 0x%Iu\n", &lib, path.c_str(), flags);
 		open_archive(lib, path);
 		init_props();
 	}
 
 	Archive::Archive(Com::Object<IInArchive> arc, flags_type flags) :
-		m_arc(arc), m_flags(flags)
+		m_arc(arc),
+		m_flags(flags)
 	{
+		LogNoise(L"0x%Iu\n", flags);
 		init_props();
 	}
 
 	void Archive::open_archive(const Lib & lib, const ustring & path)
 	{
-		Com::Object<IInStream> stream(new FileReadStream(path.c_str()));
+		LogNoise(L"%p, '%s'\n", &lib, path.c_str());
+		Com::Object<IInStream> stream(new FileReadStream(path));
 		Com::Object<IArchiveOpenCallback> openCallback(new OpenCallback);
 		for (Codecs::const_iterator it = lib.codecs().begin(); it != lib.codecs().end(); ++it) {
 			CheckCom(lib.CreateObject(&it->second->guid, &IID_IInArchive, (PVOID* )&m_arc));
@@ -41,6 +47,7 @@ namespace SevenZip {
 
 	void Archive::init_props()
 	{
+		LogTrace();
 		CheckApiError(m_arc->GetNumberOfItems(&m_size));
 		m_props.cache(m_arc);
 	}
@@ -94,6 +101,7 @@ namespace SevenZip {
 
 	size_t Archive::test() const
 	{
+		LogTrace();
 		ExtractCallback * callback(new ExtractCallback(*this));
 		Com::Object<IArchiveExtractCallback> extractCallback(callback);
 		m_arc->Extract(nullptr, (UInt32)-1, true, extractCallback);
@@ -102,6 +110,7 @@ namespace SevenZip {
 
 	void Archive::extract(const ustring & dest) const
 	{
+		LogTrace();
 		Com::Object<IArchiveExtractCallback> extractCallback(new ExtractCallback(*this, dest));
 		CheckCom(m_arc->Extract(nullptr, (UInt32 )-1, false, extractCallback));
 	}

@@ -196,7 +196,7 @@ namespace Base {
 	//	typedef const Type * str_t;
 	//	typedef str_t (*func_t)(str_t, Type);
 	//	str_t last1 = &where[Len(where)];
-	//	str_t pos = find_if(&where[0], last1, tr1::bind((func_t)Find, what, _1));
+	//	str_t pos = find_if(&where[0], last1, bind((func_t)Find, what, _1));
 	//	return (last1 == pos) ? nullptr : pos;
 	//}
 	//
@@ -207,7 +207,7 @@ namespace Base {
 	//	typedef const Type * str_t;
 	//	typedef str_t (*func_t)(str_t, Type);
 	//	str_t last1 = &where[Len(where)];
-	//	str_t pos = find_if(&where[0], last1, tr1::bind(logical_not<bool>(), tr1::bind((func_t)Find, what, _1)));
+	//	str_t pos = find_if(&where[0], last1, bind(logical_not<bool>(), bind((func_t)Find, what, _1)));
 	//	return (last1 == pos) ? nullptr : pos;
 	//}
 	//
@@ -218,7 +218,7 @@ namespace Base {
 	//	typedef str_t (*func_t)(str_t, Type);
 	//	reverse_iterator<str_t> first1(&where[Len(where)]);
 	//	reverse_iterator<str_t> last1(&where[0]);
-	//	reverse_iterator<str_t> pos = find_if(first1, last1, tr1::bind((func_t)Find, what, _1));
+	//	reverse_iterator<str_t> pos = find_if(first1, last1, bind((func_t)Find, what, _1));
 	////	reverse_iterator<str_t> pos = find_if(first1, last1, bind1st(ptr_fun<str_t, Type, str_t>(Find), what));
 	//	return (last1 == pos) ? nullptr : &(*pos);
 	//}
@@ -230,7 +230,7 @@ namespace Base {
 	//	typedef str_t (*func_t)(str_t, Type);
 	//	reverse_iterator<str_t> first1(&where[Len(where)]);
 	//	reverse_iterator<str_t> last1(&where[0]);
-	//	reverse_iterator<str_t> pos = find_if(first1, last1, tr1::bind(logical_not<bool>(), tr1::bind((func_t)Find, what, _1)));
+	//	reverse_iterator<str_t> pos = find_if(first1, last1, bind(logical_not<bool>(), bind((func_t)Find, what, _1)));
 	////	reverse_iterator<str_t> pos = find_if(first1, last1, not1(bind1st(ptr_fun<str_t, Type, str_t>(Find), what)));
 	//	return (last1 == pos) ? nullptr : &(*pos);
 	//}

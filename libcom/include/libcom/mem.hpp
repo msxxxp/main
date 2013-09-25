@@ -17,6 +17,11 @@ namespace Com {
 		{
 		}
 
+		CoMem(size_t size) :
+			m_ptr(::CoTaskMemAlloc(size))
+		{
+		}
+
 		operator Type() const
 		{
 			return m_ptr;
@@ -43,8 +48,7 @@ namespace Com {
 	private:
 		void clean()
 		{
-			if (m_ptr)
-				::CoTaskMemFree(m_ptr);
+			::CoTaskMemFree(m_ptr);
 		}
 
 		Type m_ptr;

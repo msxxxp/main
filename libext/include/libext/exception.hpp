@@ -4,6 +4,7 @@
 #include <libbase/std.hpp>
 #include <libbase/mstring.hpp>
 #include <libbase/shared_ptr.hpp>
+#include <libbase/backtrace.hpp>
 
 #define THROW_PLACE THIS_FILE, __LINE__, __PRETTY_FUNCTION__
 
@@ -53,6 +54,7 @@ namespace Ext {
 		ustring	m_where;
 #endif
 		Base::shared_ptr<AbstractError> m_prev_exc;
+		Base::Backtrace m_backtrace;
 	};
 
 

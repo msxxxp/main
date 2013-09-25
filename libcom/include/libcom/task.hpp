@@ -5,7 +5,7 @@
 
 #include <vector>
 
-#include <tr1/memory>
+#include <memory>
 
 ///▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒ com_task
 struct ITask;
@@ -79,7 +79,7 @@ namespace Com {
 		void save();
 
 		Object<ITaskTrigger> m_trigger;
-		std::tr1::shared_ptr<_TASK_TRIGGER> m_info;
+		std::shared_ptr<_TASK_TRIGGER> m_info;
 		size_t m_index;
 
 		friend class WinTask;

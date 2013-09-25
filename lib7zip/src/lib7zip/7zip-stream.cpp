@@ -1,8 +1,6 @@
 ﻿#include <lib7zip/7zip.hpp>
 #include <libext/exception.hpp>
-
-#define UNKNOWN_IMPL_ITF(iid) \
-	if (riid == IID_##iid) { *object = this; AddRef(); return S_OK; }
+#include <libbase/logger.hpp>
 
 namespace SevenZip {
 	///============================================================================== FileReadStream
@@ -16,42 +14,47 @@ namespace SevenZip {
 		return UnknownImp::Release();
 	}
 
-	HRESULT WINAPI FileReadStream::QueryInterface(REFIID riid, void** object) {
-		//	printf(L"FileReadStream::QueryInterface()\n");
-		UNKNOWN_IMPL_ITF(IInStream)
-		UNKNOWN_IMPL_ITF(ISequentialInStream)
+	HRESULT WINAPI FileReadStream::QueryInterface(REFIID riid, void** object)
+	{
+//		LogTrace();
+		if (IsEqualIID(riid, IID_IInStream) && object) {
+//			LogNoise(L"IID_IInStream\n");
+			*object = static_cast<IInStream*>(this);
+			AddRef();
+			return S_OK;
+		} else if (IsEqualIID(riid, IID_ISequentialInStream) && object) {
+//			LogNoise(L"IID_ISequentialInStream\n");
+			*object = static_cast<ISequentialInStream*>(this);
+			AddRef();
+			return S_OK;
+		}
 		return UnknownImp::QueryInterface(riid, object);
 	}
 
 	FileReadStream::~FileReadStream()
 	{
-		//	printf(L"FileReadStream::~FileReadStream()\n");
+		LogTrace();
 	}
 
 	FileReadStream::FileReadStream(const ustring & path) :
 		Fsys::File::Facade(path, FILE_GENERIC_READ, FILE_SHARE_READ | FILE_SHARE_DELETE, nullptr, OPEN_EXISTING, FILE_FLAG_SEQUENTIAL_SCAN)
 	{
-		//	printf(L"FileReadStream::FileReadStream(%s)\n", path);
+		LogNoise(L"'%s', %Iu\n", path.c_str(), size());
 	}
 
 	HRESULT WINAPI FileReadStream::Read(void * data, UInt32 size, UInt32 * processedSize)
 	{
-		//	printf(L"FileReadStream::Read(%d)\n", size);
-		try {
-			DWORD read = Fsys::File::Facade::read(data, size);
-			if (processedSize)
-				*processedSize = read;
-		} catch (Ext::AbstractError & e) {
-			return e.code();
-		} catch (...) {
-			return E_FAIL;
-		}
-		return S_OK;
+		DWORD read = 0;
+		bool ret = Fsys::File::Facade::read_nt(data, size, read);
+		if (processedSize)
+			*processedSize = read;
+		LogNoise(L"%p, %u, %u -> %d\n", data, size, read, ret);
+		return Com::ConvertBoolToHRESULT(ret);
 	}
 
 	HRESULT WINAPI FileReadStream::Seek(Int64 offset, UInt32 seekOrigin, UInt64 * newPosition)
 	{
-		//	printf(L"FileReadStream::Seek(%Id, %d)\n", offset, seekOrigin);
+		LogNoise(L"%I64d, %u\n", offset, seekOrigin);
 		try {
 			uint64_t new_position;
 			Fsys::File::Facade::set_position(offset, seekOrigin);
@@ -77,33 +80,47 @@ namespace SevenZip {
 		return UnknownImp::Release();
 	}
 
-	HRESULT WINAPI FileWriteStream::QueryInterface(REFIID riid, void ** object) {
-		UNKNOWN_IMPL_ITF(IOutStream)
-		UNKNOWN_IMPL_ITF(ISequentialOutStream)
+	HRESULT WINAPI FileWriteStream::QueryInterface(REFIID riid, void ** object)
+	{
+//		LogTrace();
+		if (IsEqualIID(riid, IID_IOutStream) && object) {
+//			LogNoise(L"IID_IOutStream\n");
+			*object = static_cast<IOutStream*>(this);
+			AddRef();
+			return S_OK;
+		} else if (IsEqualIID(riid, IID_ISequentialOutStream) && object) {
+//			LogNoise(L"IID_ISequentialOutStream\n");
+			*object = static_cast<ISequentialOutStream*>(this);
+			AddRef();
+			return S_OK;
+		}
 		return UnknownImp::QueryInterface(riid, object);
 	}
 
 	FileWriteStream::~FileWriteStream()
 	{
-		//	printf(L"FileWriteStream::~FileWriteStream()\n");
+		LogTrace();
 	}
 
 	FileWriteStream::FileWriteStream(const ustring & path, DWORD creat) :
 		Fsys::File::Facade(path, GENERIC_READ | GENERIC_WRITE, 0, nullptr, creat, 0)
 	{
+		LogNoise(L"'%s', %u\n", path.c_str(), creat);
 	}
 
 	HRESULT WINAPI FileWriteStream::Write(PCVOID data, UInt32 size, UInt32 * processedSize)
 	{
 		DWORD written;
-		bool result = write_nt(data, size, written);
-		if (processedSize != NULL)
+		bool ret = write_nt(data, size, written);
+		if (processedSize)
 			*processedSize = written;
-		return Com::ConvertBoolToHRESULT(result);
+		LogNoise(L"%p, %u, %u -> %d\n", data, size, written, ret);
+		return Com::ConvertBoolToHRESULT(ret);
 	}
 
 	HRESULT WINAPI FileWriteStream::Seek(Int64 offset, UInt32 seekOrigin, UInt64 * newPosition)
 	{
+		LogNoise(L"%I64d, %u\n", offset, seekOrigin);
 		HRESULT result = Com::ConvertBoolToHRESULT(set_position_nt(offset, seekOrigin));
 		if (newPosition != NULL)
 			*newPosition = get_position();
@@ -112,6 +129,7 @@ namespace SevenZip {
 
 	HRESULT WINAPI FileWriteStream::SetSize(UInt64 newSize)
 	{
+		LogNoise(L"%I64u\n", newSize);
 		uint64_t currentPos = get_position();
 		set_position(newSize);
 		HRESULT result = Com::ConvertBoolToHRESULT(set_eof());

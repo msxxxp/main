@@ -25,7 +25,7 @@ namespace Com {
 	Variant::Variant(PCWSTR val)
 	{
 		::VariantInit(this);
-		bstrVal = ::SysAllocStringLen(val, Base::Str::length(val));
+		bstrVal = ::SysAllocString(val);
 		if (bstrVal == nullptr) {
 			vt = VT_ERROR;
 			CheckCom(E_OUTOFMEMORY);
@@ -38,7 +38,7 @@ namespace Com {
 	{
 		parray = CheckPointer(::SafeArrayCreateVector(VT_BSTR, 0, cnt));
 		vt = VT_ARRAY | VT_BSTR;
-		BSTR *data = (BSTR*)parray->pvData;
+		auto data = static_cast<BSTR*>(parray->pvData);
 		for (size_t i = 0; i < cnt; ++i) {
 			data[i] = ::SysAllocString(val[i]);
 		}
@@ -114,7 +114,7 @@ namespace Com {
 	Variant::Variant(const base_type & in)
 	{
 		::VariantInit(this);
-		CheckCom(::VariantCopy(this, (VARIANTARG* )&in));
+		CheckCom(::VariantCopy(this, const_cast<base_type*>(&in)));
 	}
 
 	const Variant::this_type & Variant::operator =(const base_type & rhs)
@@ -129,7 +129,7 @@ namespace Com {
 		CheckCom(::VariantChangeType(this, this, flag, type));
 	}
 
-	HRESULT Variant::change_type_nt(VARTYPE type, DWORD flag) throw()
+	HRESULT Variant::change_type_nt(VARTYPE type, DWORD flag) noexcept
 	{
 		return ::VariantChangeType(this, this, flag, type);
 	}
@@ -190,9 +190,11 @@ namespace Com {
 		if (is_null() || is_empty())
 			return ustring();
 		else if (!is_str()) {
-			change_type(VT_BSTR);
+			this_type tmp(*this);
+			tmp.change_type(VT_BSTR);
+			return ustring(tmp.bstrVal, ::SysStringLen(tmp.bstrVal));
 		}
-		return bstrVal;
+		return ustring(bstrVal, ::SysStringLen(bstrVal));
 	}
 
 	Variant::pointer Variant::ref()
@@ -203,7 +205,8 @@ namespace Com {
 
 	void Variant::swap(this_type & rhs)
 	{
-		VARIANT & a(*this), &b(rhs);
+		VARIANT & a(*this);
+		VARIANT & b(rhs);
 		using std::swap;
 		swap(a, b);
 	}

@@ -21,7 +21,7 @@
 					<folderInfo id="cdt.managedbuild.config.gnu.mingw.exe.debug.157240058." name="/" resourcePath="">
 						<toolChain id="cdt.managedbuild.toolchain.gnu.mingw.exe.debug.135730523" name="MinGW GCC" superClass="cdt.managedbuild.toolchain.gnu.mingw.exe.debug" unusedChildren="cdt.managedbuild.tool.gnu.c.compiler.mingw.exe.debug;cdt.managedbuild.tool.gnu.assembler.mingw.exe.debug;cdt.managedbuild.tool.gnu.c.linker.mingw.exe.debug">
 							<targetPlatform id="cdt.managedbuild.target.gnu.platform.mingw.exe.debug.373443936" name="Debug Platform" superClass="cdt.managedbuild.target.gnu.platform.mingw.exe.debug"/>
-							<builder buildPath="${workspace_loc:/libcom/Debug}" id="cdt.managedbuild.tool.gnu.builder.mingw.base.1501779507" keepEnvironmentInBuildfile="false" managedBuildOn="true" name="CDT Internal Builder" superClass="cdt.managedbuild.tool.gnu.builder.mingw.base"/>
+							<builder buildPath="${workspace_loc:/libcom/Debug}" id="cdt.managedbuild.tool.gnu.builder.mingw.base.1501779507" keepEnvironmentInBuildfile="false" managedBuildOn="true" name="CDT Internal Builder" parallelBuildOn="true" parallelizationNumber="optimal" superClass="cdt.managedbuild.tool.gnu.builder.mingw.base"/>
 							<tool id="cdt.managedbuild.tool.gnu.cpp.linker.mingw.exe.debug.585067718" name="MinGW C++ Linker" superClass="cdt.managedbuild.tool.gnu.cpp.linker.mingw.exe.debug">
 								<inputType id="cdt.managedbuild.tool.gnu.cpp.linker.input.345768762" superClass="cdt.managedbuild.tool.gnu.cpp.linker.input">
 									<additionalInput kind="additionalinputdependency" paths="$(USER_OBJS)"/>
@@ -77,7 +77,7 @@
 					<folderInfo id="cdt.managedbuild.config.gnu.mingw.exe.release.440982237." name="/" resourcePath="">
 						<toolChain id="cdt.managedbuild.toolchain.gnu.mingw.exe.release.878399255" name="MinGW GCC" superClass="cdt.managedbuild.toolchain.gnu.mingw.exe.release" unusedChildren="cdt.managedbuild.tool.gnu.c.linker.mingw.exe.release;cdt.managedbuild.tool.gnu.c.compiler.mingw.exe.release;cdt.managedbuild.tool.gnu.assembler.mingw.exe.release">
 							<targetPlatform id="cdt.managedbuild.target.gnu.platform.mingw.exe.release.1310547583" name="Debug Platform" superClass="cdt.managedbuild.target.gnu.platform.mingw.exe.release"/>
-							<builder buildPath="${workspace_loc:/libcom/Release}" id="cdt.managedbuild.tool.gnu.builder.mingw.base.894635054" keepEnvironmentInBuildfile="false" managedBuildOn="true" name="CDT Internal Builder" superClass="cdt.managedbuild.tool.gnu.builder.mingw.base"/>
+							<builder buildPath="${workspace_loc:/libcom/Release}" id="cdt.managedbuild.tool.gnu.builder.mingw.base.894635054" keepEnvironmentInBuildfile="false" managedBuildOn="true" name="CDT Internal Builder" parallelBuildOn="true" parallelizationNumber="optimal" superClass="cdt.managedbuild.tool.gnu.builder.mingw.base"/>
 							<tool id="cdt.managedbuild.tool.gnu.cpp.linker.mingw.exe.release.922555231" name="MinGW C++ Linker" superClass="cdt.managedbuild.tool.gnu.cpp.linker.mingw.exe.release">
 								<inputType id="cdt.managedbuild.tool.gnu.cpp.linker.input.16075376" superClass="cdt.managedbuild.tool.gnu.cpp.linker.input">
 									<additionalInput kind="additionalinputdependency" paths="$(USER_OBJS)"/>
@@ -130,7 +130,7 @@
 					<folderInfo id="cdt.managedbuild.config.gnu.mingw.exe.debug.157240058.480318021." name="/" resourcePath="">
 						<toolChain id="cdt.managedbuild.toolchain.gnu.mingw.exe.debug.901131750" name="MinGW GCC" superClass="cdt.managedbuild.toolchain.gnu.mingw.exe.debug" unusedChildren="cdt.managedbuild.tool.gnu.c.compiler.mingw.exe.debug;cdt.managedbuild.tool.gnu.assembler.mingw.exe.debug;cdt.managedbuild.tool.gnu.c.linker.mingw.exe.debug">
 							<targetPlatform id="cdt.managedbuild.target.gnu.platform.mingw.exe.debug.1467201427" name="Debug Platform" superClass="cdt.managedbuild.target.gnu.platform.mingw.exe.debug"/>
-							<builder buildPath="${workspace_loc:/libcom/Debug}" id="cdt.managedbuild.tool.gnu.builder.mingw.base.1765548139" keepEnvironmentInBuildfile="false" managedBuildOn="true" name="CDT Internal Builder" superClass="cdt.managedbuild.tool.gnu.builder.mingw.base"/>
+							<builder buildPath="${workspace_loc:/libcom/Debug}" id="cdt.managedbuild.tool.gnu.builder.mingw.base.1765548139" keepEnvironmentInBuildfile="false" managedBuildOn="true" name="CDT Internal Builder" parallelBuildOn="true" parallelizationNumber="optimal" superClass="cdt.managedbuild.tool.gnu.builder.mingw.base"/>
 							<tool id="cdt.managedbuild.tool.gnu.cpp.linker.mingw.exe.debug.760434507" name="MinGW C++ Linker" superClass="cdt.managedbuild.tool.gnu.cpp.linker.mingw.exe.debug">
 								<inputType id="cdt.managedbuild.tool.gnu.cpp.linker.input.2104915805" superClass="cdt.managedbuild.tool.gnu.cpp.linker.input">
 									<additionalInput kind="additionalinputdependency" paths="$(USER_OBJS)"/>
@@ -183,7 +183,7 @@
 					<folderInfo id="cdt.managedbuild.config.gnu.mingw.exe.release.440982237.1983864713." name="/" resourcePath="">
 						<toolChain id="cdt.managedbuild.toolchain.gnu.mingw.exe.release.1554563296" name="MinGW GCC" superClass="cdt.managedbuild.toolchain.gnu.mingw.exe.release" unusedChildren="cdt.managedbuild.tool.gnu.c.linker.mingw.exe.release;cdt.managedbuild.tool.gnu.c.compiler.mingw.exe.release;cdt.managedbuild.tool.gnu.assembler.mingw.exe.release">
 							<targetPlatform id="cdt.managedbuild.target.gnu.platform.mingw.exe.release.1648616377" name="Debug Platform" superClass="cdt.managedbuild.target.gnu.platform.mingw.exe.release"/>
-							<builder buildPath="${workspace_loc:/libcom/Release}" id="cdt.managedbuild.tool.gnu.builder.mingw.base.137939081" keepEnvironmentInBuildfile="false" managedBuildOn="true" name="CDT Internal Builder" superClass="cdt.managedbuild.tool.gnu.builder.mingw.base"/>
+							<builder buildPath="${workspace_loc:/libcom/Release}" id="cdt.managedbuild.tool.gnu.builder.mingw.base.137939081" keepEnvironmentInBuildfile="false" managedBuildOn="true" name="CDT Internal Builder" parallelBuildOn="true" parallelizationNumber="optimal" superClass="cdt.managedbuild.tool.gnu.builder.mingw.base"/>
 							<tool id="cdt.managedbuild.tool.gnu.cpp.linker.mingw.exe.release.1981977921" name="MinGW C++ Linker" superClass="cdt.managedbuild.tool.gnu.cpp.linker.mingw.exe.release">
 								<inputType id="cdt.managedbuild.tool.gnu.cpp.linker.input.1398136089" superClass="cdt.managedbuild.tool.gnu.cpp.linker.input">
 									<additionalInput kind="additionalinputdependency" paths="$(USER_OBJS)"/>

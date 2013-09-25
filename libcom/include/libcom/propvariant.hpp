@@ -9,6 +9,7 @@ namespace Com {
 		typedef PROPVARIANT base_type;
 		typedef PropVariant this_type;
 		typedef PROPVARIANT * pointer;
+		typedef const PROPVARIANT * const_pointer;
 
 	public:
 		~PropVariant();

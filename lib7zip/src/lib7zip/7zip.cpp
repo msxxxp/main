@@ -3,6 +3,12 @@
 #include <libext/exception.hpp>
 
 namespace SevenZip {
+	Logger::Module_i * get_logger_module()
+	{
+		auto static module = Logger::get_module(L"7zip");
+		return module;
+	}
+
 	///======================================================================================== Prop
 	Prop::Prop(const Com::Object<IInArchive> & arc, size_t idx)
 	{
@@ -19,8 +25,9 @@ namespace SevenZip {
 		UInt32 num_props = 0;
 		CheckApiError(arc->GetNumberOfArchiveProperties(&num_props));
 		clear();
+		reserve(num_props);
 		for (UInt32 idx = 0; idx < num_props; ++idx) {
-			push_back(Prop(arc, idx));
+			emplace_back(arc, idx);
 		}
 	}
 
@@ -35,7 +42,8 @@ namespace SevenZip {
 
 	///========================================================================================= Lib
 	Lib::Lib(PCWSTR path) :
-		FileVersion(path), DynamicLibrary(path)
+		FileVersion(path),
+		DynamicLibrary(path)
 	{
 		GET_DLL_FUNC(CreateObject);
 		GET_DLL_FUNC(GetMethodProperty);
@@ -44,7 +52,9 @@ namespace SevenZip {
 		GET_DLL_FUNC_NT(GetHandlerProperty);
 		GET_DLL_FUNC_NT(GetHandlerProperty2);
 		GET_DLL_FUNC_NT(SetLargePageMode);
+
 		CheckApiThrowError(GetHandlerProperty2 || GetHandlerProperty, ERROR_INVALID_LIBRARY);
+
 		m_codecs.cache(*this);
 		m_methods.cache(*this);
 	}

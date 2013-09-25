@@ -8,7 +8,7 @@ namespace Logger {
 	struct LogToFile: public Target_i {
 		~LogToFile();
 
-		LogToFile(PCWSTR path);
+		LogToFile(PCWSTR path, bool overwrite);
 
 		void out(const Module_i * lgr, Level lvl, PCWSTR str, size_t size) const override;
 
@@ -27,9 +27,9 @@ namespace Logger {
 	{
 	}
 
-	LogToFile::LogToFile(PCWSTR path) :
-				m_sync(Base::Lock::get_CritSection()),
-				m_file(::CreateFileW(path, GENERIC_WRITE, FILE_SHARE_READ, nullptr, OPEN_ALWAYS, FILE_ATTRIBUTE_NORMAL, nullptr))
+	LogToFile::LogToFile(PCWSTR path, bool overwrite) :
+		m_sync(Base::Lock::get_CritSection()),
+		m_file(::CreateFileW(path, GENERIC_WRITE, FILE_SHARE_READ, nullptr, overwrite ? CREATE_ALWAYS : OPEN_ALWAYS, FILE_ATTRIBUTE_NORMAL, nullptr))
 	{
 		if (m_file.is_valid()) {
 			::SetFilePointer(m_file, 0, nullptr, FILE_END);
@@ -60,9 +60,9 @@ namespace Logger {
 		m_sync->release();
 	}
 
-	Target_t get_TargetToFile(PCWSTR path)
+	Target_t get_TargetToFile(PCWSTR path, bool overwrite)
 	{
-		return Target_t(new LogToFile(path));
+		return Target_t(new LogToFile(path, overwrite));
 	}
 
 }

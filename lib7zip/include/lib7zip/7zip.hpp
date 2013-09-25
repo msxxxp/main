@@ -4,8 +4,8 @@
  *	@link (ole32 oleaut32 uuid)
  **/
 
-#ifndef WIN_7ZIP_HPP
-#define WIN_7ZIP_HPP
+#ifndef LIB7ZIP_HPP_
+#define LIB7ZIP_HPP_
 
 #include <libcom/std.hpp>
 #include <libcom/guid.hpp>
@@ -16,17 +16,19 @@
 #include <libext/filesystem.hpp>
 #include <libbase/std.hpp>
 #include <libbase/pcstr.hpp>
+#include <libbase/logger.hpp>
 
 #include <initguid.h>
 #include <shobjidl.h>
 
 #include <map>
 #include <vector>
-#include <tr1/memory>
+#include <memory>
 
 namespace SevenZip {
 #include <lib7zip/CPP/7zip/Archive/IArchive.h>
 #include <lib7zip/CPP/7zip/IPassword.h>
+	Logger::Module_i * get_logger_module();
 
 	class Lib;
 
@@ -81,7 +83,8 @@ namespace SevenZip {
 	struct Method {
 		uint64_t id;
 		ustring name;
-		std::vector<BYTE> start_sign, finish_sign;
+		std::vector<BYTE> start_sign;
+		std::vector<BYTE> finish_sign;
 
 	private:
 		bool operator <(const Method & rhs) const;
@@ -96,8 +99,8 @@ namespace SevenZip {
 	};
 
 	///===================================================================================== Methods
-	struct Methods: private std::map<uint64_t, std::tr1::shared_ptr<Method> > {
-		typedef std::map<uint64_t, std::tr1::shared_ptr<Method> > base_type;
+	struct Methods: private std::map<uint64_t, std::shared_ptr<Method> > {
+		typedef std::map<uint64_t, std::shared_ptr<Method> > base_type;
 		typedef base_type::const_iterator iterator;
 		typedef base_type::const_iterator const_iterator;
 
@@ -107,11 +110,11 @@ namespace SevenZip {
 		using base_type::size;
 		using base_type::at;
 
-		void cache(const Lib & lib);
-
 	private:
 		Methods();
 		Methods(const Lib & lib);
+
+		void cache(const Lib & lib);
 
 		friend class Lib;
 	};
@@ -142,8 +145,8 @@ namespace SevenZip {
 	};
 
 	///====================================================================================== Codecs
-	struct Codecs: private std::map<ustring, std::tr1::shared_ptr<Codec> > {
-		typedef std::map<ustring, std::tr1::shared_ptr<Codec> > base_type;
+	struct Codecs: private std::map<ustring, std::shared_ptr<Codec> > {
+		typedef std::map<ustring, std::shared_ptr<Codec> > base_type;
 		typedef base_type::const_iterator iterator;
 		typedef base_type::const_iterator const_iterator;
 
@@ -153,13 +156,13 @@ namespace SevenZip {
 		using base_type::size;
 		using base_type::at;
 
-		void cache(const Lib & lib);
-
 //		ArcTypes find_by_ext(const ustring & ext) const;
 
 	private:
 		Codecs();
 		Codecs(const Lib & lib);
+
+		void cache(const Lib & lib);
 
 		friend class Lib;
 	};
@@ -170,10 +173,7 @@ namespace SevenZip {
 		PROPID id;
 		Com::PropVariant prop;
 
-	private:
 		Prop(const Com::Object<IInArchive> & arc, size_t idx);
-
-		friend class Props;
 	};
 
 	///======================================================================================= Props
@@ -210,7 +210,13 @@ namespace SevenZip {
 		typedef UInt32 (WINAPI *FSetLargePageMode)();
 
 	public:
-		DEFINE_FUNC(CreateObject);DEFINE_FUNC(GetHandlerProperty);DEFINE_FUNC(GetHandlerProperty2);DEFINE_FUNC(GetMethodProperty);DEFINE_FUNC(GetNumberOfFormats);DEFINE_FUNC(GetNumberOfMethods);DEFINE_FUNC(SetLargePageMode);
+		DEFINE_FUNC(CreateObject);
+		DEFINE_FUNC(GetHandlerProperty);
+		DEFINE_FUNC(GetHandlerProperty2);
+		DEFINE_FUNC(GetMethodProperty);
+		DEFINE_FUNC(GetNumberOfFormats);
+		DEFINE_FUNC(GetNumberOfMethods);
+		DEFINE_FUNC(SetLargePageMode);
 
 		Lib(PCWSTR path);
 
@@ -222,6 +228,8 @@ namespace SevenZip {
 		HRESULT get_prop(UInt32 index, PROPID prop_id, bool & value) const;
 		HRESULT get_prop(UInt32 index, PROPID prop_id, ustring & value) const;
 		HRESULT get_prop(UInt32 index, PROPID prop_id, std::vector<BYTE> & value) const;
+
+		using Ext::DynamicLibrary::get_path;
 
 	private:
 		Codecs m_codecs;
@@ -243,39 +251,39 @@ namespace SevenZip {
 
 ///============================================================================== FileReadStream
 	struct FileReadStream: public IInStream, private Fsys::File::Facade, private Com::UnknownImp {
-		virtual ~FileReadStream();
+		~FileReadStream();
 
 		FileReadStream(const ustring & path);
 
 		// Unknown
-		virtual ULONG WINAPI AddRef();
-		virtual ULONG WINAPI Release();
-		virtual HRESULT WINAPI QueryInterface(REFIID riid, void ** object);
+		ULONG WINAPI AddRef() override;
+		ULONG WINAPI Release() override;
+		HRESULT WINAPI QueryInterface(REFIID riid, void ** object) override;
 
 		// ISequentialInStream
-		virtual HRESULT WINAPI Read(void * data, UInt32 size, UInt32 * processedSize);
+		HRESULT WINAPI Read(void * data, UInt32 size, UInt32 * processedSize) override;
 
 		// IInStream
-		virtual HRESULT WINAPI Seek(Int64 offset, UInt32 seekOrigin, UInt64 * newPosition);
+		HRESULT WINAPI Seek(Int64 offset, UInt32 seekOrigin, UInt64 * newPosition) override;
 	};
 
 	///============================================================================= FileWriteStream
 	struct FileWriteStream: public IOutStream, private Fsys::File::Facade, private Com::UnknownImp {
-		virtual ~FileWriteStream();
+		~FileWriteStream();
 
 		FileWriteStream(const ustring & path, DWORD creat = CREATE_NEW);
 
 		// Unknown
-		virtual ULONG WINAPI AddRef();
-		virtual ULONG WINAPI Release();
-		virtual HRESULT WINAPI QueryInterface(REFIID riid, void ** object);
+		ULONG WINAPI AddRef() override;
+		ULONG WINAPI Release() override;
+		HRESULT WINAPI QueryInterface(REFIID riid, void ** object) override;
 
 		// ISequentialOutStream
-		virtual HRESULT WINAPI Write(PCVOID data, UInt32 size, UInt32 * processedSize);
+		HRESULT WINAPI Write(PCVOID data, UInt32 size, UInt32 * processedSize) override;
 
 		// IOutStream
-		virtual HRESULT WINAPI Seek(Int64 offset, UInt32 seekOrigin, UInt64 * newPosition);
-		virtual HRESULT WINAPI SetSize(UInt64 newSize);
+		HRESULT WINAPI Seek(Int64 offset, UInt32 seekOrigin, UInt64 * newPosition) override;
+		HRESULT WINAPI SetSize(UInt64 newSize) override;
 
 		using Fsys::File::Facade::set_mtime;
 	};
@@ -284,21 +292,21 @@ namespace SevenZip {
 	struct OpenCallback: public IArchiveOpenCallback, public ICryptoGetTextPassword, private Com::UnknownImp {
 		ustring Password;
 
-		virtual ~OpenCallback();
+		~OpenCallback();
 
 		OpenCallback();
 
 		// IUnknown
-		virtual ULONG WINAPI AddRef();
-		virtual ULONG WINAPI Release();
-		virtual HRESULT WINAPI QueryInterface(REFIID riid, void ** object);
+		ULONG WINAPI AddRef() override;
+		ULONG WINAPI Release() override;
+		HRESULT WINAPI QueryInterface(REFIID riid, void ** object) override;
 
 		// IArchiveOpenCallback
-		virtual HRESULT WINAPI SetTotal(const UInt64 * files, const UInt64 * bytes);
-		virtual HRESULT WINAPI SetCompleted(const UInt64 * files, const UInt64 * bytes);
+		HRESULT WINAPI SetTotal(const UInt64 * files, const UInt64 * bytes) override;
+		HRESULT WINAPI SetCompleted(const UInt64 * files, const UInt64 * bytes) override;
 
 		// ICryptoGetTextPassword
-		virtual HRESULT WINAPI CryptoGetTextPassword(BSTR * password);
+		HRESULT WINAPI CryptoGetTextPassword(BSTR * password) override;
 	};
 
 	///===================================================================================== Archive
@@ -408,24 +416,24 @@ namespace SevenZip {
 		FailedFiles failed_files;
 		ustring Password;
 
-		virtual ~ExtractCallback();
+		~ExtractCallback();
 
-		// Unknown
-		virtual ULONG WINAPI AddRef();
-		virtual ULONG WINAPI Release();
-		virtual HRESULT WINAPI QueryInterface(REFIID riid, void ** object);
+		// IUnknown
+		ULONG WINAPI AddRef() override;
+		ULONG WINAPI Release() override;
+		HRESULT WINAPI QueryInterface(REFIID riid, void ** object) override;
 
 		// IProgress
-		virtual HRESULT WINAPI SetTotal(UInt64 size);
-		virtual HRESULT WINAPI SetCompleted(const UInt64 * completeValue);
+		HRESULT WINAPI SetTotal(UInt64 size) override;
+		HRESULT WINAPI SetCompleted(const UInt64 * completeValue) override;
 
 		// IArchiveExtractCallback
-		virtual HRESULT WINAPI GetStream(UInt32 index, ISequentialOutStream ** outStream, Int32 askExtractMode);
-		virtual HRESULT WINAPI PrepareOperation(Int32 askExtractMode);
-		virtual HRESULT WINAPI SetOperationResult(Int32 resultEOperationResult);
+		HRESULT WINAPI GetStream(UInt32 index, ISequentialOutStream ** outStream, Int32 askExtractMode) override;
+		HRESULT WINAPI PrepareOperation(Int32 askExtractMode) override;
+		HRESULT WINAPI SetOperationResult(Int32 resultEOperationResult) override;
 
 		// ICryptoGetTextPassword
-		virtual HRESULT WINAPI CryptoGetTextPassword(BSTR * pass);
+		HRESULT WINAPI CryptoGetTextPassword(BSTR * pass) override;
 
 	private:
 		ExtractCallback(const Archive & arc, const ustring & dest_path = ustring(), const ustring & pass = ustring());
@@ -434,7 +442,7 @@ namespace SevenZip {
 		ustring m_dest;// Output directory
 
 		struct CurrItem;
-		std::tr1::shared_ptr<CurrItem> m_curr;
+		std::shared_ptr<CurrItem> m_curr;
 
 		friend class Archive;
 	};
@@ -477,31 +485,31 @@ namespace SevenZip {
 
 	///============================================================================== UpdateCallback
 	struct UpdateCallback: public IArchiveUpdateCallback2, public ICryptoGetTextPassword2, private Com::UnknownImp {
-		virtual ~UpdateCallback();
+		~UpdateCallback();
 
 		UpdateCallback(const CompressProperties & props, FailedFiles & ffiles);
 
 		// Unknown
-		virtual ULONG WINAPI AddRef();
-		virtual ULONG WINAPI Release();
-		virtual HRESULT WINAPI QueryInterface(REFIID riid, void ** object);
+		ULONG WINAPI AddRef() override;
+		ULONG WINAPI Release() override;
+		HRESULT WINAPI QueryInterface(REFIID riid, void ** object) override;
 
 		// IProgress
-		virtual HRESULT WINAPI SetTotal(UInt64 size);
-		virtual HRESULT WINAPI SetCompleted(const UInt64 * completeValue);
+		HRESULT WINAPI SetTotal(UInt64 size) override;
+		HRESULT WINAPI SetCompleted(const UInt64 * completeValue) override;
 
 		// GetUpdateItemInfo
-		virtual HRESULT WINAPI GetUpdateItemInfo(UInt32 index, Int32 * newData, Int32 * newProperties, UInt32 * indexInArchive);
-		virtual HRESULT WINAPI GetProperty(UInt32 index, PROPID propID, PROPVARIANT * value);
-		virtual HRESULT WINAPI GetStream(UInt32 index, ISequentialInStream ** inStream);
-		virtual HRESULT WINAPI SetOperationResult(Int32 operationResult);
+		HRESULT WINAPI GetUpdateItemInfo(UInt32 index, Int32 * newData, Int32 * newProperties, UInt32 * indexInArchive) override;
+		HRESULT WINAPI GetProperty(UInt32 index, PROPID propID, PROPVARIANT * value) override;
+		HRESULT WINAPI GetStream(UInt32 index, ISequentialInStream ** inStream) override;
+		HRESULT WINAPI SetOperationResult(Int32 operationResult) override;
 
 		// IArchiveUpdateCallback2
-		virtual HRESULT WINAPI GetVolumeSize(UInt32 index, UInt64 * size);
-		virtual HRESULT WINAPI GetVolumeStream(UInt32 index, ISequentialOutStream ** volumeStream);
+		HRESULT WINAPI GetVolumeSize(UInt32 index, UInt64 * size) override;
+		HRESULT WINAPI GetVolumeStream(UInt32 index, ISequentialOutStream ** volumeStream) override;
 
 		// ICryptoGetTextPassword2
-		virtual HRESULT WINAPI CryptoGetTextPassword2(Int32 * passwordIsDefined, BSTR * password);
+		HRESULT WINAPI CryptoGetTextPassword2(Int32 * passwordIsDefined, BSTR * password) override;
 
 	private:
 		const CompressProperties & m_props;

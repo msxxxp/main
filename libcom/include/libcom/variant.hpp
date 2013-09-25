@@ -64,7 +64,7 @@ namespace Com {
 
 		void change_type(DWORD type, DWORD flag = 0);
 
-		HRESULT change_type_nt(VARTYPE type, DWORD flag = 0) throw();
+		HRESULT change_type_nt(VARTYPE type, DWORD flag = 0) noexcept;
 
 		bool as_bool() const;
 		int64_t as_int() const;

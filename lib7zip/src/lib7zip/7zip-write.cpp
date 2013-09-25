@@ -3,27 +3,36 @@
 #include <libext/exception.hpp>
 #include <libbase/console.hpp>
 #include <libbase/path.hpp>
-
-#define UNKNOWN_IMPL_ITF(iid) \
-	if (riid == IID_##iid) { *object = this; AddRef(); return S_OK; }
+#include <libbase/logger.hpp>
+#include <libbase/pcstr.hpp>
 
 namespace SevenZip {
 	DirItem::DirItem(const ustring & file_path, const ustring & file_name) :
-		Fsys::Stat(Base::MakePath(file_path, file_name).c_str()), path(file_path), name(file_name)
+		Fsys::Stat(Base::MakePath(file_path, file_name).c_str()),
+		path(file_path),
+		name(file_name)
 	{
 	}
 
 	///=========================================================================== ArchiveProperties
 	CompressProperties::CompressProperties() :
-		level(5), solid(false), encrypt_header(false), AskPassword(false), IgnoreErrors(true), silent(true)
+		level(5),
+		solid(false),
+		encrypt_header(false),
+		AskPassword(false),
+		IgnoreErrors(true),
+		silent(true)
 	{
+		LogNoise(L"%Iu, %d, %d\n", level, solid, encrypt_header);
 	}
 
 	void CompressProperties::add(const ustring & add_path)
 	{
+		LogNoise(L"'%s'\n", add_path.c_str());
 		ustring path(Base::PathNice(add_path));
 		path = Base::Path::get_fullpath(Base::Path::ensure_no_end_separator(path));
 		path = Base::Path::ensure_prefix(path);
+		LogNoise(L"'%s'\n", path.c_str());
 		if (Fsys::is_exist(path)) {
 			size_t pos = path.find_last_of(Base::PATH_SEPARATORS);
 			if (pos != ustring::npos) {
@@ -53,7 +62,8 @@ namespace SevenZip {
 
 	void CompressProperties::base_add(const ustring & base_path, const ustring & name)
 	{
-		push_back(DirItem(base_path, name));
+//		LogNoise(L"'%s', '%s'\n", base_path.c_str(), name.c_str());
+		emplace_back(base_path, name);
 		ustring path(Base::MakePath(base_path, name));
 		if (Fsys::is_dir(path)) {
 			Fsys::Sequence dir(path);
@@ -71,14 +81,15 @@ namespace SevenZip {
 	///============================================================================== UpdateCallback
 	UpdateCallback::~UpdateCallback()
 	{
-		//	printf(L"ArchiveUpdateCallback::~ArchiveUpdateCallback()\n");
+		LogTrace();
 	}
 
 	UpdateCallback::UpdateCallback(const CompressProperties & props, FailedFiles & ffiles) :
-		m_props(props), m_ffiles(ffiles)
+		m_props(props),
+		m_ffiles(ffiles)
 	{
+		LogTrace();
 	}
-	;
 
 	ULONG WINAPI UpdateCallback::AddRef()
 	{
@@ -90,47 +101,50 @@ namespace SevenZip {
 		return UnknownImp::Release();
 	}
 
-	HRESULT WINAPI UpdateCallback::QueryInterface(REFIID riid, void** object) {
-		//	printf(L"ArchiveUpdateCallback::QueryInterface()\n");
-		UNKNOWN_IMPL_ITF(IArchiveUpdateCallback2)
-		UNKNOWN_IMPL_ITF(ICryptoGetTextPassword2)
+	HRESULT WINAPI UpdateCallback::QueryInterface(REFIID riid, void** object)
+	{
+//		LogTrace();
+		if (IsEqualIID(riid, IID_IArchiveUpdateCallback2) && object) {
+//			LogNoise(L"IID_IArchiveUpdateCallback2\n");
+			*object = static_cast<IArchiveUpdateCallback2*>(this);
+			AddRef();
+			return S_OK;
+		} else if (IsEqualIID(riid, IID_ICryptoGetTextPassword2) && object) {
+//			LogNoise(L"IID_ICryptoGetTextPassword2\n");
+			*object = static_cast<ICryptoGetTextPassword2*>(this);
+			AddRef();
+			return S_OK;
+		}
 		return UnknownImp::QueryInterface(riid, object);
 	}
 
-	HRESULT WINAPI UpdateCallback::SetTotal(UInt64 /*size*/)
+	HRESULT WINAPI UpdateCallback::SetTotal(UInt64 size)
 	{
-		//	printf(L"ArchiveUpdateCallback::SetTotal(%Id)\n", size);
+		LogNoise(L"%I64u\n", size);
 		return S_OK;
 	}
 
-	HRESULT WINAPI UpdateCallback::SetCompleted(const UInt64 * /* completeValue */)
+	HRESULT WINAPI UpdateCallback::SetCompleted(const UInt64 * completeValue)
 	{
-		//	printf(L"ArchiveUpdateCallback::SetCompleted()\n");
+		LogNoiseIf(completeValue, L"%I64u\n", *completeValue);
 		return S_OK;
 	}
 
 	HRESULT WINAPI UpdateCallback::GetUpdateItemInfo(UInt32 /*index*/, Int32 * newData, Int32 * newProperties, UInt32 * indexInArchive)
 	{
-		//	printf(L"ArchiveUpdateCallback::GetUpdateItemInfo(%d)\n", index);
 		if (newData)
 			*newData = Int32(true);
 		if (newProperties)
 			*newProperties = Int32(true);
 		if (indexInArchive)
 			*indexInArchive = (UInt32)-1;
+//		LogNoise(L"%u, %d, %d, %d\n", index, *newData, *newProperties, *indexInArchive);
 		return S_OK;
 	}
 
 	HRESULT WINAPI UpdateCallback::GetProperty(UInt32 index, PROPID propID, PROPVARIANT * value)
 	{
-//		printf(L"%S [%d]\n", __PRETTY_FUNCTION__, index);
 		Com::PropVariant prop;
-
-		if (propID == kpidIsAnti) {
-			prop = false;
-			prop.detach(value);
-			return S_OK;
-		}
 
 		const DirItem & dirItem = m_props.at(index);
 		switch (propID) {
@@ -174,18 +188,20 @@ namespace SevenZip {
 				prop = dirItem.atime_ft();
 				break;
 
-//			case kpidIsAnti:
+			case kpidIsAnti:
 //				prop = false;
-//				break;
+				break;
 
 			case kpidTimeType:
 				prop = (uint32_t)NFileTimeType::kWindows;
 				break;
 
 			default:
-//				printf(L"ArchiveUpdateCallback::GetProperty(%d, %d [%s])\n", index, propID, NamedValues<int>::GetName(ArcItemPropsNames, sizeofa(ArcItemPropsNames), (int) propID));
+				LogNoise(L"%u, %2u, '%s'\n", index, propID, Base::NamedValues<int>::GetName(ArcItemPropsNames, Base::lengthof(ArcItemPropsNames), propID));
 				break;
 		}
+		Com::PropVariant tmp(prop);
+//		LogNoise(L"%u, %2u, '%s' -> '%s'\n", index, propID, Base::NamedValues<int>::GetName(ArcItemPropsNames, Base::lengthof(ArcItemPropsNames), propID), tmp.as_str().c_str());
 		prop.detach(value);
 		return S_OK;
 	}
@@ -193,17 +209,16 @@ namespace SevenZip {
 	HRESULT WINAPI UpdateCallback::GetStream(UInt32 index, ISequentialInStream ** inStream)
 	try
 	{
-//		printf(L"%S [%d]\n", __PRETTY_FUNCTION__, index);
-
 		const DirItem & dirItem = m_props.at(index);
 		m_props.writeln(dirItem.name);
 
-//		if (dirItem.is_dir_or_link())
-//			return S_OK;
+		LogNoise(L"%u, '%s'\n", index, dirItem.name.c_str());
+		if (dirItem.is_dir())
+			return S_OK;
 
 		try {
-			FileReadStream * stream(new FileReadStream(Base::MakePath(dirItem.path, dirItem.name)));
-			Com::Object < ISequentialInStream > (stream).detach(*inStream);
+			FileReadStream * stream = new FileReadStream(Base::MakePath(dirItem.path, dirItem.name));
+			Com::Object<ISequentialInStream>(stream).detach(*inStream);
 		} catch (Ext::AbstractError & e) {
 			m_ffiles.push_back(FailedFile(dirItem.name, e.code()));
 			m_props.writeln(e.what());
@@ -215,28 +230,25 @@ namespace SevenZip {
 		return S_FALSE;
 	}
 
-	HRESULT WINAPI UpdateCallback::SetOperationResult(Int32 /*operationResult*/)
+	HRESULT WINAPI UpdateCallback::SetOperationResult(Int32 operationResult)
 	{
-		//	printf(L"ArchiveUpdateCallback::SetOperationResult(%d)\n", operationResult);
+		LogNoise(L"%d\n", operationResult);
 		return S_OK;
 	}
 
 	HRESULT WINAPI UpdateCallback::GetVolumeSize(UInt32 index, UInt64 * size)
-	try
 	{
-//		printf(L"%S [%d]\n", __PRETTY_FUNCTION__, index);
 		if (index >= m_props.size())
 			index = m_props.size() - 1;
 		*size = m_props.VolumesSizes.at(index);
+		LogNoise(L"%u, %I64u\n", index, *size);
 		return S_OK;
-	}
-	catch (...) {
-		return S_FALSE;
 	}
 
 	HRESULT WINAPI UpdateCallback::GetVolumeStream(UInt32 index, ISequentialOutStream ** volumeStream)
 	try
 	{
+		LogNoise(L"%u\n", index);
 		PCWSTR const VOLUME_FORMAT = L"%s.%02d%s";
 		WCHAR vname[Base::MAX_PATH_LEN];
 		_snwprintf(vname, Base::lengthof(vname), VOLUME_FORMAT, m_props.VolName.c_str(), index + 1, m_props.VolExt.c_str());
@@ -251,7 +263,6 @@ namespace SevenZip {
 
 	HRESULT WINAPI UpdateCallback::CryptoGetTextPassword2(Int32 * passwordIsDefined, BSTR * password)
 	{
-//		printf(L"%S\n", __PRETTY_FUNCTION__);
 		if (m_props.password.empty() && m_props.AskPassword) {
 			// You can ask real password here from user
 			// Password = GetPassword(OutStream);
@@ -262,6 +273,7 @@ namespace SevenZip {
 		try {
 			*passwordIsDefined = !m_props.password.empty();
 			Com::BStr(m_props.password).detach(*password);
+			LogNoise(L"%d\n", *passwordIsDefined);
 		} catch (Ext::AbstractError & e) {
 			return E_ABORT;
 		}
@@ -270,27 +282,32 @@ namespace SevenZip {
 
 	///=============================================================================== CreateArchive
 	CreateArchive::CreateArchive(const Lib & lib, const ustring & codec) :
-		m_lib(lib), m_codec(codec)
+		m_lib(lib),
+		m_codec(codec)
 	{
+		LogNoise(L"%p, '%s', '%s'\n", &lib, codec.c_str(), m_lib.codecs().at(codec)->guid.as_str().c_str());
 		CheckCom(m_lib.CreateObject(&m_lib.codecs().at(codec)->guid, &IID_IOutArchive, (PVOID* )&m_arc));
 	}
 
 	void CreateArchive::compress(const ustring & path)
 	{
+		LogNoise(L"'%s'\n", path.c_str());
 		set_properties();
 
-		Com::Object<IOutStream> outStream(new FileWriteStream(path + L"." + m_codec, CREATE_NEW));
+		Com::Object<IOutStream> outStream(new FileWriteStream(path/* + L"." + m_codec*/, CREATE_NEW));
 		Com::Object<IArchiveUpdateCallback2> updateCallback(new UpdateCallback(*this, m_ffiles));
 
 		CheckCom(m_arc->UpdateItems(outStream, CompressProperties::size(), updateCallback));
 	}
 
-//	Object<IOutArchive> CreateArchive::operator ->() const {
+//	Object<IOutArchive> CreateArchive::operator ->() const
+//	{
 //		return m_arc;
 //	}
 
 	void CreateArchive::set_properties()
 	{
+		LogNoise(L"level: %Iu, solid: %d, encrypt: %d\n", level, solid, encrypt_header);
 		Com::Object<ISetProperties> setProperties;
 		m_arc->QueryInterface(IID_ISetProperties, (PVOID*)&setProperties);
 		if (setProperties) {
@@ -303,15 +320,12 @@ namespace SevenZip {
 //				prop_names.push_back(L"0"); prop_vals.push_back(PropVariant(m_lib.methods().at(method)->name));
 				prop_names.push_back(L"V");
 				prop_vals.push_back(Com::PropVariant(true));
+				prop_names.push_back(L"tc");
+				prop_vals.push_back(Com::PropVariant(true));
 				prop_names.push_back(L"s");
 				prop_vals.push_back(Com::PropVariant(solid));
 				prop_names.push_back(L"he");
 				prop_vals.push_back(Com::PropVariant(encrypt_header));
-//				prop_names.push_back(L"hc"); prop_vals.push_back(PropVariant(compress_header));
-			} else if (m_codec == L"zip") {
-				if (!password.empty()) {
-//					prop_names.push_back(L"p"); prop_vals.push_back(PropVariant(password));
-				}
 			}
 			CheckCom(setProperties->SetProperties(&prop_names[0], &prop_vals[0], prop_names.size()));
 		}

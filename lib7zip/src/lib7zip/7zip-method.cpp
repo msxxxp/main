@@ -56,7 +56,7 @@ namespace SevenZip {
 		CheckCom(lib.GetNumberOfMethods(&num_methods));
 
 		for (UInt32 idx = 0; idx < num_methods; ++idx) {
-			std::tr1::shared_ptr<Method> tmp(new Method(lib, idx));
+			std::shared_ptr<Method> tmp(new Method(lib, idx));
 			insert(value_type(tmp->id, tmp));
 		}
 	}

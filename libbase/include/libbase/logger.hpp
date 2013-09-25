@@ -186,7 +186,7 @@ namespace Logger {
 		return Target_t();
 	}
 
-	inline Target_t get_TargetToFile(PCWSTR /*path*/)
+	inline Target_t get_TargetToFile(PCWSTR /*path*/, bool /*overwrite*/ = false)
 	{
 		return Target_t();
 	}
@@ -307,7 +307,7 @@ namespace Logger {
 
 	Target_t get_TargetToConsole();
 
-	Target_t get_TargetToFile(PCWSTR path);
+	Target_t get_TargetToFile(PCWSTR path, bool overwrite = false);
 
 	Target_t get_TargetToSys(PCWSTR name, PCWSTR path = nullptr);
 

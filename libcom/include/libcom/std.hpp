@@ -2,6 +2,7 @@
 #define _LIBCOM_STD_HPP_
 
 #include <libbase/std.hpp>
+#include <libbase/logger.hpp>
 #include <algorithm>
 
 namespace Com {
@@ -10,11 +11,12 @@ namespace Com {
 
 	HRESULT ConvertBoolToHRESULT(bool result);
 
-	///=================================================================================== Object
+	///====================================================================================== Object
 	template<typename Interface>
 	class Object {
 		typedef Object this_type;
 		typedef Interface * pointer;
+		typedef const Interface * const_pointer;
 
 	public:
 		~Object()
@@ -27,7 +29,7 @@ namespace Com {
 		{
 		}
 
-		explicit Object(const Interface * param) :
+		explicit Object(const_pointer param) :
 			m_obj((pointer)param)
 		{ // caller must not Release param
 		}
@@ -46,7 +48,7 @@ namespace Com {
 			}
 		}
 
-		this_type & operator =(const pointer rhs)
+		this_type & operator =(const_pointer rhs)
 		{ // caller must not Release rhs
 			if (m_obj != rhs) {
 				this_type tmp(rhs);
@@ -77,6 +79,7 @@ namespace Com {
 		}
 		operator pointer() const
 		{
+//			LogNoise(L"%p\n", m_obj);
 			return m_obj;
 		}
 
@@ -87,6 +90,7 @@ namespace Com {
 		}
 		pointer operator ->() const
 		{
+//			LogNoise(L"%p\n", m_obj);
 			return m_obj;
 		}
 

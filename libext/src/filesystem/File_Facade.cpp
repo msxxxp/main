@@ -2,6 +2,7 @@
 #include <libbase/path.hpp>
 #include <libbase/pcstr.hpp>
 #include <libbase/memory.hpp>
+#include <libbase/logger.hpp>
 #include <libext/dll.hpp>
 #include <libext/filesystem.hpp>
 #include <libext/exception.hpp>
@@ -16,15 +17,15 @@ namespace Fsys {
 		}
 
 		Facade::Facade(const ustring & path, bool write) :
-			m_hndl(Open(m_path, write)),
-			m_path(path)
+			m_path(path),
+			m_hndl(Open(m_path, write))
 		{
 			Fsys::Stat::refresh(m_hndl);
 		}
 
 		Facade::Facade(const ustring & path, ACCESS_MASK access, DWORD share, PSECURITY_ATTRIBUTES sa, DWORD creat, DWORD flags) :
-			m_hndl(Open(m_path, access, share, sa, creat, flags)),
-			m_path(path)
+			m_path(path),
+			m_hndl(Open(m_path, access, share, sa, creat, flags))
 		{
 			Fsys::Stat::refresh(m_hndl);
 		}
@@ -67,6 +68,7 @@ namespace Fsys {
 
 		bool Facade::write_nt(PCVOID buf, size_t size, DWORD & written)
 		{
+//			LogNoise(L"%p, %Iu\n", buf, size);
 			return ::WriteFile(m_hndl, buf, size, &written, nullptr);
 		}
 
@@ -134,6 +136,7 @@ namespace Fsys {
 
 		HANDLE Facade::Open(const ustring & path, ACCESS_MASK access, DWORD share, PSECURITY_ATTRIBUTES sa, DWORD creat, DWORD flags)
 		{
+//			LogNoise(L"'%s', 0x%08X, 0x%08X, %p\n", path.c_str(), access, share, sa);
 			return CheckHandleErr(::CreateFileW(path.c_str(), access, share, sa, creat, flags, nullptr));
 		}
 

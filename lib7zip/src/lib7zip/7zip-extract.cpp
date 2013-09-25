@@ -3,8 +3,8 @@
 #include <libext/exception.hpp>
 #include <libbase/path.hpp>
 
-#define UNKNOWN_IMPL_ITF(iid) \
-	if (riid == IID_##iid) { *object = this; AddRef(); return S_OK; }
+/*#define UNKNOWN_IMPL_ITF(iid) \
+	if (riid == IID_##iid) { *object = this; AddRef(); return S_OK; }*/
 
 namespace SevenZip {
 	///============================================================================= ExtractCallback
@@ -31,9 +31,18 @@ namespace SevenZip {
 	}
 
 	HRESULT WINAPI ExtractCallback::QueryInterface(REFIID riid, void** object) {
-//		printf(L"ArchiveExtractCallback::QueryInterface()\n");
-		UNKNOWN_IMPL_ITF(IArchiveExtractCallback)
-		UNKNOWN_IMPL_ITF(ICryptoGetTextPassword)
+//		LogTrace();
+		if (IsEqualIID(riid, IID_IArchiveExtractCallback) && object) {
+//			LogNoise(L"IID_IArchiveExtractCallback\n");
+			*object = static_cast<IArchiveExtractCallback*>(this);
+			AddRef();
+			return S_OK;
+		} else if (IsEqualIID(riid, IID_ICryptoGetTextPassword) && object) {
+//			LogNoise(L"IID_ICryptoGetTextPassword\n");
+			*object = static_cast<ICryptoGetTextPassword*>(this);
+			AddRef();
+			return S_OK;
+		}
 		return UnknownImp::QueryInterface(riid, object);
 	}
 

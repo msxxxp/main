@@ -3,6 +3,7 @@
 
 #include <libbase/std.hpp>
 /*?*/#include <libbase/string.hpp>
+#include <libbase/logger.hpp>
 
 namespace Base {
 	namespace Filename {
@@ -129,7 +130,7 @@ namespace Base {
 	ustring PathNice(PCWSTR path);
 	inline ustring PathNice(const ustring &path)
 	{
-		return Path::canonicalize(Path::expand(path.c_str()));
+		return PathNice(path.c_str());
 	}
 
 	ustring Secure(PCWSTR path);

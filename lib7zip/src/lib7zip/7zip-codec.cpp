@@ -47,7 +47,7 @@ namespace SevenZip {
 		CheckCom(lib.GetNumberOfFormats(&num_formats));
 		clear();
 		for (UInt32 idx = 0; idx < num_formats; ++idx) {
-			std::tr1::shared_ptr<Codec> tmp(new Codec(lib, idx));
+			std::shared_ptr<Codec> tmp(new Codec(lib, idx));
 			insert(value_type(tmp->name, tmp));
 		}
 	}

@@ -16,7 +16,7 @@ namespace SevenZip {
 
 	///=========================================================================== ArchiveProperties
 	CompressProperties::CompressProperties() :
-		level(5),
+		level(CompressLevel::NORMAL),
 		solid(false),
 		encrypt_header(false),
 		AskPassword(false),
@@ -281,23 +281,25 @@ namespace SevenZip {
 	}
 
 	///=============================================================================== CreateArchive
-	CreateArchive::CreateArchive(const Lib & lib, const ustring & codec) :
+	CreateArchive::CreateArchive(const Lib & lib, const ustring & path, const CompressProperties & properties) :
 		m_lib(lib),
-		m_codec(codec)
+		m_path(path),
+		m_properties(properties)
 	{
-		LogNoise(L"%p, '%s', '%s'\n", &lib, codec.c_str(), m_lib.codecs().at(codec)->guid.as_str().c_str());
-		CheckCom(m_lib.CreateObject(&m_lib.codecs().at(codec)->guid, &IID_IOutArchive, (PVOID* )&m_arc));
+		LogNoise(L"%p, '%s', '%s'\n", &lib, m_properties.codec.c_str(), m_lib.codecs().at(m_properties.codec)->guid.as_str().c_str());
+		CheckCom(m_lib.CreateObject(&m_lib.codecs().at(m_properties.codec)->guid, &IID_IOutArchive, (void**)&m_archive));
 	}
 
-	void CreateArchive::compress(const ustring & path)
+	ssize_t CreateArchive::execute()
 	{
-		LogNoise(L"'%s'\n", path.c_str());
+		LogNoise(L"'%s'\n", m_path.c_str());
 		set_properties();
 
-		Com::Object<IOutStream> outStream(new FileWriteStream(path/* + L"." + m_codec*/, CREATE_NEW));
-		Com::Object<IArchiveUpdateCallback2> updateCallback(new UpdateCallback(*this, m_ffiles));
+		Com::Object<IOutStream> outStream(new FileWriteStream(m_path/* + L"." + m_properties.codec*/, CREATE_NEW));
+		Com::Object<IArchiveUpdateCallback2> updateCallback(new UpdateCallback(m_properties, m_ffiles));
 
-		CheckCom(m_arc->UpdateItems(outStream, CompressProperties::size(), updateCallback));
+		CheckCom(m_archive->UpdateItems(outStream, m_properties.size(), updateCallback));
+		return 0;
 	}
 
 //	Object<IOutArchive> CreateArchive::operator ->() const
@@ -307,25 +309,25 @@ namespace SevenZip {
 
 	void CreateArchive::set_properties()
 	{
-		LogNoise(L"level: %Iu, solid: %d, encrypt: %d\n", level, solid, encrypt_header);
+		LogNoise(L"level: %Id, solid: %d, encrypt: %d\n", m_properties.level, m_properties.solid, m_properties.encrypt_header);
 		Com::Object<ISetProperties> setProperties;
-		m_arc->QueryInterface(IID_ISetProperties, (PVOID*)&setProperties);
+		m_archive->QueryInterface(IID_ISetProperties, (PVOID*)&setProperties);
 		if (setProperties) {
 			std::vector<PCWSTR> prop_names;
 			std::vector<Com::PropVariant> prop_vals;
 
 			prop_names.push_back(L"x");
-			prop_vals.push_back(Com::PropVariant((UInt32)level));
-			if (m_codec == L"7z") {
+			prop_vals.push_back(Com::PropVariant(static_cast<UInt32>(m_properties.level)));
+			if (m_properties.codec == L"7z") {
 //				prop_names.push_back(L"0"); prop_vals.push_back(PropVariant(m_lib.methods().at(method)->name));
 				prop_names.push_back(L"V");
 				prop_vals.push_back(Com::PropVariant(true));
 				prop_names.push_back(L"tc");
 				prop_vals.push_back(Com::PropVariant(true));
 				prop_names.push_back(L"s");
-				prop_vals.push_back(Com::PropVariant(solid));
+				prop_vals.push_back(Com::PropVariant(m_properties.solid));
 				prop_names.push_back(L"he");
-				prop_vals.push_back(Com::PropVariant(encrypt_header));
+				prop_vals.push_back(Com::PropVariant(m_properties.encrypt_header));
 			}
 			CheckCom(setProperties->SetProperties(&prop_names[0], &prop_vals[0], prop_names.size()));
 		}

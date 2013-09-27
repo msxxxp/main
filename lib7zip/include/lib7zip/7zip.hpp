@@ -86,6 +86,8 @@ namespace SevenZip {
 		std::vector<BYTE> start_sign;
 		std::vector<BYTE> finish_sign;
 
+		Method(const Lib & arc_lib, size_t idx);
+
 	private:
 		bool operator <(const Method & rhs) const;
 
@@ -93,14 +95,12 @@ namespace SevenZip {
 
 		bool operator !=(const Method & rhs) const;
 
-		Method(const Lib & arc_lib, size_t idx);
-
 		friend class Methods;
 	};
 
 	///===================================================================================== Methods
-	struct Methods: private std::map<uint64_t, std::shared_ptr<Method> > {
-		typedef std::map<uint64_t, std::shared_ptr<Method> > base_type;
+	struct Methods: private std::vector<Method> {
+		typedef std::vector<Method> base_type;
 		typedef base_type::const_iterator iterator;
 		typedef base_type::const_iterator const_iterator;
 
@@ -112,7 +112,6 @@ namespace SevenZip {
 
 	private:
 		Methods();
-		Methods(const Lib & lib);
 
 		void cache(const Lib & lib);
 
@@ -132,35 +131,37 @@ namespace SevenZip {
 
 //		ustring default_extension() const;
 
+		Codec(const Lib & arc_lib, size_t idx);
+
+		bool operator ==(const ustring & name) const;
+
 	private:
 		bool operator <(const Codec & rhs) const;
-
 		bool operator ==(const Codec & rhs) const;
-
 		bool operator !=(const Codec & rhs) const;
-
-		Codec(const Lib & arc_lib, size_t idx);
 
 		friend class Codecs;
 	};
 
 	///====================================================================================== Codecs
-	struct Codecs: private std::map<ustring, std::shared_ptr<Codec> > {
-		typedef std::map<ustring, std::shared_ptr<Codec> > base_type;
+	struct Codecs: private std::vector<Codec> {
+		typedef std::vector<Codec> base_type;
 		typedef base_type::const_iterator iterator;
 		typedef base_type::const_iterator const_iterator;
 
 		using base_type::begin;
+		using base_type::rbegin;
 		using base_type::end;
+		using base_type::rend;
 		using base_type::empty;
 		using base_type::size;
-		using base_type::at;
+
+		const_iterator at(const ustring & name) const;
 
 //		ArcTypes find_by_ext(const ustring & ext) const;
 
 	private:
 		Codecs();
-		Codecs(const Lib & lib);
 
 		void cache(const Lib & lib);
 
@@ -311,11 +312,44 @@ namespace SevenZip {
 
 	///===================================================================================== Archive
 	class Archive: private Base::Uncopyable {
-		class const_input_iterator;
+	public:
+		typedef size_t size_type;
 
 	public:
-		typedef Archive this_type;
-		typedef size_t size_type;
+		Archive(const Lib & lib, const ustring & path);
+
+		Archive(Com::Object<IInArchive> arc);
+
+		const Codec & codec() const;
+
+		const Props & props() const;
+
+		Com::Object<IInArchive> operator ->() const;
+
+		operator Com::Object<IInArchive>() const;
+
+		bool empty() const;
+
+		size_t size() const;
+
+	private:
+		void open_archive(const Lib & lib, const ustring & path);
+
+		void init_props();
+
+		Com::Object<IInArchive> m_arc;
+		Codecs::const_iterator m_codec;
+		Props m_props;
+		UInt32 m_size;
+	};
+
+	///============================================================================= ArchiveSequence
+	class ArchiveSequence: public Archive {
+		class const_input_iterator;
+		typedef Archive base_type;
+
+	public:
+		typedef ArchiveSequence this_type;
 		typedef int flags_type;
 		typedef const_input_iterator iterator;
 		typedef const_input_iterator const_iterator;
@@ -328,15 +362,11 @@ namespace SevenZip {
 			skipHidden = 0x0010,
 		};
 
-		Archive(const Lib & lib, const ustring & path, flags_type flags = 0);
+		ArchiveSequence(const Lib & lib, const ustring & path, flags_type flags = 0);
 
-		Archive(const Lib & lib, const ustring & path, const ustring & mask, flags_type flags = 0);
+		ArchiveSequence(const Lib & lib, const ustring & path, const ustring & mask, flags_type flags = 0);
 
-		Archive(Com::Object<IInArchive> arc, flags_type flags = 0);
-
-		const Codec & codec() const;
-
-		Com::Object<IInArchive> operator ->() const;
+		ArchiveSequence(Com::Object<IInArchive> arc, flags_type flags = 0);
 
 		const_iterator begin() const;
 
@@ -344,33 +374,13 @@ namespace SevenZip {
 
 		const_iterator at(size_t index) const;
 
-		bool empty() const;
-
-		size_t size() const;
-
 		flags_type flags() const;
 
-		const Props & props() const;
-
-		size_t test() const;
-
-		void extract(const ustring & dest) const;
-
-		operator Com::Object<IInArchive>() const;
-
 	private:
-		void open_archive(const Lib & lib, const ustring & path);
-
-		void init_props();
-
-		Com::Object<IInArchive> m_arc;
-		Codecs::const_iterator m_codec;
-		Props m_props;
-		UInt32 m_size;
 		flags_type m_flags;
 	};
 
-	struct Archive::const_input_iterator {
+	struct ArchiveSequence::const_input_iterator {
 		typedef const_input_iterator this_type;
 
 		this_type & operator ++();
@@ -401,14 +411,37 @@ namespace SevenZip {
 
 	private:
 		const_input_iterator();
-		const_input_iterator(const Archive & seq);
-		const_input_iterator(const Archive & seq, UInt32 index);
+		const_input_iterator(const ArchiveSequence & seq);
+		const_input_iterator(const ArchiveSequence & seq, UInt32 index);
 
-		Archive * m_seq;
+		ArchiveSequence * m_seq;
 		UInt32 m_index;
 		bool m_end;
 
-		friend class Archive;
+		friend class ArchiveSequence;
+	};
+
+	///============================================================================== ArchiveExtract
+	class ArchiveExtract: public Base::Command_p {
+	public:
+		ArchiveExtract(const Lib & lib, const ustring & arcPath, const ustring & destPath);
+
+		ssize_t execute() override;
+
+	private:
+		ArchiveSequence m_archive;
+		ustring m_dest;
+	};
+
+	///================================================================================= ArchiveTest
+	class ArchiveTest: public Base::Command_p {
+	public:
+		ArchiveTest(const Lib & lib, const ustring & path);
+
+		ssize_t execute() override;
+
+	private:
+		ArchiveSequence m_archive;
 	};
 
 	///============================================================================= ExtractCallback
@@ -417,6 +450,8 @@ namespace SevenZip {
 		ustring Password;
 
 		~ExtractCallback();
+
+		ExtractCallback(const ArchiveSequence & arc, const ustring & dest_path = ustring(), const ustring & pass = ustring());
 
 		// IUnknown
 		ULONG WINAPI AddRef() override;
@@ -436,18 +471,23 @@ namespace SevenZip {
 		HRESULT WINAPI CryptoGetTextPassword(BSTR * pass) override;
 
 	private:
-		ExtractCallback(const Archive & arc, const ustring & dest_path = ustring(), const ustring & pass = ustring());
-
-		const Archive & m_wa;
+		const ArchiveSequence & m_wa;
 		ustring m_dest;// Output directory
 
 		struct CurrItem;
 		std::shared_ptr<CurrItem> m_curr;
-
-		friend class Archive;
 	};
 
 	///=========================================================================== ArchiveProperties
+	enum class CompressLevel: ssize_t {
+		STORE   = 0,
+		FASTEST = 1,
+		FAST    = 3,
+		NORMAL  = 5,
+		MAX     = 7,
+		ULTRA   = 9,
+	};
+
 	struct CompressProperties: private std::vector<DirItem> {
 		typedef std::vector<DirItem> base_type;
 		typedef base_type::const_iterator iterator;
@@ -459,10 +499,11 @@ namespace SevenZip {
 		using base_type::at;
 
 		std::vector<UInt64> VolumesSizes;
+		ustring codec;
 		ustring VolName;
 		ustring VolExt;
 		ustring password;
-		size_t level;
+		CompressLevel level;
 		bool solid;
 		bool encrypt_header;
 		bool AskPassword;
@@ -517,10 +558,10 @@ namespace SevenZip {
 	};
 
 	///=============================================================================== CreateArchive
-	struct CreateArchive: public CompressProperties, private Base::Uncopyable {
-		CreateArchive(const Lib & lib, const ustring & codec);
+	struct CreateArchive: public Base::Command_p, private Base::Uncopyable {
+		CreateArchive(const Lib & lib, const ustring & path, const CompressProperties & properties);
 
-		void compress(const ustring & path);
+		ssize_t execute() override;
 
 //		Object<IOutArchive> operator ->() const;
 
@@ -528,8 +569,9 @@ namespace SevenZip {
 		void set_properties();
 
 		const Lib & m_lib;
-		const ustring m_codec;
-		Com::Object<IOutArchive> m_arc;
+		const ustring m_path;
+		const CompressProperties & m_properties;
+		Com::Object<IOutArchive> m_archive;
 		FailedFiles m_ffiles;
 	};
 }

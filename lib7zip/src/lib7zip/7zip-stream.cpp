@@ -54,7 +54,7 @@ namespace SevenZip {
 
 	HRESULT WINAPI FileReadStream::Seek(Int64 offset, UInt32 seekOrigin, UInt64 * newPosition)
 	{
-		LogNoise(L"%I64d, %u\n", offset, seekOrigin);
+		HRESULT ret = S_OK;
 		try {
 			uint64_t new_position;
 			Fsys::File::Facade::set_position(offset, seekOrigin);
@@ -62,11 +62,12 @@ namespace SevenZip {
 			if (newPosition)
 				*newPosition = new_position;
 		} catch (Ext::AbstractError & e) {
-			return e.code();
+			ret = e.code();
 		} catch (...) {
-			return E_FAIL;
+			ret = E_FAIL;
 		}
-		return S_OK;
+		LogNoise(L"%I64d, %u -> %d\n", offset, seekOrigin, ret);
+		return ret;
 	}
 
 	///============================================================================= FileWriteStream

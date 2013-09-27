@@ -20,7 +20,7 @@ namespace {
 		set_default_level(Level::Trace);
 		set_default_prefix(Prefix::Full/* | Prefix::Place*/);
 		set_default_target(get_TargetToFile(L"test-7zip.log", true));
-//		set_default_target(get_TargetToConsole());
+		//		set_default_target(get_TargetToConsole());
 
 		set_module_prefix(Prefix::Function | Prefix::Thread, get_module(L"7zip"));
 		set_module_target(get_TargetToFile(L"test-7zip1.log", true), get_module(L"7zip"));
@@ -37,12 +37,12 @@ struct ArcInfo: public Base::Command_p {
 	{
 		LogForce(L"\nSupported methods (%Id):\n", arc_lib.methods().size());
 		for (auto it = arc_lib.methods().begin(); it != arc_lib.methods().end(); ++it) {
-			LogForce(L"%16I64d\tname: %-10.10s\n", it->first, it->second->name.c_str());
+			LogForce(L"%16I64d\tname: %-10.10s\n", it->id, it->name.c_str());
 		}
 
 		LogForce(L"\nSupported archive formats (%Id):\n", arc_lib.codecs().size());
 		for (auto it = arc_lib.codecs().begin(); it != arc_lib.codecs().end(); ++it) {
-			LogForce(L"%8s\tupd: %d\text: %16s\t add_ext: %s\tguid: %s\n", it->first.c_str(), it->second->updatable, it->second->ext.c_str(), it->second->add_ext.c_str(), it->second->guid.as_str().c_str());
+			LogForce(L"%8s\tupd: %d\text: %16s\t add_ext: %s\tguid: %s\n", it->name.c_str(), it->updatable, it->ext.c_str(), it->add_ext.c_str(), it->guid.as_str().c_str());
 		}
 		return true;
 	}
@@ -66,19 +66,16 @@ struct ArcCompress: public Base::Command_p {
 		ustring full_path(m_path + L"." + m_codec);
 		if (!Fsys::File::is_exist(full_path)) {
 			LogForce(L"Compressing to '%s':\n", full_path.c_str());
-			SevenZip::CreateArchive arc(arc_lib, m_codec);
-			arc.add(m_what);
-			arc.silent = false;
-//			arc.level = 5;
-//			if (m_codec == L"7z") {
-//				arc.password = L"7z";
-				arc.encrypt_header = false;
-				arc.solid = true;
-				arc.level = 3;
-//			} else if (m_codec == L"zip") {
-//			}
+			SevenZip::CompressProperties props;
+			props.add(m_what);
+			props.codec = m_codec;
+			props.level = SevenZip::CompressLevel::FASTEST;
+			props.silent = false;
+//			props.password = L"7z";
+			props.encrypt_header = false;
+			props.solid = true;
 
-			arc.compress(full_path);
+			SevenZip::CreateArchive(arc_lib, full_path, props).execute();
 		}
 		return true;
 	}
@@ -100,8 +97,8 @@ struct ArcList: public Base::Command_p {
 
 	ssize_t execute()
 	{
-		if (Fsys::is_exist(m_path)) {
-			SevenZip::Archive archive(arc_lib, m_path);
+		if (Fsys::File::is_exist(m_path)) {
+			SevenZip::ArchiveSequence archive(arc_lib, m_path);
 			LogForce(L"\nArchive information: %s\tCodec: %s\n", m_path.c_str(), archive.codec().name.c_str());
 			LogForce(L"Number of archive properties: %Id\n", archive.props().size());
 			for (auto it = archive.props().begin(); it != archive.props().end(); ++it) {
@@ -140,11 +137,10 @@ struct ArcTest: public Base::Command_p {
 
 	ssize_t execute()
 	{
-		if (Fsys::is_exist(m_path)) {
-			SevenZip::Archive archive(arc_lib, m_path);
-
-			LogForce(L"\nTesting:\n");
-			LogForce(L"Errors: %Id\n", archive.test());
+		if (Fsys::File::is_exist(m_path)) {
+			LogForce(L"Testing:\n");
+			ssize_t ret = SevenZip::ArchiveTest(arc_lib, m_path).execute();
+			LogForce(L"Errors: %Id\n", ret);
 		}
 		return true;
 	}
@@ -156,17 +152,18 @@ private:
 
 struct ArcExtract: public Base::Command_p {
 	ArcExtract(const SevenZip::Lib & lib, const ustring & path, const ustring & where) :
-		arc_lib(lib), m_path(path), m_where(where)
+		arc_lib(lib),
+		m_path(path),
+		m_where(where)
 	{
 	}
 
 	ssize_t execute()
 	{
-		if (Fsys::is_exist(m_path)) {
-			SevenZip::Archive archive(arc_lib, m_path);
-
+		if (Fsys::File::is_exist(m_path)) {
 			LogForce(L"\nExtracting:\n");
-			archive.extract(m_where);
+			ssize_t ret = SevenZip::ArchiveExtract(arc_lib, m_path, m_where).execute();
+			LogForce(L"Errors: %Id\n", ret);
 		}
 		return true;
 	}
@@ -266,7 +263,7 @@ try
 catch (Ext::AbstractError & e) {
 	LogError(L"%s\n", e.what().c_str());
 	LogError(L"%s\n", e.where());
-//	e.format_error();
+	//	e.format_error();
 	return 2;
 }
 catch (std::exception & e) {

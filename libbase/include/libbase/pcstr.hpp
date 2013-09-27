@@ -317,7 +317,6 @@ namespace Base {
 			return 0;
 		}
 	};
-
 }
 
 #endif

@@ -44,20 +44,15 @@ namespace SevenZip {
 	{
 	}
 
-	Methods::Methods(const Lib & lib)
-	{
-		cache(lib);
-	}
-
 	void Methods::cache(const Lib & lib)
 	{
-		clear();
 		UInt32 num_methods = 0;
 		CheckCom(lib.GetNumberOfMethods(&num_methods));
 
-		for (UInt32 idx = 0; idx < num_methods; ++idx) {
-			std::shared_ptr<Method> tmp(new Method(lib, idx));
-			insert(value_type(tmp->id, tmp));
+		clear();
+
+		for (size_t idx = 0; idx < num_methods; ++idx) {
+			emplace_back(lib, idx);
 		}
 	}
 }

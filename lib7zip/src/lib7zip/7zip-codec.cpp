@@ -1,6 +1,8 @@
 ﻿#include <lib7zip/7zip.hpp>
 #include <libext/exception.hpp>
 
+#include <algorithm>
+
 namespace SevenZip {
 	///======================================================================================= Codec
 	Codec::Codec(const Lib & arc_lib, size_t idx)
@@ -14,6 +16,11 @@ namespace SevenZip {
 		arc_lib.get_prop(idx, NArchive::kStartSignature, start_sign);
 		arc_lib.get_prop(idx, NArchive::kFinishSignature, finish_sign);
 		arc_lib.get_prop(idx, NArchive::kKeepName, kKeepName);
+	}
+
+	bool Codec::operator ==(const ustring & name) const
+	{
+		return this->name == name;
 	}
 
 	bool Codec::operator <(const Codec & rhs) const
@@ -32,23 +39,26 @@ namespace SevenZip {
 	}
 
 	///====================================================================================== Codecs
-	Codecs::Codecs()
+	Codecs::const_iterator Codecs::at(const ustring & name) const
 	{
+		auto it = std::find(begin(), end(), name);
+		CheckApiThrowError(it != end(), ERROR_NOT_SUPPORTED);
+		return it;
 	}
 
-	Codecs::Codecs(const Lib & lib)
+	Codecs::Codecs()
 	{
-		cache(lib);
 	}
 
 	void Codecs::cache(const Lib & lib)
 	{
 		UInt32 num_formats = 0;
 		CheckCom(lib.GetNumberOfFormats(&num_formats));
+
 		clear();
-		for (UInt32 idx = 0; idx < num_formats; ++idx) {
-			std::shared_ptr<Codec> tmp(new Codec(lib, idx));
-			insert(value_type(tmp->name, tmp));
+
+		for (size_t idx = 0; idx < num_formats; ++idx) {
+			emplace_back(lib, idx);
 		}
 	}
 }

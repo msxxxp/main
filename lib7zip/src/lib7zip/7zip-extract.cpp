@@ -11,11 +11,13 @@ namespace SevenZip {
 	struct ExtractCallback::CurrItem {
 		ustring path;
 		Com::Object<FileWriteStream> stream;
-		Archive::iterator item;
+		ArchiveSequence::iterator item;
 		Int32 mode;
 
-		CurrItem(Int32 m, const ustring & p, Archive::iterator i) :
-			path(p + i.path()), item(i), mode(m)
+		CurrItem(Int32 m, const ustring & p, ArchiveSequence::iterator i) :
+			path(p + i.path()),
+			item(i),
+			mode(m)
 		{
 		}
 	};
@@ -48,38 +50,44 @@ namespace SevenZip {
 
 	ExtractCallback::~ExtractCallback()
 	{
-//		printf(L"ArchiveExtractCallback::~ArchiveExtractCallback()\n");
+		LogTrace();
 	}
 
-	ExtractCallback::ExtractCallback(const Archive & arc, const ustring & dest_path, const ustring & pass) :
-		Password(pass), m_wa(arc), m_dest(/*Base::MakeGoodPath(*/dest_path)
+	ExtractCallback::ExtractCallback(const ArchiveSequence & arc, const ustring & dest_path, const ustring & pass) :
+		Password(pass),
+		m_wa(arc),
+		m_dest(/*Base::MakeGoodPath(*/dest_path)
 	{
-//		printf(L"ArchiveExtractCallback::ArchiveExtractCallback(%s)\n", dest_path.c_str());
+		LogNoise(L"'%s'\n", dest_path.c_str());
 		Base::Path::ensure_end_separator(m_dest);
 	}
 
-	HRESULT WINAPI ExtractCallback::SetTotal(UInt64 /*size*/)
+	HRESULT WINAPI ExtractCallback::SetTotal(UInt64 size)
 	{
-//		return total size
-//		printf(L"ArchiveExtractCallback::SetTotal(%d)\n", size);
-//		FuncLogger();
+		UNUSED(size);
+
+		LogNoise(L"%I64u\n", size);
+
 		return S_OK;
 	}
 
-	HRESULT WINAPI ExtractCallback::SetCompleted(const UInt64 */*completeValue*/)
+	HRESULT WINAPI ExtractCallback::SetCompleted(const UInt64 *completeValue)
 	{
+		UNUSED(completeValue);
+
+		LogNoise(L"%I64u\n", *completeValue);
+
 //		return processed size
 //		if (completeValue) {
 //			printf(L"ArchiveExtractCallback::SetCompleted(%d)\n", *completeValue);
 //		}
-//		FuncLogger();
 		return S_OK;
 	}
 
 	HRESULT WINAPI ExtractCallback::GetStream(UInt32 index, ISequentialOutStream ** outStream, Int32 askExtractMode)
 	{
-//		FuncLogger();
-//		printf(L"ArchiveExtractCallback::GetStream(%d, %d)\n", index, askExtractMode);
+		LogNoise(L"%u, %u\n", index, askExtractMode);
+
 		*outStream = nullptr;
 
 		m_curr.reset(new CurrItem(askExtractMode, m_dest, m_wa.at(index)));
@@ -115,8 +123,7 @@ namespace SevenZip {
 
 	HRESULT WINAPI ExtractCallback::PrepareOperation(Int32 askExtractMode)
 	{
-//		FuncLogger();
-//		printf(L"ArchiveExtractCallback::PrepareOperation(%d)\n", askExtractMode);
+		LogNoise(L"%u\n", askExtractMode);
 		switch (askExtractMode) {
 			case NArchive::NExtract::NAskMode::kExtract:
 //				printf(L"Extract: %s\n", m_curr->item.path().c_str());
@@ -133,8 +140,7 @@ namespace SevenZip {
 
 	HRESULT WINAPI ExtractCallback::SetOperationResult(Int32 operationResult)
 	{
-//		FuncLogger();
-//		printf(L"ArchiveExtractCallback::SetOperationResult(%d)\n", operationResult);
+		LogNoise(L"%d\n", operationResult);
 
 		if (operationResult != NArchive::NExtract::NOperationResult::kOK) {
 			failed_files.push_back(FailedFile(m_curr->item.path(), operationResult));
@@ -151,7 +157,7 @@ namespace SevenZip {
 
 	HRESULT WINAPI ExtractCallback::CryptoGetTextPassword(BSTR *pass)
 	{
-//		printf(L"%S\n", __PRETTY_FUNCTION__);
+		LogTrace();
 		if (Password.empty()) {
 			// You can ask real password here from user
 			// PrintError("Password is not defined");

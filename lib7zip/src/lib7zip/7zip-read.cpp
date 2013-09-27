@@ -16,13 +16,11 @@ namespace SevenZip {
 
 	ULONG WINAPI OpenCallback::AddRef()
 	{
-		LogTrace();
 		return UnknownImp::AddRef();
 	}
 
 	ULONG WINAPI OpenCallback::Release()
 	{
-		LogTrace();
 		return UnknownImp::Release();
 	}
 
@@ -43,15 +41,23 @@ namespace SevenZip {
 		return UnknownImp::QueryInterface(riid, object);
 	}
 
-	HRESULT WINAPI OpenCallback::SetTotal(const UInt64 */*files*/, const UInt64 */*bytes*/)
+	HRESULT WINAPI OpenCallback::SetTotal(const UInt64 *files, const UInt64 *bytes)
 	{
-		LogTrace();
+		UNUSED(files);
+		UNUSED(bytes);
+
+		LogNoise(L"%I64u, %I64u\n", files ? *files : 0ULL, bytes ? *bytes : 0ULL);
+
 		return S_OK;
 	}
 
-	HRESULT WINAPI OpenCallback::SetCompleted(const UInt64 */*files*/, const UInt64 */*bytes*/)
+	HRESULT WINAPI OpenCallback::SetCompleted(const UInt64 *files, const UInt64 *bytes)
 	{
-		LogTrace();
+		UNUSED(files);
+		UNUSED(bytes);
+
+		LogNoise(L"%I64u, %I64u\n", files ? *files : 0ULL, bytes ? *bytes : 0ULL);
+
 		return S_OK;
 	}
 

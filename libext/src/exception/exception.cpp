@@ -28,23 +28,23 @@ namespace Ext {
 	AbstractError::AbstractError(PCSTR file, size_t line, PCSTR func):
 		m_where(THROW_PLACE_STR),
 		m_prev_exc(nullptr) {
-		m_backtrace.Print();
+//		m_backtrace.Print();
 	}
 
 	AbstractError::AbstractError(const AbstractError & prev, PCSTR file, size_t line, PCSTR func):
 		m_where(THROW_PLACE_STR),
 		m_prev_exc(prev.clone()) {
-		m_backtrace.Print();
+//		m_backtrace.Print();
 	}
 #else
 	AbstractError::AbstractError():
 		m_prev_exc(nullptr){
-		m_backtrace.Print();
+//		m_backtrace.Print();
 	}
 
 	AbstractError::AbstractError(const AbstractError & prev):
 		m_prev_exc(prev.clone()) {
-		m_backtrace.Print();
+//		m_backtrace.Print();
 	}
 #endif
 

@@ -25,7 +25,7 @@ namespace {
 		set_default_level(Level::Trace);
 		set_default_prefix(Prefix::Medium/* | Prefix::Place | Prefix::Thread | Prefix::Module*/);
 //		set_default_target(get_TargetToConsole());
-		set_default_target(get_TargetToFile(L".\\elevated.log"));
+		set_default_target(get_TargetToFile(L".\\elevated.log", true));
 	}
 
 	ustring guid = L"{8D4032BA-28CD-4085-8E7E-592F74EB5D40}";
@@ -88,6 +88,19 @@ struct Pipe {
 		return m_pipe;
 	}
 
+
+	void read(void * buffer, size_t bufSize, DWORD & read)
+	{
+//		DWORD read_ = 0;
+		CheckApi(::ReadFile(m_pipe, buffer, bufSize, &read, nullptr));
+//		read = read_;
+	}
+
+	void write(const void * buffer, size_t bufSize, DWORD & written)
+	{
+		CheckApi(::WriteFile(m_pipe, buffer, bufSize, &written, nullptr));
+	}
+
 private:
 	HANDLE m_pipe;
 };
@@ -129,7 +142,6 @@ int elevated()
 //		return( FALSE );
 //	}
 
-
 	TOKEN_ELEVATION t_TokenElevation;
 	DWORD dw_TokenLength = 0;
 	CheckApi(::GetTokenInformation(procToken, TokenElevation, &t_TokenElevation, sizeof(t_TokenElevation), &dw_TokenLength));
@@ -145,29 +157,27 @@ int elevated()
 	}
 
 	DWORD read = 0;
-	DWORD pid = 0;
-	DWORD tid = 0;
-	HANDLE tokenDup = nullptr;
-		Pipe client(pipeName.c_str(), 20000);
-		CheckApi(::ReadFile(client, &tid, sizeof(tid), &read, nullptr));
+	DWORD ppid = 0;
+	DWORD ptid = 0;
+//	HANDLE tokenDup = nullptr;
 
-		HANDLE parentThread = CheckHandle(::OpenThread(THREAD_ALL_ACCESS, false, tid));
+	Pipe client(pipeName.c_str(), 20000);
+	client.read(&ppid, sizeof(ppid), read);
+	client.read(&ptid, sizeof(ptid), read);
+	LogInfo(L"ppid: %u\n", ppid);
+	LogInfo(L"ptid: %u\n", ptid);
 
-		::DuplicateTokenEx(procToken, TOKEN_ALL_ACCESS, NULL, SecurityImpersonation, /*TokenPrimary*/ TokenImpersonation, &tokenDup);
-
-		CheckApi(::SetThreadToken(&parentThread, restrictedToken));
-		Ext::WinPriv::modify(tokenDup, SE_DEBUG_NAME, true);
-		Ext::WinPriv::modify(tokenDup, SE_ASSIGNPRIMARYTOKEN_NAME, true);
-		Ext::WinPriv::modify(tokenDup, SE_TCB_NAME, true);
-		Ext::WinPriv::modify(tokenDup, SE_SECURITY_NAME, true);
-		Ext::WinPriv::modify(tokenDup, SE_CREATE_TOKEN_NAME, true);
-		Ext::WinPriv::modify(tokenDup, SE_IMPERSONATE_NAME, true);
-
-//	Pipe client(pipeName.c_str(), 20000);
-//	CheckApi(::ReadFile(client, &pid, sizeof(pid), &read, nullptr));
-	LogInfo(L"pid: %u\n", pid);
-	LogInfo(L"tid: %u\n", tid);
-
+//	HANDLE parentThread = CheckHandle(::OpenThread(THREAD_ALL_ACCESS, false, ptid));
+//
+//	::DuplicateTokenEx(procToken, TOKEN_ALL_ACCESS, NULL, SecurityImpersonation, /*TokenPrimary*/ TokenImpersonation, &tokenDup);
+//
+//	CheckApi(::SetThreadToken(&parentThread, restrictedToken));
+//	Ext::WinPriv::modify(tokenDup, SE_DEBUG_NAME, true);
+//	Ext::WinPriv::modify(tokenDup, SE_ASSIGNPRIMARYTOKEN_NAME, true);
+//	Ext::WinPriv::modify(tokenDup, SE_TCB_NAME, true);
+//	Ext::WinPriv::modify(tokenDup, SE_SECURITY_NAME, true);
+//	Ext::WinPriv::modify(tokenDup, SE_CREATE_TOKEN_NAME, true);
+//	Ext::WinPriv::modify(tokenDup, SE_IMPERSONATE_NAME, true);
 
 //	HANDLE parent = CheckHandle(::OpenProcess(PROCESS_ALL_ACCESS, false, pid));
 	HANDLE target = nullptr;
@@ -189,11 +199,11 @@ int base()
 
 	HANDLE procToken = nullptr;
 	CheckApi(::OpenProcessToken(::GetCurrentProcess(), GENERIC_ALL | TOKEN_QUERY | TOKEN_ADJUST_PRIVILEGES, &procToken));
-	Ext::WinPriv::modify(procToken, SE_ASSIGNPRIMARYTOKEN_NAME, true);
-	Ext::WinPriv::modify(procToken, SE_TCB_NAME, true);
-	Ext::WinPriv::modify(procToken, SE_SECURITY_NAME, true);
-	Ext::WinPriv::modify(procToken, SE_CREATE_TOKEN_NAME, true);
-	Ext::WinPriv::modify(procToken, SE_IMPERSONATE_NAME, true);
+//	Ext::WinPriv::modify(procToken, SE_ASSIGNPRIMARYTOKEN_NAME, true);
+//	Ext::WinPriv::modify(procToken, SE_TCB_NAME, true);
+//	Ext::WinPriv::modify(procToken, SE_SECURITY_NAME, true);
+//	Ext::WinPriv::modify(procToken, SE_CREATE_TOKEN_NAME, true);
+//	Ext::WinPriv::modify(procToken, SE_IMPERSONATE_NAME, true);
 //
 //	Sleep(20000);
 //	Ext::Privilege CreateSymlinkPrivilege(SE_IMPERSONATE_NAME);
@@ -215,6 +225,7 @@ int base()
 //	HANDLE threadHandle = nullptr;
 //	CheckApi(::DuplicateHandle(GetCurrentProcess(), GetCurrentThread(), info.hProcess, &threadHandle, GENERIC_ALL, false, 0));
 //
+	DWORD read = 0;
 	DWORD written = 0;
 //	{
 //		Pipe pipe(pipeName.c_str(), PIPE_ACCESS_DUPLEX | FILE_FLAG_OVERLAPPED, PIPE_TYPE_BYTE | PIPE_READMODE_BYTE | PIPE_WAIT, 1);
@@ -223,30 +234,36 @@ int base()
 //		CheckApi(::WriteFile(pipe, &threadHandle, sizeof(threadHandle), &written, nullptr));
 //		pipe.disconnect();
 //	}
-	DWORD pid = ::GetCurrentProcessId();
-	DWORD tid = ::GetCurrentThreadId();
+
 	Pipe pipe(pipeName.c_str(), PIPE_ACCESS_DUPLEX | FILE_FLAG_OVERLAPPED, PIPE_TYPE_BYTE | PIPE_READMODE_BYTE | PIPE_WAIT, 1);
 	pipe.connect();
 
+//	{
+//		HANDLE procToken = nullptr;
+//		CheckApi(::OpenProcessToken(::GetCurrentProcess(), TOKEN_QUERY | TOKEN_ADJUST_PRIVILEGES, &procToken));
+//	}
+
 	CheckApi(::ImpersonateNamedPipeClient(pipe));
+
 	{
-		HANDLE token = nullptr;
-		CheckApi(::OpenThreadToken(::GetCurrentThread(), /*GENERIC_ALL | */TOKEN_QUERY | TOKEN_ADJUST_PRIVILEGES, false, &token));
+		HANDLE threadToken = nullptr;
+		CheckApi(::OpenThreadToken(::GetCurrentThread(), /*GENERIC_ALL | */TOKEN_QUERY | TOKEN_ADJUST_PRIVILEGES, false, &threadToken));
 
 		SECURITY_IMPERSONATION_LEVEL level = SecurityImpersonation;
-		DWORD read = 0;
-		CheckApi(::GetTokenInformation(token, TokenImpersonationLevel, &level, sizeof(level), &read));
-		LogInfo(L"Security level: %d\n", (int)level);
+		CheckApi(::GetTokenInformation(threadToken, TokenImpersonationLevel, &level, sizeof(level), &read));
+		LogInfo(L"TokenImpersonationLevel: %d\n", (int)level);
 
-//		Ext::WinPriv::modify(token, SE_IMPERSONATE_NAME, true);
-//		LogInfo(L"is_ena: %d\n", Ext::WinPriv::is_enabled(token, SE_IMPERSONATE_NAME));
-
+//		Ext::WinPriv::modify(threadToken, SE_IMPERSONATE_NAME, true);
+//		LogInfo(L"is_ena: %d\n", Ext::WinPriv::is_enabled(threadToken, SE_IMPERSONATE_NAME));
+		CloseHandle(threadToken);
 	}
 
-	CheckApi(::WriteFile(pipe, &tid, sizeof(tid), &written, nullptr));
-//	LogInfo(L"threadHandle: %Iu\n", threadHandle);
+	DWORD pid = ::GetCurrentProcessId();
+	DWORD tid = ::GetCurrentThreadId();
 	LogInfo(L"pid: %u\n", pid);
 	LogInfo(L"tid: %u\n", tid);
+	pipe.write(&pid, sizeof(pid), written);
+	pipe.write(&tid, sizeof(tid), written);
 
 //	DWORD read = 0;
 //	HANDLE target = nullptr;
@@ -266,27 +283,34 @@ int base()
 
 	Sleep(3000);
 	{
-		HANDLE token = nullptr;
-		CheckApi(::OpenThreadToken(::GetCurrentThread(), /*GENERIC_ALL | */TOKEN_QUERY/* | TOKEN_ADJUST_PRIVILEGES*/, false, &token));
+		HANDLE threadToken = nullptr;
+		CheckApi(::OpenThreadToken(::GetCurrentThread(), /*GENERIC_ALL | */TOKEN_QUERY | TOKEN_ADJUST_PRIVILEGES, false, &threadToken));
 
 		SECURITY_IMPERSONATION_LEVEL level = SecurityImpersonation;
-		DWORD read = 0;
-		CheckApi(::GetTokenInformation(token, TokenImpersonationLevel, &level, sizeof(level), &read));
-		LogInfo(L"level: %d\n", (int)level);
+		CheckApi(::GetTokenInformation(threadToken, TokenImpersonationLevel, &level, sizeof(level), &read));
+		LogInfo(L"TokenImpersonationLevel: %d\n", (int)level);
+
+		CloseHandle(threadToken);
 	}
 
-	::Sleep(3000);
-	CheckApi(Fsys::Directory::create_nt(L"c:\\Program Files\\~tmp1"));
+	Sleep(3000);
+	CheckApi(Fsys::Directory::create_nt(L"c:\\Program Files\\~base1"));
 	Sleep(5000);
-	CheckApi(::RevertToSelf());
 //	LogErrorIf(!Fsys::Directory::create_nt(L"c:\\Program Files\\tmp2\\"), L"%s\n", Base::ErrAsStr().c_str());
 
-//	DWORD dwError = GetLastError();
-//	if (dwError == ERROR_CANCELLED)
-//	{
-//		// The user refused the elevation.
-//		// Do nothing ...
-//	}
+	CheckApi(::RevertToSelf());
+
+	{
+		HANDLE threadToken = nullptr;
+		CheckApi(::OpenThreadToken(::GetCurrentThread(), /*GENERIC_ALL | */TOKEN_QUERY | TOKEN_ADJUST_PRIVILEGES, false, &threadToken));
+
+		SECURITY_IMPERSONATION_LEVEL level = SecurityImpersonation;
+		CheckApi(::GetTokenInformation(threadToken, TokenImpersonationLevel, &level, sizeof(level), &read));
+		LogInfo(L"TokenImpersonationLevel: %d\n", (int)level);
+
+		CloseHandle(threadToken);
+	}
+
 	pipe.disconnect();
 
 	return 0;

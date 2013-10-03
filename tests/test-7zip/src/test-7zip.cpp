@@ -20,9 +20,8 @@ namespace {
 		set_default_level(Level::Trace);
 		set_default_prefix(Prefix::Full/* | Prefix::Place*/);
 		set_default_target(get_TargetToFile(L"test-7zip.log", true));
-//		//		set_default_target(get_TargetToConsole());
 //
-		set_module_prefix(Prefix::Full | Prefix::Function | Prefix::Thread, get_module(L"SevenZip"));
+		set_module_prefix(Prefix::Full, get_module(L"SevenZip"));
 		set_module_target(get_TargetToFile(L"test-SevenZip.log", true), get_module(L"SevenZip"));
 		set_module_level(Level::Info, get_module(L"SevenZip"));
 	}

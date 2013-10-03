@@ -310,13 +310,12 @@ try
 	return 0;
 }
 catch (Ext::AbstractError & e) {
-	LogError(L"%s\n", e.what().c_str());
-	LogError(L"%s\n", e.where());
-	//	e.format_error();
+	LogFatal(L"%s\n", e.what().c_str());
+	LogFatal(L"%s\n", e.where());
 	return 2;
 }
 catch (std::exception & e) {
-	LogForce(L"std::exception [%S]:\n", typeid(e).name());
-	LogForce(L"What: %S\n", e.what());
+	LogFatal(L"std::exception [%S]:\n", typeid(e).name());
+	LogFatal(L"What: %S\n", e.what());
 	return 1;
 }

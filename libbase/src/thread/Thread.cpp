@@ -11,58 +11,6 @@ namespace Base {
 		return module;
 	}
 
-	enum THREADINFOCLASS {
-		ThreadBasicInformation,
-		ThreadTimes,
-		ThreadPriority,
-		ThreadBasePriority,
-		ThreadAffinityMask,
-		ThreadImpersonationToken,
-		ThreadDescriptorTableEntry,
-		ThreadEnableAlignmentFaultFixup,
-		ThreadEventPair_Reusable,
-		ThreadQuerySetWin32StartAddress,
-		ThreadZeroTlsCell,
-		ThreadPerformanceCount,
-		ThreadAmILastThread,
-		ThreadIdealProcessor,
-		ThreadPriorityBoost,
-		ThreadSetTlsArrayAddress,
-		ThreadIsIoPending,
-		ThreadHideFromDebugger,
-		ThreadBreakOnTermination,
-		ThreadSwitchLegacyState,
-		ThreadIsTerminated,
-		ThreadLastSystemCall,
-		ThreadIoPriority,
-		ThreadCycleTime,
-		ThreadPagePriority,
-		ThreadActualBasePriority,
-		ThreadTebInformation,
-		ThreadCSwitchMon,
-		ThreadCSwitchPmu,
-		ThreadWow64Context,
-		ThreadGroupInformation,
-		ThreadUmsInformation,
-		ThreadCounterProfiling,
-		ThreadIdealProcessorEx,
-		MaxThreadInfoClass
-	};
-
-	typedef LONG NTSTATUS;
-
-	extern "C" {
-		NTSYSCALLAPI
-		NTSTATUS
-		NTAPI
-		NtSetInformationThread(IN HANDLE ThreadHandle, IN THREADINFOCLASS ThreadInformationClass, IN PVOID ThreadInformation, IN ULONG ThreadInformationLength);
-
-		NTSTATUS
-		WINAPI
-		NtQueryInformationThread(IN HANDLE ThreadHandle, IN THREADINFOCLASS ThreadInformationClass, PVOID ThreadInformation, IN ULONG ThreadInformationLength, PULONG ReturnLength);
-	}
-
-
 	Thread::~Thread() noexcept
 	{
 		if (m_handle) {
@@ -71,9 +19,9 @@ namespace Base {
 		}
 	}
 
-	Thread::Thread(ThreadRoutine_i * routine):
+	Thread::Thread(ThreadRoutine_i * routine, bool suspended):
 		m_routine(routine),
-		m_handle(::CreateThread(nullptr, 0, ThreadRoutine_i::run_thread, m_routine, CREATE_SUSPENDED, &m_id))
+		m_handle(::CreateThread(nullptr, 0, ThreadRoutine_i::run_thread, routine, suspended ? CREATE_SUSPENDED : 0, &m_id))
 	{
 		LogNoise(L"id: %u\n", m_id);
 	}
@@ -115,15 +63,6 @@ namespace Base {
 		return ret;
 	}
 
-	bool Thread::set_io_priority(Thread::IoPriority_t prio)
-	{
-		LogNoise(L"id: %u, prio: %s\n", m_id, to_str(prio));
-		ULONG p = (ULONG)prio;
-		NTSTATUS ret = NtSetInformationThread(m_handle, ThreadIoPriority, &p, sizeof(p));
-		LogErrorIf(ret, L"-> %s\n", NTStatusAsStr(ret).c_str());
-		return ret;
-	}
-
 	size_t Thread::get_exitcode() const
 	{
 		DWORD ret;
@@ -137,15 +76,6 @@ namespace Base {
 	{
 		LogNoise(L"id: %u\n", m_id);
 		return (Thread::Priority_t)::GetThreadPriority(m_handle);
-	}
-
-	Thread::IoPriority_t Thread::get_io_priority() const
-	{
-		LogNoise(L"id: %u\n", m_id);
-		ULONG p = 0;
-		NTSTATUS ret = NtQueryInformationThread(m_handle, ThreadIoPriority, &p, sizeof(p), nullptr);
-		LogErrorIf(ret, L"-> %s\n", NTStatusAsStr(ret).c_str());
-		return (Thread::IoPriority_t)p;
 	}
 
 	bool Thread::suspend() const
@@ -168,6 +98,13 @@ namespace Base {
 	{
 		LogNoise(L"id: %u\n", m_id);
 		return (WaitResult_t)::WaitForSingleObjectEx(m_handle, timeout, true);
+	}
+
+	void Thread::terminate()
+	{
+		LogNoise(L"id: %u\n", m_id);
+		::TerminateThread(m_handle, 255);
+		LogNoise(L"id: %u\n", m_id);
 	}
 
 	PCWSTR to_str(Thread::Priority_t prio)

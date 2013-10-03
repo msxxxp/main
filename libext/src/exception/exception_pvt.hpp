@@ -8,15 +8,15 @@ namespace Ext {
 
 	///==================================================================================== WinError
 	struct WinError: public AbstractError {
-		virtual WinError * clone() const;
+		virtual WinError * clone() const override;
 
-		virtual ustring type() const;
+		virtual ustring type() const override;
 
-		virtual ustring	 what() const;
+		virtual ustring	 what() const override;
 
-		virtual DWORD code() const;
+		virtual DWORD code() const override;
 
-		virtual void format_error(Base::mstring & out) const;
+		virtual void format_error(Base::mstring & out) const override;
 
 	protected:
 #ifndef NDEBUG
@@ -36,11 +36,11 @@ namespace Ext {
 
 	///==================================================================================== WmiError
 	struct WmiError: public WinError {
-		virtual WmiError * clone() const;
+		virtual WmiError * clone() const override;
 
-		virtual ustring type() const;
+		virtual ustring type() const override;
 
-		virtual ustring	 what() const;
+		virtual ustring	 what() const override;
 
 	private:
 #ifndef NDEBUG
@@ -55,11 +55,11 @@ namespace Ext {
 
 	///================================================================================== HMailError
 	struct HMailError: public WinError {
-		virtual HMailError * clone() const;
+		virtual HMailError * clone() const override;
 
-		virtual ustring type() const;
+		virtual ustring type() const override;
 
-		virtual ustring	 what() const;
+		virtual ustring	 what() const override;
 
 	private:
 #ifndef NDEBUG
@@ -74,9 +74,9 @@ namespace Ext {
 
 	///================================================================================== WSockError
 	struct WSockError: public WinError {
-		virtual WSockError * clone() const;
+		virtual WSockError * clone() const override;
 
-		virtual ustring type() const;
+		virtual ustring type() const override;
 
 	private:
 #ifndef NDEBUG
@@ -89,7 +89,6 @@ namespace Ext {
 
 		friend struct HiddenFunctions;
 	};
-
 
 }
 

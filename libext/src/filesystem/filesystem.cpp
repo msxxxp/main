@@ -78,7 +78,7 @@ namespace {
 namespace Fsys {
 	bool is_exist(PCWSTR path)
 	{
-		DWORD attr = ::GetFileAttributesW(path);
+		DWORD attr = get_attr_nt(path);
 		if (attr != INVALID_FILE_ATTRIBUTES)
 			return true;
 		DWORD err = ::GetLastError();
@@ -170,5 +170,12 @@ namespace Fsys {
 		wchar_t path[Base::MAX_PATH_LEN];
 		CheckApi(psapi_dll::inst().GetMappedFileNameW(::GetCurrentProcess(), view, path, Base::lengthof(path)));
 		return device_path_to_disk(path);
+	}
+
+	HANDLE DuplicateHandle(HANDLE hndl)
+	{
+		HANDLE ret = nullptr;
+		CheckApi(::DuplicateHandle(GetCurrentProcess(), CheckHandle(hndl), GetCurrentProcess(), &ret, 0, FALSE, DUPLICATE_SAME_ACCESS));
+		return ret;
 	}
 }

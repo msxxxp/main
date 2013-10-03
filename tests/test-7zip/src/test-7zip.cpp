@@ -20,10 +20,11 @@ namespace {
 		set_default_level(Level::Trace);
 		set_default_prefix(Prefix::Full/* | Prefix::Place*/);
 		set_default_target(get_TargetToFile(L"test-7zip.log", true));
-		//		set_default_target(get_TargetToConsole());
-
-		set_module_prefix(Prefix::Function | Prefix::Thread, get_module(L"7zip"));
-		set_module_target(get_TargetToFile(L"test-7zip1.log", true), get_module(L"7zip"));
+//		//		set_default_target(get_TargetToConsole());
+//
+		set_module_prefix(Prefix::Full | Prefix::Function | Prefix::Thread, get_module(L"SevenZip"));
+		set_module_target(get_TargetToFile(L"test-SevenZip.log", true), get_module(L"SevenZip"));
+		set_module_level(Level::Info, get_module(L"SevenZip"));
 	}
 }
 
@@ -49,6 +50,50 @@ struct ArcInfo: public Base::Command_p {
 
 private:
 	const SevenZip::Lib & arc_lib;
+};
+
+struct ArcCompressPiped: public Base::Command_p {
+	ArcCompressPiped(const SevenZip::Lib & lib, const ustring & destPath, const ustring & midName, const ustring & srcPath) :
+		arc_lib(lib),
+		m_destPath(destPath),
+		m_midName(midName),
+		m_srcPath(srcPath)
+	{
+		LogNoise(L"%p, '%s', '%s'\n", &lib, destPath.c_str(), srcPath.c_str());
+	}
+
+	ssize_t execute()
+	{
+		ustring midCodec = L"tar";
+		ustring destCodec = L"gzip";
+
+		ustring midName(m_midName + L"." + midCodec);
+		ustring fullPath(m_destPath + L"." + midCodec + L"." + destCodec);
+		if (!Fsys::File::is_exist(fullPath)) {
+			LogForce(L"Compressing to '%s':\n", fullPath.c_str());
+			SevenZip::CompressProperties midProps;
+			midProps.add(m_srcPath);
+			midProps.codec = midCodec;
+
+			SevenZip::CompressProperties destProps;
+			destProps.add_virtual(midName);
+			destProps.codec = destCodec;
+			destProps.level = SevenZip::CompressLevel::STORE;
+			destProps.silent = false;
+//			destProps.password = L"7z";
+			destProps.encrypt_header = false;
+			destProps.solid = true;
+
+			SevenZip::CreateArchivePiped(arc_lib, midProps, fullPath, destProps).execute();
+		}
+		return true;
+	}
+
+private:
+	const SevenZip::Lib & arc_lib;
+	ustring m_destPath;
+	ustring m_midName;
+	ustring m_srcPath;
 };
 
 struct ArcCompress: public Base::Command_p {
@@ -232,6 +277,11 @@ struct CmdParser: public Base::Command_p {
 
 			if (Base::Str::compare(argv[i], L"/a") == 0 && i < (argc - 3)) {
 				action.reset(new ArcCompress(arc_lib, argv[i + 1], argv[i + 2], argv[i + 3]));
+				continue;
+			}
+
+			if (Base::Str::compare(argv[i], L"/g") == 0 && i < (argc - 3)) {
+				action.reset(new ArcCompressPiped(arc_lib, argv[i + 1], argv[i + 3], argv[i + 2]));
 				continue;
 			}
 		}

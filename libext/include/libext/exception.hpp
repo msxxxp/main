@@ -4,7 +4,7 @@
 #include <libbase/std.hpp>
 #include <libbase/mstring.hpp>
 #include <libbase/shared_ptr.hpp>
-//#include <libbase/backtrace.hpp>
+#include <libbase/backtrace.hpp>
 
 #define THROW_PLACE THIS_FILE, __LINE__, __PRETTY_FUNCTION__
 

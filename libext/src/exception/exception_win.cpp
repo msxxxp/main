@@ -1,6 +1,7 @@
 ﻿#include "exception_pvt.hpp"
 #include <libbase/err.hpp>
 #include <libbase/logger.hpp>
+#include <libbase/backtrace.hpp>
 
 namespace Ext {
 
@@ -96,8 +97,9 @@ namespace Ext {
 
 	HRESULT HiddenFunctions::CheckComFunc(HRESULT res, PCSTR file, size_t line, PCSTR func)
 	{
-		if (FAILED(res))
+		if (FAILED(res)) {
 			throw WinError(res, file, line, func);
+		}
 		return res;
 	}
 

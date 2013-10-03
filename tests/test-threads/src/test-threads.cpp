@@ -78,8 +78,10 @@ namespace {
 	{
 		using namespace Logger;
 		set_default_level(Level::Trace);
-		set_default_prefix(Prefix::Medium | Prefix::Place | Prefix::Module | Prefix::Thread);
-		set_default_target(get_TargetToConsole());
+//		set_default_prefix(Prefix::Medium | Prefix::Place | Prefix::Module | Prefix::Thread);
+//		set_default_target(get_TargetToConsole());
+		set_default_prefix(Prefix::Full/* | Prefix::Place*/);
+		set_default_target(get_TargetToFile(L"test-7zip.log", true));
 
 //		set_module_enabled(false, get_module(L"threads"));
 	}
@@ -113,8 +115,8 @@ int main()
 	setup_logger();
 	LogTrace();
 
-	test_window();
-	return 0;
+//	test_window();
+//	return 0;
 
 	Base::Queue queue;
 	Routine routine1(&queue, 100);

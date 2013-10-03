@@ -62,9 +62,9 @@ namespace Base {
 
 		~Thread() noexcept;
 
-		Thread(ThreadRoutine_i * routine);
+		Thread(ThreadRoutine_i * routine, bool suspended = false);
 
-		Thread(ThreadRoutine_i * routine, void * data, size_t stack_size = 0);
+		Thread(ThreadRoutine_i * routine, void * data, bool suspended = false, size_t stack_size = 0);
 
 		Thread(Thread && right);
 
@@ -106,6 +106,8 @@ namespace Base {
 		bool resume() const;
 
 		WaitResult_t wait(Timeout_t timeout = WAIT_FOREVER) const;
+
+		void terminate();
 
 	private:
 		ThreadRoutine_i * m_routine;

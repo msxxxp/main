@@ -15,9 +15,10 @@ namespace Base {
 		}
 
 		ScopeGuard::ScopeGuard(ScopeGuard && right) :
-			m_unit(right.m_unit)
+			m_unit(nullptr)
 		{
-			right.m_unit = nullptr;
+			using std::swap;
+			swap(m_unit, right.m_unit);
 		}
 
 		ScopeGuard & ScopeGuard::operator =(ScopeGuard && right)

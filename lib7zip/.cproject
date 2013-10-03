@@ -125,6 +125,7 @@
 		<configuration configurationName="Debug-x64">
 			<resource resourceType="PROJECT" workspacePath="/lib7zip"/>
 		</configuration>
+		<configuration configurationName="Release-x64"/>
 		<configuration configurationName="Debug">
 			<resource resourceType="PROJECT" workspacePath="/lib7zip"/>
 		</configuration>

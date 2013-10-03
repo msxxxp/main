@@ -5,7 +5,7 @@
 namespace SevenZip {
 	Logger::Module_i * get_logger_module()
 	{
-		auto static module = Logger::get_module(L"7zip");
+		auto static module = Logger::get_module(L"SevenZip");
 		return module;
 	}
 

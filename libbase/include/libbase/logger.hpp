@@ -282,11 +282,13 @@ namespace Logger {
 
 	inline void lock_module(Module_i * module)
 	{
+		UNUSED(module);
 		module->batch_lock();
 	}
 
 	inline void unlock_module(Module_i * module)
 	{
+		UNUSED(module);
 		module->batch_unlock();
 	}
 

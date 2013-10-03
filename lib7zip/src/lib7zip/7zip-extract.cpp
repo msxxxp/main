@@ -75,7 +75,7 @@ namespace SevenZip {
 	{
 		UNUSED(completeValue);
 
-		LogNoise(L"%I64u\n", *completeValue);
+		LogNoise(L"%I64u\n", completeValue ? *completeValue : 0ULL);
 
 //		return processed size
 //		if (completeValue) {

@@ -37,13 +37,13 @@ namespace Com {
 		static Initializer com;
 	}
 
+	HRESULT ConvertErrorToHRESULT(LONG error)
+	{
+		return (error == ERROR_SUCCESS) ? S_OK : HRESULT_FROM_WIN32(error);
+	}
+
 	HRESULT ConvertBoolToHRESULT(bool result)
 	{
-		if (result)
-			return S_OK;
-		DWORD lastError = ::GetLastError();
-		if (lastError == 0)
-			return E_FAIL;
-		return HRESULT_FROM_WIN32(lastError);
+		return result ? S_OK : ConvertErrorToHRESULT(::GetLastError());
 	}
 }

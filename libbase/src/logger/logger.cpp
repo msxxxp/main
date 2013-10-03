@@ -138,8 +138,9 @@ namespace Logger {
 	void Module_impl::set_target(const Target_t & target)
 	{
 		batch_lock();
+		Target_t oldTarget(m_target);
 		m_target = target;
-		batch_unlock();
+		oldTarget->unlock();
 	}
 
 	void Module_impl::set_enabled(bool enabled)
@@ -151,7 +152,7 @@ namespace Logger {
 
 	void Module_impl::out(PCSTR file, int line, PCSTR func, Level lvl, PCWSTR format, ...) const
 	{
-		if (m_enabled && lvl >= m_lvl) {
+		if (m_enabled && m_lvl <= lvl) {
 			ustring prefix = create_prefix(lvl);
 			add_place(prefix, file, line, func);
 			va_list args;
@@ -198,10 +199,10 @@ namespace Logger {
 			prefix += Base::String::format(L"%s ", LogLevelNames[(int)lvl]);
 		}
 		if (m_prefix & Prefix::Module) {
-			prefix += Base::String::format(L"{%s} ", m_name.c_str());
+			prefix += Base::String::format(L"{%8s} ", m_name.c_str());
 		}
 		if (m_prefix & Prefix::Thread) {
-			prefix += Base::String::format(L"<%05u> ", ::GetCurrentThreadId());
+			prefix += Base::String::format(L"<%5u> ", ::GetCurrentThreadId());
 		}
 		return prefix;
 	}
@@ -348,10 +349,10 @@ namespace Logger {
 	{
 		auto lk(m_sync->lock_scope());
 		defModule = register_module_(defModuleName, defTarget, defLevel);
-		auto prefix = defModule->get_prefix();
-		defModule->set_prefix(Prefix::Thread | Prefix::Time | Prefix::Date);
+//		auto prefix = defModule->get_prefix();
+//		defModule->set_prefix(Prefix::Thread | Prefix::Time | Prefix::Date);
 		defModule->out(Level::Force, L"Logger has been created\n");
-		defModule->set_prefix(prefix);
+//		defModule->set_prefix(prefix);
 	}
 
 	Logger_impl::~Logger_impl()

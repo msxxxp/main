@@ -21,7 +21,6 @@
 #include <initguid.h>
 #include <shobjidl.h>
 
-#include <map>
 #include <vector>
 #include <memory>
 
@@ -76,7 +75,10 @@ namespace SevenZip {
 	struct DirItem: public Fsys::Stat {
 		ustring path;
 		ustring name;
+
 		DirItem(const ustring & file_path, const ustring & file_name);
+
+		DirItem(const ustring & file_name, bool virtualItem);
 	};
 
 	///====================================================================================== Method
@@ -280,13 +282,38 @@ namespace SevenZip {
 		HRESULT WINAPI QueryInterface(REFIID riid, void ** object) override;
 
 		// ISequentialOutStream
-		HRESULT WINAPI Write(PCVOID data, UInt32 size, UInt32 * processedSize) override;
+		HRESULT WINAPI Write(const void * data, UInt32 size, UInt32 * processedSize) override;
 
 		// IOutStream
 		HRESULT WINAPI Seek(Int64 offset, UInt32 seekOrigin, UInt64 * newPosition) override;
 		HRESULT WINAPI SetSize(UInt64 newSize) override;
 
 		using Fsys::File::Facade::set_mtime;
+		using Fsys::File::Facade::set_del_on_close;
+	};
+
+	///============================================================================= FileWriteStream
+	struct VirtualReadWriteStream: public ISequentialInStream, public ISequentialOutStream, private Com::UnknownImp {
+		~VirtualReadWriteStream();
+
+		VirtualReadWriteStream();
+
+		// Unknown
+		ULONG WINAPI AddRef() override;
+		ULONG WINAPI Release() override;
+		HRESULT WINAPI QueryInterface(REFIID riid, void ** object) override;
+
+		// ISequentialInStream
+		HRESULT WINAPI Read(void * data, UInt32 size, UInt32 * processedSize) override;
+
+		// ISequentialOutStream
+		HRESULT WINAPI Write(const void * data, UInt32 size, UInt32 * processedSize) override;
+
+		void close_write();
+
+	private:
+		struct impl;
+		std::shared_ptr<impl> m_impl;
 	};
 
 	///================================================================================ OpenCallback
@@ -472,7 +499,7 @@ namespace SevenZip {
 
 	private:
 		const ArchiveSequence & m_wa;
-		ustring m_dest;// Output directory
+		ustring m_dest; // Output directory
 
 		struct CurrItem;
 		std::shared_ptr<CurrItem> m_curr;
@@ -514,6 +541,8 @@ namespace SevenZip {
 
 		void add(const ustring & add_path);
 
+		void add_virtual(const ustring & name);
+
 		void writeln(PCWSTR str) const;
 
 		void writeln(const ustring & str) const;
@@ -530,6 +559,8 @@ namespace SevenZip {
 
 		UpdateCallback(const CompressProperties & props, FailedFiles & ffiles);
 
+		UpdateCallback(const CompressProperties & props, FailedFiles & ffiles, const Com::Object<ISequentialInStream> & midStream);
+
 		// Unknown
 		ULONG WINAPI AddRef() override;
 		ULONG WINAPI Release() override;
@@ -539,7 +570,7 @@ namespace SevenZip {
 		HRESULT WINAPI SetTotal(UInt64 size) override;
 		HRESULT WINAPI SetCompleted(const UInt64 * completeValue) override;
 
-		// GetUpdateItemInfo
+		// IArchiveUpdateCallback
 		HRESULT WINAPI GetUpdateItemInfo(UInt32 index, Int32 * newData, Int32 * newProperties, UInt32 * indexInArchive) override;
 		HRESULT WINAPI GetProperty(UInt32 index, PROPID propID, PROPVARIANT * value) override;
 		HRESULT WINAPI GetStream(UInt32 index, ISequentialInStream ** inStream) override;
@@ -552,27 +583,46 @@ namespace SevenZip {
 		// ICryptoGetTextPassword2
 		HRESULT WINAPI CryptoGetTextPassword2(Int32 * passwordIsDefined, BSTR * password) override;
 
+		uint64_t get_total_size() const
+		{
+			return m_totalSize;
+		}
+
 	private:
 		const CompressProperties & m_props;
 		FailedFiles & m_ffiles;
+		Com::Object<ISequentialInStream> m_midStream;
+		uint64_t m_totalSize;
+		uint64_t m_completedSize;
 	};
 
 	///=============================================================================== CreateArchive
 	struct CreateArchive: public Base::Command_p, private Base::Uncopyable {
-		CreateArchive(const Lib & lib, const ustring & path, const CompressProperties & properties);
+		CreateArchive(const Lib & lib, const ustring & destPath, const CompressProperties & properties);
 
 		ssize_t execute() override;
 
 //		Object<IOutArchive> operator ->() const;
 
-	private:
-		void set_properties();
+	protected:
+		void set_properties(Com::Object<IOutArchive> arc, const CompressProperties & props);
 
 		const Lib & m_lib;
-		const ustring m_path;
-		const CompressProperties & m_properties;
-		Com::Object<IOutArchive> m_archive;
+		const ustring m_destPath;
+		const CompressProperties & m_destProperties;
+		Com::Object<IOutArchive> m_destArchive;
 		FailedFiles m_ffiles;
+	};
+
+	///========================================================================== CreateArchivePiped
+	struct CreateArchivePiped: public CreateArchive {
+		CreateArchivePiped(const Lib & lib, const CompressProperties & midProperties, const ustring & destPath, const CompressProperties & destProperties);
+
+		ssize_t execute() override;
+
+	private:
+		const CompressProperties & m_midProperties;
+		Com::Object<IOutArchive> m_midArchive;
 	};
 }
 

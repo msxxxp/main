@@ -33,9 +33,9 @@ namespace Base {
 	}
 
 
-	Thread::Thread(ThreadRoutine_i * routine, void * data, size_t stack_size):
+	Thread::Thread(ThreadRoutine_i * routine, void * data, bool suspended, size_t stack_size):
 		m_routine(routine),
-		m_handle(::CreateThread(nullptr, stack_size, ThreadParameters::run_thread_with_param, new ThreadParameters(m_routine, data), CREATE_SUSPENDED, &m_id))
+		m_handle(::CreateThread(nullptr, stack_size, ThreadParameters::run_thread_with_param, new ThreadParameters(m_routine, data), suspended ? CREATE_SUSPENDED : 0, &m_id))
 	{
 	}
 

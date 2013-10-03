@@ -45,6 +45,10 @@ namespace Base {
 			void swap(ScopeGuard & right);
 
 		private:
+			ScopeGuard(const ScopeGuard & right) = delete;
+
+			ScopeGuard & operator = (const ScopeGuard & right) = delete;
+
 			SyncUnit_i * m_unit;
 		};
 

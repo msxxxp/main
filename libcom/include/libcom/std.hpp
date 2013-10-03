@@ -9,6 +9,8 @@ namespace Com {
 
 	void init();
 
+	HRESULT ConvertErrorToHRESULT(LONG error);
+
 	HRESULT ConvertBoolToHRESULT(bool result);
 
 	///====================================================================================== Object
@@ -40,8 +42,17 @@ namespace Com {
 			m_obj->AddRef();
 		}
 
-		Object(const this_type & param) :
-			m_obj(param.m_obj)
+		Object(const this_type & right) :
+			m_obj(right.m_obj)
+		{
+			if (m_obj) {
+				m_obj->AddRef();
+			}
+		}
+
+		template<typename OtherInterface>
+		Object(const Object<OtherInterface> & right) :
+			m_obj(static_cast<OtherInterface*>(right))
 		{
 			if (m_obj) {
 				m_obj->AddRef();
@@ -60,6 +71,16 @@ namespace Com {
 		{
 			if (m_obj != rhs.m_obj) {
 				this_type tmp(rhs);
+				swap(tmp);
+			}
+			return *this;
+		}
+
+		template<typename OtherInterface>
+		this_type & operator =(const Object<OtherInterface> & right)
+		{
+			if (m_obj != static_cast<OtherInterface*>(right)) {
+				this_type tmp(right);
 				swap(tmp);
 			}
 			return *this;

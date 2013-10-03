@@ -5,8 +5,11 @@
 #include <libbase/filesystem.hpp>
 #include <libbase/shared_ptr.hpp>
 #include <libbase/command_p.hpp>
+#include <libbase/logger.hpp>
 
 namespace Fsys {
+	Logger::Module_i * get_logger_module();
+
 	namespace File {
 		struct Facade;
 	}
@@ -79,6 +82,8 @@ namespace Fsys {
 	ustring device_path_to_disk(PCWSTR path);
 
 	ustring get_path(HANDLE path);
+
+	HANDLE DuplicateHandle(HANDLE hndl);
 
 	struct DeleteCmd: public Base::Command_p {
 		DeleteCmd(const ustring &path):
@@ -202,13 +207,15 @@ namespace Fsys {
 			return device() == rhs.device() && inode() == rhs.inode();
 		}
 
-	private:
+	protected:
 		Stat()
 		{
+			Memory::zero((BY_HANDLE_FILE_INFORMATION*)this, sizeof(BY_HANDLE_FILE_INFORMATION));
 		}
 
 		void refresh(HANDLE hndl);
 
+	private:
 //		FILE_BASIC_INFO    m_basic_info;
 //		FILE_STANDARD_INFO m_standard_info;
 //		FILE_ID_INFO       m_id_info;
@@ -450,6 +457,8 @@ namespace Fsys {
 		struct Facade: private Fsys::Stat, private Base::Uncopyable {
 			~Facade();
 
+			explicit Facade(HANDLE hndl);
+
 			Facade(const ustring & path, bool write = false);
 
 			Facade(const ustring & path, ACCESS_MASK access, DWORD share, PSECURITY_ATTRIBUTES sa, DWORD creat, DWORD flags);
@@ -466,7 +475,9 @@ namespace Fsys {
 
 			bool write_nt(PCVOID buf, size_t size, DWORD & written);
 
-			bool set_attr(DWORD at);
+			void set_attr(DWORD at);
+
+			bool set_attr_nt(DWORD at);
 
 			uint64_t get_position() const;
 
@@ -474,11 +485,25 @@ namespace Fsys {
 
 			bool set_position_nt(int64_t dist, DWORD method = FILE_BEGIN);
 
-			bool set_eof();
+			void set_eof();
 
-			bool set_time(const FILETIME & ctime, const FILETIME & atime, const FILETIME & mtime);
+			bool set_eof_nt();
 
-			bool set_mtime(const FILETIME & mtime);
+			void set_time(const FILETIME & ctime, const FILETIME & atime, const FILETIME & mtime);
+
+			bool set_time_nt(const FILETIME & ctime, const FILETIME & atime, const FILETIME & mtime);
+
+			void set_mtime(const FILETIME & mtime);
+
+			bool set_mtime_nt(const FILETIME & mtime);
+
+			void set_ctime(const FILETIME & ctime);
+
+			bool set_ctime_nt(const FILETIME & ctime);
+
+			void set_atime(const FILETIME & atime);
+
+			bool set_atime_nt(const FILETIME & atime);
 
 			ustring path() const {
 				return m_path;
@@ -498,9 +523,12 @@ namespace Fsys {
 
 			static HANDLE Open(const ustring & path, ACCESS_MASK access, DWORD share, PSECURITY_ATTRIBUTES sa, DWORD creat, DWORD flags);
 
+			void set_del_on_close(bool delOnClose);
+
 		private:
-			ustring m_path;
 			HANDLE m_hndl;
+			ustring m_path;
+			bool m_delOnClose;
 		};
 
 		///=============================================================================== File::Map

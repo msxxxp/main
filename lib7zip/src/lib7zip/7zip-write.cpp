@@ -244,6 +244,7 @@ namespace SevenZip {
 				FileReadStream * stream = new FileReadStream(Base::MakePath(dirItem.path, dirItem.name));
 				Com::Object<ISequentialInStream>(stream).detach(*inStream);
 			} catch (Ext::AbstractError & e) {
+				LogError(L"%u -> '%s'\n", index, e.what().c_str());
 				m_ffiles.push_back(FailedFile(dirItem.name, e.code()));
 				m_props.writeln(e.what());
 				return S_FALSE;
@@ -251,7 +252,9 @@ namespace SevenZip {
 		}
 		return S_OK;
 	}
-	catch (std::exception & /*e*/) {
+	catch (std::exception & e) {
+		UNUSED(e);
+		LogError(L"%S\n", e.what());
 		return S_FALSE;
 	}
 

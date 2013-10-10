@@ -121,7 +121,8 @@ namespace Ext {
 
 	void User::add(const ustring & name, const ustring & pass, const ustring & dom) {
 		DWORD dwLevel = 1;
-		USER_INFO_1 info = {0};
+		USER_INFO_1 info;
+		Memory::zero(info);
 		info.usri1_name = const_cast<wchar_t*>(name.c_str());
 		info.usri1_password = const_cast<wchar_t*>(pass.c_str());
 		info.usri1_priv = USER_PRIV_USER;

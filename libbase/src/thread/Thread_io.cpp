@@ -1,6 +1,7 @@
 #include <libbase/thread.hpp>
 
 #include <libbase/err.hpp>
+#include <libbase/string.hpp>
 #include <libbase/logger.hpp>
 
 namespace Base {

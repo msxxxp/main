@@ -142,12 +142,14 @@ namespace Ext {
 		}
 
 		Authz(PSID sid) {
-			LUID unusedId = {0};
+			LUID unusedId;
+			Memory::zero(unusedId);
 			CheckApi(Authz_dll::inst().AuthzInitializeContextFromSid(0, sid, Authz_dll::inst(), nullptr, unusedId, nullptr, &m_cln));
 		}
 
 		ACCESS_MASK access(PSECURITY_DESCRIPTOR psd) {
-			AUTHZ_ACCESS_REQUEST AccessRequest = {0};
+			AUTHZ_ACCESS_REQUEST AccessRequest;
+			Memory::zero(AccessRequest);
 			AccessRequest.DesiredAccess = MAXIMUM_ALLOWED;
 			AccessRequest.PrincipalSelfSid = NULL;
 			AccessRequest.ObjectTypeList = NULL;
@@ -156,7 +158,8 @@ namespace Ext {
 
 			BYTE     Buffer[1024];
 			RtlZeroMemory(Buffer, sizeof(Buffer));
-			AUTHZ_ACCESS_REPLY AccessReply = {0};
+			AUTHZ_ACCESS_REPLY AccessReply;
+			Memory::zero(AccessReply);
 			AccessReply.ResultListLength = 1;
 			AccessReply.GrantedAccessMask = (PACCESS_MASK) (Buffer);
 			AccessReply.Error = (PDWORD) (Buffer + sizeof(ACCESS_MASK));

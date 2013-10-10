@@ -244,7 +244,8 @@ namespace Fsys {
 
 			Base::auto_close<HANDLE> hLink(CheckHandle(OpenLinkHandle(path, GENERIC_WRITE)));
 
-			REPARSE_GUID_DATA_BUFFER rgdb = {0};
+			REPARSE_GUID_DATA_BUFFER rgdb;
+			Memory::zero(rgdb);
 			rgdb.ReparseTag = rdb->ReparseTag;
 			DWORD dwBytesReturned;
 			CheckApi(::DeviceIoControl(hLink, FSCTL_DELETE_REPARSE_POINT, &rgdb, REPARSE_GUID_DATA_BUFFER_HEADER_SIZE, nullptr, 0, &dwBytesReturned, 0));

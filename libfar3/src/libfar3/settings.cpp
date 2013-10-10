@@ -26,8 +26,9 @@ namespace Far {
 	///================================================================================== Settings_t
 	Settings_t::~Settings_t()
 	{
-		psi().SettingsControl(m_hndl, SCTL_FREE, 0, 0);
 		LogTrace();
+		psi().SettingsControl(m_hndl, SCTL_FREE, 0, 0);
+		LogNoise(L"Object destoyed\n");
 	}
 
 	Settings_t::Settings_t(const GUID & guid) :
@@ -63,7 +64,12 @@ namespace Far {
 	size_t Settings_t::get(PCWSTR name, PVOID value, size_t size, FARSETTINGS_SUBFOLDERS root) const
 	{
 		LogTrace();
-		FarSettingsItem item = {sizeof(item), root, name, FST_DATA};
+		FarSettingsItem item;
+		Memory::zero(item);
+		item.StructSize = sizeof(item);
+		item.Root = root;
+		item.Name = name;
+		item.Type = FST_DATA;
 		if (psi().SettingsControl(m_hndl, SCTL_GET, 0, &item)) {
 			if (value) {
 				size = (item.Data.Size > size) ? size : item.Data.Size;
@@ -79,14 +85,24 @@ namespace Far {
 	PCWSTR Settings_t::get(PCWSTR name, PCWSTR def, FARSETTINGS_SUBFOLDERS root) const
 	{
 		LogTrace();
-		FarSettingsItem item = {sizeof(item), root, name, FST_STRING};
+		FarSettingsItem item;
+		Memory::zero(item);
+		item.StructSize = sizeof(item);
+		item.Root = root;
+		item.Name = name;
+		item.Type = FST_STRING;
 		return psi().SettingsControl(m_hndl, SCTL_GET, 0, &item) ? item.String : def;
 	}
 
 	uint64_t Settings_t::get(PCWSTR name, uint64_t def, FARSETTINGS_SUBFOLDERS root) const
 	{
 		LogTrace();
-		FarSettingsItem item = {sizeof(item), root, name, FST_QWORD};
+		FarSettingsItem item;
+		Memory::zero(item);
+		item.StructSize = sizeof(item);
+		item.Root = root;
+		item.Name = name;
+		item.Type = FST_QWORD;
 		return psi().SettingsControl(m_hndl, SCTL_GET, 0, &item) ? item.Number : def;
 	}
 
@@ -105,7 +121,12 @@ namespace Far {
 	bool Settings_t::set(PCWSTR name, PCVOID value, size_t size, FARSETTINGS_SUBFOLDERS root)
 	{
 		LogTrace();
-		FarSettingsItem item = {sizeof(item), root, name, FST_DATA};
+		FarSettingsItem item;
+		Memory::zero(item);
+		item.StructSize = sizeof(item);
+		item.Root = root;
+		item.Name = name;
+		item.Type = FST_DATA;
 		item.Data.Size = size;
 		item.Data.Data = value;
 		return psi().SettingsControl(m_hndl, SCTL_SET, 0, &item);
@@ -114,7 +135,12 @@ namespace Far {
 	bool Settings_t::set(PCWSTR name, PCWSTR value, FARSETTINGS_SUBFOLDERS root)
 	{
 		LogTrace();
-		FarSettingsItem item = {sizeof(item), root, name, FST_STRING};
+		FarSettingsItem item;
+		Memory::zero(item);
+		item.StructSize = sizeof(item);
+		item.Root = root;
+		item.Name = name;
+		item.Type = FST_STRING;
 		item.String = value;
 		return psi().SettingsControl(m_hndl, SCTL_SET, 0, &item);
 	}
@@ -122,7 +148,12 @@ namespace Far {
 	bool Settings_t::set(PCWSTR name, uint64_t value, FARSETTINGS_SUBFOLDERS root)
 	{
 		LogTrace();
-		FarSettingsItem item = {sizeof(item), root, name, FST_QWORD};
+		FarSettingsItem item;
+		Memory::zero(item);
+		item.StructSize = sizeof(item);
+		item.Root = root;
+		item.Name = name;
+		item.Type = FST_QWORD;
 		item.Number = value;
 		return psi().SettingsControl(m_hndl, SCTL_SET, 0, &item);
 	}
@@ -130,7 +161,12 @@ namespace Far {
 	bool Settings_t::set(PCWSTR name, int64_t value, FARSETTINGS_SUBFOLDERS root)
 	{
 		LogTrace();
-		FarSettingsItem item = {sizeof(item), root, name, FST_QWORD};
+		FarSettingsItem item;
+		Memory::zero(item);
+		item.StructSize = sizeof(item);
+		item.Root = root;
+		item.Name = name;
+		item.Type = FST_QWORD;
 		item.Number = value;
 		return psi().SettingsControl(m_hndl, SCTL_SET, 0, &item);
 	}

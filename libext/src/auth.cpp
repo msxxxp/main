@@ -41,7 +41,8 @@ namespace Ext {
 	}
 
 	void Credential_t::set(PCWSTR name, PCWSTR pass, PCWSTR target) {
-		CREDENTIALW cred = {0};
+		CREDENTIALW cred;
+		Memory::zero(cred);
 		cred.Type = CRED_TYPE_GENERIC;
 		cred.Persist = CRED_PERSIST_LOCAL_MACHINE;
 		cred.TargetName = target ? (PWSTR)target : (PWSTR)name;

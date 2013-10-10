@@ -125,7 +125,8 @@ namespace Fsys {
 
 	void del_recycle(PCWSTR path)
 	{
-		SHFILEOPSTRUCTW info = {0};
+		SHFILEOPSTRUCTW info;
+		Memory::zero(info);
 		info.wFunc = FO_DELETE;
 		info.pFrom = path;
 		info.fFlags = FOF_ALLOWUNDO | FOF_NOCONFIRMATION | FOF_NOERRORUI | FOF_SILENT;

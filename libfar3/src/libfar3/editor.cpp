@@ -32,7 +32,10 @@ namespace Far {
 
 		ssize_t get_string(ssize_t y, PCWSTR & str)
 		{
-			EditorGetString egs = {sizeof(egs), y};
+			EditorGetString egs;
+			Memory::zero(egs);
+			egs.StructSize = sizeof(egs);
+			egs.StringNumber = y;
 			psi().EditorControl(-1, ECTL_GETSTRING, 0, &egs);
 			str = egs.StringText;
 			return egs.StringLength;
@@ -66,19 +69,28 @@ namespace Far {
 
 		intptr_t unselect_block()
 		{
-			EditorSelect tmp = {sizeof(tmp), BTYPE_NONE};
+			EditorSelect tmp;
+			Memory::zero(tmp);
+			tmp.StructSize = sizeof(tmp);
+			tmp.BlockType = BTYPE_NONE;
 			return psi().EditorControl(-1, ECTL_SELECT, 0, &tmp);
 		}
 
 		intptr_t start_undo()
 		{
-			EditorUndoRedo eur = {sizeof(eur), EUR_BEGIN};
+			EditorUndoRedo eur;
+			Memory::zero(eur);
+			eur.StructSize = sizeof(eur);
+			eur.Command = EUR_BEGIN;
 			return psi().EditorControl(-1, ECTL_UNDOREDO, 0, &eur);
 		}
 
 		intptr_t stop_undo()
 		{
-			EditorUndoRedo eur = {sizeof(eur), EUR_END};
+			EditorUndoRedo eur;
+			Memory::zero(eur);
+			eur.StructSize = sizeof(eur);
+			eur.Command = EUR_END;
 			return psi().EditorControl(-1, ECTL_UNDOREDO, 0, &eur);
 		}
 

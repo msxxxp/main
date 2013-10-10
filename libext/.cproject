@@ -44,7 +44,7 @@
 								</option>
 								<option id="gnu.cpp.compiler.option.warnings.extrawarn.963448245" name="Extra warnings (-Wextra)" superClass="gnu.cpp.compiler.option.warnings.extrawarn" value="true" valueType="boolean"/>
 								<option id="gnu.cpp.compiler.option.warnings.toerrors.928801736" name="Warnings as errors (-Werror)" superClass="gnu.cpp.compiler.option.warnings.toerrors" value="true" valueType="boolean"/>
-								<option id="gnu.cpp.compiler.option.other.other.802655446" name="Other flags" superClass="gnu.cpp.compiler.option.other.other" value="-Wno-missing-field-initializers -c -fmessage-length=0 -fno-threadsafe-statics -std=c++11" valueType="string"/>
+								<option id="gnu.cpp.compiler.option.other.other.802655446" name="Other flags" superClass="gnu.cpp.compiler.option.other.other" value="-c -fmessage-length=0 -fno-threadsafe-statics -std=c++11" valueType="string"/>
 								<inputType id="cdt.managedbuild.tool.gnu.cpp.compiler.input.333925563" superClass="cdt.managedbuild.tool.gnu.cpp.compiler.input"/>
 							</tool>
 							<tool id="cdt.managedbuild.tool.gnu.archiver.mingw.lib.debug.1350003693" name="GCC Archiver" superClass="cdt.managedbuild.tool.gnu.archiver.mingw.lib.debug"/>
@@ -95,7 +95,7 @@
 								</option>
 								<option id="gnu.cpp.compiler.option.warnings.extrawarn.561792524" name="Extra warnings (-Wextra)" superClass="gnu.cpp.compiler.option.warnings.extrawarn" value="true" valueType="boolean"/>
 								<option id="gnu.cpp.compiler.option.warnings.toerrors.512892482" name="Warnings as errors (-Werror)" superClass="gnu.cpp.compiler.option.warnings.toerrors" value="true" valueType="boolean"/>
-								<option id="gnu.cpp.compiler.option.other.other.1555469879" name="Other flags" superClass="gnu.cpp.compiler.option.other.other" value="-Wno-missing-field-initializers -c -fmessage-length=0 -fno-threadsafe-statics -std=c++11" valueType="string"/>
+								<option id="gnu.cpp.compiler.option.other.other.1555469879" name="Other flags" superClass="gnu.cpp.compiler.option.other.other" value="-c -fmessage-length=0 -fno-threadsafe-statics -std=c++11" valueType="string"/>
 								<inputType id="cdt.managedbuild.tool.gnu.cpp.compiler.input.238015624" superClass="cdt.managedbuild.tool.gnu.cpp.compiler.input"/>
 							</tool>
 							<tool id="cdt.managedbuild.tool.gnu.archiver.mingw.lib.release.1952633612" name="GCC Archiver" superClass="cdt.managedbuild.tool.gnu.archiver.mingw.lib.release"/>
@@ -145,7 +145,7 @@
 								</option>
 								<option id="gnu.cpp.compiler.option.warnings.extrawarn.2107010895" name="Extra warnings (-Wextra)" superClass="gnu.cpp.compiler.option.warnings.extrawarn" value="true" valueType="boolean"/>
 								<option id="gnu.cpp.compiler.option.warnings.toerrors.1462950863" name="Warnings as errors (-Werror)" superClass="gnu.cpp.compiler.option.warnings.toerrors" value="true" valueType="boolean"/>
-								<option id="gnu.cpp.compiler.option.other.other.1827646702" name="Other flags" superClass="gnu.cpp.compiler.option.other.other" value="-Wno-missing-field-initializers -c -fmessage-length=0 -fno-threadsafe-statics -std=c++11 -m32" valueType="string"/>
+								<option id="gnu.cpp.compiler.option.other.other.1827646702" name="Other flags" superClass="gnu.cpp.compiler.option.other.other" value="-c -fmessage-length=0 -fno-threadsafe-statics -std=c++11 -m32" valueType="string"/>
 								<inputType id="cdt.managedbuild.tool.gnu.cpp.compiler.input.1907231705" superClass="cdt.managedbuild.tool.gnu.cpp.compiler.input"/>
 							</tool>
 							<tool id="cdt.managedbuild.tool.gnu.archiver.mingw.lib.debug.1094494572" name="GCC Archiver" superClass="cdt.managedbuild.tool.gnu.archiver.mingw.lib.debug"/>
@@ -195,7 +195,7 @@
 								</option>
 								<option id="gnu.cpp.compiler.option.warnings.extrawarn.729791321" name="Extra warnings (-Wextra)" superClass="gnu.cpp.compiler.option.warnings.extrawarn" value="true" valueType="boolean"/>
 								<option id="gnu.cpp.compiler.option.warnings.toerrors.154234453" name="Warnings as errors (-Werror)" superClass="gnu.cpp.compiler.option.warnings.toerrors" value="true" valueType="boolean"/>
-								<option id="gnu.cpp.compiler.option.other.other.407825398" name="Other flags" superClass="gnu.cpp.compiler.option.other.other" value="-Wno-missing-field-initializers -c -fmessage-length=0 -fno-threadsafe-statics -std=c++11 -m32" valueType="string"/>
+								<option id="gnu.cpp.compiler.option.other.other.407825398" name="Other flags" superClass="gnu.cpp.compiler.option.other.other" value="-c -fmessage-length=0 -fno-threadsafe-statics -std=c++11 -m32" valueType="string"/>
 								<inputType id="cdt.managedbuild.tool.gnu.cpp.compiler.input.158363451" superClass="cdt.managedbuild.tool.gnu.cpp.compiler.input"/>
 							</tool>
 							<tool id="cdt.managedbuild.tool.gnu.archiver.mingw.lib.release.2074543761" name="GCC Archiver" superClass="cdt.managedbuild.tool.gnu.archiver.mingw.lib.release"/>

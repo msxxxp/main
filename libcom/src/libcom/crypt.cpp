@@ -313,7 +313,8 @@ namespace Com {
 			ustring capsule(guid.empty() ? WinGUID().as_str() : guid);
 			Provider provider(capsule.c_str(), 0, MS_STRONG_PROV_W, PROV_RSA_FULL);
 			provider.create_key(AT_KEYEXCHANGE);
-			CRYPT_KEY_PROV_INFO info = {0};
+			CRYPT_KEY_PROV_INFO info;
+			Memory::zero(info);
 			info.pwszContainerName = (wchar_t*)capsule.c_str();
 			info.pwszProvName = (wchar_t*)MS_STRONG_PROV;
 			info.dwProvType = PROV_RSA_FULL;

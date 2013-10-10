@@ -12,8 +12,10 @@ namespace Ext {
 	DWORD Exec::TIMEOUT_DX = 200;
 
 	void Exec::Run(const ustring &cmd) {
-		PROCESS_INFORMATION pi = {0};
-		STARTUPINFOW si = {0};
+		PROCESS_INFORMATION pi;
+		Memory::zero(pi);
+		STARTUPINFOW si;
+		Memory::zero(si);
 		si.cb = sizeof(si);
 		si.wShowWindow = SW_HIDE;
 		si.dwFlags = STARTF_USESHOWWINDOW;
@@ -35,8 +37,11 @@ namespace Ext {
 		CheckApi(::SetHandleInformation(hPipeOutWrite, HANDLE_FLAG_INHERIT, HANDLE_FLAG_INHERIT));
 
 		// fork process
-		PROCESS_INFORMATION pi = {0};
-		STARTUPINFOW si = {0};
+		PROCESS_INFORMATION pi;
+		Memory::zero(pi);
+		STARTUPINFOW si;
+		Memory::zero(si);
+
 		si.cb = sizeof(si);
 		si.hStdOutput = hPipeOutWrite;
 		si.hStdError = hPipeOutWrite;
@@ -94,8 +99,10 @@ namespace Ext {
 		CheckApi(::SetHandleInformation(hPipeOutWrite, HANDLE_FLAG_INHERIT, HANDLE_FLAG_INHERIT));
 
 		// fork process
-		PROCESS_INFORMATION pi = {0};
-		STARTUPINFOW si = {0};
+		PROCESS_INFORMATION pi;
+		Memory::zero(pi);
+		STARTUPINFOW si;
+		Memory::zero(si);
 		si.cb = sizeof(si);
 		si.hStdInput = hPipeInRead;
 		si.hStdOutput = hPipeOutWrite;
@@ -144,8 +151,10 @@ namespace Ext {
 		DWORD Result = 0;
 
 		// fork process
-		PROCESS_INFORMATION pi = {0};
-		STARTUPINFOW si = {0};
+		PROCESS_INFORMATION pi;
+		Memory::zero(pi);
+		STARTUPINFOW si;
+		Memory::zero(si);
 		si.cb = sizeof(si);
 		si.wShowWindow = SW_HIDE;
 		si.dwFlags = STARTF_USESHOWWINDOW;
@@ -166,8 +175,10 @@ namespace Ext {
 	void Exec::RunAsUser(const ustring &cmd, HANDLE hToken) {
 		ustring app = Validate(cmd);
 
-		PROCESS_INFORMATION pi = {0};
-		STARTUPINFOW si = {0};
+		PROCESS_INFORMATION pi;
+		Memory::zero(pi);
+		STARTUPINFOW si;
+		Memory::zero(si);
 		si.cb = sizeof(si);
 
 		CheckApi(::CreateProcessAsUserW(hToken, nullptr, (PWSTR)app.c_str(), nullptr, nullptr, false, CREATE_DEFAULT_ERROR_MODE, nullptr, nullptr, &si, &pi));
@@ -178,8 +189,10 @@ namespace Ext {
 	void Exec::RunAsUser(const ustring &cmd, const ustring &user, const ustring &pass) {
 		ustring app = Validate(cmd);
 
-		PROCESS_INFORMATION pi = {0};
-		STARTUPINFOW si = {0};
+		PROCESS_INFORMATION pi;
+		Memory::zero(pi);
+		STARTUPINFOW si;
+		Memory::zero(si);
 		si.cb = sizeof(si);
 
 		CheckApi(::CreateProcessWithLogonW(user.c_str(), nullptr, pass.c_str(), 0, nullptr, (PWSTR)app.c_str(), CREATE_DEFAULT_ERROR_MODE, nullptr, nullptr, &si, &pi));
@@ -205,8 +218,10 @@ namespace Ext {
 		CheckApi(::SetHandleInformation(hPipeOutWrite, HANDLE_FLAG_INHERIT, HANDLE_FLAG_INHERIT));
 
 		// fork process
-		PROCESS_INFORMATION pi = {0};
-		STARTUPINFOW si = {0};
+		PROCESS_INFORMATION pi;
+		Memory::zero(pi);
+		STARTUPINFOW si;
+		Memory::zero(si);
 		si.cb = sizeof(si);
 		si.hStdInput = hPipeInRead;
 		si.hStdOutput = hPipeOutWrite;
@@ -694,7 +709,8 @@ int Execute(const wchar_t *CmdStr, // Ком.строка для исполне�
 	}
 
 	void WinJob::SetTimeLimit(size_t seconds) {
-		JOBOBJECT_BASIC_LIMIT_INFORMATION jobli = {{{0}}}; // funny syntax to suppress warnings
+		JOBOBJECT_BASIC_LIMIT_INFORMATION jobli;
+		Memory::zero(jobli);
 		jobli.PerJobUserTimeLimit.QuadPart = seconds * 10000;
 		CheckApi(::SetInformationJobObject(m_job, JobObjectBasicLimitInformation, &jobli, sizeof(jobli)));
 	}
@@ -714,8 +730,10 @@ int Execute(const wchar_t *CmdStr, // Ком.строка для исполне�
 	void WinJob::RunAsUser(const ustring &cmd, HANDLE hToken) {
 		ustring app = Validate(cmd);
 
-		PROCESS_INFORMATION pi = {0};
-		STARTUPINFOW si = {0};
+		PROCESS_INFORMATION pi;
+		Memory::zero(pi);
+		STARTUPINFOW si;
+		Memory::zero(si);
 		si.cb = sizeof(si);
 
 		CheckApi(::CreateProcessAsUserW(hToken, nullptr, (PWSTR)app.c_str(), nullptr, nullptr, false, CREATE_SUSPENDED | CREATE_DEFAULT_ERROR_MODE, nullptr, nullptr, &si, &pi));
@@ -742,8 +760,10 @@ int Execute(const wchar_t *CmdStr, // Ком.строка для исполне�
 		CheckApi(::SetHandleInformation(hPipeOutWrite, HANDLE_FLAG_INHERIT, HANDLE_FLAG_INHERIT));
 
 		// fork process
-		PROCESS_INFORMATION pi = {0};
-		STARTUPINFOW si = {0};
+		PROCESS_INFORMATION pi;
+		Memory::zero(pi);
+		STARTUPINFOW si;
+		Memory::zero(si);
 		si.cb = sizeof(si);
 		si.hStdInput = hPipeInRead;
 		si.hStdOutput = hPipeOutWrite;

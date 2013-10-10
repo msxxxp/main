@@ -72,7 +72,8 @@ namespace Ext {
 		bool is_enabled(HANDLE token, const LUID & priv)
 		{
 			BOOL ret = false;
-			PRIVILEGE_SET ps = {0};
+			PRIVILEGE_SET ps;
+			Memory::zero(ps);
 			ps.PrivilegeCount = 1;
 			ps.Privilege[0].Luid = priv;
 
@@ -97,7 +98,8 @@ namespace Ext {
 
 		void modify(HANDLE token, const LUID & priv, bool enable)
 		{
-			TOKEN_PRIVILEGES tp = {0};
+			TOKEN_PRIVILEGES tp;
+			Memory::zero(tp);
 			tp.PrivilegeCount = 1;
 			tp.Privileges[0].Luid = priv;
 			tp.Privileges[0].Attributes = (enable) ? SE_PRIVILEGE_ENABLED : 0;
@@ -148,7 +150,8 @@ namespace Ext {
 		auto_close<HANDLE> token;
 		if (::OpenProcessToken(::GetCurrentProcess(), TOKEN_QUERY | TOKEN_ADJUST_PRIVILEGES, &token)) {
 			BOOL Result = false;
-			PRIVILEGE_SET ps = {0};
+			PRIVILEGE_SET ps;
+			Memory::zero(ps);
 			ps.PrivilegeCount = 1;
 			ps.Privilege[0].Luid = WinPriv::as_luid(priv_name);
 			if (::PrivilegeCheck(token, &ps, &Result) && !Result) {

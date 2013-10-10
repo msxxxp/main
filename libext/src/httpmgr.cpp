@@ -203,8 +203,8 @@ namespace Http {
 	}
 
 	void Server::del(const HttpBindIP & ip) const {
-		HTTP_SERVICE_CONFIG_SSL_SET	info = {{0}, {0}};
-
+		HTTP_SERVICE_CONFIG_SSL_SET	info;
+		Memory::zero(info);
 		info.KeyDesc = ip;
 		CheckApiError(::HttpDeleteServiceConfiguration(NULL, HttpServiceConfigSSLCertInfo, (PVOID) &info, sizeof(info), NULL));
 	}

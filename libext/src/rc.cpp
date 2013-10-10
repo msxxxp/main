@@ -58,7 +58,8 @@ namespace Ext {
 		if (!host.empty()) {
 			LogTrace();
 			ustring ipc = MakeIPCstring(host);
-			NETRESOURCE NetRes = {0};
+			NETRESOURCE NetRes;
+			Memory::zero(NetRes);
 			NetRes.dwType = RESOURCETYPE_ANY;
 			NetRes.lpRemoteName = (PWSTR)ipc.c_str();
 			if (Str::is_empty(user)) {

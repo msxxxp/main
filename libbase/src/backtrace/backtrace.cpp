@@ -172,7 +172,8 @@ namespace Base {
 	FrameInfo::Data::Data(size_t frame) :
 		addr(0), offset(0), module_base(0), line(0), func(L"?")
 	{
-		IMAGEHLP_MODULEW64 modinfo = {0};
+		IMAGEHLP_MODULEW64 modinfo;
+		Memory::zero(modinfo);
 		modinfo.SizeOfStruct = sizeof(modinfo) - 8;
 		BOOL ret = SymGetModuleInfoW64(GetCurrentProcess(), frame, &modinfo);
 		LogErrorIf(ret == FALSE, L"%s\n", ErrAsStr().c_str());
@@ -394,7 +395,8 @@ namespace Base {
 		LogNoise(L"path: '%s' depth: %Iu\n", path, depth);
 		SymbolInit::inst(path);
 
-		CONTEXT ctx = {0};
+		CONTEXT ctx;
+		Memory::zero(ctx);
 		ctx.ContextFlags = CONTEXT_FULL;
 		RtlCaptureContext(&ctx);
 

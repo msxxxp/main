@@ -5,7 +5,6 @@
 #include <vector>
 
 namespace {
-
 	struct DeliveryMapping {
 		DeliveryMapping(Base::Queue * queue, Base::Message::type_t type_mask, Base::Message::code_t code_mask, Base::Delivery::filter_t filter):
 			m_queue(queue),
@@ -127,12 +126,15 @@ namespace {
 }
 
 namespace Base {
-	namespace Delivery {
-		static Logger::Module_i * get_logger_module()
+	namespace {
+		Logger::Module_i * get_logger_module()
 		{
 			auto static module = Logger::get_module(L"message");
 			return module;
 		}
+	}
+
+	namespace Delivery {
 
 
 		SubscribtionId Subscribe(Queue * queue, Message::type_t type_mask, Message::code_t code_mask, filter_t filter)

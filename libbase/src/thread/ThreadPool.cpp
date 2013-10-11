@@ -4,10 +4,13 @@
 #include <libbase/string.hpp>
 
 namespace Base {
-	static Logger::Module_i * get_logger_module()
-	{
-		auto static module = Logger::get_module(L"threads");
-		return module;
+
+	namespace {
+		Logger::Module_i * get_logger_module()
+		{
+			auto static module = Logger::get_module(L"threads");
+			return module;
+		}
 	}
 
 	ThreadPool::ThreadPool()

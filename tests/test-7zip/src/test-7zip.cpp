@@ -35,14 +35,14 @@ struct ArcInfo: public Base::Command_p {
 
 	ssize_t execute()
 	{
-		LogForce(L"\nSupported methods (%Id):\n", arc_lib.methods().size());
+		Base::Console::printf(L"\nSupported methods (%Id):\n", arc_lib.methods().size());
 		for (auto it = arc_lib.methods().begin(); it != arc_lib.methods().end(); ++it) {
-			LogForce(L"%16I64d\tname: %-10.10s\n", it->id, it->name.c_str());
+			Base::Console::printf(L"%16I64d\tname: %-10.10s\n", it->id, it->name.c_str());
 		}
 
-		LogForce(L"\nSupported archive formats (%Id):\n", arc_lib.codecs().size());
+		Base::Console::printf(L"\nSupported archive formats (%Id):\n", arc_lib.codecs().size());
 		for (auto it = arc_lib.codecs().begin(); it != arc_lib.codecs().end(); ++it) {
-			LogForce(L"%8s\tupd: %d\text: %16s\t add_ext: %s\tguid: %s\n", it->name.c_str(), it->updatable, it->ext.c_str(), it->add_ext.c_str(), it->guid.as_str().c_str());
+			Base::Console::printf(L"%8s\tupd: %d\text: %16s\t add_ext: %s\tguid: %s\n", it->name.c_str(), it->updatable, it->ext.c_str(), it->add_ext.c_str(), it->guid.as_str().c_str());
 		}
 		return true;
 	}
@@ -69,7 +69,7 @@ struct ArcCompressPiped: public Base::Command_p {
 		ustring midName(m_midName + L"." + midCodec);
 		ustring fullPath(m_destPath + L"." + midCodec + L"." + destCodec);
 		if (!Fsys::File::is_exist(fullPath)) {
-			LogForce(L"Compressing to '%s':\n", fullPath.c_str());
+			Base::Console::printf(L"Compressing to '%s':\n", fullPath.c_str());
 			SevenZip::CompressProperties midProps;
 			midProps.add(m_srcPath);
 			midProps.codec = midCodec;
@@ -109,7 +109,7 @@ struct ArcCompress: public Base::Command_p {
 	{
 		ustring full_path(m_path + L"." + m_codec);
 		if (!Fsys::File::is_exist(full_path)) {
-			LogForce(L"Compressing to '%s':\n", full_path.c_str());
+			Base::Console::printf(L"Compressing to '%s':\n", full_path.c_str());
 			SevenZip::CompressProperties props;
 			props.add(m_what);
 			props.codec = m_codec;
@@ -143,21 +143,21 @@ struct ArcList: public Base::Command_p {
 	{
 		if (Fsys::File::is_exist(m_path)) {
 			SevenZip::ArchiveSequence archive(arc_lib, m_path);
-			LogForce(L"\nArchive information: %s\tCodec: %s\n", m_path.c_str(), archive.codec().name.c_str());
-			LogForce(L"Number of archive properties: %Id\n", archive.props().size());
+			Base::Console::printf(L"\nArchive information: %s\tCodec: %s\n", m_path.c_str(), archive.codec().name.c_str());
+			Base::Console::printf(L"Number of archive properties: %Id\n", archive.props().size());
 			for (auto it = archive.props().begin(); it != archive.props().end(); ++it) {
-				LogForce(L"'%s'\t%s %d\t'%s'\n", it->name.c_str(), Base::NamedValues<int>::GetName(SevenZip::ArcItemPropsNames, Base::lengthof(SevenZip::ArcItemPropsNames), it->id), it->id, it->prop.as_str().c_str());
+				Base::Console::printf(L"'%s'\t%s %d\t'%s'\n", it->name.c_str(), Base::NamedValues<int>::GetName(SevenZip::ArcItemPropsNames, Base::lengthof(SevenZip::ArcItemPropsNames), it->id), it->id, it->prop.as_str().c_str());
 			}
 
-			LogForce(L"\nListing(%Id):\n", archive.size());
+			Base::Console::printf(L"\nListing(%Id):\n", archive.size());
 			for (size_t i = 0; i < archive.size(); ++i) {
 				auto it = archive.at(i);
-				LogForce(L"%4Id IsDir: %d\tSize: %8Id\tPath: '%s'\n", i, it.is_dir(), it.size(), it.path().c_str());
+				Base::Console::printf(L"%4Id IsDir: %d\tSize: %8Id\tPath: '%s'\n", i, it.is_dir(), it.size(), it.path().c_str());
 				for (size_t j = 0; m_full && j < it.get_props_count(); ++j) {
 					ustring name;
 					PROPID id;
 					if (it.get_prop_info(j, name, id)) {
-						LogForce(L"'%s'\t%s %I64d\t%s\n", name.c_str(), Base::NamedValues<int>::GetName(SevenZip::ArcItemPropsNames, Base::lengthof(SevenZip::ArcItemPropsNames), id), id,
+						Base::Console::printf(L"'%s'\t%s %I64d\t%s\n", name.c_str(), Base::NamedValues<int>::GetName(SevenZip::ArcItemPropsNames, Base::lengthof(SevenZip::ArcItemPropsNames), id), id,
 						         it.get_prop(id).as_str().c_str());
 					}
 				}
@@ -182,9 +182,9 @@ struct ArcTest: public Base::Command_p {
 	ssize_t execute()
 	{
 		if (Fsys::File::is_exist(m_path)) {
-			LogForce(L"Testing:\n");
+			Base::Console::printf(L"Testing:\n");
 			ssize_t ret = SevenZip::ArchiveTest(arc_lib, m_path).execute();
-			LogForce(L"Errors: %Id\n", ret);
+			Base::Console::printf(L"Errors: %Id\n", ret);
 		}
 		return true;
 	}
@@ -205,9 +205,9 @@ struct ArcExtract: public Base::Command_p {
 	ssize_t execute()
 	{
 		if (Fsys::File::is_exist(m_path)) {
-			LogForce(L"\nExtracting:\n");
+			Base::Console::printf(L"\nExtracting:\n");
 			ssize_t ret = SevenZip::ArchiveExtract(arc_lib, m_path, m_where).execute();
-			LogForce(L"Errors: %Id\n", ret);
+			Base::Console::printf(L"Errors: %Id\n", ret);
 		}
 		return true;
 	}
@@ -226,17 +226,17 @@ struct ShowHelp: public Base::Command_p {
 
 	ssize_t execute()
 	{
-		LogForce(L"Простой пример работы с 7-zip\nAndrew Grechkin, 2012\n");
-		LogForce(L"\nИнфо:\n");
-		LogForce(L"\t%s /i\n", m_prg.c_str());
-		LogForce(L"Лист:\n");
-		LogForce(L"\t%s /l arc.name\n", m_prg.c_str());
-		LogForce(L"Тест:\n");
-		LogForce(L"\t%s /t arc.name\n", m_prg.c_str());
-		LogForce(L"Распаковка:\n");
-		LogForce(L"\t%s /e arc.name dest.path\n", m_prg.c_str());
-		LogForce(L"Запаковка:\n");
-		LogForce(L"\t%s /a arc.name src.path tar\n", m_prg.c_str());
+		Base::Console::printf(L"Простой пример работы с 7-zip\nAndrew Grechkin, 2012\n");
+		Base::Console::printf(L"\nИнфо:\n");
+		Base::Console::printf(L"\t%s /i\n", m_prg.c_str());
+		Base::Console::printf(L"Лист:\n");
+		Base::Console::printf(L"\t%s /l arc.name\n", m_prg.c_str());
+		Base::Console::printf(L"Тест:\n");
+		Base::Console::printf(L"\t%s /t arc.name\n", m_prg.c_str());
+		Base::Console::printf(L"Распаковка:\n");
+		Base::Console::printf(L"\t%s /e arc.name dest.path\n", m_prg.c_str());
+		Base::Console::printf(L"Запаковка:\n");
+		Base::Console::printf(L"\t%s /a arc.name src.path tar\n", m_prg.c_str());
 		return true;
 	}
 
@@ -303,7 +303,7 @@ try
 	setup_logger();
 
 	SevenZip::Lib arc_lib(L"7z.dll");
-	LogForce(L"7-zip library version: %s, '%s'\n", arc_lib.get_version().c_str(), arc_lib.get_path().c_str());
+	Base::Console::printf(L"7-zip library version: %s, '%s'\n", arc_lib.get_version().c_str(), arc_lib.get_path().c_str());
 
 	CmdParser(::GetCommandLineW(), arc_lib).execute();
 

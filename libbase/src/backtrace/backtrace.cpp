@@ -5,7 +5,7 @@
 #include <libbase/string.hpp>
 
 #if defined(__GNUC__)
-#include <bfd\bfd.h>
+#include <bfd.h>
 #include <cxxabi.h>
 
 struct bfd_ctx {
@@ -144,10 +144,12 @@ void find(bfd_ctx * b, size_t offset, const char *& file, const char *& func, si
 
 namespace Base {
 
-	static Logger::Module_i * get_logger_module()
-	{
-		auto static module = Logger::get_module(L"backtra");
-		return module;
+	namespace {
+		Logger::Module_i * get_logger_module()
+		{
+			auto static module = Logger::get_module(L"backtra");
+			return module;
+		}
 	}
 
 	struct FrameInfo::Data {
@@ -442,6 +444,7 @@ namespace Base {
 
 	void Backtrace::Print() const
 	{
+#ifndef NO_LOGGER
 		Logger::lock_module(get_logger_module());
 		Logger::set_module_color_mode(true, get_logger_module());
 		auto savedLevel = get_logger_module()->get_level();
@@ -454,6 +457,7 @@ namespace Base {
 		Logger::set_module_level(savedLevel, get_logger_module());
 		Logger::set_module_prefix(savedPrefix, get_logger_module());
 		Logger::unlock_module(get_logger_module());
+#endif
 	}
 
 }

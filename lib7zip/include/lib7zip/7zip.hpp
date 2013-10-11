@@ -24,9 +24,10 @@
 #include <vector>
 #include <memory>
 
-namespace SevenZip {
 #include <lib7zip/CPP/7zip/Archive/IArchive.h>
 #include <lib7zip/CPP/7zip/IPassword.h>
+
+namespace SevenZip {
 	Logger::Module_i * get_logger_module();
 
 	class Lib;

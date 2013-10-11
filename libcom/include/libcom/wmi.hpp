@@ -46,7 +46,8 @@ namespace Com {
 
 ///========================================================================================= WmiEnum
 	struct WmiEnum: public Object<IEnumWbemClassObject> {
-		WmiEnum()
+		WmiEnum():
+			m_end(true)
 		{
 		}
 

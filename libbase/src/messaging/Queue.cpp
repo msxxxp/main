@@ -6,11 +6,12 @@
 #include <deque>
 
 namespace Base {
-
-	static Logger::Module_i * get_logger_module()
-	{
-		auto static module = Logger::get_module(L"message");
-		return module;
+	namespace {
+		Logger::Module_i * get_logger_module()
+		{
+			auto static module = Logger::get_module(L"message");
+			return module;
+		}
 	}
 
 	struct Queue::Queue_impl: private Lock::CriticalSection, private Lock::Semaphore, private std::deque<Message> {

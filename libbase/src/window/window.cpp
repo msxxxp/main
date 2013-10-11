@@ -1,7 +1,8 @@
 #include <libbase/window.hpp>
-#include <libbase/logger.hpp>
 #include <libbase/err.hpp>
 #include <libbase/string.hpp>
+#include <liblog/logger.hpp>
+
 #include <winuser.h>
 
 namespace Base {
@@ -98,4 +99,3 @@ namespace Base {
 		return range.first != range.second ? range.first : end();
 	}
 }
-

@@ -1,7 +1,7 @@
 #include <libbase/messaging.hpp>
 
-#include <libbase/logger.hpp>
 #include <libbase/lock.hpp>
+#include <liblog/logger.hpp>
 
 #include <deque>
 

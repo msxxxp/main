@@ -3,7 +3,6 @@
 
 #include <libbase/std.hpp>
 /*?*/#include <libbase/string.hpp>
-#include <libbase/logger.hpp>
 
 namespace Base {
 	namespace Filename {

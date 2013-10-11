@@ -1,8 +1,8 @@
 #include <libbase/backtrace.hpp>
 
 #include <libbase/err.hpp>
-#include <libbase/logger.hpp>
 #include <libbase/string.hpp>
+#include <liblog/logger.hpp>
 
 #if defined(__GNUC__)
 #include <bfd.h>

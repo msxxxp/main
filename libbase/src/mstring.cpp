@@ -1,8 +1,8 @@
 ﻿#include <libbase/mstring.hpp>
 
 #include <libbase/memory.hpp>
-#include <libbase/logger.hpp>
 #include <libbase/string.hpp>
+#include <liblog/logger.hpp>
 
 namespace Base {
 

@@ -1,14 +1,14 @@
-﻿#ifndef _LIBBASE_LOGGER_HPP_
-#define _LIBBASE_LOGGER_HPP_
+﻿#ifndef LIBLOG_LOGGER_HPP_
+#define LIBLOG_LOGGER_HPP_
 
 #include <libbase/std.hpp>
 
-#ifdef NO_LOGGER
+#ifndef ENABLE_LOGGER
 #else
 #include <libbase/shared_ptr.hpp>
 #endif
 
-#ifdef NO_LOGGER
+#ifndef ENABLE_LOGGER
 #   define LogTrace()
 #   define LogTraceIf(condition) (void)(condition)
 #   define LogNoise(format, args ...)
@@ -103,7 +103,7 @@ namespace Logger {
 		const static flags Full     = Date | Time | Level | Function | Module | Thread | Place;
 	};
 
-#ifdef NO_LOGGER
+#ifndef ENABLE_LOGGER
 	typedef Target_i * Target_t;
 
 	inline Level get_default_level()

@@ -1,7 +1,7 @@
 #include <libbase/thread.hpp>
 
-#include <libbase/logger.hpp>
 #include <libbase/messaging.hpp>
+#include <liblog/logger.hpp>
 
 namespace Base {
 	namespace {

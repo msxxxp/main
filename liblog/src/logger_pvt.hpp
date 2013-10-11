@@ -1,7 +1,7 @@
-#ifndef _LIBBASE_LOGGER_PVT_HPP_
-#define _LIBBASE_LOGGER_PVT_HPP_
+#ifndef LIBLOG_LOGGER_PVT_HPP_
+#define LIBLOG_LOGGER_PVT_HPP_
 
-#include <libbase/logger.hpp>
+#include <liblog/logger.hpp>
 
 namespace Logger {
 

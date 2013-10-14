@@ -6,7 +6,7 @@
 
 #include <libext/dll.hpp>
 #include <libext/reg.hpp>
-#include <libbase/logger.hpp>
+#include <liblog/logger.hpp>
 #include <libbase/str.hpp>
 
 #include <cassert>
@@ -227,4 +227,3 @@ namespace Java {
 	}
 
 }
-

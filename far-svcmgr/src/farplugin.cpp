@@ -27,7 +27,7 @@
 #include <libfar3/panelcontroller_i.hpp>
 #include <libfar3/dialog_builder.hpp>
 
-#include <libbase/logger.hpp>
+#include <liblog/logger.hpp>
 
 #include <globalinfo.hpp>
 #include <guid.hpp>

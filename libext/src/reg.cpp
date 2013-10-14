@@ -1,7 +1,7 @@
 ﻿#include <libext/reg.hpp>
 #include <libext/exception.hpp>
-#include <libbase/logger.hpp>
-#include <libbase/pcstr.hpp>
+#include <liblog/logger.hpp>
+#include <libbase/cstr.hpp>
 #include <libbase/bit.hpp>
 
 #include <cassert>
@@ -183,7 +183,7 @@ namespace Ext {
 
 	ustring Register::get(PCWSTR name, PCWSTR def) const {
 //		LogDebug(L"name: '%s', def: '%s'\n", name, def);
-		Base::auto_array<wchar_t> buf(Base::Str::length(def) + 1, def);
+		Base::auto_array<wchar_t> buf(Cstr::length(def) + 1, def);
 		DWORD l_size = buf.size_in_bytes();
 		if (::RegQueryValueExW(m_hndl, name, nullptr, nullptr, (PBYTE)buf.data(), &l_size) == ERROR_MORE_DATA) {
 			buf.reserve(l_size / sizeof(wchar_t));
@@ -233,7 +233,7 @@ namespace Ext {
 	}
 
 	void Register::set(PCWSTR name, PCWSTR value) {
-		CheckApiError(::RegSetValueExW(m_hndl, name, 0, REG_SZ, (PBYTE)&value, (Base::Str::length(value) + 1) * sizeof(wchar_t)));
+		CheckApiError(::RegSetValueExW(m_hndl, name, 0, REG_SZ, (PBYTE)&value, (Cstr::length(value) + 1) * sizeof(wchar_t)));
 	}
 
 	void Register::set(PCWSTR name, uint64_t value) {

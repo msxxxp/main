@@ -70,7 +70,7 @@ namespace Ext {
 	}
 
 	WinTSHandle::WinTSHandle(PCWSTR host): m_ts(WTS_CURRENT_SERVER_HANDLE) {
-		if (host && !Base::Str::is_empty(host)) {
+		if (host && !Cstr::is_empty(host)) {
 			m_ts = Wtsapi32_dll::inst().WTSOpenServerW((PWSTR)host);
 			CheckApi(m_ts != nullptr && m_ts != INVALID_HANDLE_VALUE);
 		}
@@ -107,8 +107,8 @@ namespace Ext {
 	DWORD WinTSession::Question(DWORD id, PCWSTR ttl, PCWSTR msg, DWORD time, const WinTSHandle &host) {
 		DWORD Result = 0;
 		CheckApi(Wtsapi32_dll::inst().WTSSendMessageW(host, id,
-		                                              (PWSTR)ttl, Str::length(ttl)*sizeof(wchar_t),
-		                                              (PWSTR)msg, Str::length(msg)*sizeof(wchar_t),
+		                                              (PWSTR)ttl, Cstr::length(ttl)*sizeof(wchar_t),
+		                                              (PWSTR)msg, Cstr::length(msg)*sizeof(wchar_t),
 		                                              MB_OKCANCEL | MB_ICONQUESTION, time, &Result, true));
 		return Result;
 	}
@@ -116,8 +116,8 @@ namespace Ext {
 	DWORD WinTSession::Message(DWORD id, PCWSTR ttl, PCWSTR msg, DWORD time, bool wait, const WinTSHandle &host) {
 		DWORD	Result = 0;
 		CheckApi(Wtsapi32_dll::inst().WTSSendMessageW(host, id,
-		                                              (PWSTR)ttl, Str::length(ttl)*sizeof(wchar_t),
-		                                              (PWSTR)msg, Str::length(msg)*sizeof(wchar_t),
+		                                              (PWSTR)ttl, Cstr::length(ttl)*sizeof(wchar_t),
+		                                              (PWSTR)msg, Cstr::length(msg)*sizeof(wchar_t),
 		                                              MB_OK | MB_ICONASTERISK, time, &Result, wait));
 		return Result;
 	}

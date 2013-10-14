@@ -22,7 +22,7 @@
 #include <panelmodel.hpp>
 #include <globalinfo.hpp>
 
-#include <libbase/logger.hpp>
+#include <liblog/logger.hpp>
 
 PanelModel::PanelModel()
 {

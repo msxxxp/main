@@ -2,7 +2,7 @@
 #define _LIBBASE_CONSOLE_HPP_
 
 #include <libbase/std.hpp>
-#include <libbase/pcstr.hpp>
+#include <libbase/cstr.hpp>
 
 namespace Base {
 	ssize_t safe_vsnprintf(PWSTR buf, size_t len, PCWSTR format, va_list vl);
@@ -29,7 +29,7 @@ namespace Base {
 
 		inline size_t out(PCWSTR str, Handle hnd = Handle::OUTPUT)
 		{
-			return out(hnd, str, Str::length(str));
+			return out(hnd, str, Cstr::length(str));
 		}
 
 		size_t out(wchar_t ch, Handle hnd = Handle::OUTPUT);

@@ -20,7 +20,7 @@
 #include <libfar3/dialog_builder_ex.hpp>
 
 //#include <libbase/pcstr.hpp>
-//#include <libbase/logger.hpp>
+//#include <liblog/logger.hpp>
 
 #include "DlgBuilder_pvt.hpp"
 

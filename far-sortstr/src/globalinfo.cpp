@@ -29,7 +29,7 @@
 #include <libfar3/settings.hpp>
 
 #include <libbase/pcstr.hpp>
-#include <libbase/logger.hpp>
+#include <liblog/logger.hpp>
 
 #include <version.h>
 

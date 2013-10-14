@@ -1,12 +1,12 @@
 ﻿#include <libext/dacl.hpp>
 #include <libext/exception.hpp>
-#include <libbase/logger.hpp>
+#include <liblog/logger.hpp>
 #include <libbase/bit.hpp>
 #include <libbase/bit_str.hpp>
 
 namespace Ext {
 
-	Base::NamedValues<BYTE> aceTypes[] = {
+	Cstr::NamedValues<BYTE> aceTypes[] = {
 		{L"ACCESS_ALLOWED_ACE_TYPE", ACCESS_ALLOWED_ACE_TYPE},
 		{L"ACCESS_DENIED_ACE_TYPE", ACCESS_DENIED_ACE_TYPE},
 		{L"SYSTEM_AUDIT_ACE_TYPE", SYSTEM_AUDIT_ACE_TYPE},
@@ -15,7 +15,7 @@ namespace Ext {
 		{L"SYSTEM_AUDIT_OBJECT_ACE_TYPE", SYSTEM_AUDIT_OBJECT_ACE_TYPE},
 	};
 
-	Base::NamedValues<ULONG> aceFlags[] = {
+	Cstr::NamedValues<ULONG> aceFlags[] = {
 		{L"INHERITED_ACE", INHERITED_ACE},
 		{L"CONTAINER_INHERIT_ACE", CONTAINER_INHERIT_ACE},
 		{L"OBJECT_INHERIT_ACE", OBJECT_INHERIT_ACE},
@@ -26,7 +26,7 @@ namespace Ext {
 	};
 
 	void WinDacl::parse(PACL acl) {
-#ifndef NO_LOGGER
+#ifdef ENABLE_LOGGER
 		LogInfo(L"ACL:\n");
 		if (!acl) {
 			LogInfo(L"\tNULL\tAll access allowed\n");

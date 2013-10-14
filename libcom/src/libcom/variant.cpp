@@ -1,6 +1,6 @@
 #include <libcom/variant.hpp>
 #include <libext/exception.hpp>
-#include <libbase/pcstr.hpp>
+#include <libbase/cstr.hpp>
 
 namespace Com {
 

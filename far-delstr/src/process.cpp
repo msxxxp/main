@@ -28,7 +28,7 @@
 #include <libfar3/dialog_builder.hpp>
 #include <libbase/std.hpp>
 #include <libbase/pcstr.hpp>
-#include <libbase/logger.hpp>
+#include <liblog/logger.hpp>
 
 #include <functional>
 #include <cmath>

@@ -9,7 +9,7 @@
 #include <lib7zip/7zip.hpp>
 #include <libext/exception.hpp>
 #include <libbase/console.hpp>
-#include <libbase/logger.hpp>
+#include <liblog/logger.hpp>
 #include <libbase/pcstr.hpp>
 #include <libbase/command_p.hpp>
 

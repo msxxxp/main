@@ -7,7 +7,7 @@
 #include <iosfwd>
 #include <vector>
 
-#ifdef NO_LOGGER
+#ifndef ENABLE_LOGGER
 #define LogBacktrace()
 #else
 #define LogBacktrace() Base::Backtrace().Print()

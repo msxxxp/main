@@ -100,7 +100,7 @@ namespace Logger {
 
 		const static flags Lite     = Time | Level;
 		const static flags Medium   = Time | Level | Function;
-		const static flags Full     = Date | Time | Level | Function | Module | Thread | Place;
+		const static flags Full     = Time | Level | Function | Date | Module | Thread | Place;
 	};
 
 #ifndef ENABLE_LOGGER

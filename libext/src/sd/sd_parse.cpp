@@ -1,7 +1,7 @@
 ﻿#include <libext/sd.hpp>
 #include <libext/exception.hpp>
 #include <libext/dacl.hpp>
-#include <libbase/logger.hpp>
+#include <liblog/logger.hpp>
 #include <libbase/bit.hpp>
 #include <libbase/bit_str.hpp>
 #include <libbase/string.hpp>
@@ -9,7 +9,7 @@
 namespace Ext {
 
 	void WinSD::parse(PSECURITY_DESCRIPTOR sd) {
-#ifndef NO_LOGGER
+#ifdef ENABLE_LOGGER
 		WORD ctrl = get_control(sd);
 		LogInfo(L"Security descriptor:\n");
 		LogInfo(L"SDDL: %s\n", WinSD::as_sddl(sd).c_str());

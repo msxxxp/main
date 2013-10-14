@@ -1,8 +1,8 @@
 #include <libext/service.hpp>
-#include <libbase/logger.hpp>
-#include <libbase/pcstr.hpp>
+#include <liblog/logger.hpp>
+#include <libbase/cstr.hpp>
 
-using Base::Str::compare_cs;
+using Cstr::compare_cs;
 
 namespace Ext {
 

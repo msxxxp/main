@@ -444,7 +444,7 @@ namespace Base {
 
 	void Backtrace::Print() const
 	{
-#ifndef NO_LOGGER
+#ifdef ENABLE_LOGGER
 		Logger::lock_module(get_logger_module());
 		Logger::set_module_color_mode(true, get_logger_module());
 		auto savedLevel = get_logger_module()->get_level();

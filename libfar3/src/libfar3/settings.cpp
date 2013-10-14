@@ -19,7 +19,7 @@
 #include <libfar3/settings.hpp>
 #include <libfar3/helper.hpp>
 
-#include <libbase/logger.hpp>
+#include <liblog/logger.hpp>
 
 namespace Far {
 

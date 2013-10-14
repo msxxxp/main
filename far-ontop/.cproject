@@ -31,7 +31,6 @@
 									<listOptionValue builtIn="false" value="_UNICODE"/>
 									<listOptionValue builtIn="false" value="NoStdNew"/>
 									<listOptionValue builtIn="false" value="NoStlString"/>
-									<listOptionValue builtIn="false" value="NO_LOGGER"/>
 								</option>
 								<option id="gnu.cpp.compiler.option.include.paths.84519211" name="Include paths (-I)" superClass="gnu.cpp.compiler.option.include.paths" valueType="includePath">
 									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/libfar3/include}&quot;"/>
@@ -109,7 +108,6 @@
 									<listOptionValue builtIn="false" value="_UNICODE"/>
 									<listOptionValue builtIn="false" value="NoStdNew"/>
 									<listOptionValue builtIn="false" value="NoStlString"/>
-									<listOptionValue builtIn="false" value="NO_LOGGER"/>
 								</option>
 								<option id="gnu.cpp.compiler.option.include.paths.216387915" name="Include paths (-I)" superClass="gnu.cpp.compiler.option.include.paths" valueType="includePath">
 									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/libfar3/include}&quot;"/>

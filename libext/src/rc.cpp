@@ -2,7 +2,7 @@
 #include <libext/dll.hpp>
 #include <libext/exception.hpp>
 #include <libbase/std.hpp>
-#include <libbase/logger.hpp>
+#include <liblog/logger.hpp>
 #include <libbase/string.hpp>
 
 using namespace Base;
@@ -62,7 +62,7 @@ namespace Ext {
 			Memory::zero(NetRes);
 			NetRes.dwType = RESOURCETYPE_ANY;
 			NetRes.lpRemoteName = (PWSTR)ipc.c_str();
-			if (Str::is_empty(user)) {
+			if (Cstr::is_empty(user)) {
 				user = nullptr;
 				pass = nullptr;
 			}

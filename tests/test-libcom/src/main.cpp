@@ -3,7 +3,7 @@
 #include <libcom/variant.hpp>
 #include <libcom/bstr.hpp>
 #include <libext/exception.hpp>
-#include <libbase/logger.hpp>
+#include <liblog/logger.hpp>
 #include <libbase/str.hpp>
 
 
@@ -51,5 +51,3 @@ int main() try {
 	LogError(L"What: %S\n", e.what());
 	return 1;
 }
-
-

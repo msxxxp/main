@@ -1,7 +1,7 @@
 #include <lib7zip/7zip.hpp>
 #include <libcom/bstr.hpp>
 #include <libext/exception.hpp>
-#include <libbase/logger.hpp>
+#include <liblog/logger.hpp>
 
 namespace SevenZip {
 	///===================================================================================== Archive

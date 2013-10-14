@@ -83,7 +83,6 @@
 								<option id="gnu.cpp.compiler.option.preprocessor.def.1436146232" name="Defined symbols (-D)" superClass="gnu.cpp.compiler.option.preprocessor.def" valueType="definedSymbols">
 									<listOptionValue builtIn="false" value="UNICODE"/>
 									<listOptionValue builtIn="false" value="_UNICODE"/>
-									<listOptionValue builtIn="false" value="NO_LOGGER"/>
 								</option>
 								<inputType id="cdt.managedbuild.tool.gnu.cpp.compiler.input.1938344853" superClass="cdt.managedbuild.tool.gnu.cpp.compiler.input"/>
 							</tool>

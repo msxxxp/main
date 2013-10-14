@@ -46,7 +46,7 @@ namespace Base {
 		wchar_t buf[MAX_PATH];
 		wchar_t pid[32];
 		buf[0] = 0;
-		Str::convert_num(pid, ::GetCurrentProcessId());
+		Cstr::convert_num(pid, ::GetCurrentProcessId());
 		::GetTempFileNameW(path, pid, 0, buf);
 		return buf;
 	}
@@ -104,7 +104,7 @@ namespace Base {
 	///=================================================================================================
 	bool substr_match(const ustring& str, size_t pos, PCWSTR mstr)
 	{
-		size_t mstr_len = Str::length(mstr);
+		size_t mstr_len = Cstr::length(mstr);
 		if ((pos > str.size()) || (pos + mstr_len > str.size())) {
 			return false;
 		}

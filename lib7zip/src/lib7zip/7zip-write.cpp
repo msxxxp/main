@@ -3,8 +3,8 @@
 #include <libext/exception.hpp>
 #include <libbase/console.hpp>
 #include <libbase/path.hpp>
-#include <libbase/logger.hpp>
-#include <libbase/pcstr.hpp>
+#include <liblog/logger.hpp>
+#include <libbase/cstr.hpp>
 
 namespace SevenZip {
 	DirItem::DirItem(const ustring & file_path, const ustring & file_name) :

@@ -75,7 +75,7 @@ namespace Base {
 		{
 		}
 
-		auto_buf(this_type && rhs):
+		auto_buf(this_type && rhs) :
 			m_ptr(nullptr)
 		{
 			swap(rhs);
@@ -90,8 +90,7 @@ namespace Base {
 
 		void reserve(size_type nsize)
 		{
-			if (size() < nsize)
-			{
+			if (size() < nsize) {
 				Memory::realloc(m_ptr, nsize);
 			}
 		}
@@ -178,16 +177,14 @@ namespace Base {
 		}
 
 		explicit auto_array(size_type count, const_pointer data = nullptr) :
-			m_ptr(Memory::calloc<pointer>(count)),
-			m_count(count)
+			m_ptr(Memory::calloc<pointer>(count)), m_count(count)
 		{
 			if (data)
 				std::uninitialized_copy(data, data + m_count, m_ptr);
 		}
 
-		auto_array(this_type && rhs):
-			m_ptr(nullptr),
-			m_count(0)
+		auto_array(this_type && rhs) :
+			m_ptr(nullptr), m_count(0)
 		{
 			swap(rhs);
 		}
@@ -201,8 +198,7 @@ namespace Base {
 
 		void reserve(size_type new_count)
 		{
-			if (size() < new_count)
-			{
+			if (size() < new_count) {
 				Memory::realloc(m_ptr, new_count * sizeof(value_type), HEAP_ZERO_MEMORY);
 				m_count = new_count;
 			}
@@ -245,10 +241,7 @@ namespace Base {
 
 		bool operator ==(const this_type & rhs) const
 		{
-			return (m_count == rhs.m_count) ?
-				std::equal(m_ptr, m_ptr + m_count, rhs.m_ptr)
-			:
-				false;
+			return (m_count == rhs.m_count) ? std::equal(m_ptr, m_ptr + m_count, rhs.m_ptr) : false;
 		}
 
 		void detach(pointer & ptr, size_t & size)
@@ -267,7 +260,7 @@ namespace Base {
 		}
 
 	private:
-		pointer   m_ptr;
+		pointer m_ptr;
 		size_type m_count;
 	};
 
@@ -289,7 +282,7 @@ namespace Base {
 		}
 
 		explicit auto_close(value_type ptr) :
-				m_impl(new auto_close_impl(ptr))
+			m_impl(new auto_close_impl(ptr))
 		{
 		}
 
@@ -362,8 +355,8 @@ namespace Base {
 			close();
 		}
 
-		explicit auto_close(value_type ptr = nullptr) :
-			m_ptr(ptr)
+		explicit auto_close(value_type hndl = nullptr) :
+			m_hndl(hndl)
 		{
 		}
 
@@ -371,25 +364,25 @@ namespace Base {
 
 		auto_close(this_type && rhs);
 
-		this_type & operator = (const this_type & rhs);
+		this_type & operator =(const this_type & rhs);
 
-		this_type & operator = (this_type && rhs);
+		this_type & operator =(this_type && rhs);
 
-		value_type * operator & ();
+		value_type * operator &();
 
 		operator value_type() const
 		{
-			return m_ptr;
+			return m_hndl;
 		}
 
 		value_type data() const
 		{
-			return m_ptr;
+			return m_hndl;
 		}
 
 		bool is_valid() const
 		{
-			return m_ptr && m_ptr != INVALID_HANDLE_VALUE;
+			return m_hndl && m_hndl != INVALID_HANDLE_VALUE;
 		}
 
 		void close();
@@ -397,11 +390,11 @@ namespace Base {
 		void swap(auto_close & rhs)
 		{
 			using std::swap;
-			swap(m_ptr, rhs.m_ptr);
+			swap(m_hndl, rhs.m_hndl);
 		}
 
 	private:
-		value_type m_ptr;
+		value_type m_hndl;
 	};
 
 	inline void swap(auto_close<HANDLE> & b1, auto_close<HANDLE> & b2)
@@ -409,13 +402,14 @@ namespace Base {
 		b1.swap(b2);
 	}
 
-	///================================================================================ auto_destroy
+	///================================================================================= Destroyable
 	struct Destroyable {
 		virtual ~Destroyable();
 
 		virtual void destroy() const = 0;
 	};
 
+	///================================================================================ auto_destroy
 	template<typename Type>
 	struct auto_destroy {
 		~auto_destroy()
@@ -428,6 +422,19 @@ namespace Base {
 		{
 		}
 
+		auto_destroy(auto_destroy && right) :
+			m_ptr(nullptr)
+		{
+			swap(right);
+		}
+
+		auto_destroy & operator =(auto_destroy && right)
+		{
+			if (this->m_ptr != right.m_ptr)
+				auto_destroy(std::move(right)).swap(*this);
+			return *this;
+		}
+
 		Type operator ->()
 		{
 			return m_ptr;
@@ -438,7 +445,17 @@ namespace Base {
 			return m_ptr;
 		}
 
+		void swap(auto_destroy & right)
+		{
+			using std::swap;
+			swap(m_ptr, right.m_ptr);
+		}
+
 	private:
+		auto_destroy(const auto_destroy & right) = delete;
+
+		auto_destroy & operator =(const auto_destroy & right) = delete;
+
 		Type m_ptr;
 	};
 }

@@ -15,7 +15,7 @@ typedef std::string astring;
 typedef std::wstring ustring;
 #endif
 
-#include <libbase/pcstr.hpp>
+#include <libbase/cstr.hpp>
 #include <libbase/memory.hpp>
 
 namespace Base {

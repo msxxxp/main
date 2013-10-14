@@ -23,7 +23,7 @@
 
 #include <libfar3/helper.hpp>
 #include <libfar3/plugin_i.hpp>
-#include <libbase/logger.hpp>
+#include <liblog/logger.hpp>
 
 namespace {
 	void setup_logger()

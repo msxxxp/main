@@ -20,7 +20,7 @@
 #include <libfar3/plugin_i.hpp>
 
 #include <libbase/std.hpp>
-#include <libbase/logger.hpp>
+#include <liblog/logger.hpp>
 
 namespace Far {
 

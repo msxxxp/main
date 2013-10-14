@@ -27,7 +27,7 @@
 #include <libfar3/helper.hpp>
 
 #include <libbase/pcstr.hpp>
-#include <libbase/logger.hpp>
+#include <liblog/logger.hpp>
 
 #include <version.h>
 

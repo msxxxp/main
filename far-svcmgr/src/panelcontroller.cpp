@@ -33,7 +33,7 @@
 #include <libfar3/helper.hpp>
 #include <libfar3/dialog_builder_ex.hpp>
 #include <libfar3/panel.hpp>
-#include <libbase/logger.hpp>
+#include <liblog/logger.hpp>
 #include <libbase/pcstr.hpp>
 #include <libbase/string.hpp>
 

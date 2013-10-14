@@ -8,6 +8,24 @@
 namespace Base {
 
 	template<typename Type>
+	struct default_delete
+	{
+		void operator ()(Type * ptr) const
+		{
+			delete ptr;
+		}
+	};
+
+	template<typename Type>
+	struct default_delete<Type []>
+	{
+		void operator ()(Type * ptr) const
+		{
+			delete [] ptr;
+		}
+	};
+
+	template<typename Type>
 	class shared_ptr {
 		typedef Type element_type;
 		typedef shared_ptr this_type;
@@ -67,15 +85,15 @@ namespace Base {
 			}
 		}
 
-		void reset(element_type * p)
+		void reset(element_type * ptr)
 		{
-			shared_ptr(p).swap(*this);
+			shared_ptr(ptr).swap(*this);
 		}
 
 		template<typename Deleter>
-		void reset(element_type * p, Deleter d)
+		void reset(element_type * ptr, Deleter d)
 		{
-			shared_ptr(p, d).swap(*this);
+			shared_ptr(ptr, d).swap(*this);
 		}
 
 		element_type & operator *() const
@@ -95,12 +113,12 @@ namespace Base {
 
 		bool unique() const
 		{
-			return !m_impl || m_impl->count() == 1;
+			return !m_impl || m_impl->count_ref() == 1;
 		}
 
 		size_type use_count() const
 		{
-			return (m_impl) ? m_impl->count() : 0;
+			return (m_impl) ? m_impl->count_ref() : 0;
 		}
 
 		operator bool() const
@@ -108,20 +126,22 @@ namespace Base {
 			return m_impl && m_impl->get();
 		}
 
-		void swap(this_type & b) noexcept
+		void swap(this_type & other) noexcept
 		{
 			using std::swap;
-			swap(m_impl, b.m_impl);
+			swap(m_impl, other.m_impl);
 		}
 
 	private:
+		typedef typename Base::default_delete<Type> default_deleter;
+
 		struct shared_ptr_impl: public ref_counter {
 			shared_ptr_impl(element_type * ptr) : m_ptr(ptr) {}
 
 			element_type * get() const {return m_ptr;}
 
 		private:
-			void destroy() const override {delete m_ptr;}
+			void destroy() const override {default_deleter()(m_ptr);}
 
 			void deallocate() const override {delete this;}
 

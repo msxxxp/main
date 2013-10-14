@@ -1,7 +1,7 @@
 #include <libcom/crypt.hpp>
 #include <libcom/guid.hpp>
 #include <libbase/std.hpp>
-#include <libbase/pcstr.hpp>
+#include <libbase/cstr.hpp>
 #include <libbase/bit.hpp>
 #include <libbase/string.hpp>
 
@@ -83,7 +83,7 @@ namespace Com {
 			cbData = 0;
 			pbData = nullptr;
 			reserve((in.size() + 1) * sizeof(wchar_t));
-			Base::Str::copy((PWSTR)pbData, in.c_str(), in.size());
+			Cstr::copy((PWSTR)pbData, in.c_str(), in.size());
 		}
 
 		bool DataBlob::reserve()

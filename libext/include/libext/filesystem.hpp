@@ -5,7 +5,7 @@
 #include <libbase/filesystem.hpp>
 #include <libbase/shared_ptr.hpp>
 #include <libbase/command_p.hpp>
-#include <libbase/logger.hpp>
+#include <liblog/logger.hpp>
 
 namespace Fsys {
 	Logger::Module_i * get_logger_module();

@@ -35,7 +35,7 @@ namespace Base {
 	{
 		PCWSTR ptr = in;
 		while (ptr && *ptr) {
-			ptr += (Str::length(ptr) + 1);
+			ptr += (Cstr::length(ptr) + 1);
 			++m_size;
 		}
 		m_capa = ptr - in;
@@ -58,8 +58,8 @@ namespace Base {
 
 	void mstring::impl::push_back(PCWSTR str)
 	{
-		if (!Str::is_empty(str)) {
-			size_t size = Str::length(str) + 1;
+		if (!Cstr::is_empty(str)) {
+			size_t size = Cstr::length(str) + 1;
 			++m_size;
 			size_t new_index = m_capa;
 			m_capa += size;
@@ -131,7 +131,7 @@ namespace Base {
 		PCWSTR ptr = c_str();
 		size_t cnt = 0;
 		while (*ptr && (cnt++ < index)) {
-			ptr += (Str::length(ptr) + 1);
+			ptr += (Cstr::length(ptr) + 1);
 		}
 		return ptr;
 	}

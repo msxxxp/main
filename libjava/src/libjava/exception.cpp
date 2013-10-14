@@ -1,6 +1,6 @@
 #include <libjava/exception.hpp>
 
-#include <libbase/logger.hpp>
+#include <liblog/logger.hpp>
 
 namespace Java {
 	ustring ErrAsStr(jint code) {

@@ -21,7 +21,7 @@ namespace Base {
 			auto_array<wchar_t> buf(8 * 1024);
 			while (safe_vsnprintf(buf.data(), buf.size(), format, vl) < 0)
 				buf.reserve(buf.size() * 2);
-			return out(hnd, buf.data(), Str::length(buf.data()));
+			return out(hnd, buf.data(), Cstr::length(buf.data()));
 		}
 
 		int printf(PCWSTR format, ...)

@@ -81,7 +81,7 @@ namespace Base {
 			while (flag) {
 				if (Flags::check(in, (Type)flag)) {
 					wchar_t buf[64];
-					Base::Str::convert_num(buf, flag);
+					Cstr::convert_num(buf, flag);
 					Base::String::Inplace::add_word(Result, buf, L",");
 				}
 				flag >>= 1;

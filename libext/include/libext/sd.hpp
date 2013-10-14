@@ -2,7 +2,7 @@
 #define WIN_NET_SD_HPP
 
 #include <libbase/std.hpp>
-#include <libbase/logger.hpp>
+#include <liblog/logger.hpp>
 #include <libbase/string.hpp>
 #include <libext/sid.hpp>
 #include <libext/trustee.hpp>

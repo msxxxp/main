@@ -1,8 +1,8 @@
 #include <libbase/std.hpp>
 #include <libbase/path.hpp>
-#include <libbase/pcstr.hpp>
+#include <libbase/cstr.hpp>
 #include <libbase/memory.hpp>
-#include <libbase/logger.hpp>
+#include <liblog/logger.hpp>
 #include <libext/dll.hpp>
 #include <libext/filesystem.hpp>
 #include <libext/exception.hpp>

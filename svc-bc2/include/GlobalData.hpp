@@ -1,5 +1,5 @@
 ﻿#include <libbase/std.hpp>
-#include <libbase/logger.hpp>
+#include <liblog/logger.hpp>
 #include <libbase/messaging.hpp>
 
 struct GlobalData
@@ -30,4 +30,3 @@ struct GlobalData
 private:
 	Base::Queue m_workerTasksQueue;
 };
-

@@ -1,8 +1,8 @@
 #include <libbase/std.hpp>
 #include <libbase/memory.hpp>
 #include <libbase/path.hpp>
-#include <libbase/pcstr.hpp>
-#include <libbase/logger.hpp>
+#include <libbase/cstr.hpp>
+#include <liblog/logger.hpp>
 #include <libext/dll.hpp>
 #include <libext/filesystem.hpp>
 #include <libext/exception.hpp>
@@ -66,7 +66,7 @@ namespace Fsys {
 			}
 
 			PCWSTR name = st.name();
-			if (!(flags & SearchFlags_t::incDots) && (Base::Str::compare(name, L".") == 0 || Base::Str::compare(name, L"..") == 0)) {
+			if (!(flags & SearchFlags_t::incDots) && (Cstr::compare(name, L".") == 0 || Cstr::compare(name, L"..") == 0)) {
 				continue;
 			}
 

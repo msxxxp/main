@@ -25,7 +25,7 @@
 #include <libfar3/panel.hpp>
 #include <libfar3/viewer.hpp>
 #include <libfar3/obsolete.hpp>
-#include <libbase/logger.hpp>
+#include <liblog/logger.hpp>
 #include <libbase/memory.hpp>
 #include <libbase/pcstr.hpp>
 #include <libbase/path.hpp>

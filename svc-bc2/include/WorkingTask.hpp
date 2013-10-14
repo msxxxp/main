@@ -2,7 +2,7 @@
 #define WORKINGTASK_HPP_
 
 #include <libbase/std.hpp>
-#include <libbase/logger.hpp>
+#include <liblog/logger.hpp>
 #include <libbase/command_p.hpp>
 #include <libbase/string.hpp>
 #include <libbase/path.hpp>

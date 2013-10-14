@@ -1,5 +1,4 @@
 ﻿#include <libbase/env.hpp>
-#include <libbase/pcstr.hpp>
 #include <libbase/string.hpp>
 
 namespace Base {
@@ -16,9 +15,9 @@ namespace Base {
 		}
 
 		bool add(PCWSTR name, PCWSTR val) {
-			Base::auto_array<wchar_t> buf(::GetEnvironmentVariableW(name, nullptr, 0) + Str::length(val));
+			Base::auto_array<wchar_t> buf(::GetEnvironmentVariableW(name, nullptr, 0) + Cstr::length(val));
 			::GetEnvironmentVariableW(name, buf.data(), buf.size());
-			Str::cat(buf.data(), val);
+			Cstr::cat(buf.data(), val);
 			return ::SetEnvironmentVariableW(name, buf.data()) != 0;
 		}
 

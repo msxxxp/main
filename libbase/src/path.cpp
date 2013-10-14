@@ -21,7 +21,7 @@ namespace Base {
 
 			ustring & ensure_no_end_separator(ustring & path)
 			{
-				if (!path.empty() && Str::find(PATH_SEPARATORS, path[path.size() - 1])) {
+				if (!path.empty() && Cstr::find(PATH_SEPARATORS, path[path.size() - 1])) {
 					path.erase(path.size() - 1);
 				}
 				return path;
@@ -29,7 +29,7 @@ namespace Base {
 
 			ustring & ensure_end_separator(ustring & path, wchar_t sep)
 			{
-				if (!path.empty() && !Str::find(PATH_SEPARATORS, path[path.size() - 1])) {
+				if (!path.empty() && !Cstr::find(PATH_SEPARATORS, path[path.size() - 1])) {
 					path += sep;
 				}
 				return path;
@@ -53,7 +53,7 @@ namespace Base {
 
 		bool set_work_directory(PCWSTR path)
 		{
-			return Str::is_empty(path) ? false : ::SetCurrentDirectoryW(path);
+			return Cstr::is_empty(path) ? false : ::SetCurrentDirectoryW(path);
 		}
 
 		extern "C" {
@@ -102,4 +102,3 @@ namespace Base {
 	}
 
 }
-

@@ -23,7 +23,7 @@
 
 #include <libfar3/helper.hpp>
 
-#include <libbase/logger.hpp>
+#include <liblog/logger.hpp>
 
 #include <globalinfo.hpp>
 #include <guid.hpp>

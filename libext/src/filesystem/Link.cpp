@@ -4,7 +4,7 @@
 #include <libbase/std.hpp>
 #include <libbase/memory.hpp>
 #include <libbase/path.hpp>
-#include <libbase/pcstr.hpp>
+#include <libbase/cstr.hpp>
 
 namespace Fsys {
 
@@ -207,7 +207,7 @@ namespace Fsys {
 
 			Base::auto_close<HANDLE> hLink(CheckHandle(OpenLinkHandle(new_path, GENERIC_WRITE)));
 			ustring SubstituteName(ustring(Base::REPARSE_PREFIX) + Base::Path::remove_prefix(path));
-			REPARSE_BUF rdb(IO_REPARSE_TAG_SYMLINK, path, Base::Str::length(path), SubstituteName.c_str(), SubstituteName.size());
+			REPARSE_BUF rdb(IO_REPARSE_TAG_SYMLINK, path, Cstr::length(path), SubstituteName.c_str(), SubstituteName.size());
 			try {
 				rdb.set_to(new_path);
 			} catch (...) {
@@ -221,7 +221,7 @@ namespace Fsys {
 			Directory::create(new_path);
 			Base::auto_close<HANDLE> hLink(CheckHandle(OpenLinkHandle(new_path, GENERIC_WRITE)));
 			ustring SubstituteName(ustring(Base::REPARSE_PREFIX) + Base::Path::remove_prefix(path));
-			REPARSE_BUF rdb(IO_REPARSE_TAG_MOUNT_POINT, path, Base::Str::length(path), SubstituteName.c_str(), SubstituteName.size());
+			REPARSE_BUF rdb(IO_REPARSE_TAG_MOUNT_POINT, path, Cstr::length(path), SubstituteName.c_str(), SubstituteName.size());
 			try {
 				rdb.set_to(new_path);
 			} catch (...) {

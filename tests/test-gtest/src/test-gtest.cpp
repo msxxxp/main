@@ -101,7 +101,7 @@ int main(int argc, char* argv[])
 //#include <libbase/string.hpp>
 //#include <libbase/str.hpp>
 //
-////#include <libbase/logger.hpp>
+////#include <liblog/logger.hpp>
 //
 //namespace {
 //	void setup_logger()

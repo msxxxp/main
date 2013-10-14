@@ -285,7 +285,7 @@ namespace Base {
 			if (pos1 > 0 && str[pos1 - 1] == L'-')
 				--pos1;
 			ustring tmp(str.substr(pos1, pos2 - pos1));
-			num = Str::to_int64(tmp.c_str(), base);
+			num = Cstr::to_int64(tmp.c_str(), base);
 			str.erase(0, pos2);
 			return true;
 		}
@@ -366,7 +366,7 @@ namespace Base {
 				hash = Memory::malloc<PVOID>(size);
 				for (size_t i = 0; i < size; ++i) {
 					astring tmp = str.substr(i * 2, 2);
-					((PBYTE)hash)[i] = (BYTE)Str::to_int32(tmp.c_str(), 16);
+					((PBYTE)hash)[i] = (BYTE)Cstr::to_int32(tmp.c_str(), 16);
 				}
 				return true;
 			}
@@ -412,7 +412,7 @@ namespace Base {
 		auto_array<BYTE> ret(size);
 		for (size_t i = 0; i < size; ++i) {
 			ustring tmp = str.substr(i * 2, 2);
-			ret[i] = (BYTE)Str::to_int32(tmp.c_str(), 16);
+			ret[i] = (BYTE)Cstr::to_int32(tmp.c_str(), 16);
 		}
 		return ret;
 	}

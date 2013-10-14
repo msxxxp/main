@@ -1,9 +1,9 @@
 ﻿#include <libbase/std.hpp>
 #include <libbase/filesystem.hpp>
 #include <libbase/path.hpp>
-#include <libbase/pcstr.hpp>
+#include <libbase/cstr.hpp>
 #include <libbase/memory.hpp>
-#include <libbase/logger.hpp>
+#include <liblog/logger.hpp>
 #include <libext/dll.hpp>
 #include <libext/filesystem.hpp>
 #include <libext/exception.hpp>
@@ -59,7 +59,7 @@ namespace Fsys {
 			Base::auto_close<HANDLE> file(CheckHandle(::CreateFileW(path, GENERIC_WRITE, 0, lpsa,
 					CREATE_NEW, FILE_ATTRIBUTE_NORMAL, nullptr)));
 			DWORD bytesWritten = 0;
-			DWORD bytesToWrite = Base::Str::length(content);
+			DWORD bytesToWrite = Cstr::length(content);
 			CheckApi(::WriteFile(file, (PCVOID )content, bytesToWrite, &bytesWritten, nullptr) && bytesToWrite == bytesWritten);
 		}
 

@@ -120,6 +120,9 @@
 		<configuration configurationName="Debug-x64">
 			<resource resourceType="PROJECT" workspacePath="/liblog"/>
 		</configuration>
+		<configuration configurationName="x64">
+			<resource resourceType="PROJECT" workspacePath="/liblog"/>
+		</configuration>
 		<configuration configurationName="Release-x64">
 			<resource resourceType="PROJECT" workspacePath="/liblog"/>
 		</configuration>

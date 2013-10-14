@@ -15,8 +15,8 @@
 #include <libext/fileversion.hpp>
 #include <libext/filesystem.hpp>
 #include <libbase/std.hpp>
-#include <libbase/pcstr.hpp>
-#include <libbase/logger.hpp>
+#include <libbase/cstr.hpp>
+#include <liblog/logger.hpp>
 
 #include <initguid.h>
 #include <shobjidl.h>
@@ -58,8 +58,8 @@ namespace SevenZip {
 		metSwap4 = 131844,
 	};
 
-	extern const Base::NamedValues<int> ArcItemPropsNames[63];
-	extern const Base::NamedValues<CompressMethod> CompressMethodsNames[21];
+	extern const Cstr::NamedValues<int> ArcItemPropsNames[63];
+	extern const Cstr::NamedValues<CompressMethod> CompressMethodsNames[21];
 
 	struct FailedFile {
 		ustring path;

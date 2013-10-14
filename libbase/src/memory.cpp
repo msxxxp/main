@@ -16,37 +16,43 @@ namespace Memory {
 
 namespace Base {
 
-	auto_close<HANDLE>::auto_close(const this_type & rhs):
-		m_ptr(nullptr) {
-		::DuplicateHandle(::GetCurrentProcess(), rhs.m_ptr, ::GetCurrentProcess(), &m_ptr, 0, FALSE, DUPLICATE_SAME_ACCESS);
+	auto_close<HANDLE>::auto_close(const this_type & rhs) :
+		m_hndl(nullptr)
+	{
+		::DuplicateHandle(::GetCurrentProcess(), rhs.m_hndl, ::GetCurrentProcess(), &m_hndl, 0, FALSE, DUPLICATE_SAME_ACCESS);
 	}
 
-	auto_close<HANDLE> & auto_close<HANDLE>::operator = (const this_type & rhs) {
+	auto_close<HANDLE> & auto_close<HANDLE>::operator =(const this_type & rhs)
+	{
 		if (this != &rhs)
 			this_type(rhs).swap(*this);
 		return *this;
 	}
 
-	auto_close<HANDLE>::auto_close(this_type && rhs):
-		m_ptr(nullptr) {
+	auto_close<HANDLE>::auto_close(this_type && rhs) :
+		m_hndl(nullptr)
+	{
 		swap(rhs);
 	}
 
-	auto_close<HANDLE> & auto_close<HANDLE>::operator = (this_type && rhs) {
-		if (this != (this_type*)&(size_t&)rhs) // amazing operator & bypass
+	auto_close<HANDLE> & auto_close<HANDLE>::operator =(this_type && rhs)
+	{
+		if (this->m_hndl != rhs.m_hndl)
 			this_type(std::move(rhs)).swap(*this);
 		return *this;
 	}
 
-	auto_close<HANDLE>::value_type * auto_close<HANDLE>::operator & () {
+	auto_close<HANDLE>::value_type * auto_close<HANDLE>::operator &()
+	{
 		close();
-		return &m_ptr;
+		return &m_hndl;
 	}
 
-	void auto_close<HANDLE>::close() {
+	void auto_close<HANDLE>::close()
+	{
 		if (is_valid()) {
-			::CloseHandle(m_ptr);
-			m_ptr = nullptr;
+			::CloseHandle(m_hndl);
+			m_hndl = nullptr;
 		}
 	}
 

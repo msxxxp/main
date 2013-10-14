@@ -7,7 +7,7 @@ namespace Base {
 		bool is_valid(PCWSTR name)
 		{
 			//		const wchar_t invalidCharsInName[] = L"\\\"<>:/|?*";
-			return Str::compare(name, L".") && Str::compare(name, L"..") && Str::compare(name, L"...");
+			return Cstr::compare(name, L".") && Cstr::compare(name, L"..") && Cstr::compare(name, L"...");
 		}
 
 		ustring extract(const ustring & path)

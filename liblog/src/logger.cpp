@@ -230,24 +230,24 @@ namespace Logger {
 	struct pModule_less: public std::binary_function<const Module_i *, const Module_i *, bool> {
 		bool operator ()(const Module_i * lhs, const Module_i * rhs) const
 		{
-			return Base::Str::compare(lhs->get_name(), rhs->get_name()) < 0;
+			return Cstr::compare(lhs->get_name(), rhs->get_name()) < 0;
 		}
 	};
 
 	struct pModule_PCWSTR_less {
 		bool operator ()(Module_i * lhs, PCWSTR rhs) const
 		{
-			return Base::Str::compare(lhs->get_name(), rhs) < 0;
+			return Cstr::compare(lhs->get_name(), rhs) < 0;
 		}
 
 		bool operator ()(PCWSTR left, Module_i * right) const
 		{
-			return Base::Str::compare(left, right->get_name()) < 0;
+			return Cstr::compare(left, right->get_name()) < 0;
 		}
 
 		bool operator ()(const Module_i * lhs, const Module_i * rhs) const
 		{
-			return Base::Str::compare(lhs->get_name(), rhs->get_name()) < 0;
+			return Cstr::compare(lhs->get_name(), rhs->get_name()) < 0;
 		}
 	};
 

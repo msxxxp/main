@@ -2,7 +2,7 @@
 #include <libbase/filesystem.hpp>
 #include <libbase/memory.hpp>
 #include <libbase/path.hpp>
-#include <libbase/pcstr.hpp>
+#include <libbase/cstr.hpp>
 #include <libext/dll.hpp>
 #include <libext/filesystem.hpp>
 #include <libext/exception.hpp>
@@ -152,9 +152,9 @@ namespace Fsys {
 		while (*p) {
 			*drive = *p;
 			CheckApi(::QueryDosDeviceW(drive, device, Base::lengthof(device)));
-			if (Base::Str::find(path, device) == path) {
+			if (Cstr::find(path, device) == path) {
 				wchar_t new_path[Base::MAX_PATH_LEN];
-				_snwprintf(new_path, Base::lengthof(new_path), L"%s%s", drive, path + Base::Str::length(device));
+				_snwprintf(new_path, Base::lengthof(new_path), L"%s%s", drive, path + Cstr::length(device));
 				return ustring(new_path);
 			}
 			while (*p++)

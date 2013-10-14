@@ -1,6 +1,6 @@
 #include <libext/pipe.hpp>
 #include <libext/exception.hpp>
-#include <libbase/logger.hpp>
+#include <liblog/logger.hpp>
 
 namespace Ext {
 	AnonPipe::~AnonPipe()

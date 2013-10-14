@@ -3,7 +3,7 @@
 #include <libjava/jvm.hpp>
 #include <libjava/exception.hpp>
 #include <libjava/class.hpp>
-#include <libbase/logger.hpp>
+#include <liblog/logger.hpp>
 
 #include <string>
 

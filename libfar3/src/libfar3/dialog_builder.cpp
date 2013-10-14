@@ -19,8 +19,8 @@
 #include <libfar3/dialog_builder.hpp>
 
 #include <libbase/std.hpp>
-#include <libbase/logger.hpp>
-#include <libbase/pcstr.hpp>
+#include <libbase/cstr.hpp>
+#include <liblog/logger.hpp>
 
 #include "DlgBuilder_pvt.hpp"
 
@@ -137,12 +137,12 @@ namespace Far {
 		OKButton->Y1 = OKButton->Y2 = NextY++;
 		OKButtonId = DialogItems.size() - 1;
 
-		if (!Base::Str::is_empty(CancelLabel)) {
+		if (!Cstr::is_empty(CancelLabel)) {
 			FarDialogItem_t * CancelButton = add_dialog_item(DI_BUTTON, CancelLabel, DIF_CENTERGROUP);
 			CancelButton->Y1 = CancelButton->Y2 = OKButton->Y1;
 		}
 
-		if (!Base::Str::is_empty(ExtraLabel)) {
+		if (!Cstr::is_empty(ExtraLabel)) {
 			FarDialogItem_t * ExtraButton = add_dialog_item(DI_BUTTON, ExtraLabel, DIF_CENTERGROUP);
 			ExtraButton->Y1 = ExtraButton->Y2 = OKButton->Y1;
 		}

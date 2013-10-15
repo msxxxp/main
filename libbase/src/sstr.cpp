@@ -117,7 +117,7 @@ namespace Base {
 		size_type currSize = default_buffer_size;
 		pointer ptr = make_copy(L"", currSize);
 
-		while (static_cast<unsigned>(::_vsnwprintf(ptr, currSize, fmt, args)) > currSize) {
+		while (!Base::safe_vsnprintf(ptr, currSize, fmt, args)) {
 			currSize *= 2;
 			free(ptr);
 			ptr = make_copy(L"", currSize);

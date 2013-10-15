@@ -5,8 +5,6 @@
 #include <libbase/cstr.hpp>
 
 namespace Base {
-	ssize_t safe_vsnprintf(PWSTR buf, size_t len, PCWSTR format, va_list vl);
-
 	namespace Console {
 		enum class Handle : size_t {
 			INPUT  = STD_INPUT_HANDLE,

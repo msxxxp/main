@@ -2,12 +2,6 @@
 #include <libbase/memory.hpp>
 
 namespace Base {
-	ssize_t safe_vsnprintf(PWSTR buf, size_t len, PCWSTR format, va_list vl)
-	{
-		buf[--len] = 0;
-		return ::_vsnwprintf(buf, len, format, vl);
-	}
-
 	namespace Console {
 		size_t out(Handle hnd, PCWSTR str, size_t len)
 		{

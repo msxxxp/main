@@ -137,6 +137,8 @@ namespace Base {
 		this_type & operator = (const this_type &) = delete;
 #endif
 	};
+
+	bool safe_vsnprintf(PWSTR buf, size_t len, PCWSTR format, va_list vl);
 }
 
 #endif

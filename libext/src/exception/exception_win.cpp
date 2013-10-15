@@ -46,7 +46,7 @@ namespace Ext {
 
 	ustring WinError::what() const
 	{
-		return Base::ErrAsStr(code());
+		return ustring(Base::ErrAsStr(code()).c_str());
 	}
 
 	DWORD WinError::code() const

@@ -24,7 +24,7 @@ namespace Ext {
 	}
 
 	ustring	WmiError::what() const {
-		return Base::ErrAsStrWmi(code());
+		return ustring(Base::ErrAsStrWmi(code()).c_str());
 	}
 
 

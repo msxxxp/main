@@ -3,8 +3,9 @@
 #include <libext/exception.hpp>
 #include <libbase/console.hpp>
 #include <libbase/path.hpp>
-#include <liblog/logger.hpp>
 #include <libbase/cstr.hpp>
+#include <libbase/string.hpp>
+#include <liblog/logger.hpp>
 
 namespace SevenZip {
 	DirItem::DirItem(const ustring & file_path, const ustring & file_name) :
@@ -214,13 +215,13 @@ namespace SevenZip {
 				prop = (uint32_t)0777;
 				break;
 			default:
-				LogWarn(L"%u, %2u, '%s'\n", index, propID, Base::NamedValues<int>::GetName(ArcItemPropsNames, Base::lengthof(ArcItemPropsNames), propID));
+				LogWarn(L"%u, %2u, '%s'\n", index, propID, Cstr::NamedValues<int>::GetName(ArcItemPropsNames, Base::lengthof(ArcItemPropsNames), propID));
 				break;
 		}
 		prop.detach(value);
 		return S_OK;
 	} catch (Ext::AbstractError & e) {
-		LogError(L"%u, %2u, '%s' -> '%s'\n", index, propID, Base::NamedValues<int>::GetName(ArcItemPropsNames, Base::lengthof(ArcItemPropsNames), propID), e.what().c_str());
+		LogError(L"%u, %2u, '%s' -> '%s'\n", index, propID, Cstr::NamedValues<int>::GetName(ArcItemPropsNames, Base::lengthof(ArcItemPropsNames), propID), e.what().c_str());
 		return S_FALSE;
 	} catch (std::out_of_range & e) {
 		LogError(L"%S\n", e.what());

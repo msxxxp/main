@@ -23,7 +23,7 @@ namespace Ext {
 	}
 
 	ustring	HMailError::what() const {
-		return Base::ErrAsStr(code(), L"hMailServer.exe");
+		return ustring(Base::ErrAsStr(code(), L"hMailServer.exe").c_str());
 	}
 
 #ifndef NDEBUG

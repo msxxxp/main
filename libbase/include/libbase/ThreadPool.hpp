@@ -22,7 +22,7 @@ namespace Base {
 		~ThreadPool();
 
 		template<class... Args>
-		void emplace_back(Args&&... args)
+		void create_thread(Args&&... args)
 		{
 			base_type::emplace_back(args...);
 			m_handles.push_back(base_type::back().get_handle());

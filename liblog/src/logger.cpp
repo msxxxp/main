@@ -2,13 +2,16 @@
 #include "logger_pvt.hpp"
 
 #include <libbase/lock.hpp>
-#include <libbase/string.hpp>
+#include <libbase/cstr.hpp>
+#include <libbase/pvt/lite_string.hpp>
 
 #include <vector>
 
 #include <stdio.h>
 
 namespace Logger {
+
+	typedef Base::basic_string<wchar_t, Base::char_traits<wchar_t> > ustring;
 
 	PCWSTR const LogLevelNames[(int)Level::Force + 1] = {
 		L"TRACE",
@@ -26,6 +29,27 @@ namespace Logger {
 		PCWSTR const place;
 		PCWSTR const additional;
 	};
+
+	///=============================================================================================
+	const size_t default_buffer_size = 4 * 1024;
+
+	ustring format(PCWSTR fmt, va_list args)
+	{
+		wchar_t buf[default_buffer_size];
+		size_t size = Base::lengthof(buf) - 1;
+		buf[size] = L'\0';
+		::_vsnwprintf(buf, size, fmt, args);
+		return ustring(buf);
+	}
+
+	ustring format(PCWSTR fmt, ...)
+	{
+		va_list args;
+		va_start(args, fmt);
+		auto tmp = format(fmt, args);
+		va_end(args);
+		return tmp;
+	}
 
 	///==================================================================================== Module_i
 	Module_i::~Module_i()
@@ -69,7 +93,7 @@ namespace Logger {
 
 		ustring & add_place(ustring & prefix, PCSTR file, int line, PCSTR func) const;
 
-		void out_args(Level lvl, const ustring & prefix, PCWSTR format, va_list args) const;
+		void out_args(Level lvl, const ustring & prefix, PCWSTR frmat, va_list args) const;
 
 		ustring m_name;
 		Base::shared_ptr<Target_i> m_target;
@@ -189,20 +213,20 @@ namespace Logger {
 			SYSTEMTIME time;
 			::GetLocalTime(&time);
 			if (m_prefix & Prefix::Date) {
-				prefix += Base::String::format(L"%04u-%02u-%02u ", time.wYear, time.wMonth, time.wDay);
+				prefix += format(L"%04u-%02u-%02u ", time.wYear, time.wMonth, time.wDay);
 			}
 			if (m_prefix & Prefix::Time) {
-				prefix += Base::String::format(L"%02u:%02u:%02u.%03u ", time.wHour, time.wMinute, time.wSecond, time.wMilliseconds);
+				prefix += format(L"%02u:%02u:%02u.%03u ", time.wHour, time.wMinute, time.wSecond, time.wMilliseconds);
 			}
 		}
 		if (m_prefix & Prefix::Level) {
-			prefix += Base::String::format(L"%s ", LogLevelNames[(int)lvl]);
+			prefix += format(L"%s ", LogLevelNames[(int)lvl]);
 		}
 		if (m_prefix & Prefix::Module) {
-			prefix += Base::String::format(L"{%8s} ", m_name.c_str());
+			prefix += format(L"{%8s} ", m_name.c_str());
 		}
 		if (m_prefix & Prefix::Thread) {
-			prefix += Base::String::format(L"<%5u> ", ::GetCurrentThreadId());
+			prefix += format(L"<%5u> ", ::GetCurrentThreadId());
 		}
 		return prefix;
 	}
@@ -210,18 +234,18 @@ namespace Logger {
 	ustring & Module_impl::add_place(ustring & prefix, PCSTR file, int line, PCSTR func) const
 	{
 		if (m_prefix & Prefix::Place) {
-			prefix += Base::String::format(L"%14.14S:%4d ", file, line);
+			prefix += format(L"%14.14S:%4d ", file, line);
 		}
 		if (m_prefix & Prefix::Function) {
-			prefix += Base::String::format(L"[%S] ", func);
+			prefix += format(L"[%S] ", func);
 		}
 		return prefix;
 	}
 
-	void Module_impl::out_args(Level lvl, const ustring & prefix, PCWSTR format, va_list args) const
+	void Module_impl::out_args(Level lvl, const ustring & prefix, PCWSTR frmat, va_list args) const
 	{
 		ustring tmp(prefix);
-		tmp += Base::String::format(format, args);
+		tmp += format(frmat, args);
 		batch_lock();
 		m_target->out(this, lvl, tmp.c_str(), tmp.size());
 		batch_unlock();
@@ -345,7 +369,7 @@ namespace Logger {
 	PCWSTR const Logger_impl::defModuleName = L"default";
 
 	Logger_impl::Logger_impl() :
-		m_sync(Base::Lock::get_ReadWrite())
+		m_sync(Base::Lock::get_CritSection())
 	{
 		auto lk(m_sync->lock_scope());
 		defModule = register_module_(defModuleName, defTarget, defLevel);
@@ -358,7 +382,7 @@ namespace Logger {
 	Logger_impl::~Logger_impl()
 	{
 		auto lk(m_sync->lock_scope());
-		defModule->set_prefix(Prefix::Thread | Prefix::Time | Prefix::Date);
+//		defModule->set_prefix(Prefix::Thread | Prefix::Time | Prefix::Date);
 		defModule->out(Level::Force, L"Logger is being destroyed\n");
 		while (!m_modules.empty()) {
 			delete m_modules.back();

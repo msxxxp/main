@@ -1,9 +1,10 @@
 ﻿#include <libbase/err.hpp>
-#include <libbase/string.hpp>
+
+#include <algorithm>
 
 namespace Base {
 
-	ustring ErrAsStr(DWORD err, PCWSTR lib) {
+	sstr ErrAsStr(DWORD err, PCWSTR lib) {
 		HMODULE mod = nullptr;
 		if (err && lib) {
 			mod = ::LoadLibraryExW(lib, nullptr, DONT_RESOLVE_DLL_REFERENCES); //LOAD_LIBRARY_AS_DATAFILE
@@ -20,26 +21,23 @@ namespace Base {
 			if (lib) {
 				return ErrAsStr(err);
 			} else {
-				wchar_t out[MAX_PATH];
-				_snwprintf(out, lengthof(out), L"[0x%x] Unknown error", err);
-				return ustring(out);
+				return sstr::format(L"[0x%x (%u)] Unknown error", err, err);
 			}
 		}
 
-		wchar_t out[MAX_PATH_LEN];
-		_snwprintf(out, lengthof(out), L"[0x%x (%u)] %s", err, err, buf);
+		sstr ret = sstr::format(L"[0x%x (%u)] %s", err, err, buf);
+		ret[ret.size() - 2] = L'\0'; // delete return char
 		::LocalFree(buf);
 
-		ustring ret(out);
-		return ret.erase(ret.size() - 2);
+		return std::move(ret);
 	}
 
-	ustring NTStatusAsStr(ULONG status)
+	sstr NTStatusAsStr(ULONG status)
 	{
 		return ErrAsStr(status, L"NTDLL.DLL");
 	}
 
-	ustring ErrAsStrWmi(HRESULT err)
+	sstr ErrAsStrWmi(HRESULT err)
 	{
 		return ErrAsStr(err, L"WMIUTILS.DLL");
 	}

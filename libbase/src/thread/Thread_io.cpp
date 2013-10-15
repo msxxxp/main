@@ -67,20 +67,20 @@ namespace Base {
 
 	bool Thread::set_io_priority(Thread::IoPriority_t prio)
 	{
-		LogNoise(L"id: %u, prio: %s\n", m_id, to_str(prio));
 		ULONG p = (ULONG)prio;
 		NTSTATUS ret = NtSetInformationThread(m_handle, ThreadIoPriority, &p, sizeof(p));
-		LogErrorIf(ret, L"-> %s\n", NTStatusAsStr(ret).c_str());
+		LogNoiseIf(!ret, L"id: %u, prio: '%s'\n", m_id, to_str(prio));
+		LogErrorIf( ret, L"id: %u, prio: '%s' -> %s\n", m_id, to_str(prio), NTStatusAsStr(ret).c_str());
 		return ret;
 	}
 
 	Thread::IoPriority_t Thread::get_io_priority() const
 	{
-		LogNoise(L"id: %u\n", m_id);
-		ULONG p = 0;
-		NTSTATUS ret = NtQueryInformationThread(m_handle, ThreadIoPriority, &p, sizeof(p), nullptr);
-		LogErrorIf(ret, L"-> %s\n", NTStatusAsStr(ret).c_str());
-		return (Thread::IoPriority_t)p;
+		ULONG prio = 0;
+		NTSTATUS ret = NtQueryInformationThread(m_handle, ThreadIoPriority, &prio, sizeof(prio), nullptr);
+		LogNoiseIf(!ret, L"id: %u -> '%s'\n", m_id, to_str((Thread::IoPriority_t)prio));
+		LogErrorIf( ret, L"id: %u -> '%s'\n", m_id, NTStatusAsStr(ret).c_str());
+		return (Thread::IoPriority_t)prio;
 	}
 
 }

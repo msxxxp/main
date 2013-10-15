@@ -107,8 +107,6 @@ namespace Base {
 
 		WaitResult_t wait(Timeout_t timeout = WAIT_FOREVER) const;
 
-		void terminate();
-
 	private:
 		ThreadRoutine_i * m_routine;
 		handle_t m_handle;

@@ -1,87 +1,90 @@
 ﻿#include <libbase/std.hpp>
+#include <libbase/console.hpp>
 #include <libbase/backtrace.hpp>
-#include <liblog/logger.hpp>
 #include <libbase/messaging.hpp>
 #include <libbase/thread.hpp>
 #include <libbase/ThreadPool.hpp>
+#include <libbase/atexit.hpp>
+#include <libbase/sstr.hpp>
+#include <libbase/err.hpp>
+#include <liblog/logger.hpp>
 
-#include <stdio.h>
-#include <functional>
-#include <memory>
-#include <vector>
-#include <libbase/window.hpp>
-
-struct CMyWnd: public Base::Window {
-	CMyWnd()
-	{
-		LogTrace();
-		add_handler(WM_CREATE, &CMyWnd::OnCreate);
-		add_handler(WM_DESTROY, &CMyWnd::OnDestroy);
-		add_handler(WM_CLOSE, &CMyWnd::OnClose);
-		add_handler(WM_ACTIVATE, &CMyWnd::OnActivate);
-		add_handler(WM_SETFOCUS, &CMyWnd::OnSetFocus);
-		add_handler(WM_KILLFOCUS, &CMyWnd::OnKillFocus);
-	}
-
-	LRESULT OnCreate(LPARAM lparam, WPARAM wparam)
-	{
-		LogNoise(L"lparam: %Id wparam: %Id\n", lparam, wparam);
-		return 0;
-	}
-
-	LRESULT OnDestroy(LPARAM lparam, WPARAM wparam)
-	{
-		LogNoise(L"lparam: %Id wparam: %Id\n", lparam, wparam);
-		::PostQuitMessage(0);
-		return 0;
-	}
-
-	LRESULT OnClose(LPARAM lparam, WPARAM wparam)
-	{
-		// chose close option
-		LogNoise(L"lparam: %Id wparam: %Id\n", lparam, wparam);
-		::DestroyWindow(get_handle());
-		return 0;
-	}
-
-	LRESULT OnActivate(LPARAM lparam, WPARAM wparam)
-	{
-		LogNoise(L"lparam: %Id wparam: %Id\n", lparam, wparam);
-		return 0;
-	}
-
-	LRESULT OnSetFocus(LPARAM lparam, WPARAM wparam)
-	{
-		LogNoise(L"lparam: %Id wparam: %Id\n", lparam, wparam);
-		return 0;
-	}
-
-	LRESULT OnKillFocus(LPARAM lparam, WPARAM wparam)
-	{
-		LogNoise(L"lparam: %Id wparam: %Id\n", lparam, wparam);
-		return 0;
-	}
-};
-
-int test_window()
-{
-	LogTrace();
-	CMyWnd * wnd = new CMyWnd;
-	wnd->create(0, L"HelloWorld!", 0, WS_OVERLAPPEDWINDOW | WS_VISIBLE, 300, 300, 500, 400, 0);
-
-	Base::WindowApplication().Run();
-	return 0;
-}
-
+//#include <stdio.h>
+//#include <functional>
+//#include <memory>
+//#include <vector>
+//#include <libbase/window.hpp>
+//
+//struct CMyWnd: public Base::Window {
+//	CMyWnd()
+//	{
+//		LogTrace();
+//		add_handler(WM_CREATE, &CMyWnd::OnCreate);
+//		add_handler(WM_DESTROY, &CMyWnd::OnDestroy);
+//		add_handler(WM_CLOSE, &CMyWnd::OnClose);
+//		add_handler(WM_ACTIVATE, &CMyWnd::OnActivate);
+//		add_handler(WM_SETFOCUS, &CMyWnd::OnSetFocus);
+//		add_handler(WM_KILLFOCUS, &CMyWnd::OnKillFocus);
+//	}
+//
+//	LRESULT OnCreate(LPARAM lparam, WPARAM wparam)
+//	{
+//		LogNoise(L"lparam: %Id wparam: %Id\n", lparam, wparam);
+//		return 0;
+//	}
+//
+//	LRESULT OnDestroy(LPARAM lparam, WPARAM wparam)
+//	{
+//		LogNoise(L"lparam: %Id wparam: %Id\n", lparam, wparam);
+//		::PostQuitMessage(0);
+//		return 0;
+//	}
+//
+//	LRESULT OnClose(LPARAM lparam, WPARAM wparam)
+//	{
+//		// chose close option
+//		LogNoise(L"lparam: %Id wparam: %Id\n", lparam, wparam);
+//		::DestroyWindow(get_handle());
+//		return 0;
+//	}
+//
+//	LRESULT OnActivate(LPARAM lparam, WPARAM wparam)
+//	{
+//		LogNoise(L"lparam: %Id wparam: %Id\n", lparam, wparam);
+//		return 0;
+//	}
+//
+//	LRESULT OnSetFocus(LPARAM lparam, WPARAM wparam)
+//	{
+//		LogNoise(L"lparam: %Id wparam: %Id\n", lparam, wparam);
+//		return 0;
+//	}
+//
+//	LRESULT OnKillFocus(LPARAM lparam, WPARAM wparam)
+//	{
+//		LogNoise(L"lparam: %Id wparam: %Id\n", lparam, wparam);
+//		return 0;
+//	}
+//};
+//
+//int test_window()
+//{
+//	LogTrace();
+//	CMyWnd * wnd = new CMyWnd;
+//	wnd->create(0, L"HelloWorld!", 0, WS_OVERLAPPEDWINDOW | WS_VISIBLE, 300, 300, 500, 400, 0);
+//
+//	Base::WindowApplication().Run();
+//	return 0;
+//}
+//
 namespace {
 	void setup_logger()
 	{
 		using namespace Logger;
 		set_default_level(Level::Trace);
-//		set_default_prefix(Prefix::Medium | Prefix::Place | Prefix::Module | Prefix::Thread);
-//		set_default_target(get_TargetToConsole());
-		set_default_prefix(Prefix::Full/* | Prefix::Place*/);
-		set_default_target(get_TargetToFile(L"test-7zip.log", true));
+		set_default_prefix(Prefix::Full & ~Prefix::Date);
+		set_default_target(get_TargetToConsole());
+//		set_default_target(get_TargetToFile(L"test-threads.log", true));
 
 //		set_module_enabled(false, get_module(L"threads"));
 	}
@@ -98,10 +101,10 @@ struct Routine: public Base::ThreadRoutine_i
 
 	size_t run(void *) override
 	{
-		LogTrace();
+		LogDebug(L"Start routine\n");
 		Base::Message message;
 		m_queue->get_message(message, 5000);
-		LogTrace();
+		LogDebug(L"Exit routine\n");
 		return m_num;
 	}
 
@@ -110,24 +113,21 @@ private:
 	ssize_t m_num;
 };
 
-int main()
+int test_threads()
 {
-	setup_logger();
-	LogTrace();
-
-//	test_window();
-//	return 0;
-
 	Base::Queue queue;
 	Routine routine1(&queue, 100);
 	Routine routine2(&queue, 200);
 	Base::ThreadPool threads;
-	threads.emplace_back(&routine1);
-	threads.emplace_back(&routine2);
+	threads.create_thread(&routine1);
+	threads.create_thread(&routine2);
 
 //	Sleep(5000);
-	threads[0].set_io_priority(Base::Thread::IoPriority_t::LOW);
+	threads[0].set_io_priority(Base::Thread::IoPriority_t::VERY_LOW);
+	threads[0].set_io_priority(Base::Thread::IoPriority_t::NORMAL);
+	threads[1].set_io_priority(Base::Thread::IoPriority_t::LOW);
 	threads[1].set_io_priority(Base::Thread::IoPriority_t::HIGH);
+	threads[1].set_io_priority(Base::Thread::IoPriority_t::CRITICAL);
 
 //	Sleep(5000);
 	threads[0].set_priority(Base::Thread::Priority_t::TIME_CRITICAL);
@@ -135,13 +135,91 @@ int main()
 
 	Base::Message message(1, 2, 3, nullptr);
 	queue.put_message(message);
-	threads[0].resume();
-	threads[1].resume();
+//	queue.put_message(message);
 	while (threads.wait_all(1000) != Base::WaitResult_t::SUCCESS)
 		;
 
 	LogInfo(L"threads[0] exited: %d\n", threads[0].get_exitcode());
 	LogInfo(L"threads[1] exited: %d\n", threads[1].get_exitcode());
-	LogTrace();
 	return 0;
 }
+
+int test_sstr()
+{
+//	Base::Console::printf(L"%S:%d '%s': %Iu\n", __PRETTY_FUNCTION__, __LINE__, ptr, length);
+	LogTrace();
+	Base::sstr str1;
+	Base::sstr str2 = L"str2";
+	Base::sstr str3 = Base::sstr::format(L"%s, %s, %I64u", L"hello", L"world", 36ull);
+	Base::sstr str4 = Base::ErrAsStr(5);
+	Base::sstr str5 = Base::sstr::format(L"%d%d%d%d", 4,4,4,4);
+	Base::sstr str6 = Base::sstr::format(L"%d%d%d%d%d", 5,5,5,5,5);
+
+	LogDebug(L"'%s'\n", str1.c_str());
+	LogDebug(L"'%s'\n", str2.c_str());
+	LogDebug(L"'%s'\n", str3.c_str());
+	LogDebug(L"'%s'\n", str4.c_str());
+	LogDebug(L"'%s'\n", str5.c_str());
+	LogDebug(L"'%s'\n", str6.c_str());
+	return 0;
+}
+
+#ifdef NDEBUG
+int wWmain()
+#else
+int main()
+#endif
+{
+	setup_logger();
+	LogTrace();
+
+//	return test_window();
+
+	return test_threads();
+
+//	return test_sstr();
+}
+
+/// ========================================================================== Startup (entry point)
+#ifdef NDEBUG
+extern "C" {
+	int atexit(Base::FunctionAtExit pf)
+	{
+		return Base::atexit(pf);
+	}
+
+	void __cxa_pure_virtual(void)
+	{
+		Base::cxa_pure_virtual();
+	}
+
+	int	mainCRTStartup() {
+//	int	WinMainCRTStartup() {
+		Base::init_atexit();
+//		Base::Console::printf(L"%S:%d\n", __PRETTY_FUNCTION__, __LINE__);
+		int Result = 0;
+//		STARTUPINFO StartupInfo = {sizeof(STARTUPINFO), 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0};
+//		::GetStartupInfo(&StartupInfo);
+//
+//		Result = wWinMain(::GetModuleHandle(nullptr), nullptr, ::GetCommandLine(),
+//						  StartupInfo.dwFlags & STARTF_USESHOWWINDOW ? StartupInfo.wShowWindow : SW_SHOWDEFAULT);
+		Result = wWmain();
+		Base::invoke_atexit();
+		::ExitProcess(Result);
+		return Result;
+	}
+
+//	BOOL WINAPI	DllMainCRTStartup(HANDLE, DWORD dwReason, PVOID) {
+//		switch (dwReason) {
+//			case DLL_PROCESS_ATTACH:
+//				init_atexit();
+//				break;
+//
+//			case DLL_PROCESS_DETACH:
+//				invoke_atexit();
+//				break;
+//		}
+//		return true;
+//	}
+}
+#endif

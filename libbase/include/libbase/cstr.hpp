@@ -98,12 +98,12 @@ namespace Cstr {
 	}
 
 	inline PSTR copy(PSTR dest, PCSTR src, size_t size) {
-		dest[--size] = 0;
+		dest[size] = 0;
 		return ::strncpy(dest, src, size);
 	}
 
 	inline PWSTR copy(PWSTR dest, PCWSTR src, size_t size) {
-		dest[--size] = 0;
+		dest[size] = 0;
 		return ::wcsncpy(dest, src, size);
 	}
 

@@ -14,7 +14,8 @@ namespace Base {
 		}
 	}
 
-	struct Queue::Queue_impl: private Lock::CriticalSection, private Lock::Semaphore, private std::deque<Message> {
+	struct Queue::Queue_impl: private Lock::CriticalSection, private Lock::Semaphore, private std::vector<Message>
+	{ // deque would bring exceptions dependence
 		void put_message(value_type const& message);
 
 		WaitResult_t get_message(value_type & message, size_t timeout_msec);
@@ -34,7 +35,8 @@ namespace Base {
 		if (waitResult == WaitResult_t::SUCCESS) {
 			CriticalSection::lock();
 			message = front();
-			pop_front();
+//			pop_front();
+			erase(begin());
 			CriticalSection::release();
 		}
 		return waitResult;
@@ -81,9 +83,8 @@ namespace Base {
 	{
 		LogNoise(L"Queue: %p wait: %Id\n", m_impl, timeout_msec);
 		auto ret = m_impl->get_message(message, timeout_msec);
-		LogWarnIf(ret != WaitResult_t::SUCCESS, L"ret: '%s'\n", to_str(ret));
+		LogAttenIf(ret != WaitResult_t::SUCCESS, L"ret: '%s'\n", to_str(ret));
 		LogNoiseIf(ret == WaitResult_t::SUCCESS, L"ret: '%s' Message(type: %Id, code: %Id, param: %Id, data: %p)\n", to_str(ret), message.get_type(), message.get_code(), message.get_param(), message.get_data());
 		return ret;
 	}
-
 }

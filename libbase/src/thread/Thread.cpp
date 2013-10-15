@@ -1,7 +1,5 @@
 #include <libbase/thread.hpp>
-
 #include <libbase/err.hpp>
-#include <libbase/string.hpp>
 #include <liblog/logger.hpp>
 
 namespace Base {
@@ -60,9 +58,9 @@ namespace Base {
 
 	bool Thread::set_priority(Thread::Priority_t prio)
 	{
-		LogNoise(L"id: %u, prio: %s\n", m_id, to_str(prio));
+		LogNoise(L"id: %u, prio: '%s'\n", m_id, to_str(prio));
 		bool ret = ::SetThreadPriority(m_handle, (int)prio);
-		LogErrorIf(!ret, L"-> %s\n", ErrAsStr().c_str());
+		LogErrorIf(!ret, L"id: %u, prio: '%s' -> %s\n", m_id, to_str(prio), ErrAsStr().c_str());
 		return ret;
 	}
 
@@ -77,15 +75,16 @@ namespace Base {
 
 	Thread::Priority_t Thread::get_priority() const
 	{
-		LogNoise(L"id: %u\n", m_id);
-		return (Thread::Priority_t)::GetThreadPriority(m_handle);
+		Thread::Priority_t prio = (Thread::Priority_t)::GetThreadPriority(m_handle);
+		LogNoise(L"id: %u -> '%s'\n", m_id, to_str(prio));
+		return prio;
 	}
 
 	bool Thread::suspend() const
 	{
 		LogNoise(L"id: %u\n", m_id);
 		bool ret = ::SuspendThread(m_handle) != (DWORD)-1;
-		LogErrorIf(!ret, L"-> %s\n", ErrAsStr().c_str());
+		LogErrorIf(!ret, L"id: %u -> %s\n", m_id, ErrAsStr().c_str());
 		return ret;
 	}
 
@@ -93,21 +92,14 @@ namespace Base {
 	{
 		LogNoise(L"id: %u\n", m_id);
 		bool ret = ::ResumeThread(m_handle) != (DWORD)-1;
-		LogErrorIf(!ret, L"-> %s\n", ErrAsStr().c_str());
+		LogErrorIf(!ret, L"id: %u -> %s\n", m_id, ErrAsStr().c_str());
 		return ret;
 	}
 
 	WaitResult_t Thread::wait(Timeout_t timeout) const
 	{
-		LogNoise(L"id: %u\n", m_id);
+		LogNoise(L"id: %u, timeout: %Id\n", m_id, timeout);
 		return (WaitResult_t)::WaitForSingleObjectEx(m_handle, timeout, true);
-	}
-
-	void Thread::terminate()
-	{
-		LogNoise(L"id: %u\n", m_id);
-		::TerminateThread(m_handle, 255);
-		LogNoise(L"id: %u\n", m_id);
 	}
 
 	PCWSTR to_str(Thread::Priority_t prio)

@@ -7,7 +7,7 @@
 #include <libext/dll.hpp>
 #include <libext/reg.hpp>
 #include <liblog/logger.hpp>
-#include <libbase/str.hpp>
+#include <libbase/string.hpp>
 
 #include <cassert>
 
@@ -95,7 +95,7 @@ namespace Java {
 				};
 				ustring home_path(Register::get_parameter(JVM_JRE, Register::HOME_KEY));
 				for (PCWSTR sub_path : paths) {
-					ustring dll_path(Base::as_str(L"%s\\%s\\%s", home_path.c_str(), sub_path, DLL_NAME));
+					ustring dll_path(Base::String::format(L"%s\\%s\\%s", home_path.c_str(), sub_path, DLL_NAME));
 					ret = ::LoadLibraryW(dll_path.c_str());
 					if (ret)
 						break;

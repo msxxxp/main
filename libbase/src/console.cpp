@@ -36,11 +36,11 @@ namespace Base {
 		return written;
 	}
 
-	int snprintf(PWSTR buff, size_t len, PCWSTR format, ...)
+	bool snprintf(PWSTR buff, size_t len, PCWSTR format, ...)
 	{
 		va_list vl;
 		va_start(vl, format);
-		int ret = safe_vsnprintf(buff, len, format, vl);
+		bool ret = safe_vsnprintf(buff, len, format, vl);
 		va_end(vl);
 		return ret;
 	}

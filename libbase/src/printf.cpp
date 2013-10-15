@@ -13,7 +13,7 @@ namespace Base {
 		size_t vprintf(Handle hnd, PCWSTR format, va_list vl)
 		{
 			auto_array<wchar_t> buf(8 * 1024);
-			while (safe_vsnprintf(buf.data(), buf.size(), format, vl) < 0)
+			while (!safe_vsnprintf(buf.data(), buf.size(), format, vl))
 				buf.reserve(buf.size() * 2);
 			return out(hnd, buf.data(), Cstr::length(buf.data()));
 		}

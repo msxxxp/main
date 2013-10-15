@@ -61,7 +61,7 @@ namespace Base {
 	size_t fileout(wchar_t ch, size_t len, HANDLE hndl);
 
 	///================================================================================= Console out
-	int snprintf(PWSTR buff, size_t len, PCWSTR format, ...);
+	bool snprintf(PWSTR buff, size_t len, PCWSTR format, ...);
 
 	void errx(int eval, PCSTR format, ...);
 

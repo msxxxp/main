@@ -219,6 +219,101 @@ namespace Logger {
 	Target_t get_TargetToMult(const Target_t & first, const Target_t & second);
 #else
 	typedef Target_i * Target_t;
+
+	inline Level get_default_level()
+	{
+		return Level::Atten;
+	}
+
+	inline void set_default_level(Level /*lvl*/)
+	{
+	}
+
+	inline size_t get_default_prefix()
+	{
+		return Prefix::Medium;
+	}
+
+	inline void set_default_prefix(size_t /*prefix*/)
+	{
+	}
+
+	inline Target_t get_default_target()
+	{
+		return Target_t();
+	}
+
+	inline void set_default_target(Target_t /*target*/)
+	{
+	}
+
+	inline Module_i * get_default_module()
+	{
+		return nullptr;
+	}
+
+	inline Module_i * get_module(PCWSTR /*name*/, const Target_t & /*target*/ = get_default_target(), Level /*lvl*/ = get_default_level())
+	{
+		return nullptr;
+	}
+
+	inline void set_module_target(const Target_t & /*target*/, Module_i * /*module*/)
+	{
+	}
+
+	inline void set_module_level(Level /*lvl*/, Module_i * /*module*/)
+	{
+	}
+
+	inline void set_module_prefix(size_t /*prefix*/, Module_i * /*module*/)
+	{
+	}
+
+	inline Prefix::flags get_module_prefix(Module_i * /*module*/)
+	{
+		return 0;
+	}
+
+	inline void set_module_color_mode(bool /*mode*/, Module_i * /*module*/)
+	{
+	}
+
+	inline void set_module_enabled(bool /*enabled*/, Module_i * /*module*/)
+	{
+	}
+
+	inline void lock_module(Module_i * /*module*/)
+	{
+	}
+
+	inline void unlock_module(Module_i * /*module*/)
+	{
+	}
+
+	inline Target_t get_TargetToNull()
+	{
+		return Target_t();
+	}
+
+	inline Target_t get_TargetToConsole()
+	{
+		return Target_t();
+	}
+
+	inline Target_t get_TargetToFile(PCWSTR /*path*/, bool /*overwrite*/ = false)
+	{
+		return Target_t();
+	}
+
+	inline Target_t get_TargetToSys(PCWSTR /*name*/, PCWSTR /*path*/= nullptr)
+	{
+		return Target_t();
+	}
+
+	inline Target_t get_TargetToMult(const Target_t & /*first*/, const Target_t & /*second*/)
+	{
+		return Target_t();
+	}
 #endif
 }
 

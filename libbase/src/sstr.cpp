@@ -102,6 +102,7 @@ namespace Base {
 	{
 		pointer ret = Memory::calloc<pointer>(length + 1);
 		Cstr::copy(ret, ptr, length);
+		ret[length] = 0;
 		return ret;
 	}
 

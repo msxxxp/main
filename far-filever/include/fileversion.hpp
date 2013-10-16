@@ -71,9 +71,14 @@ struct FileVersion {
 		return m_lngIderr;
 	}
 
-	bool is_ok() const
+	bool is_version_loaded() const
 	{
-		return m_data || m_machine;
+		return m_data;
+	}
+
+	bool is_arch_loaded() const
+	{
+		return m_machine;
 	}
 
 	PCVOID GetData() const
@@ -136,7 +141,7 @@ struct FVI {
 		return m_size;
 	}
 
-	FileVerInfo_ & operator [](int index)
+	const FileVerInfo_ & operator [](int index) const
 	{
 		return m_data[index];
 	}

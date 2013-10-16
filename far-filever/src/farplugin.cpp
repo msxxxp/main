@@ -35,7 +35,7 @@
 #include <lang.hpp>
 #include <fileversion.hpp>
 
-#include <time.h>
+//#include <time.h>
 
 Cstr::NamedValues<WORD> Machines[] = {
 	{ L"UNKNOWN", IMAGE_FILE_MACHINE_UNKNOWN },
@@ -159,7 +159,7 @@ Far::PanelController_i * FarPlugin::Open(const OpenInfo * Info)
 	Base::Path::canonicalize(buf1, buf2);
 	LogNoise(L"buf: '%s'\n", buf1);
 	FileVersion fv(buf1);
-	if (fv.is_ok()) {
+	if (fv.is_version_loaded() || fv.is_arch_loaded()) {
 		FVI fvi(fv);
 //		wchar_t timeBuf[32] = {0};
 //		_vsnwprintf(timeBuf, Base::lengthof(timeBuf), L"%S", ctime(&fv.created()));

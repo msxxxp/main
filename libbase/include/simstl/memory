@@ -1,6 +1,0 @@
-#ifndef SARALIB_STL_MEMORY_
-#define SARALIB_STL_MEMORY_
-
-#include "impl/impl_memory.hpp"
-
-#endif

@@ -27,7 +27,7 @@
 #include <libfar3/obsolete.hpp>
 #include <liblog/logger.hpp>
 #include <libbase/memory.hpp>
-#include <libbase/pcstr.hpp>
+#include <libbase/cstr.hpp>
 #include <libbase/path.hpp>
 
 #include <globalinfo.hpp>
@@ -37,8 +37,7 @@
 
 #include <time.h>
 
-
-Base::NamedValues<WORD> Machines[] = {
+Cstr::NamedValues<WORD> Machines[] = {
 	{ L"UNKNOWN", IMAGE_FILE_MACHINE_UNKNOWN },
 	{ L"I386", IMAGE_FILE_MACHINE_I386 },
 	{ L"R4000", IMAGE_FILE_MACHINE_R4000 },
@@ -115,20 +114,20 @@ Far::PanelController_i * FarPlugin::Open(const OpenInfo * Info)
 			const PluginPanelItem * ppi = pi.get_current();
 			PCWSTR fileName = ppi->FileName;
 			LogNoise(L"ppi->FileName: '%s'\n", ppi->FileName);
-			if (Base::Str::find(fileName, Base::PATH_SEPARATORS)) {
-				Base::Str::copy(buf2, fileName, Base::lengthof(buf2));
+			if (Cstr::find(fileName, Base::PATH_SEPARATORS)) {
+				Cstr::copy(buf2, fileName, Base::lengthof(buf2));
 			} else {
-				Base::Str::copy(buf2, pi.get_current_directory(), Base::lengthof(buf2));
-				if (!Base::Str::is_empty(buf2)) {
+				Cstr::copy(buf2, pi.get_current_directory(), Base::lengthof(buf2));
+				if (!Cstr::is_empty(buf2)) {
 					Far::fsf().AddEndSlash(buf2);
 				}
-				Base::Str::cat(buf2, fileName, Base::lengthof(buf2));
+				Cstr::cat(buf2, fileName, Base::lengthof(buf2));
 			}
 		}
 	} else if (Info->OpenFrom == OPEN_COMMANDLINE) {
 		OpenCommandLineInfo * info = (OpenCommandLineInfo*)Info->Data;
 		LogNoise(L"comline: %s\n", info->CommandLine);
-		Base::Str::copy(buf2, info->CommandLine, Base::lengthof(buf2));
+		Cstr::copy(buf2, info->CommandLine, Base::lengthof(buf2));
 		Far::fsf().Trim(buf2);
 		Far::fsf().Unquote(buf2);
 		Far::fsf().Trim(buf2);
@@ -139,13 +138,13 @@ Far::PanelController_i * FarPlugin::Open(const OpenInfo * Info)
 		if (Base::Path::is_relative(buf1)) {
 			LogNoise(L"is relative\n");
 			fsf().GetCurrentDirectoryW(Base::lengthof(buf2), buf2);
-			if (!Base::Str::is_empty(buf2)) {
+			if (!Cstr::is_empty(buf2)) {
 				Far::fsf().AddEndSlash(buf2);
 			}
-			Base::Str::cat(buf2, buf1, Base::lengthof(buf2));
+			Cstr::cat(buf2, buf1, Base::lengthof(buf2));
 		} else {
 			LogNoise(L"is absolute\n");
-			Base::Str::copy(buf2, buf1, Base::lengthof(buf2));
+			Cstr::copy(buf2, buf1, Base::lengthof(buf2));
 		}
 	} else if (Info->OpenFrom == OPEN_VIEWER) {
 		Far::Viewer::get_filename(buf2, Base::lengthof(buf2));
@@ -175,7 +174,7 @@ Far::PanelController_i * FarPlugin::Open(const OpenInfo * Info)
 			{DI_TEXT, 5, y, 26, 0,          0,            (PCWSTR)fvi[i].msgTxt},
 			{DI_EDIT, 28, y++, x - 2, 0,    DIF_READONLY, fvi[i++].data},
 			{DI_TEXT, 5, y, 26, 0,          0,            (PCWSTR)MtxtMachine},
-			{DI_EDIT, 28, y++, x - 2, 0,    DIF_READONLY, Base::NamedValues<WORD>::GetName(Machines, lengthof(Machines), fv.machine())},
+			{DI_EDIT, 28, y++, x - 2, 0,    DIF_READONLY, Cstr::NamedValues<WORD>::GetName(Machines, Base::lengthof(Machines), fv.machine())},
 //			{DI_TEXT, 5, y, 26, 0,          0,            (PCWSTR)MtxtCreated},
 //			{DI_EDIT, 28, y++, x - 2, 0,    DIF_READONLY, timeBuf},
 			{DI_TEXT, 5, y++, 0, 0,         DIF_SEPARATOR, L""},

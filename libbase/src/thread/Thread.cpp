@@ -2,6 +2,8 @@
 #include <libbase/err.hpp>
 #include <liblog/logger.hpp>
 
+#include <algorithm>
+
 namespace Base {
 
 	namespace {

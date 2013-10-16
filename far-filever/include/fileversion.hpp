@@ -73,7 +73,7 @@ struct FileVersion {
 
 	bool is_ok() const
 	{
-		return m_data;
+		return m_data || m_machine;
 	}
 
 	PCVOID GetData() const

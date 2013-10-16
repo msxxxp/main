@@ -1,4 +1,5 @@
 ﻿#include <libbase/std.hpp>
+#include <wchar.h>
 
 namespace Base {
 	bool safe_vsnprintf(PWSTR buf, size_t len, PCWSTR format, va_list vl)

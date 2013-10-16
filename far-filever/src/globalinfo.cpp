@@ -26,7 +26,7 @@
 
 #include <libfar3/helper.hpp>
 
-#include <libbase/pcstr.hpp>
+#include <libbase/cstr.hpp>
 #include <liblog/logger.hpp>
 
 #include <version.h>
@@ -34,7 +34,7 @@
 FarGlobalInfo::FarGlobalInfo()
 {
 	LogTrace();
-	Base::Str::copy(prefix, L"fver");
+	Cstr::copy(prefix, L"fver");
 }
 
 FarGlobalInfo::~FarGlobalInfo()

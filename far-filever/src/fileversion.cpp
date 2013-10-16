@@ -23,7 +23,7 @@
 
 #include <libbase/io.hpp>
 #include <libbase/memory.hpp>
-#include <libbase/pcstr.hpp>
+#include <libbase/cstr.hpp>
 
 #include <stdio.h>
 
@@ -83,7 +83,7 @@ FileVersion::FileVersion(PCWSTR path) :
 			WCHAR tmp[4] = {0};
 			DWORD err = 0;
 			_snwprintf(tmp, lengthof(tmp), L"%04x", translate->wCodePage);
-			err = Base::Str::to_uint32(tmp);
+			err = Cstr::to_uint32(tmp);
 			_snwprintf(m_lngIderr, lengthof(m_lngIderr), L"%04x%04x", translate->wLanguage, err);
 		}
 	} else {

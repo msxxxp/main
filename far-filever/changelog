@@ -1,3 +1,9 @@
+15 October 2013
+   released version 1.1.20 of filever
+
+     Change log:
+        -Fixed: Если архитектура определена, то показывается диалог, даже с пустой версией
+
 19 May 2013
    released version 1.1.19 of filever
 

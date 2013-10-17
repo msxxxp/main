@@ -402,13 +402,6 @@ namespace Base {
 		b1.swap(b2);
 	}
 
-	///================================================================================= Destroyable
-	struct Destroyable {
-		virtual ~Destroyable();
-
-		virtual void destroy() const = 0;
-	};
-
 	///================================================================================ auto_destroy
 	template<typename Type>
 	struct auto_destroy {

@@ -2,7 +2,6 @@
 #define _LIBBASE_LOCK_HPP_
 
 #include <libbase/std.hpp>
-#include <libbase/memory.hpp>
 
 namespace Base {
 	namespace Lock {

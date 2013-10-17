@@ -4,11 +4,6 @@
 namespace Fsys {
 	namespace Directory {
 
-		bool create_nt(PCWSTR path, LPSECURITY_ATTRIBUTES lpsa)
-		{
-			return ::CreateDirectoryW(path, lpsa) || (::GetLastError() == ERROR_ALREADY_EXISTS && Fsys::is_dir_nt(path));
-		}
-
 		inline bool del_simple_nt(PCWSTR path)
 		{
 			return ::RemoveDirectoryW(path);
@@ -30,5 +25,11 @@ namespace Fsys {
 		{
 			return del_simple_nt(path) || del_attrcheck_nt(path);
 		}
+
+		bool create_nt(PCWSTR path, LPSECURITY_ATTRIBUTES lpsa)
+		{
+			return ::CreateDirectoryW(path, lpsa) || (::GetLastError() == ERROR_ALREADY_EXISTS && Fsys::is_dir_nt(path));
+		}
+
 	}
 }

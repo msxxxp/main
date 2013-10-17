@@ -111,7 +111,7 @@ namespace Base {
 		::MessageBoxW(nullptr, text, capt, MB_OK);
 	}
 
-	///=============================================================================================
+	///================================================================================== Uncopyable
 	class Uncopyable {
 		typedef Uncopyable this_type;
 
@@ -138,7 +138,24 @@ namespace Base {
 #endif
 	};
 
+	///=================================================================================== Command_p
+	struct Command_p {
+		virtual ~Command_p();
+
+		virtual ssize_t execute();
+	};
+
+	///================================================================================= Destroyable
+	struct Destroyable {
+		virtual ~Destroyable();
+
+		virtual void destroy() const = 0;
+	};
+
+	///=============================================================================================
 	bool safe_vsnprintf(PWSTR buf, size_t len, PCWSTR format, va_list vl);
+
+	bool safe_snprintf(PWSTR buff, size_t len, PCWSTR format, ...);
 }
 
 #endif

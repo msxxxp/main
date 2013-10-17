@@ -1,6 +1,7 @@
 #include <libbase/std.hpp>
 #include <libbase/path.hpp>
 #include <libbase/string.hpp>
+#include <libbase/cstr.hpp>
 
 namespace Base {
 	namespace Path {

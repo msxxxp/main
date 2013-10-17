@@ -3,7 +3,7 @@
 #include <libbase/lock.hpp>
 #include <liblog/logger.hpp>
 
-#include <deque>
+#include <vector>
 
 namespace Base {
 	namespace {

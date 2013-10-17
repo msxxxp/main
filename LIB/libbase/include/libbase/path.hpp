@@ -2,7 +2,7 @@
 #define _LIBBASE_PATH_HPP_
 
 #include <libbase/std.hpp>
-/*?*/#include <libbase/string.hpp>
+#include <libbase/string.hpp>
 
 namespace Base {
 	namespace Filename {

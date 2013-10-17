@@ -10,20 +10,26 @@ namespace Fsys {
 	bool is_file_nt(PCWSTR path)
 	{
 		DWORD attr = get_attr_nt(path);
-		return attr != INVALID_FILE_ATTRIBUTES && !(attr & FILE_ATTRIBUTE_DIRECTORY);
+		return attr != INVALID_FILE_ATTRIBUTES && is_file(attr);
 	}
 
 	bool is_dir_nt(PCWSTR path)
 	{
 		DWORD attr = get_attr_nt(path);
-		return attr != INVALID_FILE_ATTRIBUTES && (attr & FILE_ATTRIBUTE_DIRECTORY);
+		return attr != INVALID_FILE_ATTRIBUTES && is_dir(attr);
+	}
+
+	bool is_link_nt(PCWSTR path)
+	{
+		DWORD attr = get_attr_nt(path);
+		return attr != INVALID_FILE_ATTRIBUTES && is_link(attr);
 	}
 
 	bool del_nt(PCWSTR path)
 	{
 		DWORD attr = get_attr_nt(path);
-		if (attr != INVALID_FILE_ATTRIBUTES ) {
-			if (attr & FILE_ATTRIBUTE_DIRECTORY) {
+		if (attr != INVALID_FILE_ATTRIBUTES) {
+			if (is_dir(attr)) {
 				return Directory::del_nt(path);
 			} else {
 				return File::del_nt(path);

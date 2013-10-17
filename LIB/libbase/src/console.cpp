@@ -36,15 +36,6 @@ namespace Base {
 		return written;
 	}
 
-	bool snprintf(PWSTR buff, size_t len, PCWSTR format, ...)
-	{
-		va_list vl;
-		va_start(vl, format);
-		bool ret = safe_vsnprintf(buff, len, format, vl);
-		va_end(vl);
-		return ret;
-	}
-
 	void errx(int eval, PCSTR format, ...)
 	{
 		va_list vl;

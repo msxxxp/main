@@ -1,4 +1,5 @@
-﻿#include <libbase/string.hpp>
+﻿#include <libbase/cstr.hpp>
+#include <libbase/string.hpp>
 
 namespace Base {
 

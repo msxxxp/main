@@ -3,6 +3,7 @@
 #include <liblog/logger.hpp>
 
 #include <vector>
+#include <algorithm>
 
 namespace {
 	struct DeliveryMapping {

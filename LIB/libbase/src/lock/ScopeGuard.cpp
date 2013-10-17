@@ -1,5 +1,7 @@
 ﻿#include <libbase/lock.hpp>
 
+#include <algorithm>
+
 namespace Base {
 	namespace Lock {
 		ScopeGuard::~ScopeGuard()

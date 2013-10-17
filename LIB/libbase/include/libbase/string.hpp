@@ -2,11 +2,10 @@
 #define _LIBBASE_STRING_HPP_
 
 #include <libbase/std.hpp>
+#include <libbase/cstr.hpp>
 
 #if defined(NoStlString) || defined(USE_LITE_STRING)
 #include "pvt/lite_string.hpp"
-//typedef Base::basic_string<char> astring;
-//typedef Base::basic_string<wchar_t> ustring;
 typedef Base::basic_string<char, Base::char_traits<char> > astring;
 typedef Base::basic_string<wchar_t, Base::char_traits<wchar_t> > ustring;
 #else
@@ -15,7 +14,7 @@ typedef std::string astring;
 typedef std::wstring ustring;
 #endif
 
-#include <libbase/cstr.hpp>
+//#include <libbase/cstr.hpp>
 #include <libbase/memory.hpp>
 
 namespace Base {

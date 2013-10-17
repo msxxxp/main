@@ -2,87 +2,38 @@
 #define _LIBBASE_DLL_HPP_
 
 #include <libbase/std.hpp>
-#include <algorithm>
 
 namespace Base {
-
-	///============================================================================== DinamicLibrary
 	struct DynamicLibrary: private Uncopyable {
-		virtual ~DynamicLibrary() noexcept
-		{
-			::FreeLibrary(m_hnd);
-		}
+		virtual ~DynamicLibrary() noexcept;
 
-		virtual bool is_valid() const noexcept
-		{
-			return m_hnd;
-		}
+		virtual bool is_valid() const noexcept;
 
 	public:
-		DynamicLibrary(PCWSTR path, DWORD flags = 0) noexcept :
-			m_hnd(::LoadLibraryExW(path, nullptr, flags)),
-			m_flags(flags)
-		{
-		}
+		DynamicLibrary(PCWSTR path, DWORD flags = 0) noexcept;
 
-		DynamicLibrary(HMODULE hndl, DWORD flags) noexcept :
-			m_hnd(hndl),
-			m_flags(flags)
-		{
-		}
+		DynamicLibrary(HMODULE hndl, DWORD flags) noexcept;
 
-		DynamicLibrary(DynamicLibrary && right) noexcept :
-			m_hnd(right.m_hnd),
-			m_flags(right.m_flags)
-		{
-			right.m_hnd = nullptr;
-			right.m_flags = 0;
-		}
+		DynamicLibrary(DynamicLibrary && right) noexcept ;
 
-		DynamicLibrary & operator = (DynamicLibrary && right) noexcept
-		{
-			if (this != &right)
-				DynamicLibrary(std::move(right)).swap(*this);
-			return *this;
-		}
+		DynamicLibrary & operator = (DynamicLibrary && right) noexcept;
 
-		void swap(DynamicLibrary & right) noexcept
-		{
-			using std::swap;
-			swap(m_hnd, right.m_hnd);
-			swap(m_flags, right.m_flags);
-		}
+		void swap(DynamicLibrary & right) noexcept;
 
-		operator HMODULE () const noexcept
-		{
-			return m_hnd;
-		}
+		operator HMODULE () const noexcept;
 
-		HMODULE get_hmodule() const noexcept
-		{
-			return m_hnd;
-		}
+		HMODULE get_hmodule() const noexcept;
 
-		DWORD get_flags() const noexcept
-		{
-			return m_flags;
-		}
+		DWORD get_flags() const noexcept;
 
-		bool get_path(PWSTR path, size_t size) const noexcept
-		{
-			return ::GetModuleFileNameW(m_hnd, path, size);
-		}
+		bool get_path(PWSTR path, size_t size) const noexcept;
 
-		FARPROC get_function(PCSTR name) const noexcept
-		{
-			return ::GetProcAddress(m_hnd, name);
-		}
+		FARPROC get_function(PCSTR name) const noexcept;
 
 	private:
 		HMODULE m_hnd;
 		DWORD m_flags;
 	};
-
 }
 
 #endif

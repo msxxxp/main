@@ -1,6 +1,7 @@
 ﻿#include <libbase/mstring.hpp>
 
 #include <libbase/memory.hpp>
+#include <libbase/cstr.hpp>
 #include <libbase/string.hpp>
 #include <liblog/logger.hpp>
 

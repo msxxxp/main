@@ -1,7 +1,7 @@
-﻿#include <libbase/io.hpp>
+﻿#include <libbase/filesystem.hpp>
 #include <algorithm>
 
-namespace Base {
+namespace Fsys {
 
 	file_map_t::~file_map_t()
 	{
@@ -21,7 +21,7 @@ namespace Base {
 			return;
 		m_size = std::min(get_size(file), size);
 		DWORD protect = write ? PAGE_READWRITE : PAGE_READONLY;
-		HANDLE m_map = ::CreateFileMappingW(file, nullptr, protect, high_part_64(m_size), low_part_64(m_size), nullptr);
+		HANDLE m_map = ::CreateFileMappingW(file, nullptr, protect, Base::high_part_64(m_size), Base::low_part_64(m_size), nullptr);
 		if (m_map) {
 			ACCESS_MASK access = m_write ? FILE_MAP_WRITE : FILE_MAP_READ;
 			m_data = ::MapViewOfFile(m_map, access, 0, 0, size);

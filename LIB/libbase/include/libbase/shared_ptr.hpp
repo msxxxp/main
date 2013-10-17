@@ -1,5 +1,5 @@
-﻿#ifndef _LIBBASE_SHARED_PTR_HPP_
-#define _LIBBASE_SHARED_PTR_HPP_
+﻿#ifndef LIBBASE_SHARED_PTR_HPP_
+#define LIBBASE_SHARED_PTR_HPP_
 
 #include <libbase/std.hpp>
 #include <libbase/pvt/ref_cnt.hpp>

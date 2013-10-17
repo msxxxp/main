@@ -1,5 +1,5 @@
-﻿#ifndef _LIBBASE_CONSOLE_HPP_
-#define _LIBBASE_CONSOLE_HPP_
+﻿#ifndef LIBBASE_CONSOLE_HPP_
+#define LIBBASE_CONSOLE_HPP_
 
 #include <libbase/std.hpp>
 #include <libbase/cstr.hpp>

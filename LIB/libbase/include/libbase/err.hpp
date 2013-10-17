@@ -1,5 +1,5 @@
-﻿#ifndef _LIBBASE_ERR_HPP_
-#define _LIBBASE_ERR_HPP_
+﻿#ifndef LIBBASE_ERR_HPP_
+#define LIBBASE_ERR_HPP_
 
 #include <libbase/std.hpp>
 #include <libbase/sstr.hpp>

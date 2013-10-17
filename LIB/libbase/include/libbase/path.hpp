@@ -1,5 +1,5 @@
-﻿#ifndef _LIBBASE_PATH_HPP_
-#define _LIBBASE_PATH_HPP_
+﻿#ifndef LIBBASE_PATH_HPP_
+#define LIBBASE_PATH_HPP_
 
 #include <libbase/std.hpp>
 #include <libbase/string.hpp>

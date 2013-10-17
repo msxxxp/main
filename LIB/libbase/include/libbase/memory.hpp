@@ -1,5 +1,5 @@
-﻿#ifndef _LIBBASE_MEMORY_HPP_
-#define _LIBBASE_MEMORY_HPP_
+﻿#ifndef LIBBASE_MEMORY_HPP_
+#define LIBBASE_MEMORY_HPP_
 
 #include <libbase/std.hpp>
 #include <algorithm>

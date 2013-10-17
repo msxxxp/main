@@ -1,5 +1,5 @@
-﻿#ifndef _LIBBASE_WIN64_HPP_
-#define _LIBBASE_WIN64_HPP_
+﻿#ifndef LIBBASE_WIN64_HPP_
+#define LIBBASE_WIN64_HPP_
 
 #include <libbase/std.hpp>
 

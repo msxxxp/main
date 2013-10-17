@@ -1,5 +1,5 @@
-#ifndef _LIBBASE_ATEXIT_HPP_
-#define _LIBBASE_ATEXIT_HPP_
+#ifndef LIBBASE_ATEXIT_HPP_
+#define LIBBASE_ATEXIT_HPP_
 
 namespace Base {
 

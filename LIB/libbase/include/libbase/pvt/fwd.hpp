@@ -1,5 +1,5 @@
-#ifndef _LIBBASE_FWD_HPP_
-#define _LIBBASE_FWD_HPP_
+#ifndef LIBBASE_FWD_HPP_
+#define LIBBASE_FWD_HPP_
 
 namespace Base {
 	template<typename CharType>

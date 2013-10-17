@@ -1,5 +1,5 @@
-﻿#ifndef _LIBBASE_CSTR_HPP_
-#define _LIBBASE_CSTR_HPP_
+﻿#ifndef LIBBASE_CSTR_HPP_
+#define LIBBASE_CSTR_HPP_
 
 #include <libbase/std.hpp>
 #include <wchar.h>

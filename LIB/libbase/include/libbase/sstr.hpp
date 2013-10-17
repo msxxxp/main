@@ -1,5 +1,5 @@
-#ifndef _LIBBASE_SSTR_HPP_
-#define _LIBBASE_SSTR_HPP_
+#ifndef LIBBASE_SSTR_HPP_
+#define LIBBASE_SSTR_HPP_
 
 #include <libbase/std.hpp>
 

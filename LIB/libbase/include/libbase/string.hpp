@@ -1,5 +1,5 @@
-﻿#ifndef _LIBBASE_STRING_HPP_
-#define _LIBBASE_STRING_HPP_
+﻿#ifndef LIBBASE_STRING_HPP_
+#define LIBBASE_STRING_HPP_
 
 #include <libbase/std.hpp>
 #include <libbase/cstr.hpp>

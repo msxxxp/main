@@ -1,5 +1,5 @@
-#ifndef _LIBBASE_LOCK_HPP_
-#define _LIBBASE_LOCK_HPP_
+#ifndef LIBBASE_LOCK_HPP_
+#define LIBBASE_LOCK_HPP_
 
 #include <libbase/std.hpp>
 

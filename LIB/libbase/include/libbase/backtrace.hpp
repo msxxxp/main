@@ -1,5 +1,5 @@
-#ifndef _LIBBASE_BACKTRACE_HPP_
-#define	_LIBBASE_BACKTRACE_HPP_
+#ifndef LIBBASE_BACKTRACE_HPP_
+#define	LIBBASE_BACKTRACE_HPP_
 
 #include <libbase/std.hpp>
 #include <dbghelp.h>

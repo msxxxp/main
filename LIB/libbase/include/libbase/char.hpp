@@ -1,5 +1,5 @@
-﻿#ifndef _LIBBASE_CHAR_HPP_
-#define _LIBBASE_CHAR_HPP_
+﻿#ifndef LIBBASE_CHAR_HPP_
+#define LIBBASE_CHAR_HPP_
 
 #include <libbase/std.hpp>
 #include <wchar.h>

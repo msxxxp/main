@@ -1,5 +1,5 @@
-﻿#ifndef _LIBBASE_FILESYSTEM_HPP
-#define _LIBBASE_FILESYSTEM_HPP
+﻿#ifndef LIBBASE_FILESYSTEM_HPP
+#define LIBBASE_FILESYSTEM_HPP
 
 #include <libbase/std.hpp>
 

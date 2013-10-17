@@ -1,5 +1,5 @@
-﻿#ifndef _LIBBASE_TIME_HPP_
-#define _LIBBASE_TIME_HPP_
+﻿#ifndef LIBBASE_TIME_HPP_
+#define LIBBASE_TIME_HPP_
 
 #include <libbase/std.hpp>
 #include <libbase/memory.hpp>

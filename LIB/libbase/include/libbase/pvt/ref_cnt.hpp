@@ -1,5 +1,5 @@
-﻿#ifndef _LIBBASE_REF_CNT_HPP_
-#define _LIBBASE_REF_CNT_HPP_
+﻿#ifndef LIBBASE_REF_CNT_HPP_
+#define LIBBASE_REF_CNT_HPP_
 
 #include <libbase/std.hpp>
 

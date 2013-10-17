@@ -1,5 +1,5 @@
-#ifndef _LIBBASE_THREAD_HPP_
-#define _LIBBASE_THREAD_HPP_
+#ifndef LIBBASE_THREAD_HPP_
+#define LIBBASE_THREAD_HPP_
 
 #include <libbase/std.hpp>
 

@@ -1,5 +1,5 @@
-#ifndef _LIBBASE_THREADPOOL_HPP_
-#define _LIBBASE_THREADPOOL_HPP_
+#ifndef LIBBASE_THREADPOOL_HPP_
+#define LIBBASE_THREADPOOL_HPP_
 
 #include <libbase/std.hpp>
 #include <libbase/thread.hpp>

@@ -1,5 +1,5 @@
-﻿#ifndef _LIBBASE_SINGLETON_P_HPP_
-#define _LIBBASE_SINGLETON_P_HPP_
+﻿#ifndef LIBBASE_SINGLETON_P_HPP_
+#define LIBBASE_SINGLETON_P_HPP_
 
 #include <libbase/std.hpp>
 

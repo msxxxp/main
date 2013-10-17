@@ -1,5 +1,5 @@
-#ifndef _LIBBASE_SYSTEM_HPP_
-#define _LIBBASE_SYSTEM_HPP_
+#ifndef LIBBASE_SYSTEM_HPP_
+#define LIBBASE_SYSTEM_HPP_
 
 #include <libbase/std.hpp>
 

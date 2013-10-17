@@ -1,5 +1,5 @@
-#ifndef _LIBBASE_PVT_MEMORY_HPP_
-#define _LIBBASE_PVT_MEMORY_HPP_
+#ifndef LIBBASE_PVT_MEMORY_HPP_
+#define LIBBASE_PVT_MEMORY_HPP_
 
 #include <windows.h>
 

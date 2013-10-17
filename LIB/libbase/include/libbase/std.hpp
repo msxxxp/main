@@ -1,5 +1,5 @@
-﻿#ifndef _LIBBASE_STD_HPP_
-#define _LIBBASE_STD_HPP_
+﻿#ifndef LIBBASE_STD_HPP_
+#define LIBBASE_STD_HPP_
 
 #include "pvt/config.hpp"
 #include "pvt/memory.hpp"

@@ -1,5 +1,5 @@
-﻿#ifndef _LIBBASE_BIT_STR_HPP_
-#define _LIBBASE_BIT_STR_HPP_
+﻿#ifndef LIBBASE_BIT_STR_HPP_
+#define LIBBASE_BIT_STR_HPP_
 
 #include <libbase/std.hpp>
 #include <libbase/bit.hpp>

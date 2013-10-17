@@ -1,5 +1,5 @@
-﻿#ifndef _LIBBASE_MSTRING_HPP_
-#define _LIBBASE_MSTRING_HPP_
+﻿#ifndef LIBBASE_MSTRING_HPP_
+#define LIBBASE_MSTRING_HPP_
 
 #include <libbase/std.hpp>
 

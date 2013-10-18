@@ -1,29 +1,26 @@
-#include <iostream>
-
 #include <libjava/jvm.hpp>
 #include <libjava/exception.hpp>
 #include <libjava/class.hpp>
 #include <liblog/logger.hpp>
 
-#include <string>
+namespace {
+	void setup_logger()
+	{
+		using namespace Logger;
+		set_default_level(Level::Trace);
+		set_default_prefix(Prefix::Full & ~Prefix::Date);
+		set_default_target(get_TargetToConsole());
+	}
+}
 
 int main() try {
-	Base::Logger::set_target(Base::Logger::get_TargetToConsole());
-	Base::Logger::set_color_mode(true);
-	Base::Logger::set_level(Base::Logger::LVL_TRACE);
+	setup_logger();
 	LogTrace();
 
 	{
-		LogTrace();
-		//		Class cl(env.get_class("org/andrewgrechkin/LibTest"));
-		//		Class cl(env.get_class("org/andrewgrechkin/MainWindow"));
-		//		ob.call_method_void("print", "()V");
-//		Java::Env env = Java::get_env();
-		Java::Env env = Java::create_vm("-Djava.class.path=D:\\projects\\andrew-grechkin\\tests\\test-libjava\\Debug\\LibTest.jar");
-		LogTrace();
+		Java::Env env = Java::create_vm("-Djava.class.path=C:\\test-swing.jar");
+
 		env.get_class("org/andrewgrechkin/MainWindow").run();
-		LogTrace();
-		Java::destroy_vm();
 	}
 
 	return 0;

@@ -5,7 +5,6 @@
 
 #include <libext/exception.hpp>
 
-
 namespace Java {
 
 	///=================================================================================== JavaError
@@ -14,7 +13,7 @@ namespace Java {
 
 		virtual ustring type() const;
 
-		virtual ustring	 what() const;
+		virtual ustring what() const;
 
 		virtual DWORD code() const;
 
@@ -32,14 +31,13 @@ namespace Java {
 		friend struct HiddenFunctions;
 	};
 
-
 	///=============================================================================== JavaException
 	struct JavaException: public Ext::AbstractError {
 		virtual JavaException * clone() const;
 
 		virtual ustring type() const;
 
-		virtual ustring	 what() const;
+		virtual ustring what() const;
 
 		virtual DWORD code() const;
 
@@ -57,7 +55,6 @@ namespace Java {
 
 		friend struct HiddenFunctions;
 	};
-
 
 	///=============================================================================================
 #ifndef NDEBUG
@@ -82,16 +79,14 @@ namespace Java {
 
 #define CheckJavaExc(arg) (Java::HiddenFunctions::CheckJavaExcFunc((arg)))
 
-	struct HiddenFunctions {
-		static jint CheckJavaErrFunc(jint res);
-		static jint CheckJavaThrowErrFunc(bool r, jint err);
-		static const Env & CheckJavaExcFunc(const Env & env);
-	};
+struct HiddenFunctions {
+	static jint CheckJavaErrFunc(jint res);
+	static jint CheckJavaThrowErrFunc(bool r, jint err);
+	static const Env & CheckJavaExcFunc(const Env & env);
+};
 
 #endif
 
-
 }
-
 
 #endif

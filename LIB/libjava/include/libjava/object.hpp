@@ -4,7 +4,6 @@
 #include <libjava/env.hpp>
 #include <libjava/class.hpp>
 
-
 namespace Java {
 
 	struct Object {
@@ -28,11 +27,13 @@ namespace Java {
 
 		ustring get_field_string(const char * name) const;
 
-		operator jobject () const {
+		operator jobject() const
+		{
 			return m_object;
 		}
 
-		const Env & get_env() const {
+		const Env & get_env() const
+		{
 			return m_class.get_env();
 		}
 

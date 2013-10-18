@@ -21,7 +21,7 @@
 
 #include "fileversion.hpp"
 
-#include <libbase/io.hpp>
+#include <libbase/filesystem.hpp>
 #include <libbase/memory.hpp>
 #include <libbase/cstr.hpp>
 
@@ -59,7 +59,7 @@ FileVersion::FileVersion(PCWSTR path) :
 {
 	Memory::zero(this, sizeof(*this));
 
-	Base::file_map_t fmap(path, sizeof(IMAGE_DOS_HEADER));
+	Fsys::file_map_t fmap(path, sizeof(IMAGE_DOS_HEADER));
 	if (fmap.is_ok() && (fmap.size() == sizeof(IMAGE_DOS_HEADER))) {
 		PIMAGE_DOS_HEADER dosHeader = (PIMAGE_DOS_HEADER)fmap.data();
 		if (dosHeader->e_magic != IMAGE_DOS_SIGNATURE) {

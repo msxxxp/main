@@ -4,7 +4,6 @@
 #include <libbase/std.hpp>
 #include <libbase/filesystem.hpp>
 #include <libbase/shared_ptr.hpp>
-#include <libbase/command_p.hpp>
 #include <liblog/logger.hpp>
 
 namespace Fsys {

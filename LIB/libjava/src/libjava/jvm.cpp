@@ -6,10 +6,11 @@
 
 #include <libext/dll.hpp>
 #include <libext/reg.hpp>
-#include <liblog/logger.hpp>
 #include <libbase/string.hpp>
+#include <liblog/logger.hpp>
 
 #include <cassert>
+#include <algorithm>
 
 namespace Java {
 
@@ -19,7 +20,6 @@ namespace Java {
 		JVM_JRE,
 		JVM_JDK,
 	};
-
 
 	namespace Register {
 //		static PCWSTR const RUNTIME_LIB = L"RuntimeLib";
@@ -35,13 +35,15 @@ namespace Java {
 
 		ustring get_parameter(JvmType type, PCWSTR name);
 
-		ustring get_version(JvmType type) {
+		ustring get_version(JvmType type)
+		{
 			using Ext::Register;
 			Register reg(PATHS[type], HKEY_LOCAL_MACHINE);
 			return reg.get(CURRENT_VERSION, Base::EMPTY_STR);
 		}
 
-		ustring get_parameter(JvmType type, PCWSTR name) {
+		ustring get_parameter(JvmType type, PCWSTR name)
+		{
 			using Ext::Register;
 			return Register(PATHS[type], HKEY_LOCAL_MACHINE).open_subkey_stored_in_key(CURRENT_VERSION).get(name, Base::EMPTY_STR);
 		}
@@ -62,37 +64,36 @@ namespace Java {
 		typedef jint (JNICALL *FJNI_GetCreatedJavaVMs)(JavaVM **, jsize, jsize *);
 		typedef jint (JNICALL *FJNI_GetDefaultJavaVMInitArgs)(void *args);
 
-
 		DEFINE_FUNC(JNI_CreateJavaVM);
 		DEFINE_FUNC(JNI_GetCreatedJavaVMs);
 
-		Jvm_dll():
+		Jvm_dll() :
 			DynamicLibrary(find_and_load_dll())
 		{
+			LogTrace();
 			GET_DLL_FUNC(JNI_CreateJavaVM);
 			GET_DLL_FUNC(JNI_GetCreatedJavaVMs);
 			GET_DLL_FUNC(JNI_GetDefaultJavaVMInitArgs);
 		}
 
-		JavaVMInitArgs get_default_init_args() const {
+		JavaVMInitArgs get_default_init_args() const
+		{
+			LogTrace();
 			JavaVMInitArgs ret;
 			ret.version = DEFAULT_VERSION;
 			CheckJavaErr(JNI_GetDefaultJavaVMInitArgs(&ret));
-			return ret;
+			return std::move(ret);
 		}
 
 	private:
 		DEFINE_FUNC(JNI_GetDefaultJavaVMInitArgs);
 
-		static HMODULE find_and_load_dll() {
+		static HMODULE find_and_load_dll()
+		{
+			LogTrace();
 			HMODULE ret = ::LoadLibraryW(DLL_NAME);
 			if (!ret) {
-				static PCWSTR const paths[] = {
-					L"bin\\server",
-					L"bin\\client",
-					L"jre\\bin\\server",
-					L"jre\\bin\\client",
-				};
+				static PCWSTR const paths[] = {L"bin\\server", L"bin\\client", L"jre\\bin\\server", L"jre\\bin\\client", };
 				ustring home_path(Register::get_parameter(JVM_JRE, Register::HOME_KEY));
 				for (PCWSTR sub_path : paths) {
 					ustring dll_path(Base::String::format(L"%s\\%s\\%s", home_path.c_str(), sub_path, DLL_NAME));
@@ -110,14 +111,10 @@ namespace Java {
 
 	PCWSTR const Jvm_dll::DLL_NAME = L"jvm.dll";
 
-
 	///========================================================================================= Jvm
 	struct Vm: private Jvm_dll {
 
-		static Vm & inst() {
-			static Vm ret;
-			return ret;
-		}
+		static Vm & inst();
 
 		Env get_env() const;
 
@@ -138,37 +135,50 @@ namespace Java {
 		ssize_t m_version;
 	};
 
-	Vm::~Vm() {
-		destroy_vm();
+	Vm & Vm::inst()
+	{
+		static Vm ret;
+		return ret;
 	}
 
-	Vm::Vm():
+	Vm::~Vm()
+	{
+		destroy();
+		LogTrace();
+	}
+
+	Vm::Vm() :
 		m_jvm(nullptr),
 		m_version(DEFAULT_VERSION)
 	{
+		LogTrace();
 	}
 
-	Env Vm::get_env() const {
+	Env Vm::get_env() const
+	{
 		LogTrace();
 		CheckJavaThrowErr(m_jvm, JNI_EDETACHED);
 
 		JNIEnv * tmp = nullptr;
-		CheckJavaErr(m_jvm->GetEnv((void**)&tmp, m_version));
+		CheckJavaErr(m_jvm->GetEnv((void** )&tmp, m_version));
 		return Env(tmp);
 	}
 
-	Env Vm::create(PCSTR class_path) {
-		LogTrace();
+	Env Vm::create(PCSTR class_path)
+	{
+		LogNoise(L"(%S)\n", class_path);
+
 		if (m_jvm)
 			return get_env();
 //		CheckJavaThrowErr(m_jvm == nullptr, JNI_EEXIST);
 
 		JNIEnv * tmp = nullptr;
-		//Create class path
+		// Create class path
 		JavaVMOption options[1];
+		Memory::zero(options, sizeof(options));
 		options[0].optionString = (PSTR)class_path;
 
-		//Initialize Java Virtual Machine
+		// Initialize Java Virtual Machine
 		JavaVMInitArgs vm_args = get_default_init_args();
 		vm_args.nOptions = Base::lengthof(options);
 		vm_args.options = options;
@@ -179,11 +189,12 @@ namespace Java {
 		LogDebug(L"options cnt: %d\n", vm_args.nOptions);
 		LogDebug(L"ignoreUnrecognized: %d\n", vm_args.ignoreUnrecognized);
 
-		CheckJavaErr(JNI_CreateJavaVM(&m_jvm, (void**)&tmp, &vm_args));
+		CheckJavaErr(JNI_CreateJavaVM(&m_jvm, (void** )&tmp, &vm_args));
 		return Env(tmp);
 	}
 
-	void Vm::destroy() {
+	void Vm::destroy()
+	{
 		LogTrace();
 		if (!m_jvm)
 			return;
@@ -191,38 +202,49 @@ namespace Java {
 		m_jvm = nullptr;
 	}
 
-	Env Vm::attach(const JavaVMAttachArgs & args) const {
+	Env Vm::attach(const JavaVMAttachArgs & args) const
+	{
 		LogTrace();
 		CheckJavaThrowErr(m_jvm, JNI_ERR);
 		JNIEnv * l_jenv = nullptr;
-		CheckJavaErr(m_jvm->AttachCurrentThread((void**)&l_jenv, (void*)&args));
+		CheckJavaErr(m_jvm->AttachCurrentThread((void** )&l_jenv, (void* )&args));
 		return Env(l_jenv);
 	}
 
-	void Vm::detach() const {
+	void Vm::detach() const
+	{
 		LogTrace();
 		CheckJavaThrowErr(m_jvm, JNI_EDETACHED);
 		CheckJavaErr(m_jvm->DetachCurrentThread());
 	}
 
 	///=============================================================================================
-	Env create_vm(PCSTR class_path) {
+	Env create_vm(PCSTR class_path)
+	{
+		LogTrace();
 		return Vm::inst().create(class_path);
 	}
 
-	void destroy_vm() {
+	void destroy_vm()
+	{
+		LogTrace();
 		Vm::inst().destroy();
 	}
 
-	Env attach_current_thread(const JavaVMAttachArgs & args) {
+	Env attach_current_thread(const JavaVMAttachArgs & args)
+	{
+		LogTrace();
 		return Vm::inst().attach(args);
 	}
 
-	void detach_current_thread() {
+	void detach_current_thread()
+	{
+		LogTrace();
 		Vm::inst().detach();
 	}
 
-	Env get_env() {
+	Env get_env()
+	{
 		return Vm::inst().get_env();
 	}
 

@@ -3,9 +3,9 @@
 
 namespace Base {
 
-	const int64_t MAX_ATEXITLIST_ENTRIES = 8;
+	const long MAX_ATEXITLIST_ENTRIES = 32;
 
-	int64_t atexit_index = MAX_ATEXITLIST_ENTRIES - 1;
+	long atexit_index = MAX_ATEXITLIST_ENTRIES - 1;
 
 	FunctionAtExit pf_atexitlist[MAX_ATEXITLIST_ENTRIES];
 
@@ -22,7 +22,7 @@ namespace Base {
 		else
 			++atexit_index;
 
-		for (int64_t i = atexit_index; i < MAX_ATEXITLIST_ENTRIES; ++i)
+		for (long i = atexit_index; i < MAX_ATEXITLIST_ENTRIES; ++i)
 		{
 //			LogDebug(L"[%I64d] ptr: %p\n", i, pf_atexitlist[i]);
 			(*pf_atexitlist[i])();
@@ -32,7 +32,7 @@ namespace Base {
 	int atexit(FunctionAtExit pf)
 	{
 //		LogTrace();
-		int64_t ind = ::InterlockedExchangeAdd64(&atexit_index, -1);
+		long ind = ::InterlockedExchangeAdd(&atexit_index, -1);
 		if (ind >= 0)
 		{
 //			LogDebug(L"[%I64d] ptr: %p\n", ind, pf);

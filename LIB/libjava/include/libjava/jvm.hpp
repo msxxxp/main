@@ -5,17 +5,14 @@
 
 #include <jni.h>
 
-
 namespace Java {
 
 	struct Env;
-
 
 	///================================================================================== AttachArgs
 	struct AttachArgs: public JavaVMAttachArgs {
 		AttachArgs();
 	};
-
 
 	///=============================================================================================
 	Env create_vm(PCSTR class_path = "");
@@ -29,6 +26,5 @@ namespace Java {
 	Env get_env();
 
 }
-
 
 #endif

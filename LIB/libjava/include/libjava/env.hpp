@@ -5,16 +5,15 @@
 
 #include <jni.h>
 
-
 namespace Java {
 
 	struct Class;
 	struct Object;
 
-
 	///========================================================================================= Env
 	struct Env {
-		JNIEnv * operator -> () const {
+		JNIEnv * operator ->() const
+		{
 			return m_jenv;
 		}
 
@@ -33,6 +32,5 @@ namespace Java {
 	};
 
 }
-
 
 #endif

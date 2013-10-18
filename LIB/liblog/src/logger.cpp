@@ -3,6 +3,7 @@
 
 #include <libbase/lock.hpp>
 #include <libbase/cstr.hpp>
+#include <libbase/memory.hpp>
 #include <libbase/pvt/lite_string.hpp>
 
 #include <vector>

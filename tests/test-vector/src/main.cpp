@@ -10,6 +10,9 @@
 #include <simstl/memory>
 #include <simstl/iterator>
 #include <simstl/string>
+
+#include <string>
+
 class Base {
 public:
 	~Base()
@@ -273,36 +276,58 @@ void test_string()
 
 	{
 		string asd("newGoodString");
+		std::string stdasd("newGoodString");
 		asd.replace(3, 4, "Super", 5);
-		printf("\n");
+		stdasd.replace(3, 4, "Super", 5);
+		printf("asd (%Iu, %Iu): '%s'\n", asd.size(), asd.capacity(), asd.c_str());
+		printf("stdasd (%Iu, %Iu): '%s'\n", stdasd.size(), stdasd.capacity(), stdasd.c_str());
+		assert(Str_compare(asd.c_str(), stdasd.c_str()) == 0);
 	}
 	{
 		string asd("newGoodString");
+		std::string stdasd("newGoodString");
 		asd.replace(3, 4, "Bad", 3);
-		printf("\n");
+		stdasd.replace(3, 4, "Bad", 3);
+		printf("asd (%Iu, %Iu): '%s'\n", asd.size(), asd.capacity(), asd.c_str());
+		printf("stdasd (%Iu, %Iu): '%s'\n", stdasd.size(), stdasd.capacity(), stdasd.c_str());
+		assert(Str_compare(asd.c_str(), stdasd.c_str()) == 0);
 	}
 	{
 		string asd("newGoodString");
+		std::string stdasd("newGoodString");
 		asd.replace(3, 0, "Super", 5);
-		printf("\n");
+		stdasd.replace(3, 0, "Super", 5);
+		printf("asd (%Iu, %Iu): '%s'\n", asd.size(), asd.capacity(), asd.c_str());
+		printf("stdasd (%Iu, %Iu): '%s'\n", stdasd.size(), stdasd.capacity(), stdasd.c_str());
+		assert(Str_compare(asd.c_str(), stdasd.c_str()) == 0);
 	}
 	{
 		string asd("Iam");
-		asd.replace(555, 444, "Super", 8);
-		printf("\n");
+		asd.replace(3, 444, "Super", 8);
+		printf("asd (%Iu, %Iu): '%s'\n", asd.size(), asd.capacity(), asd.c_str());
+		std::string stdasd("Iam");
+		stdasd.replace(3, 444, "Super", 8);
+		printf("stdasd (%Iu, %Iu): '%s'\n", stdasd.size(), stdasd.capacity(), stdasd.c_str());
+		assert(Str_compare(asd.c_str(), stdasd.c_str()) == 0);
 	}
 	{
 		string asd("IamStar");
 		asd.replace(3, 0, "SuperStar", 5);
-		printf("\n");
+		printf("asd (%Iu, %Iu): '%s'\n", asd.size(), asd.capacity(), asd.c_str());
+		std::string stdasd("IamStar");
+		stdasd.replace(3, 0, "SuperStar", 5);
+		printf("stdasd (%Iu, %Iu): '%s'\n", stdasd.size(), stdasd.capacity(), stdasd.c_str());
+		assert(Str_compare(asd.c_str(), stdasd.c_str()) == 0);
 	}
 	{
 		string asd("IamSuperStar");
 		asd.replace(3, 0, asd.c_str() + 3, 5);
-		printf("\n");
+		printf("asd (%Iu, %Iu): '%s'\n", asd.size(), asd.capacity(), asd.c_str());
+		std::string stdasd("IamSuperStar");
+		stdasd.replace(3, 0, stdasd.c_str() + 3, 5);
+		printf("stdasd (%Iu, %Iu): '%s'\n", stdasd.size(), stdasd.capacity(), stdasd.c_str());
+		assert(Str_compare(asd.c_str(), stdasd.c_str()) == 0);
 	}
-
-	return;
 
 	const char * cc = "const char *";
 
@@ -320,7 +345,9 @@ void test_string()
 	printf("a (%Iu, %Iu): '%s'\n", a.size(), a.capacity(), a.c_str());
 
 	string str1(5, 'h');
+	std::string stdstr1(5, 'h');
 	printf("str1: '%s' size: %d\n", str1.c_str(), (int)str1.size());
+	assert(Str_compare(str1.c_str(), stdstr1.c_str()) == 0);
 	assert(Str_compare(str1.c_str(), "hhhhh") == 0);
 	assert(str1.size() == 5);
 	assert(*(str1.cend() - 1) == 'h');
@@ -329,7 +356,9 @@ void test_string()
 
 	const char * pcwstr = "PCWSTR";
 	string str2(pcwstr);
+	std::string stdstr2(pcwstr);
 	printf("str2: '%s' size: %d\n", str2.c_str(), (int)str2.size());
+	assert(Str_compare(str2.c_str(), stdstr2.c_str()) == 0);
 	assert(Str_compare(str2.c_str(), pcwstr) == 0);
 	assert(str2.size() == 6);
 	assert(*(str2.cend() - 1) == 'R');
@@ -338,7 +367,9 @@ void test_string()
 
 	char * pwstr = (char *)"1pwstr2";
 	string str3 = pwstr;
+	std::string stdstr3 = pwstr;
 	printf("str3: '%s' size: %d\n\n", str3.c_str(), (int)str3.size());
+	assert(Str_compare(str3.c_str(), stdstr3.c_str()) == 0);
 	assert(Str_compare(str3.c_str(), pwstr) == 0);
 	assert(str3.size() == 7);
 	assert(*(str3.cend() - 1) == '2');
@@ -346,7 +377,9 @@ void test_string()
 	assert(*str3.cbegin() == '1');
 
 	str1 = "que1";
+	stdstr1 = "que1";
 	printf("str1: '%s' size: %d\n", str1.c_str(), (int)str1.size());
+	assert(Str_compare(str1.c_str(), stdstr1.c_str()) == 0);
 	assert(Str_compare(str1.c_str(), "que1") == 0);
 	assert(str1.size() == 4);
 	assert(*(str1.cend() - 1) == '1');
@@ -354,7 +387,9 @@ void test_string()
 	assert(*str1.cbegin() == 'q');
 
 	str2 = str1;
+	stdstr2 = stdstr1;
 	printf("str2: '%s' size: %d\n", str2.c_str(), (int)str2.size());
+	assert(Str_compare(str2.c_str(), stdstr2.c_str()) == 0);
 	assert(Str_compare(str2.c_str(), "que1") == 0);
 	assert(str2.size() == 4);
 	assert(*(str2.cend() - 1) == '1');
@@ -363,7 +398,9 @@ void test_string()
 	assert(str1.c_str() == str2.c_str());
 
 	str3.clear();
+	stdstr3.clear();
 	printf("str3: '%s' size: %d\n\n", str3.c_str(), (int)str3.size());
+	assert(Str_compare(str3.c_str(), stdstr3.c_str()) == 0);
 	assert(Str_compare(str3.c_str(), "") == 0);
 	assert(str3.size() == 0);
 //		assert(*(str3.cend()-1) == '2');
@@ -373,7 +410,9 @@ void test_string()
 	assert(str3.cbegin() == str3.cend());
 
 	str2.append(str1);
+	stdstr2.append(stdstr1);
 	printf("str2: '%s' size: %d\n", str2.c_str(), (int)str2.size());
+	assert(Str_compare(str2.c_str(), stdstr2.c_str()) == 0);
 	assert(Str_compare(str2.c_str(), "que1que1") == 0);
 	assert(str2.size() == 8);
 	assert(*(str2.cend() - 1) == '1');
@@ -382,7 +421,9 @@ void test_string()
 	assert(str1.c_str() != str2.c_str());
 
 	str2.replace(4, 0, "test2");
+	stdstr2.replace(4, 0, "test2");
 	printf("str2: '%s' size: %d\n", str2.c_str(), (int)str2.size());
+	assert(Str_compare(str2.c_str(), stdstr2.c_str()) == 0);
 	assert(Str_compare(str2.c_str(), "que1test2que1") == 0);
 	assert(str2.size() == 13);
 	assert(*(str2.cend() - 1) == '1');
@@ -403,48 +444,70 @@ void test_string()
 	assert(str2.find_last_not_of("2d") == 12);
 
 	str2.replace(4, 5, "TEST3");
+	stdstr2.replace(4, 5, "TEST3");
 	printf("str2: '%s' size: %d capacity: %d\n", str2.c_str(), (int)str2.size(), (int)str2.capacity());
+	assert(Str_compare(str2.c_str(), stdstr2.c_str()) == 0);
 	assert(Str_compare(str2.c_str(), "que1TEST3que1") == 0);
 	assert(str2.size() == 13);
 
 	str2.replace(0, 512, "T4");
+	stdstr2.replace(0, 512, "T4");
 	printf("str2: '%s' size: %d capacity: %d\n", str2.c_str(), (int)str2.size(), (int)str2.capacity());
+	assert(Str_compare(str2.c_str(), stdstr2.c_str()) == 0);
 	assert(Str_compare(str2.c_str(), "T4") == 0);
 	assert(str2.size() == 2);
 
 	str2.replace(2, 128, "testing5");
+	stdstr2.replace(2, 128, "testing5");
 	printf("str2: '%s' size: %d capacity: %d\n", str2.c_str(), (int)str2.size(), (int)str2.capacity());
+	assert(Str_compare(str2.c_str(), stdstr2.c_str()) == 0);
 	assert(Str_compare(str2.c_str(), "T4testing5") == 0);
 	assert(str2.size() == 10);
 
 	str2.replace(0, 1024, "");
+	stdstr2.replace(0, 1024, "");
 	printf("str2: '%s' size: %d capacity: %d\n", str2.c_str(), (int)str2.size(), (int)str2.capacity());
+	assert(Str_compare(str2.c_str(), stdstr2.c_str()) == 0);
 	assert(Str_compare(str2.c_str(), "") == 0);
 	assert(str2.size() == 0);
 
 	str2.replace(0, 1, "again6");
+	stdstr2.replace(0, 1, "again6");
 	printf("str2: '%s' size: %d capacity: %d\n", str2.c_str(), (int)str2.size(), (int)str2.capacity());
+	assert(Str_compare(str2.c_str(), stdstr2.c_str()) == 0);
 	assert(Str_compare(str2.c_str(), "again6") == 0);
 	assert(str2.size() == 6);
 
 	str2.erase(4, 20);
+	stdstr2.erase(4, 20);
 	printf("str2: '%s' size: %d capacity: %d\n", str2.c_str(), (int)str2.size(), (int)str2.capacity());
+	assert(Str_compare(str2.c_str(), stdstr2.c_str()) == 0);
 	assert(Str_compare(str2.c_str(), "agai") == 0);
 	assert(str2.size() == 4);
 
 	str2.erase(str2.cbegin() + 2);
+	stdstr2.erase(stdstr2.begin() + 2);
 	printf("str2: '%s' size: %d capacity: %d\n", str2.c_str(), (int)str2.size(), (int)str2.capacity());
+	assert(Str_compare(str2.c_str(), stdstr2.c_str()) == 0);
 	assert(Str_compare(str2.c_str(), "agi") == 0);
 	assert(str2.size() == 3);
 
 	str2.append(str2);
+	stdstr2.append(stdstr2);
 	printf("str2: '%s' size: %d capacity: %d\n", str2.c_str(), (int)str2.size(), (int)str2.capacity());
+	printf("stdstr2: '%s' size: %d capacity: %d\n", stdstr2.c_str(), (int)stdstr2.size(), (int)stdstr2.capacity());
 	str2.append(str2);
+	stdstr2.append(stdstr2);
 	printf("str2: '%s' size: %d capacity: %d\n", str2.c_str(), (int)str2.size(), (int)str2.capacity());
+	printf("stdstr2: '%s' size: %d capacity: %d\n", stdstr2.c_str(), (int)stdstr2.size(), (int)stdstr2.capacity());
+	assert(Str_compare(str2.c_str(), stdstr2.c_str()) == 0);
 
 	const char * qqq = str2.c_str() + 3;
 	str2.append(qqq, 5);
+	stdstr2.append(qqq, 5);
 	printf("str2: '%s' size: %d capacity: %d\n", str2.c_str(), (int)str2.size(), (int)str2.capacity());
+	printf("stdstr2: '%s' size: %d capacity: %d\n", stdstr2.c_str(), (int)stdstr2.size(), (int)stdstr2.capacity());
+	assert(Str_compare(str2.c_str(), stdstr2.c_str()) == 0);
 }
 
 int wWinMain(const wchar_t * /*pCmdLine*/)
@@ -453,41 +516,11 @@ int wWinMain(const wchar_t * /*pCmdLine*/)
 
 	srand(time(0));
 
+//	test_vector();
 	test_string();
 
-	//printf("exit()\n");
+	printf("%s end\n", __PRETTY_FUNCTION__);
 	return 0;
-}
-
-extern "C" {
-	void* _system_malloc(sarastd::size_t size)
-	{
-		return malloc(size);
-	}
-
-	void _system_free(void * ptr)
-	{
-		free(ptr);
-	}
-
-	void* _system_movable_malloc(sarastd::size_t size)
-	{
-		return malloc(size);
-	}
-
-	void _system_movable_free(void * handle)
-	{
-		free(handle);
-	}
-
-	void* _system_movable_lock(void * handle)
-	{
-		return handle;
-	}
-
-	void _system_movable_unlock(void * /*handle*/)
-	{
-	}
 }
 
 bool hh::Less(const Value & a, const Value & b)

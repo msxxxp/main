@@ -134,22 +134,6 @@ namespace sarastd {
 		return sarastd::copy(first2, last2, d_first);
 	}
 
-	//	template<typename InputIt1, typename InputIt2, typename OutputIt, typename Compare>
-	//	OutputIt merge(InputIt1 first1, InputIt1 last1, InputIt2 first2, InputIt2 last2, OutputIt result, Compare compare)
-	//	{
-	//		while ((first1 != last1) && (first2 != last2)) {
-	//			if (compare(*first2, *first1)) {
-	//				*result = *first2;
-	//				++first2;
-	//			} else {
-	//				*result = *first1;
-	//				++first1;
-	//			}
-	//			++result;
-	//		}
-	//		return sarastd::copy(first2, last2, sarastd::copy(first1, last1, result));
-	//	}
-
 	template<typename InputIt1, typename InputIt2, typename OutputIt>
 	OutputIt merge(InputIt1 first1, InputIt1 last1, InputIt2 first2, InputIt2 last2, OutputIt result)
 	{
@@ -334,39 +318,6 @@ namespace sarastd {
 			}
 		}
 
-		//	template<typename RandomIt, typename _Size, typename _Compare>
-		//	void _introselect(RandomIt __first, RandomIt __nth, RandomIt __last, _Size __depth_limit, _Compare __comp)
-		//	{
-		//		typedef typename iterator_traits<RandomIt>::value_type value_type;
-		//
-		//		while (__last - __first > 3) {
-		//			if (__depth_limit == 0) {
-		//				std::__heap_select(__first, __nth + 1, __last, __comp);
-		//				// Place the nth largest element in its final position.
-		//				sarastd::iter_swap(__first, __nth);
-		//				return;
-		//			}
-		//			--__depth_limit;
-		//			RandomIt __cut = std::__unguarded_partition_pivot(__first, __last, __comp);
-		//			if (__cut <= __nth)
-		//				__first = __cut;
-		//			else
-		//				__last = __cut;
-		//		}
-		//		std::__insertion_sort(__first, __last, __comp);
-		//	}
-		//
-		//	template<typename RandomIt, typename _Compare>
-		//	void nth_element(RandomIt __first, RandomIt __nth, RandomIt __last, _Compare __comp)
-		//	{
-		//		typedef typename iterator_traits<RandomIt>::value_type value_type;
-		//
-		//		if (__first == __last || __nth == __last)
-		//			return;
-		//
-		//		std::__introselect(__first, __nth, __last, std::__lg(__last - __first) * 2, __comp);
-		//	}
-
 	}
 
 	///=============================================================================================
@@ -471,8 +422,8 @@ namespace sarastd {
 
 			while (((last - first) > ISORT_MAX) && (kRecursionCount > 0)) {
 				const RandomIt position(
-				    sarastd::pvt::get_partition<RandomIt, value_type, Compare>(first, last,
-				                                                                     sarastd::pvt::median<value_type, Compare>(*first, *(first + (last - first) / 2), *(last - 1), compare), compare));
+				    sarastd::pvt::get_partition<RandomIt, value_type, Compare>(first, last, sarastd::pvt::median<value_type, Compare>(*first, *(first + (last - first) / 2), *(last - 1), compare),
+				                                                               compare));
 
 				sarastd::pvt::quick_sort_impl<RandomIt, Size, Compare>(position, last, --kRecursionCount, compare);
 				last = position;

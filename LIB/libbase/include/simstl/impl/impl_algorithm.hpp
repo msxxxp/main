@@ -428,7 +428,6 @@ namespace sarastd {
 		return ++result;
 	}
 
-
 	template<typename ForwardIt>
 	ForwardIt unique(ForwardIt first, ForwardIt last)
 	{

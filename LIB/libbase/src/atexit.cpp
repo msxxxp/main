@@ -1,11 +1,13 @@
 #include <libbase/std.hpp>
 #include <libbase/atexit.hpp>
 
+#include <atomic>
+
 namespace Base {
 
-	const long MAX_ATEXITLIST_ENTRIES = 32;
+	const ssize_t MAX_ATEXITLIST_ENTRIES = 32;
 
-	long atexit_index = MAX_ATEXITLIST_ENTRIES - 1;
+	std::atomic<ssize_t> atexit_index(MAX_ATEXITLIST_ENTRIES - 1);
 
 	FunctionAtExit pf_atexitlist[MAX_ATEXITLIST_ENTRIES];
 
@@ -22,7 +24,7 @@ namespace Base {
 		else
 			++atexit_index;
 
-		for (long i = atexit_index; i < MAX_ATEXITLIST_ENTRIES; ++i)
+		for (ssize_t i = atexit_index; i < MAX_ATEXITLIST_ENTRIES; ++i)
 		{
 //			LogDebug(L"[%I64d] ptr: %p\n", i, pf_atexitlist[i]);
 			(*pf_atexitlist[i])();
@@ -32,7 +34,7 @@ namespace Base {
 	int atexit(FunctionAtExit pf)
 	{
 //		LogTrace();
-		long ind = ::InterlockedExchangeAdd(&atexit_index, -1);
+		ssize_t ind = --atexit_index;
 		if (ind >= 0)
 		{
 //			LogDebug(L"[%I64d] ptr: %p\n", ind, pf);

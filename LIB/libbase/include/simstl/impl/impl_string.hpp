@@ -31,7 +31,7 @@ namespace sarastd {
 		typedef sarastd::reverse_iterator<iterator> reverse_iterator;
 		typedef sarastd::reverse_iterator<const_iterator> const_reverse_iterator;
 
-		static const size_type npos = ~(size_type)0;
+		static const size_type npos = ~size_type(0);
 
 		~basic_string();
 
@@ -722,10 +722,11 @@ namespace sarastd {
 	template<typename Char, typename Traits>
 	typename basic_string<Char, Traits>::this_type & basic_string<Char, Traits>::replace(size_type pos, size_type len, const_pointer str, size_type count)
 	{
-		if (str && count) {
+		if (str) {
 //			printf("      (%Iu, %Iu): '%s'\n", size(), capacity(), c_str());
 			pos = sarastd::min(pos, size());
 			len = sarastd::min(len, size() - pos);
+//			printf("      (pos: %Iu, len: %Iu)\n", pos, len);
 			if (is_same_str(str) || is_shared()) {
 				this_type tmp(c_str(), pos, get_necessary_capacity(count - len));
 //				printf("      (%Iu, %Iu): '%s'\n", tmp.size(), tmp.capacity(), tmp.c_str());

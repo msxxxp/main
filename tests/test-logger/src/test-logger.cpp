@@ -1,4 +1,5 @@
 #include <liblog/logger.hpp>
+#include <libbase/std.hpp>
 #include <libbase/atexit.hpp>
 #include <libbase/console.hpp>
 
@@ -22,10 +23,10 @@ int wWmain() {
 int main() {
 #endif
 //	Base::Console::printf(L"%S:%d\n", __PRETTY_FUNCTION__, __LINE__);
-	setup_logger();
+//	setup_logger();
 
 //	Base::Console::printf(L"%S:%d\n", __PRETTY_FUNCTION__, __LINE__);
-	LogTrace();
+//	LogTrace();
 
 //	Base::Console::printf(L"%S:%d\n", __PRETTY_FUNCTION__, __LINE__);
 	return 0;

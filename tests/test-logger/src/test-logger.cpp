@@ -3,6 +3,8 @@
 #include <libbase/atexit.hpp>
 #include <libbase/console.hpp>
 
+#include <memory>
+
 namespace {
 	void setup_logger()
 	{
@@ -12,30 +14,81 @@ namespace {
 //		Base::Console::printf(L"%S:%d\n", __PRETTY_FUNCTION__, __LINE__);
 		set_default_prefix(Prefix::Full/* | Prefix::Place*/);
 //		Base::Console::printf(L"%S:%d\n", __PRETTY_FUNCTION__, __LINE__);
-		set_default_target(get_TargetToConsole());
+//		set_default_target(get_TargetToConsole());
 //		Base::Console::printf(L"%S:%d\n", __PRETTY_FUNCTION__, __LINE__);
 	}
 }
 
+class A {
+public:
+	~A()
+	{
+		Base::Console::printf(L"%S\n", __PRETTY_FUNCTION__);
+	}
+
+	A() :
+		m_int(1)
+	{
+		Base::Console::printf(L"%S\n", __PRETTY_FUNCTION__);
+	}
+
+	int get_int() const
+	{
+		return m_int;
+	}
+
+private:
+	int m_int;
+};
+
+class B: public A {
+public:
+	~B()
+	{
+		Base::Console::printf(L"%S\n", __PRETTY_FUNCTION__);
+	}
+
+	B() :
+		m_double(10)
+	{
+		Base::Console::printf(L"%S\n", __PRETTY_FUNCTION__);
+	}
+
+	double get_double() const
+	{
+		return m_double;
+	}
+
+private:
+	double m_double;
+};
+
 #ifdef NDEBUG
-int wWmain() {
+int wWmain()
+{
 #else
-int main() {
+	int main() {
 #endif
 //	Base::Console::printf(L"%S:%d\n", __PRETTY_FUNCTION__, __LINE__);
-//	setup_logger();
+	setup_logger();
 
 //	Base::Console::printf(L"%S:%d\n", __PRETTY_FUNCTION__, __LINE__);
-//	LogTrace();
+	LogTrace();
 
 //	Base::Console::printf(L"%S:%d\n", __PRETTY_FUNCTION__, __LINE__);
+
+	{
+		std::shared_ptr<A> sptr(std::make_shared<B>());
+	}
+
+	LogTrace();
 	return 0;
 }
 
 /// ========================================================================== Startup (entry point)
 #ifdef NDEBUG
 extern "C" {
-	int atexit(Base::FunctionAtExit pf)
+	int atexit(Base::CrtFunction pf)
 	{
 		return Base::atexit(pf);
 	}
@@ -45,7 +98,8 @@ extern "C" {
 		Base::cxa_pure_virtual();
 	}
 
-	int	mainCRTStartup() {
+	int mainCRTStartup()
+	{
 //	int	WinMainCRTStartup() {
 		Base::init_atexit();
 //		Base::Console::printf(L"%S:%d\n", __PRETTY_FUNCTION__, __LINE__);
@@ -56,8 +110,11 @@ extern "C" {
 //		Result = wWinMain(::GetModuleHandle(nullptr), nullptr, ::GetCommandLine(),
 //						  StartupInfo.dwFlags & STARTF_USESHOWWINDOW ? StartupInfo.wShowWindow : SW_SHOWDEFAULT);
 		Result = wWmain();
+		Base::Console::printf(L"%S:%d\n", __PRETTY_FUNCTION__, __LINE__);
 		Base::invoke_atexit();
+		Base::Console::printf(L"%S:%d\n", __PRETTY_FUNCTION__, __LINE__);
 		::ExitProcess(Result);
+		Base::Console::printf(L"%S:%d\n", __PRETTY_FUNCTION__, __LINE__);
 		return Result;
 	}
 

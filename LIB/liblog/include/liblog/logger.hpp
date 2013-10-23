@@ -101,7 +101,7 @@ namespace Logger {
 		const static flags Lite     = Time | Level;
 		const static flags Medium   = Time | Level | Function;
 		const static flags Full     = Time | Level | Function | Date | Module | Thread | Place;
-	};
+	}
 
 #ifdef ENABLE_LOGGER
 	typedef Base::shared_ptr<Target_i> Target_t;

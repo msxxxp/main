@@ -52,6 +52,9 @@
 									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/liblog/include}&quot;"/>
 									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/${ProjName}/include}&quot;"/>
 								</option>
+								<option id="gnu.cpp.compiler.option.warnings.pedantic.632656551" name="Pedantic (-pedantic)" superClass="gnu.cpp.compiler.option.warnings.pedantic" value="true" valueType="boolean"/>
+								<option id="gnu.cpp.compiler.option.warnings.pedantic.error.1388077399" name="Pedantic warnings as errors (-pedantic-errors)" superClass="gnu.cpp.compiler.option.warnings.pedantic.error" value="true" valueType="boolean"/>
+								<option id="gnu.cpp.compiler.option.warnings.nowarn.642533162" name="Inhibit all warnings (-w)" superClass="gnu.cpp.compiler.option.warnings.nowarn" value="false" valueType="boolean"/>
 								<inputType id="cdt.managedbuild.tool.gnu.cpp.compiler.input.1199966272" superClass="cdt.managedbuild.tool.gnu.cpp.compiler.input"/>
 							</tool>
 							<tool id="cdt.managedbuild.tool.gnu.cpp.linker.mingw.base.540826383" name="MinGW C++ Linker" superClass="cdt.managedbuild.tool.gnu.cpp.linker.mingw.base"/>
@@ -105,8 +108,8 @@
 									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/liblog/include}&quot;"/>
 									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/${ProjName}/include}&quot;"/>
 								</option>
-								<option id="gnu.cpp.compiler.option.warnings.pedantic.351751174" name="Pedantic (-pedantic)" superClass="gnu.cpp.compiler.option.warnings.pedantic" value="false" valueType="boolean"/>
-								<option id="gnu.cpp.compiler.option.warnings.pedantic.error.1580390309" name="Pedantic warnings as errors (-pedantic-errors)" superClass="gnu.cpp.compiler.option.warnings.pedantic.error" value="false" valueType="boolean"/>
+								<option id="gnu.cpp.compiler.option.warnings.pedantic.351751174" name="Pedantic (-pedantic)" superClass="gnu.cpp.compiler.option.warnings.pedantic" value="true" valueType="boolean"/>
+								<option id="gnu.cpp.compiler.option.warnings.pedantic.error.1580390309" name="Pedantic warnings as errors (-pedantic-errors)" superClass="gnu.cpp.compiler.option.warnings.pedantic.error" value="true" valueType="boolean"/>
 								<inputType id="cdt.managedbuild.tool.gnu.cpp.compiler.input.1077346429" superClass="cdt.managedbuild.tool.gnu.cpp.compiler.input"/>
 							</tool>
 							<tool id="cdt.managedbuild.tool.gnu.cpp.linker.mingw.base.1047594683" name="MinGW C++ Linker" superClass="cdt.managedbuild.tool.gnu.cpp.linker.mingw.base"/>
@@ -161,6 +164,8 @@
 									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/liblog/include}&quot;"/>
 									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/${ProjName}/include}&quot;"/>
 								</option>
+								<option id="gnu.cpp.compiler.option.warnings.pedantic.265450938" superClass="gnu.cpp.compiler.option.warnings.pedantic" value="true" valueType="boolean"/>
+								<option id="gnu.cpp.compiler.option.warnings.pedantic.error.1409385159" superClass="gnu.cpp.compiler.option.warnings.pedantic.error" value="true" valueType="boolean"/>
 								<inputType id="cdt.managedbuild.tool.gnu.cpp.compiler.input.598917932" superClass="cdt.managedbuild.tool.gnu.cpp.compiler.input"/>
 							</tool>
 							<tool id="cdt.managedbuild.tool.gnu.cpp.linker.mingw.base.57082174" name="MinGW C++ Linker" superClass="cdt.managedbuild.tool.gnu.cpp.linker.mingw.base"/>
@@ -213,6 +218,8 @@
 									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/liblog/include}&quot;"/>
 									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/${ProjName}/include}&quot;"/>
 								</option>
+								<option id="gnu.cpp.compiler.option.warnings.pedantic.1654546573" superClass="gnu.cpp.compiler.option.warnings.pedantic" value="true" valueType="boolean"/>
+								<option id="gnu.cpp.compiler.option.warnings.pedantic.error.1586624222" superClass="gnu.cpp.compiler.option.warnings.pedantic.error" value="true" valueType="boolean"/>
 								<inputType id="cdt.managedbuild.tool.gnu.cpp.compiler.input.1425160179" superClass="cdt.managedbuild.tool.gnu.cpp.compiler.input"/>
 							</tool>
 							<tool id="cdt.managedbuild.tool.gnu.cpp.linker.mingw.base.187563253" name="MinGW C++ Linker" superClass="cdt.managedbuild.tool.gnu.cpp.linker.mingw.base"/>
@@ -265,8 +272,8 @@
 									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/liblog/include}&quot;"/>
 									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/${ProjName}/include}&quot;"/>
 								</option>
-								<option id="gnu.cpp.compiler.option.warnings.pedantic.578500172" name="Pedantic (-pedantic)" superClass="gnu.cpp.compiler.option.warnings.pedantic" value="false" valueType="boolean"/>
-								<option id="gnu.cpp.compiler.option.warnings.pedantic.error.884985185" name="Pedantic warnings as errors (-pedantic-errors)" superClass="gnu.cpp.compiler.option.warnings.pedantic.error" value="false" valueType="boolean"/>
+								<option id="gnu.cpp.compiler.option.warnings.pedantic.578500172" name="Pedantic (-pedantic)" superClass="gnu.cpp.compiler.option.warnings.pedantic" value="true" valueType="boolean"/>
+								<option id="gnu.cpp.compiler.option.warnings.pedantic.error.884985185" name="Pedantic warnings as errors (-pedantic-errors)" superClass="gnu.cpp.compiler.option.warnings.pedantic.error" value="true" valueType="boolean"/>
 								<inputType id="cdt.managedbuild.tool.gnu.cpp.compiler.input.837431313" superClass="cdt.managedbuild.tool.gnu.cpp.compiler.input"/>
 							</tool>
 							<tool id="cdt.managedbuild.tool.gnu.cpp.linker.mingw.base.2101414964" name="MinGW C++ Linker" superClass="cdt.managedbuild.tool.gnu.cpp.linker.mingw.base"/>
@@ -318,8 +325,8 @@
 									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/liblog/include}&quot;"/>
 									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/${ProjName}/include}&quot;"/>
 								</option>
-								<option id="gnu.cpp.compiler.option.warnings.pedantic.346163988" name="Pedantic (-pedantic)" superClass="gnu.cpp.compiler.option.warnings.pedantic" value="false" valueType="boolean"/>
-								<option id="gnu.cpp.compiler.option.warnings.pedantic.error.1491864570" name="Pedantic warnings as errors (-pedantic-errors)" superClass="gnu.cpp.compiler.option.warnings.pedantic.error" value="false" valueType="boolean"/>
+								<option id="gnu.cpp.compiler.option.warnings.pedantic.346163988" name="Pedantic (-pedantic)" superClass="gnu.cpp.compiler.option.warnings.pedantic" value="true" valueType="boolean"/>
+								<option id="gnu.cpp.compiler.option.warnings.pedantic.error.1491864570" name="Pedantic warnings as errors (-pedantic-errors)" superClass="gnu.cpp.compiler.option.warnings.pedantic.error" value="true" valueType="boolean"/>
 								<inputType id="cdt.managedbuild.tool.gnu.cpp.compiler.input.1934763352" superClass="cdt.managedbuild.tool.gnu.cpp.compiler.input"/>
 							</tool>
 							<tool id="cdt.managedbuild.tool.gnu.c.linker.mingw.base.697621268" name="MinGW C Linker" superClass="cdt.managedbuild.tool.gnu.c.linker.mingw.base"/>

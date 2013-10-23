@@ -7,7 +7,7 @@ namespace Base {
 
 	///======================================================================== Forward declarations
 	struct Message;
-	struct MessageManager;
+	class MessageManager;
 	class Queue;
 	class Observer;
 	class Observable;
@@ -19,12 +19,12 @@ namespace Base {
 		typedef ssize_t param_t;
 		typedef void * data_t;
 
-		static const type_t ALL_TYPES = ~(type_t)0;
-		static const code_t ALL_CODES = ~(code_t)0;
+		static const type_t MASK_ALL_TYPES = ~static_cast<type_t>(0);
+		static const code_t MASK_ALL_CODES = ~static_cast<code_t>(0);
 
 		~Message();
 
-		Message(const type_t & type = type_t(), const code_t & code = code_t(), const param_t & param = param_t(), const data_t & data = nullptr);
+		Message(const type_t & type = type_t(), const code_t & code = code_t(), const param_t & param = param_t(), const data_t & data = data_t());
 
 		type_t get_type() const;
 
@@ -133,7 +133,7 @@ namespace Base {
 
 		typedef bool (*filter_t)(const Message & message);
 
-		SubscribtionId Subscribe(Queue * queue, Message::type_t type_mask = Message::ALL_TYPES, Message::code_t code_mask = Message::ALL_CODES, filter_t filter = nullptr);
+		SubscribtionId Subscribe(Queue * queue, Message::type_t type_mask = Message::MASK_ALL_TYPES, Message::code_t code_mask = Message::MASK_ALL_CODES, filter_t filter = nullptr);
 
 		void Unsubscribe(SubscribtionId id);
 
@@ -143,7 +143,7 @@ namespace Base {
 
 		class Subscriber: private Queue {
 		public:
-			Subscriber(Message::type_t type_mask = Message::ALL_TYPES, Message::code_t code_mask = Message::ALL_CODES, filter_t filter = nullptr)
+			Subscriber(Message::type_t type_mask = Message::MASK_ALL_TYPES, Message::code_t code_mask = Message::MASK_ALL_CODES, filter_t filter = nullptr)
 			{
 				Subscribe(this, type_mask, code_mask, filter);
 			}

@@ -7,7 +7,8 @@ namespace Base {
 	struct Observer;
 	struct Observable;
 
-	struct MessageManager {
+	class MessageManager {
+	public:
 		virtual ~MessageManager();
 
 		virtual void register_observer(Observable * subject, Observer * observer) = 0;

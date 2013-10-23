@@ -15,7 +15,7 @@ namespace Base {
 
 	inline WORD & swap_bytes(WORD & inout)
 	{
-		inout = inout >> 8 | inout << 8;
+		inout = static_cast<WORD>(inout >> 8 | inout << 8);
 		return inout;
 	}
 

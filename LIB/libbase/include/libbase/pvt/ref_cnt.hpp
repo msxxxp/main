@@ -36,10 +36,6 @@ namespace Base {
 //		size_t m_shareable:1;
 	};
 
-	inline ref_counter::~ref_counter()
-	{
-	}
-
 	inline ref_counter::ref_counter() :
 		m_refcnt(1)
 //		, m_shareable(true)
@@ -82,10 +78,6 @@ namespace Base {
 	inline size_t ref_counter::count_ref() const
 	{
 		return m_refcnt;
-	}
-
-	inline void ref_counter::destroy() const
-	{
 	}
 
 }

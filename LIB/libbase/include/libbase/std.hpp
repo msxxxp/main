@@ -82,22 +82,16 @@ namespace Base {
 
 	inline PCSTR filename_only(PCSTR path, char ch = '\\')
 	{
-#ifdef _MSC_VER
 		PCSTR tmp = strrchr((path), ch);
-		return ( tmp ? tmp : (path) - 1) + 1;
-#else
-		return (strrchr((path), ch) ? : (path) - 1) + 1;
-#endif
+		return (tmp ? tmp : (path) - 1) + 1;
+//		return (strrchr((path), ch) ? : (path) - 1) + 1;
 	}
 
 	inline PCWSTR filename_only(PCWSTR path, wchar_t ch = PATH_SEPARATOR_C)
 	{
-#ifdef _MSC_VER
 		PCWSTR tmp = wcsrchr((path), ch);
-		return ( tmp ? tmp : (path) - 1) + 1;
-#else
-		return (wcsrchr((path), ch) ? : (path) - 1) + 1;
-#endif
+		return (tmp ? tmp : (path) - 1) + 1;
+//		return (wcsrchr((path), ch) ? : (path) - 1) + 1;
 	}
 
 	///=============================================================================================

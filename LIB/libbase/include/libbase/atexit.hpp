@@ -3,13 +3,13 @@
 
 namespace Base {
 
-	typedef void (*FunctionAtExit)(void);
+	typedef void (*CrtFunction)(void);
 
 	void init_atexit();
 
 	void invoke_atexit();
 
-	int atexit(FunctionAtExit pf);
+	int atexit(CrtFunction pf);
 
 	void cxa_pure_virtual();
 }

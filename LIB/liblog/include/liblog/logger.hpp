@@ -4,7 +4,7 @@
 #include <libbase/std.hpp>
 
 #ifdef ENABLE_LOGGER
-#include <libbase/shared_ptr.hpp>
+#include <memory>
 #else
 #endif
 
@@ -104,7 +104,7 @@ namespace Logger {
 	}
 
 #ifdef ENABLE_LOGGER
-	typedef Base::shared_ptr<Target_i> Target_t;
+	typedef std::shared_ptr<Target_i> Target_t;
 
 	///==================================================================================== Module_i
 	struct Module_i {

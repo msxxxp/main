@@ -1,9 +1,12 @@
 #include <liblog/logger.hpp>
+#include <libbase/console.hpp>
 
 namespace Logger {
 
 	struct LogToNull: public Target_i {
 		~LogToNull();
+
+		LogToNull();
 
 		void out(const Module_i * lgr, Level lvl, PCWSTR str, size_t size) const override;
 
@@ -16,6 +19,12 @@ namespace Logger {
 
 	LogToNull::~LogToNull()
 	{
+		Base::Console::printf(L"%S:%d\n", __PRETTY_FUNCTION__, __LINE__);
+	}
+
+	LogToNull::LogToNull()
+	{
+		Base::Console::printf(L"%S:%d\n", __PRETTY_FUNCTION__, __LINE__);
 	}
 
 	void LogToNull::out(const Module_i * /*lgr*/, Level /*lvl*/, PCWSTR /*str*/, size_t /*size*/) const

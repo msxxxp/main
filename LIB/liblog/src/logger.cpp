@@ -97,7 +97,7 @@ namespace Logger {
 		void out_args(Level lvl, const ustring & prefix, PCWSTR frmat, va_list args) const;
 
 		ustring m_name;
-		Base::shared_ptr<Target_i> m_target;
+		std::shared_ptr<Target_i> m_target;
 		Level m_lvl;
 		size_t m_prefix;
 		uint32_t m_color:1;

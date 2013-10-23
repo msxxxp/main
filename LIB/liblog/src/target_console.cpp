@@ -37,11 +37,13 @@ namespace Logger {
 
 	LogToConsole::~LogToConsole()
 	{
+		Base::Console::printf(L"%S:%d\n", __PRETTY_FUNCTION__, __LINE__);
 	}
 
 	LogToConsole::LogToConsole() :
 		m_sync(Base::Lock::get_CritSection())
 	{
+		Base::Console::printf(L"%S:%d\n", __PRETTY_FUNCTION__, __LINE__);
 	}
 
 	void LogToConsole::out(const Module_i * lgr, Level lvl, PCWSTR str, size_t size) const

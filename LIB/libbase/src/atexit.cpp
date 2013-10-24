@@ -15,13 +15,10 @@ namespace Base {
 
 	CrtFunction pf_atexitlist[MAX_ATEXITLIST_ENTRIES];
 
-	void invoke_ctors()
+	void invoke_crt_functions(const CrtFunction * pf)
 	{
-		Base::Console::printf(L"%S:%d, __CTOR_LIST__: %p\n", __PRETTY_FUNCTION__, __LINE__, __CTOR_LIST__);
-
-		const CrtFunction * pf = __CTOR_LIST__;
-		for (size_t i = 0; *pf && i < 10; ++i, ++pf) {
-			Base::Console::printf(L"%S:%d, ctr: %pf, *pf: %p\n", __PRETTY_FUNCTION__, __LINE__, pf, *pf);
+		for (size_t i = 0; *pf; ++i, ++pf) {
+			Base::Console::printf(L"%S:%d, pf: %p\n", __PRETTY_FUNCTION__, __LINE__, *pf);
 			if (reinterpret_cast<intptr_t>(*pf) == static_cast<intptr_t>(-1)) {
 				continue;
 			} else {
@@ -30,9 +27,16 @@ namespace Base {
 		}
 	}
 
+	void invoke_ctors()
+	{
+		Base::Console::printf(L"%S:%d, __CTOR_LIST__: %p\n", __PRETTY_FUNCTION__, __LINE__, __CTOR_LIST__);
+		invoke_crt_functions(__CTOR_LIST__);
+	}
+
 	void invoke_dtors()
 	{
 		Base::Console::printf(L"%S:%d, __DTOR_LIST__: %p\n", __PRETTY_FUNCTION__, __LINE__, __DTOR_LIST__);
+		invoke_crt_functions(__DTOR_LIST__);
 	}
 
 	void init_atexit()

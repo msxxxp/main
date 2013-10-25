@@ -14,7 +14,7 @@ namespace {
 //		Base::Console::printf(L"%S:%d\n", __PRETTY_FUNCTION__, __LINE__);
 		set_default_prefix(Prefix::Full/* | Prefix::Place*/);
 //		Base::Console::printf(L"%S:%d\n", __PRETTY_FUNCTION__, __LINE__);
-//		set_default_target(get_TargetToConsole());
+		set_default_target(get_TargetToConsole());
 //		Base::Console::printf(L"%S:%d\n", __PRETTY_FUNCTION__, __LINE__);
 	}
 }
@@ -104,17 +104,16 @@ extern "C" {
 		Base::init_atexit();
 //		Base::Console::printf(L"%S:%d\n", __PRETTY_FUNCTION__, __LINE__);
 		int Result = 0;
+
 //		STARTUPINFO StartupInfo = {sizeof(STARTUPINFO), 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0};
 //		::GetStartupInfo(&StartupInfo);
 //
 //		Result = wWinMain(::GetModuleHandle(nullptr), nullptr, ::GetCommandLine(),
 //						  StartupInfo.dwFlags & STARTF_USESHOWWINDOW ? StartupInfo.wShowWindow : SW_SHOWDEFAULT);
 		Result = wWmain();
-		Base::Console::printf(L"%S:%d\n", __PRETTY_FUNCTION__, __LINE__);
+
 		Base::invoke_atexit();
-		Base::Console::printf(L"%S:%d\n", __PRETTY_FUNCTION__, __LINE__);
 		::ExitProcess(Result);
-		Base::Console::printf(L"%S:%d\n", __PRETTY_FUNCTION__, __LINE__);
 		return Result;
 	}
 

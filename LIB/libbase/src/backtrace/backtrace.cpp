@@ -5,7 +5,7 @@
 #include <liblog/logger.hpp>
 
 #if defined(__GNUC__)
-#include <bfd.h>
+#include <bfd/bfd.h>
 #include <cxxabi.h>
 
 struct bfd_ctx {

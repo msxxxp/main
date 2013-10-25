@@ -123,6 +123,7 @@
 									<listOptionValue builtIn="false" value="UNICODE"/>
 									<listOptionValue builtIn="false" value="_UNICODE"/>
 									<listOptionValue builtIn="false" value="NDEBUG"/>
+									<listOptionValue builtIn="false" value="ENABLE_LOGGER"/>
 									<listOptionValue builtIn="false" value="NoStlString"/>
 								</option>
 								<option id="gnu.cpp.compiler.option.other.other.1820332955" name="Other flags" superClass="gnu.cpp.compiler.option.other.other" value="-c -fmessage-length=0 -fno-exceptions -fno-rtti -fno-threadsafe-statics -std=c++11 -m32" valueType="string"/>
@@ -141,12 +142,13 @@
 									<listOptionValue builtIn="false" value="libfar3"/>
 									<listOptionValue builtIn="false" value="liblog"/>
 									<listOptionValue builtIn="false" value="libbase"/>
+									<listOptionValue builtIn="false" value="gcc"/>
 									<listOptionValue builtIn="false" value="mingwex"/>
 									<listOptionValue builtIn="false" value="mingw32"/>
-									<listOptionValue builtIn="false" value="gcc"/>
-									<listOptionValue builtIn="false" value="msvcrt"/>
-									<listOptionValue builtIn="false" value="kernel32"/>
+									<listOptionValue builtIn="false" value="stdc++"/>
 									<listOptionValue builtIn="false" value="ntdll"/>
+									<listOptionValue builtIn="false" value="kernel32"/>
+									<listOptionValue builtIn="false" value="msvcrt"/>
 								</option>
 								<option id="gnu.cpp.link.option.paths.175086254" name="Library search path (-L)" superClass="gnu.cpp.link.option.paths" valueType="libPaths">
 									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/liblog/Release-x32}&quot;"/>
@@ -208,6 +210,7 @@
 									<listOptionValue builtIn="false" value="_DEBUG"/>
 									<listOptionValue builtIn="false" value="UNICODE"/>
 									<listOptionValue builtIn="false" value="_UNICODE"/>
+									<listOptionValue builtIn="false" value="ENABLE_LOGGER"/>
 								</option>
 								<option id="gnu.cpp.compiler.option.other.other.821760731" name="Other flags" superClass="gnu.cpp.compiler.option.other.other" value="-c -fmessage-length=0 -fno-exceptions -fno-rtti -fno-threadsafe-statics -std=c++11" valueType="string"/>
 								<option id="gnu.cpp.compiler.option.warnings.extrawarn.759080496" name="Extra warnings (-Wextra)" superClass="gnu.cpp.compiler.option.warnings.extrawarn" value="true" valueType="boolean"/>
@@ -221,8 +224,8 @@
 								<option defaultValue="true" id="gnu.cpp.link.option.shared.632869696" name="Shared (-shared)" superClass="gnu.cpp.link.option.shared" valueType="boolean"/>
 								<option id="gnu.cpp.link.option.flags.1233087418" name="Linker flags" superClass="gnu.cpp.link.option.flags" value="-Wl,-Map=sortstr-x64.map ..\src\mainW.gcc.def" valueType="string"/>
 								<option id="gnu.cpp.link.option.paths.706919852" name="Library search path (-L)" superClass="gnu.cpp.link.option.paths" valueType="libPaths">
-									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/liblog/Release-x64}&quot;"/>
 									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/libfar3/Debug-x64}&quot;"/>
+									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/liblog/Release-x64}&quot;"/>
 									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/libbase/Debug-x64}&quot;"/>
 								</option>
 								<option id="gnu.cpp.link.option.libs.858707587" name="Libraries (-l)" superClass="gnu.cpp.link.option.libs" valueType="libs">
@@ -284,6 +287,7 @@
 									<listOptionValue builtIn="false" value="_DEBUG"/>
 									<listOptionValue builtIn="false" value="UNICODE"/>
 									<listOptionValue builtIn="false" value="_UNICODE"/>
+									<listOptionValue builtIn="false" value="ENABLE_LOGGER"/>
 								</option>
 								<option id="gnu.cpp.compiler.option.other.other.364185021" name="Other flags" superClass="gnu.cpp.compiler.option.other.other" value="-c -fmessage-length=0 -fno-exceptions -fno-rtti -fno-threadsafe-statics -std=c++11 -m32" valueType="string"/>
 								<option id="gnu.cpp.compiler.option.warnings.extrawarn.1457723923" name="Extra warnings (-Wextra)" superClass="gnu.cpp.compiler.option.warnings.extrawarn" value="true" valueType="boolean"/>

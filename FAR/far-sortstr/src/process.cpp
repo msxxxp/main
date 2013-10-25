@@ -228,20 +228,17 @@ void InsertFromVector(const data_vector & data, Type first, Type last)
 		}
 	}
 	switch (get_global_info()->cbValue_Operation) {
-		case Operation::SORT: {
+		case Operation::SORT:
 			break;
-		}
-		case Operation::REMOVE_DUP: {
+		case Operation::REMOVE_DUP:
 			for (; j < data.size(); ++i, ++j)
 				editor_set_string(i, Base::EMPTY_STR, EDITOR_EOL);
 			break;
-		}
-		case Operation::SPARSE_DUP: {
+		case Operation::SPARSE_DUP:
 			for (; j < data.size(); ++i, ++j)
 				if (!data[j].first.empty())
 					editor_set_string(i, Base::EMPTY_STR, EDITOR_EOL);
 			break;
-		}
 	}
 }
 

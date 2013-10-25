@@ -104,7 +104,7 @@ bool PairLessCI(const sortpair & lhs, const sortpair & rhs)
 	return false;
 }
 
-bool PairLessCS(const sortpair & lhs, const sortpair & rhs)
+bool LoggedPairLessCS(const sortpair & lhs, const sortpair & rhs)
 {
 	int ret = Cstr::compare_cs(lhs.first.c_str(), rhs.first.c_str());
 	if (ret < 0)
@@ -112,6 +112,13 @@ bool PairLessCS(const sortpair & lhs, const sortpair & rhs)
 	else if (ret == 0)
 		return lhs.second.line < rhs.second.line;
 	return false;
+}
+
+bool PairLessCS(const sortpair & left, const sortpair & right)
+{
+	bool ret = LoggedPairLessCS(left, right);
+	LogNoise(L"'%s' < '%s' -> %d\n", left.first.c_str(), right.first.c_str(), ret);
+	return ret;
 }
 
 bool PairLessCScode(const sortpair & lhs, const sortpair & rhs)

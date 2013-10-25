@@ -119,8 +119,6 @@ void FarGlobalInfo::save_settings() const
 	settings.set(L"whitespace", edValue_Whitespaces);
 	settings.set(L"Prefix", prefix);
 	LogNoise(L"cbValue_Invert: %Id\n", cbValue_Invert);
-	LogNoise(L"cbValue_Sensitive: %Id\n", cbValue_Sensitive);
-	LogNoise(L"cbValue_Numeric: %Id\n", cbValue_Numeric);
 	LogNoise(L"cbValue_Selected: %Id\n", cbValue_Selected);
 	LogNoise(L"cbValue_AsEmpty: %Id\n", cbValue_AsEmpty);
 	LogNoise(L"edValue_Whitespaces: '%s'\n", edValue_Whitespaces);

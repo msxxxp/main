@@ -32,9 +32,7 @@ namespace {
 		using namespace Logger;
 		set_default_level(Level::Trace);
 		set_default_prefix(Prefix::Medium | Prefix::Place);
-		set_default_target(get_TargetToFile(L"D:/projects/~test/sortstr.log"));
-
-//		set_module_enabled(false, get_module(L"threads"));
+		set_default_target(get_TargetToFile(L"D:/projects/~test/sortstr.log", true));
 	}
 }
 

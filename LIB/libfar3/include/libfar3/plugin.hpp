@@ -9,8 +9,8 @@
 */
 
 /*
-Copyright © 1996 Eugene Roshal
-Copyright © 2000 Far Group
+Copyright ï¿½ 1996 Eugene Roshal
+Copyright ï¿½ 2000 Far Group
 All rights reserved.
 
 Redistribution and use in source and binary forms, with or without
@@ -2648,7 +2648,7 @@ extern "C"
 	void     WINAPI SetStartupInfoW(const struct PluginStartupInfo *Info);
 
 #ifdef __cplusplus
-};
+}
 #endif
 
 #endif /* RC_INVOKED */

@@ -24,6 +24,20 @@
 #include <libfar3/globalinfo_i.hpp>
 #include <libbase/std.hpp>
 
+enum class Operation: ssize_t {
+	SORT       = 0,
+	REMOVE_DUP = 1,
+	SPARSE_DUP = 2,
+};
+
+enum class Comparation: ssize_t {
+	LEX_CI   = 0,
+	LEX_CS   = 1,
+	LEX_CODE = 2,
+	NUMERIC  = 3,
+	LENGTH   = 4,
+};
+
 struct FarGlobalInfo: public Far::GlobalInfo_i, private Base::Uncopyable {
 	~FarGlobalInfo();
 
@@ -74,10 +88,9 @@ struct FarGlobalInfo: public Far::GlobalInfo_i, private Base::Uncopyable {
 		return m_ei.BlockType;
 	}
 
-	ssize_t cbValue_Operation;
+	Operation   cbValue_Operation;
+	Comparation cbValue_Comparation;
 	ssize_t cbValue_Invert;
-	ssize_t cbValue_Sensitive;
-	ssize_t cbValue_Numeric;
 	ssize_t cbValue_Selected;
 	ssize_t cbValue_AsEmpty;
 	WCHAR edValue_Whitespaces[32];

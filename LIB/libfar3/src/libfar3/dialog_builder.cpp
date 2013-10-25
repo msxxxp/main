@@ -292,10 +292,10 @@ namespace Far {
 	}
 
 	///=============================================================================================
-	Base::shared_ptr<DialogBuilder_i> create_dialog_builder(const GUID & aId, PCWSTR TitleLabel, PCWSTR aHelpTopic, FARWINDOWPROC aDlgProc, void * aUserParam)
+	std::shared_ptr<DialogBuilder_i> create_dialog_builder(const GUID & aId, PCWSTR TitleLabel, PCWSTR aHelpTopic, FARWINDOWPROC aDlgProc, void * aUserParam)
 	{
 		LogTrace();
-		return Base::shared_ptr<DialogBuilder_i>(new SimpleDialogBuilder_impl(aId, TitleLabel, aHelpTopic, aDlgProc, aUserParam));
+		return std::make_shared<SimpleDialogBuilder_impl>(aId, TitleLabel, aHelpTopic, aDlgProc, aUserParam);
 	}
 
 }

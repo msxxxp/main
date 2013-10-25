@@ -24,26 +24,26 @@
 namespace AutoVersion{
 
 	//Date Version Types
-	static const char DATE[] = "19";
-	static const char MONTH[] = "05";
+	static const char DATE[] = "25";
+	static const char MONTH[] = "10";
 	static const char YEAR[] = "2013";
-	static const char UBUNTU_VERSION_STYLE[] = "13.05";
+	static const char UBUNTU_VERSION_STYLE[] = "13.10";
 
 	//Software Status
 	static const char STATUS[] = "Release";
 	static const char STATUS_SHORT[] = "r";
 
 	//Standard Version Type
-	static const long MAJOR = 1;
-	static const long MINOR = 9;
-	static const long BUILD = 21;
+	static const long MAJOR = 2;
+	static const long MINOR = 0;
+	static const long BUILD = 22;
 	static const long REVISION = 0;
 
 	//Miscellaneous Version Types
-	static const long BUILDS_COUNT = 1;
-	#define RC_FILEVERSION 1,9,21,0
-	#define RC_FILEVERSION_STRING "1, 9, 21, 0\0"
-	static const char FULLVERSION_STRING[] = "1.9.21.0";
+	static const long BUILDS_COUNT = 22;
+	#define RC_FILEVERSION 2,0,22,0
+	#define RC_FILEVERSION_STRING "2, 0, 22, 0\0"
+	static const char FULLVERSION_STRING[] = "2.0.22.0";
 
 }
 #endif //VERSION_H

@@ -28,16 +28,17 @@
 #include <libfar3/editor.hpp>
 #include <libfar3/settings.hpp>
 
-#include <libbase/pcstr.hpp>
+#include <libbase/cstr.hpp>
 #include <liblog/logger.hpp>
 
 #include <version.h>
 
 FarGlobalInfo::FarGlobalInfo() :
-	cbValue_Operation(0)
+	cbValue_Operation(Operation::SORT),
+	cbValue_Comparation(Comparation::LEX_CI)
 {
 	LogTrace();
-	cbValue_Invert = cbValue_Sensitive = cbValue_Numeric = cbValue_Selected = cbValue_AsEmpty = 0;
+	cbValue_Invert = cbValue_Selected = cbValue_AsEmpty = 0;
 	edValue_Whitespaces[0] = 0;
 	prefix[0] = 0;
 	m_first_line = 0;
@@ -90,32 +91,29 @@ void FarGlobalInfo::load_settings()
 {
 	LogTrace();
 	Far::Settings_t settings(*get_guid());
+	cbValue_Comparation = static_cast<Comparation>(settings.get(L"comparation", (int64_t)cbValue_Comparation));
 	cbValue_Invert = settings.get(L"invert", (int64_t)cbValue_Invert);
-	cbValue_Sensitive = settings.get(L"case", (int64_t)cbValue_Sensitive);
-	cbValue_Numeric = settings.get(L"numeric", (int64_t)cbValue_Numeric);
 	cbValue_Selected = settings.get(L"selection", (int64_t)cbValue_Selected);
 	cbValue_AsEmpty = settings.get(L"asempty", (int64_t)cbValue_AsEmpty);
 	wcsncpy(edValue_Whitespaces, settings.get(L"whitespaces", L" "), Base::lengthof(edValue_Whitespaces));
 	wcsncpy(prefix, settings.get(L"Prefix", L"sortstr"), Base::lengthof(prefix));
 
+	LogNoise(L"cbValue_Comparation: %Id\n", static_cast<ssize_t>(cbValue_Comparation));
 	LogNoise(L"cbValue_Invert: %Id\n", cbValue_Invert);
-	LogNoise(L"cbValue_Sensitive: %Id\n", cbValue_Sensitive);
-	LogNoise(L"cbValue_Numeric: %Id\n", cbValue_Numeric);
 	LogNoise(L"cbValue_Selected: %Id\n", cbValue_Selected);
 	LogNoise(L"cbValue_AsEmpty: %Id\n", cbValue_AsEmpty);
 	LogNoise(L"edValue_Whitespaces: '%s'\n", edValue_Whitespaces);
 	LogNoise(L"prefix: '%s'\n", prefix);
 
-	cbValue_Operation = 0;
+	cbValue_Operation = Operation::SORT;
 }
 
 void FarGlobalInfo::save_settings() const
 {
 	LogTrace();
 	Far::Settings_t settings(*get_guid());
+	settings.set(L"comparation", (int64_t)cbValue_Comparation);
 	settings.set(L"invert", (int64_t)cbValue_Invert);
-	settings.set(L"case", (int64_t)cbValue_Sensitive);
-	settings.set(L"numeric", (int64_t)cbValue_Numeric);
 	settings.set(L"selection", (int64_t)cbValue_Selected);
 	settings.set(L"asempty", (int64_t)cbValue_AsEmpty);
 	settings.set(L"whitespace", edValue_Whitespaces);

@@ -23,7 +23,8 @@
 #include <libfar3/helper.hpp>
 
 #include <libbase/std.hpp>
-#include <libbase/shared_ptr.hpp>
+
+#include <memory>
 
 namespace Far {
 
@@ -229,7 +230,7 @@ namespace Far {
 	};
 
 	///=============================================================================================
-	Base::shared_ptr<DialogBuilder_i> create_dialog_builder(const GUID & aId, PCWSTR TitleLabel, PCWSTR aHelpTopic = nullptr, FARWINDOWPROC aDlgProc = nullptr, void * aUserParam = nullptr);
+	std::shared_ptr<DialogBuilder_i> create_dialog_builder(const GUID & aId, PCWSTR TitleLabel, PCWSTR aHelpTopic = nullptr, FARWINDOWPROC aDlgProc = nullptr, void * aUserParam = nullptr);
 
 }
 

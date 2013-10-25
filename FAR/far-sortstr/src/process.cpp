@@ -40,21 +40,23 @@ PCWSTR EDITOR_EOL = nullptr;
 struct SelInfo {
 	ssize_t start;
 	ssize_t count;
+
 	SelInfo(ssize_t s = -1, ssize_t c = -1) :
-		start(s), count(c)
+		start(s),
+		count(c)
 	{
 	}
-	;
 };
 
 struct SortInfo {
-	size_t line;
+	size_t      line;
 	long double num;
+
 	SortInfo(size_t l) :
-		line(l), num(0)
+		line(l),
+		num(0)
 	{
 	}
-	;
 };
 
 typedef std::pair<ustring, SelInfo> datapair;
@@ -62,25 +64,19 @@ typedef std::pair<ustring, SortInfo> sortpair;
 typedef std::vector<datapair> data_vector;
 typedef std::vector<sortpair> sort_vector;
 
-enum {
-	DEL_NO = 0,
-	DEL_BLOCK,
-	DEL_SPARSE,
-};
-
 bool PairEqCI(const sortpair & lhs, const sortpair & rhs)
 {
-	return Base::Str::compare_ci(lhs.first.c_str(), rhs.first.c_str()) == 0;
+	return Cstr::compare_ci(lhs.first.c_str(), rhs.first.c_str()) == 0;
 }
 
 bool PairEqCS(const sortpair & lhs, const sortpair & rhs)
 {
-	return Base::Str::compare_cs(lhs.first.c_str(), rhs.first.c_str()) == 0;
+	return Cstr::compare_cs(lhs.first.c_str(), rhs.first.c_str()) == 0;
 }
 
 bool PairEqCScode(const sortpair & lhs, const sortpair & rhs)
 {
-	return Base::Str::compare(lhs.first.c_str(), rhs.first.c_str()) == 0;
+	return Cstr::compare(lhs.first.c_str(), rhs.first.c_str()) == 0;
 }
 
 bool PairEqNum(const sortpair & lhs, const sortpair & rhs)
@@ -93,9 +89,14 @@ bool PairLessLine(const sortpair & lhs, const sortpair & rhs)
 	return lhs.second.line < rhs.second.line;
 }
 
+bool PairEqLength(const sortpair & lhs, const sortpair & rhs)
+{
+	return lhs.first.length() == rhs.first.length();
+}
+
 bool PairLessCI(const sortpair & lhs, const sortpair & rhs)
 {
-	int ret = Base::Str::compare_ci(lhs.first.c_str(), rhs.first.c_str());
+	int ret = Cstr::compare_ci(lhs.first.c_str(), rhs.first.c_str());
 	if (ret < 0)
 		return true;
 	else if (ret == 0)
@@ -105,7 +106,7 @@ bool PairLessCI(const sortpair & lhs, const sortpair & rhs)
 
 bool PairLessCS(const sortpair & lhs, const sortpair & rhs)
 {
-	int ret = Base::Str::compare_cs(lhs.first.c_str(), rhs.first.c_str());
+	int ret = Cstr::compare_cs(lhs.first.c_str(), rhs.first.c_str());
 	if (ret < 0)
 		return true;
 	else if (ret == 0)
@@ -115,7 +116,7 @@ bool PairLessCS(const sortpair & lhs, const sortpair & rhs)
 
 bool PairLessCScode(const sortpair & lhs, const sortpair & rhs)
 {
-	int ret = Base::Str::compare(lhs.first.c_str(), rhs.first.c_str());
+	int ret = Cstr::compare(lhs.first.c_str(), rhs.first.c_str());
 	if (ret < 0)
 		return true;
 	else if (ret == 0)
@@ -132,6 +133,11 @@ bool PairLessNum(const sortpair & lhs, const sortpair & rhs)
 	return false;
 }
 
+bool PairLessLength(const sortpair & lhs, const sortpair & rhs)
+{
+	return lhs.first.length() < rhs.first.length();
+}
+
 INT_PTR editor_set_string(ssize_t y, ustring const& str, PCWSTR eol)
 {
 	return Far::Editor::set_string(y, str.c_str(), str.size(), eol);
@@ -139,7 +145,7 @@ INT_PTR editor_set_string(ssize_t y, ustring const& str, PCWSTR eol)
 
 bool is_whitespace(WCHAR ch)
 {
-	return Base::Str::find(get_global_info()->edValue_Whitespaces, ch);
+	return Cstr::find(get_global_info()->edValue_Whitespaces, ch);
 }
 
 long double FindNum(PCWSTR str)
@@ -150,7 +156,7 @@ long double FindNum(PCWSTR str)
 	if (*num) {
 		WCHAR buf[132];
 		buf[Base::lengthof(buf) - 1] = 0;
-		Base::Str::copy(buf, num, Base::lengthof(buf) - 1);
+		Cstr::copy(buf, num, Base::lengthof(buf) - 1);
 		for (PWSTR k = buf; *k; ++k) {
 			if (*k == L',') {
 				*k = L'.';
@@ -185,7 +191,7 @@ void InsertFromVector(const data_vector & data, Type first, Type last)
 			continue;
 		}
 		switch (get_global_info()->cbValue_Operation) {
-			case DEL_NO:
+			case Operation::SORT:
 				if (get_global_info()->get_block_type() == BTYPE_STREAM || !get_global_info()->cbValue_Selected) {
 					editor_set_string(i, data[first->second.line].first, EDITOR_EOL);
 				} else {
@@ -202,11 +208,11 @@ void InsertFromVector(const data_vector & data, Type first, Type last)
 				}
 				++first;
 				break;
-			case DEL_BLOCK:
+			case Operation::REMOVE_DUP:
 				editor_set_string(i, data[first->second.line].first, EDITOR_EOL);
 				++first;
 				break;
-			case DEL_SPARSE: {
+			case Operation::SPARSE_DUP: {
 				if (!data[j].first.empty()) {
 					editor_set_string(i, Base::EMPTY_STR, EDITOR_EOL);
 				}
@@ -215,43 +221,46 @@ void InsertFromVector(const data_vector & data, Type first, Type last)
 		}
 	}
 	switch (get_global_info()->cbValue_Operation) {
-		case DEL_BLOCK:
+		case Operation::SORT: {
+			break;
+		}
+		case Operation::REMOVE_DUP: {
 			for (; j < data.size(); ++i, ++j)
 				editor_set_string(i, Base::EMPTY_STR, EDITOR_EOL);
 			break;
-		case DEL_SPARSE: {
+		}
+		case Operation::SPARSE_DUP: {
 			for (; j < data.size(); ++i, ++j)
 				if (!data[j].first.empty())
 					editor_set_string(i, Base::EMPTY_STR, EDITOR_EOL);
-		}
 			break;
+		}
 	}
 }
 
 bool Execute()
 {
-	LogTrace();
-	LogDebug(L"get_first_line(): %Id, get_total_lines(): %Id\n", get_global_info()->get_first_line(), get_global_info()->get_total_lines());
+	LogNoise(L"get_first_line(): %Id, get_total_lines(): %Id\n", get_global_info()->get_first_line(), get_global_info()->get_total_lines());
 	if (!get_global_info()->get_total_lines())
 		return false;
 
-	LogDebug(L"get_block_type(): %Id\n", get_global_info()->get_block_type());
+	LogNoise(L"get_block_type(): %Id\n", get_global_info()->get_block_type());
 	data_vector data;
 	sort_vector sortdata;
 //	data.reserve(get_global_info()->get_total_lines() - get_global_info()->get_first_line());
 //	sortdata.reserve(data.capacity());
 
 	EditorGetString egs;
-	for (size_t y = get_global_info()->get_first_line(); y < get_global_info()->get_total_lines(); ++y) {
-		Far::Editor::get_string(y, egs);
+	for (size_t strNum = get_global_info()->get_first_line(); strNum < get_global_info()->get_total_lines(); ++strNum) {
+		Far::Editor::get_string(strNum, egs);
 
-		if (y == (get_global_info()->get_total_lines() - 1) && Base::Str::is_empty(egs.StringText))
+		if (strNum == (get_global_info()->get_total_lines() - 1) && Cstr::is_empty(egs.StringText))
 			break;
 		if (get_global_info()->get_block_type() != BTYPE_NONE && (egs.SelStart == -1 || egs.SelStart == egs.SelEnd))
 			break;
 
 		ustring tmp(egs.StringText, egs.StringLength);
-		LogDebug(L"str[%Id]: egs.SelStart: %Id, egs.SelEnd: %Id, egs.StringLength: %Id '%s'\n", y, egs.SelStart, egs.SelEnd, egs.StringLength, tmp.c_str());
+		LogDebug(L"str[%Id]: egs.SelStart: %Id, egs.SelEnd: %Id, egs.StringLength: %Id '%s'\n", strNum, egs.SelStart, egs.SelEnd, egs.StringLength, tmp.c_str());
 
 		ssize_t SelLen = -2;
 		switch (get_global_info()->get_block_type()) {
@@ -261,68 +270,65 @@ bool Execute()
 				}
 				LogDebug(L"SelLen: %Id\n", SelLen);
 				if (SelLen != -2) {
-					sortdata.emplace_back(ustring(egs.StringText + egs.SelStart, SelLen), y - get_global_info()->get_first_line());
-//					sortdata.push_back(sortpair(ustring(egs.StringText + egs.SelStart, SelLen), y - get_global_info()->get_first_line()));
-					if (get_global_info()->cbValue_Numeric) {
+					sortdata.emplace_back(ustring(egs.StringText + egs.SelStart, SelLen), strNum - get_global_info()->get_first_line());
+					if (get_global_info()->cbValue_Comparation == Comparation::NUMERIC) {
 						sortdata.back().second.num = FindNum(sortdata.back().first.c_str());
 					}
-					LogDebug(L"sortdata.back().second.line: %Id, sortdata.back().second.num: %f, sortdata.back().first: '%s'\n", sortdata.back().second.line, (double )sortdata.back().second.num,
-					         sortdata.back().first.c_str());
+					LogNoise(L"sortdata.back().second.line: %Id, sortdata.back().second.num: %f, sortdata.back().first: '%s'\n", sortdata.back().second.line, (double )sortdata.back().second.num, sortdata.back().first.c_str());
 				} else if (get_global_info()->cbValue_AsEmpty) {
-					sortdata.emplace_back(ustring(), y - get_global_info()->get_first_line());
-					LogDebug(L"sortdata.back().second.line: %Id, sortdata.back().second.num: %f, sortdata.back().first: '%s'\n", sortdata.back().second.line, (double )sortdata.back().second.num,
-					         sortdata.back().first.c_str());
-//					sortdata.push_back(sortpair(ustring(), y - get_global_info()->get_first_line()));
+					sortdata.emplace_back(ustring(), strNum - get_global_info()->get_first_line());
+					LogNoise(L"sortdata.back().second.line: %Id, sortdata.back().second.num: %f, sortdata.back().first: '%s'\n", sortdata.back().second.line, (double )sortdata.back().second.num, sortdata.back().first.c_str());
 				}
 				data.emplace_back(tmp, SelInfo(egs.SelStart, SelLen));
-//				data.push_back(data_vector::value_type(tmp, SelInfo(egs.SelStart, SelLen)));
-				LogDebug(L"data.back().second.start: %Id, data.back().second.count: %Id, data.back().first: '%s'\n", data.back().second.start, data.back().second.count, data.back().first.c_str());
+				LogNoise(L"data.back().second.start: %Id, data.back().second.count: %Id, data.back().first: '%s'\n", data.back().second.start, data.back().second.count, data.back().first.c_str());
 				break;
 			}
 			case BTYPE_STREAM:
 			default: {
 				data.emplace_back(tmp, SelInfo(0, egs.StringLength));
-//				data.push_back(data_vector::value_type(tmp, SelInfo(0, egs.StringLength)));
-				sortdata.emplace_back(tmp, y - get_global_info()->get_first_line());
-//				sortdata.push_back(sortpair(tmp, y - get_global_info()->get_first_line()));
-				if (get_global_info()->cbValue_Numeric) {
+				sortdata.emplace_back(tmp, strNum - get_global_info()->get_first_line());
+				if (get_global_info()->cbValue_Comparation == Comparation::NUMERIC) {
 					sortdata.back().second.num = FindNum(sortdata.back().first.c_str());
 				}
-				LogDebug(L"sortdata.back().second.line: %Id, sortdata.back().second.num: %f, sortdata.back().first: '%s'\n", sortdata.back().second.line, (double )sortdata.back().second.num,
-				         sortdata.back().first.c_str());
-				LogDebug(L"data.back().second.start: %Id, data.back().second.count: %Id, data.back().first: '%s'\n", data.back().second.start, data.back().second.count, data.back().first.c_str());
-			}
+				LogNoise(L"sortdata.back().second.line: %Id, sortdata.back().second.num: %f, sortdata.back().first: '%s'\n", sortdata.back().second.line, (double )sortdata.back().second.num, sortdata.back().first.c_str());
+				LogNoise(L"data.back().second.start: %Id, data.back().second.count: %Id, data.back().first: '%s'\n", data.back().second.start, data.back().second.count, data.back().first.c_str());
 				break;
+			}
 		}
-//		file << "line: " << i << " sta: " << data[i].second.start << " cnt: " << data[i].second.count << endl;
 	}
-
-//	ofstream file1("sortdata1.log");
-//	for (sort_vector::iterator it = sortdata.begin(); it != sortdata.end(); ++it) {
-//		file1 << "line: " << it->second.line << " num: " << setprecision(16) << it->second.num << " str: '" << oem(it->first).c_str() << "'" << endl;
-//	}
 
 	LogTrace();
-	std::pointer_to_binary_function<const sortpair &, const sortpair &, bool> pfLe(get_global_info()->cbValue_Numeric ? ptr_fun(PairLessNum) : ptr_fun(PairLessCScode)), pfEq(
-	    get_global_info()->cbValue_Numeric ? ptr_fun(PairEqNum) : ptr_fun(PairEqCScode));
-
-	switch (get_global_info()->cbValue_Sensitive) {
-		case 0:
-			pfLe = get_global_info()->cbValue_Numeric ? ptr_fun(PairLessNum) : ptr_fun(PairLessCI);
-			pfEq = get_global_info()->cbValue_Numeric ? ptr_fun(PairEqNum) : ptr_fun(PairEqCI);
+	std::pointer_to_binary_function<const sortpair &, const sortpair &, bool> pfLe;
+	std::pointer_to_binary_function<const sortpair &, const sortpair &, bool> pfEq;
+	switch (get_global_info()->cbValue_Comparation) {
+		case Comparation::LEX_CI:
+			pfLe = ptr_fun(PairLessCI);
+			pfEq = ptr_fun(PairEqCI);
 			break;
-		case 1:
-			pfLe = get_global_info()->cbValue_Numeric ? ptr_fun(PairLessNum) : ptr_fun(PairLessCS);
-			pfEq = get_global_info()->cbValue_Numeric ? ptr_fun(PairEqNum) : ptr_fun(PairEqCS);
+		case Comparation::LEX_CS:
+			pfLe = ptr_fun(PairLessCS);
+			pfEq = ptr_fun(PairEqCS);
+			break;
+		case Comparation::LEX_CODE:
+			pfLe = ptr_fun(PairLessCScode);
+			pfEq = ptr_fun(PairEqCScode);
+			break;
+		case Comparation::NUMERIC:
+			pfLe = ptr_fun(PairLessNum);
+			pfEq = ptr_fun(PairEqNum);
+			break;
+		case Comparation::LENGTH:
+			pfLe = ptr_fun(PairLessLength);
+			pfEq = ptr_fun(PairEqLength);
 			break;
 	}
 
-	std::sort(sortdata.begin(), sortdata.end(), pfLe);
+	std::stable_sort(sortdata.begin(), sortdata.end(), pfLe);
 
-	if (get_global_info()->cbValue_Operation) {
+	if (get_global_info()->cbValue_Operation != Operation::SORT) {
 		sort_vector::iterator it = std::unique(sortdata.begin(), sortdata.end(), pfEq);
 		sortdata.erase(it, sortdata.end());
-		std::sort(sortdata.begin(), sortdata.end(), ptr_fun(PairLessLine));
+		std::stable_sort(sortdata.begin(), sortdata.end(), ptr_fun(PairLessLine));
 	}
 
 //	for (sort_vector::iterator it = sortdata.begin(); it != sortdata.end(); ++it) {
@@ -330,7 +336,7 @@ bool Execute()
 //	}
 
 	Far::Editor::start_undo();
-	if (get_global_info()->cbValue_Invert && !get_global_info()->cbValue_Operation) {
+	if (get_global_info()->cbValue_Invert && get_global_info()->cbValue_Operation == Operation::SORT) {
 		InsertFromVector(data, sortdata.rbegin(), sortdata.rend());
 	} else {
 		InsertFromVector(data, sortdata.begin(), sortdata.end());
@@ -347,23 +353,34 @@ void process()
 	get_global_info()->load_settings();
 	get_global_info()->load_editor_info();
 
-	FarListItem cbItems[] = {{0, Far::get_msg(lbSort), {0}}, {0, Far::get_msg(lbDelBlock), {0}}, {0, Far::get_msg(lbDelSparse), {0}}, };
+	FarListItem cbOperation[] = {
+		{0, Far::get_msg(lbSort), {0}},
+		{0, Far::get_msg(lbRemoveDup), {0}},
+		{0, Far::get_msg(lbSparseDup), {0}},
+	};
+
+	FarListItem cbComparation[] = {
+		{0, Far::get_msg(lbCompLexCI), {0}},
+		{0, Far::get_msg(lbCompLexCS), {0}},
+		{0, Far::get_msg(lbCompLexCode), {0}},
+		{0, Far::get_msg(lbCompNumeric), {0}},
+		{0, Far::get_msg(lbCompLength), {0}},
+	};
 
 	using namespace Far;
 	auto Builder = create_dialog_builder(DialogGuid, get_msg(DlgTitle));
 	LogTrace();
-	Builder->add_item(create_checkbox(&get_global_info()->cbValue_Invert, cbInvert));
-	Builder->add_item(create_checkbox(&get_global_info()->cbValue_Sensitive, cbSensitive, DIF_3STATE));
+	Builder->add_item(create_label(txOperation));
+	Builder->add_item(create_combobox(reinterpret_cast<ssize_t*>(&get_global_info()->cbValue_Operation), cbOperation, Base::lengthof(cbOperation), DIF_DROPDOWNLIST | DIF_LISTNOAMPERSAND));
+	Builder->add_item(create_label(txComparation));
+	Builder->add_item(create_combobox(reinterpret_cast<ssize_t*>(&get_global_info()->cbValue_Comparation), cbComparation, Base::lengthof(cbComparation), DIF_DROPDOWNLIST | DIF_LISTNOAMPERSAND));
 	Builder->add_item(create_separator());
-	Builder->add_item(create_checkbox(&get_global_info()->cbValue_Numeric, cbNumeric));
+	Builder->add_item(create_checkbox(&get_global_info()->cbValue_Invert, cbInvert));
 	Builder->add_item(create_label(txWhitespace));
 	Builder->add_item_after(create_edit(get_global_info()->edValue_Whitespaces, 10));
 	Builder->add_item(create_separator());
 	Builder->add_item(create_checkbox(&get_global_info()->cbValue_Selected, cbSelected, (get_global_info()->get_block_type() != BTYPE_COLUMN) ? DIF_DISABLE : 0));
 	Builder->add_item(create_checkbox(&get_global_info()->cbValue_AsEmpty, cbAsEmpty, (get_global_info()->get_block_type() != BTYPE_COLUMN) ? DIF_DISABLE : 0));
-	Builder->add_item(create_separator());
-	Builder->add_item(create_label(txOperation));
-	Builder->add_item(create_combobox(&get_global_info()->cbValue_Operation, cbItems, Base::lengthof(cbItems), DIF_DROPDOWNLIST | DIF_LISTNOAMPERSAND));
 	Builder->add_item(create_separator());
 	Builder->add_OKCancel(get_msg(txtBtnOk), get_msg(txtBtnCancel));
 	if (Builder->show()) {

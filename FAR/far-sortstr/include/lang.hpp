@@ -23,15 +23,19 @@
 
 enum FarMessage {
 	cbInvert = 5,
-	cbSensitive,
-	cbNumeric,
 	txWhitespace,
 	cbSelected,
 	cbAsEmpty,
 	txOperation,
 	lbSort,
-	lbDelBlock,
-	lbDelSparse,
+	lbRemoveDup,
+	lbSparseDup,
+	txComparation,
+	lbCompLexCI,
+	lbCompLexCS,
+	lbCompLexCode,
+	lbCompNumeric,
+	lbCompLength,
 };
 
 #endif

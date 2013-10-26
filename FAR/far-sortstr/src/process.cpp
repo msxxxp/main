@@ -33,18 +33,33 @@
 #include <functional>
 #include <cmath>
 #include <vector>
+#include <tuple>
 #include <cstdlib>
 
 PCWSTR EDITOR_EOL = nullptr;
+const ssize_t NOTHING_SELECTED = -2;
 
-struct SelInfo {
+struct SelectionInfo {
 	ssize_t start;
 	ssize_t count;
+	ustring substr;
+	long double num;
 
-	SelInfo(ssize_t s = -1, ssize_t c = -1) :
+	SelectionInfo(ssize_t s, ssize_t c) :
 		start(s),
 		count(c)
 	{
+	}
+
+	SelectionInfo(const ustring & base, ssize_t s, ssize_t c) :
+		start(s),
+		count(c),
+		substr(),
+		num(0)
+	{
+		if (get_global_info()->cbValue_Comparation == Comparation::NUMERIC) {
+			num = FindNum(substr.c_str());
+		}
 	}
 };
 
@@ -59,8 +74,10 @@ struct SortInfo {
 	}
 };
 
-typedef std::pair<ustring, SelInfo> datapair;
+typedef std::tuple<ustring, SelectionInfo> StringData;
+typedef std::pair<ustring, SelectionInfo> datapair;
 typedef std::pair<ustring, SortInfo> sortpair;
+typedef std::vector<StringData> strings;
 typedef std::vector<datapair> data_vector;
 typedef std::vector<sortpair> sort_vector;
 
@@ -190,7 +207,7 @@ void InsertFromVector(const data_vector & data, Type first, Type last)
 {
 	size_t i = get_global_info()->get_first_line(), j = 0;
 	for (; first != last; ++i, ++j) {
-		if (data[j].second.count == -2 && !get_global_info()->cbValue_AsEmpty) {
+		if (data[j].second.count == NOTHING_SELECTED && !get_global_info()->cbValue_AsEmpty) {
 			continue;
 		}
 		if (j == first->second.line) {
@@ -266,14 +283,14 @@ bool Execute()
 		ustring tmp(egs.StringText, egs.StringLength);
 		LogDebug(L"str[%Id]: egs.SelStart: %Id, egs.SelEnd: %Id, egs.StringLength: %Id '%s'\n", strNum, egs.SelStart, egs.SelEnd, egs.StringLength, tmp.c_str());
 
-		ssize_t SelLen = -2;
+		ssize_t SelLen = NOTHING_SELECTED;
 		switch (get_global_info()->get_block_type()) {
 			case BTYPE_COLUMN: {
 				if (egs.SelStart < egs.StringLength) {
 					SelLen = std::min(egs.SelEnd, egs.StringLength) - std::min(egs.SelStart, egs.StringLength);
 				}
 				LogDebug(L"SelLen: %Id\n", SelLen);
-				if (SelLen != -2) {
+				if (SelLen != NOTHING_SELECTED) {
 					sortdata.emplace_back(ustring(egs.StringText + egs.SelStart, SelLen), strNum - get_global_info()->get_first_line());
 					if (get_global_info()->cbValue_Comparation == Comparation::NUMERIC) {
 						sortdata.back().second.num = FindNum(sortdata.back().first.c_str());
@@ -283,13 +300,14 @@ bool Execute()
 					sortdata.emplace_back(ustring(), strNum - get_global_info()->get_first_line());
 					LogNoise(L"sortdata.back().second.line: %Id, sortdata.back().second.num: %f, sortdata.back().first: '%s'\n", sortdata.back().second.line, (double )sortdata.back().second.num, sortdata.back().first.c_str());
 				}
-				data.emplace_back(tmp, SelInfo(egs.SelStart, SelLen));
+				data.emplace_back(tmp, SelectionInfo(egs.SelStart, SelLen));
+				strings.emplace_back(tmp, SelectionInfo(egs.SelStart, SelLen));
 				LogNoise(L"data.back().second.start: %Id, data.back().second.count: %Id, data.back().first: '%s'\n", data.back().second.start, data.back().second.count, data.back().first.c_str());
 				break;
 			}
 			case BTYPE_STREAM:
 			default: {
-				data.emplace_back(tmp, SelInfo(0, egs.StringLength));
+				data.emplace_back(tmp, SelectionInfo(0, egs.StringLength));
 				sortdata.emplace_back(tmp, strNum - get_global_info()->get_first_line());
 				if (get_global_info()->cbValue_Comparation == Comparation::NUMERIC) {
 					sortdata.back().second.num = FindNum(sortdata.back().first.c_str());
@@ -327,12 +345,12 @@ bool Execute()
 			break;
 	}
 
-	std::stable_sort(sortdata.begin(), sortdata.end(), pfLe);
+	std::sort(sortdata.begin(), sortdata.end(), pfLe);
 
 	if (get_global_info()->cbValue_Operation != Operation::SORT) {
 		sort_vector::iterator it = std::unique(sortdata.begin(), sortdata.end(), pfEq);
 		sortdata.erase(it, sortdata.end());
-		std::stable_sort(sortdata.begin(), sortdata.end(), ptr_fun(PairLessLine));
+		std::sort(sortdata.begin(), sortdata.end(), ptr_fun(PairLessLine));
 	}
 
 //	for (sort_vector::iterator it = sortdata.begin(); it != sortdata.end(); ++it) {

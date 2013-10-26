@@ -39,7 +39,7 @@
 									<listOptionValue builtIn="false" value="ENABLE_LOGGER"/>
 									<listOptionValue builtIn="false" value="NoStlString"/>
 								</option>
-								<option id="gnu.cpp.compiler.option.other.other.668966724" name="Other flags" superClass="gnu.cpp.compiler.option.other.other" value="-c -fmessage-length=0 -fno-exceptions -fno-rtti -fno-threadsafe-statics -std=c++11" valueType="string"/>
+								<option id="gnu.cpp.compiler.option.other.other.668966724" name="Other flags" superClass="gnu.cpp.compiler.option.other.other" value="-c -fmessage-length=0 -fno-exceptions -fno-rtti -fno-threadsafe-statics -std=c++11 -m64" valueType="string"/>
 								<option id="gnu.cpp.compiler.option.warnings.extrawarn.67340761" name="Extra warnings (-Wextra)" superClass="gnu.cpp.compiler.option.warnings.extrawarn" value="true" valueType="boolean"/>
 								<option id="gnu.cpp.compiler.option.warnings.toerrors.1768996861" name="Warnings as errors (-Werror)" superClass="gnu.cpp.compiler.option.warnings.toerrors" value="true" valueType="boolean"/>
 								<option id="gnu.cpp.compiler.option.warnings.pedantic.527239605" name="Pedantic (-pedantic)" superClass="gnu.cpp.compiler.option.warnings.pedantic" value="true" valueType="boolean"/>
@@ -50,9 +50,9 @@
 							<tool command="g++" commandLinePattern="${COMMAND} ${FLAGS} ${OUTPUT_FLAG} ${OUTPUT_PREFIX}${OUTPUT} ${INPUTS}" errorParsers="org.eclipse.cdt.core.GLDErrorParser" id="cdt.managedbuild.tool.gnu.cpp.linker.mingw.exe.release.254862411" name="MinGW C++ Linker" superClass="cdt.managedbuild.tool.gnu.cpp.linker.mingw.exe.release">
 								<option id="gnu.cpp.link.option.strip.1149219272" name="Omit all symbol information (-s)" superClass="gnu.cpp.link.option.strip" value="true" valueType="boolean"/>
 								<option defaultValue="true" id="gnu.cpp.link.option.shared.1868224880" name="Shared (-shared)" superClass="gnu.cpp.link.option.shared" valueType="boolean"/>
-								<option id="gnu.cpp.link.option.flags.1996872322" name="Linker flags" superClass="gnu.cpp.link.option.flags" value="-Wl,-Map=sortstr-x64.map ..\src\mainW.gcc.def" valueType="string"/>
+								<option id="gnu.cpp.link.option.flags.1996872322" name="Linker flags" superClass="gnu.cpp.link.option.flags" value="-Wl,-Map=sortstr-x64.map ..\src\mainW.gcc.def -static" valueType="string"/>
 								<option id="gnu.cpp.link.option.paths.1318845807" name="Library search path (-L)" superClass="gnu.cpp.link.option.paths" valueType="libPaths">
-									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/liblog/Release-x64}&quot;"/>
+									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/liblog/Release-x64-stub}&quot;"/>
 									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/libfar3/Release-x64-NoStr}&quot;"/>
 									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/libbase/Release-x64-NoStr}&quot;"/>
 								</option>
@@ -63,7 +63,6 @@
 									<listOptionValue builtIn="false" value="gcc"/>
 									<listOptionValue builtIn="false" value="mingwex"/>
 									<listOptionValue builtIn="false" value="mingw32"/>
-									<listOptionValue builtIn="false" value="stdc++"/>
 									<listOptionValue builtIn="false" value="ntdll"/>
 									<listOptionValue builtIn="false" value="kernel32"/>
 									<listOptionValue builtIn="false" value="msvcrt"/>
@@ -212,7 +211,7 @@
 									<listOptionValue builtIn="false" value="_UNICODE"/>
 									<listOptionValue builtIn="false" value="ENABLE_LOGGER"/>
 								</option>
-								<option id="gnu.cpp.compiler.option.other.other.821760731" name="Other flags" superClass="gnu.cpp.compiler.option.other.other" value="-c -fmessage-length=0 -fno-exceptions -fno-rtti -fno-threadsafe-statics -std=c++11" valueType="string"/>
+								<option id="gnu.cpp.compiler.option.other.other.821760731" name="Other flags" superClass="gnu.cpp.compiler.option.other.other" value="-c -fmessage-length=0 -fno-exceptions -fno-rtti -fno-threadsafe-statics -std=c++11 -m64" valueType="string"/>
 								<option id="gnu.cpp.compiler.option.warnings.extrawarn.759080496" name="Extra warnings (-Wextra)" superClass="gnu.cpp.compiler.option.warnings.extrawarn" value="true" valueType="boolean"/>
 								<option id="gnu.cpp.compiler.option.warnings.toerrors.756864771" name="Warnings as errors (-Werror)" superClass="gnu.cpp.compiler.option.warnings.toerrors" value="true" valueType="boolean"/>
 								<option id="gnu.cpp.compiler.option.warnings.pedantic.error.391875808" name="Pedantic warnings as errors (-pedantic-errors)" superClass="gnu.cpp.compiler.option.warnings.pedantic.error" value="true" valueType="boolean"/>

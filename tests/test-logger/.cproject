@@ -39,18 +39,18 @@
 							<tool command="g++" commandLinePattern="${COMMAND} ${FLAGS} ${OUTPUT_FLAG} ${OUTPUT_PREFIX}${OUTPUT} ${INPUTS}" errorParsers="org.eclipse.cdt.core.GLDErrorParser" id="cdt.managedbuild.tool.gnu.cpp.linker.mingw.exe.release.186449539" name="MinGW C++ Linker" superClass="cdt.managedbuild.tool.gnu.cpp.linker.mingw.exe.release">
 								<option id="gnu.cpp.link.option.strip.184391048" name="Omit all symbol information (-s)" superClass="gnu.cpp.link.option.strip" value="true" valueType="boolean"/>
 								<option id="gnu.cpp.link.option.paths.1259026971" name="Library search path (-L)" superClass="gnu.cpp.link.option.paths" valueType="libPaths">
-									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/liblog/Release-x64-stub}&quot;"/>
+									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/liblog/Release-x64}&quot;"/>
 									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/libbase/Release-x64}&quot;"/>
 								</option>
 								<option id="gnu.cpp.link.option.libs.345359101" name="Libraries (-l)" superClass="gnu.cpp.link.option.libs" valueType="libs">
 									<listOptionValue builtIn="false" value="liblog"/>
 									<listOptionValue builtIn="false" value="libbase"/>
+									<listOptionValue builtIn="false" value="gcc"/>
 									<listOptionValue builtIn="false" value="ntdll"/>
 									<listOptionValue builtIn="false" value="kernel32"/>
 									<listOptionValue builtIn="false" value="msvcrt"/>
-									<listOptionValue builtIn="false" value="gcc"/>
 								</option>
-								<option id="gnu.cpp.link.option.flags.1779362223" name="Linker flags" superClass="gnu.cpp.link.option.flags" value="-Wl,-Map=test-logger.map -m64" valueType="string"/>
+								<option id="gnu.cpp.link.option.flags.1779362223" name="Linker flags" superClass="gnu.cpp.link.option.flags" value="-Wl,-Map=test-logger.map -m64 -static" valueType="string"/>
 								<option id="gnu.cpp.link.option.nostart.1548279019" name="Do not use standard start files (-nostartfiles)" superClass="gnu.cpp.link.option.nostart" value="true" valueType="boolean"/>
 								<option id="gnu.cpp.link.option.nodeflibs.1262073161" name="Do not use default libraries (-nodefaultlibs)" superClass="gnu.cpp.link.option.nodeflibs" value="true" valueType="boolean"/>
 								<option id="gnu.cpp.link.option.nostdlibs.1852980550" name="No startup or default libs (-nostdlib)" superClass="gnu.cpp.link.option.nostdlibs" value="true" valueType="boolean"/>

@@ -72,7 +72,7 @@ PCWSTR FarGlobalInfo::get_title() const
 VersionInfo FarGlobalInfo::get_version() const
 {
 	using namespace AutoVersion;
-	return MAKEFARVERSION(MAJOR, MINOR, BUILD, FARMANAGERVERSION_BUILD, VS_RELEASE);
+	return MAKEFARVERSION(MAJOR, MINOR, BUILD, FARMANAGERVERSION_BUILD, VS_BETA);
 }
 
 VersionInfo FarGlobalInfo::get_min_version() const

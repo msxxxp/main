@@ -46,6 +46,7 @@ bool is_whitespace(WCHAR ch)
 
 INT_PTR editor_set_string(ssize_t y, const ustring & str, PCWSTR eol)
 {
+	LogNoise(L"row: %5Id '%s'\n", y, str.c_str());
 	return Far::Editor::set_string(y, str.c_str(), str.size(), eol);
 }
 
@@ -63,12 +64,13 @@ struct StringInfo {
 	{
 //		LogNoise(L"str[%Id]: egs.SelStart: %Id, egs.SelEnd: %Id, egs.StringLength: %Id '%s'\n", strNum, egs.SelStart, egs.SelEnd, egs.StringLength, tmp.c_str());
 		if (fgi->get_block_type() == BTYPE_COLUMN) {
+			start = egs.SelStart;
 			count = NOTHING_SELECTED;
 			if (egs.SelStart < egs.StringLength) {
 				count = std::min(egs.SelEnd, egs.StringLength) - std::min(egs.SelStart, egs.StringLength);
 			}
 		}
-		LogNoise(L"start: %Id, count: %Id '%s'\n", start, count, str.c_str());
+		LogNoise(L"row: %Id, start: %Id, count: %Id '%s'\n", row, start, count, str.c_str());
 	}
 };
 
@@ -85,7 +87,8 @@ struct SortInfo {
 		if (fgi->cbValue_Comparation == Comparation::NUMERIC) {
 			num = FindNum(substr.c_str());
 		}
-//		LogNoise(L"sortdata.back().second.line: %Id, sortdata.back().second.num: %f, sortdata.back().first: '%s'\n", sortdata.back().line, (double )sortdata.back().num, sortdata.back().substr.c_str());
+		LogNoise(L"line: %Id '%s'\n", line, substr.c_str());
+//		LogNoise(L"line: %Id, num: %f '%s'\n", line, (double)num, substr.c_str());
 	}
 
 private:
@@ -135,7 +138,6 @@ long double SortInfo::FindNum(PCWSTR str)
 	}
 	return ret;
 }
-
 
 typedef std::vector<StringInfo> data_vector;
 typedef std::vector<SortInfo> sort_vector;
@@ -230,30 +232,35 @@ void InsertFromVector(const data_vector & data, Type first, Type last)
 {
 	auto fgi = get_global_info();
 
-	size_t i = fgi->get_first_line(), j = 0;
-	for (; first != last; ++i, ++j) {
-		if (data[j].count == NOTHING_SELECTED && !fgi->cbValue_AsEmpty) {
+	size_t i = fgi->get_first_line();
+	auto si = data.cbegin();
+	for (; si != data.end() && first != last; ++i, ++si) {
+		if (!fgi->cbValue_AsEmpty && si->count == NOTHING_SELECTED) {
+			// do not touch string where nothing selected
 			continue;
 		}
-		if (j == first->line) {
+
+		if (si->row == first->line) {
+			// skip the same lines
 			++first;
 			continue;
 		}
+
 		switch (fgi->cbValue_Operation) {
 			case Operation::SORT:
-				if (fgi->get_block_type() == BTYPE_STREAM || !fgi->cbValue_Selected) {
-					editor_set_string(i, data[first->line].str, EDITOR_EOL);
-				} else {
-					if (data[j].str.size() <= (size_t)data[j].start) {
-						ustring tmp(data[j].start, Base::SPACE_C);
-						tmp.replace(0, data[j].str.size(), data[j].str);
+				if (fgi->get_block_type() == BTYPE_COLUMN && fgi->cbValue_Selected) {
+					if (si->str.size() <= (size_t)si->start) {
+						ustring tmp(si->start, Base::SPACE_C);
+						tmp.replace(0, si->str.size(), si->str);
 						tmp += first->substr;
 						editor_set_string(i, tmp, EDITOR_EOL);
 					} else {
-						ustring tmp(data[j].str);
-						tmp.replace(data[j].start, data[j].count, first->substr);
+						ustring tmp(si->str);
+						tmp.replace(si->start, si->count, first->substr);
 						editor_set_string(i, tmp, EDITOR_EOL);
 					}
+				} else {
+					editor_set_string(i, data[first->line].str, EDITOR_EOL);
 				}
 				++first;
 				break;
@@ -262,7 +269,7 @@ void InsertFromVector(const data_vector & data, Type first, Type last)
 				++first;
 				break;
 			case Operation::SPARSE_DUP: {
-				if (!data[j].str.empty()) {
+				if (!si->str.empty()) {
 					editor_set_string(i, Base::EMPTY_STR, EDITOR_EOL);
 				}
 				break;
@@ -273,15 +280,71 @@ void InsertFromVector(const data_vector & data, Type first, Type last)
 		case Operation::SORT:
 			break;
 		case Operation::REMOVE_DUP:
-			for (; j < data.size(); ++i, ++j)
+			for (; si != data.end(); ++i, ++si)
 				editor_set_string(i, Base::EMPTY_STR, EDITOR_EOL);
 			break;
 		case Operation::SPARSE_DUP:
-			for (; j < data.size(); ++i, ++j)
-				if (!data[j].str.empty())
+			for (; si != data.end(); ++i, ++si)
+				if (!si->str.empty())
 					editor_set_string(i, Base::EMPTY_STR, EDITOR_EOL);
 			break;
 	}
+
+
+
+
+//	size_t i = fgi->get_first_line(), j = 0;
+//	for (; first != last; ++i, ++j) {
+//		if (data[j].count == NOTHING_SELECTED && !fgi->cbValue_AsEmpty) {
+//			continue;
+//		}
+//		if (j == first->line) {
+//			++first;
+//			continue;
+//		}
+//		switch (fgi->cbValue_Operation) {
+//			case Operation::SORT:
+//				if (fgi->get_block_type() == BTYPE_COLUMN && fgi->cbValue_Selected) {
+//					if (data[j].str.size() <= (size_t)data[j].start) {
+//						ustring tmp(data[j].start, Base::SPACE_C);
+//						tmp.replace(0, data[j].str.size(), data[j].str);
+//						tmp += first->substr;
+//						editor_set_string(i, tmp, EDITOR_EOL);
+//					} else {
+//						ustring tmp(data[j].str);
+//						tmp.replace(data[j].start, data[j].count, first->substr);
+//						editor_set_string(i, tmp, EDITOR_EOL);
+//					}
+//				} else {
+//					editor_set_string(i, data[first->line].str, EDITOR_EOL);
+//				}
+//				++first;
+//				break;
+//			case Operation::REMOVE_DUP:
+//				editor_set_string(i, data[first->line].str, EDITOR_EOL);
+//				++first;
+//				break;
+//			case Operation::SPARSE_DUP: {
+//				if (!data[j].str.empty()) {
+//					editor_set_string(i, Base::EMPTY_STR, EDITOR_EOL);
+//				}
+//				break;
+//			}
+//		}
+//	}
+//	switch (fgi->cbValue_Operation) {
+//		case Operation::SORT:
+//			break;
+//		case Operation::REMOVE_DUP:
+//			for (; j < data.size(); ++i, ++j)
+//				editor_set_string(i, Base::EMPTY_STR, EDITOR_EOL);
+//			break;
+//		case Operation::SPARSE_DUP:
+//			for (; j < data.size(); ++i, ++j)
+//				if (!data[j].str.empty())
+//					editor_set_string(i, Base::EMPTY_STR, EDITOR_EOL);
+//			break;
+//	}
 }
 
 bool Execute()
@@ -308,7 +371,9 @@ bool Execute()
 			break;
 
 		data.emplace_back(egs, fgi);
-		sortdata.emplace_back(data.back(), fgi);
+		StringInfo & si = data.back();
+		if (get_global_info()->cbValue_AsEmpty || si.count != NOTHING_SELECTED)
+			sortdata.emplace_back(si, fgi);
 	}
 
 	LogTrace();
@@ -337,6 +402,15 @@ bool Execute()
 			break;
 	}
 
+	for (auto it = data.begin(); it != data.end(); ++it) {
+		LogDebug(L"row: %5Iu, str: '%s'\n", it->row, it->str.c_str());
+	}
+
+	LogDebug(L"before: [%Iu]\n", sortdata.size());
+	for (auto it = sortdata.begin(); it != sortdata.end(); ++it) {
+		LogDebug(L"line: %5Iu, substr: '%s'\n", it->line, it->substr.c_str());
+	}
+
 	std::sort(sortdata.begin(), sortdata.end(), pfLe);
 
 	if (fgi->cbValue_Operation != Operation::SORT) {
@@ -345,9 +419,10 @@ bool Execute()
 		std::sort(sortdata.begin(), sortdata.end(), std::ptr_fun(PairLessLine));
 	}
 
-//	for (sort_vector::iterator it = sortdata.begin(); it != sortdata.end(); ++it) {
-//		LogDebug(L"line: %Iu, str: '%s'\n", it->second.line, it->first.c_str());
-//	}
+	LogDebug(L"after: [%Iu]\n", sortdata.size());
+	for (auto it = sortdata.begin(); it != sortdata.end(); ++it) {
+		LogDebug(L"line: %5Iu, substr: '%s'\n", it->line, it->substr.c_str());
+	}
 
 	Far::Editor::start_undo();
 	if (fgi->cbValue_Invert && fgi->cbValue_Operation == Operation::SORT) {

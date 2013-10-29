@@ -83,9 +83,9 @@ struct FarGlobalInfo: public Far::GlobalInfo_i, private Base::Uncopyable {
 		return m_ei.CurPos;
 	}
 
-	ssize_t get_block_type() const
+	EDITOR_BLOCK_TYPES get_block_type() const
 	{
-		return m_ei.BlockType;
+		return static_cast<EDITOR_BLOCK_TYPES>(m_ei.BlockType);
 	}
 
 	Operation   cbValue_Operation;

@@ -1,5 +1,5 @@
 #include <liblog/logger.hpp>
-#include <libbase/console.hpp>
+//#include <libbase/console.hpp>
 
 namespace Logger {
 

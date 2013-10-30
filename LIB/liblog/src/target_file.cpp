@@ -45,7 +45,7 @@ namespace Logger {
 	{
 		if (m_file.is_valid()) {
 			DWORD written = 0;
-			auto lk(m_sync->lock_scope());
+			auto lockScope(m_sync->lock_scope());
 			::WriteFile(m_file, str, size * sizeof(wchar_t), &written, nullptr);
 		}
 	}

@@ -402,14 +402,14 @@ bool Execute()
 			break;
 	}
 
-	for (auto it = data.begin(); it != data.end(); ++it) {
-		LogDebug(L"row: %5Iu, str: '%s'\n", it->row, it->str.c_str());
-	}
-
-	LogDebug(L"before: [%Iu]\n", sortdata.size());
-	for (auto it = sortdata.begin(); it != sortdata.end(); ++it) {
-		LogDebug(L"line: %5Iu, substr: '%s'\n", it->line, it->substr.c_str());
-	}
+//	for (auto it = data.begin(); it != data.end(); ++it) {
+//		LogDebug(L"row: %5Iu, str: '%s'\n", it->row, it->str.c_str());
+//	}
+//
+//	LogDebug(L"before: [%Iu]\n", sortdata.size());
+//	for (auto it = sortdata.begin(); it != sortdata.end(); ++it) {
+//		LogDebug(L"line: %5Iu, substr: '%s'\n", it->line, it->substr.c_str());
+//	}
 
 	std::sort(sortdata.begin(), sortdata.end(), pfLe);
 
@@ -419,10 +419,10 @@ bool Execute()
 		std::sort(sortdata.begin(), sortdata.end(), std::ptr_fun(PairLessLine));
 	}
 
-	LogDebug(L"after: [%Iu]\n", sortdata.size());
-	for (auto it = sortdata.begin(); it != sortdata.end(); ++it) {
-		LogDebug(L"line: %5Iu, substr: '%s'\n", it->line, it->substr.c_str());
-	}
+//	LogDebug(L"after: [%Iu]\n", sortdata.size());
+//	for (auto it = sortdata.begin(); it != sortdata.end(); ++it) {
+//		LogDebug(L"line: %5Iu, substr: '%s'\n", it->line, it->substr.c_str());
+//	}
 
 	Far::Editor::start_undo();
 	if (fgi->cbValue_Invert && fgi->cbValue_Operation == Operation::SORT) {

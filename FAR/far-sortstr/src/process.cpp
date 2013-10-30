@@ -31,10 +31,7 @@
 #include <liblog/logger.hpp>
 
 #include <functional>
-#include <cmath>
 #include <vector>
-#include <tuple>
-#include <cstdlib>
 
 const PCWSTR EDITOR_EOL = nullptr;
 const ssize_t NOTHING_SELECTED = -2;
@@ -142,37 +139,37 @@ long double SortInfo::FindNum(PCWSTR str)
 typedef std::vector<StringInfo> data_vector;
 typedef std::vector<SortInfo> sort_vector;
 
-bool PairEqCI(const SortInfo & left, const SortInfo & right)
+bool SortInfoEqCI(const SortInfo & left, const SortInfo & right)
 {
 	return Cstr::compare_ci(left.substr.c_str(), right.substr.c_str()) == 0;
 }
 
-bool PairEqCS(const SortInfo & left, const SortInfo & right)
+bool SortInfoEqCS(const SortInfo & left, const SortInfo & right)
 {
 	return Cstr::compare_cs(left.substr.c_str(), right.substr.c_str()) == 0;
 }
 
-bool PairEqCScode(const SortInfo & left, const SortInfo & right)
+bool SortInfoEqCScode(const SortInfo & left, const SortInfo & right)
 {
 	return Cstr::compare(left.substr.c_str(), right.substr.c_str()) == 0;
 }
 
-bool PairEqNum(const SortInfo & left, const SortInfo & right)
+bool SortInfoEqNum(const SortInfo & left, const SortInfo & right)
 {
 	return left.num == right.num;
 }
 
-bool PairLessLine(const SortInfo & left, const SortInfo & right)
+bool SortInfoLessLine(const SortInfo & left, const SortInfo & right)
 {
 	return left.line < right.line;
 }
 
-bool PairEqLength(const SortInfo & left, const SortInfo & right)
+bool SortInfoEqLength(const SortInfo & left, const SortInfo & right)
 {
 	return left.substr.length() == right.substr.length();
 }
 
-bool PairLessCI(const SortInfo & left, const SortInfo & right)
+bool SortInfoLessCI(const SortInfo & left, const SortInfo & right)
 {
 	int ret = Cstr::compare_ci(left.substr.c_str(), right.substr.c_str());
 	if (ret < 0)
@@ -182,7 +179,7 @@ bool PairLessCI(const SortInfo & left, const SortInfo & right)
 	return false;
 }
 
-bool LoggedPairLessCS(const SortInfo & left, const SortInfo & right)
+bool SortInfoLessCS(const SortInfo & left, const SortInfo & right)
 {
 	int ret = Cstr::compare_cs(left.substr.c_str(), right.substr.c_str());
 	if (ret < 0)
@@ -192,14 +189,7 @@ bool LoggedPairLessCS(const SortInfo & left, const SortInfo & right)
 	return false;
 }
 
-bool PairLessCS(const SortInfo & left, const SortInfo & right)
-{
-	bool ret = LoggedPairLessCS(left, right);
-//	LogNoise(L"'%s' < '%s' -> %d\n", left.substr.c_str(), right.substr.c_str(), ret);
-	return ret;
-}
-
-bool PairLessCScode(const SortInfo & left, const SortInfo & right)
+bool SortInfoLessCScode(const SortInfo & left, const SortInfo & right)
 {
 	int ret = Cstr::compare(left.substr.c_str(), right.substr.c_str());
 	if (ret < 0)
@@ -209,7 +199,7 @@ bool PairLessCScode(const SortInfo & left, const SortInfo & right)
 	return false;
 }
 
-bool PairLessNum(const SortInfo & left, const SortInfo & right)
+bool SortInfoLessNum(const SortInfo & left, const SortInfo & right)
 {
 	if (left.num < right.num)
 		return true;
@@ -218,7 +208,7 @@ bool PairLessNum(const SortInfo & left, const SortInfo & right)
 	return false;
 }
 
-bool PairLessLength(const SortInfo & left, const SortInfo & right)
+bool SortInfoLessLength(const SortInfo & left, const SortInfo & right)
 {
 	if (left.substr.length() < right.substr.length())
 		return true;
@@ -289,62 +279,6 @@ void InsertFromVector(const data_vector & data, Type first, Type last)
 					editor_set_string(i, Base::EMPTY_STR, EDITOR_EOL);
 			break;
 	}
-
-
-
-
-//	size_t i = fgi->get_first_line(), j = 0;
-//	for (; first != last; ++i, ++j) {
-//		if (data[j].count == NOTHING_SELECTED && !fgi->cbValue_AsEmpty) {
-//			continue;
-//		}
-//		if (j == first->line) {
-//			++first;
-//			continue;
-//		}
-//		switch (fgi->cbValue_Operation) {
-//			case Operation::SORT:
-//				if (fgi->get_block_type() == BTYPE_COLUMN && fgi->cbValue_Selected) {
-//					if (data[j].str.size() <= (size_t)data[j].start) {
-//						ustring tmp(data[j].start, Base::SPACE_C);
-//						tmp.replace(0, data[j].str.size(), data[j].str);
-//						tmp += first->substr;
-//						editor_set_string(i, tmp, EDITOR_EOL);
-//					} else {
-//						ustring tmp(data[j].str);
-//						tmp.replace(data[j].start, data[j].count, first->substr);
-//						editor_set_string(i, tmp, EDITOR_EOL);
-//					}
-//				} else {
-//					editor_set_string(i, data[first->line].str, EDITOR_EOL);
-//				}
-//				++first;
-//				break;
-//			case Operation::REMOVE_DUP:
-//				editor_set_string(i, data[first->line].str, EDITOR_EOL);
-//				++first;
-//				break;
-//			case Operation::SPARSE_DUP: {
-//				if (!data[j].str.empty()) {
-//					editor_set_string(i, Base::EMPTY_STR, EDITOR_EOL);
-//				}
-//				break;
-//			}
-//		}
-//	}
-//	switch (fgi->cbValue_Operation) {
-//		case Operation::SORT:
-//			break;
-//		case Operation::REMOVE_DUP:
-//			for (; j < data.size(); ++i, ++j)
-//				editor_set_string(i, Base::EMPTY_STR, EDITOR_EOL);
-//			break;
-//		case Operation::SPARSE_DUP:
-//			for (; j < data.size(); ++i, ++j)
-//				if (!data[j].str.empty())
-//					editor_set_string(i, Base::EMPTY_STR, EDITOR_EOL);
-//			break;
-//	}
 }
 
 bool Execute()
@@ -381,24 +315,24 @@ bool Execute()
 	std::pointer_to_binary_function<const SortInfo &, const SortInfo &, bool> pfEq;
 	switch (fgi->cbValue_Comparation) {
 		case Comparation::LEX_CI:
-			pfLe = std::ptr_fun(PairLessCI);
-			pfEq = std::ptr_fun(PairEqCI);
+			pfLe = std::ptr_fun(SortInfoLessCI);
+			pfEq = std::ptr_fun(SortInfoEqCI);
 			break;
 		case Comparation::LEX_CS:
-			pfLe = std::ptr_fun(PairLessCS);
-			pfEq = std::ptr_fun(PairEqCS);
+			pfLe = std::ptr_fun(SortInfoLessCS);
+			pfEq = std::ptr_fun(SortInfoEqCS);
 			break;
 		case Comparation::LEX_CODE:
-			pfLe = std::ptr_fun(PairLessCScode);
-			pfEq = std::ptr_fun(PairEqCScode);
+			pfLe = std::ptr_fun(SortInfoLessCScode);
+			pfEq = std::ptr_fun(SortInfoEqCScode);
 			break;
 		case Comparation::NUMERIC:
-			pfLe = std::ptr_fun(PairLessNum);
-			pfEq = std::ptr_fun(PairEqNum);
+			pfLe = std::ptr_fun(SortInfoLessNum);
+			pfEq = std::ptr_fun(SortInfoEqNum);
 			break;
 		case Comparation::LENGTH:
-			pfLe = std::ptr_fun(PairLessLength);
-			pfEq = std::ptr_fun(PairEqLength);
+			pfLe = std::ptr_fun(SortInfoLessLength);
+			pfEq = std::ptr_fun(SortInfoEqLength);
 			break;
 	}
 
@@ -416,7 +350,7 @@ bool Execute()
 	if (fgi->cbValue_Operation != Operation::SORT) {
 		sort_vector::iterator it = std::unique(sortdata.begin(), sortdata.end(), pfEq);
 		sortdata.erase(it, sortdata.end());
-		std::sort(sortdata.begin(), sortdata.end(), std::ptr_fun(PairLessLine));
+		std::sort(sortdata.begin(), sortdata.end(), std::ptr_fun(SortInfoLessLine));
 	}
 
 //	LogDebug(L"after: [%Iu]\n", sortdata.size());
@@ -459,22 +393,22 @@ void process()
 	};
 
 	using namespace Far;
-	auto Builder = create_dialog_builder(DialogGuid, get_msg(DlgTitle));
+	auto dialog = create_dialog_builder(DialogGuid, get_msg(DlgTitle));
 	LogTrace();
-	Builder->add_item(create_label(txOperation));
-	Builder->add_item(create_combobox(reinterpret_cast<ssize_t*>(&fgi->cbValue_Operation), cbOperation, Base::lengthof(cbOperation), DIF_DROPDOWNLIST | DIF_LISTNOAMPERSAND));
-	Builder->add_item(create_label(txComparation));
-	Builder->add_item(create_combobox(reinterpret_cast<ssize_t*>(&fgi->cbValue_Comparation), cbComparation, Base::lengthof(cbComparation), DIF_DROPDOWNLIST | DIF_LISTNOAMPERSAND));
-	Builder->add_item(create_separator());
-	Builder->add_item(create_checkbox(&fgi->cbValue_Invert, cbInvert));
-	Builder->add_item(create_label(txWhitespace));
-	Builder->add_item_after(create_edit(fgi->edValue_Whitespaces, 10));
-	Builder->add_item(create_separator());
-	Builder->add_item(create_checkbox(&fgi->cbValue_Selected, cbSelected, (fgi->get_block_type() != BTYPE_COLUMN) ? DIF_DISABLE : 0));
-	Builder->add_item(create_checkbox(&fgi->cbValue_AsEmpty, cbAsEmpty, (fgi->get_block_type() != BTYPE_COLUMN) ? DIF_DISABLE : 0));
-	Builder->add_item(create_separator());
-	Builder->add_OKCancel(get_msg(txtBtnOk), get_msg(txtBtnCancel));
-	if (Builder->show()) {
+	dialog->add_item(create_label(txOperation));
+	dialog->add_item(create_combobox(reinterpret_cast<ssize_t*>(&fgi->cbValue_Operation), cbOperation, Base::lengthof(cbOperation), DIF_DROPDOWNLIST | DIF_LISTNOAMPERSAND));
+	dialog->add_item(create_label(txComparation));
+	dialog->add_item(create_combobox(reinterpret_cast<ssize_t*>(&fgi->cbValue_Comparation), cbComparation, Base::lengthof(cbComparation), DIF_DROPDOWNLIST | DIF_LISTNOAMPERSAND));
+	dialog->add_item(create_separator());
+	dialog->add_item(create_checkbox(&fgi->cbValue_Invert, cbInvert));
+	dialog->add_item(create_label(txWhitespace));
+	dialog->add_item_after(create_edit(fgi->edValue_Whitespaces, 10));
+	dialog->add_item(create_separator());
+	dialog->add_item(create_checkbox(&fgi->cbValue_Selected, cbSelected, (fgi->get_block_type() != BTYPE_COLUMN) ? DIF_DISABLE : 0));
+	dialog->add_item(create_checkbox(&fgi->cbValue_AsEmpty, cbAsEmpty, (fgi->get_block_type() != BTYPE_COLUMN) ? DIF_DISABLE : 0));
+	dialog->add_item(create_separator());
+	dialog->add_OKCancel(get_msg(txtBtnOk), get_msg(txtBtnCancel));
+	if (dialog->show()) {
 		fgi->save_settings();
 		Execute();
 	}

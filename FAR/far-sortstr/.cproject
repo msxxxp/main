@@ -64,8 +64,8 @@
 									<listOptionValue builtIn="false" value="mingwex"/>
 									<listOptionValue builtIn="false" value="mingw32"/>
 									<listOptionValue builtIn="false" value="ntdll"/>
-									<listOptionValue builtIn="false" value="kernel32"/>
 									<listOptionValue builtIn="false" value="msvcrt"/>
+									<listOptionValue builtIn="false" value="kernel32"/>
 								</option>
 								<option id="gnu.cpp.link.option.nostart.930216616" name="Do not use standard start files (-nostartfiles)" superClass="gnu.cpp.link.option.nostart" value="true" valueType="boolean"/>
 								<option id="gnu.cpp.link.option.nodeflibs.2000412659" name="Do not use default libraries (-nodefaultlibs)" superClass="gnu.cpp.link.option.nodeflibs" value="true" valueType="boolean"/>
@@ -144,13 +144,12 @@
 									<listOptionValue builtIn="false" value="gcc"/>
 									<listOptionValue builtIn="false" value="mingwex"/>
 									<listOptionValue builtIn="false" value="mingw32"/>
-									<listOptionValue builtIn="false" value="stdc++"/>
 									<listOptionValue builtIn="false" value="ntdll"/>
-									<listOptionValue builtIn="false" value="kernel32"/>
 									<listOptionValue builtIn="false" value="msvcrt"/>
+									<listOptionValue builtIn="false" value="kernel32"/>
 								</option>
 								<option id="gnu.cpp.link.option.paths.175086254" name="Library search path (-L)" superClass="gnu.cpp.link.option.paths" valueType="libPaths">
-									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/liblog/Release-x32}&quot;"/>
+									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/liblog/Release-x32-stub}&quot;"/>
 									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/libfar3/Release-x32-NoStr}&quot;"/>
 									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/libbase/Release-x32-NoStr}&quot;"/>
 								</option>

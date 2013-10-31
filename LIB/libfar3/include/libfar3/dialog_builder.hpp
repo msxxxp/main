@@ -1,5 +1,5 @@
 ﻿/**
- © 2012 Andrew Grechkin
+ © 2013 Andrew Grechkin
  Source code: <http://code.google.com/p/andrew-grechkin>
 
  This program is free software: you can redistribute it and/or modify
@@ -75,7 +75,7 @@ namespace Far {
 		ssize_t m_index;
 	};
 
-	struct FarDialogItem_t: public FarDialogItem {
+	struct FarDialogItem_t: public FarDialogItem, private Base::Uncopyable {
 		~FarDialogItem_t();
 
 		FarDialogItem_t(FARDIALOGITEMTYPES Type_, PCWSTR Text_, FARDIALOGITEMFLAGS flags_ = DIF_NONE);
@@ -95,11 +95,6 @@ namespace Far {
 		void set_index(ssize_t ind);
 
 		void save() const;
-
-	private:
-		FarDialogItem_t(FarDialogItem_t const& right) = delete;
-
-		FarDialogItem_t & operator = (FarDialogItem_t const& right) = delete;
 	};
 
 	FarDialogItem_t * create_label(PCWSTR text, FARDIALOGITEMFLAGS flags = DIF_NONE);

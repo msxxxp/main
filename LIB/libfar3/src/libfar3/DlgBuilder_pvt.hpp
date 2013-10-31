@@ -1,5 +1,5 @@
 ﻿/**
- © 2012 Andrew Grechkin
+ © 2013 Andrew Grechkin
  Source code: <http://code.google.com/p/andrew-grechkin>
 
  This program is free software: you can redistribute it and/or modify
@@ -27,11 +27,10 @@
 
 namespace Far {
 
-	///=============================================================================================
 	struct SimpleDialogBuilder_impl: public DialogBuilder_i {
 		SimpleDialogBuilder_impl(const GUID & aId, PCWSTR Label, PCWSTR aHelpTopic = nullptr, FARWINDOWPROC aDlgProc = nullptr, void * aUserParam = nullptr);
 
-		~SimpleDialogBuilder_impl() override;
+		~SimpleDialogBuilder_impl();
 
 		FarDialogItem_t * add_item_(FarDialogItem_t * item) override;
 

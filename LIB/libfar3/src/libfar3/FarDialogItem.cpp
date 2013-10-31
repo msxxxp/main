@@ -1,5 +1,5 @@
 ﻿/**
- © 2012 Andrew Grechkin
+ © 2013 Andrew Grechkin
  Source code: <http://code.google.com/p/andrew-grechkin>
 
  This program is free software: you can redistribute it and/or modify
@@ -19,24 +19,25 @@
 #include <libfar3/dialog_builder.hpp>
 
 #include <libbase/std.hpp>
+#include <libbase/cstr.hpp>
 #include <liblog/logger.hpp>
 
 namespace Far {
 
 	ssize_t inline TextWidth(const FarDialogItem_t * Item)
 	{
-		return ::lstrlenW(Item->Data);
+		return Cstr::length(Item->Data);
 	}
 
 	FarDialogItem_t::~FarDialogItem_t()
 	{
-		delete (DialogItemBinding_i*)UserData;
+		delete reinterpret_cast<DialogItemBinding_i*>(UserData);
 	}
 
 	FarDialogItem_t::FarDialogItem_t(FARDIALOGITEMTYPES Type_, PCWSTR Text_, FARDIALOGITEMFLAGS flags_)
 	{
 		LogTrace();
-		::memset(this, 0, sizeof(*this));
+		Memory::zero(*this);
 		Type = Type_;
 		Data = Text_;
 		Flags = flags_;
@@ -44,12 +45,11 @@ namespace Far {
 
 	FarDialogItem_t::FarDialogItem_t(DialogItemBinding_i * binding, FARDIALOGITEMTYPES Type_, PCWSTR Text_, FARDIALOGITEMFLAGS flags_)
 	{
-		LogTrace();
-		::memset(this, 0, sizeof(*this));
+		Memory::zero(*this);
 		Type = Type_;
 		Data = Text_;
 		Flags = flags_;
-		UserData = (intptr_t)binding;
+		UserData =reinterpret_cast<intptr_t>(binding);
 	}
 
 	FarDialogItem_t::FarDialogItem_t(FarDialogItem_t && right):
@@ -62,7 +62,8 @@ namespace Far {
 	FarDialogItem_t & FarDialogItem_t::operator = (FarDialogItem_t && right)
 	{
 		LogTrace();
-		::memcpy(this, &right, sizeof(*this));
+		FarDialogItem::operator =(right);
+//		::memcpy(this, &right, sizeof(*this));
 		right.UserData = 0;
 		return *this;
 	}
@@ -70,11 +71,12 @@ namespace Far {
 	ssize_t FarDialogItem_t::get_height() const
 	{
 		LogTrace();
-		return ((DialogItemBinding_i*)UserData)->get_height();
+		return reinterpret_cast<DialogItemBinding_i*>(UserData)->get_height();
 	}
 
 	ssize_t FarDialogItem_t::get_width() const
 	{
+		LogTrace();
 		switch (Type) {
 			case DI_TEXT:
 			case DI_DOUBLEBOX:
@@ -89,7 +91,6 @@ namespace Far {
 			case DI_FIXEDIT:
 			case DI_PSWEDIT: {
 				int Width = X2 - X1 + 1;
-				// стрелка history занимает дополнительное место, но раньше она рисовалась поверх рамки???
 				if (Flags & DIF_HISTORY)
 					Width++;
 				return Width;
@@ -100,7 +101,7 @@ namespace Far {
 				return X2 - X1 + 1;
 
 			default:
-				return ((DialogItemBinding_i*)UserData)->get_width();
+				return reinterpret_cast<DialogItemBinding_i*>(UserData)->get_width();
 				break;
 		}
 		return 0;
@@ -108,17 +109,17 @@ namespace Far {
 
 	void FarDialogItem_t::set_dlg(HANDLE * dlg)
 	{
-		((DialogItemBinding_i*)UserData)->set_dlg(dlg);
+		reinterpret_cast<DialogItemBinding_i*>(UserData)->set_dlg(dlg);
 	}
 
 	void FarDialogItem_t::set_index(ssize_t ind)
 	{
-		((DialogItemBinding_i*)UserData)->set_index(ind);
+		reinterpret_cast<DialogItemBinding_i*>(UserData)->set_index(ind);
 	}
 
 	void FarDialogItem_t::save() const
 	{
-		((DialogItemBinding_i*)UserData)->save();
+		reinterpret_cast<DialogItemBinding_i*>(UserData)->save();
 	}
 
 }

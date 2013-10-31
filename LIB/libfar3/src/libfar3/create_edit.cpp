@@ -1,5 +1,5 @@
 ﻿/**
- © 2012 Andrew Grechkin
+ © 2013 Andrew Grechkin
  Source code: <http://code.google.com/p/andrew-grechkin>
 
  This program is free software: you can redistribute it and/or modify
@@ -60,6 +60,7 @@ namespace Far {
 	{
 		LogTrace();
 
+		LogNoise(L"'%s' %Id, 0x%I64X\n", value, max_size, flags);
 		auto ret = new FarDialogItem_t(new PluginEditFieldBinding(value, max_size), DI_EDIT, value, flags);
 		if (width == -1 || width >= max_size)
 			width = max_size - 1;
@@ -78,7 +79,7 @@ namespace Far {
 
 	FarDialogItem_t * create_password(PWSTR value, ssize_t max_size, ssize_t width, FARDIALOGITEMFLAGS flags)
 	{
-		LogTrace();
+		LogNoise(L"%Id, 0x%I64X\n", max_size, flags);
 		auto ret = new FarDialogItem_t(new PluginEditFieldBinding(value, max_size), DI_PSWEDIT, value, flags);
 		if (width == -1 || width >= max_size)
 			width = max_size - 1;

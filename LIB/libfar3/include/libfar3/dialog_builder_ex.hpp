@@ -46,12 +46,12 @@ namespace Far {
 			return add_passwordfield_(Value, MaxSize, Width);
 		}
 
-		//		// Добавляет кнопку справа от элемента RelativeTo.
-		//		FarDialogItem * add_button_after(PCWSTR Label, FarDialogItem * RelativeTo)
-		//		{
-		//			return add_item_after_(DI_TEXT, Label, RelativeTo);
-		//		}
-		//
+//		// Добавляет кнопку справа от элемента RelativeTo.
+//		FarDialogItem * add_button_after(PCWSTR Label, FarDialogItem * RelativeTo)
+//		{
+//			return add_item_after_(DI_TEXT, Label, RelativeTo);
+//		}
+//
 		// Начинает располагать поля диалога в две колонки.
 		void start_column()
 		{

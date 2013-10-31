@@ -27,12 +27,14 @@ namespace Cstr {
 
 	inline size_t length(PCSTR in)
 	{
-		return ::strlen(in);
+//		return ::strlen(in);
+		return ::lstrlenA(in);
 	}
 
 	inline size_t length(PCWSTR in)
 	{
-		return ::wcslen(in);
+//		return ::wcslen(in);
+		return ::lstrlenW(in);
 	}
 
 	inline int compare(PCSTR in1, PCSTR in2)

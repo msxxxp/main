@@ -1,5 +1,5 @@
 ﻿/**
- © 2012 Andrew Grechkin
+ © 2013 Andrew Grechkin
  Source code: <http://code.google.com/p/andrew-grechkin>
 
  This program is free software: you can redistribute it and/or modify
@@ -24,8 +24,8 @@
 
 namespace Far {
 
-	struct PluginCheckBoxBinding: public DialogItemBinding_i {
-		PluginCheckBoxBinding(ssize_t * value);
+	struct CheckBoxBinding: public DialogItemBinding_i {
+		CheckBoxBinding(ssize_t * value);
 
 		void save_() const override;
 
@@ -35,28 +35,27 @@ namespace Far {
 		ssize_t * Value;
 	};
 
-	PluginCheckBoxBinding::PluginCheckBoxBinding(ssize_t * value) :
+	CheckBoxBinding::CheckBoxBinding(ssize_t * value) :
 		Value(value)
 	{
 	}
 
-	void PluginCheckBoxBinding::save_() const
+	void CheckBoxBinding::save_() const
 	{
 		intptr_t Selected = psi().SendDlgMessage(get_dlg(), DM_GETCHECK, get_index(), 0);
 		*Value = Selected;
-		LogDebug(L"dlg: %p, index: %Id, value: %Id\n", get_dlg(), get_index(), *Value);
+		LogNoise(L"dlg: %p, index: %Id, value: %Id\n", get_dlg(), get_index(), *Value);
 	}
 
-	ssize_t PluginCheckBoxBinding::get_width_() const
+	ssize_t CheckBoxBinding::get_width_() const
 	{
-//		return ::lstrlenW(get_item()->Data) + 4;
 		return 0;
 	}
 
 	FarDialogItem_t * create_checkbox(ssize_t * value, PCWSTR text, FARDIALOGITEMFLAGS flags)
 	{
-		LogTrace();
-		auto ret = new FarDialogItem_t(new PluginCheckBoxBinding(value), DI_CHECKBOX, text, flags);
+		LogNoise(L"'%s' %Id, 0x%I64X\n", text, *value, flags);
+		auto ret = new FarDialogItem_t(new CheckBoxBinding(value), DI_CHECKBOX, text, flags);
 		ret->Selected = *value;
 
 		return ret;

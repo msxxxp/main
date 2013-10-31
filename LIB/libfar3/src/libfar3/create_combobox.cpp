@@ -1,5 +1,5 @@
 ﻿/**
- © 2012 Andrew Grechkin
+ © 2013 Andrew Grechkin
  Source code: <http://code.google.com/p/andrew-grechkin>
 
  This program is free software: you can redistribute it and/or modify
@@ -20,12 +20,13 @@
 #include <libfar3/helper.hpp>
 
 #include <libbase/std.hpp>
+#include <libbase/cstr.hpp>
 #include <liblog/logger.hpp>
 
 namespace Far {
 
-	struct PluginComboBoxBinding: public DialogItemBinding_i {
-		PluginComboBoxBinding(ssize_t * value, FarListItem items[], size_t count);
+	struct ComboBoxBinding: public DialogItemBinding_i {
+		ComboBoxBinding(ssize_t * value, FarListItem items[], size_t count);
 
 		void save_() const override;
 
@@ -38,7 +39,7 @@ namespace Far {
 		FarList m_items;
 	};
 
-	PluginComboBoxBinding::PluginComboBoxBinding(ssize_t * value, FarListItem items[], size_t count) :
+	ComboBoxBinding::ComboBoxBinding(ssize_t * value, FarListItem items[], size_t count) :
 		Value(value)
 	{
 		m_items.StructSize = sizeof(m_items);
@@ -46,33 +47,38 @@ namespace Far {
 		m_items.Items = items;
 	}
 
-	void PluginComboBoxBinding::save_() const
+	void ComboBoxBinding::save_() const
 	{
 		*Value = psi().SendDlgMessage(get_dlg(), DM_LISTGETCURPOS, get_index(), 0);
 		LogDebug(L"value: %Id\n", *Value);
 	}
 
-	ssize_t PluginComboBoxBinding::get_width_() const
+	ssize_t ComboBoxBinding::get_width_() const
 	{
-		ssize_t width = 0;
-		for (size_t i = 0; i < m_items.ItemsNumber; ++i)
-			width = std::max(width, (ssize_t)lstrlenW(m_items.Items[i].Text));
-		return width + 9;
+		size_t width = 4;
+		for (size_t i = 0; i < m_items.ItemsNumber; ++i) {
+			width = std::max(width, Cstr::length(m_items.Items[i].Text));
+//			LogNoise(L"'%s'\n", m_items.Items[i].Text);
+		}
+		width = (width / 16 + 1) * 16 + 3;
+		LogNoise(L"-> %Iu\n", width);
+		return width;
 	}
 
-	FarList * PluginComboBoxBinding::get_items() const
+	FarList * ComboBoxBinding::get_items() const
 	{
 		return (FarList *)&m_items;
 	}
 
 	FarDialogItem_t * create_combobox(ssize_t * value, FarListItem items[], size_t count, FARDIALOGITEMFLAGS flags)
 	{
-		LogTrace();
+		LogNoise(L"%Iu, %Id, 0x%I64X\n", count, *value, flags);
 		items[*value].Flags |= LIF_SELECTED;
-		auto binding = new PluginComboBoxBinding(value, items, count);
+		auto binding = new ComboBoxBinding(value, items, count);
 		auto ret = new FarDialogItem_t(binding, DI_COMBOBOX, nullptr, flags);
 		ret->ListItems = binding->get_items();
-		ret->X2 = ret->X1 + ret->get_width();
+		ret->X2 = ret->X1 + ret->get_width() - 3;
+		LogNoise(L"X1: %Id, Y1: %Id, X2: %Id\n", ret->X1, ret->Y1, ret->X2);
 
 		return ret;
 	}

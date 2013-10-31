@@ -248,7 +248,9 @@ namespace Far {
 	{
 		LogTrace();
 		auto it = std::max_element(++DialogItems.begin(), DialogItems.end(), &CompareWidth_less);
-		return it->X1 + it->get_width() - 1 - ZERO_X;
+		ssize_t ret = it->X1 + it->get_width() - 1 - ZERO_X;
+		LogNoise(L"-> %Id\n", ret);
+		return ret;
 	}
 
 	void SimpleDialogBuilder_impl::save()
@@ -289,6 +291,7 @@ namespace Far {
 				border.X2 += borderX2;
 			border.Y2 = DialogItems.back().Y2 + 1;
 		}
+		LogTrace();
 	}
 
 	///=============================================================================================

@@ -31,15 +31,9 @@ namespace Far {
 	struct DialogItemBinding_i {
 		virtual ~DialogItemBinding_i();
 
-		HANDLE get_dlg() const
-		{
-			return *m_dlg;
-		}
+		HANDLE get_dlg() const;
 
-		ssize_t get_index() const
-		{
-			return m_index;
-		}
+		ssize_t get_index() const;
 
 		void set_dlg(HANDLE * hndl);
 

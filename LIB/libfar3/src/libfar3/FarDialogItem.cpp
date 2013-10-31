@@ -36,7 +36,7 @@ namespace Far {
 
 	FarDialogItem_t::FarDialogItem_t(FARDIALOGITEMTYPES Type_, PCWSTR Text_, FARDIALOGITEMFLAGS flags_)
 	{
-		LogTrace();
+		LogNoise(L"'%s' %d, 0x%I64X\n", Text_, Type_, flags_);
 		Memory::zero(*this);
 		Type = Type_;
 		Data = Text_;
@@ -45,6 +45,7 @@ namespace Far {
 
 	FarDialogItem_t::FarDialogItem_t(DialogItemBinding_i * binding, FARDIALOGITEMTYPES Type_, PCWSTR Text_, FARDIALOGITEMFLAGS flags_)
 	{
+		LogNoise(L"'%s' %d, 0x%I64X, %p\n", Text_, Type_, flags_, binding);
 		Memory::zero(*this);
 		Type = Type_;
 		Data = Text_;
@@ -76,16 +77,18 @@ namespace Far {
 
 	ssize_t FarDialogItem_t::get_width() const
 	{
-		LogTrace();
+		ssize_t ret = 0;
 		switch (Type) {
 			case DI_TEXT:
 			case DI_DOUBLEBOX:
-				return TextWidth(this);
+				ret = TextWidth(this);
+				break;
 
 			case DI_CHECKBOX:
 			case DI_RADIOBUTTON:
 			case DI_BUTTON:
-				return TextWidth(this) + 4;
+				ret = TextWidth(this) + 4;
+				break;
 
 			case DI_EDIT:
 			case DI_FIXEDIT:
@@ -93,18 +96,20 @@ namespace Far {
 				int Width = X2 - X1 + 1;
 				if (Flags & DIF_HISTORY)
 					Width++;
-				return Width;
+				ret = Width;
 				break;
 			}
 
 			case DI_SINGLEBOX:
-				return X2 - X1 + 1;
+				ret = X2 - X1 + 1;
+				break;
 
 			default:
-				return reinterpret_cast<DialogItemBinding_i*>(UserData)->get_width();
+				ret = reinterpret_cast<DialogItemBinding_i*>(UserData)->get_width();
 				break;
 		}
-		return 0;
+		LogNoise(L"-> %Id\n", ret);
+		return ret;
 	}
 
 	void FarDialogItem_t::set_dlg(HANDLE * dlg)

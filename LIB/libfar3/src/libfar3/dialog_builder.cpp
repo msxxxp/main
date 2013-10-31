@@ -43,8 +43,8 @@ namespace Far {
 	}
 
 	///=============================================================================================
-	SimpleDialogBuilder_impl::SimpleDialogBuilder_impl(const GUID & aId, PCWSTR Label, PCWSTR aHelpTopic, FARWINDOWPROC aDlgProc, void * aUserParam) :
-		Id(aId),
+	SimpleDialogBuilder_impl::SimpleDialogBuilder_impl(const GUID & guid, PCWSTR label, PCWSTR aHelpTopic, FARWINDOWPROC aDlgProc, void * aUserParam) :
+		m_guid(guid),
 		DlgProc(aDlgProc),
 		HelpTopic(aHelpTopic),
 		UserParam(aUserParam),
@@ -55,8 +55,8 @@ namespace Far {
 		OKButtonId(-1),
 		SingleBoxIndex(0)
 	{
-		LogTrace();
-		create_border(Label);
+		LogNoise(L"'%s'\n", label);
+		create_border(label);
 	}
 
 	SimpleDialogBuilder_impl::~SimpleDialogBuilder_impl()
@@ -276,7 +276,7 @@ namespace Far {
 		LogTrace();
 		ssize_t Width = DialogItems[0].X2 + (DEFAULT_BORDER_INDENT_X  + 1);
 		ssize_t Height = DialogItems[0].Y2 + (DEFAULT_BORDER_INDENT_Y  + 1);
-		DialogHandle = psi().DialogInit(get_plugin_guid(), &Id, -1, -1, Width, Height, HelpTopic, &DialogItems[0], DialogItems.size(), 0, 0, DlgProc, UserParam);
+		DialogHandle = psi().DialogInit(get_plugin_guid(), &m_guid, -1, -1, Width, Height, HelpTopic, &DialogItems[0], DialogItems.size(), 0, 0, DlgProc, UserParam);
 		return psi().DialogRun(DialogHandle);
 	}
 

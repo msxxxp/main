@@ -1,5 +1,5 @@
 ﻿/**
- © 2012 Andrew Grechkin
+ © 2013 Andrew Grechkin
  Source code: <http://code.google.com/p/andrew-grechkin>
 
  This program is free software: you can redistribute it and/or modify
@@ -22,6 +22,16 @@ namespace Far {
 
 	DialogItemBinding_i::~DialogItemBinding_i()
 	{
+	}
+
+	HANDLE DialogItemBinding_i::get_dlg() const
+	{
+		return (this) ? *m_dlg : nullptr;
+	}
+
+	ssize_t DialogItemBinding_i::get_index() const
+	{
+		return (this) ? m_index : 0;
 	}
 
 	void DialogItemBinding_i::set_dlg(HANDLE * hndl)

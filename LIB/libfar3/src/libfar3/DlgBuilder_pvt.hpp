@@ -28,7 +28,7 @@
 namespace Far {
 
 	struct SimpleDialogBuilder_impl: public DialogBuilder_i {
-		SimpleDialogBuilder_impl(const GUID & aId, PCWSTR Label, PCWSTR aHelpTopic = nullptr, FARWINDOWPROC aDlgProc = nullptr, void * aUserParam = nullptr);
+		SimpleDialogBuilder_impl(const GUID & guid, PCWSTR Label, PCWSTR aHelpTopic = nullptr, FARWINDOWPROC aDlgProc = nullptr, void * aUserParam = nullptr);
 
 		~SimpleDialogBuilder_impl();
 
@@ -74,7 +74,7 @@ namespace Far {
 		void UpdateBorderSize();
 
 	protected:
-		GUID Id;
+		GUID m_guid;
 		FARWINDOWPROC DlgProc;
 		PCWSTR HelpTopic;
 		void * UserParam;

@@ -73,19 +73,19 @@ struct StringInfo {
 
 struct SortInfo {
 	ustring     substr;
-	size_t      line;
+	size_t      row;
 	long double num;
 
 	SortInfo(const StringInfo & si, const FarGlobalInfo * fgi) :
 		substr(get_substr(si, fgi->get_block_type(), fgi->cbValue_AsEmpty)),
-		line(si.row - fgi->get_first_line()),
+		row(si.row),
 		num(0)
 	{
 		if (fgi->cbValue_Comparation == Comparation::NUMERIC) {
 			num = FindNum(substr.c_str());
 		}
-		LogNoise(L"line: %Id '%s'\n", line, substr.c_str());
-//		LogNoise(L"line: %Id, num: %f '%s'\n", line, (double)num, substr.c_str());
+		LogNoise(L"row: %Id '%s'\n", row, substr.c_str());
+//		LogNoise(L"row: %Id, num: %f '%s'\n", row, (double)num, substr.c_str());
 	}
 
 private:
@@ -161,7 +161,7 @@ bool SortInfoEqNum(const SortInfo & left, const SortInfo & right)
 
 bool SortInfoLessLine(const SortInfo & left, const SortInfo & right)
 {
-	return left.line < right.line;
+	return left.row < right.row;
 }
 
 bool SortInfoEqLength(const SortInfo & left, const SortInfo & right)
@@ -175,7 +175,7 @@ bool SortInfoLessCI(const SortInfo & left, const SortInfo & right)
 	if (ret < 0)
 		return true;
 	else if (ret == 0)
-		return left.line < right.line;
+		return left.row < right.row;
 	return false;
 }
 
@@ -185,7 +185,7 @@ bool SortInfoLessCS(const SortInfo & left, const SortInfo & right)
 	if (ret < 0)
 		return true;
 	else if (ret == 0)
-		return left.line < right.line;
+		return left.row < right.row;
 	return false;
 }
 
@@ -195,7 +195,7 @@ bool SortInfoLessCScode(const SortInfo & left, const SortInfo & right)
 	if (ret < 0)
 		return true;
 	else if (ret == 0)
-		return left.line < right.line;
+		return left.row < right.row;
 	return false;
 }
 
@@ -204,7 +204,7 @@ bool SortInfoLessNum(const SortInfo & left, const SortInfo & right)
 	if (left.num < right.num)
 		return true;
 	else if (left.num == right.num)
-		return left.line < right.line;
+		return left.row < right.row;
 	return false;
 }
 
@@ -213,7 +213,7 @@ bool SortInfoLessLength(const SortInfo & left, const SortInfo & right)
 	if (left.substr.length() < right.substr.length())
 		return true;
 	else if (left.substr.length() == right.substr.length())
-		return left.line < right.line;
+		return left.row < right.row;
 	return false;
 }
 
@@ -227,11 +227,13 @@ void InsertFromVector(const data_vector & data, Type first, Type last)
 	for (; si != data.end() && first != last; ++i, ++si) {
 		if (!fgi->cbValue_AsEmpty && si->count == NOTHING_SELECTED) {
 			// do not touch string where nothing selected
+			LogNoise(L"skip: i: %Iu\n", i);
 			continue;
 		}
 
-		if (si->row == first->line) {
+		if (si->row == first->row) {
 			// skip the same lines
+			LogNoise(L"skip: i: %Iu\n", i);
 			++first;
 			continue;
 		}
@@ -250,12 +252,12 @@ void InsertFromVector(const data_vector & data, Type first, Type last)
 						editor_set_string(i, tmp, EDITOR_EOL);
 					}
 				} else {
-					editor_set_string(i, data[first->line].str, EDITOR_EOL);
+					editor_set_string(i, data[first->row - fgi->get_first_line()].str, EDITOR_EOL);
 				}
 				++first;
 				break;
 			case Operation::REMOVE_DUP:
-				editor_set_string(i, data[first->line].str, EDITOR_EOL);
+				editor_set_string(i, data[first->row - fgi->get_first_line()].str, EDITOR_EOL);
 				++first;
 				break;
 			case Operation::SPARSE_DUP: {
@@ -342,7 +344,7 @@ bool Execute()
 //
 //	LogDebug(L"before: [%Iu]\n", sortdata.size());
 //	for (auto it = sortdata.begin(); it != sortdata.end(); ++it) {
-//		LogDebug(L"line: %5Iu, substr: '%s'\n", it->line, it->substr.c_str());
+//		LogDebug(L"row: %5Iu, substr: '%s'\n", it->row, it->substr.c_str());
 //	}
 
 	std::sort(sortdata.begin(), sortdata.end(), pfLe);
@@ -355,7 +357,7 @@ bool Execute()
 
 //	LogDebug(L"after: [%Iu]\n", sortdata.size());
 //	for (auto it = sortdata.begin(); it != sortdata.end(); ++it) {
-//		LogDebug(L"line: %5Iu, substr: '%s'\n", it->line, it->substr.c_str());
+//		LogDebug(L"row: %5Iu, substr: '%s'\n", it->row, it->substr.c_str());
 //	}
 
 	Far::Editor::start_undo();

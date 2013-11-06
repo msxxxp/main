@@ -24,7 +24,7 @@
 #include <libfar3/plugin_i.hpp>
 
 #include <libbase/std.hpp>
-#include <libbase/mstring.hpp>
+#include <libbase/sstr.hpp>
 #include <libbase/memory.hpp>
 
 namespace Far {

@@ -1,4 +1,5 @@
 ﻿#include <libbase/std.hpp>
+#include <libbase/pvt/va_list.hpp>
 #include <wchar.h>
 
 namespace Base {
@@ -10,11 +11,9 @@ namespace Base {
 
 	bool safe_snprintf(PWSTR buff, size_t len, PCWSTR format, ...)
 	{
-		va_list vl;
+		Base::Va_list vl;
 		va_start(vl, format);
-		bool ret = safe_vsnprintf(buff, len, format, vl);
-		va_end(vl);
-		return ret;
+		return safe_vsnprintf(buff, len, format, vl);
 	}
 
 }

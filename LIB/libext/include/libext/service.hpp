@@ -14,7 +14,7 @@
 
 #include <libbase/std.hpp>
 #include <libbase/memory.hpp>
-#include <libbase/mstring.hpp>
+#include <libbase/sstr.hpp>
 //#include <libbase/command_p.hpp>
 
 

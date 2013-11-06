@@ -2,7 +2,7 @@
 #define LIBBASE_LITE_STRING_HPP_
 
 #include <libbase/std.hpp>
-#include <libbase/char.hpp>
+#include <libbase/cstr.hpp>
 #include <libbase/pvt/ref_cnt.hpp>
 #include <algorithm>
 

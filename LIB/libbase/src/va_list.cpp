@@ -1,6 +1,6 @@
 ﻿#include <libbase/string.hpp>
+#include <libbase/pvt/va_list.hpp>
 
-#include <stdarg.h>
 #include <stdio.h>
 
 namespace Base {
@@ -12,11 +12,9 @@ namespace Base {
 	namespace String {
 		ustring format(PCWSTR fmt, ...)
 		{
-			va_list args;
+			Base::Va_list args;
 			va_start(args, fmt);
-			auto tmp = format(fmt, args);
-			va_end(args);
-			return tmp;
+			return format(fmt, args);
 		}
 
 		ustring format(PCWSTR fmt, va_list args)

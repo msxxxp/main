@@ -1,5 +1,6 @@
 ﻿#include <libbase/console.hpp>
 #include <libbase/memory.hpp>
+#include <libbase/pvt/va_list.hpp>
 
 namespace Base {
 	namespace Console {
@@ -9,8 +10,9 @@ namespace Base {
 		{
 			DWORD written = 0;
 			if (len) {
-				if (!::WriteConsoleW(::GetStdHandle((DWORD)hnd), str, len, &written, nullptr)) {
-					::WriteFile(::GetStdHandle((DWORD)hnd), str, len * sizeof(wchar_t), &written, nullptr);
+				HANDLE hndl = ::GetStdHandle(static_cast<DWORD>(hnd));
+				if (!::WriteConsoleW(hndl, str, len, &written, nullptr)) {
+					::WriteFile(hndl, str, len * sizeof(wchar_t), &written, nullptr);
 					written /= sizeof(wchar_t);
 				}
 			}
@@ -27,11 +29,9 @@ namespace Base {
 
 		int printf(PCWSTR format, ...)
 		{
-			va_list vl;
+			Base::Va_list vl;
 			va_start(vl, format);
-			int ret = vprintf(Handle::OUTPUT, format, vl);
-			va_end(vl);
-			return ret;
+			return vprintf(Handle::OUTPUT, format, vl);
 		}
 
 	}

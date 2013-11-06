@@ -2,7 +2,7 @@
 #define _LIBEXT_EXCEPTION_HPP_
 
 #include <libbase/std.hpp>
-#include <libbase/mstring.hpp>
+#include <libbase/sstr.hpp>
 #include <libbase/shared_ptr.hpp>
 #include <libbase/backtrace.hpp>
 

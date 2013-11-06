@@ -60,10 +60,6 @@ namespace Base {
 
 	size_t fileout(wchar_t ch, size_t len, HANDLE hndl);
 
-	///================================================================================= Console out
-
-	void errx(int eval, PCSTR format, ...);
-
 /*
  #ifndef NDEBUG
  extern PCSTR FUNC_ENTER_FORMAT;

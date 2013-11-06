@@ -1,26 +1,10 @@
 #include <libbase/sstr.hpp>
 #include <libbase/cstr.hpp>
+#include <libbase/pvt/va_list.hpp>
 
 #include <algorithm>
 
-#include <stdarg.h>
-
 namespace Base {
-	struct Va_list {
-		~Va_list()
-		{
-			va_end(m_args);
-		}
-
-		va_list & get_args()
-		{
-			return m_args;
-		}
-
-	private:
-		va_list m_args;
-	};
-
 	sstr::~sstr()
 	{
 		free(m_data);
@@ -128,9 +112,9 @@ namespace Base {
 
 	sstr sstr::format(const_pointer fmt, ...)
 	{
-		Va_list args;
-		va_start(args.get_args(), fmt);
-		return format(fmt, args.get_args());
+		Base::Va_list args;
+		va_start(args, fmt);
+		return format(fmt, args);
 	}
 
 	void sstr::free(pointer ptr)

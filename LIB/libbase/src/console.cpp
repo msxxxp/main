@@ -1,6 +1,7 @@
 ﻿#include <libbase/console.hpp>
+#include <libbase/pvt/va_list.hpp>
 
-#include <stdio.h>
+//#include <stdio.h>
 
 namespace Base {
 	namespace Console {
@@ -19,11 +20,9 @@ namespace Base {
 
 		int printf(Handle hnd, PCWSTR format, ...)
 		{
-			va_list vl;
+			Base::Va_list vl;
 			va_start(vl, format);
-			int Result = vprintf(hnd, format, vl);
-			va_end(vl);
-			return Result;
+			return vprintf(hnd, format, vl);
 		}
 
 	}
@@ -34,15 +33,6 @@ namespace Base {
 		::WriteFile(hndl, str, len * sizeof(*str), &written, nullptr);
 		written /= sizeof(*str);
 		return written;
-	}
-
-	void errx(int eval, PCSTR format, ...)
-	{
-		va_list vl;
-		va_start(vl, format);
-		::vprintf(format, vl);
-		va_end(vl);
-		exit(eval);
 	}
 
 //#ifndef NDEBUG

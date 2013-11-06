@@ -1,5 +1,5 @@
 ﻿#include <libbase/std.hpp>
-#include <libbase/char.hpp>
+#include <libbase/cstr.hpp>
 
 namespace Base {
 	ssize_t get_type_of_char(wchar_t in)

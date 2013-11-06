@@ -1,4 +1,4 @@
-﻿#include <libbase/mstring.hpp>
+﻿#include <libbase/sstr.hpp>
 
 #include <libbase/memory.hpp>
 #include <libbase/cstr.hpp>
@@ -17,9 +17,9 @@ namespace Base {
 		void push_back(PCWSTR str);
 
 	private:
-		PWSTR m_data;
-		size_t m_capa;
-		size_t m_size;
+		wchar_t * m_data;
+		size_t    m_capa;
+		size_t    m_size;
 
 		friend class mstring;
 	};
@@ -69,67 +69,64 @@ namespace Base {
 		}
 	}
 
+	///=============================================================================================
 	mstring::~mstring()
 	{
 		delete m_str;
 	}
 
-	mstring::mstring(PCWSTR in) :
+	mstring::mstring(const_pointer in) :
 		m_str(new impl(in))
 	{
 	}
 
-	mstring::mstring(const mstring & other):
-		m_str(new impl(*other.m_str))
+//	mstring::mstring(const this_type & other):
+//		m_str(new impl(*other.m_str))
+//	{
+//	}
+//
+//	mstring & mstring::operator =(const this_type & other)
+//	{
+//		if (this != &other)
+//			mstring(other).swap(*this);
+//		return *this;
+//	}
+//
+	mstring::mstring(this_type && rhs) :
+		m_str(nullptr)
 	{
+		swap(rhs);
 	}
 
-	mstring & mstring::operator =(const mstring & other)
+	mstring & mstring::operator =(this_type && rhs)
 	{
-		if (this != &other)
-			mstring(other).swap(*this);
+		swap(rhs);
 		return *this;
 	}
 
-	mstring::mstring(mstring && rhs):
-		m_str(rhs.m_str)
-	{
-		rhs.m_str = nullptr;
-	}
-
-	mstring & mstring::operator =(mstring && rhs) {
-		if (this != &rhs) {
-			impl * tmp = m_str;
-			m_str = rhs.m_str;
-			rhs.m_str = nullptr;
-			delete tmp;
-		}
-		return *this;
-	}
-
-	void mstring::push_back(PCWSTR str)
+	void mstring::push_back(const_pointer str)
 	{
 		m_str->push_back(str);
 	}
 
-	size_t mstring::size() const
+	mstring::size_type mstring::size() const
 	{
 		return m_str->m_size;
 	}
 
-	size_t mstring::capacity() const
+	mstring::size_type mstring::capacity() const
 	{
 		return m_str->m_capa;
 	}
 
-	PCWSTR mstring::c_str() const
+	mstring::const_pointer mstring::c_str() const
 	{
 		return m_str->m_data;
 	}
 
-	PCWSTR mstring::operator [](size_t index) const
+	mstring::const_pointer mstring::operator [](size_type index) const
 	{
-		PCWSTR ptr = c_str();
+		auto ptr = c_str();
 		size_t cnt = 0;
 		while (*ptr && (cnt++ < index)) {
 			ptr += (Cstr::length(ptr) + 1);
@@ -137,7 +134,7 @@ namespace Base {
 		return ptr;
 	}
 
-	void mstring::swap(mstring & other)
+	void mstring::swap(this_type & other)
 	{
 		using std::swap;
 		swap(m_str, other.m_str);

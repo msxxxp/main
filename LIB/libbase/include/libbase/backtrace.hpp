@@ -2,10 +2,11 @@
 #define	LIBBASE_BACKTRACE_HPP_
 
 #include <libbase/std.hpp>
-#include <dbghelp.h>
 
-#include <iosfwd>
+//#include <iosfwd>
 #include <vector>
+
+#include <dbghelp.h>
 
 #ifndef ENABLE_LOGGER
 #define LogBacktrace()
@@ -15,17 +16,17 @@
 
 namespace Base {
 
-	struct FrameInfo
+	struct FrameInfo: private Base::Uncopyable
 	{
 		~FrameInfo();
 
 		FrameInfo(size_t frame);
 
-		FrameInfo(const FrameInfo & right);
+//		FrameInfo(const FrameInfo & right);
 
 		FrameInfo(FrameInfo && right);
 
-		FrameInfo & operator = (const FrameInfo & right);
+//		FrameInfo & operator = (const FrameInfo & right);
 
 		FrameInfo & operator = (FrameInfo && right);
 
@@ -68,6 +69,7 @@ namespace Base {
 		using std::vector<FrameInfo>::operator[];
 
 		void Print() const;
+
 	private:
 		static const size_t MAX_DEPTH = 64;
 	};

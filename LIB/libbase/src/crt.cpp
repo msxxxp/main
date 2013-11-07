@@ -11,9 +11,9 @@ namespace Base {
 
 	const ssize_t MAX_ATEXITLIST_ENTRIES = 32;
 
-	std::atomic<ssize_t> atexit_index(0);
+	std::atomic<ssize_t> atExitIndex(0);
 
-	CrtFunction pf_atexitlist[MAX_ATEXITLIST_ENTRIES];
+	CrtFunction atExitArray[MAX_ATEXITLIST_ENTRIES];
 
 	void invoke_crt_functions(const CrtFunction * pf, ptrdiff_t step)
 	{
@@ -42,7 +42,7 @@ namespace Base {
 	void init_atexit()
 	{
 		for (ssize_t i = 0; i < MAX_ATEXITLIST_ENTRIES; ++i)
-			pf_atexitlist[i] = reinterpret_cast<CrtFunction>(-1);
+			atExitArray[i] = reinterpret_cast<CrtFunction>(-1);
 		atexit(reinterpret_cast<CrtFunction>(0));
 		atexit(&invoke_dtors);
 
@@ -52,17 +52,17 @@ namespace Base {
 	void invoke_atexit()
 	{
 //		Base::Console::printf(L"%S:%d, atexit_index: %Id\n", __PRETTY_FUNCTION__, __LINE__, ssize_t(atexit_index));
-		invoke_crt_functions(&pf_atexitlist[MAX_ATEXITLIST_ENTRIES - 1], -1);
+		invoke_crt_functions(&atExitArray[MAX_ATEXITLIST_ENTRIES - 1], -1);
 	}
 
 	int atexit(CrtFunction pf)
 	{
-		ssize_t ind = atexit_index++;
+		ssize_t ind = atExitIndex++;
 
 //		Base::Console::printf(L"%S:%d, func: %p, index: %Id\n", __PRETTY_FUNCTION__, __LINE__, pf, ind);
 		if (ind < MAX_ATEXITLIST_ENTRIES)
 		{
-			pf_atexitlist[ind] = pf;
+			atExitArray[ind] = pf;
 			return 0;
 		}
 		return -1;

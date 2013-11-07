@@ -4,6 +4,8 @@
 #include <libbase/string.hpp>
 #include <liblog/logger.hpp>
 
+#include <algorithm>
+
 #if defined(__GNUC__)
 #include <bfd.h>
 #include <cxxabi.h>
@@ -274,32 +276,34 @@ namespace Base {
 	}
 
 	FrameInfo::FrameInfo(size_t frame) :
-		m_frame(frame), m_data(nullptr)
+		m_frame(frame),
+		m_data(nullptr)
 	{
 	}
 
-	FrameInfo::FrameInfo(const FrameInfo & right) :
-		m_frame(right.m_frame), m_data(nullptr)
-	{
-	}
-
+//	FrameInfo::FrameInfo(const FrameInfo & right) :
+//		m_frame(right.m_frame),
+//		m_data(nullptr)
+//	{
+//	}
+//
 	FrameInfo::FrameInfo(FrameInfo && right) :
-		m_frame(right.m_frame), m_data(right.m_data)
+		m_frame(),
+		m_data(nullptr)
 	{
-		right.m_data = nullptr;
+		swap(right);
 	}
 
-	FrameInfo & FrameInfo::operator =(const FrameInfo & right)
-	{
-		if (this != &right)
-			FrameInfo(right).swap(*this);
-		return *this;
-	}
-
+//	FrameInfo & FrameInfo::operator =(const FrameInfo & right)
+//	{
+//		if (this != &right)
+//			FrameInfo(right).swap(*this);
+//		return *this;
+//	}
+//
 	FrameInfo & FrameInfo::operator =(FrameInfo && right)
 	{
-		if (this != &right)
-			FrameInfo(std::move(right)).swap(*this);
+		FrameInfo(std::move(right)).swap(*this);
 		return *this;
 	}
 

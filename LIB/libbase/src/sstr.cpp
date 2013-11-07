@@ -10,24 +10,24 @@ namespace Base {
 		free(m_data);
 	}
 
-	sstr::sstr():
+	sstr::sstr() :
 		m_data(make_copy(L""))
 	{
 	}
 
-	sstr::sstr(const_pointer ptr):
+	sstr::sstr(const_pointer ptr) :
 		m_data(make_copy(ptr))
 	{
 	}
 
-	sstr::sstr(const this_type & other):
+	sstr::sstr(const this_type & other) :
 		m_data(make_copy(other.m_data))
 	{
-//		Base::Console::printf(L"%S:%d\n", __PRETTY_FUNCTION__, __LINE__);
 	}
 
-	sstr::sstr(this_type && other):
-		m_data(make_copy(L""))
+	sstr::sstr(this_type && other) :
+//		m_data(make_copy(L""))
+		this_type()
 	{
 		swap(other);
 	}
@@ -77,7 +77,7 @@ namespace Base {
 		return Cstr::length(m_data);
 	}
 
-	sstr::sstr(pointer ptr, bool /*construct*/):
+	sstr::sstr(pointer ptr, bool /*construct*/) :
 		m_data(ptr)
 	{
 	}

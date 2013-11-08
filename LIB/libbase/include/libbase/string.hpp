@@ -19,6 +19,8 @@ typedef std::wstring ustring;
 
 namespace Base {
 
+	ssize_t ustring_test();
+
 	namespace String {
 
 		astring w2cp(PCWSTR in, UINT cp);

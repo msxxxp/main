@@ -11,14 +11,14 @@ namespace Base {
 			return out(str, hnd);
 		}
 
-		size_t out(PCSTR str, size_t len, Handle hnd)
+		int printf(Handle hnd, PCWSTR format, ...)
 		{
-			DWORD written = 0;
-			(len && !::WriteConsoleA(::GetStdHandle((DWORD)hnd), str, len, &written, nullptr));
-			return written;
+			Base::Va_list vl;
+			va_start(vl, format);
+			return vprintf(hnd, format, vl);
 		}
 
-		int printf(Handle hnd, PCWSTR format, ...)
+		int printf(Handle hnd, PCSTR format, ...)
 		{
 			Base::Va_list vl;
 			va_start(vl, format);

@@ -7,9 +7,9 @@ namespace Base {
 
 	class sstr {
 		typedef sstr this_type;
-		typedef wchar_t value_type;
 
 	public:
+		typedef wchar_t value_type;
 		typedef size_t size_type;
 		typedef value_type & reference;
 		typedef const value_type & const_reference;
@@ -45,6 +45,8 @@ namespace Base {
 		static sstr format(const_pointer fmt, va_list args);
 
 		static sstr format(const_pointer fmt, ...);
+
+		static ssize_t unit_test();
 
 	private:
 		sstr(pointer ptr, bool capture);
@@ -92,6 +94,8 @@ namespace Base {
 		const_pointer operator [](size_type index) const;
 
 		void swap(this_type & other);
+
+		static ssize_t unit_test();
 
 	private:
 		void add_data(const_pointer mstr);

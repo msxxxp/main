@@ -12,13 +12,21 @@ namespace Base {
 			ERR    = STD_ERROR_HANDLE,
 		};
 
-		size_t out(Handle hnd, PCWSTR str, size_t len);
-
 		size_t vprintf(Handle hnd, PCWSTR format, va_list vl);
+
+		size_t vprintf(Handle hnd, PCSTR format, va_list vl);
 
 		int printf(Handle hnd, PCWSTR format, ...);
 
 		int printf(PCWSTR format, ...);
+
+		int printf(Handle hnd, PCSTR format, ...);
+
+		int printf(PCSTR format, ...);
+
+		size_t out(Handle hnd, PCWSTR str, size_t len);
+
+		size_t out(Handle hnd, PCSTR str, size_t len);
 
 		inline size_t out(PCWSTR str, size_t len, Handle hnd = Handle::OUTPUT)
 		{
@@ -32,9 +40,22 @@ namespace Base {
 
 		size_t out(wchar_t ch, Handle hnd = Handle::OUTPUT);
 
-		size_t out(PCSTR str, size_t len, Handle hnd = Handle::OUTPUT);
+		inline size_t out(PCSTR str, size_t len, Handle hnd = Handle::OUTPUT)
+		{
+			return out(hnd, str, len);
+		}
+
+		inline size_t out(PCSTR str, Handle hnd = Handle::OUTPUT)
+		{
+			return out(hnd, str, Cstr::length(str));
+		}
 
 		inline size_t vprintf(PCWSTR format, va_list vl)
+		{
+			return vprintf(Handle::OUTPUT, format, vl);
+		}
+
+		inline size_t vprintf(PCSTR format, va_list vl)
 		{
 			return vprintf(Handle::OUTPUT, format, vl);
 		}

@@ -13,6 +13,8 @@
 #include "impl_vector_impl.hpp"
 
 namespace sarastd {
+	ssize_t vector_test();
+
 	template<typename Type, typename Allocator = sarastd::allocator<Type> >
 	class vector {
 		typedef vector this_type;

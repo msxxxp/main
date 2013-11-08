@@ -150,6 +150,10 @@ namespace Base {
 	bool safe_vsnprintf(PWSTR buf, size_t len, PCWSTR format, va_list vl);
 
 	bool safe_snprintf(PWSTR buff, size_t len, PCWSTR format, ...);
+
+	bool safe_vsnprintf(PSTR buf, size_t len, PCSTR format, va_list vl);
+
+	bool safe_snprintf(PSTR buff, size_t len, PCSTR format, ...);
 }
 
 #endif

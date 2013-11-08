@@ -10,6 +10,8 @@
 #include "impl_memory.hpp"
 
 namespace sarastd {
+	ssize_t string_test();
+
 	template<typename Char, typename Traits>
 	class basic_string {
 		static const sarastd::size_t MIN_ALLOC_BLOCK = 16;

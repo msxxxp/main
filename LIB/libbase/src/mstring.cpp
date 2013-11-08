@@ -7,121 +7,80 @@
 
 namespace Base {
 
-	struct mstring::impl {
-		~impl();
-
-		explicit impl(PCWSTR in);
-
-		impl(const impl & other);
-
-		void push_back(PCWSTR str);
-
-	private:
-		wchar_t * m_data;
-		size_t    m_capa;
-		size_t    m_size;
-
-		friend class mstring;
-	};
-
-	mstring::impl::~impl()
+	///=============================================================================================
+	mstring::~mstring()
 	{
 		Memory::free(m_data);
 	}
 
-	mstring::impl::impl(PCWSTR in) :
+	mstring::mstring(const_pointer mstr) :
 		m_data(nullptr),
 		m_capa(0),
 		m_size(0)
 	{
-		PCWSTR ptr = in;
+		const_pointer ptr = mstr;
 		while (ptr && *ptr) {
 			ptr += (Cstr::length(ptr) + 1);
 			++m_size;
 		}
-		m_capa = ptr - in;
-		if (m_capa) {
-			m_data = Memory::calloc<wchar_t*>(m_capa);
-			Memory::copy(m_data, in, m_capa * sizeof(wchar_t));
-		}
+		m_capa = ptr - mstr;
+		add_data(mstr);
 	}
 
-	mstring::impl::impl(const impl & other) :
+	mstring::mstring(const this_type & other):
 		m_data(nullptr),
 		m_capa(other.m_capa),
 		m_size(other.m_size)
 	{
-		if (m_capa) {
-			m_data = Memory::calloc<wchar_t*>(m_capa);
-			Memory::copy(m_data, other.m_data, m_capa * sizeof(wchar_t));
-		}
+		add_data(other.m_data);
 	}
 
-	void mstring::impl::push_back(PCWSTR str)
+	mstring & mstring::operator =(const this_type & other)
 	{
-		if (!Cstr::is_empty(str)) {
-			size_t size = Cstr::length(str) + 1;
-			++m_size;
-			size_t new_index = m_capa;
-			m_capa += size;
-			Memory::realloc(m_data, sizeof(wchar_t) * m_capa);
-			Memory::copy(&m_data[new_index], str, size * sizeof(wchar_t));
-		}
+		if (m_data != other.m_data)
+			mstring(other).swap(*this);
+		return *this;
 	}
 
-	///=============================================================================================
-	mstring::~mstring()
+	mstring::mstring(this_type && other) :
+		mstring(nullptr)
 	{
-		delete m_str;
+		swap(other);
 	}
 
-	mstring::mstring(const_pointer in) :
-		m_str(new impl(in))
+	mstring & mstring::operator =(this_type && other)
 	{
-	}
-
-//	mstring::mstring(const this_type & other):
-//		m_str(new impl(*other.m_str))
-//	{
-//	}
-//
-//	mstring & mstring::operator =(const this_type & other)
-//	{
-//		if (this != &other)
-//			mstring(other).swap(*this);
-//		return *this;
-//	}
-//
-	mstring::mstring(this_type && rhs) :
-		m_str(nullptr)
-	{
-		swap(rhs);
-	}
-
-	mstring & mstring::operator =(this_type && rhs)
-	{
-		swap(rhs);
+		if (m_data != other.m_data)
+			swap(other);
 		return *this;
 	}
 
 	void mstring::push_back(const_pointer str)
 	{
-		m_str->push_back(str);
+		if (!Cstr::is_empty(str)) {
+			size_t size = Cstr::length(str) + 1;
+			size_t new_index = m_capa;
+			m_capa += size;
+			Memory::realloc(m_data, sizeof(value_type) * (m_capa + 1));
+			Cstr::char_traits<value_type>::copy(&m_data[new_index], str, size);
+			m_data[m_capa] = static_cast<value_type>(0);
+			++m_size;
+		}
 	}
 
 	mstring::size_type mstring::size() const
 	{
-		return m_str->m_size;
+		return m_size;
 	}
 
 	mstring::size_type mstring::capacity() const
 	{
-		return m_str->m_capa;
+		return m_capa;
 	}
 
 	mstring::const_pointer mstring::c_str() const
 	{
-		return m_str->m_data;
+		return m_data;
 	}
 
 	mstring::const_pointer mstring::operator [](size_type index) const
@@ -137,7 +96,18 @@ namespace Base {
 	void mstring::swap(this_type & other)
 	{
 		using std::swap;
-		swap(m_str, other.m_str);
+		swap(m_data, other.m_data);
+		swap(m_size, other.m_size);
+		swap(m_capa, other.m_capa);
+	}
+
+	void mstring::add_data(const_pointer mstr)
+	{
+		if (m_capa) {
+			m_data = Memory::calloc<pointer>(m_capa + 1);
+			Cstr::char_traits<value_type>::copy(m_data, mstr, m_capa);
+			m_data[m_capa] = static_cast<value_type>(0);
+		}
 	}
 
 }

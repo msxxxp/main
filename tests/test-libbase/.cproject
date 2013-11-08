@@ -145,6 +145,7 @@
 									<listOptionValue builtIn="false" value="_UNICODE"/>
 									<listOptionValue builtIn="false" value="DEBUG"/>
 									<listOptionValue builtIn="false" value="_DEBUG"/>
+									<listOptionValue builtIn="false" value="ENABLE_LOGGER"/>
 								</option>
 								<option id="gnu.cpp.compiler.option.other.other.1765781257" name="Other flags" superClass="gnu.cpp.compiler.option.other.other" value="-c -fmessage-length=0 -fno-exceptions -fno-rtti -fno-threadsafe-statics -std=c++11" valueType="string"/>
 								<option id="gnu.cpp.compiler.option.warnings.extrawarn.845898761" name="Extra warnings (-Wextra)" superClass="gnu.cpp.compiler.option.warnings.extrawarn" value="true" valueType="boolean"/>
@@ -153,9 +154,11 @@
 							<tool command="g++" commandLinePattern="${COMMAND} ${FLAGS} ${OUTPUT_FLAG} ${OUTPUT_PREFIX}${OUTPUT} ${INPUTS}" errorParsers="org.eclipse.cdt.core.GLDErrorParser" id="cdt.managedbuild.tool.gnu.cpp.linker.mingw.exe.debug.1792621054" name="MinGW C++ Linker" superClass="cdt.managedbuild.tool.gnu.cpp.linker.mingw.exe.debug">
 								<option id="gnu.cpp.link.option.paths.1088915127" name="Library search path (-L)" superClass="gnu.cpp.link.option.paths" valueType="libPaths">
 									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/libbase/Debug-x64}&quot;"/>
+									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/liblog/Release-x64}&quot;"/>
 								</option>
 								<option id="gnu.cpp.link.option.flags.1855535187" name="Linker flags" superClass="gnu.cpp.link.option.flags" value="-Wl,-Map=test-libbase.exe.map" valueType="string"/>
 								<option id="gnu.cpp.link.option.libs.1504780276" name="Libraries (-l)" superClass="gnu.cpp.link.option.libs" valueType="libs">
+									<listOptionValue builtIn="false" value="liblog"/>
 									<listOptionValue builtIn="false" value="libbase"/>
 									<listOptionValue builtIn="false" value="dbghelp"/>
 								</option>

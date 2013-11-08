@@ -233,7 +233,7 @@ namespace Base {
 
 		size_type find(const CharType * str, size_type pos = 0) const
 		{
-			auto find = Traits::find(cbegin() + pos, str);
+			auto find = Cstr::char_traits_ex<value_type>::find(cbegin() + pos, str);
 			return (find) ? find - cbegin() : npos;
 		}
 
@@ -251,7 +251,7 @@ namespace Base {
 			if (count != 0 && count <= pos) {
 				pos -= (count - 1);
 				while (pos > 0)
-					if (Traits::find(cbegin() + --pos, str))
+					if (Cstr::char_traits_ex<value_type>::find(cbegin() + --pos, str))
 						return pos;
 			}
 			return npos;

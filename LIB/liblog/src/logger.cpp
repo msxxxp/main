@@ -12,7 +12,7 @@
 
 namespace Logger {
 
-	typedef Base::basic_string<wchar_t, Base::char_traits<wchar_t> > ustring;
+	typedef Base::basic_string<wchar_t, Cstr::char_traits<wchar_t> > ustring;
 
 	PCWSTR const LogLevelNames[(int)Level::Force + 1] = {
 		L"TRACE",
@@ -23,6 +23,8 @@ namespace Logger {
 		L"WARN ",
 		L"ERROR",
 		L"FATAL",
+		L"ALERT",
+		L"EMERG",
 		L"     ",
 	};
 

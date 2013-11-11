@@ -41,6 +41,10 @@
 #       define LogErrorIf(condition, format, ...) if (condition) get_logger_module()->out(THIS_PLACE, Logger::Level::Error, format, ##__VA_ARGS__)
 #       define LogFatal(format, ...)              get_logger_module()->out(THIS_PLACE, Logger::Level::Fatal, format, ##__VA_ARGS__)
 #       define LogFatalIf(condition, format, ...) if (condition) get_logger_module()->out(THIS_PLACE, Logger::Level::Fatal, format, ##__VA_ARGS__)
+#       define LogAlert(format, ...)              get_logger_module()->out(THIS_PLACE, Logger::Level::Alert, format, ##__VA_ARGS__)
+#       define LogAlertIf(condition, format, ...) if (condition) get_logger_module()->out(THIS_PLACE, Logger::Level::Alert, format, ##__VA_ARGS__)
+#       define LogEmerg(format, ...)              get_logger_module()->out(THIS_PLACE, Logger::Level::Emerg, format, ##__VA_ARGS__)
+#       define LogEmergIf(condition, format, ...) if (condition) get_logger_module()->out(THIS_PLACE, Logger::Level::Emerg, format, ##__VA_ARGS__)
 #       define LogForce(format, ...)              get_logger_module()->out(THIS_PLACE, Logger::Level::Force, format, ##__VA_ARGS__)
 #       define LogForceIf(condition, format, ...) if (condition) get_logger_module()->out(THIS_PLACE, Logger::Level::Force, format, ##__VA_ARGS__)
 //#   endif
@@ -63,6 +67,10 @@
 #   define LogErrorIf(condition, format, args ...)     (void)(condition)
 #   define LogFatal(format, args ...)
 #   define LogFatalIf(condition, format, args ...)     (void)(condition)
+#   define LogAlert(format, args ...)
+#   define LogAlertIf(condition, format, args ...)     (void)(condition)
+#   define LogEmerg(format, args ...)
+#   define LogEmergIf(condition, format, args ...)     (void)(condition)
 #   define LogForce(format, args ...)
 #   define LogForceIf(condition, format, args ...)     (void)(condition)
 #endif
@@ -85,6 +93,8 @@ namespace Logger {
 		Warn,
 		Error,
 		Fatal,
+		Alert,
+		Emerg,
 		Force,
 	};
 

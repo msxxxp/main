@@ -156,7 +156,7 @@
 						</toolChain>
 					</folderInfo>
 					<sourceEntries>
-						<entry excluding="src/logger.cpp|src/target_console.cpp|src/target_file.cpp|src/target_mult.cpp|src/target_sys.cpp|thread" flags="VALUE_WORKSPACE_PATH|RESOLVED" kind="sourcePath" name=""/>
+						<entry excluding="src/Module_impl.cpp|src/Logger_impl.cpp|src/Logger_i.cpp|src/logger.cpp|src/target_console.cpp|src/target_file.cpp|src/target_mult.cpp|src/target_sys.cpp|thread" flags="VALUE_WORKSPACE_PATH|RESOLVED" kind="sourcePath" name=""/>
 					</sourceEntries>
 				</configuration>
 			</storageModule>
@@ -210,7 +210,7 @@
 						</toolChain>
 					</folderInfo>
 					<sourceEntries>
-						<entry excluding="src/logger.cpp|src/target_console.cpp|src/target_file.cpp|src/target_mult.cpp|src/target_sys.cpp|thread" flags="VALUE_WORKSPACE_PATH|RESOLVED" kind="sourcePath" name=""/>
+						<entry excluding="src/Module_impl.cpp|src/Logger_impl.cpp|src/Logger_i.cpp|src/logger.cpp|src/target_console.cpp|src/target_file.cpp|src/target_mult.cpp|src/target_sys.cpp|thread" flags="VALUE_WORKSPACE_PATH|RESOLVED" kind="sourcePath" name=""/>
 					</sourceEntries>
 				</configuration>
 			</storageModule>

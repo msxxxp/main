@@ -9,13 +9,13 @@ namespace {
 	void setup_logger()
 	{
 		using namespace Logger;
-		//		Base::Console::printf(L"%S:%d\n", __PRETTY_FUNCTION__, __LINE__);
-		set_default_level(Level::Trace);
-		//		Base::Console::printf(L"%S:%d\n", __PRETTY_FUNCTION__, __LINE__);
-		set_default_prefix(Prefix::Full/* | Prefix::Place*/);
-		//		Base::Console::printf(L"%S:%d\n", __PRETTY_FUNCTION__, __LINE__);
-		set_default_target(get_TargetToConsole());
-		//		Base::Console::printf(L"%S:%d\n", __PRETTY_FUNCTION__, __LINE__);
+//		Base::Console::printf(L"%S:%d\n", __PRETTY_FUNCTION__, __LINE__);
+		Default::set_level(Level::Trace);
+//		Base::Console::printf(L"%S:%d\n", __PRETTY_FUNCTION__, __LINE__);
+		Default::set_prefix(Prefix::Full/* | Prefix::Place*/);
+//		Base::Console::printf(L"%S:%d\n", __PRETTY_FUNCTION__, __LINE__);
+		Default::set_target(get_TargetToConsole());
+//		Base::Console::printf(L"%S:%d\n", __PRETTY_FUNCTION__, __LINE__);
 	}
 }
 

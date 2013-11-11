@@ -7,13 +7,12 @@ namespace Logger {
 
 		~LogToMult();
 
-		void out(const Module_i * lgr, Level lvl, PCWSTR str, size_t size) const override;
+		void out(const Module_i * lgr, Level lvl, const wchar_t * str, size_t size) const override;
 
-		void out(PCWSTR str, size_t size) const override;
+		void out(const wchar_t * str, size_t size) const override;
 
-		void lock() const override;
+		Lock::ScopeGuard lock_scope() const override;
 
-		void unlock() const override;
 	private:
 		Target_t m_first;
 		Target_t m_second;
@@ -29,28 +28,22 @@ namespace Logger {
 	{
 	}
 
-	void LogToMult::out(const Module_i * lgr, Level lvl, PCWSTR str, size_t size) const
+	void LogToMult::out(const Module_i * lgr, Level lvl, const wchar_t * str, size_t size) const
 	{
 		m_first->out(lgr, lvl, str, size);
 		m_second->out(lgr, lvl, str, size);
 	}
 
-	void LogToMult::out(PCWSTR str, size_t size) const
+	void LogToMult::out(const wchar_t * str, size_t size) const
 	{
 		m_first->out(str, size);
 		m_second->out(str, size);
 	}
 
-	void LogToMult::lock() const
+	Lock::ScopeGuard LogToMult::lock_scope() const
 	{
-		m_first->lock();
-		m_second->lock();
-	}
-
-	void LogToMult::unlock() const
-	{
-		m_first->unlock();
-		m_second->unlock();
+		return m_first->lock_scope();
+//		m_second->lock();
 	}
 
 	Target_t get_TargetToMult(const Target_t & first, const Target_t & second)

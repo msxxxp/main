@@ -1,19 +1,11 @@
 #include <liblog/logger.hpp>
 
 namespace Logger {
-	///==================================================================================== Target_i
-	Target_i::~Target_i()
-	{
-	}
-
-	///==================================================================================== Module_i
-	Module_i::~Module_i()
-	{
-	}
-
 	///================================================================================= Module_impl
 	struct Module_impl: public Module_i, private Base::Uncopyable {
-		PCWSTR get_name() const override {return Base::EMPTY_STR;}
+		void destroy() const override {}
+
+		const wchar_t * get_name() const override {return Base::EMPTY_STR;}
 
 		Level get_level() const override {return Level::Atten;}
 
@@ -21,23 +13,32 @@ namespace Logger {
 
 		bool is_color_mode() const override {return false;}
 
-		void set_level(Level /*lvl*/) override {}
+		void set_level(Level lvl) override {UNUSED(lvl);}
 
-		void set_prefix(size_t /*prefix*/) override {}
+		void set_prefix(size_t prefix) override {UNUSED(prefix);}
 
-		void set_color_mode(bool /*mode*/) override {}
+		void set_color_mode(bool mode) override {UNUSED(mode);}
 
-		void set_target(const Target_t & /*target*/) override {}
+		void set_target(const Target_t & target) override {UNUSED(target);}
 
-		void set_enabled(bool /*enabled*/) override {}
+		void set_enabled(bool enabled) override {UNUSED(enabled);}
 
-		void out(PCSTR /*file*/, int /*line*/, PCSTR /*func*/, Level /*lvl*/, PCWSTR /*format*/, ...) const override {}
+		void out(const char * file, int line, const char * func, Level lvl, const wchar_t * format, ...) const override
+		{
+			UNUSED(file);
+			UNUSED(line);
+			UNUSED(func);
+			UNUSED(lvl);
+			UNUSED(format);
+		}
 
-		void out(Level /*lvl*/, PCWSTR /*format*/, ...) const override {}
+		void out(Level lvl, const wchar_t * format, ...) const override
+		{
+			UNUSED(lvl);
+			UNUSED(format);
+		}
 
-		void batch_lock() const override {}
-
-		void batch_unlock() const override {}
+		Lock::ScopeGuard lock_scope() const override {return Lock::ScopeGuard();}
 
 		static Module_impl & inst()
 		{
@@ -46,40 +47,48 @@ namespace Logger {
 		}
 	};
 
-	Level get_default_level()
-	{
-		return Level::Atten;
-	}
+	namespace Default {
+		Level get_level()
+		{
+			return Level::Atten;
+		}
 
-	void set_default_level(Level /*lvl*/)
-	{
-	}
+		void set_level(Level lvl)
+		{
+			UNUSED(lvl);
+		}
 
-	size_t get_default_prefix()
-	{
-		return Prefix::Medium;
-	}
+		size_t get_prefix()
+		{
+			return Prefix::Medium;
+		}
 
-	void set_default_prefix(size_t /*prefix*/)
-	{
-	}
+		void set_prefix(size_t prefix)
+		{
+			UNUSED(prefix);
+		}
 
-	Target_t get_default_target()
-	{
-		return get_TargetToNull();
-	}
+		Target_t get_target()
+		{
+			return get_TargetToNull();
+		}
 
-	void set_default_target(Target_t /*target*/)
-	{
-	}
+		void set_target(Target_t target)
+		{
+			UNUSED(target);
+		}
 
-	Module_i * get_default_module()
-	{
-		return &Module_impl::inst();
-	}
+		Module_i * get_module()
+		{
+			return &Module_impl::inst();
+		}
+	} // namespace Default
 
-	Module_i * get_module(PCWSTR /*name*/, const Target_t & /*target*/, Level /*lvl*/)
+	Module_i * get_module(const wchar_t * name, const Target_t & target, Level lvl)
 	{
+		UNUSED(name);
+		UNUSED(target);
+		UNUSED(lvl);
 		return &Module_impl::inst();
 	}
 
@@ -88,18 +97,24 @@ namespace Logger {
 		return get_TargetToNull();
 	}
 
-	Target_t get_TargetToFile(PCWSTR /*path*/, bool /*overwrite*/)
+	Target_t get_TargetToFile(const wchar_t * path, bool overwrite)
 	{
+		UNUSED(path);
+		UNUSED(overwrite);
 		return get_TargetToNull();
 	}
 
-	Target_t get_TargetToSys(PCWSTR /*name*/, PCWSTR /*path*/)
+	Target_t get_TargetToSys(const wchar_t * name, const wchar_t * path)
 	{
+		UNUSED(name);
+		UNUSED(path);
 		return get_TargetToNull();
 	}
 
-	Target_t get_TargetToMult(const Target_t & /*first*/, const Target_t & /*second*/)
+	Target_t get_TargetToMult(const Target_t & first, const Target_t & second)
 	{
+		UNUSED(first);
+		UNUSED(second);
 		return get_TargetToNull();
 	}
 }

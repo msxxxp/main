@@ -8,13 +8,11 @@ namespace Logger {
 
 		LogToNull();
 
-		void out(const Module_i * lgr, Level lvl, PCWSTR str, size_t size) const override;
+		void out(const Module_i * lgr, Level lvl, const wchar_t * str, size_t size) const override;
 
-		void out(PCWSTR str, size_t size) const override;
+		void out(const wchar_t * str, size_t size) const override;
 
-		void lock() const override;
-
-		void unlock() const override;
+		Lock::ScopeGuard lock_scope() const override;
 	};
 
 	LogToNull::~LogToNull()
@@ -27,20 +25,17 @@ namespace Logger {
 //		Base::Console::printf(L"%S:%d\n", __PRETTY_FUNCTION__, __LINE__);
 	}
 
-	void LogToNull::out(const Module_i * /*lgr*/, Level /*lvl*/, PCWSTR /*str*/, size_t /*size*/) const
+	void LogToNull::out(const Module_i * /*lgr*/, Level /*lvl*/, const wchar_t * /*str*/, size_t /*size*/) const
 	{
 	}
 
-	void LogToNull::out(PCWSTR /*str*/, size_t /*size*/) const
+	void LogToNull::out(const wchar_t * /*str*/, size_t /*size*/) const
 	{
 	}
 
-	void LogToNull::lock() const
+	Lock::ScopeGuard LogToNull::lock_scope() const
 	{
-	}
-
-	void LogToNull::unlock() const
-	{
+		return Lock::ScopeGuard();
 	}
 
 	Target_t get_TargetToNull()

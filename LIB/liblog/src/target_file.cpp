@@ -8,18 +8,16 @@ namespace Logger {
 	struct LogToFile: public Target_i {
 		~LogToFile();
 
-		LogToFile(PCWSTR path, bool overwrite);
+		LogToFile(const wchar_t * path, bool overwrite);
 
-		void out(const Module_i * lgr, Level lvl, PCWSTR str, size_t size) const override;
+		void out(const Module_i * lgr, Level lvl, const wchar_t * str, size_t size) const override;
 
-		void out(PCWSTR str, size_t size) const override;
+		void out(const wchar_t * str, size_t size) const override;
 
-		void lock() const override;
-
-		void unlock() const override;
+		Lock::ScopeGuard lock_scope() const override;
 
 	private:
-		Base::auto_destroy<Base::Lock::SyncUnit_i*> m_sync;
+		Base::auto_destroy<Lock::SyncUnit_i*> m_sync;
 		Base::auto_close<HANDLE> m_file;
 	};
 
@@ -27,8 +25,8 @@ namespace Logger {
 	{
 	}
 
-	LogToFile::LogToFile(PCWSTR path, bool overwrite) :
-		m_sync(Base::Lock::get_CritSection()),
+	LogToFile::LogToFile(const wchar_t * path, bool overwrite) :
+		m_sync(Lock::get_CritSection()),
 		m_file(::CreateFileW(path, GENERIC_WRITE, FILE_SHARE_READ, nullptr, overwrite ? CREATE_ALWAYS : OPEN_ALWAYS, FILE_ATTRIBUTE_NORMAL, nullptr))
 	{
 		if (m_file.is_valid()) {
@@ -36,12 +34,12 @@ namespace Logger {
 		}
 	}
 
-	void LogToFile::out(const Module_i * /*lgr*/, Level /*lvl*/, PCWSTR str, size_t size) const
+	void LogToFile::out(const Module_i * /*lgr*/, Level /*lvl*/, const wchar_t * str, size_t size) const
 	{
 		out(str, size);
 	}
 
-	void LogToFile::out(PCWSTR str, size_t size) const
+	void LogToFile::out(const wchar_t * str, size_t size) const
 	{
 		if (m_file.is_valid()) {
 			DWORD written = 0;
@@ -50,17 +48,12 @@ namespace Logger {
 		}
 	}
 
-	void LogToFile::lock() const
+	Lock::ScopeGuard LogToFile::lock_scope() const
 	{
-		m_sync->lock();
+		return m_sync->lock_scope();
 	}
 
-	void LogToFile::unlock() const
-	{
-		m_sync->release();
-	}
-
-	Target_t get_TargetToFile(PCWSTR path, bool overwrite)
+	Target_t get_TargetToFile(const wchar_t * path, bool overwrite)
 	{
 		return Target_t(new LogToFile(path, overwrite));
 	}

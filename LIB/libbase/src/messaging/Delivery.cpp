@@ -49,7 +49,7 @@ namespace {
 
 	typedef std::pair<Base::Delivery::SubscribtionId, DeliveryMapping> dm_t;
 
-	struct Delivery_impl: private Base::Lock::CriticalSection, private std::vector<dm_t> {
+	struct Delivery_impl: private Lock::CriticalSection, private std::vector<dm_t> {
 
 		Delivery_impl():
 			m_id_generator(0)
@@ -136,7 +136,6 @@ namespace Base {
 	}
 
 	namespace Delivery {
-
 
 		SubscribtionId Subscribe(Queue * queue, Message::type_t type_mask, Message::code_t code_mask, filter_t filter)
 		{

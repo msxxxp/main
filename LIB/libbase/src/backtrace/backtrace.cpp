@@ -449,18 +449,18 @@ namespace Base {
 	void Backtrace::Print() const
 	{
 #ifdef ENABLE_LOGGER
-		Logger::lock_module(get_logger_module());
-		Logger::set_module_color_mode(true, get_logger_module());
-		auto savedLevel = get_logger_module()->get_level();
-		auto savedPrefix = Logger::get_module_prefix(get_logger_module());
-		Logger::set_module_prefix(Logger::Prefix::Time | Logger::Prefix::Thread, get_logger_module());
-		Logger::set_module_level(Logger::Level::Force, get_logger_module());
+		auto module = get_logger_module();
+		auto scopeLock(module->lock_scope());
+		Logger::set_color_mode(module, true);
+		auto savedLevel = Logger::get_level(module);
+		auto savedPrefix = Logger::get_prefix(module);
+		Logger::set_prefix(module, Logger::Prefix::Time | Logger::Prefix::Thread);
+		Logger::set_level(module, Logger::Level::Force);
 		LogForce(L"Backtrace: [%Iu]\n", size());
 		for (size_t i = 0; i < size(); ++i)
 			LogForce(L"[%02Iu] %s\n", size() - (i + 1), operator[](i).to_str().c_str());
-		Logger::set_module_level(savedLevel, get_logger_module());
-		Logger::set_module_prefix(savedPrefix, get_logger_module());
-		Logger::unlock_module(get_logger_module());
+		Logger::set_level(module, savedLevel);
+		Logger::set_prefix(module, savedPrefix);
 #endif
 	}
 

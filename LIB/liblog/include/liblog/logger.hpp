@@ -2,6 +2,7 @@
 #define LIBLOG_LOGGER_HPP_
 
 #include <libbase/std.hpp>
+#include <libbase/lock.hpp>
 
 #ifdef ENABLE_LOGGER
 #include <memory>
@@ -80,8 +81,6 @@ namespace Logger {
 	struct Target_i;
 }
 
-Logger::Module_i * get_logger_module();
-
 namespace Logger {
 
 	enum class Level : ssize_t {
@@ -114,13 +113,34 @@ namespace Logger {
 	}
 
 #ifdef ENABLE_LOGGER
+	///==================================================================================== Target_i
+	struct Target_i {
+		virtual ~Target_i();
+
+		virtual void out(const Module_i * module, Level lvl, const wchar_t * str, size_t size) const = 0;
+
+		virtual void out(const wchar_t * str, size_t size) const = 0;
+
+		virtual Lock::ScopeGuard lock_scope() const = 0;
+	};
+
 	typedef std::shared_ptr<Target_i> Target_t;
 
+	Target_t get_TargetToNull();
+
+	Target_t get_TargetToConsole();
+
+	Target_t get_TargetToFile(const wchar_t * path, bool overwrite = false);
+
+	Target_t get_TargetToSys(const wchar_t * name, const wchar_t * path = nullptr);
+
+	Target_t get_TargetToMult(const Target_t & first, const Target_t & second);
+
 	///==================================================================================== Module_i
-	struct Module_i {
+	struct Module_i: public Base::Destroyable {
 		virtual ~Module_i();
 
-		virtual PCWSTR get_name() const = 0;
+		virtual const wchar_t * get_name() const = 0;
 
 		virtual Level get_level() const = 0;
 
@@ -138,167 +158,73 @@ namespace Logger {
 
 		virtual void set_enabled(bool enabled) = 0;
 
-		virtual void out(PCSTR file, int line, PCSTR func, Level lvl, PCWSTR format, ...) const = 0;
+		virtual void out(const char * file, int line, const char * func, Level lvl, const wchar_t * format, ...) const = 0;
 
-		virtual void out(Level lvl, PCWSTR format, ...) const = 0;
+		virtual void out(Level lvl, const wchar_t * format, ...) const = 0;
 
-		virtual void batch_lock() const = 0;
-
-		virtual void batch_unlock() const = 0;
+		virtual Lock::ScopeGuard lock_scope() const = 0;
 	};
 
-	Level get_default_level();
+	namespace Default {
+		Level get_level();
 
-	void set_default_level(Level lvl);
+		void set_level(Level lvl);
 
-	size_t get_default_prefix();
+		size_t get_prefix();
 
-	void set_default_prefix(size_t prefix);
+		void set_prefix(size_t prefix);
 
-	Target_t get_default_target();
+		Target_t get_target();
 
-	void set_default_target(Target_t target);
+		void set_target(Target_t target);
 
-	Module_i * get_default_module();
+		Module_i * get_module();
+	}  // namespace Default
 
-	Module_i * get_module(PCWSTR name, const Target_t & target = get_default_target(), Level lvl = get_default_level());
+	Module_i * get_module(const wchar_t * name, const Target_t & target = Default::get_target(), Level lvl = Default::get_level());
 
-	inline void set_module_target(const Target_t & target, Module_i * module)
+	inline void set_target(Module_i * module, const Target_t & target)
 	{
 		module->set_target(target);
 	}
 
-	inline void set_module_level(Level lvl, Module_i * module)
+	inline void set_level(Module_i * module, Level lvl)
 	{
 		module->set_level(lvl);
 	}
 
-	inline void set_module_prefix(size_t prefix, Module_i * module)
+	inline void set_prefix(Module_i * module, size_t prefix)
 	{
 		module->set_prefix(prefix);
 	}
 
-	inline Prefix::flags get_module_prefix(Module_i * module)
+	inline Prefix::flags get_prefix(Module_i * module)
 	{
 		return module->get_prefix();
 	}
 
-	inline void set_module_color_mode(bool mode, Module_i * module)
+	inline Level get_level(Module_i * module)
+	{
+		return module->get_level();
+	}
+
+	inline void set_color_mode(Module_i * module, bool mode)
 	{
 		module->set_color_mode(mode);
 	}
 
-	inline void set_module_enabled(bool enabled, Module_i * module)
+	inline void set_enabled(Module_i * module, bool enabled)
 	{
 		module->set_enabled(enabled);
 	}
 
-	inline void lock_module(Module_i * module)
+	inline Lock::ScopeGuard lock_scope(Module_i * module)
 	{
-		UNUSED(module);
-		module->batch_lock();
+		return module->lock_scope();
 	}
 
-	inline void unlock_module(Module_i * module)
-	{
-		UNUSED(module);
-		module->batch_unlock();
-	}
-
-	///==================================================================================== Target_i
-	struct Target_i {
-		virtual ~Target_i();
-
-		virtual void out(const Module_i * module, Level lvl, PCWSTR str, size_t size) const = 0;
-
-		virtual void out(PCWSTR str, size_t size) const = 0;
-
-		virtual void lock() const = 0;
-
-		virtual void unlock() const = 0;
-	};
-
-	Target_t get_TargetToNull();
-
-	Target_t get_TargetToConsole();
-
-	Target_t get_TargetToFile(PCWSTR path, bool overwrite = false);
-
-	Target_t get_TargetToSys(PCWSTR name, PCWSTR path = nullptr);
-
-	Target_t get_TargetToMult(const Target_t & first, const Target_t & second);
 #else
 	typedef Target_i * Target_t;
-
-	inline Level get_default_level()
-	{
-		return Level::Atten;
-	}
-
-	inline void set_default_level(Level /*lvl*/)
-	{
-	}
-
-	inline size_t get_default_prefix()
-	{
-		return Prefix::Medium;
-	}
-
-	inline void set_default_prefix(size_t /*prefix*/)
-	{
-	}
-
-	inline Target_t get_default_target()
-	{
-		return Target_t();
-	}
-
-	inline void set_default_target(Target_t /*target*/)
-	{
-	}
-
-	inline Module_i * get_default_module()
-	{
-		return nullptr;
-	}
-
-	inline Module_i * get_module(PCWSTR /*name*/, const Target_t & /*target*/ = get_default_target(), Level /*lvl*/ = get_default_level())
-	{
-		return nullptr;
-	}
-
-	inline void set_module_target(const Target_t & /*target*/, Module_i * /*module*/)
-	{
-	}
-
-	inline void set_module_level(Level /*lvl*/, Module_i * /*module*/)
-	{
-	}
-
-	inline void set_module_prefix(size_t /*prefix*/, Module_i * /*module*/)
-	{
-	}
-
-	inline Prefix::flags get_module_prefix(Module_i * /*module*/)
-	{
-		return 0;
-	}
-
-	inline void set_module_color_mode(bool /*mode*/, Module_i * /*module*/)
-	{
-	}
-
-	inline void set_module_enabled(bool /*enabled*/, Module_i * /*module*/)
-	{
-	}
-
-	inline void lock_module(Module_i * /*module*/)
-	{
-	}
-
-	inline void unlock_module(Module_i * /*module*/)
-	{
-	}
 
 	inline Target_t get_TargetToNull()
 	{
@@ -310,26 +236,120 @@ namespace Logger {
 		return Target_t();
 	}
 
-	inline Target_t get_TargetToFile(PCWSTR /*path*/, bool /*overwrite*/ = false)
+	inline Target_t get_TargetToFile(const wchar_t * path, bool overwrite = false)
 	{
+		UNUSED(path);
+		UNUSED(overwrite);
 		return Target_t();
 	}
 
-	inline Target_t get_TargetToSys(PCWSTR /*name*/, PCWSTR /*path*/= nullptr)
+	inline Target_t get_TargetToSys(const wchar_t * name, const wchar_t * path = nullptr)
 	{
+		UNUSED(name);
+		UNUSED(path);
 		return Target_t();
 	}
 
-	inline Target_t get_TargetToMult(const Target_t & /*first*/, const Target_t & /*second*/)
+	inline Target_t get_TargetToMult(const Target_t & first, const Target_t & second)
 	{
+		UNUSED(first);
+		UNUSED(second);
 		return Target_t();
 	}
+
+	namespace Default {
+		inline Level get_level()
+		{
+			return Level::Atten;
+		}
+
+		inline void set_level(Level lvl)
+		{
+			UNUSED(lvl);
+		}
+
+		inline size_t get_prefix()
+		{
+			return Prefix::Medium;
+		}
+
+		inline void set_prefix(size_t prefix)
+		{
+			UNUSED(prefix);
+		}
+
+		inline Target_t get_target()
+		{
+			return Target_t();
+		}
+
+		inline void set_target(Target_t target)
+		{
+			UNUSED(target);
+		}
+
+		inline Module_i * get_module()
+		{
+			return nullptr;
+		}
+	}  // namespace Default
+
+	inline Module_i * get_module(const wchar_t * name, const Target_t & target = Default::get_target(), Level lvl = Default::get_level())
+	{
+		UNUSED(name);
+		UNUSED(target);
+		UNUSED(lvl);
+		return nullptr;
+	}
+
+	inline void set_target(Module_i * module, const Target_t & target)
+	{
+		UNUSED(module);
+		UNUSED(target);
+	}
+
+	inline void set_level(Module_i * module, Level lvl)
+	{
+		UNUSED(module);
+		UNUSED(lvl);
+	}
+
+	inline void set_prefix(Module_i * module, size_t prefix)
+	{
+		UNUSED(module);
+		UNUSED(prefix);
+	}
+
+	inline Prefix::flags get_prefix(Module_i * module)
+	{
+		UNUSED(module);
+		return 0;
+	}
+
+	inline void set_color_mode(Module_i * module, bool mode)
+	{
+		UNUSED(module);
+		UNUSED(mode);
+	}
+
+	inline void set_enabled(Module_i * module, bool enabled)
+	{
+		UNUSED(module);
+		UNUSED(enabled);
+	}
+
+	inline Lock::ScopeGuard lock_module(Module_i * module)
+	{
+		UNUSED(module);
+		return Lock::ScopeGuard();
+	}
+
 #endif
 }
 
 inline Logger::Module_i * get_logger_module()
 {
-	return Logger::get_default_module();
+	return Logger::Default::get_module();
 }
 
 #endif

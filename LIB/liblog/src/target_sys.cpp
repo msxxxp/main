@@ -23,20 +23,18 @@ namespace Logger {
 	struct LogToSys: public Target_i {
 		~LogToSys();
 
-		LogToSys(PCWSTR name, PCWSTR path);
+		LogToSys(const wchar_t * name, const wchar_t * path);
 
-		void out(const Module_i * lgr, Level lvl, PCWSTR str, size_t size) const override;
+		void out(const Module_i * lgr, Level lvl, const wchar_t * str, size_t size) const override;
 
-		void out(PCWSTR str, size_t size) const override;
+		void out(const wchar_t * str, size_t size) const override;
 
-		void lock() const override;
-
-		void unlock() const override;
+		Lock::ScopeGuard lock_scope() const override;
 
 	private:
-		static void app_register(PCWSTR name, PCWSTR path);
+		static void app_register(const wchar_t * name, const wchar_t * path);
 
-		Base::auto_destroy<Base::Lock::SyncUnit_i*> m_sync;
+		Base::auto_destroy<Lock::SyncUnit_i*> m_sync;
 		HANDLE m_hndl;
 	};
 
@@ -45,14 +43,14 @@ namespace Logger {
 		::DeregisterEventSource(m_hndl);
 	}
 
-	LogToSys::LogToSys(PCWSTR name, PCWSTR path) :
-		m_sync(Base::Lock::get_CritSection())
+	LogToSys::LogToSys(const wchar_t * name, const wchar_t * path) :
+		m_sync(Lock::get_CritSection())
 	{
 		app_register(name, path);
 		m_hndl = ::RegisterEventSourceW(nullptr, name);
 	}
 
-	void LogToSys::out(const Module_i * /*lgr*/, Level lvl, PCWSTR str, size_t /*size*/) const
+	void LogToSys::out(const Module_i * /*lgr*/, Level lvl, const wchar_t * str, size_t /*size*/) const
 	{
 		//			PSID user = nullptr;
 		//			HANDLE token;
@@ -67,28 +65,23 @@ namespace Logger {
 		//			free(token_user);
 	}
 
-	void LogToSys::out(PCWSTR str, size_t /*size*/) const
+	void LogToSys::out(const wchar_t * str, size_t /*size*/) const
 	{
-		::ReportEventW(m_hndl, LogLevelTypes[(int)get_default_level()], 0, EV_MSG_STRING, nullptr, 1, 0, &str, nullptr);
+		::ReportEventW(m_hndl, LogLevelTypes[(int)Default::get_level()], 0, EV_MSG_STRING, nullptr, 1, 0, &str, nullptr);
 	}
 
-	void LogToSys::lock() const
+	Lock::ScopeGuard LogToSys::lock_scope() const
 	{
-		m_sync->lock();
+		return m_sync->lock_scope();
 	}
 
-	void LogToSys::unlock() const
-	{
-		m_sync->release();
-	}
-
-	void LogToSys::app_register(PCWSTR name, PCWSTR path)
+	void LogToSys::app_register(const wchar_t * name, const wchar_t * path)
 	{
 		wchar_t path_buf[Base::MAX_PATH_LEN], *fullpath = path_buf;
 		if (Cstr::is_empty(path)) {
 			::GetModuleFileNameW(0, path_buf, Base::lengthof(path_buf));
 		} else {
-			fullpath = (PWSTR)path;
+			fullpath = (wchar_t *)path;
 		}
 
 		auto key1 = L"SYSTEM\\CurrentControlSet\\Services\\EventLog\\Application\\";
@@ -106,7 +99,7 @@ namespace Logger {
 		::RegCloseKey(hKey);
 	}
 
-	Target_t get_TargetToSys(PCWSTR name, PCWSTR path)
+	Target_t get_TargetToSys(const wchar_t * name, const wchar_t * path)
 	{
 		return Target_t(new LogToSys(name, path));
 	}

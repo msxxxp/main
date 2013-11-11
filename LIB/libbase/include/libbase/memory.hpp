@@ -403,14 +403,14 @@ namespace Base {
 	}
 
 	///================================================================================ auto_destroy
-	template<typename Type>
-	struct auto_destroy {
+	template<typename Pointer>
+	struct auto_destroy: private Base::Uncopyable {
 		~auto_destroy()
 		{
 			m_ptr->destroy();
 		}
 
-		auto_destroy(Type ptr) :
+		auto_destroy(Pointer ptr) :
 			m_ptr(ptr)
 		{
 		}
@@ -423,17 +423,16 @@ namespace Base {
 
 		auto_destroy & operator =(auto_destroy && right)
 		{
-			if (this->m_ptr != right.m_ptr)
-				auto_destroy(std::move(right)).swap(*this);
+			auto_destroy(std::move(right)).swap(*this);
 			return *this;
 		}
 
-		Type operator ->()
+		Pointer operator ->()
 		{
 			return m_ptr;
 		}
 
-		const Type operator ->() const
+		const Pointer operator ->() const
 		{
 			return m_ptr;
 		}
@@ -445,12 +444,9 @@ namespace Base {
 		}
 
 	private:
-		auto_destroy(const auto_destroy & right) = delete;
-
-		auto_destroy & operator =(const auto_destroy & right) = delete;
-
-		Type m_ptr;
+		Pointer m_ptr;
 	};
+
 }
 
 #endif

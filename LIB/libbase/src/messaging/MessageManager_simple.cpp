@@ -24,7 +24,7 @@ namespace Base {
 		return left < right.first;
 	}
 
-	struct SimpleMessageManager: public MessageManager, private Base::Lock::CriticalSection, private std::vector<mapping> {
+	struct SimpleMessageManager: public MessageManager, private Lock::CriticalSection, private std::vector<mapping> {
 		SimpleMessageManager()
 		{
 		}

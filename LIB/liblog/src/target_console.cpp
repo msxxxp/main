@@ -23,16 +23,14 @@ namespace Logger {
 
 		LogToConsole();
 
-		void out(const Module_i * lgr, Level lvl, PCWSTR str, size_t size) const override;
+		void out(const Module_i * lgr, Level lvl, const wchar_t * str, size_t size) const override;
 
-		void out(PCWSTR str, size_t size) const override;
+		void out(const wchar_t * str, size_t size) const override;
 
-		void lock() const override;
-
-		void unlock() const override;
+		Lock::ScopeGuard lock_scope() const override;
 
 	private:
-		Base::auto_destroy<Base::Lock::SyncUnit_i*> m_sync;
+		Base::auto_destroy<Lock::SyncUnit_i*> m_sync;
 	};
 
 	LogToConsole::~LogToConsole()
@@ -41,12 +39,12 @@ namespace Logger {
 	}
 
 	LogToConsole::LogToConsole() :
-		m_sync(Base::Lock::get_CritSection())
+		m_sync(Lock::get_CritSection())
 	{
 //		Base::Console::printf(L"%S:%d\n", __PRETTY_FUNCTION__, __LINE__);
 	}
 
-	void LogToConsole::out(const Module_i * lgr, Level lvl, PCWSTR str, size_t size) const
+	void LogToConsole::out(const Module_i * lgr, Level lvl, const wchar_t * str, size_t size) const
 	{
 		auto lockScope(m_sync->lock_scope());
 		if (lgr->is_color_mode()) {
@@ -57,20 +55,15 @@ namespace Logger {
 		}
 	}
 
-	void LogToConsole::out(PCWSTR str, size_t size) const
+	void LogToConsole::out(const wchar_t * str, size_t size) const
 	{
 		auto lockScope(m_sync->lock_scope());
 		Base::Console::out(str, size);
 	}
 
-	void LogToConsole::lock() const
+	Lock::ScopeGuard LogToConsole::lock_scope() const
 	{
-		m_sync->lock();
-	}
-
-	void LogToConsole::unlock() const
-	{
-		m_sync->release();
+		return m_sync->lock_scope();
 	}
 
 	///=============================================================================================

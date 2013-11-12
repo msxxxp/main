@@ -13,8 +13,7 @@ namespace sarastd {
 	ssize_t string_test();
 
 	template<typename CharType, typename Traits>
-	class basic_string
-	{
+	class basic_string {
 		static const sarastd::size_t MIN_ALLOC_BLOCK = 16;
 		typedef basic_string this_type;
 
@@ -85,6 +84,8 @@ namespace sarastd {
 
 		iterator insert(const_iterator pos, value_type ch);
 		iterator insert(iterator pos, size_type count, value_type ch);
+		template<typename InputIt>
+		iterator insert(const_iterator pos, InputIt first, InputIt last);
 		this_type & insert(size_type index, size_type count, value_type ch);
 		this_type & insert(size_type index, const_pointer str);
 		this_type & insert(size_type index, const_pointer str, size_type count);
@@ -523,6 +524,12 @@ namespace sarastd {
 		typename sarastd::iterator_traits<const_iterator>::difference_type posFirst = sarastd::distance(begin(), pos);
 		insert(posFirst, 0, count, ch);
 		return iterator(_str() + posFirst);
+	}
+
+	template<typename CharType, typename Traits>
+	template<typename InputIt>
+	typename basic_string<CharType, Traits>::iterator basic_string<CharType, Traits>::insert(const_iterator pos, InputIt first, InputIt last)
+	{
 	}
 
 	template<typename CharType, typename Traits>
@@ -1016,7 +1023,7 @@ namespace sarastd {
 	}
 
 	template<typename CharType, typename Traits>
-	void swap(basic_string<CharType, Traits>  & left, basic_string<CharType, Traits> & right)
+	void swap(basic_string<CharType, Traits> & left, basic_string<CharType, Traits> & right)
 	{
 		left.swap(right);
 	}

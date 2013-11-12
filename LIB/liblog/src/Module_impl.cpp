@@ -1,9 +1,10 @@
 #include <liblog/logger.hpp>
-#include <libbase/pvt/lite_string.hpp>
+#include <libbase/cstr.hpp>
+#include <simstl/string>
 #include "Module_impl.hpp"
 
 namespace Logger {
-	typedef Base::basic_string<wchar_t, Cstr::char_traits<wchar_t> > ustring;
+	typedef sarastd::basic_string<wchar_t, Cstr::char_traits<wchar_t> > ustring;
 
 	const wchar_t * const LogLevelNames[(int)Level::Force + 1] = {
 		L"TRACE",

@@ -9,9 +9,9 @@ namespace {
 	void setup_logger()
 	{
 		using namespace Logger;
-		set_default_level(Level::Trace);
-		set_default_prefix(Prefix::Medium | Prefix::Place);
-		set_default_target(get_TargetToConsole());
+		Default::set_level(Level::Trace);
+		Default::set_prefix(Prefix::Medium | Prefix::Place);
+		Default::set_target(get_TargetToConsole());
 	}
 }
 

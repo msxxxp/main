@@ -94,10 +94,13 @@ int main()
 	{
 		auto student0 = get_student(0);
 		LogDebug(L"ID: %f, GPA: %c\n", std::get<0>(student0), std::get<1>(student0));
+		LogDebug(L"ID: %d, GPA: %c\n", (int )std::get<0>(student0), std::get<1>(student0));
 
 	}
 	LogTrace();
+
 	return 0;
+
 }
 
 /// ========================================================================== Startup (entry point)
@@ -132,17 +135,17 @@ extern "C" {
 		return Result;
 	}
 
-	//	BOOL WINAPI	DllMainCRTStartup(HANDLE, DWORD dwReason, PVOID) {
-	//		switch (dwReason) {
-	//			case DLL_PROCESS_ATTACH:
-	//				init_atexit();
-	//				break;
-	//
-	//			case DLL_PROCESS_DETACH:
-	//				invoke_atexit();
-	//				break;
-	//		}
-	//		return true;
-	//	}
+//	BOOL WINAPI	DllMainCRTStartup(HANDLE, DWORD dwReason, PVOID) {
+//		switch (dwReason) {
+//			case DLL_PROCESS_ATTACH:
+//				init_atexit();
+//				break;
+//
+//			case DLL_PROCESS_DETACH:
+//				invoke_atexit();
+//				break;
+//		}
+//		return true;
+//	}
 }
 #endif

@@ -5,16 +5,15 @@
 #include <libbase/cstr.hpp>
 
 #if defined(NoStlString) || defined(USE_LITE_STRING)
-#include "pvt/lite_string.hpp"
-typedef Base::basic_string<char, Cstr::char_traits<char> > astring;
-typedef Base::basic_string<wchar_t, Cstr::char_traits<wchar_t> > ustring;
+#include <simstl/string>
+typedef sarastd::basic_string<char, Cstr::char_traits<char> > astring;
+typedef sarastd::basic_string<wchar_t, Cstr::char_traits<wchar_t> > ustring;
 #else
 #include <string>
 typedef std::string astring;
 typedef std::wstring ustring;
 #endif
 
-//#include <libbase/cstr.hpp>
 #include <libbase/memory.hpp>
 
 namespace Base {
@@ -28,30 +27,44 @@ namespace Base {
 		ustring cp2w(PCSTR in, UINT cp);
 
 		ustring format(PCWSTR format, ...);
-
 		ustring format(PCWSTR format, va_list args);
+
+		astring to_string(int value);
+		astring to_string(long value);
+		astring to_string(long long value);
+		astring to_string(unsigned value);
+		astring to_string(unsigned long value);
+		astring to_string(unsigned long long value);
+		astring to_string(float value);
+		astring to_string(double value);
+		astring to_string(long double value);
+
+		ustring to_wstring(int value);
+		ustring to_wstring(long value);
+		ustring to_wstring(long long value);
+		ustring to_wstring(unsigned value);
+		ustring to_wstring(unsigned long value);
+		ustring to_wstring(unsigned long long value);
+		ustring to_wstring(float value);
+		ustring to_wstring(double value);
+		ustring to_wstring(long double value);
 
 		namespace Inplace {
 			astring & trim_left(astring & str, const astring & chrs = " \t\r\n");
-
 			ustring & trim_left(ustring & str, const ustring & chrs = L" \t\r\n");
 
 			astring & trim_right(astring & str, const astring & chrs = " \t\r\n");
-
 			ustring & trim_right(ustring & str, const ustring & chrs = L" \t\r\n");
 
 			astring & trim(astring & str, const astring & chrs = " \t\r\n");
-
 			ustring & trim(ustring & str, const ustring & chrs = L" \t\r\n");
 
 			ustring & replace_all(ustring & str, const ustring & from, const ustring & to);
 
 			ustring & to_lower(ustring & inout);
-
 			ustring & to_upper(ustring & inout);
 
 			ustring & add_word(ustring & inout, const ustring & add, const ustring & delim = ustring());
-
 		}
 
 		inline astring trim(const astring & str, const astring & chrs = " \t\r\n")

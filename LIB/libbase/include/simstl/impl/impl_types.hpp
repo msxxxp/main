@@ -1,6 +1,12 @@
 #ifndef SARALIB_STL_TYPES_HPP_
 #define SARALIB_STL_TYPES_HPP_
 
+#ifdef __x86_64__
+#define nullptr 0LL
+#else
+#define nullptr 0
+#endif
+
 namespace sarastd
 {
 #ifdef __x86_64__

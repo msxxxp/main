@@ -40,13 +40,13 @@ namespace Cstr {
 
 		static bool lt(const char_type & c1, const char_type & c2) noexcept {return c1 < c2;}
 
-		static int compare(const char_type * str1, const char_type* str2, size_t count) {return ::memcmp(str1, str2, count);}
+		static int compare(const char_type * str1, const char_type* str2, size_t count) {return memcmp(str1, str2, count);}
 
 		static size_t length(const char_type * str) {return ::lstrlenA(str);}
 
 		static const char_type * find(const char_type * s, size_t n, const char_type & a) {return (const char_type*)memchr(s, a, n);}
 
-		static char_type * move(char_type * s1, const char_type * s2, size_t n) {return (char_type*)memmove(s1, s2, n);}
+		static char_type * move(char_type * dest, const char_type * src, size_t count) {return (char_type*)memmove(dest, src, count);}
 
 		static char_type * copy(char_type * dest, const char_type * src, size_t count) {return (char_type*)memcpy(dest, src, count);}
 
@@ -63,55 +63,8 @@ namespace Cstr {
 		static int_type eof() noexcept {return static_cast<int_type>(-1);}
 
 		static int_type not_eof(const int_type & c) noexcept {return (c == eof()) ? 0 : c;}
-	};
 
-	template<>
-	struct char_traits<wchar_t>
-	{
-		typedef wchar_t           char_type;
-		typedef wint_t            int_type;
-//		typedef streamoff         off_type;
-//		typedef wstreampos        pos_type;
-//		typedef mbstate_t         state_type;
-
-		static void assign(char_type & c1, const char_type & c2) noexcept {c1 = c2;}
-
-		static bool eq(const char_type & c1, const char_type & c2) noexcept {return c1 == c2;}
-
-		static bool lt(const char_type & c1, const char_type & c2) noexcept {return c1 < c2;}
-
-		static int compare(const char_type * str1, const char_type* str2, size_t count) {return ::wmemcmp(str1, str2, count);}
-
-		static size_t length(const char_type * str) {return ::lstrlenW(str);}
-
-		static const char_type * find(const char_type * s, size_t n, const char_type & ch) {return wmemchr(s, ch, n);}
-
-		static char_type * move(char_type * s1, const char_type * s2, size_t n) {return wmemmove(s1, s2, n);}
-
-		static char_type * copy(char_type * dest, const char_type * src, size_t count) {return wmemcpy(dest, src, count);}
-
-		static char_type * assign(char_type * s, size_t n, char_type a) {return wmemset(s, a, n);}
-
-		static char_type to_char_type(const int_type & c) noexcept {return char_type(c);}
-
-		static int_type to_int_type(const char_type & c) noexcept {return int_type(c);}
-
-		static bool eq_int_type(const int_type & c1, const int_type & c2) noexcept {return c1 == c2;}
-
-		static int_type eof() noexcept {return static_cast<int_type>((wint_t)(0xFFFF));}
-
-		static int_type not_eof(const int_type & c) noexcept {return (c == eof()) ? 0 : c;}
-	};
-
-	template<>
-	struct char_traits_ex<char>: public char_traits<char>
-	{
-		typedef char              char_type;
-		typedef int               int_type;
-//		typedef streampos         pos_type;
-//		typedef streamoff         off_type;
-//		typedef mbstate_t         state_type;
-
+		/// nonstandard
 		static bool is_empty(const char_type * str) {return str == nullptr || *str == static_cast<char_type>(0);}
 
 		static int compare(const char_type * str1, const char_type * str2) {return ::lstrcmpA(str1, str2);}
@@ -146,7 +99,7 @@ namespace Cstr {
 	};
 
 	template<>
-	struct char_traits_ex<wchar_t>: public char_traits<wchar_t>
+	struct char_traits<wchar_t>
 	{
 		typedef wchar_t           char_type;
 		typedef wint_t            int_type;
@@ -154,6 +107,35 @@ namespace Cstr {
 //		typedef wstreampos        pos_type;
 //		typedef mbstate_t         state_type;
 
+		static void assign(char_type & c1, const char_type & c2) noexcept {c1 = c2;}
+
+		static bool eq(const char_type & c1, const char_type & c2) noexcept {return c1 == c2;}
+
+		static bool lt(const char_type & c1, const char_type & c2) noexcept {return c1 < c2;}
+
+		static int compare(const char_type * str1, const char_type* str2, size_t count) {return ::wmemcmp(str1, str2, count);}
+
+		static size_t length(const char_type * str) {return ::lstrlenW(str);}
+
+		static const char_type * find(const char_type * s, size_t n, const char_type & ch) {return wmemchr(s, ch, n);}
+
+		static char_type * move(char_type * dest, const char_type * src, size_t count) {return wmemmove(dest, src, count);}
+
+		static char_type * copy(char_type * dest, const char_type * src, size_t count) {return wmemcpy(dest, src, count);}
+
+		static char_type * assign(char_type * s, size_t n, char_type a) {return wmemset(s, a, n);}
+
+		static char_type to_char_type(const int_type & c) noexcept {return char_type(c);}
+
+		static int_type to_int_type(const char_type & c) noexcept {return int_type(c);}
+
+		static bool eq_int_type(const int_type & c1, const int_type & c2) noexcept {return c1 == c2;}
+
+		static int_type eof() noexcept {return static_cast<int_type>((wint_t)(0xFFFF));}
+
+		static int_type not_eof(const int_type & c) noexcept {return (c == eof()) ? 0 : c;}
+
+		/// nonstandard
 		static bool is_empty(const char_type * str) {return str == nullptr || *str == static_cast<char_type>(0);}
 
 		static int compare(const char_type * str1, const char_type * str2) {return ::lstrcmpW(str1, str2);}
@@ -192,105 +174,105 @@ namespace Cstr {
 	template<typename CharType>
 	bool is_space(CharType chr)
 	{
-		return Cstr::char_traits_ex<CharType>::get_type_of_char(chr) & C1_SPACE;
+		return Cstr::char_traits<CharType>::get_type_of_char(chr) & C1_SPACE;
 	}
 
 	template<typename CharType>
 	bool is_printable(CharType chr)
 	{
-		return !(Cstr::char_traits_ex<CharType>::get_type_of_char(chr) & C1_CNTRL);
+		return !(Cstr::char_traits<CharType>::get_type_of_char(chr) & C1_CNTRL);
 	}
 
 	template<typename CharType>
 	bool is_control(CharType chr)
 	{
-		return Cstr::char_traits_ex<CharType>::get_type_of_char(chr) & C1_CNTRL;
+		return Cstr::char_traits<CharType>::get_type_of_char(chr) & C1_CNTRL;
 	}
 
 	template<typename CharType>
 	bool is_upper(CharType chr)
 	{
-		return Cstr::char_traits_ex<CharType>::get_type_of_char(chr) & C1_UPPER;
+		return Cstr::char_traits<CharType>::get_type_of_char(chr) & C1_UPPER;
 	}
 
 	template<typename CharType>
 	bool is_lower(CharType chr)
 	{
-		return Cstr::char_traits_ex<CharType>::get_type_of_char(chr) & C1_LOWER;
+		return Cstr::char_traits<CharType>::get_type_of_char(chr) & C1_LOWER;
 	}
 
 	template<typename CharType>
 	bool is_alpha(CharType chr)
 	{
-		return Cstr::char_traits_ex<CharType>::get_type_of_char(chr) & C1_ALPHA;
+		return Cstr::char_traits<CharType>::get_type_of_char(chr) & C1_ALPHA;
 	}
 
 	template<typename CharType>
 	bool is_alnum(CharType chr)
 	{
-		return Cstr::char_traits_ex<CharType>::get_type_of_char(chr) & (C1_ALPHA | C1_DIGIT);
+		return Cstr::char_traits<CharType>::get_type_of_char(chr) & (C1_ALPHA | C1_DIGIT);
 	}
 
 	template<typename CharType>
 	bool is_digit(CharType chr)
 	{
-		return Cstr::char_traits_ex<CharType>::get_type_of_char(chr) & C1_DIGIT;
+		return Cstr::char_traits<CharType>::get_type_of_char(chr) & C1_DIGIT;
 	}
 
 	template<typename CharType>
 	bool is_xdigit(CharType chr)
 	{
-		return Cstr::char_traits_ex<CharType>::get_type_of_char(chr) & C1_XDIGIT;
+		return Cstr::char_traits<CharType>::get_type_of_char(chr) & C1_XDIGIT;
 	}
 
 	template<typename CharType>
 	bool is_punct(CharType chr)
 	{
-		return Cstr::char_traits_ex<CharType>::get_type_of_char(chr) & C1_PUNCT;
+		return Cstr::char_traits<CharType>::get_type_of_char(chr) & C1_PUNCT;
 	}
 
 	namespace Inplace {
 		template<typename CharType>
 		CharType & to_upper(CharType & chr)
 		{
-			return Cstr::char_traits_ex<CharType>::to_upper(chr);
+			return Cstr::char_traits<CharType>::to_upper(chr);
 		}
 
 		template<typename CharType>
 		CharType * to_upper(CharType * str, size_t count)
 		{
-			return Cstr::char_traits_ex<CharType>::to_upper(str, count);
+			return Cstr::char_traits<CharType>::to_upper(str, count);
 		}
 
 		template<typename CharType>
 		CharType * to_upper(CharType * str)
 		{
-			return Cstr::char_traits_ex<CharType>::to_upper(str, length(str));
+			return Cstr::char_traits<CharType>::to_upper(str, length(str));
 		}
 
 		template<typename CharType>
 		CharType & to_lower(CharType & chr)
 		{
-			return Cstr::char_traits_ex<CharType>::to_lower(chr);
+			return Cstr::char_traits<CharType>::to_lower(chr);
 		}
 
 		template<typename CharType>
 		CharType * to_lower(CharType * str, size_t count)
 		{
-			return Cstr::char_traits_ex<CharType>::to_lower(str, count);
+			return Cstr::char_traits<CharType>::to_lower(str, count);
 		}
 
 		template<typename CharType>
 		CharType * to_lower(CharType * str)
 		{
-			return Cstr::char_traits_ex<CharType>::to_lower(str, length(str));
+			return Cstr::char_traits<CharType>::to_lower(str, length(str));
 		}
 	}
 
 	template<typename CharType>
 	bool is_empty(const CharType * str)
 	{
-		return Cstr::char_traits_ex<CharType>::is_empty(str);
+		return Cstr::char_traits<CharType>::is_empty(str);
 	}
 
 	template<typename CharType>
@@ -302,7 +284,7 @@ namespace Cstr {
 	template<typename CharType>
 	int compare(const CharType * str1, const CharType * str2)
 	{
-		return Cstr::char_traits_ex<CharType>::compare(str1, str2);
+		return Cstr::char_traits<CharType>::compare(str1, str2);
 	}
 
 	template<typename CharType>
@@ -314,25 +296,25 @@ namespace Cstr {
 	template<typename CharType>
 	int compare_cs(const CharType * str1, const CharType * str2)
 	{
-		return Cstr::char_traits_ex<CharType>::compare_cs(str1, str2);
+		return Cstr::char_traits<CharType>::compare_cs(str1, str2);
 	}
 
 	template<typename CharType>
 	int compare_cs(const CharType * str1, const CharType * str2, size_t count)
 	{
-		return Cstr::char_traits_ex<CharType>::compare_cs(str1, str2, count);
+		return Cstr::char_traits<CharType>::compare_cs(str1, str2, count);
 	}
 
 	template<typename CharType>
 	int compare_ci(const CharType * str1, const CharType * str2)
 	{
-		return Cstr::char_traits_ex<CharType>::compare_ci(str1, str2);
+		return Cstr::char_traits<CharType>::compare_ci(str1, str2);
 	}
 
 	template<typename CharType>
 	int compare_ci(const CharType * str1, const CharType * str2, size_t count)
 	{
-		return Cstr::char_traits_ex<CharType>::compare_ci(str1, str2, count);
+		return Cstr::char_traits<CharType>::compare_ci(str1, str2, count);
 	}
 
 	template<typename CharType>
@@ -344,7 +326,7 @@ namespace Cstr {
 	template<typename CharType>
 	CharType * copy(CharType * dest, const CharType * src)
 	{
-		return Cstr::char_traits_ex<CharType>::copy(dest, src);
+		return Cstr::char_traits<CharType>::copy(dest, src);
 	}
 
 	template<typename CharType>
@@ -356,25 +338,25 @@ namespace Cstr {
 	template<typename CharType>
 	CharType * cat(CharType * dest, const CharType * src)
 	{
-		return Cstr::char_traits_ex<CharType>::cat(dest, src);
+		return Cstr::char_traits<CharType>::cat(dest, src);
 	}
 
 	template<typename CharType>
 	CharType * cat(CharType * dest, const CharType * src, size_t count)
 	{
-		return Cstr::char_traits_ex<CharType>::cat(dest, src, count);
+		return Cstr::char_traits<CharType>::cat(dest, src, count);
 	}
 
 	template<typename CharType>
 	const CharType * find(const CharType * where, const CharType * what)
 	{
-		return Cstr::char_traits_ex<CharType>::find(where, what);
+		return Cstr::char_traits<CharType>::find(where, what);
 	}
 
 	template<typename CharType>
 	const CharType * find(const CharType * where, CharType what)
 	{
-		return Cstr::char_traits_ex<CharType>::find(where, what);
+		return Cstr::char_traits<CharType>::find(where, what);
 	}
 
 	//inline PSTR RFind(PCSTR where, PCSTR what) {
@@ -423,13 +405,13 @@ namespace Cstr {
 	template<typename CharType>
 	CharType to_upper(CharType chr)
 	{
-		return Cstr::char_traits_ex<CharType>::to_upper(chr);
+		return Cstr::char_traits<CharType>::to_upper(chr);
 	}
 
 	template<typename CharType>
 	CharType to_lower(CharType chr)
 	{
-		return Cstr::char_traits_ex<CharType>::to_lower(chr);
+		return Cstr::char_traits<CharType>::to_lower(chr);
 	}
 
 	template<typename CharType>

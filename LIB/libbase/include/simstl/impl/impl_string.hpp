@@ -12,8 +12,9 @@
 namespace sarastd {
 	ssize_t string_test();
 
-	template<typename Char, typename Traits>
-	class basic_string {
+	template<typename CharType, typename Traits>
+	class basic_string
+	{
 		static const sarastd::size_t MIN_ALLOC_BLOCK = 16;
 		typedef basic_string this_type;
 
@@ -33,7 +34,7 @@ namespace sarastd {
 		typedef sarastd::reverse_iterator<iterator> reverse_iterator;
 		typedef sarastd::reverse_iterator<const_iterator> const_reverse_iterator;
 
-		static const size_type npos = ~size_type(0);
+		static const size_type npos = ~static_cast<size_type>(0);
 
 		~basic_string();
 
@@ -68,7 +69,7 @@ namespace sarastd {
 		int compare(const this_type & str) const;
 		int compare(size_type pos, size_type count, const this_type & str) const;
 		int compare(size_type pos, size_type count, const_pointer str) const;
-		int compare(size_type pos, size_type count, const_pointer str, size_type len) const;
+		int compare(size_type pos1, size_type count1, const_pointer str, size_type count2) const;
 
 		this_type & append(size_type count, value_type ch);
 		this_type & append(const this_type & str);
@@ -97,28 +98,6 @@ namespace sarastd {
 		this_type & operator +=(const this_type & str);
 		this_type & operator +=(const_pointer str);
 		this_type & operator +=(value_type ch);
-
-		this_type operator +(const this_type & str) const;
-		this_type operator +(const_pointer str) const;
-		this_type operator +(value_type ch) const;
-
-		bool operator ==(const this_type & str) const;
-		bool operator ==(const_pointer str) const;
-
-		bool operator !=(const this_type & in) const;
-		bool operator !=(const_pointer in) const;
-
-		bool operator <(const this_type & str) const;
-		bool operator <(const_pointer str) const;
-
-		bool operator >(const this_type & str) const;
-		bool operator >(const_pointer str) const;
-
-		bool operator <=(const this_type & str) const;
-		bool operator <=(const_pointer str) const;
-
-		bool operator >=(const this_type & str) const;
-		bool operator >=(const_pointer str) const;
 
 		const_reference operator [](size_type in) const;
 		reference operator [](size_type in);
@@ -162,20 +141,45 @@ namespace sarastd {
 
 		size_type get_new_capacity(size_type capacity) const;
 
-		size_type get_necessary_capacity(sarastd::ptrdiff_t addToSize) const;
+		size_type get_necessary_capacity(ptrdiff_t addToSize) const;
 
 		void split(size_type necessaryCapacity);
 
-		int compare(const_pointer str1, size_type count1, const_pointer str2, size_type count2) const;
+		static int compare(const_pointer str1, size_type count1, const_pointer str2, size_type count2);
 
 		bool is_same_str(const_pointer str) const;
 
 		bool is_shared() const;
+
+		template<typename C, typename T> friend basic_string<C, T> operator +(const basic_string<C, T> & left, const basic_string<C, T> & right);
+		template<typename C, typename T> friend basic_string<C, T> operator +(const C * left, const basic_string<C, T> & right);
+		template<typename C, typename T> friend basic_string<C, T> operator +(C left, const basic_string<C, T> & right);
+		template<typename C, typename T> friend basic_string<C, T> operator +(const basic_string<C, T> & left, const C * right);
+		template<typename C, typename T> friend basic_string<C, T> operator +(const basic_string<C, T> & left, C right);
+
+		template<typename C, typename T> friend bool operator ==(const basic_string<C, T> & left, const basic_string<C, T> & right);
+		template<typename C, typename T> friend bool operator ==(const C * left, const basic_string<C, T> & right);
+		template<typename C, typename T> friend bool operator ==(const basic_string<C, T> & left, const C * right);
+		template<typename C, typename T> friend bool operator !=(const basic_string<C, T> & left, const basic_string<C, T> & right);
+		template<typename C, typename T> friend bool operator !=(const C * left, const basic_string<C, T> & right);
+		template<typename C, typename T> friend bool operator !=(const basic_string<C, T> & left, const C * right);
+		template<typename C, typename T> friend bool operator <(const basic_string<C, T> & left, const basic_string<C, T> & right);
+		template<typename C, typename T> friend bool operator <(const C * left, const basic_string<C, T> & right);
+		template<typename C, typename T> friend bool operator <(const basic_string<C, T> & left, const C * right);
+		template<typename C, typename T> friend bool operator <=(const basic_string<C, T> & left, const basic_string<C, T> & right);
+		template<typename C, typename T> friend bool operator <=(const C * left, const basic_string<C, T> & right);
+		template<typename C, typename T> friend bool operator <=(const basic_string<C, T> & left, const C * right);
+		template<typename C, typename T> friend bool operator >(const basic_string<C, T> & left, const basic_string<C, T> & right);
+		template<typename C, typename T> friend bool operator >(const C * left, const basic_string<C, T> & right);
+		template<typename C, typename T> friend bool operator >(const basic_string<C, T> & left, const C * right);
+		template<typename C, typename T> friend bool operator >=(const basic_string<C, T> & left, const basic_string<C, T> & right);
+		template<typename C, typename T> friend bool operator >=(const C * left, const basic_string<C, T> & right);
+		template<typename C, typename T> friend bool operator >=(const basic_string<C, T> & left, const C * right);
 	};
 
 	///=============================================================================================
-	template<typename Char, typename Traits>
-	struct basic_string<Char, Traits>::string_impl: public sarastd::pvt::ref_counter {
+	template<typename CharType, typename Traits>
+	struct basic_string<CharType, Traits>::string_impl: public sarastd::pvt::ref_counter {
 		static string_impl * allocate(size_type capa)
 		{
 			string_impl * impl = (string_impl*)sarastd::pvt::_allocate<char>(sizeof(string_impl) + capa * sizeof(value_type));
@@ -201,9 +205,9 @@ namespace sarastd {
 			return m_size;
 		}
 
-		void * get_str_data() const
+		pointer get_str_data() const
 		{
-			return (void*)m_str;
+			return const_cast<pointer>(m_str);
 		}
 
 	private:
@@ -220,8 +224,8 @@ namespace sarastd {
 		value_type m_str[1];
 	};
 
-	template<typename Char, typename Traits>
-	void basic_string<Char, Traits>::string_impl::append(const_pointer str, size_type count)
+	template<typename CharType, typename Traits>
+	void basic_string<CharType, Traits>::string_impl::append(const_pointer str, size_type count)
 	{
 		if (str && count) {
 			traits_type::copy(m_str + m_size, str, count);
@@ -229,8 +233,8 @@ namespace sarastd {
 		}
 	}
 
-	template<typename Char, typename Traits>
-	void basic_string<Char, Traits>::string_impl::append(value_type ch, size_type count)
+	template<typename CharType, typename Traits>
+	void basic_string<CharType, Traits>::string_impl::append(value_type ch, size_type count)
 	{
 		if (count) {
 			traits_type::assign(m_str + m_size, count, ch);
@@ -238,152 +242,152 @@ namespace sarastd {
 		}
 	}
 
-	template<typename Char, typename Traits>
-	void basic_string<Char, Traits>::string_impl::set_size(size_type new_size)
+	template<typename CharType, typename Traits>
+	void basic_string<CharType, Traits>::string_impl::set_size(size_type new_size)
 	{
 		m_size = new_size;
-		m_str[m_size] = 0;
+		m_str[m_size] = static_cast<CharType>(0);
 	}
 
-	template<typename Char, typename Traits>
-	void basic_string<Char, Traits>::string_impl::set_capacity(size_type new_capacity)
+	template<typename CharType, typename Traits>
+	void basic_string<CharType, Traits>::string_impl::set_capacity(size_type new_capacity)
 	{
 		m_capa = new_capacity;
 	}
 
-	template<typename Char, typename Traits>
-	basic_string<Char, Traits>::string_impl::~string_impl()
+	template<typename CharType, typename Traits>
+	basic_string<CharType, Traits>::string_impl::~string_impl()
 	{
 	}
 
-	template<typename Char, typename Traits>
-	void basic_string<Char, Traits>::string_impl::destroy() const
+	template<typename CharType, typename Traits>
+	void basic_string<CharType, Traits>::string_impl::destroy() const
 	{
 		this->~string_impl();
 	}
 
-	template<typename Char, typename Traits>
-	void basic_string<Char, Traits>::string_impl::deallocate() const
+	template<typename CharType, typename Traits>
+	void basic_string<CharType, Traits>::string_impl::deallocate() const
 	{
 		sarastd::pvt::_deallocate((char*)this);
 	}
 
-	template<typename Char, typename Traits>
-	basic_string<Char, Traits>::string_impl::string_impl(size_type capa) :
+	template<typename CharType, typename Traits>
+	basic_string<CharType, Traits>::string_impl::string_impl(size_type capa) :
 		m_capa(capa), m_size(0)
 	{
-		m_str[0] = 0;
+		m_str[0] = static_cast<CharType>(0);
 	}
 
 	///=============================================================================================
-	template<typename Char, typename Traits>
-	basic_string<Char, Traits>::~basic_string()
+	template<typename CharType, typename Traits>
+	basic_string<CharType, Traits>::~basic_string()
 	{
 		m_data->decrease_ref();
 	}
 
-	template<typename Char, typename Traits>
-	basic_string<Char, Traits>::basic_string() :
+	template<typename CharType, typename Traits>
+	basic_string<CharType, Traits>::basic_string() :
 		m_data(string_impl::allocate(get_new_capacity(0)))
 	{
 	}
 
-	template<typename Char, typename Traits>
-	basic_string<Char, Traits>::basic_string(const this_type & right) :
+	template<typename CharType, typename Traits>
+	basic_string<CharType, Traits>::basic_string(const this_type & right) :
 		m_data(right.m_data)
 	{
 		m_data->increase_ref();
 	}
 
-	template<typename Char, typename Traits>
-	basic_string<Char, Traits>::basic_string(size_type count, value_type in) :
+	template<typename CharType, typename Traits>
+	basic_string<CharType, Traits>::basic_string(size_type count, value_type in) :
 		m_data(string_impl::allocate(get_new_capacity(count)))
 	{
 		m_data->append(in, count);
 	}
 
-	template<typename Char, typename Traits>
-	basic_string<Char, Traits>::basic_string(const_pointer in, size_type count) :
+	template<typename CharType, typename Traits>
+	basic_string<CharType, Traits>::basic_string(const_pointer in, size_type count) :
 		m_data(string_impl::allocate(get_new_capacity((in && count == npos) ? count = traits_type::length(in) : count)))
 	{
 		m_data->append(in, count);
 	}
 
-	template<typename Char, typename Traits>
-	bool basic_string<Char, Traits>::empty() const
+	template<typename CharType, typename Traits>
+	bool basic_string<CharType, Traits>::empty() const
 	{
 		return m_data->get_size() == 0;
 	}
 
-	template<typename Char, typename Traits>
-	typename basic_string<Char, Traits>::size_type basic_string<Char, Traits>::capacity() const
+	template<typename CharType, typename Traits>
+	typename basic_string<CharType, Traits>::size_type basic_string<CharType, Traits>::capacity() const
 	{
 		return m_data->get_capacity();
 	}
 
-	template<typename Char, typename Traits>
-	typename basic_string<Char, Traits>::size_type basic_string<Char, Traits>::size() const
+	template<typename CharType, typename Traits>
+	typename basic_string<CharType, Traits>::size_type basic_string<CharType, Traits>::size() const
 	{
 		return m_data->get_size();
 	}
 
-	template<typename Char, typename Traits>
-	typename basic_string<Char, Traits>::size_type basic_string<Char, Traits>::length() const
+	template<typename CharType, typename Traits>
+	typename basic_string<CharType, Traits>::size_type basic_string<CharType, Traits>::length() const
 	{
 		return m_data->get_size();
 	}
 
-	template<typename Char, typename Traits>
-	typename basic_string<Char, Traits>::const_pointer basic_string<Char, Traits>::c_str() const
+	template<typename CharType, typename Traits>
+	typename basic_string<CharType, Traits>::const_pointer basic_string<CharType, Traits>::c_str() const
 	{
 		return (const_pointer)m_data->get_str_data();
 	}
 
-	template<typename Char, typename Traits>
-	void basic_string<Char, Traits>::swap(this_type & in)
+	template<typename CharType, typename Traits>
+	void basic_string<CharType, Traits>::swap(this_type & in)
 	{
 		using sarastd::swap;
 		swap(m_data, in.m_data);
 	}
 
-	template<typename Char, typename Traits>
-	typename basic_string<Char, Traits>::const_iterator basic_string<Char, Traits>::cbegin() const
+	template<typename CharType, typename Traits>
+	typename basic_string<CharType, Traits>::const_iterator basic_string<CharType, Traits>::cbegin() const
 	{
 		return const_iterator(c_str());
 	}
 
-	template<typename Char, typename Traits>
-	typename basic_string<Char, Traits>::const_iterator basic_string<Char, Traits>::begin() const
+	template<typename CharType, typename Traits>
+	typename basic_string<CharType, Traits>::const_iterator basic_string<CharType, Traits>::begin() const
 	{
 		return cbegin();
 	}
 
-	template<typename Char, typename Traits>
-	typename basic_string<Char, Traits>::iterator basic_string<Char, Traits>::begin()
+	template<typename CharType, typename Traits>
+	typename basic_string<CharType, Traits>::iterator basic_string<CharType, Traits>::begin()
 	{
 		return iterator(_str());
 	}
 
-	template<typename Char, typename Traits>
-	typename basic_string<Char, Traits>::const_iterator basic_string<Char, Traits>::cend() const
+	template<typename CharType, typename Traits>
+	typename basic_string<CharType, Traits>::const_iterator basic_string<CharType, Traits>::cend() const
 	{
 		return cbegin() + size();
 	}
 
-	template<typename Char, typename Traits>
-	typename basic_string<Char, Traits>::const_iterator basic_string<Char, Traits>::end() const
+	template<typename CharType, typename Traits>
+	typename basic_string<CharType, Traits>::const_iterator basic_string<CharType, Traits>::end() const
 	{
 		return cbegin() + size();
 	}
 
-	template<typename Char, typename Traits>
-	typename basic_string<Char, Traits>::iterator basic_string<Char, Traits>::end()
+	template<typename CharType, typename Traits>
+	typename basic_string<CharType, Traits>::iterator basic_string<CharType, Traits>::end()
 	{
 		return begin() + size();
 	}
 
-	template<typename Char, typename Traits>
-	void basic_string<Char, Traits>::clear()
+	template<typename CharType, typename Traits>
+	void basic_string<CharType, Traits>::clear()
 	{
 		if (!empty()) {
 			split(capacity());
@@ -391,65 +395,65 @@ namespace sarastd {
 		}
 	}
 
-	template<typename Char, typename Traits>
-	void basic_string<Char, Traits>::reserve(size_type capa)
+	template<typename CharType, typename Traits>
+	void basic_string<CharType, Traits>::reserve(size_type capa)
 	{
 		if (capacity() < capa) {
 			this_type(c_str(), size(), capa).swap(*this);
 		}
 	}
 
-	template<typename Char, typename Traits>
-	int basic_string<Char, Traits>::compare(const_pointer str) const
+	template<typename CharType, typename Traits>
+	int basic_string<CharType, Traits>::compare(const_pointer str) const
 	{
 		return compare(c_str(), length(), str, traits_type::length(str));
 	}
 
-	template<typename Char, typename Traits>
-	int basic_string<Char, Traits>::compare(const this_type & str) const
+	template<typename CharType, typename Traits>
+	int basic_string<CharType, Traits>::compare(const this_type & str) const
 	{
 		return compare(c_str(), length(), str.c_str(), str.length());
 	}
 
-	template<typename Char, typename Traits>
-	int basic_string<Char, Traits>::compare(size_type pos, size_type count, const this_type & str) const
+	template<typename CharType, typename Traits>
+	int basic_string<CharType, Traits>::compare(size_type pos, size_type count, const this_type & str) const
 	{
 		return compare(c_str() + pos, count, str.c_str(), str.length());
 	}
 
-	template<typename Char, typename Traits>
-	int basic_string<Char, Traits>::compare(size_type pos, size_type count, const_pointer str) const
+	template<typename CharType, typename Traits>
+	int basic_string<CharType, Traits>::compare(size_type pos, size_type count, const_pointer str) const
 	{
 		return compare(c_str() + pos, count, str, traits_type::length(str));
 	}
 
-	template<typename Char, typename Traits>
-	int basic_string<Char, Traits>::compare(size_type pos, size_type count, const_pointer str, size_type len) const
+	template<typename CharType, typename Traits>
+	int basic_string<CharType, Traits>::compare(size_type pos, size_type count, const_pointer str, size_type len) const
 	{
 		return compare(c_str() + pos, count, str, len);
 	}
 
-	template<typename Char, typename Traits>
-	typename basic_string<Char, Traits>::this_type & basic_string<Char, Traits>::append(size_type count, value_type ch)
+	template<typename CharType, typename Traits>
+	typename basic_string<CharType, Traits>::this_type & basic_string<CharType, Traits>::append(size_type count, value_type ch)
 	{
 		return append(this_type(count, ch));
 	}
 
-	template<typename Char, typename Traits>
-	typename basic_string<Char, Traits>::this_type & basic_string<Char, Traits>::append(const this_type & str)
+	template<typename CharType, typename Traits>
+	typename basic_string<CharType, Traits>::this_type & basic_string<CharType, Traits>::append(const this_type & str)
 	{
 		append(str.c_str(), str.size());
 		return *this;
 	}
 
-	template<typename Char, typename Traits>
-	typename basic_string<Char, Traits>::this_type & basic_string<Char, Traits>::append(const this_type & str, size_type pos, size_type count)
+	template<typename CharType, typename Traits>
+	typename basic_string<CharType, Traits>::this_type & basic_string<CharType, Traits>::append(const this_type & str, size_type pos, size_type count)
 	{
 		return append(str.c_str() + pos, count);
 	}
 
-	template<typename Char, typename Traits>
-	typename basic_string<Char, Traits>::this_type & basic_string<Char, Traits>::append(const_pointer str, size_type count)
+	template<typename CharType, typename Traits>
+	typename basic_string<CharType, Traits>::this_type & basic_string<CharType, Traits>::append(const_pointer str, size_type count)
 	{
 		if (str && count) {
 			if (is_same_str(str)) {
@@ -464,265 +468,175 @@ namespace sarastd {
 		return *this;
 	}
 
-	template<typename Char, typename Traits>
-	typename basic_string<Char, Traits>::this_type & basic_string<Char, Traits>::append(const_pointer str)
+	template<typename CharType, typename Traits>
+	typename basic_string<CharType, Traits>::this_type & basic_string<CharType, Traits>::append(const_pointer str)
 	{
 		return append(str, traits_type::length(str));
 	}
 
-	template<typename Char, typename Traits>
-	typename basic_string<Char, Traits>::this_type & basic_string<Char, Traits>::assign(size_type count, value_type ch)
+	template<typename CharType, typename Traits>
+	typename basic_string<CharType, Traits>::this_type & basic_string<CharType, Traits>::assign(size_type count, value_type ch)
 	{
 		this_type(count, ch).swap(*this);
 		return *this;
 	}
 
-	template<typename Char, typename Traits>
-	typename basic_string<Char, Traits>::this_type & basic_string<Char, Traits>::assign(const this_type & str)
+	template<typename CharType, typename Traits>
+	typename basic_string<CharType, Traits>::this_type & basic_string<CharType, Traits>::assign(const this_type & str)
 	{
 		this_type(str).swap(*this);
 		return *this;
 	}
 
-	template<typename Char, typename Traits>
-	typename basic_string<Char, Traits>::this_type & basic_string<Char, Traits>::assign(const this_type & str, size_type pos, size_type count)
+	template<typename CharType, typename Traits>
+	typename basic_string<CharType, Traits>::this_type & basic_string<CharType, Traits>::assign(const this_type & str, size_type pos, size_type count)
 	{
 		this_type(str.c_str() + pos, count).swap(*this);
 		return *this;
 	}
 
-	template<typename Char, typename Traits>
-	typename basic_string<Char, Traits>::this_type & basic_string<Char, Traits>::assign(const_pointer str, size_type count)
+	template<typename CharType, typename Traits>
+	typename basic_string<CharType, Traits>::this_type & basic_string<CharType, Traits>::assign(const_pointer str, size_type count)
 	{
 		this_type(str, count).swap(*this);
 		return *this;
 	}
 
-	template<typename Char, typename Traits>
-	typename basic_string<Char, Traits>::this_type & basic_string<Char, Traits>::assign(const_pointer str)
+	template<typename CharType, typename Traits>
+	typename basic_string<CharType, Traits>::this_type & basic_string<CharType, Traits>::assign(const_pointer str)
 	{
 		this_type(str).swap(*this);
 		return *this;
 	}
 
-	template<typename Char, typename Traits>
-	typename basic_string<Char, Traits>::iterator basic_string<Char, Traits>::insert(const_iterator pos, value_type ch)
+	template<typename CharType, typename Traits>
+	typename basic_string<CharType, Traits>::iterator basic_string<CharType, Traits>::insert(const_iterator pos, value_type ch)
 	{
 		typename sarastd::iterator_traits<const_iterator>::difference_type posFirst = sarastd::distance(cbegin(), pos);
 		insert(posFirst, 0, 1, ch);
 		return iterator(_str() + posFirst);
 	}
 
-	template<typename Char, typename Traits>
-	typename basic_string<Char, Traits>::iterator basic_string<Char, Traits>::insert(iterator pos, size_type count, value_type ch)
+	template<typename CharType, typename Traits>
+	typename basic_string<CharType, Traits>::iterator basic_string<CharType, Traits>::insert(iterator pos, size_type count, value_type ch)
 	{
 		typename sarastd::iterator_traits<const_iterator>::difference_type posFirst = sarastd::distance(begin(), pos);
 		insert(posFirst, 0, count, ch);
 		return iterator(_str() + posFirst);
 	}
 
-	template<typename Char, typename Traits>
-	typename basic_string<Char, Traits>::this_type & basic_string<Char, Traits>::insert(size_type index, size_type count, value_type ch)
+	template<typename CharType, typename Traits>
+	typename basic_string<CharType, Traits>::this_type & basic_string<CharType, Traits>::insert(size_type index, size_type count, value_type ch)
 	{
 		return replace(index, 0, count, ch);
 	}
 
-	template<typename Char, typename Traits>
-	typename basic_string<Char, Traits>::this_type & basic_string<Char, Traits>::insert(size_type index, const_pointer str)
+	template<typename CharType, typename Traits>
+	typename basic_string<CharType, Traits>::this_type & basic_string<CharType, Traits>::insert(size_type index, const_pointer str)
 	{
 		return replace(index, 0, str, traits_type::length(str));
 	}
 
-	template<typename Char, typename Traits>
-	typename basic_string<Char, Traits>::this_type & basic_string<Char, Traits>::insert(size_type index, const_pointer str, size_type count)
+	template<typename CharType, typename Traits>
+	typename basic_string<CharType, Traits>::this_type & basic_string<CharType, Traits>::insert(size_type index, const_pointer str, size_type count)
 	{
 		return replace(index, 0, str, count);
 	}
 
-	template<typename Char, typename Traits>
-	typename basic_string<Char, Traits>::this_type & basic_string<Char, Traits>::insert(size_type index, const this_type & str)
+	template<typename CharType, typename Traits>
+	typename basic_string<CharType, Traits>::this_type & basic_string<CharType, Traits>::insert(size_type index, const this_type & str)
 	{
 		return replace(index, 0, str.c_str(), str.length());
 	}
 
-	template<typename Char, typename Traits>
-	typename basic_string<Char, Traits>::this_type & basic_string<Char, Traits>::insert(size_type index, const this_type & str, size_type index_str, size_type count)
+	template<typename CharType, typename Traits>
+	typename basic_string<CharType, Traits>::this_type & basic_string<CharType, Traits>::insert(size_type index, const this_type & str, size_type index_str, size_type count)
 	{
 		return replace(index, 0, str.c_str(), count);
 	}
 
-	template<typename Char, typename Traits>
-	typename basic_string<Char, Traits>::this_type & basic_string<Char, Traits>::operator =(const this_type & right)
+	template<typename CharType, typename Traits>
+	typename basic_string<CharType, Traits>::this_type & basic_string<CharType, Traits>::operator =(const this_type & right)
 	{
 		return assign(right);
 	}
 
-	template<typename Char, typename Traits>
-	typename basic_string<Char, Traits>::this_type & basic_string<Char, Traits>::operator =(const_pointer right)
+	template<typename CharType, typename Traits>
+	typename basic_string<CharType, Traits>::this_type & basic_string<CharType, Traits>::operator =(const_pointer right)
 	{
 		return assign(right);
 	}
 
-	template<typename Char, typename Traits>
-	typename basic_string<Char, Traits>::this_type & basic_string<Char, Traits>::operator =(value_type ch)
+	template<typename CharType, typename Traits>
+	typename basic_string<CharType, Traits>::this_type & basic_string<CharType, Traits>::operator =(value_type ch)
 	{
 		return assign(1, ch);
 	}
 
-	template<typename Char, typename Traits>
-	typename basic_string<Char, Traits>::this_type & basic_string<Char, Traits>::operator +=(const this_type & str)
+	template<typename CharType, typename Traits>
+	typename basic_string<CharType, Traits>::this_type & basic_string<CharType, Traits>::operator +=(const this_type & str)
 	{
 		return append(str);
 	}
 
-	template<typename Char, typename Traits>
-	typename basic_string<Char, Traits>::this_type & basic_string<Char, Traits>::operator +=(const_pointer str)
+	template<typename CharType, typename Traits>
+	typename basic_string<CharType, Traits>::this_type & basic_string<CharType, Traits>::operator +=(const_pointer str)
 	{
 		return append(str);
 	}
 
-	template<typename Char, typename Traits>
-	typename basic_string<Char, Traits>::this_type & basic_string<Char, Traits>::operator +=(value_type ch)
+	template<typename CharType, typename Traits>
+	typename basic_string<CharType, Traits>::this_type & basic_string<CharType, Traits>::operator +=(value_type ch)
 	{
 		return append(1, ch);
 	}
 
-	template<typename Char, typename Traits>
-	typename basic_string<Char, Traits>::this_type basic_string<Char, Traits>::operator +(const this_type & str) const
-	{
-		return this_type(c_str(), size(), size() + str.size()) += str;
-	}
-
-	template<typename Char, typename Traits>
-	typename basic_string<Char, Traits>::this_type basic_string<Char, Traits>::operator +(const_pointer str) const
-	{
-		return this_type(c_str(), size(), size() + traits_type::length(str)) += str;
-	}
-
-	template<typename Char, typename Traits>
-	typename basic_string<Char, Traits>::this_type basic_string<Char, Traits>::operator +(value_type ch) const
-	{
-		return this_type(c_str(), size(), size() + 1) += ch;
-	}
-
-	template<typename Char, typename Traits>
-	bool basic_string<Char, Traits>::operator ==(const this_type & str) const
-	{
-		return compare(c_str(), size(), str.c_str(), str.size()) == 0;
-	}
-
-	template<typename Char, typename Traits>
-	bool basic_string<Char, Traits>::operator ==(const_pointer str) const
-	{
-		return compare(c_str(), size(), str, traits_type::length(str)) == 0;
-	}
-
-	template<typename Char, typename Traits>
-	bool basic_string<Char, Traits>::operator !=(const this_type & str) const
-	{
-		return !operator ==(str);
-	}
-
-	template<typename Char, typename Traits>
-	bool basic_string<Char, Traits>::operator !=(const_pointer str) const
-	{
-		return !operator ==(str);
-	}
-
-	template<typename Char, typename Traits>
-	bool basic_string<Char, Traits>::operator <(const this_type & str) const
-	{
-		return compare(c_str(), size(), str.c_str(), str.size()) < 0;
-	}
-
-	template<typename Char, typename Traits>
-	bool basic_string<Char, Traits>::operator <(const_pointer str) const
-	{
-		return compare(c_str(), size(), str, traits_type::length(str)) < 0;
-	}
-
-	template<typename Char, typename Traits>
-	bool basic_string<Char, Traits>::operator >(const this_type & str) const
-	{
-		return compare(c_str(), size(), str.c_str(), str.size()) > 0;
-	}
-
-	template<typename Char, typename Traits>
-	bool basic_string<Char, Traits>::operator >(const_pointer str) const
-	{
-		return compare(c_str(), size(), str, traits_type::length(str)) > 0;
-	}
-
-	template<typename Char, typename Traits>
-	bool basic_string<Char, Traits>::operator <=(const this_type & str) const
-	{
-		return compare(c_str(), size(), str.c_str(), str.size()) <= 0;
-	}
-
-	template<typename Char, typename Traits>
-	bool basic_string<Char, Traits>::operator <=(const_pointer str) const
-	{
-		return compare(c_str(), size(), str, traits_type::length(str)) <= 0;
-	}
-
-	template<typename Char, typename Traits>
-	bool basic_string<Char, Traits>::operator >=(const this_type & str) const
-	{
-		return compare(c_str(), size(), str.c_str(), str.size()) >= 0;
-	}
-
-	template<typename Char, typename Traits>
-	bool basic_string<Char, Traits>::operator >=(const_pointer str) const
-	{
-		return compare(c_str(), size(), str, traits_type::length(str)) >= 0;
-	}
-
-	template<typename Char, typename Traits>
-	typename basic_string<Char, Traits>::const_reference basic_string<Char, Traits>::operator [](size_type in) const
+	template<typename CharType, typename Traits>
+	typename basic_string<CharType, Traits>::const_reference basic_string<CharType, Traits>::operator [](size_type in) const
 	{
 		return *(c_str() + in);
 	}
 
-	template<typename Char, typename Traits>
-	typename basic_string<Char, Traits>::reference basic_string<Char, Traits>::operator [](size_type in)
+	template<typename CharType, typename Traits>
+	typename basic_string<CharType, Traits>::reference basic_string<CharType, Traits>::operator [](size_type in)
 	{
 		split(capacity());
 		return *(_str() + in);
 	}
 
-	template<typename Char, typename Traits>
-	typename basic_string<Char, Traits>::const_reference basic_string<Char, Traits>::at(size_type in) const
+	template<typename CharType, typename Traits>
+	typename basic_string<CharType, Traits>::const_reference basic_string<CharType, Traits>::at(size_type in) const
 	{
 		return *(c_str() + in);
 	}
 
-	template<typename Char, typename Traits>
-	typename basic_string<Char, Traits>::reference basic_string<Char, Traits>::at(size_type in)
+	template<typename CharType, typename Traits>
+	typename basic_string<CharType, Traits>::reference basic_string<CharType, Traits>::at(size_type in)
 	{
 		split(capacity());
 		return *(_str() + in);
 	}
 
-	template<typename Char, typename Traits>
-	typename basic_string<Char, Traits>::this_type & basic_string<Char, Traits>::replace(size_type pos, size_type len, const this_type & str)
+	template<typename CharType, typename Traits>
+	typename basic_string<CharType, Traits>::this_type & basic_string<CharType, Traits>::replace(size_type pos, size_type len, const this_type & str)
 	{
 		return replace(pos, len, str.c_str(), str.size());
 	}
 
-	template<typename Char, typename Traits>
-	typename basic_string<Char, Traits>::this_type & basic_string<Char, Traits>::replace(size_type pos, size_type len, const this_type & str, size_type subpos, size_type sublen)
+	template<typename CharType, typename Traits>
+	typename basic_string<CharType, Traits>::this_type & basic_string<CharType, Traits>::replace(size_type pos, size_type len, const this_type & str, size_type subpos, size_type sublen)
 	{
 		return replace(pos, len, &str[subpos], sublen);
 	}
 
-	template<typename Char, typename Traits>
-	typename basic_string<Char, Traits>::this_type & basic_string<Char, Traits>::replace(size_type pos, size_type len, const_pointer str)
+	template<typename CharType, typename Traits>
+	typename basic_string<CharType, Traits>::this_type & basic_string<CharType, Traits>::replace(size_type pos, size_type len, const_pointer str)
 	{
 		return replace(pos, len, str, traits_type::length(str));
 	}
 
-	template<typename Char, typename Traits>
-	typename basic_string<Char, Traits>::this_type & basic_string<Char, Traits>::replace(size_type pos, size_type len, const_pointer str, size_type count)
+	template<typename CharType, typename Traits>
+	typename basic_string<CharType, Traits>::this_type & basic_string<CharType, Traits>::replace(size_type pos, size_type len, const_pointer str, size_type count)
 	{
 		if (str) {
 //			printf("      (%Iu, %Iu): '%s'\n", size(), capacity(), c_str());
@@ -753,34 +667,34 @@ namespace sarastd {
 		return *this;
 	}
 
-	template<typename Char, typename Traits>
-	typename basic_string<Char, Traits>::this_type & basic_string<Char, Traits>::replace(size_type pos, size_type len, size_type count, value_type ch)
+	template<typename CharType, typename Traits>
+	typename basic_string<CharType, Traits>::this_type & basic_string<CharType, Traits>::replace(size_type pos, size_type len, size_type count, value_type ch)
 	{
 		return replace(pos, len, this_type(count, ch));
 	}
 
-	template<typename Char, typename Traits>
-	typename basic_string<Char, Traits>::this_type basic_string<Char, Traits>::substr(size_type pos, size_type n) const
+	template<typename CharType, typename Traits>
+	typename basic_string<CharType, Traits>::this_type basic_string<CharType, Traits>::substr(size_type pos, size_type n) const
 	{
 		return this_type(c_str() + pos, n);
 	}
 
-	template<typename Char, typename Traits>
-	typename basic_string<Char, Traits>::this_type & basic_string<Char, Traits>::erase(size_type pos, size_type count)
+	template<typename CharType, typename Traits>
+	typename basic_string<CharType, Traits>::this_type & basic_string<CharType, Traits>::erase(size_type pos, size_type count)
 	{
 		size_type posLast = (count == npos) ? size() : sarastd::min(size(), pos + count);
 		erase(sarastd::next(cbegin(), pos), sarastd::next(cbegin(), posLast));
 		return *this;
 	}
 
-	template<typename Char, typename Traits>
-	typename basic_string<Char, Traits>::iterator basic_string<Char, Traits>::erase(const_iterator position)
+	template<typename CharType, typename Traits>
+	typename basic_string<CharType, Traits>::iterator basic_string<CharType, Traits>::erase(const_iterator position)
 	{
 		return erase(position, sarastd::next(position, 1));
 	}
 
-	template<typename Char, typename Traits>
-	typename basic_string<Char, Traits>::iterator basic_string<Char, Traits>::erase(const_iterator first, const_iterator last)
+	template<typename CharType, typename Traits>
+	typename basic_string<CharType, Traits>::iterator basic_string<CharType, Traits>::erase(const_iterator first, const_iterator last)
 	{
 		typename sarastd::iterator_traits<const_iterator>::difference_type posFirst = sarastd::distance(cbegin(), first);
 		typename sarastd::iterator_traits<const_iterator>::difference_type posLast = sarastd::distance(cbegin(), sarastd::min(last, cend()));
@@ -795,34 +709,34 @@ namespace sarastd {
 		return iterator(_str() + posFirst);
 	}
 
-	template<typename Char, typename Traits>
-	typename basic_string<Char, Traits>::size_type basic_string<Char, Traits>::find(const this_type & str, size_type pos) const
+	template<typename CharType, typename Traits>
+	typename basic_string<CharType, Traits>::size_type basic_string<CharType, Traits>::find(const this_type & str, size_type pos) const
 	{
 		return find(str.c_str(), pos);
 	}
 
-	template<typename Char, typename Traits>
-	typename basic_string<Char, Traits>::size_type basic_string<Char, Traits>::find(const_pointer str, size_type pos) const
+	template<typename CharType, typename Traits>
+	typename basic_string<CharType, Traits>::size_type basic_string<CharType, Traits>::find(const_pointer str, size_type pos) const
 	{
 		const_pointer find = traits_type::find(c_str() + pos, str);
 		return (find) ? find - c_str() : npos;
 	}
 
-	template<typename Char, typename Traits>
-	typename basic_string<Char, Traits>::size_type basic_string<Char, Traits>::find(value_type ch, size_type pos) const
+	template<typename CharType, typename Traits>
+	typename basic_string<CharType, Traits>::size_type basic_string<CharType, Traits>::find(value_type ch, size_type pos) const
 	{
 		const_pointer find = traits_type::find(c_str() + pos, size(), ch);
 		return (find) ? find - c_str() : npos;
 	}
 
-	template<typename Char, typename Traits>
-	typename basic_string<Char, Traits>::size_type basic_string<Char, Traits>::rfind(const this_type & str, size_type pos) const
+	template<typename CharType, typename Traits>
+	typename basic_string<CharType, Traits>::size_type basic_string<CharType, Traits>::rfind(const this_type & str, size_type pos) const
 	{
 		return rfind(str.c_str(), pos, str.length());
 	}
 
-	template<typename Char, typename Traits>
-	typename basic_string<Char, Traits>::size_type basic_string<Char, Traits>::rfind(const_pointer str, size_type pos, size_type count) const
+	template<typename CharType, typename Traits>
+	typename basic_string<CharType, Traits>::size_type basic_string<CharType, Traits>::rfind(const_pointer str, size_type pos, size_type count) const
 	{
 		pos = sarastd::min(pos, size());
 		if (count != 0 && count <= pos) {
@@ -834,14 +748,14 @@ namespace sarastd {
 		return npos;
 	}
 
-	template<typename Char, typename Traits>
-	typename basic_string<Char, Traits>::size_type basic_string<Char, Traits>::rfind(const_pointer str, size_type pos) const
+	template<typename CharType, typename Traits>
+	typename basic_string<CharType, Traits>::size_type basic_string<CharType, Traits>::rfind(const_pointer str, size_type pos) const
 	{
 		return rfind(str, pos, traits_type::length(str));
 	}
 
-	template<typename Char, typename Traits>
-	typename basic_string<Char, Traits>::size_type basic_string<Char, Traits>::rfind(value_type ch, size_type pos) const
+	template<typename CharType, typename Traits>
+	typename basic_string<CharType, Traits>::size_type basic_string<CharType, Traits>::rfind(value_type ch, size_type pos) const
 	{
 		pos = sarastd::min(pos, size());
 		while (pos > 0)
@@ -850,8 +764,8 @@ namespace sarastd {
 		return npos;
 	}
 
-	template<typename Char, typename Traits>
-	typename basic_string<Char, Traits>::size_type basic_string<Char, Traits>::find_first_of(const this_type & str, size_type pos) const
+	template<typename CharType, typename Traits>
+	typename basic_string<CharType, Traits>::size_type basic_string<CharType, Traits>::find_first_of(const this_type & str, size_type pos) const
 	{
 		for (; pos < size(); ++pos)
 			if (traits_type::find(str.c_str(), str.size(), at(pos)))
@@ -859,8 +773,8 @@ namespace sarastd {
 		return npos;
 	}
 
-	template<typename Char, typename Traits>
-	typename basic_string<Char, Traits>::size_type basic_string<Char, Traits>::find_last_of(const this_type & str, size_type pos) const
+	template<typename CharType, typename Traits>
+	typename basic_string<CharType, Traits>::size_type basic_string<CharType, Traits>::find_last_of(const this_type & str, size_type pos) const
 	{
 		pos = sarastd::min(pos, size());
 		while (pos > 0)
@@ -869,54 +783,54 @@ namespace sarastd {
 		return npos;
 	}
 
-	template<typename Char, typename Traits>
-	typename basic_string<Char, Traits>::size_type basic_string<Char, Traits>::find_first_not_of(const this_type & str, size_type pos) const
+	template<typename CharType, typename Traits>
+	typename basic_string<CharType, Traits>::size_type basic_string<CharType, Traits>::find_first_not_of(const this_type & str, size_type pos) const
 	{
 		for (; pos < size(); ++pos)
-			if (traits_type::find(str.c_str(), str.size(), at(pos)) == 0)
+			if (traits_type::find(str.c_str(), str.size(), at(pos)) == nullptr)
 				return pos;
 		return npos;
 	}
 
-	template<typename Char, typename Traits>
-	typename basic_string<Char, Traits>::size_type basic_string<Char, Traits>::find_last_not_of(const this_type & str, size_type pos) const
+	template<typename CharType, typename Traits>
+	typename basic_string<CharType, Traits>::size_type basic_string<CharType, Traits>::find_last_not_of(const this_type & str, size_type pos) const
 	{
 		pos = sarastd::min(pos, size());
 		while (pos > 0)
-			if (traits_type::find(str.c_str(), str.size(), at(--pos)) == 0)
+			if (traits_type::find(str.c_str(), str.size(), at(--pos)) == nullptr)
 				return pos;
 		return npos;
 	}
 
-	template<typename Char, typename Traits>
-	basic_string<Char, Traits>::basic_string(const_pointer str, size_type count, size_type capacity) :
+	template<typename CharType, typename Traits>
+	basic_string<CharType, Traits>::basic_string(const_pointer str, size_type count, size_type capacity) :
 		m_data(string_impl::allocate(get_new_capacity(capacity)))
 	{
 		m_data->append(str, count);
 	}
 
-	template<typename Char, typename Traits>
-	typename basic_string<Char, Traits>::pointer basic_string<Char, Traits>::_str() const
+	template<typename CharType, typename Traits>
+	typename basic_string<CharType, Traits>::pointer basic_string<CharType, Traits>::_str() const
 	{
-		return (pointer)m_data->get_str_data();
+		return m_data->get_str_data();
 	}
 
-	template<typename Char, typename Traits>
-	typename basic_string<Char, Traits>::size_type basic_string<Char, Traits>::get_new_capacity(size_type capacity) const
+	template<typename CharType, typename Traits>
+	typename basic_string<CharType, Traits>::size_type basic_string<CharType, Traits>::get_new_capacity(size_type capacity) const
 	{
 		return sarastd::max(size_type(MIN_ALLOC_BLOCK), capacity);
 	}
 
-	template<typename Char, typename Traits>
-	typename basic_string<Char, Traits>::size_type basic_string<Char, Traits>::get_necessary_capacity(sarastd::ptrdiff_t addToSize) const
+	template<typename CharType, typename Traits>
+	typename basic_string<CharType, Traits>::size_type basic_string<CharType, Traits>::get_necessary_capacity(ptrdiff_t addToSize) const
 	{
 		if (capacity() < (size() + addToSize))
-			return size() + sarastd::max((sarastd::ptrdiff_t)size(), addToSize);
+			return size() + sarastd::max((ptrdiff_t)size(), addToSize);
 		return capacity();
 	}
 
-	template<typename Char, typename Traits>
-	void basic_string<Char, Traits>::split(size_type necesseryCapacity)
+	template<typename CharType, typename Traits>
+	void basic_string<CharType, Traits>::split(size_type necesseryCapacity)
 	{
 		if (capacity() < necesseryCapacity)
 			this_type(c_str(), size(), necesseryCapacity).swap(*this);
@@ -924,8 +838,8 @@ namespace sarastd {
 			this_type(c_str(), size(), capacity()).swap(*this);
 	}
 
-	template<typename Char, typename Traits>
-	int basic_string<Char, Traits>::compare(const_pointer str1, size_type count1, const_pointer str2, size_type count2) const
+	template<typename CharType, typename Traits>
+	int basic_string<CharType, Traits>::compare(const_pointer str1, size_type count1, const_pointer str2, size_type count2)
 	{
 		int result = traits_type::compare(str1, str2, sarastd::min(count1, count2));
 		if (result != 0)
@@ -937,16 +851,174 @@ namespace sarastd {
 		return 0;
 	}
 
-	template<typename Char, typename Traits>
-	bool basic_string<Char, Traits>::is_same_str(const_pointer str) const
+	template<typename CharType, typename Traits>
+	bool basic_string<CharType, Traits>::is_same_str(const_pointer str) const
 	{
 		return c_str() <= str && str < (c_str() + size()); // append to itself
 	}
 
-	template<typename Char, typename Traits>
-	bool basic_string<Char, Traits>::is_shared() const
+	template<typename CharType, typename Traits>
+	bool basic_string<CharType, Traits>::is_shared() const
 	{
 		return m_data->count_ref() > 1;
+	}
+
+	///=============================================================================================
+	template<typename CharType, typename Traits>
+	basic_string<CharType, Traits> operator +(const basic_string<CharType, Traits> & left, const basic_string<CharType, Traits> & right)
+	{
+		return basic_string<CharType, Traits>(left.c_str(), left.size(), left.size() + right.size()) += right;
+	}
+
+	template<typename CharType, typename Traits>
+	basic_string<CharType, Traits> operator +(const CharType * left, const basic_string<CharType, Traits> & right)
+	{
+		typedef typename basic_string<CharType, Traits>::traits_type traits_type;
+		typename basic_string<CharType, Traits>::size_type length = traits_type::length(left);
+		return basic_string<CharType, Traits>(left, length, length + right.size()) += right;
+	}
+
+	template<typename CharType, typename Traits>
+	basic_string<CharType, Traits> operator +(CharType left, const basic_string<CharType, Traits> & right)
+	{
+		return basic_string<CharType, Traits>(&left, 1, 1 + right.size()) += right;
+	}
+
+	template<typename CharType, typename Traits>
+	basic_string<CharType, Traits> operator +(const basic_string<CharType, Traits> & left, const CharType * right)
+	{
+		typedef typename basic_string<CharType, Traits>::traits_type traits_type;
+		return basic_string<CharType, Traits>(left.c_str(), left.size(), left.size() + traits_type::length(right)) += right;
+	}
+
+	template<typename CharType, typename Traits>
+	basic_string<CharType, Traits> operator +(const basic_string<CharType, Traits> & left, CharType right)
+	{
+		return basic_string<CharType, Traits>(left.c_str(), left.size(), left.size() + 1) += right;
+	}
+
+	template<typename CharType, typename Traits>
+	bool operator ==(const basic_string<CharType, Traits> & left, const basic_string<CharType, Traits> & right)
+	{
+		return basic_string<CharType, Traits>::compare(left.c_str(), left.size(), right.c_str(), right.size()) == 0;
+	}
+
+	template<typename CharType, typename Traits>
+	bool operator ==(const CharType * left, const basic_string<CharType, Traits> & right)
+	{
+		typedef typename basic_string<CharType, Traits>::traits_type traits_type;
+		return basic_string<CharType, Traits>::compare(left, traits_type::length(left), right.c_str(), right.size()) == 0;
+	}
+
+	template<typename CharType, typename Traits>
+	bool operator ==(const basic_string<CharType, Traits> & left, const CharType * right)
+	{
+		typedef typename basic_string<CharType, Traits>::traits_type traits_type;
+		return basic_string<CharType, Traits>::compare(left.c_str(), left.size(), right, traits_type::length(right)) == 0;
+	}
+
+	template<typename CharType, typename Traits>
+	bool operator !=(const basic_string<CharType, Traits> & left, const basic_string<CharType, Traits> & right)
+	{
+		return !operator ==(left, right);
+	}
+
+	template<typename CharType, typename Traits>
+	bool operator !=(const CharType * left, const basic_string<CharType, Traits> & right)
+	{
+		return !operator ==(left, right);
+	}
+
+	template<typename CharType, typename Traits>
+	bool operator !=(const basic_string<CharType, Traits> & left, const CharType * right)
+	{
+		return !operator ==(left, right);
+	}
+
+	template<typename CharType, typename Traits>
+	bool operator <(const basic_string<CharType, Traits> & left, const basic_string<CharType, Traits> & right)
+	{
+		return basic_string<CharType, Traits>::compare(left.c_str(), left.size(), right.c_str(), right.size()) < 0;
+	}
+
+	template<typename CharType, typename Traits>
+	bool operator <(const CharType * left, const basic_string<CharType, Traits> & right)
+	{
+		typedef typename basic_string<CharType, Traits>::traits_type traits_type;
+		return basic_string<CharType, Traits>::compare(left, traits_type::length(left), right.c_str(), right.size()) < 0;
+	}
+
+	template<typename CharType, typename Traits>
+	bool operator <(const basic_string<CharType, Traits> & left, const CharType * right)
+	{
+		typedef typename basic_string<CharType, Traits>::traits_type traits_type;
+		return basic_string<CharType, Traits>::compare(left.c_str(), left.size(), right, traits_type::length(right)) < 0;
+	}
+
+	template<typename CharType, typename Traits>
+	bool operator <=(const basic_string<CharType, Traits> & left, const basic_string<CharType, Traits> & right)
+	{
+		return basic_string<CharType, Traits>::compare(left.c_str(), left.size(), right.c_str(), right.size()) <= 0;
+	}
+
+	template<typename CharType, typename Traits>
+	bool operator <=(const CharType * left, const basic_string<CharType, Traits> & right)
+	{
+		typedef typename basic_string<CharType, Traits>::traits_type traits_type;
+		return basic_string<CharType, Traits>::compare(left, traits_type::length(left), right.c_str(), right.size()) <= 0;
+	}
+
+	template<typename CharType, typename Traits>
+	bool operator <=(const basic_string<CharType, Traits> & left, const CharType * right)
+	{
+		typedef typename basic_string<CharType, Traits>::traits_type traits_type;
+		return basic_string<CharType, Traits>::compare(left.c_str(), left.size(), right, traits_type::length(right)) <= 0;
+	}
+
+	template<typename CharType, typename Traits>
+	bool operator >(const basic_string<CharType, Traits> & left, const basic_string<CharType, Traits> & right)
+	{
+		return basic_string<CharType, Traits>::compare(left.c_str(), left.size(), right.c_str(), right.size()) > 0;
+	}
+
+	template<typename CharType, typename Traits>
+	bool operator >(const CharType * left, const basic_string<CharType, Traits> & right)
+	{
+		typedef typename basic_string<CharType, Traits>::traits_type traits_type;
+		return basic_string<CharType, Traits>::compare(left, traits_type::length(left), right.c_str(), right.size()) > 0;
+	}
+
+	template<typename CharType, typename Traits>
+	bool operator >(const basic_string<CharType, Traits> & left, const CharType * right)
+	{
+		typedef typename basic_string<CharType, Traits>::traits_type traits_type;
+		return basic_string<CharType, Traits>::compare(left.c_str(), left.size(), right, traits_type::length(right)) > 0;
+	}
+
+	template<typename CharType, typename Traits>
+	bool operator >=(const basic_string<CharType, Traits> & left, const basic_string<CharType, Traits> & right)
+	{
+		return basic_string<CharType, Traits>::compare(left.c_str(), left.size(), right.c_str(), right.size()) >= 0;
+	}
+
+	template<typename CharType, typename Traits>
+	bool operator >=(const CharType * left, const basic_string<CharType, Traits> & right)
+	{
+		typedef typename basic_string<CharType, Traits>::traits_type traits_type;
+		return basic_string<CharType, Traits>::compare(left, traits_type::length(left), right.c_str(), right.size()) >= 0;
+	}
+
+	template<typename CharType, typename Traits>
+	bool operator >=(const basic_string<CharType, Traits> & left, const CharType * right)
+	{
+		typedef typename basic_string<CharType, Traits>::traits_type traits_type;
+		return basic_string<CharType, Traits>::compare(left.c_str(), left.size(), right, traits_type::length(right)) >= 0;
+	}
+
+	template<typename CharType, typename Traits>
+	void swap(basic_string<CharType, Traits>  & left, basic_string<CharType, Traits> & right)
+	{
+		left.swap(right);
 	}
 
 	///=============================================================================================

@@ -6,20 +6,15 @@ namespace Cstr {
 	struct char_traits
 	{
 	};
-
-	template<typename CharType>
-	struct char_traits_ex
-	{
-	};
 }
 
 #if defined(NoStlString) || defined(NO_STD_STRING)
-namespace Base {
+namespace sarastd {
 	template<typename CharType, typename Traits>
 	struct basic_string;
 }
-typedef Base::basic_string<char, Cstr::char_traits<char> > astring;
-typedef Base::basic_string<wchar_t, Cstr::char_traits<wchar_t> > ustring;
+typedef sarastd::basic_string<char, Cstr::char_traits<char> > astring;
+typedef sarastd::basic_string<wchar_t, Cstr::char_traits<wchar_t> > ustring;
 #else
 #ifdef _MSC_VER
 	#include <string>

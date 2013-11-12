@@ -27,8 +27,8 @@ namespace Ext {
 		void set_host(const ustring & host = ustring(), PCWSTR user = nullptr, PCWSTR pass = nullptr);
 
 	private:
-		Base::shared_ptr<Ext::RemoteConnection> m_conn;
-		mutable Base::shared_ptr<Ext::Service::Manager> m_scm;
+		std::shared_ptr<Ext::RemoteConnection> m_conn;
+		mutable std::shared_ptr<Ext::Service::Manager> m_scm;
 		Service::EnumerateType_t m_type;
 		mutable bool m_writable;
 	};
@@ -81,8 +81,8 @@ namespace Ext {
 	void Services::Filter::set_host(const ustring & host, PCWSTR user, PCWSTR pass)
 	{
 		LogNoise(L"host: '%s', user: '%s'\n", host.c_str(), user);
-		Base::shared_ptr<Ext::RemoteConnection> tmp_conn(new Ext::RemoteConnection(host, user, pass));
-		Base::shared_ptr<Ext::Service::Manager> tmp_scm(new Ext::Service::Manager(tmp_conn.get(), SC_MANAGER_CONNECT | SC_MANAGER_ENUMERATE_SERVICE));
+		std::shared_ptr<Ext::RemoteConnection> tmp_conn(new Ext::RemoteConnection(host, user, pass));
+		std::shared_ptr<Ext::Service::Manager> tmp_scm(new Ext::Service::Manager(tmp_conn.get(), SC_MANAGER_CONNECT | SC_MANAGER_ENUMERATE_SERVICE));
 		m_writable = false;
 
 		using std::swap;

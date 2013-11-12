@@ -3,8 +3,9 @@
 
 #include <libbase/std.hpp>
 #include <libbase/filesystem.hpp>
-#include <libbase/shared_ptr.hpp>
 #include <liblog/logger.hpp>
+
+#include <memory>
 
 namespace Fsys {
 	Logger::Module_i * get_logger_module();
@@ -364,7 +365,7 @@ namespace Fsys {
 			FindStat         m_stat;
 		};
 
-		Base::shared_ptr<impl> m_impl;
+		std::shared_ptr<impl> m_impl;
 
 		friend class Sequence;
 	};
@@ -609,7 +610,7 @@ namespace Fsys {
 			file_map_iterator(const Map * seq);
 
 			struct impl;
-			Base::shared_ptr<impl> m_impl;
+			std::shared_ptr<impl> m_impl;
 
 			friend class Map;
 		};

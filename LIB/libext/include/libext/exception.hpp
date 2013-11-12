@@ -2,7 +2,7 @@
 #define _LIBEXT_EXCEPTION_HPP_
 
 #include <libbase/std.hpp>
-#include <libbase/sstr.hpp>
+#include <libbase/wstr.hpp>
 #include <libbase/backtrace.hpp>
 
 #include <memory>

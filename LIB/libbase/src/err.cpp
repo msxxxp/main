@@ -4,7 +4,7 @@
 
 namespace Base {
 
-	sstr ErrAsStr(DWORD err, PCWSTR lib) {
+	wstr ErrAsStr(DWORD err, PCWSTR lib) {
 		HMODULE mod = nullptr;
 		if (err && lib) {
 			mod = ::LoadLibraryExW(lib, nullptr, DONT_RESOLVE_DLL_REFERENCES); //LOAD_LIBRARY_AS_DATAFILE
@@ -21,23 +21,23 @@ namespace Base {
 			if (lib) {
 				return ErrAsStr(err);
 			} else {
-				return sstr::format(L"[0x%x (%u)] Unknown error", err, err);
+				return wstr::format(L"[0x%x (%u)] Unknown error", err, err);
 			}
 		}
 
-		sstr ret = sstr::format(L"[0x%x (%u)] %s", err, err, buf);
+		wstr ret = wstr::format(L"[0x%x (%u)] %s", err, err, buf);
 		ret[ret.size() - 2] = L'\0'; // delete return char
 		::LocalFree(buf);
 
 		return std::move(ret);
 	}
 
-	sstr NTStatusAsStr(ULONG status)
+	wstr NTStatusAsStr(ULONG status)
 	{
 		return ErrAsStr(status, L"NTDLL.DLL");
 	}
 
-	sstr ErrAsStrWmi(HRESULT err)
+	wstr ErrAsStrWmi(HRESULT err)
 	{
 		return ErrAsStr(err, L"WMIUTILS.DLL");
 	}

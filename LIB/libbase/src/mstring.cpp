@@ -1,4 +1,4 @@
-﻿#include <libbase/sstr.hpp>
+﻿#include <libbase/wstr.hpp>
 
 #include <libbase/memory.hpp>
 #include <libbase/cstr.hpp>

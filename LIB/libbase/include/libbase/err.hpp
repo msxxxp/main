@@ -2,15 +2,15 @@
 #define LIBBASE_ERR_HPP_
 
 #include <libbase/std.hpp>
-#include <libbase/sstr.hpp>
+#include <libbase/wstr.hpp>
 
 namespace Base {
 
-	sstr ErrAsStr(DWORD err = ::GetLastError(), PCWSTR lib = nullptr);
+	wstr ErrAsStr(DWORD err = ::GetLastError(), PCWSTR lib = nullptr);
 
-	sstr NTStatusAsStr(ULONG status);
+	wstr NTStatusAsStr(ULONG status);
 
-	sstr ErrAsStrWmi(HRESULT err);
+	wstr ErrAsStrWmi(HRESULT err);
 
 }
 

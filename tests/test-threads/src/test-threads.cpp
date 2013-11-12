@@ -5,7 +5,7 @@
 #include <libbase/thread.hpp>
 #include <libbase/ThreadPool.hpp>
 #include <libbase/atexit.hpp>
-#include <libbase/sstr.hpp>
+#include <libbase/wstr.hpp>
 #include <libbase/err.hpp>
 #include <liblog/logger.hpp>
 

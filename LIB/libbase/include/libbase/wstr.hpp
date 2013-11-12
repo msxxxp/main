@@ -1,12 +1,12 @@
-#ifndef LIBBASE_SSTR_HPP_
-#define LIBBASE_SSTR_HPP_
+#ifndef LIBBASE_WSTR_HPP_
+#define LIBBASE_WSTR_HPP_
 
 #include <libbase/std.hpp>
 
 namespace Base {
 
-	class sstr {
-		typedef sstr this_type;
+	class wstr {
+		typedef wstr this_type;
 
 	public:
 		typedef wchar_t value_type;
@@ -16,23 +16,27 @@ namespace Base {
 		typedef value_type * pointer;
 		typedef const value_type * const_pointer;
 
-		~sstr();
+		~wstr();
 
-		sstr();
+		wstr();
 
-		sstr(const_pointer ptr);
+		wstr(const_pointer ptr);
 
-		sstr(const this_type & other);
+		wstr(const this_type & other);
 
-		sstr(this_type && other);
+		wstr(this_type && other);
 
-		sstr & operator =(const this_type & other);
+		wstr & operator =(const this_type & other);
 
-		sstr & operator =(this_type && other);
+		wstr & operator =(this_type && other);
 
 		reference operator [](size_type index);
 
 		const_reference operator [](size_type index) const;
+
+		this_type & operator += (const this_type & right);
+
+		this_type operator + (const this_type & right) const;
 
 		const_pointer c_str() const;
 
@@ -42,20 +46,26 @@ namespace Base {
 
 		void swap(this_type & other);
 
-		static sstr format(const_pointer fmt, va_list args);
+		static wstr format(const_pointer fmt, va_list args);
 
-		static sstr format(const_pointer fmt, ...);
+		static wstr format(const_pointer fmt, ...);
 
 		static ssize_t unit_test();
 
 	private:
-		sstr(pointer ptr, bool capture);
+		wstr(pointer ptr, bool capture);
 
-		static pointer make_copy(const_pointer ptr, size_type size);
+		wstr(const_pointer str1, size_type length1, const_pointer str2, size_type length2);
 
-		static pointer make_copy(const_pointer ptr);
+		static pointer make_copy(const_pointer str, size_type length);
 
-		static void free(pointer ptr);
+		static pointer make_copy(const_pointer str);
+
+		static pointer make_copy(const_pointer str1, size_type length1, const_pointer str2, size_type length2);
+
+		static pointer make_copy(const_pointer str1, const_pointer str2);
+
+		static void free(pointer str);
 
 		pointer m_data;
 	};

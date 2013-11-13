@@ -14,13 +14,13 @@ namespace sarastd {
 
 	template<typename CharType, typename Traits>
 	class basic_string {
-		static const sarastd::size_t MIN_ALLOC_BLOCK = 16;
+		static const size_t MIN_ALLOC_BLOCK = 16;
 		typedef basic_string this_type;
 
 	public:
-		typedef Traits traits_type;
-		typedef sarastd::size_t size_type;
-		typedef sarastd::ptrdiff_t difference_type;
+		typedef Traits    traits_type;
+		typedef size_t    size_type;
+		typedef ptrdiff_t difference_type;
 
 		typedef typename traits_type::char_type value_type;
 		typedef value_type & reference;

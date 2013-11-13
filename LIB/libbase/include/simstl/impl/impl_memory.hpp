@@ -2,9 +2,11 @@
 #define SARALIB_STL_MEMORY_HPP_
 
 #include "impl_types.hpp"
+#include "impl_generic.hpp"
 #include "impl_iterator_base.hpp"
 #include "impl_new.hpp"
-#include "impl_utility.hpp"
+#include "impl_pair.hpp"
+#include "impl_ref_counter.hpp"
 
 namespace sarastd {
 
@@ -18,7 +20,7 @@ namespace sarastd {
 		template<typename Type>
 		Type* _allocate(sarastd::size_t cnt)
 		{
-			return (Type*)::operator new(sizeof(Type) * cnt, sarastd::nothrow);
+			return static_cast<Type*>(::operator new(sizeof(Type) * cnt, sarastd::nothrow));
 		}
 
 		template<typename Type>
@@ -433,52 +435,6 @@ namespace sarastd {
 		}
 	}
 
-	namespace pvt {
-		struct ref_counter {
-			virtual ~ref_counter();
-
-			ref_counter();
-
-			void increase_ref();
-
-			void decrease_ref();
-
-			bool is_shared() const {return m_refcnt > 1;}
-
-			sarastd::size_t count_ref() const;
-
-		private:
-			virtual void destroy() const;
-
-			virtual void deallocate() const = 0;
-
-			ref_counter(const ref_counter & rhs); // forbidden
-
-			ref_counter & operator = (const ref_counter & rhs); // forbidden
-
-		private:
-			sarastd::size_t m_refcnt;
-		};
-
-		ref_counter::~ref_counter() {}
-
-		ref_counter::ref_counter() : m_refcnt(1) {}
-
-		void ref_counter::increase_ref() {++m_refcnt;}
-
-		void ref_counter::decrease_ref()
-		{
-			if (--m_refcnt == 0) {
-				destroy();
-				deallocate();
-			}
-		}
-
-		sarastd::size_t ref_counter::count_ref() const {return m_refcnt;}
-
-		void ref_counter::destroy() const {}
-	}
-
 	template<typename Type>
 	struct default_delete
 	{
@@ -645,33 +601,33 @@ namespace sarastd {
 	}
 
 	template<typename T, typename U>
-	bool operator !=(const shared_ptr<T> & a, const shared_ptr<U> & b)
-	{
-		return sarastd::pvt::ops::operator !=(a, b);
-	}
-
-	template<typename T, typename U>
 	bool operator <(const shared_ptr<T> & a, const shared_ptr<U> & b)
 	{
 		return a.get() < b.get();
 	}
 
 	template<typename T, typename U>
+	bool operator !=(const shared_ptr<T> & a, const shared_ptr<U> & b)
+	{
+		return sarastd::pvt::generic::operator !=(a, b);
+	}
+
+	template<typename T, typename U>
 	bool operator >(const shared_ptr<T> & a, const shared_ptr<U> & b)
 	{
-		return sarastd::pvt::ops::operator >(a, b);
+		return sarastd::pvt::generic::operator >(a, b);
 	}
 
 	template<typename T, typename U>
 	bool operator <=(const shared_ptr<T> & a, const shared_ptr<U> & b)
 	{
-		return sarastd::pvt::ops::operator <=(a, b);
+		return sarastd::pvt::generic::operator <=(a, b);
 	}
 
 	template<typename T, typename U>
 	bool operator >=(const shared_ptr<T> & a, const shared_ptr<U> & b)
 	{
-		return sarastd::pvt::ops::operator >=(a, b);
+		return sarastd::pvt::generic::operator >=(a, b);
 	}
 
 	template<typename T>

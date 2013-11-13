@@ -56,7 +56,7 @@ namespace sarastd
 		template<typename Iterator>
 		bool operator !=(const _const_value_iterator<Iterator>& lhs, const _const_value_iterator<Iterator>& rhs)
 		{
-			return sarastd::pvt::ops::operator !=(lhs, rhs);
+			return sarastd::pvt::generic::operator !=(lhs, rhs);
 		}
 
 		template<typename Iterator>
@@ -68,19 +68,19 @@ namespace sarastd
 		template<typename Iterator>
 		bool operator <=(const _const_value_iterator<Iterator>& lhs, const _const_value_iterator<Iterator>& rhs)
 		{
-			return sarastd::pvt::ops::operator <=(lhs, rhs);
+			return sarastd::pvt::generic::operator <=(lhs, rhs);
 		}
 
 		template<typename Iterator>
 		bool operator >(const _const_value_iterator<Iterator>& lhs, const _const_value_iterator<Iterator>& rhs)
 		{
-			return sarastd::pvt::ops::operator >(lhs, rhs);
+			return sarastd::pvt::generic::operator >(lhs, rhs);
 		}
 
 		template<typename Iterator>
 		bool operator >=(const _const_value_iterator<Iterator>& lhs, const _const_value_iterator<Iterator>& rhs)
 		{
-			return sarastd::pvt::ops::operator >=(lhs, rhs);
+			return sarastd::pvt::generic::operator >=(lhs, rhs);
 		}
 
 		template<typename Iterator>

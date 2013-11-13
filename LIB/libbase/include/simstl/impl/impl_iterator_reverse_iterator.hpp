@@ -6,12 +6,12 @@
 
 namespace sarastd
 {
-	template<typename Iterator>
+	template<typename Pointer>
 	class reverse_iterator
 	{
-		typedef Iterator                                iterator_type;
-		typedef reverse_iterator<Iterator>              this_type;
-		typedef iterator_traits<Iterator>               traits_type;
+		typedef Pointer                                 iterator_type;
+		typedef reverse_iterator<iterator_type>         this_type;
+		typedef iterator_traits<iterator_type>          traits_type;
 
 	public:
 		typedef typename traits_type::iterator_category iterator_category;
@@ -21,14 +21,14 @@ namespace sarastd
 		typedef typename traits_type::pointer           pointer;
 
 		reverse_iterator() : current() {}
-		explicit reverse_iterator(Iterator it) : current(it) {}
-		reverse_iterator(const this_type& ri) : current(ri.current) {}
+		explicit reverse_iterator(iterator_type ptr) : current(ptr) {}
+		reverse_iterator(const this_type & other) : current(other.current) {}
 
 		template <typename U>
 		reverse_iterator(const reverse_iterator<U>& ri) : current(ri.base()) {}
 
 		template <typename U>
-		reverse_iterator<Iterator>& operator =(const reverse_iterator<U>& ri) {current = ri.base(); return *this;}
+		reverse_iterator<iterator_type>& operator =(const reverse_iterator<U>& ri) {current = ri.base(); return *this;}
 
 		iterator_type base() const                         {return current;}
 
@@ -44,60 +44,60 @@ namespace sarastd
 
 		// Random access iterator requirements
 		reference     operator [](difference_type n) const {return *(*this + n);}
-		this_type     operator +(difference_type n) const  {return this_type(current - n);}
+		this_type     operator + (difference_type n) const {return this_type(current - n);}
 		this_type&    operator +=(difference_type n)       {current -= n; return *this;}
-		this_type     operator -(difference_type n) const  {return this_type(current + n);}
+		this_type     operator - (difference_type n) const {return this_type(current + n);}
 		this_type&    operator -=(difference_type n)       {current += n; return *this;}
 
 	protected:
 		iterator_type current;
 	};
 
-	template<typename Iterator1, typename Iterator2>
-	bool operator ==(const reverse_iterator<Iterator1>& lhs, const reverse_iterator<Iterator2>& rhs)
+	template<typename Type1, typename Type2>
+	bool operator ==(const reverse_iterator<Type1>& lhs, const reverse_iterator<Type2>& rhs)
 	{
 		return lhs.base() == rhs.base();
 	}
 
-	template<typename Iterator1, typename Iterator2>
-	bool operator !=(const reverse_iterator<Iterator1>& lhs, const reverse_iterator<Iterator2>& rhs)
-	{
-		return sarastd::pvt::ops::operator !=(lhs, rhs);
-	}
-
-	template<typename Iterator1, typename Iterator2>
-	bool operator <(const reverse_iterator<Iterator1>& lhs, const reverse_iterator<Iterator2>& rhs)
+	template<typename Type1, typename Type2>
+	bool operator <(const reverse_iterator<Type1>& lhs, const reverse_iterator<Type2>& rhs)
 	{
 		return lhs.base() < rhs.base();
 	}
 
-	template<typename Iterator1, typename Iterator2>
-	bool operator <=(const reverse_iterator<Iterator1>& lhs, const reverse_iterator<Iterator2>& rhs)
+	template<typename Type1, typename Type2>
+	bool operator !=(const reverse_iterator<Type1>& lhs, const reverse_iterator<Type2>& rhs)
 	{
-		return sarastd::pvt::ops::operator <=(lhs, rhs);
+		return sarastd::pvt::generic::operator !=(lhs, rhs);
 	}
 
-	template<typename Iterator1, typename Iterator2>
-	bool operator >(const reverse_iterator<Iterator1>& lhs, const reverse_iterator<Iterator2>& rhs)
+	template<typename Type1, typename Type2>
+	bool operator <=(const reverse_iterator<Type1>& lhs, const reverse_iterator<Type2>& rhs)
 	{
-		return sarastd::pvt::ops::operator >(lhs, rhs);
+		return sarastd::pvt::generic::operator <=(lhs, rhs);
 	}
 
-	template<typename Iterator1, typename Iterator2>
-	bool operator >=(const reverse_iterator<Iterator1>& lhs, const reverse_iterator<Iterator2>& rhs)
+	template<typename Type1, typename Type2>
+	bool operator >(const reverse_iterator<Type1>& lhs, const reverse_iterator<Type2>& rhs)
 	{
-		return sarastd::pvt::ops::operator >=(lhs, rhs);
+		return sarastd::pvt::generic::operator >(lhs, rhs);
 	}
 
-	template<typename Iterator>
-	reverse_iterator<Iterator> operator +(typename reverse_iterator<Iterator>::difference_type n, const reverse_iterator<Iterator> & it)
+	template<typename Type1, typename Type2>
+	bool operator >=(const reverse_iterator<Type1>& lhs, const reverse_iterator<Type2>& rhs)
+	{
+		return sarastd::pvt::generic::operator >=(lhs, rhs);
+	}
+
+	template<typename Type>
+	reverse_iterator<Type> operator +(typename reverse_iterator<Type>::difference_type n, const reverse_iterator<Type> & it)
 	{
 		return it + n;
 	}
 
-	template<typename Iterator>
+	template<typename Type>
 	typename
-	reverse_iterator<Iterator>::difference_type operator -(const reverse_iterator<Iterator>& lhs, const reverse_iterator<Iterator>& rhs)
+	reverse_iterator<Type>::difference_type operator -(const reverse_iterator<Type>& lhs, const reverse_iterator<Type>& rhs)
 	{
 		return rhs.base() - lhs.base();
 	}

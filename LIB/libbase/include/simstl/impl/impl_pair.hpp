@@ -1,37 +1,11 @@
-#ifndef SARALIB_STL_UTILITY_HPP_
-#define SARALIB_STL_UTILITY_HPP_
+#ifndef SARALIB_STL_PAIR_HPP_
+#define SARALIB_STL_PAIR_HPP_
 
 #include "impl_types.hpp"
+#include "impl_generic.hpp"
 #include "impl_algorithm_base.hpp"
 
 namespace sarastd {
-	namespace pvt {
-		namespace ops {
-			template<typename T1, typename T2>
-			bool operator !=(const T1& x, const T2& y)
-			{
-				return !(x == y);
-			}
-
-			template<typename T1, typename T2>
-			bool operator >(const T1& x, const T2& y)
-			{
-				return (y < x);
-			}
-
-			template<typename T1, typename T2>
-			bool operator <=(const T1& x, const T2& y)
-			{
-				return !(y < x);
-			}
-
-			template<typename T1, typename T2>
-			bool operator >=(const T1& x, const T2& y)
-			{
-				return !(x < y);
-			}
-		}
-	}
 
 	template<typename T1, typename T2>
 	struct pair {
@@ -107,33 +81,33 @@ namespace sarastd {
 	}
 
 	template<typename T1, typename T2>
-	bool operator !=(const pair<T1, T2>& lhs, const pair<T1, T2>& rhs)
-	{
-		return pvt::ops::operator !=(lhs, rhs);
-	}
-
-	template<typename T1, typename T2>
-	bool operator <(const pair<T1, T2>& lhs, const pair<T1, T2>& rhs)
+	bool operator < (const pair<T1, T2>& lhs, const pair<T1, T2>& rhs)
 	{
         return ((lhs.first < rhs.first) || (!(rhs.first < lhs.first) && (lhs.second < rhs.second)));
 	}
 
 	template<typename T1, typename T2>
-	bool operator <=(const pair<T1, T2>& lhs, const pair<T1, T2>& rhs)
+	bool operator !=(const pair<T1, T2>& lhs, const pair<T1, T2>& rhs)
 	{
-		return pvt::ops::operator <=(lhs, rhs);
+		return pvt::generic::operator !=(lhs, rhs);
 	}
 
 	template<typename T1, typename T2>
-	bool operator >(const pair<T1, T2>& lhs, const pair<T1, T2>& rhs)
+	bool operator <=(const pair<T1, T2>& lhs, const pair<T1, T2>& rhs)
 	{
-		return pvt::ops::operator >(lhs, rhs);
+		return pvt::generic::operator <=(lhs, rhs);
+	}
+
+	template<typename T1, typename T2>
+	bool operator > (const pair<T1, T2>& lhs, const pair<T1, T2>& rhs)
+	{
+		return pvt::generic::operator >(lhs, rhs);
 	}
 
 	template<typename T1, typename T2>
 	bool operator >=(const pair<T1, T2>& lhs, const pair<T1, T2>& rhs)
 	{
-		return pvt::ops::operator >=(lhs, rhs);
+		return pvt::generic::operator >=(lhs, rhs);
 	}
 
 	template<typename T1, typename T2>

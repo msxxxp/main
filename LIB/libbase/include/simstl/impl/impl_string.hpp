@@ -148,6 +148,8 @@ namespace sarastd {
 
 		static int compare(const_pointer str1, size_type count1, const_pointer str2, size_type count2);
 
+		size_type find(const_pointer str, size_type pos, size_type length) const;
+
 		bool is_same_str(const_pointer str) const;
 
 		bool is_shared() const;
@@ -719,14 +721,13 @@ namespace sarastd {
 	template<typename CharType, typename Traits>
 	typename basic_string<CharType, Traits>::size_type basic_string<CharType, Traits>::find(const this_type & str, size_type pos) const
 	{
-		return find(str.c_str(), pos);
+		return find(str.c_str(), pos, str.length());
 	}
 
 	template<typename CharType, typename Traits>
 	typename basic_string<CharType, Traits>::size_type basic_string<CharType, Traits>::find(const_pointer str, size_type pos) const
 	{
-		const_pointer find = traits_type::find(c_str() + pos, str);
-		return (find) ? find - c_str() : npos;
+		return find(str, pos, traits_type::length(str));
 	}
 
 	template<typename CharType, typename Traits>
@@ -856,6 +857,24 @@ namespace sarastd {
 		if (count1 > count2)
 			return 1;
 		return 0;
+	}
+
+	template<typename CharType, typename Traits>
+	basic_string<CharType, Traits>::size_type basic_string<CharType, Traits>::find(const_pointer str, size_type pos, size_type length) const
+	{
+		const size_type size = this->size();
+		const_pointer data = this->c_str();
+
+		if (length == 0)
+			return pos <= size ? pos : npos;
+
+		if (length <= size)
+		{
+			for (; pos <= size - length; ++pos)
+				if (traits_type::eq(data[pos], str[0]) && traits_type::compare(data + pos + 1, str + 1, length - 1) == 0)
+					return pos;
+		}
+		return npos;
 	}
 
 	template<typename CharType, typename Traits>

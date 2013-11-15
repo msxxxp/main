@@ -10,20 +10,18 @@ namespace Base {
 	}
 
 	namespace String {
-		ustring format(PCWSTR fmt, ...)
+		astring format(PCSTR fmt, ...)
 		{
 			Base::Va_list args;
 			va_start(args, fmt);
 			return format(fmt, args);
 		}
 
-		ustring format(PCWSTR fmt, va_list args)
+		astring format(PCSTR fmt, va_list args)
 		{
-			wchar_t buf[default_buffer_size];
-			size_t size = lengthof(buf) - 1;
-			buf[size] = L'\0';
-			::_vsnwprintf(buf, size, fmt, args);
-			return ustring(buf);
+			char buf[default_buffer_size];
+			Base::safe_vsnprintf(buf, Base::lengthof(buf), fmt, args);
+			return astring(buf);
 		}
 	}
 

@@ -16,5 +16,4 @@ namespace Base {
 		va_start(vl, format);
 		return safe_vsnprintf(buff, len, format, vl);
 	}
-
 }

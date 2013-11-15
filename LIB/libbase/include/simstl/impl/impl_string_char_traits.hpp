@@ -49,10 +49,46 @@ namespace sarastd
 		static int_type eof() {return static_cast<int_type>(-1);}
 
 		static int_type not_eof(const int_type & c) {return (c == eof()) ? 0 : c;}
-
-		/// nonstandard
-		static const char_type * find(const char_type * where, const char_type * what) {return strstr(where, what);}
 	};
+
+	template<>
+	struct char_traits<wchar_t>
+	{
+		typedef wchar_t           char_type;
+		typedef wint_t            int_type;
+//		typedef streamoff         off_type;
+//		typedef wstreampos        pos_type;
+//		typedef mbstate_t         state_type;
+
+		static void assign(char_type & c1, const char_type & c2) {c1 = c2;}
+
+		static bool eq(const char_type & c1, const char_type & c2) {return c1 == c2;}
+
+		static bool lt(const char_type & c1, const char_type & c2) {return c1 < c2;}
+
+		static int compare(const char_type * str1, const char_type* str2, size_t count) {return ::wmemcmp(str1, str2, count);}
+
+		static size_t length(const char_type * str) {return ::wcslen(str);}
+
+		static const char_type * find(const char_type * s, size_t n, const char_type & ch) {return wmemchr(s, ch, n);}
+
+		static char_type * move(char_type * dest, const char_type * src, size_t count) {return wmemmove(dest, src, count);}
+
+		static char_type * copy(char_type * dest, const char_type * src, size_t count) {return wmemcpy(dest, src, count);}
+
+		static char_type * assign(char_type * s, size_t n, char_type a) {return wmemset(s, a, n);}
+
+		static char_type to_char_type(const int_type & c) {return char_type(c);}
+
+		static int_type to_int_type(const char_type & c) {return int_type(c);}
+
+		static bool eq_int_type(const int_type & c1, const int_type & c2) {return c1 == c2;}
+
+		static int_type eof() {return static_cast<int_type>((wint_t)(0xFFFF));}
+
+		static int_type not_eof(const int_type & c) {return (c == eof()) ? 0 : c;}
+	};
+
 }
 
 #endif

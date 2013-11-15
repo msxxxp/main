@@ -1,10 +1,29 @@
 #include <liblog/logger.hpp>
 #include <libbase/cstr.hpp>
+#include <libbase/pvt/va_list.hpp>
 #include <simstl/string>
 #include "Module_impl.hpp"
 
 namespace Logger {
-	typedef sarastd::basic_string<wchar_t, Cstr::char_traits<wchar_t> > ustring;
+	typedef sarastd::wstring ustring;
+
+	namespace {
+		const size_t default_buffer_size = 4 * 1024;
+
+		ustring format(PCWSTR fmt, va_list args)
+		{
+			wchar_t buf[default_buffer_size];
+			Base::safe_vsnprintf(buf, Base::lengthof(buf), fmt, args);
+			return ustring(buf);
+		}
+
+		ustring format(PCWSTR fmt, ...)
+		{
+			Base::Va_list args;
+			va_start(args, fmt);
+			return format(fmt, args);
+		}
+	}
 
 	const wchar_t * const LogLevelNames[(int)Level::Force + 1] = {
 		L"TRACE",
@@ -21,24 +40,6 @@ namespace Logger {
 	};
 
 	const size_t default_buffer_size = 4 * 1024;
-
-	ustring format(const wchar_t * fmt, va_list args)
-	{
-		wchar_t buf[default_buffer_size];
-		size_t size = Base::lengthof(buf) - 1;
-		buf[size] = L'\0';
-		::_vsnwprintf(buf, size, fmt, args);
-		return ustring(buf);
-	}
-
-	ustring format(const wchar_t * fmt, ...)
-	{
-		va_list args;
-		va_start(args, fmt);
-		auto tmp = format(fmt, args);
-		va_end(args);
-		return tmp;
-	}
 
 	///================================================================================= Module_impl
 	struct Module_impl: public Module_i, private Base::Uncopyable {

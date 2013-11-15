@@ -4,7 +4,7 @@
 #include <libbase/std.hpp>
 #include <libbase/cstr.hpp>
 
-#if defined(NoStlString) || defined(USE_LITE_STRING)
+#if defined(NoStlString) || defined(USE_LITE_STRING) || defined(NO_STD_STRING)
 #include <simstl/string>
 typedef sarastd::basic_string<char, Cstr::char_traits<char> > astring;
 typedef sarastd::basic_string<wchar_t, Cstr::char_traits<wchar_t> > ustring;
@@ -23,11 +23,13 @@ namespace Base {
 	namespace String {
 
 		astring w2cp(PCWSTR in, UINT cp);
-
 		ustring cp2w(PCSTR in, UINT cp);
 
 		ustring format(PCWSTR format, ...);
 		ustring format(PCWSTR format, va_list args);
+
+		astring format(PCSTR format, ...);
+		astring format(PCSTR format, va_list args);
 
 		astring to_string(int value);
 		astring to_string(long value);

@@ -8,7 +8,7 @@ namespace Cstr {
 	};
 }
 
-#if defined(NoStlString) || defined(NO_STD_STRING)
+#if defined(NoStlString) || defined(USE_LITE_STRING) || defined(NO_STD_STRING)
 namespace sarastd {
 	template<typename CharType, typename Traits>
 	struct basic_string;

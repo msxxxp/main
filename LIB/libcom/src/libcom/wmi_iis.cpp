@@ -1,8 +1,9 @@
 ﻿#include <libcom/wmi_iis.hpp>
 #include <libcom/safearray.hpp>
 #include <libext/exception.hpp>
-#include <libbase/shared_ptr.hpp>
 #include <libbase/string.hpp>
+
+#include <memory>
 
 namespace Com {
 ///==================================================================================== WmiIisServer
@@ -697,9 +698,9 @@ namespace Com {
 
 	void WmiIisSite::bindings(const WmiIisBindings & in)
 	{
-		std::vector<Base::shared_ptr<WmiIisBinding> > binds;
+		std::vector<std::shared_ptr<WmiIisBinding> > binds;
 		for (WmiIisBindings::const_iterator it = in.begin(); it != in.end(); ++it) {
-			binds.push_back(Base::shared_ptr<WmiIisBinding>(new WmiIisBinding(conn(), it->first, it->second)));
+			binds.push_back(std::shared_ptr<WmiIisBinding>(new WmiIisBinding(conn(), it->first, it->second)));
 		}
 		SafeArray arr(VT_UNKNOWN, binds.size());
 		for (size_t i = 0; i < arr.size(); ++i) {

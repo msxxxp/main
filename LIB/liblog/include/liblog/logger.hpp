@@ -7,6 +7,7 @@
 #ifdef ENABLE_LOGGER
 #include <memory>
 #else
+#include <libbase/console.hpp>
 #endif
 
 #ifdef ENABLE_LOGGER
@@ -52,28 +53,28 @@
 #else
 #   define LogTrace()
 #   define LogTraceIf(condition)                       (void)(condition)
-#   define LogNoise(format, args ...)
-#   define LogNoiseIf(condition, format, args ...)     (void)(condition)
-#   define LogDebug(format, args ...)
-#   define LogDebugIf(condition, format, args ...)     (void)(condition)
-#   define LogInfo(format, args ...)
-#   define LogInfoIf(condition, format, args ...)      (void)(condition)
-#   define LogReport(format, args ...)
-#   define LogReportIf(condition, format, args ...)    (void)(condition)
-#   define LogAtten(format, args ...)
-#   define LogAttenIf(condition, format, args ...)     (void)(condition)
-#   define LogWarn(format, args ...)
-#   define LogWarnIf(condition, format, args ...)      (void)(condition)
-#   define LogError(format, args ...)
-#   define LogErrorIf(condition, format, args ...)     (void)(condition)
-#   define LogFatal(format, args ...)
-#   define LogFatalIf(condition, format, args ...)     (void)(condition)
-#   define LogAlert(format, args ...)
-#   define LogAlertIf(condition, format, args ...)     (void)(condition)
-#   define LogEmerg(format, args ...)
-#   define LogEmergIf(condition, format, args ...)     (void)(condition)
-#   define LogForce(format, args ...)
-#   define LogForceIf(condition, format, args ...)     (void)(condition)
+#   define LogNoise(format, ...)
+#   define LogNoiseIf(condition, format, ...)          (void)(condition)
+#   define LogDebug(format, ...)
+#   define LogDebugIf(condition, format, ...)          (void)(condition)
+#   define LogInfo(format, ...)
+#   define LogInfoIf(condition, format, ...)           (void)(condition)
+#   define LogReport(format, ...)
+#   define LogReportIf(condition, format, ...)         (void)(condition)
+#   define LogAtten(format, ...)
+#   define LogAttenIf(condition, format, ...)          (void)(condition)
+#   define LogWarn(format, ...)
+#   define LogWarnIf(condition, format, ...)           (void)(condition)
+#   define LogError(format, ...)
+#   define LogErrorIf(condition, format, ...)          (void)(condition)
+#   define LogFatal(format, ...)
+#   define LogFatalIf(condition, format, ...)          (void)(condition)
+#   define LogAlert(format, ...)
+#   define LogAlertIf(condition, format, ...)          (void)(condition)
+#   define LogEmerg(format, ...)
+#   define LogEmergIf(condition, format, ...)          (void)(condition)
+#   define LogForce(format, ...)                       Base::Console::printf(format, ##__VA_ARGS__)
+#   define LogForceIf(condition, format, ...)          if (condition) Base::Console::printf(format, ##__VA_ARGS__)
 #endif
 
 namespace Logger {

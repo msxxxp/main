@@ -13,80 +13,76 @@ namespace sarastd {
 	template<typename ForwardIt, typename T>
 	ForwardIt lower_bound(ForwardIt first, ForwardIt last, const T& value)
 	{
-		ForwardIt it;
-		typename sarastd::iterator_traits<ForwardIt>::difference_type count, step;
-		count = sarastd::distance(first, last);
+		typename sarastd::iterator_traits<ForwardIt>::difference_type count = sarastd::distance(first, last);
 
 		while (count > 0) {
-			it = first;
-			step = count / 2;
-			sarastd::advance(it, step);
-			if (*it < value) {
-				first = ++it;
+			typename sarastd::iterator_traits<ForwardIt>::difference_type step = count / 2;
+			ForwardIt mid = sarastd::next(first, step);
+			if (*mid < value) {
+				first = ++mid;
 				count -= step + 1;
-			} else
+			} else {
 				count = step;
+			}
 		}
+
 		return first;
 	}
 
 	template<typename ForwardIt, typename T, typename Compare>
 	ForwardIt lower_bound(ForwardIt first, ForwardIt last, const T& value, Compare comp)
 	{
-		ForwardIt it;
-		typename sarastd::iterator_traits<ForwardIt>::difference_type count, step;
-		count = sarastd::distance(first, last);
+		typename sarastd::iterator_traits<ForwardIt>::difference_type count = sarastd::distance(first, last);
 
 		while (count > 0) {
-			it = first;
-			step = count / 2;
-			sarastd::advance(it, step);
-			if (comp(*it, value)) {
-				first = ++it;
+			typename sarastd::iterator_traits<ForwardIt>::difference_type step = count / 2;
+			ForwardIt mid = sarastd::next(first, step);
+			if (comp(*mid, value)) {
+				first = ++mid;
 				count -= step + 1;
-			} else
+			} else {
 				count = step;
+			}
 		}
+
 		return first;
 	}
 
 	template<typename ForwardIt, typename T>
 	ForwardIt upper_bound(ForwardIt first, ForwardIt last, const T& value)
 	{
-		ForwardIt it;
-		typename sarastd::iterator_traits<ForwardIt>::distance_type count, step;
-		count = sarastd::distance(first, last);
+		typename sarastd::iterator_traits<ForwardIt>::difference_type count = sarastd::distance(first, last);
 
 		while (count > 0) {
-			it = first;
-			step = count / 2;
-			sarastd::advance(it, step);
-			if (!(value < *it)) {
-				first = ++it;
+			typename sarastd::iterator_traits<ForwardIt>::difference_type step = count / 2;
+			ForwardIt mid = sarastd::next(first, step);
+			if (!(value < *mid)) {
+				first = ++mid;
 				count -= step + 1;
-			} else
+			} else {
 				count = step;
+			}
 		}
+
 		return first;
 	}
 
 	template<typename ForwardIt, typename T, typename Compare>
 	ForwardIt upper_bound(ForwardIt first, ForwardIt last, const T& value, Compare comp)
 	{
-		ForwardIt it;
-		typename sarastd::iterator_traits<ForwardIt>::distance_type count, step;
-		count = sarastd::distance(first, last);
+		typename sarastd::iterator_traits<ForwardIt>::difference_type count = sarastd::distance(first, last);
 
 		while (count > 0) {
-			it = first;
-			step = count / 2;
-			sarastd::advance(it, step);
-			if (!comp(value, *it)) {
-				first = ++it;
+			typename sarastd::iterator_traits<ForwardIt>::difference_type step = count / 2;
+			ForwardIt mid = sarastd::next(first, step);
+			if (!comp(value, *mid)) {
+				first = ++mid;
 				count -= step + 1;
-			} else
+			} else {
 				count = step;
+			}
 		}
+
 		return first;
 	}
 

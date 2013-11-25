@@ -2,6 +2,7 @@
 #define SARALIB_STL_FUNCTIONAL_HPP_
 
 #include "impl_types.hpp"
+#include "impl_generic.hpp"
 
 namespace sarastd {
 	template<typename T>
@@ -95,19 +96,7 @@ namespace sarastd {
 
 		result_type operator ()(const first_argument_type& a, const second_argument_type& b) const
 		{
-			return a != b;
-		}
-	};
-
-	template<typename T>
-	struct greater {
-		typedef bool result_type;
-		typedef T first_argument_type;
-		typedef T second_argument_type;
-
-		result_type operator ()(const first_argument_type& a, const second_argument_type& b) const
-		{
-			return b < a;
+			return sarastd::pvt::generic::operator !=(a, b);
 		}
 	};
 
@@ -123,18 +112,18 @@ namespace sarastd {
 		}
 	};
 
-	template<typename T>
-	struct greater_equal {
-		typedef bool result_type;
-		typedef T first_argument_type;
-		typedef T second_argument_type;
-
-		result_type operator ()(const first_argument_type& a, const second_argument_type& b) const
-		{
-			return !(a < b);
-		}
-	};
-
+//	template<typename T1, typename T2 = T1>
+//	struct less {
+//		typedef bool result_type;
+//		typedef T1 first_argument_type;
+//		typedef T2 second_argument_type;
+//
+//		result_type operator ()(const first_argument_type& a, const second_argument_type& b) const
+//		{
+//			return a < b;
+//		}
+//	};
+//
 	template<typename T>
 	struct less_equal {
 		typedef bool result_type;
@@ -143,7 +132,31 @@ namespace sarastd {
 
 		result_type operator ()(const first_argument_type& a, const second_argument_type& b) const
 		{
-			return !(b < a);
+			return sarastd::pvt::generic::operator <=(a, b);
+		}
+	};
+
+	template<typename T>
+	struct greater {
+		typedef bool result_type;
+		typedef T first_argument_type;
+		typedef T second_argument_type;
+
+		result_type operator ()(const first_argument_type& a, const second_argument_type& b) const
+		{
+			return sarastd::pvt::generic::operator >(a, b);
+		}
+	};
+
+	template<typename T>
+	struct greater_equal {
+		typedef bool result_type;
+		typedef T first_argument_type;
+		typedef T second_argument_type;
+
+		result_type operator ()(const first_argument_type& a, const second_argument_type& b) const
+		{
+			return sarastd::pvt::generic::operator >=(a, b);
 		}
 	};
 
@@ -220,10 +233,6 @@ namespace sarastd {
 
 	template<typename Predicate>
 	class unary_negate {
-
-	protected:
-		Predicate mPredicate;
-
 	public:
 		typedef bool result_type;
 		typedef typename Predicate::argument_type argument_type;
@@ -233,10 +242,13 @@ namespace sarastd {
 		{
 		}
 
-		bool operator()(const argument_type& a) const
+		bool operator ()(const argument_type& a) const
 		{
 			return !mPredicate(a);
 		}
+
+	protected:
+		Predicate mPredicate;
 	};
 
 	template<typename Predicate>
@@ -247,9 +259,6 @@ namespace sarastd {
 
 	template<typename Predicate>
 	class binary_negate {
-	protected:
-		Predicate mPredicate;
-
 	public:
 		typedef bool result_type;
 		typedef typename Predicate::first_argument_type first_argument_type;
@@ -260,10 +269,13 @@ namespace sarastd {
 		{
 		}
 
-		bool operator()(const first_argument_type& a, const second_argument_type& b) const
+		bool operator ()(const first_argument_type& a, const second_argument_type& b) const
 		{
 			return !mPredicate(a, b);
 		}
+
+	protected:
+		Predicate mPredicate;
 	};
 
 	template<typename Predicate>

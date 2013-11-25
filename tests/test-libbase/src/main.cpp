@@ -5,6 +5,8 @@
 
 #include <liblog/logger.hpp>
 
+#include <simstl/algorithm>
+
 namespace {
 	void setup_logger()
 	{
@@ -29,6 +31,12 @@ int main()
 
 	LogTrace();
 	Base::mstring::unit_test();
+
+//	LogTrace();
+//	sarastd::string_test();
+
+	LogTrace();
+	sarastd::algorithm_test();
 
 	return 0;
 }

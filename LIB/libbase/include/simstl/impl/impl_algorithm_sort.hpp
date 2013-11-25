@@ -89,15 +89,13 @@ namespace sarastd {
 	template<typename ForwardIt, typename T>
 	bool binary_search(ForwardIt first, ForwardIt last, const T& value)
 	{
-		first = sarastd::lower_bound(first, last, value);
-		return (!(first == last) && !(value < *first));
+		return (value < *first) ? false : sarastd::lower_bound(first, last, value) != last;
 	}
 
 	template<typename ForwardIt, typename T, typename Compare>
 	bool binary_search(ForwardIt first, ForwardIt last, const T& value, Compare comp)
 	{
-		first = sarastd::lower_bound(first, last, value, comp);
-		return (!(first == last) && !comp(value, *first));
+		return comp(value, *first) ? false : sarastd::lower_bound(first, last, value, comp) != last;
 	}
 
 	template<typename ForwardIt, typename T>

@@ -6,4 +6,8 @@
 #include "impl/impl_algorithm_sort.hpp"
 #include "impl/impl_algorithm.hpp"
 
+namespace sarastd {
+	ssize_t algorithm_test();
+}
+
 #endif

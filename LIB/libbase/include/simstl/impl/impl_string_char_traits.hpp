@@ -70,13 +70,13 @@ namespace sarastd
 
 		static size_t length(const char_type * str) {return ::wcslen(str);}
 
-		static const char_type * find(const char_type * s, size_t n, const char_type & ch) {return wmemchr(s, ch, n);}
+		static const char_type * find(const char_type * where, size_t length, const char_type & what) {return wmemchr(where, what, length);}
 
 		static char_type * move(char_type * dest, const char_type * src, size_t count) {return wmemmove(dest, src, count);}
 
 		static char_type * copy(char_type * dest, const char_type * src, size_t count) {return wmemcpy(dest, src, count);}
 
-		static char_type * assign(char_type * s, size_t n, char_type a) {return wmemset(s, a, n);}
+		static char_type * assign(char_type * str, size_t count, char_type chr) {return wmemset(str, chr, count);}
 
 		static char_type to_char_type(const int_type & c) {return char_type(c);}
 

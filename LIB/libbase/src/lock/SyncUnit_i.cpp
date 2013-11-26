@@ -2,8 +2,8 @@
 
 namespace Lock {
 
-	SyncUnit_i::~SyncUnit_i()
-	{
-	}
+//	SyncUnit_i::~SyncUnit_i()
+//	{
+//	}
 
 }

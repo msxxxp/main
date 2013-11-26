@@ -18,13 +18,20 @@ namespace Lock {
 		void destroy() const override;
 
 	public:
-		virtual ~SyncUnit_i();
+		virtual ~SyncUnit_i() = default;
 
 		virtual void lock() = 0;
 
 		virtual void lock_read() = 0;
 
 		virtual void unlock() = 0;
+
+	protected:
+		SyncUnit_i() = default;
+
+	private:
+		SyncUnit_i(const SyncUnit_i &) = delete;
+		SyncUnit_i & operator =(const SyncUnit_i &) = delete;
 	};
 
 	SyncUnit_i * get_CritSection();
@@ -46,9 +53,8 @@ namespace Lock {
 		void swap(ScopeGuard & right);
 
 	private:
-		ScopeGuard(const ScopeGuard & right) = delete;
-
-		ScopeGuard & operator =(const ScopeGuard & right) = delete;
+		ScopeGuard(const ScopeGuard &) = delete;
+		ScopeGuard & operator =(const ScopeGuard &) = delete;
 
 		SyncUnit_i * m_unit;
 	};
@@ -76,11 +82,40 @@ namespace Lock {
 			m_sync.unlock();
 		}
 
+	private:
 		LockGuard(const LockGuard &) = delete;
 		LockGuard& operator =(const LockGuard &) = delete;
 
-	private:
 		mutex_type & m_sync;
+	};
+
+	template<typename Mutex>
+	class LockGuard<Mutex*> {
+	public:
+		typedef Mutex mutex_type;
+
+		explicit LockGuard(mutex_type * m) :
+			m_sync(m)
+		{
+			m_sync->lock();
+		}
+
+		LockGuard(mutex_type * m, bool doNotLock) :
+			m_sync(m)
+		{
+			UNUSED(doNotLock);
+		}
+
+		~LockGuard()
+		{
+			m_sync->unlock();
+		}
+
+	private:
+		LockGuard(const LockGuard &) = delete;
+		LockGuard& operator =(const LockGuard &) = delete;
+
+		mutex_type * m_sync;
 	};
 
 	///============================================================================= CriticalSection
@@ -110,10 +145,10 @@ namespace Lock {
 			::LeaveCriticalSection(&m_sync);
 		}
 
+	private:
 		CriticalSection(const CriticalSection &) = delete;
 		CriticalSection& operator =(const CriticalSection &) = delete;
 
-	private:
 		mutable CRITICAL_SECTION m_sync;
 	};
 
@@ -149,10 +184,10 @@ namespace Lock {
 			::ReleaseSemaphore(m_handle, cnt, nullptr);
 		}
 
+	private:
 		Semaphore(const Semaphore &) = delete;
 		Semaphore& operator =(const Semaphore &) = delete;
 
-	private:
 		mutable HANDLE m_handle;
 	};
 

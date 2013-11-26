@@ -31,10 +31,10 @@ struct LockMutexThead1: public Base::ThreadRoutine_i {
 		UNUSED(data);
 
 		while (true) {
-//			Lock::lock(*m2, *m1);
-			m2->lock();
+			Lock::lock(m2, m1);
+//			m2->lock();
 			LogTrace();
-			m1->lock();
+//			m1->lock();
 			Sleep(33);
 			m1->unlock();
 			m2->unlock();
@@ -50,10 +50,10 @@ struct LockMutexThead2: public Base::ThreadRoutine_i {
 		UNUSED(data);
 
 		while (true) {
-//			Lock::lock(*m1, *m2);
-			m1->lock();
+			Lock::lock(m1, m2);
+//			m1->lock();
 			LogTrace();
-			m2->lock();
+//			m2->lock();
 			Sleep(33);
 			m1->unlock();
 			m2->unlock();

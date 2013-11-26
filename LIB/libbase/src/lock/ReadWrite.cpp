@@ -11,6 +11,8 @@ namespace Lock {
 
 		void lock_read() override;
 
+		bool try_lock() override;
+
 		void unlock() override;
 
 	private:
@@ -43,51 +45,62 @@ namespace Lock {
 	{
 		CriticalSection::lock();
 		// Are there any threads accessing the resource?
-		BOOL fResourceOwned = ((m_nActive > 0) || ((m_nActive < 0) && (m_WriterThreadId != ::GetCurrentThreadId())));
+		bool resourceOwned = m_nActive > 0 || (m_nActive < 0 && m_WriterThreadId != ::GetCurrentThreadId());
 
-		if (fResourceOwned) {
+		if (resourceOwned) {
 			// This writer must wait, increment the count of waiting writers
-			m_nWaitingWriters++;
+			++m_nWaitingWriters;
 		} else {
 			// This writer can write, decrement the count of active writers
-			m_nActive--;
+			--m_nActive;
+			m_WriterThreadId = ::GetCurrentThreadId();
 		}
 		CriticalSection::unlock();
 
-		if (fResourceOwned) {
-			// This thread must wait
+		if (resourceOwned)
 			::WaitForSingleObject(m_EventAllowWrite, INFINITE);
-		}
-		m_WriterThreadId = ::GetCurrentThreadId();
 	}
 
 	void ReadWrite_impl::lock_read()
 	{
 		CriticalSection::lock();
 		// Are there writers waiting or is a writer writing?
-		BOOL fResourceWritePending = (m_nWaitingWriters || (m_nActive < 0));
+		bool resourceWritePending = (m_nWaitingWriters || m_nActive < 0);
 
-		if (fResourceWritePending) {
+		if (resourceWritePending) {
 			// This reader must wait, increment the count of waiting readers
-			m_nWaitingReaders++;
+			++m_nWaitingReaders;
 		} else {
 			// This reader can read, increment the count of active readers
-			m_nActive++;
+			++m_nActive;
 		}
 		CriticalSection::unlock();
 
-		if (fResourceWritePending) {
+		if (resourceWritePending)
 			::WaitForSingleObject(m_EventAllowRead, INFINITE);
+	}
+
+	bool ReadWrite_impl::try_lock()
+	{
+		CriticalSection::lock();
+		bool resourceFreed = m_nActive == 0 || (m_nActive < 0 && m_WriterThreadId == ::GetCurrentThreadId());
+
+		if (resourceFreed) {
+			--m_nActive;
+			m_WriterThreadId = ::GetCurrentThreadId();
 		}
+		CriticalSection::unlock();
+
+		return resourceFreed;
 	}
 
 	void ReadWrite_impl::unlock()
 	{
 		CriticalSection::lock();
 		if (m_nActive > 0) {
-			m_nActive--;	// Readers have control so a reader must be done
+			--m_nActive;	// Readers have control so a reader must be done
 		} else {
-			m_nActive++;	// Writers have control so a writer must be done
+			++m_nActive;	// Writers have control so a writer must be done
 		}
 
 		if (m_nActive == 0) {
@@ -97,8 +110,8 @@ namespace Lock {
 			//       if there are always writers wanting to write
 			if (m_nWaitingWriters > 0) {
 				// Writers are waiting and they take priority over readers
-				m_nActive = -1;					// A writer will get access
-				m_nWaitingWriters--;			// One less writer will be waiting
+				--m_nActive;
+				--m_nWaitingWriters;
 				::SetEvent(m_EventAllowWrite);	// NOTE: The event will release only 1 writer thread
 			} else if (m_nWaitingReaders > 0) {
 				// Readers are waiting and no writers are waiting
@@ -106,8 +119,6 @@ namespace Lock {
 				m_nWaitingReaders = 0;			// No readers will be waiting
 				::SetEvent(m_EventAllowRead);	// release all readers
 				::ResetEvent(m_EventAllowRead);
-			} else {
-				// There are no threads waiting at all; nothing to release
 			}
 		}
 		CriticalSection::unlock();

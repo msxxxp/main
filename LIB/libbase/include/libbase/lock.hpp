@@ -18,16 +18,17 @@ namespace Lock {
 		void destroy() const override;
 
 	public:
-		virtual ~SyncUnit_i() = default;
-
 		virtual void lock() = 0;
 
 		virtual void lock_read() = 0;
+
+		virtual bool try_lock() = 0;
 
 		virtual void unlock() = 0;
 
 	protected:
 		SyncUnit_i() = default;
+		virtual ~SyncUnit_i() = default;
 
 	private:
 		SyncUnit_i(const SyncUnit_i &) = delete;

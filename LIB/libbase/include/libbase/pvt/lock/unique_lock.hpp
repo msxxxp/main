@@ -23,163 +23,85 @@ namespace Lock {
 	constexpr try_to_lock_t try_to_lock{};
 	constexpr adopt_lock_t adopt_lock{};
 
-	template<typename _Mutex>
+	template<typename SyncUnit>
 	class unique_lock {
+		typedef unique_lock<SyncUnit> this_type;
+
 	public:
-		typedef _Mutex mutex_type;
+		typedef SyncUnit mutex_type;
+
+		~unique_lock()
+		{
+			if (m_owns)
+				unlock();
+		}
 
 		unique_lock() :
-			m_sync(nullptr), m_owns(false)
+			m_sync(nullptr),
+			m_owns(false)
 		{
 		}
 
 		unique_lock(mutex_type & m) :
-			m_sync(&m), m_owns(false)
+			m_sync(&m),
+			m_owns(false)
+		{
+			lock();
+		}
+
+		unique_lock(mutex_type * m) :
+			m_sync(m),
+			m_owns(false)
 		{
 			lock();
 		}
 
 		unique_lock(mutex_type & m, defer_lock_t) :
-			m_sync(&m), m_owns(false)
+			m_sync(&m),
+			m_owns(false)
+		{
+		}
+
+		unique_lock(mutex_type * m, defer_lock_t) :
+			m_sync(m),
+			m_owns(false)
 		{
 		}
 
 		unique_lock(mutex_type & m, try_to_lock_t) :
-			m_sync(&m), m_owns(m_sync->try_lock())
-		{
-		}
-
-		unique_lock(mutex_type & m, adopt_lock_t) :
-			m_sync(&m), m_owns(true)
-		{
-		}
-
-		~unique_lock()
-		{
-			if (m_owns)
-				unlock();
-		}
-
-		unique_lock(unique_lock && u) :
-			m_sync(nullptr), m_owns(false)
-		{
-			swap(u);
-		}
-
-		unique_lock & operator =(unique_lock && u)
-		{
-			unique_lock(std::move(u)).swap(*this);
-			return *this;
-		}
-
-		void lock()
-		{
-			if (m_sync && !m_owns) {
-				m_sync->lock();
-				m_owns = true;
-			}
-		}
-
-		bool try_lock()
-		{
-			if (m_sync && !m_owns) {
-				m_owns = m_sync->try_lock();
-			}
-			return m_owns;
-		}
-
-		void unlock()
-		{
-			if (m_sync && m_owns) {
-				m_sync->unlock();
-				m_owns = false;
-			}
-		}
-
-		void swap(unique_lock & __u)
-		{
-			using std::swap;
-			swap(m_sync, __u.m_sync);
-			swap(m_owns, __u.m_owns);
-		}
-
-		mutex_type * release()
-		{
-			mutex_type * ret = m_sync;
-			m_sync = nullptr;
-			m_owns = false;
-			return ret;
-		}
-
-		bool owns_lock() const
-		{
-			return m_owns;
-		}
-
-		explicit operator bool() const
-		{
-			return owns_lock();
-		}
-
-		mutex_type * mutex() const
-		{
-			return m_sync;
-		}
-
-		unique_lock(const unique_lock &) = delete;
-		unique_lock & operator =(const unique_lock &) = delete;
-
-	private:
-		mutex_type * m_sync;
-		bool m_owns;
-	};
-
-	template<typename _Mutex>
-	class unique_lock<_Mutex*> {
-	public:
-		typedef _Mutex mutex_type;
-
-		unique_lock() :
-			m_sync(nullptr), m_owns(false)
-		{
-		}
-
-		unique_lock(mutex_type * m) :
-			m_sync(m), m_owns(false)
-		{
-			lock();
-		}
-
-		unique_lock(mutex_type * m, defer_lock_t) :
-			m_sync(m), m_owns(false)
+			m_sync(&m),
+			m_owns(m_sync->try_lock())
 		{
 		}
 
 		unique_lock(mutex_type * m, try_to_lock_t) :
-			m_sync(m), m_owns(m_sync->try_lock())
+			m_sync(*m),
+			m_owns(m_sync->try_lock())
+		{
+		}
+
+		unique_lock(mutex_type & m, adopt_lock_t) :
+			m_sync(&m),
+			m_owns(true)
 		{
 		}
 
 		unique_lock(mutex_type * m, adopt_lock_t) :
-			m_sync(m), m_owns(true)
+			m_sync(m),
+			m_owns(true)
 		{
 		}
 
-		~unique_lock()
+		unique_lock(this_type && other) :
+			m_sync(nullptr),
+			m_owns(false)
 		{
-			if (m_owns)
-				unlock();
+			swap(other);
 		}
 
-		unique_lock(unique_lock && u) :
-			m_sync(nullptr), m_owns(false)
+		this_type & operator =(this_type && other)
 		{
-			swap(u);
-		}
-
-		unique_lock & operator =(unique_lock && u)
-		{
-			unique_lock(std::move(u)).swap(*this);
+			this_type(std::move(other)).swap(*this);
 			return *this;
 		}
 
@@ -202,16 +124,16 @@ namespace Lock {
 		void unlock()
 		{
 			if (m_sync && m_owns) {
-				m_sync->unlock();
 				m_owns = false;
+				m_sync->unlock();
 			}
 		}
 
-		void swap(unique_lock & __u)
+		void swap(this_type & other)
 		{
 			using std::swap;
-			swap(m_sync, __u.m_sync);
-			swap(m_owns, __u.m_owns);
+			swap(m_sync, other.m_sync);
+			swap(m_owns, other.m_owns);
 		}
 
 		mutex_type * release()
@@ -237,8 +159,8 @@ namespace Lock {
 			return m_sync;
 		}
 
-		unique_lock(const unique_lock &) = delete;
-		unique_lock & operator =(const unique_lock &) = delete;
+		unique_lock(const this_type &) = delete;
+		this_type & operator =(const this_type &) = delete;
 
 	private:
 		mutex_type * m_sync;
@@ -246,10 +168,10 @@ namespace Lock {
 	};
 
 	namespace pvt {
-		template<typename _Lock>
-		unique_lock<_Lock> try_to_lock(_Lock & l)
+		template<typename SyncUnit>
+		unique_lock<SyncUnit> try_to_lock(SyncUnit & l)
 		{
-			return unique_lock<_Lock>(l, Lock::try_to_lock);
+			return unique_lock<SyncUnit>(l, Lock::try_to_lock);
 		}
 
 		template<int _Idx, bool _Continue = true>

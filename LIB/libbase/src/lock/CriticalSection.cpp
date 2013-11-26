@@ -9,6 +9,8 @@ namespace Lock {
 
 		void lock_read() override;
 
+		bool try_lock() override;
+
 		void unlock() override;
 	};
 
@@ -24,6 +26,11 @@ namespace Lock {
 	void CriticalSection_impl::lock_read()
 	{
 		CriticalSection::lock();
+	}
+
+	bool CriticalSection_impl::try_lock()
+	{
+		return CriticalSection::try_lock();
 	}
 
 	void CriticalSection_impl::unlock()

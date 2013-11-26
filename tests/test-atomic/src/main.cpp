@@ -22,8 +22,8 @@ namespace {
 	}
 }
 
-Lock::CriticalSection * m1;
-Lock::CriticalSection * m2;
+Lock::SyncUnit_i * m1;
+Lock::SyncUnit_i * m2;
 
 struct LockMutexThead1: public Base::ThreadRoutine_i {
 	size_t run(void * data) override
@@ -31,7 +31,7 @@ struct LockMutexThead1: public Base::ThreadRoutine_i {
 		UNUSED(data);
 
 		while (true) {
-			Lock::lock(m2, m1);
+			Lock::lock(*m2, *m1);
 //			m2->lock();
 			LogTrace();
 //			m1->lock();
@@ -50,7 +50,7 @@ struct LockMutexThead2: public Base::ThreadRoutine_i {
 		UNUSED(data);
 
 		while (true) {
-			Lock::lock(m1, m2);
+			Lock::lock(*m1, *m2);
 //			m1->lock();
 			LogTrace();
 //			m2->lock();
@@ -76,8 +76,8 @@ int test_atomic()
 
 int test_lock()
 {
-	m1 = new Lock::CriticalSection;
-	m2 = new Lock::CriticalSection;
+	m1 = Lock::get_CritSection();
+	m2 = Lock::get_CritSection();
 
 	LockMutexThead1 routine1;
 	LockMutexThead2 routine2;

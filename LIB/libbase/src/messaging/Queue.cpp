@@ -25,7 +25,7 @@ namespace Base {
 	{
 		CriticalSection::lock();
 		emplace_back(message);
-		CriticalSection::release();
+		CriticalSection::unlock();
 		Semaphore::release(1);
 	}
 
@@ -37,7 +37,7 @@ namespace Base {
 			message = front();
 //			pop_front();
 			erase(begin());
-			CriticalSection::release();
+			CriticalSection::unlock();
 		}
 		return waitResult;
 	}

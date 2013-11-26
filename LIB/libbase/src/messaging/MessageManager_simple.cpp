@@ -50,7 +50,7 @@ namespace Base {
 	{
 		lock();
 		emplace(std::upper_bound(begin(), end(), subject), subject, observer);
-		release();
+		unlock();
 	}
 
 	void SimpleMessageManager::unregister_observer(Observable * subject, Observer * observer)
@@ -58,7 +58,7 @@ namespace Base {
 		lock();
 		auto range = std::equal_range(begin(), end(), subject);
 		erase(remove(range.first, range.second, observer), range.second);
-		release();
+		unlock();
 	}
 
 	void SimpleMessageManager::unregister_all(Observable * subject)
@@ -66,14 +66,14 @@ namespace Base {
 		lock();
 		auto range = std::equal_range(begin(), end(), subject);
 		erase(range.first, range.second);
-		release();
+		unlock();
 	}
 
 	void SimpleMessageManager::unregister_all(Observer * observer)
 	{
 		lock();
 		erase(remove(begin(), end(), observer), end());
-		release();
+		unlock();
 	}
 
 	void SimpleMessageManager::notify(const Observable * subject, const Message & event) const
@@ -83,7 +83,7 @@ namespace Base {
 		std::for_each(range.first, range.second, [event](const mapping & pair) {
 			pair.second->notify(event);
 		});
-		release();
+		unlock();
 	}
 
 	MessageManager * get_simple_message_manager()

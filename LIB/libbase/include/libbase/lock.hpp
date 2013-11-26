@@ -2,6 +2,8 @@
 #define LIBBASE_LOCK_HPP_
 
 #include <libbase/std.hpp>
+#include <libbase/pvt/lock/unique_lock.hpp>
+#include <libbase/pvt/lock/lock.hpp>
 
 namespace Lock {
 
@@ -22,7 +24,7 @@ namespace Lock {
 
 		virtual void lock_read() = 0;
 
-		virtual void release() = 0;
+		virtual void unlock() = 0;
 	};
 
 	SyncUnit_i * get_CritSection();
@@ -30,7 +32,7 @@ namespace Lock {
 	SyncUnit_i * get_ReadWrite();
 
 	///================================================================================== ScopeGuard
-	struct ScopeGuard: private Base::Uncopyable {
+	struct ScopeGuard {
 		~ScopeGuard();
 
 		ScopeGuard();
@@ -39,20 +41,50 @@ namespace Lock {
 
 		ScopeGuard(ScopeGuard && right);
 
-		ScopeGuard & operator = (ScopeGuard && right);
+		ScopeGuard & operator =(ScopeGuard && right);
 
 		void swap(ScopeGuard & right);
 
 	private:
 		ScopeGuard(const ScopeGuard & right) = delete;
 
-		ScopeGuard & operator = (const ScopeGuard & right) = delete;
+		ScopeGuard & operator =(const ScopeGuard & right) = delete;
 
 		SyncUnit_i * m_unit;
 	};
 
+	///=================================================================================== LockGuard
+	template<typename Mutex>
+	class LockGuard {
+	public:
+		typedef Mutex mutex_type;
+
+		explicit LockGuard(mutex_type & m) :
+			m_sync(m)
+		{
+			m_sync.lock();
+		}
+
+		LockGuard(mutex_type & m, bool doNotLock) :
+			m_sync(m)
+		{
+			UNUSED(doNotLock);
+		}
+
+		~LockGuard()
+		{
+			m_sync.unlock();
+		}
+
+		LockGuard(const LockGuard &) = delete;
+		LockGuard& operator =(const LockGuard &) = delete;
+
+	private:
+		mutex_type & m_sync;
+	};
+
 	///============================================================================= CriticalSection
-	struct CriticalSection: private Base::Uncopyable {
+	struct CriticalSection {
 		~CriticalSection()
 		{
 			::DeleteCriticalSection(&m_sync);
@@ -68,23 +100,31 @@ namespace Lock {
 			::EnterCriticalSection(&m_sync);
 		}
 
-		void release() const
+		bool try_lock() const
+		{
+			return ::TryEnterCriticalSection(&m_sync);
+		}
+
+		void unlock() const
 		{
 			::LeaveCriticalSection(&m_sync);
 		}
+
+		CriticalSection(const CriticalSection &) = delete;
+		CriticalSection& operator =(const CriticalSection &) = delete;
 
 	private:
 		mutable CRITICAL_SECTION m_sync;
 	};
 
 	///=================================================================================== Semaphore
-	struct Semaphore: private Base::Uncopyable {
+	struct Semaphore {
 		~Semaphore()
 		{
 			::CloseHandle(m_handle);
 		}
 
-		Semaphore(PCWSTR name = nullptr):
+		Semaphore(PCWSTR name = nullptr) :
 			m_handle(::CreateSemaphoreW(nullptr, 0, LONG_MAX, name))
 		{
 		}
@@ -109,35 +149,38 @@ namespace Lock {
 			::ReleaseSemaphore(m_handle, cnt, nullptr);
 		}
 
+		Semaphore(const Semaphore &) = delete;
+		Semaphore& operator =(const Semaphore &) = delete;
+
 	private:
 		mutable HANDLE m_handle;
 	};
 
-	///=============================================================================================
-	//		struct SRWlock {
-	//			SRWlock() {
-	//				::InitializeSRWLock(&m_impl);
-	//			}
-	//		private:
-	//			SRWLOCK m_impl;
-	//		};
+///=============================================================================================
+//		struct SRWlock {
+//			SRWlock() {
+//				::InitializeSRWLock(&m_impl);
+//			}
+//		private:
+//			SRWLOCK m_impl;
+//		};
 
-	//		///=========================================================================================
-	//		struct SafeStack {
-	//			~SafeStack()
-	//			{
-	//				_aligned_free(m_impl);
-	//			}
-	//
-	//			SafeStack()
-	//			{
-	//				m_impl = (PSLIST_HEADER)_aligned_malloc(sizeof(SLIST_HEADER), MEMORY_ALLOCATION_ALIGNMENT);
-	//				InitializeSListHead(m_impl);
-	//			}
-	//		private:
-	//			PSLIST_HEADER m_impl;
-	//		};
-	//
+//		///=========================================================================================
+//		struct SafeStack {
+//			~SafeStack()
+//			{
+//				_aligned_free(m_impl);
+//			}
+//
+//			SafeStack()
+//			{
+//				m_impl = (PSLIST_HEADER)_aligned_malloc(sizeof(SLIST_HEADER), MEMORY_ALLOCATION_ALIGNMENT);
+//				InitializeSListHead(m_impl);
+//			}
+//		private:
+//			PSLIST_HEADER m_impl;
+//		};
+//
 
 }
 

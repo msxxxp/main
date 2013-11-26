@@ -11,7 +11,7 @@ namespace Lock {
 
 		void lock_read() override;
 
-		void release() override;
+		void unlock() override;
 
 	private:
 		HANDLE m_EventAllowWrite; 	// Writers wait on this if a reader has access
@@ -52,7 +52,7 @@ namespace Lock {
 			// This writer can write, decrement the count of active writers
 			m_nActive--;
 		}
-		CriticalSection::release();
+		CriticalSection::unlock();
 
 		if (fResourceOwned) {
 			// This thread must wait
@@ -74,14 +74,14 @@ namespace Lock {
 			// This reader can read, increment the count of active readers
 			m_nActive++;
 		}
-		CriticalSection::release();
+		CriticalSection::unlock();
 
 		if (fResourceWritePending) {
 			::WaitForSingleObject(m_EventAllowRead, INFINITE);
 		}
 	}
 
-	void ReadWrite_impl::release()
+	void ReadWrite_impl::unlock()
 	{
 		CriticalSection::lock();
 		if (m_nActive > 0) {
@@ -110,7 +110,7 @@ namespace Lock {
 				// There are no threads waiting at all; nothing to release
 			}
 		}
-		CriticalSection::release();
+		CriticalSection::unlock();
 	}
 
 	///=============================================================================================

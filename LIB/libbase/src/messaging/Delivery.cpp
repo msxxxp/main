@@ -89,7 +89,7 @@ namespace {
 		lock();
 		auto id = GetNextId();
 		emplace_back(id, DeliveryMapping(queue, type_mask, code_mask, filter));
-		release();
+		unlock();
 		return id;
 	}
 
@@ -99,7 +99,7 @@ namespace {
 		auto it = std::find_if(begin(), end(), [&](dm_t const& item) {return item.first == id;});
 		if (it != end())
 			erase(it);
-		release();
+		unlock();
 	}
 
 	void Delivery_impl::Unsubscribe(const Base::Queue * queue)
@@ -109,7 +109,7 @@ namespace {
 			if (it->second == queue)
 				erase(it.base());
 		}
-		release();
+		unlock();
 	}
 
 	void Delivery_impl::SendRound(const Base::Message & message) const
@@ -121,7 +121,7 @@ namespace {
 		for (const dm_t & item : *this) {
 			item.second(message);
 		}
-		release();
+		unlock();
 	}
 
 }

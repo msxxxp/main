@@ -7,7 +7,7 @@ namespace Lock {
 	ScopeGuard::~ScopeGuard()
 	{
 		if (m_unit)
-			m_unit->release();
+			m_unit->unlock();
 	}
 
 	ScopeGuard::ScopeGuard() :

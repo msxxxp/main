@@ -9,7 +9,7 @@ namespace Lock {
 
 		void lock_read() override;
 
-		void release() override;
+		void unlock() override;
 	};
 
 	CriticalSection_impl::~CriticalSection_impl()
@@ -26,9 +26,9 @@ namespace Lock {
 		CriticalSection::lock();
 	}
 
-	void CriticalSection_impl::release()
+	void CriticalSection_impl::unlock()
 	{
-		CriticalSection::release();
+		CriticalSection::unlock();
 	}
 
 	///=============================================================================================

@@ -7,13 +7,15 @@ namespace Lock {
 
 		ReadWrite_impl();
 
-		void lock() override;
+		void _lock() override;
 
-		void lock_read() override;
+		void _lock_read() override;
 
-		bool try_lock() override;
+		bool _try_lock() override;
 
-		void unlock() override;
+		bool _try_lock_read() override;
+
+		void _unlock() override;
 
 	private:
 		HANDLE m_EventAllowWrite; 	// Writers wait on this if a reader has access
@@ -41,7 +43,7 @@ namespace Lock {
 		::CloseHandle(m_EventAllowWrite);
 	}
 
-	void ReadWrite_impl::lock()
+	void ReadWrite_impl::_lock()
 	{
 		CriticalSection::lock();
 		// Are there any threads accessing the resource?
@@ -61,11 +63,11 @@ namespace Lock {
 			::WaitForSingleObject(m_EventAllowWrite, INFINITE);
 	}
 
-	void ReadWrite_impl::lock_read()
+	void ReadWrite_impl::_lock_read()
 	{
 		CriticalSection::lock();
 		// Are there writers waiting or is a writer writing?
-		bool resourceWritePending = (m_nWaitingWriters || m_nActive < 0);
+		bool resourceWritePending = m_nWaitingWriters || m_nActive < 0;
 
 		if (resourceWritePending) {
 			// This reader must wait, increment the count of waiting readers
@@ -80,7 +82,7 @@ namespace Lock {
 			::WaitForSingleObject(m_EventAllowRead, INFINITE);
 	}
 
-	bool ReadWrite_impl::try_lock()
+	bool ReadWrite_impl::_try_lock()
 	{
 		CriticalSection::lock();
 		bool resourceFreed = m_nActive == 0 || (m_nActive < 0 && m_WriterThreadId == ::GetCurrentThreadId());
@@ -94,7 +96,20 @@ namespace Lock {
 		return resourceFreed;
 	}
 
-	void ReadWrite_impl::unlock()
+	bool ReadWrite_impl::_try_lock_read()
+	{
+		CriticalSection::lock();
+		bool resourceWritePending = m_nWaitingWriters || m_nActive < 0;
+
+		if (!resourceWritePending) {
+			++m_nActive;
+		}
+		CriticalSection::unlock();
+
+		return !resourceWritePending;
+	}
+
+	void ReadWrite_impl::_unlock()
 	{
 		CriticalSection::lock();
 		if (m_nActive > 0) {

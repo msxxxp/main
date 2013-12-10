@@ -5,8 +5,11 @@
 #include <libbase/lock.hpp>
 #include <libbase/thread.hpp>
 #include <libbase/ThreadPool.hpp>
+#include <libbase/system.hpp>
+#include <libbase/chrono.hpp>
 #include <atomic>
 #include <mutex>
+#include <chrono>
 
 namespace {
 	void setup_logger()
@@ -64,6 +67,33 @@ struct LockMutexThead2: public Base::ThreadRoutine_i {
 };
 
 
+int test_chrono()
+{
+	using std::chrono::duration_cast;
+	using std::chrono::microseconds;
+	using std::chrono::milliseconds;
+	using std::chrono::nanoseconds;
+	using std::chrono::steady_clock;
+
+	for (uint64_t size = 1; size < 100000000; size *= 5) {
+		auto start1= std::chrono::steady_clock::now();
+		auto start2 = std::chrono::system_clock::now();
+		auto start3 = Base::chrono::perfomance_clock::now();
+		std::vector<int> v(size, 42);
+		auto end1 = std::chrono::steady_clock::now();
+		auto end2 = std::chrono::system_clock::now();
+		auto end3 = Base::chrono::perfomance_clock::now();
+
+		auto elapsed1 = end1 - start1;
+		auto elapsed2 = end2 - start2;
+		auto elapsed3 = end3 - start3;
+		LogDebug(L"size1: %I64u, count1: %I64u\n", size, (uint64_t)duration_cast<nanoseconds>(elapsed1).count());
+		LogDebug(L"size2: %I64u, count2: %I64u\n", size, (uint64_t)duration_cast<nanoseconds>(elapsed2).count());
+		LogDebug(L"size3: %I64u, count3: %I64u\n", size, (uint64_t)duration_cast<nanoseconds>(elapsed3).count());
+	}
+	return 0;
+}
+
 int test_atomic()
 {
 	std::atomic_uint_fast64_t a;
@@ -101,7 +131,9 @@ int wWmain()
 	LogTrace();
 //	return test_atomic();
 
-	return test_lock();
+//	return test_lock();
+
+	return test_chrono();
 }
 
 /// ========================================================================== Startup (entry point)

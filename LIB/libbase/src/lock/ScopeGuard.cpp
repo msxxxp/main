@@ -15,11 +15,11 @@ namespace Lock {
 	{
 	}
 
-	ScopeGuard::ScopeGuard(SyncUnit_i * unit, bool read) :
+	ScopeGuard::ScopeGuard(SyncUnit_i * unit, bool readOnly) :
 		m_unit(unit)
 	{
 		if (m_unit)
-			read ? m_unit->lock_read() : m_unit->lock();
+			m_unit->lock(readOnly);
 	}
 
 	ScopeGuard::ScopeGuard(ScopeGuard && right) :

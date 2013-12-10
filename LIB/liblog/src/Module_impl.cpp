@@ -1,6 +1,6 @@
 #include <liblog/logger.hpp>
+#include <libbase/std.hpp>
 #include <libbase/cstr.hpp>
-#include <libbase/pvt/va_list.hpp>
 #include <simstl/string>
 #include "Module_impl.hpp"
 

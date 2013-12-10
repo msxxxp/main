@@ -1,5 +1,5 @@
-﻿#include <libbase/console.hpp>
-#include <libbase/pvt/va_list.hpp>
+﻿#include <libbase/std.hpp>
+#include <libbase/console.hpp>
 
 //#include <stdio.h>
 

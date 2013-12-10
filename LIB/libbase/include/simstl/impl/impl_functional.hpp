@@ -2,7 +2,7 @@
 #define SARALIB_STL_FUNCTIONAL_HPP_
 
 #include "impl_types.hpp"
-#include "impl_generic.hpp"
+#include "impl_rel_ops.hpp"
 
 namespace sarastd {
 	template<typename T>
@@ -96,7 +96,7 @@ namespace sarastd {
 
 		result_type operator ()(const first_argument_type& a, const second_argument_type& b) const
 		{
-			return sarastd::pvt::generic::operator !=(a, b);
+			return sarastd::rel_ops::operator !=(a, b);
 		}
 	};
 
@@ -132,7 +132,7 @@ namespace sarastd {
 
 		result_type operator ()(const first_argument_type& a, const second_argument_type& b) const
 		{
-			return sarastd::pvt::generic::operator <=(a, b);
+			return sarastd::rel_ops::operator <=(a, b);
 		}
 	};
 
@@ -144,7 +144,7 @@ namespace sarastd {
 
 		result_type operator ()(const first_argument_type& a, const second_argument_type& b) const
 		{
-			return sarastd::pvt::generic::operator >(a, b);
+			return sarastd::rel_ops::operator >(a, b);
 		}
 	};
 
@@ -156,7 +156,7 @@ namespace sarastd {
 
 		result_type operator ()(const first_argument_type& a, const second_argument_type& b) const
 		{
-			return sarastd::pvt::generic::operator >=(a, b);
+			return sarastd::rel_ops::operator >=(a, b);
 		}
 	};
 

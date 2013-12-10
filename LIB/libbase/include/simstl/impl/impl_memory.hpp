@@ -2,7 +2,7 @@
 #define SARALIB_STL_MEMORY_HPP_
 
 #include "impl_types.hpp"
-#include "impl_generic.hpp"
+#include "impl_rel_ops.hpp"
 #include "impl_iterator_base.hpp"
 #include "impl_new.hpp"
 #include "impl_pair.hpp"
@@ -609,25 +609,25 @@ namespace sarastd {
 	template<typename T, typename U>
 	bool operator !=(const shared_ptr<T> & a, const shared_ptr<U> & b)
 	{
-		return sarastd::pvt::generic::operator !=(a, b);
+		return sarastd::rel_ops::operator !=(a, b);
 	}
 
 	template<typename T, typename U>
 	bool operator >(const shared_ptr<T> & a, const shared_ptr<U> & b)
 	{
-		return sarastd::pvt::generic::operator >(a, b);
+		return sarastd::rel_ops::operator >(a, b);
 	}
 
 	template<typename T, typename U>
 	bool operator <=(const shared_ptr<T> & a, const shared_ptr<U> & b)
 	{
-		return sarastd::pvt::generic::operator <=(a, b);
+		return sarastd::rel_ops::operator <=(a, b);
 	}
 
 	template<typename T, typename U>
 	bool operator >=(const shared_ptr<T> & a, const shared_ptr<U> & b)
 	{
-		return sarastd::pvt::generic::operator >=(a, b);
+		return sarastd::rel_ops::operator >=(a, b);
 	}
 
 	template<typename T>

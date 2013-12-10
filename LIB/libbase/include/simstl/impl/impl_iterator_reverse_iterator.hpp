@@ -68,25 +68,25 @@ namespace sarastd
 	template<typename Type1, typename Type2>
 	bool operator !=(const reverse_iterator<Type1>& lhs, const reverse_iterator<Type2>& rhs)
 	{
-		return sarastd::pvt::generic::operator !=(lhs, rhs);
+		return sarastd::rel_ops::operator !=(lhs, rhs);
 	}
 
 	template<typename Type1, typename Type2>
 	bool operator <=(const reverse_iterator<Type1>& lhs, const reverse_iterator<Type2>& rhs)
 	{
-		return sarastd::pvt::generic::operator <=(lhs, rhs);
+		return sarastd::rel_ops::operator <=(lhs, rhs);
 	}
 
 	template<typename Type1, typename Type2>
 	bool operator >(const reverse_iterator<Type1>& lhs, const reverse_iterator<Type2>& rhs)
 	{
-		return sarastd::pvt::generic::operator >(lhs, rhs);
+		return sarastd::rel_ops::operator >(lhs, rhs);
 	}
 
 	template<typename Type1, typename Type2>
 	bool operator >=(const reverse_iterator<Type1>& lhs, const reverse_iterator<Type2>& rhs)
 	{
-		return sarastd::pvt::generic::operator >=(lhs, rhs);
+		return sarastd::rel_ops::operator >=(lhs, rhs);
 	}
 
 	template<typename Type>

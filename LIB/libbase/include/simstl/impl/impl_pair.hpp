@@ -2,7 +2,7 @@
 #define SARALIB_STL_PAIR_HPP_
 
 #include "impl_types.hpp"
-#include "impl_generic.hpp"
+#include "impl_rel_ops.hpp"
 #include "impl_algorithm_base.hpp"
 
 namespace sarastd {
@@ -89,25 +89,25 @@ namespace sarastd {
 	template<typename T1, typename T2>
 	bool operator !=(const pair<T1, T2>& lhs, const pair<T1, T2>& rhs)
 	{
-		return pvt::generic::operator !=(lhs, rhs);
+		return rel_ops::operator !=(lhs, rhs);
 	}
 
 	template<typename T1, typename T2>
 	bool operator <=(const pair<T1, T2>& lhs, const pair<T1, T2>& rhs)
 	{
-		return pvt::generic::operator <=(lhs, rhs);
+		return rel_ops::operator <=(lhs, rhs);
 	}
 
 	template<typename T1, typename T2>
 	bool operator > (const pair<T1, T2>& lhs, const pair<T1, T2>& rhs)
 	{
-		return pvt::generic::operator >(lhs, rhs);
+		return rel_ops::operator >(lhs, rhs);
 	}
 
 	template<typename T1, typename T2>
 	bool operator >=(const pair<T1, T2>& lhs, const pair<T1, T2>& rhs)
 	{
-		return pvt::generic::operator >=(lhs, rhs);
+		return rel_ops::operator >=(lhs, rhs);
 	}
 
 	template<typename T1, typename T2>

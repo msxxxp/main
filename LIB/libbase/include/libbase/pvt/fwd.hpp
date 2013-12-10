@@ -9,20 +9,17 @@ namespace Cstr {
 }
 
 #if defined(NoStlString) || defined(USE_LITE_STRING) || defined(NO_STD_STRING)
-namespace sarastd {
-	template<typename CharType, typename Traits>
-	struct basic_string;
-}
-typedef sarastd::basic_string<char, Cstr::char_traits<char> > astring;
-typedef sarastd::basic_string<wchar_t, Cstr::char_traits<wchar_t> > ustring;
+	#include <simstl/iosfwd>
 #else
-#ifdef _MSC_VER
-	#include <string>
-#else
-#include <iosfwd>
-#endif
-typedef std::string astring;
-typedef std::wstring ustring;
+
+	#ifdef _MSC_VER
+		#include <string>
+	#else
+		#include <iosfwd>
+	#endif
+
+	typedef std::string astring;
+	typedef std::wstring ustring;
 #endif
 
 #endif

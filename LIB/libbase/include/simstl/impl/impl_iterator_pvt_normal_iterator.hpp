@@ -3,7 +3,7 @@
 
 #include "impl_types.hpp"
 #include "impl_iterator_base.hpp"
-#include "impl_generic.hpp"
+#include "impl_rel_ops.hpp"
 
 namespace sarastd
 {
@@ -70,25 +70,25 @@ namespace sarastd
 		template<typename Type1, typename Type2>
 		bool operator !=(const _normal_iterator<Type1>& lhs, const _normal_iterator<Type2>& rhs)
 		{
-			return sarastd::pvt::generic::operator !=(lhs, rhs);
+			return sarastd::rel_ops::operator !=(lhs, rhs);
 		}
 
 		template<typename Type1, typename Type2>
 		bool operator <= (const _normal_iterator<Type1>& lhs, const _normal_iterator<Type2>& rhs)
 		{
-			return sarastd::pvt::generic::operator <=(lhs, rhs);
+			return sarastd::rel_ops::operator <=(lhs, rhs);
 		}
 
 		template<typename Type1, typename Type2>
 		bool operator > (const _normal_iterator<Type1>& lhs, const _normal_iterator<Type2>& rhs)
 		{
-			return sarastd::pvt::generic::operator >(lhs, rhs);
+			return sarastd::rel_ops::operator >(lhs, rhs);
 		}
 
 		template<typename Type1, typename Type2>
 		bool operator >=(const _normal_iterator<Type1>& lhs, const _normal_iterator<Type2>& rhs)
 		{
-			return sarastd::pvt::generic::operator >=(lhs, rhs);
+			return sarastd::rel_ops::operator >=(lhs, rhs);
 		}
 
 		template<typename Type>

@@ -107,43 +107,50 @@ namespace Base {
 
 	///================================================================================== Uncopyable
 	class Uncopyable {
-		typedef Uncopyable this_type;
-
 	protected:
-		~Uncopyable()
-		{
-		}
+		~Uncopyable() = default;
 
-		Uncopyable()
-		{
-		}
+		Uncopyable() = default;
 
 	private:
 #ifdef _MSC_VER
-		Uncopyable(const this_type &);
+		Uncopyable(const Uncopyable &);
 #else
-		Uncopyable(const this_type &) = delete;
+		Uncopyable(const Uncopyable &) = delete;
 #endif
 
 #ifdef _MSC_VER
-		this_type & operator = (const this_type &);
+		Uncopyable & operator = (const Uncopyable &);
 #else
-		this_type & operator = (const this_type &) = delete;
+		Uncopyable & operator = (const Uncopyable &) = delete;
 #endif
 	};
 
 	///=================================================================================== Command_p
 	struct Command_p {
-		virtual ~Command_p();
+		virtual ~Command_p() = default;
 
-		virtual ssize_t execute();
+		virtual ssize_t execute() = 0;
 	};
 
 	///================================================================================= Destroyable
 	struct Destroyable {
-		virtual ~Destroyable();
+		virtual ~Destroyable() = default;
 
 		virtual void destroy() const = 0;
+	};
+
+	///=============================================================================================
+	struct Va_list {
+		~Va_list();
+
+		operator va_list & ()
+		{
+			return m_args;
+		}
+
+	private:
+		va_list m_args;
 	};
 
 	///=============================================================================================

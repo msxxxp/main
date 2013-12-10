@@ -1,6 +1,6 @@
-﻿#include <libbase/console.hpp>
+﻿#include <libbase/std.hpp>
+#include <libbase/console.hpp>
 #include <libbase/memory.hpp>
-#include <libbase/pvt/va_list.hpp>
 
 namespace Base {
 	namespace Console {

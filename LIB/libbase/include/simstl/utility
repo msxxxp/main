@@ -2,5 +2,6 @@
 #define SARALIB_STL_UTILITY_
 
 #include "impl/impl_utility.hpp"
+#include "impl/impl_rel_ops.hpp"
 
 #endif

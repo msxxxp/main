@@ -24,7 +24,7 @@ namespace Lock {
 	constexpr adopt_lock_t adopt_lock{};
 
 	template<typename SyncUnit>
-	class unique_lock {
+	class unique_lock: private Base::Uncopyable {
 		typedef unique_lock<SyncUnit> this_type;
 
 	public:
@@ -159,9 +159,6 @@ namespace Lock {
 			return m_sync;
 		}
 
-		unique_lock(const this_type &) = delete;
-		this_type & operator =(const this_type &) = delete;
-
 	private:
 		mutex_type * m_sync;
 		bool m_owns;
@@ -174,15 +171,15 @@ namespace Lock {
 			return unique_lock<SyncUnit>(l, Lock::try_to_lock);
 		}
 
-		template<int _Idx, bool _Continue = true>
+		template<int Index, bool Continue = true>
 		struct try_lock_impl {
-			template<typename ... _Lock>
-			static int do_try_lock(std::tuple<_Lock&...> & locks)
+			template<typename ... SyncUnit>
+			static int do_try_lock(std::tuple<SyncUnit & ...> & locks)
 			{
-				int idx = _Idx;
-				auto lock = try_to_lock(std::get<_Idx>(locks));
+				int idx = Index;
+				auto lock = try_to_lock(std::get<Index>(locks));
 				if (lock.owns_lock()) {
-					idx = try_lock_impl<_Idx + 1, _Idx + 2 < sizeof...(_Lock)>::do_try_lock(locks);
+					idx = try_lock_impl<Index + 1, Index + 2 < sizeof...(SyncUnit)>::do_try_lock(locks);
 					if (idx == -1)
 						lock.release();
 				}
@@ -190,13 +187,13 @@ namespace Lock {
 			}
 		};
 
-		template<int _Idx>
-		struct try_lock_impl<_Idx, false> {
-			template<typename ... _Lock>
-			static int do_try_lock(std::tuple<_Lock&...> & locks)
+		template<int Index>
+		struct try_lock_impl<Index, false> {
+			template<typename ... SyncUnit>
+			static int do_try_lock(std::tuple<SyncUnit & ...> & locks)
 			{
-				int idx = _Idx;
-				auto lock = try_to_lock(std::get<_Idx>(locks));
+				int idx = Index;
+				auto lock = try_to_lock(std::get<Index>(locks));
 				if (lock.owns_lock()) {
 					lock.release();
 					idx = -1;
@@ -207,20 +204,20 @@ namespace Lock {
 
 	}
 
-	template<typename _Lock1, typename _Lock2, typename ... _Lock3>
-	int try_lock(_Lock1 & l1, _Lock2 & l2, _Lock3 & ... l3)
+	template<typename SyncUnit1, typename SyncUnit2, typename ... SyncUnit3>
+	int try_lock(SyncUnit1 & l1, SyncUnit2 & l2, SyncUnit3 & ... l3)
 	{
 		auto locks = std::tie(l1, l2, l3...);
 		return pvt::try_lock_impl<0>::do_try_lock(locks);
 	}
 
-	template<typename _L1, typename _L2, typename ..._L3>
-	void lock(_L1 & l1, _L2 & l2, _L3 & ... l3)
+	template<typename SyncUnit1, typename SyncUnit2, typename ... SyncUnit3>
+	void lock(SyncUnit1 & l1, SyncUnit2 & l2, SyncUnit3 & ... l3)
 	{
 		while (true) {
-			unique_lock<_L1> first(l1);
+			unique_lock<SyncUnit1> first(l1);
 			auto locks = std::tie(l2, l3...);
-			if (pvt::try_lock_impl<0, sizeof...(_L3)>::do_try_lock(locks) == -1) {
+			if (pvt::try_lock_impl<0, sizeof...(SyncUnit3)>::do_try_lock(locks) == -1) {
 				first.release();
 				return;
 			}

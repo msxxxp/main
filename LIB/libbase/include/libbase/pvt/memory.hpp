@@ -1,7 +1,7 @@
 #ifndef LIBBASE_PVT_MEMORY_HPP_
 #define LIBBASE_PVT_MEMORY_HPP_
 
-#include <windows.h>
+#include "config.hpp"
 
 #include <type_traits>
 

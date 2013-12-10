@@ -3,37 +3,40 @@
 namespace Lock {
 
 	struct CriticalSection_impl: public SyncUnit_i, private CriticalSection {
-		~CriticalSection_impl();
+		~CriticalSection_impl() = default;
 
-		void lock() override;
+		void _lock() override;
 
-		void lock_read() override;
+		void _lock_read() override;
 
-		bool try_lock() override;
+		bool _try_lock() override;
 
-		void unlock() override;
+		bool _try_lock_read() override;
+
+		void _unlock() override;
 	};
 
-	CriticalSection_impl::~CriticalSection_impl()
-	{
-	}
-
-	void CriticalSection_impl::lock()
+	void CriticalSection_impl::_lock()
 	{
 		CriticalSection::lock();
 	}
 
-	void CriticalSection_impl::lock_read()
+	void CriticalSection_impl::_lock_read()
 	{
 		CriticalSection::lock();
 	}
 
-	bool CriticalSection_impl::try_lock()
+	bool CriticalSection_impl::_try_lock()
 	{
 		return CriticalSection::try_lock();
 	}
 
-	void CriticalSection_impl::unlock()
+	bool CriticalSection_impl::_try_lock_read()
+	{
+		return CriticalSection::try_lock();
+	}
+
+	void CriticalSection_impl::_unlock()
 	{
 		CriticalSection::unlock();
 	}

@@ -1,5 +1,4 @@
 ﻿#include <libbase/std.hpp>
-#include <libbase/pvt/va_list.hpp>
 
 #include <wchar.h>
 

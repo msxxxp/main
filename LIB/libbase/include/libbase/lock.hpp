@@ -10,29 +10,33 @@ namespace Lock {
 	struct ScopeGuard;
 
 	///=============================================================================================
-	struct SyncUnit_i: public Base::Destroyable {
+	struct SyncUnit_i: public Base::Destroyable, private Base::Uncopyable {
 		ScopeGuard lock_scope();
 
 		ScopeGuard lock_scope_read();
 
 		void destroy() const override;
 
-	public:
-		virtual void lock() = 0;
+		void lock(bool readOnly = false) {readOnly ? _lock_read() : _lock();}
 
-		virtual void lock_read() = 0;
+		bool try_lock(bool readOnly = false) {return readOnly ? _try_lock_read() : _try_lock();}
 
-		virtual bool try_lock() = 0;
-
-		virtual void unlock() = 0;
+		void unlock() {_unlock();}
 
 	protected:
 		SyncUnit_i() = default;
 		virtual ~SyncUnit_i() = default;
 
 	private:
-		SyncUnit_i(const SyncUnit_i &) = delete;
-		SyncUnit_i & operator =(const SyncUnit_i &) = delete;
+		virtual void _lock() = 0;
+
+		virtual void _lock_read() = 0;
+
+		virtual bool _try_lock() = 0;
+
+		virtual bool _try_lock_read() = 0;
+
+		virtual void _unlock() = 0;
 	};
 
 	SyncUnit_i * get_CritSection();
@@ -40,12 +44,12 @@ namespace Lock {
 	SyncUnit_i * get_ReadWrite();
 
 	///================================================================================== ScopeGuard
-	struct ScopeGuard {
+	struct ScopeGuard: private Base::Uncopyable {
 		~ScopeGuard();
 
 		ScopeGuard();
 
-		ScopeGuard(SyncUnit_i * unit, bool read = false);
+		ScopeGuard(SyncUnit_i * unit, bool readOnly = false);
 
 		ScopeGuard(ScopeGuard && right);
 
@@ -54,15 +58,12 @@ namespace Lock {
 		void swap(ScopeGuard & right);
 
 	private:
-		ScopeGuard(const ScopeGuard &) = delete;
-		ScopeGuard & operator =(const ScopeGuard &) = delete;
-
 		SyncUnit_i * m_unit;
 	};
 
 	///=================================================================================== LockGuard
 	template<typename Mutex>
-	class LockGuard {
+	class LockGuard: private Base::Uncopyable {
 	public:
 		typedef Mutex mutex_type;
 
@@ -84,43 +85,11 @@ namespace Lock {
 		}
 
 	private:
-		LockGuard(const LockGuard &) = delete;
-		LockGuard& operator =(const LockGuard &) = delete;
-
 		mutex_type & m_sync;
 	};
 
-	template<typename Mutex>
-	class LockGuard<Mutex*> {
-	public:
-		typedef Mutex mutex_type;
-
-		explicit LockGuard(mutex_type * m) :
-			m_sync(m)
-		{
-			m_sync->lock();
-		}
-
-		LockGuard(mutex_type * m, bool doNotLock) :
-			m_sync(m)
-		{
-			UNUSED(doNotLock);
-		}
-
-		~LockGuard()
-		{
-			m_sync->unlock();
-		}
-
-	private:
-		LockGuard(const LockGuard &) = delete;
-		LockGuard& operator =(const LockGuard &) = delete;
-
-		mutex_type * m_sync;
-	};
-
 	///============================================================================= CriticalSection
-	struct CriticalSection {
+	struct CriticalSection: private Base::Uncopyable {
 		~CriticalSection()
 		{
 			::DeleteCriticalSection(&m_sync);
@@ -147,14 +116,11 @@ namespace Lock {
 		}
 
 	private:
-		CriticalSection(const CriticalSection &) = delete;
-		CriticalSection& operator =(const CriticalSection &) = delete;
-
 		mutable CRITICAL_SECTION m_sync;
 	};
 
 	///=================================================================================== Semaphore
-	struct Semaphore {
+	struct Semaphore: private Base::Uncopyable {
 		~Semaphore()
 		{
 			::CloseHandle(m_handle);
@@ -186,9 +152,6 @@ namespace Lock {
 		}
 
 	private:
-		Semaphore(const Semaphore &) = delete;
-		Semaphore& operator =(const Semaphore &) = delete;
-
 		mutable HANDLE m_handle;
 	};
 

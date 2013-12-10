@@ -7,7 +7,7 @@ namespace Base {
 	void WinTimer::Open()
 	{
 		Close();
-		hTimer = ::CreateWaitableTimer(nullptr, false, nullptr);
+		hTimer = ::CreateWaitableTimerW(nullptr, false, nullptr);
 	}
 
 	void WinTimer::Close()

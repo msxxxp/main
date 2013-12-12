@@ -118,8 +118,6 @@ int test_lock()
 
 	threads.wait_all();
 
-//	Lock::lock(m1, m2);
-
 	return 0;
 }
 

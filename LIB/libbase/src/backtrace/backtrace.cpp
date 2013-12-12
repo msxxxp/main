@@ -6,6 +6,8 @@
 
 #include <algorithm>
 
+#include <dbghelp.h>
+
 #if defined(__GNUC__)
 #include <bfd.h>
 #include <cxxabi.h>
@@ -144,7 +146,7 @@ void find(bfd_ctx * b, size_t offset, const char *& file, const char *& func, si
 }
 #endif
 
-namespace Base {
+namespace Backtrace {
 
 	namespace {
 		Logger::Module_i * get_logger_module()
@@ -154,7 +156,7 @@ namespace Base {
 		}
 	}
 
-	struct FrameInfo::Data {
+	struct Frame::Data {
 		Data(size_t frame);
 
 		bool LoadFromPDB(size_t frame);
@@ -173,7 +175,7 @@ namespace Base {
 		ustring image;
 	};
 
-	FrameInfo::Data::Data(size_t frame) :
+	Frame::Data::Data(size_t frame) :
 		addr(0), offset(0), module_base(0), line(0), func(L"?")
 	{
 		IMAGEHLP_MODULEW64 modinfo;
@@ -195,7 +197,7 @@ namespace Base {
 		(modinfo.SymType && LoadFromPDB(frame)) || LoadFromSymbols(frame) || LoadFromMap(frame);
 	}
 
-	bool FrameInfo::Data::LoadFromPDB(size_t frame)
+	bool Frame::Data::LoadFromPDB(size_t frame)
 	{
 		LogTrace();
 		bool ret = false;
@@ -208,7 +210,7 @@ namespace Base {
 
 			DWORD64 displacement;
 			BOOL err = SymFromAddrW(GetCurrentProcess(), frame, &displacement, m_syminfo);
-			LogErrorIf(err == FALSE, L"%s\n", ErrAsStr().c_str());
+			LogErrorIf(err == FALSE, L"%s\n", Base::ErrAsStr().c_str());
 			if (err != FALSE) {
 				addr = (size_t)m_syminfo->Address;
 				func = m_syminfo->Name;
@@ -226,13 +228,13 @@ namespace Base {
 //			LogErrorIf(err == FALSE, L"%s\n", ErrAsStr().c_str());
 			if (err != FALSE) {
 				line = info.LineNumber;
-				source = String::cp2w(filename_only(info.FileName), CP_ACP);
+				source = Base::String::cp2w(Base::filename_only(info.FileName), CP_ACP);
 			}
 		}
 		return ret;
 	}
 
-	bool FrameInfo::Data::LoadFromSymbols(size_t frame)
+	bool Frame::Data::LoadFromSymbols(size_t frame)
 	{
 		addr = frame;
 #if defined(__GNUC__)
@@ -251,7 +253,7 @@ namespace Base {
 			LogDebug(L"line: %d\n", line);
 
 			if (file)
-				source = Base::String::cp2w(filename_only(filename_only(file), '/'), CP_OEMCP);
+				source = Base::String::cp2w(Base::filename_only(file, '/'), CP_OEMCP);
 			if (fun) {
 				char buf[MAX_PATH];
 				size_t size = sizeof(buf);
@@ -265,98 +267,85 @@ namespace Base {
 		return false;
 	}
 
-	bool FrameInfo::Data::LoadFromMap(size_t /*frame*/)
+	bool Frame::Data::LoadFromMap(size_t /*frame*/)
 	{
 		return false;
 	}
 
-	FrameInfo::~FrameInfo()
+	Frame::~Frame()
 	{
 		delete m_data;
 	}
 
-	FrameInfo::FrameInfo(size_t frame) :
+	Frame::Frame(size_t frame) :
 		m_frame(frame),
 		m_data(nullptr)
 	{
 	}
 
-//	FrameInfo::FrameInfo(const FrameInfo & right) :
-//		m_frame(right.m_frame),
-//		m_data(nullptr)
-//	{
-//	}
-//
-	FrameInfo::FrameInfo(FrameInfo && right) :
+	Frame::Frame(Frame && right) :
 		m_frame(),
 		m_data(nullptr)
 	{
 		swap(right);
 	}
 
-//	FrameInfo & FrameInfo::operator =(const FrameInfo & right)
-//	{
-//		if (this != &right)
-//			FrameInfo(right).swap(*this);
-//		return *this;
-//	}
-//
-	FrameInfo & FrameInfo::operator =(FrameInfo && right)
+	Frame & Frame::operator =(Frame && right)
 	{
-		FrameInfo(std::move(right)).swap(*this);
+		Frame(std::move(right)).swap(*this);
 		return *this;
 	}
 
-	void FrameInfo::swap(FrameInfo & right)
+	void Frame::swap(Frame & right)
 	{
 		using std::swap;
 		swap(m_frame, right.m_frame);
 		swap(m_data, right.m_data);
 	}
 
-	const ustring & FrameInfo::source() const
+	const ustring & Frame::source() const
 	{
 		InitData();
 		return m_data->source;
 	}
 
-	const ustring & FrameInfo::func() const
+	const ustring & Frame::func() const
 	{
 		InitData();
 		return m_data->func;
 	}
 
-	const ustring & FrameInfo::module() const
+	const ustring & Frame::module() const
 	{
 		InitData();
 		return m_data->module;
 	}
 
-	size_t FrameInfo::addr() const
+	size_t Frame::addr() const
 	{
 		InitData();
 		return m_data->addr;
 	}
 
-	size_t FrameInfo::offset() const
+	size_t Frame::offset() const
 	{
 		InitData();
 		return m_data->offset;
 	}
 
-	size_t FrameInfo::line() const
+	size_t Frame::line() const
 	{
 		InitData();
 		return m_data->line;
 	}
 
-	void FrameInfo::InitData() const
+	void Frame::InitData() const
 	{
 		if (!m_data)
 			m_data = new Data(m_frame);
 	}
 
-	ustring FrameInfo::to_str() const
+	ustring Frame::to_str() const
 	{
 		wchar_t buf[MAX_PATH];
 		if (!source().empty())
@@ -392,11 +381,7 @@ namespace Base {
 	};
 
 	///=============================================================================================
-	Backtrace::~Backtrace()
-	{
-	}
-
-	Backtrace::Backtrace(PCWSTR path, size_t depth)
+	Enum::Enum(PCWSTR path, size_t depth)
 	{
 		LogNoise(L"path: '%s' depth: %Iu\n", path, depth);
 		SymbolInit::inst(path);
@@ -446,20 +431,17 @@ namespace Base {
 		LogNoise(L"depth: %Iu\n", size());
 	}
 
-	void Backtrace::Print() const
+	void Enum::Print() const
 	{
 #ifdef ENABLE_LOGGER
 		auto module = get_logger_module();
 		auto scopeLock(module->lock_scope());
 		Logger::set_color_mode(module, true);
-		auto savedLevel = Logger::get_level(module);
 		auto savedPrefix = Logger::get_prefix(module);
 		Logger::set_prefix(module, Logger::Prefix::Time | Logger::Prefix::Thread);
-		Logger::set_level(module, Logger::Level::Force);
 		LogForce(L"Backtrace: [%Iu]\n", size());
 		for (size_t i = 0; i < size(); ++i)
 			LogForce(L"[%02Iu] %s\n", size() - (i + 1), operator[](i).to_str().c_str());
-		Logger::set_level(module, savedLevel);
 		Logger::set_prefix(module, savedPrefix);
 #endif
 	}

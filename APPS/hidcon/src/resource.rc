@@ -1,5 +1,5 @@
 #include <winver.h>
-#include "version.h"
+#include "../include/version.h"
 
 //
 // Version Information resources
@@ -19,7 +19,7 @@ BEGIN
 			VALUE "FileVersion", RC_FILEVERSION_STRING
 			VALUE "FileDescription", "Execute hidden console"
 			VALUE "InternalName", "hidcon.exe"
-			VALUE "LegalCopyright", "GNU GPL (2010) Andrew Grechkin"
+			VALUE "LegalCopyright", "GNU GPL (2013) Andrew Grechkin"
 			VALUE "ProductName", "HidCon"
 		END
 	END

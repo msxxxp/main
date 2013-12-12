@@ -5,6 +5,15 @@
 
 #include <type_traits>
 
+#ifdef NDEBUG
+	#define MemoryAllocate(p1) Memory::malloc(p1)
+#else
+	#define MemoryAllocate(p1) Memory::malloc(p1, THIS_PLACE_SHORT)
+#endif
+
+#define MemoryFree(p1) Memory::free(p1)
+#define MemorySize(p1) Memory::size(p1)
+
 namespace Memory {
 #ifdef MEMORY_DEBUG
 	namespace Watchdog
@@ -139,10 +148,10 @@ namespace Memory {
 	}
 
 	template<typename NonPointer>
-	inline void fill(NonPointer in, int fill)
+	inline void fill(NonPointer & in, int fill)
 	{
 		static_assert(!std::is_pointer<NonPointer>::value, "Nonpointer type is required");
-		::memset((void*)in, fill, sizeof(in));
+		::memset((void*)&in, fill, sizeof(in));
 	}
 
 	template<typename Pointer>

@@ -4,7 +4,7 @@
 	hidcon "execute.bat"
 	hidcon "cmd /c ping localhost > c:\ping.log"
 
-© 2010 Andrew Grechkin
+© 2013 Andrew Grechkin
 	mailto: andrew.grechkin@gmail.com
 	jabber: andrew.grechkin@gmail.com
 

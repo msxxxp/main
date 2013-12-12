@@ -1,3 +1,10 @@
+12 December 2013
+   released version 1.1.4 of hidcon
+
+     Change log:
+        -Add: Добавлена команда /detach которая позволит запускать приложение и сразу завершать работу hidcon
+              это может быть полезно при запуске из bat файла, но при этом нельзя будет получить exitcode запущеного приложения
+
 05 March 2010
    released version 1.0.3 of hidcon
 

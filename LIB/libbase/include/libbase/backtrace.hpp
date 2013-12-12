@@ -3,34 +3,21 @@
 
 #include <libbase/std.hpp>
 
-//#include <iosfwd>
 #include <vector>
 
-#include <dbghelp.h>
+namespace Backtrace {
 
-#ifndef ENABLE_LOGGER
-#define LogBacktrace()
-#else
-#define LogBacktrace() Base::Backtrace().Print()
-#endif
-
-namespace Base {
-
-	struct FrameInfo: private Base::Uncopyable
+	struct Frame: private Base::Uncopyable
 	{
-		~FrameInfo();
+		~Frame();
 
-		FrameInfo(size_t frame);
+		Frame(size_t frame);
 
-//		FrameInfo(const FrameInfo & right);
+		Frame(Frame && right);
 
-		FrameInfo(FrameInfo && right);
+		Frame & operator = (Frame && right);
 
-//		FrameInfo & operator = (const FrameInfo & right);
-
-		FrameInfo & operator = (FrameInfo && right);
-
-		void swap(FrameInfo & right);
+		void swap(Frame & right);
 
 		size_t frame() const {return m_frame;}
 
@@ -57,16 +44,14 @@ namespace Base {
 		mutable Data * m_data;
 	};
 
-	struct Backtrace: private std::vector<FrameInfo> {
-		~Backtrace();
+	struct Enum: private std::vector<Frame> {
+		Enum(PCWSTR path = nullptr, size_t depth = MAX_DEPTH);
 
-		Backtrace(PCWSTR path = nullptr, size_t depth = MAX_DEPTH);
-
-		using std::vector<FrameInfo>::begin;
-		using std::vector<FrameInfo>::end;
-		using std::vector<FrameInfo>::empty;
-		using std::vector<FrameInfo>::size;
-		using std::vector<FrameInfo>::operator[];
+		using std::vector<Frame>::begin;
+		using std::vector<Frame>::end;
+		using std::vector<Frame>::empty;
+		using std::vector<Frame>::size;
+		using std::vector<Frame>::operator[];
 
 		void Print() const;
 

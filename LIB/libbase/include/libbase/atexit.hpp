@@ -12,6 +12,7 @@ namespace Base {
 	int atexit(CrtFunction pf);
 
 	void cxa_pure_virtual();
+
 }
 
 #endif

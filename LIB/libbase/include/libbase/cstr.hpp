@@ -81,6 +81,8 @@ namespace Cstr {
 
 		static const char_type * find(const char_type * where, char_type what) {return ::strchr(where, what);}
 
+		static char_type * ncopy(char_type * dest, const char_type * src, size_t bufsize) {return ::strncpy(dest, src, bufsize);}
+
 		static char_type * copy(char_type * dest, const char_type * src) {return ::strcpy(dest, src);}
 
 		static char_type * cat(char_type * dest, const char_type * src) {return ::strcat(dest, src);}
@@ -151,6 +153,8 @@ namespace Cstr {
 		static const char_type * find(const char_type * where, const char_type * what) {return wcsstr(where, what);}
 
 		static const char_type * find(const char_type * where, char_type what) {return ::wcschr(where, what);}
+
+		static char_type * ncopy(char_type * dest, const char_type * src, size_t bufsize) {return ::wcsncpy(dest, src, bufsize);}
 
 		static char_type * copy(char_type * dest, const char_type * src) {return ::wcscpy(dest, src);}
 
@@ -265,7 +269,7 @@ namespace Cstr {
 		template<typename CharType>
 		CharType * to_lower(CharType * str)
 		{
-			return Cstr::char_traits<CharType>::to_lower(str, length(str));
+			return Cstr::char_traits<CharType>::to_lower(str, Cstr::char_traits<CharType>::length(str));
 		}
 	}
 
@@ -332,7 +336,7 @@ namespace Cstr {
 	template<typename CharType>
 	CharType * copy(CharType * dest, const CharType * src, size_t count)
 	{
-		return Cstr::char_traits<CharType>::copy(dest, src, count);
+		return Cstr::char_traits<CharType>::ncopy(dest, src, count);
 	}
 
 	template<typename CharType>

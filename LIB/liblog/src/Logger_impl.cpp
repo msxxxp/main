@@ -1,4 +1,5 @@
 #include <liblog/logger.hpp>
+#include <libbase/console.hpp>
 #include <libbase/cstr.hpp>
 #include <libbase/memory.hpp>
 #include "Logger_impl.hpp"

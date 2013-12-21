@@ -20,17 +20,17 @@ ssize_t Base::mstring::unit_test()
 	mstr3.push_back(L", ");
 	mstr3.push_back(L"world!");
 
-	LogNoise(L"size: %Iu, capa: %Iu\n", mstr3.size(), mstr3.capacity());
+	LogForce(L"size: %Iu, capa: %Iu\n", mstr3.size(), mstr3.capacity());
 	for (size_t i = 0; i < mstr3.size(); ++i)
-		LogNoise(L"'%s'\n", mstr3[i]);
+		LogForce(L"'%s'\n", mstr3[i]);
 
-	LogNoise(L"size: %Iu, capa: %Iu\n", mstr4.size(), mstr4.capacity());
+	LogForce(L"size: %Iu, capa: %Iu\n", mstr4.size(), mstr4.capacity());
 	for (size_t i = 0; i < mstr4.size(); ++i)
-		LogNoise(L"'%s'\n", mstr4[i]);
+		LogForce(L"'%s'\n", mstr4[i]);
 
-	LogNoise(L"size: %Iu, capa: %Iu\n", mstr5.size(), mstr5.capacity());
+	LogForce(L"size: %Iu, capa: %Iu\n", mstr5.size(), mstr5.capacity());
 	for (size_t i = 0; i < mstr5.size(); ++i)
-		LogNoise(L"'%s'\n", mstr5[i]);
+		LogForce(L"'%s'\n", mstr5[i]);
 
 	return 0;
 }

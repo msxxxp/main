@@ -42,6 +42,9 @@ namespace sarastd {
 		basic_string(size_type count, value_type in);
 		basic_string(const_pointer in, size_type count = npos);
 
+		basic_string(this_type && right);
+		this_type & operator =(this_type && right);
+
 		bool empty() const;
 
 		size_type capacity() const;
@@ -214,8 +217,6 @@ namespace sarastd {
 		}
 
 	private:
-		void destroy() const;
-
 		void deallocate() const;
 
 		size_type m_capa;
@@ -262,14 +263,9 @@ namespace sarastd {
 	}
 
 	template<typename CharType, typename Traits>
-	void basic_string<CharType, Traits>::string_impl::destroy() const
-	{
-		sarastd::pvt::_destroy(this);
-	}
-
-	template<typename CharType, typename Traits>
 	void basic_string<CharType, Traits>::string_impl::deallocate() const
 	{
+		sarastd::pvt::_destroy(this);
 		sarastd::pvt::_deallocate((char*)this);
 	}
 
@@ -305,6 +301,19 @@ namespace sarastd {
 		m_data(string_impl::allocate(get_new_capacity((in && count == npos) ? count = traits_type::length(in) : count)))
 	{
 		m_data->append(in, count);
+	}
+
+	template<typename CharType, typename Traits>
+	basic_string<CharType, Traits>::basic_string(this_type && right) :
+		m_data(string_impl::allocate(get_new_capacity(0)))
+	{
+		swap(right);
+	}
+
+	template<typename CharType, typename Traits>
+	basic_string<CharType, Traits> & basic_string<CharType, Traits>::operator =(this_type && right)
+	{
+		swap(right);
 	}
 
 	template<typename CharType, typename Traits>

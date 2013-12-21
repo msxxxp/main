@@ -1,5 +1,6 @@
 #include <liblog/logger.hpp>
 #include <libbase/std.hpp>
+#include <libbase/console.hpp>
 #include <libbase/cstr.hpp>
 #include <simstl/string>
 #include "Module_impl.hpp"
@@ -10,33 +11,33 @@ namespace Logger {
 	namespace {
 		const size_t default_buffer_size = 4 * 1024;
 
-		ustring format(PCWSTR fmt, va_list args)
+		ustring format_str(PCWSTR fmt, va_list args)
 		{
 			wchar_t buf[default_buffer_size];
 			Base::safe_vsnprintf(buf, Base::lengthof(buf), fmt, args);
 			return ustring(buf);
 		}
 
-		ustring format(PCWSTR fmt, ...)
+		ustring format_str(PCWSTR fmt, ...)
 		{
 			Base::Va_list args;
 			va_start(args, fmt);
-			return format(fmt, args);
+			return format_str(fmt, args);
 		}
 	}
 
 	const wchar_t * const LogLevelNames[(int)Level::Force + 1] = {
-		L"TRACE",
-		L"DEBUG",
-		L"INFO ",
-		L"REPRT",
-		L"ATTEN",
-		L"WARN ",
-		L"ERROR",
-		L"FATAL",
-		L"ALERT",
-		L"EMERG",
-		L"     ",
+		L"TR",
+		L"DB",
+		L"IN",
+		L"RP",
+		L"AT",
+		L"WA",
+		L"ER",
+		L"FA",
+		L"AL",
+		L"EM",
+		L"  ",
 	};
 
 	const size_t default_buffer_size = 4 * 1024;
@@ -173,10 +174,9 @@ namespace Logger {
 	void Module_impl::out(Level lvl, const wchar_t * format, ...) const
 	{
 		if (m_enabled && lvl >= m_lvl) {
-			va_list args;
+			Base::Va_list args;
 			va_start(args, format);
 			out_args(lvl, create_prefix(lvl), format, args);
-			va_end(args);
 		}
 	}
 
@@ -192,20 +192,20 @@ namespace Logger {
 			SYSTEMTIME time;
 			::GetLocalTime(&time);
 			if (m_prefix & Prefix::Date) {
-				prefix += format(L"%04u-%02u-%02u ", time.wYear, time.wMonth, time.wDay);
+				prefix += format_str(L"%04u-%02u-%02u ", time.wYear, time.wMonth, time.wDay);
 			}
 			if (m_prefix & Prefix::Time) {
-				prefix += format(L"%02u:%02u:%02u.%03u ", time.wHour, time.wMinute, time.wSecond, time.wMilliseconds);
+				prefix += format_str(L"%02u:%02u:%02u.%03u ", time.wHour, time.wMinute, time.wSecond, time.wMilliseconds);
 			}
 		}
 		if (m_prefix & Prefix::Level) {
-			prefix += format(L"%s ", LogLevelNames[(int)lvl]);
+			prefix += format_str(L"%s ", LogLevelNames[(int)lvl]);
 		}
 		if (m_prefix & Prefix::Module) {
-			prefix += format(L"{%8s} ", m_name.c_str());
+			prefix += format_str(L"{%8s} ", m_name.c_str());
 		}
 		if (m_prefix & Prefix::Thread) {
-			prefix += format(L"<%5u> ", ::GetCurrentThreadId());
+			prefix += format_str(L"<%5u> ", ::GetCurrentThreadId());
 		}
 		return prefix;
 	}
@@ -213,10 +213,10 @@ namespace Logger {
 	ustring & Module_impl::add_place(ustring & prefix, const char * file, int line, const char * func) const
 	{
 		if (m_prefix & Prefix::Place) {
-			prefix += format(L"%14.14S:%4d ", file, line);
+			prefix += format_str(L"%14.14S:%4d ", file, line);
 		}
 		if (m_prefix & Prefix::Function) {
-			prefix += format(L"[%S] ", func);
+			prefix += format_str(L"[%S] ", func);
 		}
 		return prefix;
 	}
@@ -224,7 +224,7 @@ namespace Logger {
 	void Module_impl::out_args(Level lvl, const ustring & prefix, const wchar_t * frmat, va_list args) const
 	{
 		ustring tmp(prefix);
-		tmp += format(frmat, args);
+		tmp += format_str(frmat, args);
 		auto scopeLock(lock_scope());
 		m_target->out(this, lvl, tmp.c_str(), tmp.size());
 	}

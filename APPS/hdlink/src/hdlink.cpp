@@ -22,7 +22,7 @@
 #include <liblog/logger.hpp>
 #include <libbase/cstr.hpp>
 #include <hdlink.hpp>
-#include <Statistics.hpp>
+#include <global.hpp>
 
 #include <memory>
 
@@ -79,8 +79,8 @@ struct ShowHelp: public Base::Command_p {
 
 	ssize_t execute()
 	{
-		LogInfo(L"Search duplicate files and make hardlinks\n");
-		LogInfo(L"© 2011 Andrew Grechkin, http://code.google.com/p/andrew-grechkin/\n");
+		LogForce(L"Search duplicate files and make hardlinks\n");
+		LogForce(L"© 2011 Andrew Grechkin, http://code.google.com/p/andrew-grechkin/\n");
 		{
 			ConsoleColor col(FOREGROUND_INTENSITY | FOREGROUND_RED | FOREGROUND_BLUE);
 			LogInfo(L"NOTE:\n\tUse this tool on your own risk!\n");
@@ -170,7 +170,7 @@ private:
 int main() try
 {
 	{
-		cryptProvider.reset(new CryptProvider);
+		Global::cryptProvider.reset(new CryptProvider);
 
 		CmdParser(::GetCommandLineW()).execute();
 	}

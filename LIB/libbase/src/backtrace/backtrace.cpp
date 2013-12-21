@@ -182,7 +182,7 @@ namespace Backtrace {
 		Memory::zero(modinfo);
 		modinfo.SizeOfStruct = sizeof(modinfo) - 8;
 		BOOL ret = SymGetModuleInfoW64(GetCurrentProcess(), frame, &modinfo);
-		LogErrorIf(ret == FALSE, L"%s\n", ErrAsStr().c_str());
+		LogErrorIf(ret == FALSE, L"%s\n", Base::ErrAsStr().c_str());
 		if (ret != FALSE) {
 			module = modinfo.ModuleName;
 			module_base = modinfo.BaseOfImage;
@@ -366,13 +366,13 @@ namespace Backtrace {
 	private:
 		~SymbolInit()
 		{
-			LogErrorIf(!SymCleanup(GetCurrentProcess()), L"%s\n", ErrAsStr().c_str());
+			LogErrorIf(!SymCleanup(GetCurrentProcess()), L"%s\n", Base::ErrAsStr().c_str());
 		}
 
 		SymbolInit(PCWSTR path)
 		{
 			SymSetOptions(SymGetOptions() | SYMOPT_FAIL_CRITICAL_ERRORS | SYMOPT_LOAD_LINES);
-			LogErrorIf(!SymInitializeW(GetCurrentProcess(), path, TRUE), L"%s\n", ErrAsStr().c_str());
+			LogErrorIf(!SymInitializeW(GetCurrentProcess(), path, TRUE), L"%s\n", Base::ErrAsStr().c_str());
 
 #if defined(__GNUC__)
 			bfd_init();

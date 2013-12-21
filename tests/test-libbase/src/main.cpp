@@ -1,4 +1,5 @@
 ﻿#include <libbase/std.hpp>
+#include <libbase/console.hpp>
 #include <libbase/string.hpp>
 #include <libbase/atexit.hpp>
 #include <libbase/wstr.hpp>

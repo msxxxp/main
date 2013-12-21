@@ -101,11 +101,11 @@ namespace Fsys {
 
 	HANDLE HandleWrite(PCWSTR path);
 
-	inline HANDLE HandleRead(const ustring &path) {
+	inline HANDLE HandleRead(const ustring & path) {
 		return HandleRead(path.c_str());
 	}
 
-	inline HANDLE HandleWrite(const ustring &path) {
+	inline HANDLE HandleWrite(const ustring & path) {
 		return HandleWrite(path.c_str());
 	}
 
@@ -184,7 +184,7 @@ namespace Fsys {
 
 		int64_t inode() const
 		{
-			return Base::make_uint64(nFileIndexHigh, nFileIndexLow) & 0x0000FFFFFFFFFFFFLL;
+			return Base::make_uint64(nFileIndexHigh, nFileIndexLow) & 0x0000FFFFFFFFFFFFULL;
 		}
 
 		bool is_dir() const
@@ -234,7 +234,7 @@ namespace Fsys {
 
 	public:
 		struct FindStat {
-			PCWSTR name() const
+			const wchar_t * name() const
 			{
 				return m_stat.cFileName;
 			}

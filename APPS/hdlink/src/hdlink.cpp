@@ -80,20 +80,12 @@ struct ShowHelp: public Base::Command_p {
 	ssize_t execute()
 	{
 		LogForce(L"Search duplicate files and make hardlinks\n");
-		LogForce(L"© 2011 Andrew Grechkin, http://code.google.com/p/andrew-grechkin/\n");
-		{
-			ConsoleColor col(FOREGROUND_INTENSITY | FOREGROUND_RED | FOREGROUND_BLUE);
-			LogInfo(L"NOTE:\n\tUse this tool on your own risk!\n");
-		}
-		{
-			ConsoleColor col(FOREGROUND_INTENSITY | FOREGROUND_RED | FOREGROUND_GREEN);
-			LogInfo(L"Usage:\n");
-		}
-		LogInfo(L"\thdlink [options] [path] [path] [...]\n");
-		{
-			ConsoleColor col(FOREGROUND_INTENSITY | FOREGROUND_RED | FOREGROUND_GREEN);
-			LogInfo(L"Options:\n");
-		}
+		LogForce(L"© 2013 Andrew Grechkin, http://code.google.com/p/andrew-grechkin/\n");
+		LogError(L"NOTE:\n");
+		LogError(L"\tUse this tool on your own risk!\n");
+		LogWarn(L"Usage:\n");
+		LogInfo(L"\t%s [options] [path] [path] [...]\n", m_prg);
+		LogWarn(L"Options:\n");
 		LogInfo(L"\t/?\tShows this help screen\n");
 		LogInfo(L"\t/l\tHardlink files, if not specified, tool will just search duplicates\n");
 		LogInfo(L"\t/a\tFile attributes must match for linking\n");
@@ -106,51 +98,94 @@ struct ShowHelp: public Base::Command_p {
 		LogInfo(L"\t/q\tQuiet mode\n");
 		LogInfo(L"\t/v\tVerbose mode\n");
 		LogInfo(L"\t/d\tDebug mode\n");
-		return true;
+
+		Global::showStatistics = false;
+		return 0;
 	}
 
 private:
 	const wchar_t * m_prg;
 };
 
+
+struct ParseSinglePath: public Base::Command_p {
+	ParseSinglePath(const wchar_t * path) :
+		m_path(path)
+	{
+	}
+
+	ssize_t execute()
+	{
+		wchar_t extendedPath[Base::MAX_PATH_LEN];
+		Copy(extendedPath, PATH_PREFIX_NT, extendedPath.size());
+		Cat(extendedPath, FullPath(path).c_str(), extendedPath.size());
+		::GetLongPathNameW(extendedPath, extendedPath, extendedPath.size());
+		PWSTR tmp = (PWSTR)find_last_not_of((PCWSTR)extendedPath, L"\\ ");
+		if (tmp && (tmp - extendedPath) < (ssize_t)extendedPath.size()) {
+			tmp[1] = STR_END;		//erase tailing path separators
+		}
+
+		Path* Result = nullptr;
+		if (Empty(extendedPath) || !is_exists(extendedPath)) {
+			logError(L"Path \"%s\" is not existing or accessible!\n", extendedPath.data());
+		} else {
+			{
+				ConsoleColor col(FOREGROUND_INTENSITY | FOREGROUND_RED | FOREGROUND_GREEN);
+				logInfo(L"Adding directory: ");
+			}
+			logInfo(L"\"%s\"\n", path);
+			Result = new Path(shared_ptr<Path>(), AutoUTF(extendedPath));
+		}
+		return Result;
+		return 0;
+	}
+
+private:
+	const wchar_t * m_path;
+};
+
+Path* parsePath(PCWSTR path)
+{
+}
+
 struct CmdParser: public Base::Command_p {
-	CmdParser(wchar_t * cmdLine) :
+	CmdParser(const wchar_t * cmdLine) :
 		argv(::CommandLineToArgvW(cmdLine, &argc), ::LocalFree),
-		action(new ShowHelp(argv[0]))
+		action(new ShowHelp(argv.get()[0]))
 	{
 		for (int i = 1; i < argc; ++i) {
 			if (Cstr::compare(argv.get()[i], L"/?") == 0) {
-				action.reset(new ShowHelp(argv[0]));
+				action.reset(new ShowHelp(argv.get()[0]));
 				break;
 			}
 
 			if (Cstr::compare(argv.get()[i], L"/i") == 0) {
-				action.reset(new ArcInfo(arc_lib));
+//				action.reset(new ArcInfo(arc_lib));
 				break;
 			}
 
 			if (Cstr::compare(argv.get()[i], L"/l") == 0 && i < (argc - 1)) {
-				action.reset(new ArcList(arc_lib, argv[i + 1]));
+//				action.reset(new ArcList(arc_lib, argv[i + 1]));
 				break;
 			}
 
 			if (Cstr::compare(argv.get()[i], L"/t") == 0 && i < (argc - 1)) {
-				action.reset(new ArcTest(arc_lib, argv[i + 1]));
+//				action.reset(new ArcTest(arc_lib, argv[i + 1]));
 				break;
 			}
 
 			if (Cstr::compare(argv.get()[i], L"/e") == 0 && i < (argc - 2)) {
-				action.reset(new ArcExtract(arc_lib, argv[i + 1], argv[i + 2]));
+//				action.reset(new ArcExtract(arc_lib, argv[i + 1], argv[i + 2]));
 				continue;
 			}
 
 			if (Cstr::compare(argv.get()[i], L"/a") == 0 && i < (argc - 3)) {
-				action.reset(new ArcCompress(arc_lib, argv[i + 1], argv[i + 2], argv[i + 3]));
+//				action.reset(new ArcCompress(arc_lib, argv[i + 1], argv[i + 2], argv[i + 3]));
 				continue;
 			}
 
 			if (Cstr::compare(argv.get()[i], L"/g") == 0 && i < (argc - 3)) {
-				action.reset(new ArcCompressPiped(arc_lib, argv[i + 1], argv[i + 3], argv[i + 2]));
+//				action.reset(new ArcCompressPiped(arc_lib, argv[i + 1], argv[i + 3], argv[i + 2]));
 				continue;
 			}
 		}
@@ -162,15 +197,27 @@ struct CmdParser: public Base::Command_p {
 	}
 
 private:
-	std::unique_ptr<wchar_t*> argv;
+	std::unique_ptr<wchar_t*, HLOCAL (*)(HLOCAL)> argv;
 	std::shared_ptr<Command_p> action;
 	int argc;
 };
 
+namespace {
+	void setup_logger()
+	{
+		using namespace Logger;
+		Default::set_level(Level::Trace);
+		Default::set_prefix(Prefix::Medium | Prefix::Place);
+		Default::set_target(get_TargetToConsole());
+	}
+}
+
 int main() try
 {
+	setup_logger();
+
 	{
-		Global::cryptProvider.reset(new CryptProvider);
+		Global::cryptProvider.reset(new CryptProvider(nullptr, PROV_RSA_AES));
 
 		CmdParser(::GetCommandLineW()).execute();
 	}

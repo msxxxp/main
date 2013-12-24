@@ -227,12 +227,6 @@ public:
 	{
 		bool ret = false;
 
-		if (argc == 1) {
-			logInfo(L"%s\n", argv[0]);
-			PrintHelp();
-			return ret;
-		}
-
 		for (int i = 1; i < argc; ++i) {
 			// first check if command line option
 			if ((argv[i][0] == L'-' || argv[i][0] == L'/')) {

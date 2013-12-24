@@ -2,16 +2,16 @@
 <?fileVersion 4.0.0?><cproject storage_type_id="org.eclipse.cdt.core.XmlProjectDescriptionStorage">
 	<storageModule moduleId="org.eclipse.cdt.core.settings">
 		<cconfiguration id="cdt.managedbuild.config.gnu.mingw.exe.release.1448797081">
-			<storageModule buildSystemId="org.eclipse.cdt.managedbuilder.core.configurationDataProvider" id="cdt.managedbuild.config.gnu.mingw.exe.release.1448797081" moduleId="org.eclipse.cdt.core.settings" name="x64-Release">
+			<storageModule buildSystemId="org.eclipse.cdt.managedbuilder.core.configurationDataProvider" id="cdt.managedbuild.config.gnu.mingw.exe.release.1448797081" moduleId="org.eclipse.cdt.core.settings" name="x64-Debug">
 				<externalSettings/>
 				<extensions>
-					<extension id="org.eclipse.cdt.core.PE" point="org.eclipse.cdt.core.BinaryParser"/>
 					<extension id="org.eclipse.cdt.core.GCCErrorParser" point="org.eclipse.cdt.core.ErrorParser"/>
 					<extension id="org.eclipse.cdt.core.GLDErrorParser" point="org.eclipse.cdt.core.ErrorParser"/>
+					<extension id="org.eclipse.cdt.core.PE" point="org.eclipse.cdt.core.BinaryParser"/>
 				</extensions>
 			</storageModule>
 			<storageModule moduleId="cdtBuildSystem" version="4.0.0">
-				<configuration artifactName="${ProjName}" buildArtefactType="org.eclipse.cdt.build.core.buildArtefactType.exe" buildProperties="org.eclipse.cdt.build.core.buildType=org.eclipse.cdt.build.core.buildType.release,org.eclipse.cdt.build.core.buildArtefactType=org.eclipse.cdt.build.core.buildArtefactType.exe" cleanCommand="rm -rf" description="" id="cdt.managedbuild.config.gnu.mingw.exe.release.1448797081" name="x64-Release" parent="cdt.managedbuild.config.gnu.mingw.exe.release">
+				<configuration artifactName="${ProjName}" buildArtefactType="org.eclipse.cdt.build.core.buildArtefactType.exe" buildProperties="org.eclipse.cdt.build.core.buildType=org.eclipse.cdt.build.core.buildType.release,org.eclipse.cdt.build.core.buildArtefactType=org.eclipse.cdt.build.core.buildArtefactType.exe" cleanCommand="rm -rf" description="" id="cdt.managedbuild.config.gnu.mingw.exe.release.1448797081" name="x64-Debug" parent="cdt.managedbuild.config.gnu.mingw.exe.release">
 					<folderInfo id="cdt.managedbuild.config.gnu.mingw.exe.release.1448797081." name="/" resourcePath="">
 						<toolChain id="cdt.managedbuild.toolchain.gnu.mingw.exe.release.1898608946" name="MinGW GCC" superClass="cdt.managedbuild.toolchain.gnu.mingw.exe.release" unusedChildren="cdt.managedbuild.tool.gnu.c.compiler.mingw.exe.release;cdt.managedbuild.tool.gnu.assembler.mingw.exe.release">
 							<targetPlatform id="cdt.managedbuild.target.gnu.platform.mingw.exe.release.1439357113" name="Debug Platform" superClass="cdt.managedbuild.target.gnu.platform.mingw.exe.release"/>
@@ -19,21 +19,41 @@
 							<tool id="cdt.managedbuild.tool.gnu.archiver.mingw.base.801389201" name="GCC Archiver" superClass="cdt.managedbuild.tool.gnu.archiver.mingw.base"/>
 							<tool id="cdt.managedbuild.tool.gnu.c.linker.mingw.exe.release.1723398751" name="MinGW C Linker" superClass="cdt.managedbuild.tool.gnu.c.linker.mingw.exe.release"/>
 							<tool id="cdt.managedbuild.tool.gnu.cpp.linker.mingw.exe.release.2088352240" name="MinGW C++ Linker" superClass="cdt.managedbuild.tool.gnu.cpp.linker.mingw.exe.release">
-								<option id="gnu.cpp.link.option.strip.965540208" name="Omit all symbol information (-s)" superClass="gnu.cpp.link.option.strip" value="true" valueType="boolean"/>
+								<option id="gnu.cpp.link.option.strip.965540208" name="Omit all symbol information (-s)" superClass="gnu.cpp.link.option.strip" value="false" valueType="boolean"/>
+								<option id="gnu.cpp.link.option.paths.1436458739" name="Library search path (-L)" superClass="gnu.cpp.link.option.paths" valueType="libPaths">
+									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/liblog/Release}&quot;"/>
+									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/liblog/Release-x64}&quot;"/>
+									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/libext/Debug-x64}&quot;"/>
+									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/libbase/Debug-x64}&quot;"/>
+									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/libbase/x64-Debug}&quot;"/>
+									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/liblog/x64-Release}&quot;"/>
+									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/libext/x64-Debug}&quot;"/>
+								</option>
+								<option id="gnu.cpp.link.option.flags.1705469309" name="Linker flags" superClass="gnu.cpp.link.option.flags" value="-m64 -Wl,-Map=hdlink.exe.map" valueType="string"/>
+								<option id="gnu.cpp.link.option.libs.1339011293" superClass="gnu.cpp.link.option.libs" valueType="libs">
+									<listOptionValue builtIn="false" srcPrefixMapping="" srcRootPath="" value="liblog"/>
+									<listOptionValue builtIn="false" srcPrefixMapping="" srcRootPath="" value="libext"/>
+									<listOptionValue builtIn="false" srcPrefixMapping="" srcRootPath="" value="libbase"/>
+								</option>
 								<inputType id="cdt.managedbuild.tool.gnu.cpp.linker.input.1184669224" superClass="cdt.managedbuild.tool.gnu.cpp.linker.input">
 									<additionalInput kind="additionalinputdependency" paths="$(USER_OBJS)"/>
 									<additionalInput kind="additionalinput" paths="$(LIBS)"/>
 								</inputType>
 							</tool>
 							<tool id="cdt.managedbuild.tool.gnu.cpp.compiler.mingw.exe.release.1968924424" name="GCC C++ Compiler" superClass="cdt.managedbuild.tool.gnu.cpp.compiler.mingw.exe.release">
-								<option id="gnu.cpp.compiler.mingw.exe.release.option.optimization.level.263812921" name="Optimization Level" superClass="gnu.cpp.compiler.mingw.exe.release.option.optimization.level" value="gnu.cpp.compiler.optimization.level.most" valueType="enumerated"/>
-								<option id="gnu.cpp.compiler.mingw.exe.release.option.debugging.level.1137744735" name="Debug Level" superClass="gnu.cpp.compiler.mingw.exe.release.option.debugging.level" value="gnu.cpp.compiler.debugging.level.none" valueType="enumerated"/>
+								<option id="gnu.cpp.compiler.mingw.exe.release.option.optimization.level.263812921" name="Optimization Level" superClass="gnu.cpp.compiler.mingw.exe.release.option.optimization.level" value="gnu.cpp.compiler.optimization.level.none" valueType="enumerated"/>
+								<option id="gnu.cpp.compiler.mingw.exe.release.option.debugging.level.1137744735" name="Debug Level" superClass="gnu.cpp.compiler.mingw.exe.release.option.debugging.level" value="gnu.cpp.compiler.debugging.level.default" valueType="enumerated"/>
 								<option id="gnu.cpp.compiler.option.preprocessor.def.1492587366" name="Defined symbols (-D)" superClass="gnu.cpp.compiler.option.preprocessor.def" valueType="definedSymbols">
 									<listOptionValue builtIn="false" value="UNICODE"/>
 									<listOptionValue builtIn="false" value="_UNICODE"/>
-									<listOptionValue builtIn="false" value="NDEBUG"/>
+									<listOptionValue builtIn="false" value="DEBUG"/>
+									<listOptionValue builtIn="false" value="_DEBUG"/>
+									<listOptionValue builtIn="false" value="ENABLE_LOGGER"/>
 								</option>
 								<option id="gnu.cpp.compiler.option.include.paths.274971185" name="Include paths (-I)" superClass="gnu.cpp.compiler.option.include.paths" valueType="includePath">
+									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/liblog}&quot;"/>
+									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/libext}&quot;"/>
+									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/libbase}&quot;"/>
 									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/libext/include}&quot;"/>
 									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/liblog/include}&quot;"/>
 									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/libbase/include}&quot;"/>
@@ -41,17 +61,42 @@
 								</option>
 								<option id="gnu.cpp.compiler.option.warnings.extrawarn.1319435889" name="Extra warnings (-Wextra)" superClass="gnu.cpp.compiler.option.warnings.extrawarn" value="true" valueType="boolean"/>
 								<option id="gnu.cpp.compiler.option.warnings.toerrors.1884883882" name="Warnings as errors (-Werror)" superClass="gnu.cpp.compiler.option.warnings.toerrors" value="true" valueType="boolean"/>
+								<option id="gnu.cpp.compiler.option.other.other.175248449" name="Other flags" superClass="gnu.cpp.compiler.option.other.other" value="-c -fmessage-length=0 -fno-threadsafe-statics -m64 -std=c++11" valueType="string"/>
 								<inputType id="cdt.managedbuild.tool.gnu.cpp.compiler.input.960753501" superClass="cdt.managedbuild.tool.gnu.cpp.compiler.input"/>
 							</tool>
 						</toolChain>
 					</folderInfo>
 					<sourceEntries>
 						<entry flags="VALUE_WORKSPACE_PATH|RESOLVED" kind="sourcePath" name="include"/>
-						<entry flags="VALUE_WORKSPACE_PATH|RESOLVED" kind="sourcePath" name="src"/>
+						<entry excluding="main.cpp" flags="VALUE_WORKSPACE_PATH|RESOLVED" kind="sourcePath" name="src"/>
 					</sourceEntries>
 				</configuration>
 			</storageModule>
-			<storageModule moduleId="org.eclipse.cdt.core.externalSettings"/>
+			<storageModule moduleId="org.eclipse.cdt.core.externalSettings">
+				<externalSettings containerId="libbase;cdt.managedbuild.config.gnu.mingw.lib.debug.1580188066" factoryId="org.eclipse.cdt.core.cfg.export.settings.sipplier">
+					<externalSetting>
+						<entry flags="VALUE_WORKSPACE_PATH" kind="includePath" name="/libbase"/>
+						<entry flags="VALUE_WORKSPACE_PATH" kind="libraryPath" name="/libbase/Debug-x64"/>
+						<entry flags="VALUE_WORKSPACE_PATH" kind="libraryPath" name="/libbase/x64-Debug"/>
+						<entry flags="RESOLVED" kind="libraryFile" name="libbase" srcPrefixMapping="" srcRootPath=""/>
+					</externalSetting>
+				</externalSettings>
+				<externalSettings containerId="libext;cdt.managedbuild.config.gnu.mingw.lib.debug.818398749" factoryId="org.eclipse.cdt.core.cfg.export.settings.sipplier">
+					<externalSetting>
+						<entry flags="VALUE_WORKSPACE_PATH" kind="includePath" name="/libext"/>
+						<entry flags="VALUE_WORKSPACE_PATH" kind="libraryPath" name="/libext/Debug-x64"/>
+						<entry flags="RESOLVED" kind="libraryFile" name="libext" srcPrefixMapping="" srcRootPath=""/>
+					</externalSetting>
+				</externalSettings>
+				<externalSettings containerId="liblog;cdt.managedbuild.config.gnu.mingw.lib.release.554916237" factoryId="org.eclipse.cdt.core.cfg.export.settings.sipplier">
+					<externalSetting>
+						<entry flags="VALUE_WORKSPACE_PATH" kind="includePath" name="/liblog"/>
+						<entry flags="VALUE_WORKSPACE_PATH" kind="libraryPath" name="/liblog/Release"/>
+						<entry flags="VALUE_WORKSPACE_PATH" kind="libraryPath" name="/liblog/Release-x64"/>
+						<entry flags="RESOLVED" kind="libraryFile" name="liblog" srcPrefixMapping="" srcRootPath=""/>
+					</externalSetting>
+				</externalSettings>
+			</storageModule>
 		</cconfiguration>
 	</storageModule>
 	<storageModule moduleId="cdtBuildSystem" version="4.0.0">
@@ -78,6 +123,9 @@
 			<resource resourceType="PROJECT" workspacePath="/hdlink"/>
 		</configuration>
 		<configuration configurationName="x64-Release">
+			<resource resourceType="PROJECT" workspacePath="/hdlink"/>
+		</configuration>
+		<configuration configurationName="x64-Debug">
 			<resource resourceType="PROJECT" workspacePath="/hdlink"/>
 		</configuration>
 		<configuration configurationName="Debug">

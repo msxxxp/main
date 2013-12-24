@@ -9,7 +9,7 @@ CryptHasher::~CryptHasher()
 }
 
 CryptHasher::CryptHasher(const CryptProvider & prov, ALG_ID alg) :
-	m_hnd(nullptr)
+	m_hnd()
 {
 	CheckApi(::CryptCreateHash(prov, alg, 0, 0, &m_hnd));
 }
@@ -19,11 +19,11 @@ void CryptHasher::process(const PBYTE buf, size_t size)
 	CheckApi(::CryptHashData(m_hnd, buf, size, 0));
 }
 
-void CryptHasher::process(const wchar_t * path, uint64_t size)
+void CryptHasher::process(const wchar_t * /*path*/, uint64_t /*size*/)
 {
-	FileMap file(path, size);
-	while (file.Next())
-		Hash((const PBYTE)file.data(), file.size());
+//	FileMap file(path, size);
+//	while (file.Next())
+//		Hash((const PBYTE)file.data(), file.size());
 }
 
 size_t CryptHasher::get_size() const
@@ -40,7 +40,7 @@ ALG_ID CryptHasher::get_algorithm() const
 	return ret;
 }
 
-void CryptHasher::get_hash(PBYTE buf, DWORD size) const
+void CryptHasher::get_raw_hash(PBYTE buf, DWORD size) const
 {
 	CheckApi(::CryptGetHashParam(m_hnd, HP_HASHVAL, buf, &size, 0));
 }

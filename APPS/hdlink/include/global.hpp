@@ -9,6 +9,7 @@ namespace Global {
 
 	extern std::unique_ptr<CryptProvider> cryptProvider;
 	extern size_t minFileSize; // Minimum file size so that hard linking will be checked...
+	extern size_t firstBlockHash;
 	extern bool showStatistics;
 	extern bool isRecursive;
 	extern bool doHardlink;
@@ -81,10 +82,6 @@ struct Statistics {
 	uint64_t duplicateFileHardLinkerObjDestroyed;
 };
 
-Statistics & statistics()
-{
-	static Statistics instance;
-	return instance;
-}
+Statistics & statistics();
 
 #endif /* HDLINK_GLOBAL_HPP_ */

@@ -6,7 +6,7 @@
 struct Path: public FsNode {
 	~Path();
 
-	Path(parent_type parent, const ustring & name);
+	Path(const ustring & name, parent_type parent = parent_type(nullptr));
 };
 
 #endif /* HDLINK_PATH_HPP_ */

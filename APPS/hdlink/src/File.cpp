@@ -1,13 +1,13 @@
 #include <File.hpp>
-#include <statistics.hpp>
+#include <global.hpp>
 
 File::~File()
 {
 	++statistics().fileObjDestroyed;
 }
 
-File::File(parent_type parent, const WIN32_FIND_DATAW & info) :
-	FsNode(parent, info.cFileName),
+File::File(const WIN32_FIND_DATAW & info, parent_type parent) :
+	FsNode(info.cFileName, parent),
 	m_size(Base::make_uint64(info.nFileSizeHigh, info.nFileSizeLow)),
 	m_time(Base::make_uint64(info.ftLastWriteTime.dwHighDateTime, info.ftLastWriteTime.dwLowDateTime)),
 	m_attr(info.dwFileAttributes)

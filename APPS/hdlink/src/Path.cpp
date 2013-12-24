@@ -1,13 +1,13 @@
 #include <Path.hpp>
-#include <statistics.hpp>
+#include <global.hpp>
 
 Path::~Path()
 {
 	++statistics().pathObjDestroyed;
 }
 
-Path::Path(parent_type parent, const ustring & name) :
-	FsNode(parent, name)
+Path::Path(const ustring & name, parent_type parent) :
+	FsNode(name, parent)
 {
 	++statistics().pathObjCreated;
 }

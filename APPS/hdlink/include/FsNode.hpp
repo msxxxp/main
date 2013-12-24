@@ -12,7 +12,11 @@ typedef std::shared_ptr<FsNode> parent_type;
 struct FsNode {
 	virtual ~FsNode() = default;
 
-	FsNode(parent_type parent, const ustring & name);
+	FsNode(const ustring & name, parent_type parent):
+		m_name(name),
+		m_parent(parent)
+	{
+	}
 
 	bool path_equals(FsNode * other) const;
 
@@ -21,8 +25,8 @@ struct FsNode {
 	ustring get_full_path() const;
 
 protected:
-	parent_type m_parent;
 	ustring m_name;
+	parent_type m_parent;
 };
 
 #endif /* HDLINK_FSNODE_HPP_ */

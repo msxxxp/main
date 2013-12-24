@@ -10,7 +10,7 @@ CryptProvider::~CryptProvider()
 }
 
 CryptProvider::CryptProvider(PCWSTR prov, DWORD type) :
-	m_hnd(nullptr)
+	m_hnd()
 {
 	::CryptAcquireContextW(&m_hnd, L"MY", prov, type, 0) || ::CryptAcquireContextW(&m_hnd, L"MY", prov, type, CRYPT_NEWKEYSET);
 	LogErrorIf(!m_hnd, L"Unable to initialize Crypto Provider\n");

@@ -3,6 +3,9 @@
 	<name>hdlink</name>
 	<comment></comment>
 	<projects>
+		<project>libbase</project>
+		<project>libext</project>
+		<project>liblog</project>
 	</projects>
 	<buildSpec>
 		<buildCommand>

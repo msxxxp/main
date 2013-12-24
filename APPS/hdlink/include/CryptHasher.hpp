@@ -22,7 +22,7 @@ struct CryptHasher {
 
 	ALG_ID get_algorithm() const;
 
-	void get_hash(PBYTE buf, DWORD size) const;
+	void get_raw_hash(PBYTE buf, DWORD size) const;
 
 private:
 	HCRYPTHASH m_hnd;

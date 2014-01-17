@@ -39,8 +39,9 @@
 									<listOptionValue builtIn="false" value="ENABLE_LOGGER"/>
 								</option>
 								<option id="gnu.cpp.compiler.option.include.paths.2091167897" name="Include paths (-I)" superClass="gnu.cpp.compiler.option.include.paths" valueType="includePath">
-									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/${ProjName}/include}&quot;"/>
+									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/libstl/include}&quot;"/>
 									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/libbase/include}&quot;"/>
+									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/${ProjName}/include}&quot;"/>
 								</option>
 								<option id="gnu.cpp.compiler.option.warnings.pedantic.351751174" name="Pedantic (-pedantic)" superClass="gnu.cpp.compiler.option.warnings.pedantic" value="false" valueType="boolean"/>
 								<option id="gnu.cpp.compiler.option.warnings.pedantic.error.1580390309" name="Pedantic warnings as errors (-pedantic-errors)" superClass="gnu.cpp.compiler.option.warnings.pedantic.error" value="false" valueType="boolean"/>
@@ -95,8 +96,9 @@
 									<listOptionValue builtIn="false" value="ENABLE_LOGGER"/>
 								</option>
 								<option id="gnu.cpp.compiler.option.include.paths.815869944" name="Include paths (-I)" superClass="gnu.cpp.compiler.option.include.paths" valueType="includePath">
-									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/${ProjName}/include}&quot;"/>
+									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/libstl/include}&quot;"/>
 									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/libbase/include}&quot;"/>
+									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/${ProjName}/include}&quot;"/>
 								</option>
 								<option id="gnu.cpp.compiler.option.warnings.pedantic.1220914145" name="Pedantic (-pedantic)" superClass="gnu.cpp.compiler.option.warnings.pedantic" value="false" valueType="boolean"/>
 								<option id="gnu.cpp.compiler.option.warnings.pedantic.error.1913152246" name="Pedantic warnings as errors (-pedantic-errors)" superClass="gnu.cpp.compiler.option.warnings.pedantic.error" value="false" valueType="boolean"/>
@@ -152,8 +154,9 @@
 									<listOptionValue builtIn="false" value="STUB_LOGGER"/>
 								</option>
 								<option id="gnu.cpp.compiler.option.include.paths.698894894" name="Include paths (-I)" superClass="gnu.cpp.compiler.option.include.paths" valueType="includePath">
-									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/${ProjName}/include}&quot;"/>
+									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/libstl/include}&quot;"/>
 									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/libbase/include}&quot;"/>
+									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/${ProjName}/include}&quot;"/>
 								</option>
 								<option id="gnu.cpp.compiler.option.warnings.pedantic.245594942" name="Pedantic (-pedantic)" superClass="gnu.cpp.compiler.option.warnings.pedantic" value="false" valueType="boolean"/>
 								<option id="gnu.cpp.compiler.option.warnings.pedantic.error.1280388726" name="Pedantic warnings as errors (-pedantic-errors)" superClass="gnu.cpp.compiler.option.warnings.pedantic.error" value="false" valueType="boolean"/>
@@ -209,8 +212,9 @@
 									<listOptionValue builtIn="false" value="STUB_LOGGER"/>
 								</option>
 								<option id="gnu.cpp.compiler.option.include.paths.1827392402" name="Include paths (-I)" superClass="gnu.cpp.compiler.option.include.paths" valueType="includePath">
-									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/${ProjName}/include}&quot;"/>
+									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/libstl/include}&quot;"/>
 									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/libbase/include}&quot;"/>
+									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/${ProjName}/include}&quot;"/>
 								</option>
 								<option id="gnu.cpp.compiler.option.warnings.pedantic.987402351" name="Pedantic (-pedantic)" superClass="gnu.cpp.compiler.option.warnings.pedantic" value="false" valueType="boolean"/>
 								<option id="gnu.cpp.compiler.option.warnings.pedantic.error.1566528173" name="Pedantic warnings as errors (-pedantic-errors)" superClass="gnu.cpp.compiler.option.warnings.pedantic.error" value="false" valueType="boolean"/>
@@ -236,16 +240,19 @@
 		<configuration configurationName="Debug-x32">
 			<resource resourceType="PROJECT" workspacePath="/liblog"/>
 		</configuration>
+		<configuration configurationName="x32-Release"/>
+		<configuration configurationName="x64-Release-stub"/>
+		<configuration configurationName="x64-Release"/>
 		<configuration configurationName="Release-x32">
 			<resource resourceType="PROJECT" workspacePath="/liblog"/>
 		</configuration>
 		<configuration configurationName="Debug-x64">
 			<resource resourceType="PROJECT" workspacePath="/liblog"/>
 		</configuration>
-		<configuration configurationName="x64">
+		<configuration configurationName="Release-x64">
 			<resource resourceType="PROJECT" workspacePath="/liblog"/>
 		</configuration>
-		<configuration configurationName="Release-x64">
+		<configuration configurationName="x64">
 			<resource resourceType="PROJECT" workspacePath="/liblog"/>
 		</configuration>
 		<configuration configurationName="Release-x32-NoStr">
@@ -254,6 +261,7 @@
 		<configuration configurationName="Release-x64-NoStr">
 			<resource resourceType="PROJECT" workspacePath="/liblog"/>
 		</configuration>
+		<configuration configurationName="x32-Release-stub"/>
 	</storageModule>
 	<storageModule moduleId="org.eclipse.cdt.internal.ui.text.commentOwnerProjectMappings"/>
 	<storageModule moduleId="org.eclipse.cdt.make.core.buildtargets"/>

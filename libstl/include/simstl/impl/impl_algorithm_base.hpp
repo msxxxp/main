@@ -30,10 +30,10 @@ namespace simstd {
 #endif
 	}
 
-#ifdef min
-#undef min
-#undef max
-#endif
+//#ifdef min
+//#undef min
+//#undef max
+//#endif
 
 	template<typename T, typename Compare>
 	const T& max(const T& a, const T& b, Compare comp)
@@ -125,7 +125,7 @@ namespace simstd {
 
 	template<typename InputIt, typename OutputIt>
 	OutputIt move(InputIt first, InputIt last, OutputIt d_first)
-	{// copy behavior
+	{    // copy behavior
 		while (first != last) {
 			*d_first = *first;
 			++first;

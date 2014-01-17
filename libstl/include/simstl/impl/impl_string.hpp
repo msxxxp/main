@@ -28,8 +28,8 @@ namespace simstd {
 		typedef value_type * pointer;
 		typedef const value_type * const_pointer;
 
-		typedef simstd::pvt::_normal_iterator<pointer> iterator;
-		typedef simstd::pvt::_normal_iterator<const_pointer> const_iterator;
+		typedef simstd::pvt::normal_iterator<pointer> iterator;
+		typedef simstd::pvt::normal_iterator<const_pointer> const_iterator;
 		typedef simstd::reverse_iterator<iterator> reverse_iterator;
 		typedef simstd::reverse_iterator<const_iterator> const_reverse_iterator;
 

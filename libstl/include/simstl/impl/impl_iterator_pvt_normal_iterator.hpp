@@ -9,10 +9,10 @@ namespace simstd
 {
 	namespace pvt {
 		template<typename Pointer>
-		class _normal_iterator
+		class normal_iterator
 		{
 			typedef Pointer                                 iterator_type;
-			typedef _normal_iterator<Pointer>               this_type;
+			typedef normal_iterator<Pointer>                this_type;
 			typedef iterator_traits<Pointer>                traits_type;
 
 		public:
@@ -22,15 +22,15 @@ namespace simstd
 			typedef typename traits_type::pointer           pointer;
 			typedef typename traits_type::reference         reference;
 
-			_normal_iterator() : current() {}
-			explicit _normal_iterator(iterator_type ptr) : current(ptr) {}
-			_normal_iterator(const this_type & other) : current(other.current) {}
+			normal_iterator() : current() {}
+			explicit normal_iterator(iterator_type ptr) : current(ptr) {}
+			normal_iterator(const this_type & other) : current(other.current) {}
 
 			template <typename O>
-			_normal_iterator(const _normal_iterator<O>& other) : current(other.base()) {}
+			normal_iterator(const normal_iterator<O>& other) : current(other.base()) {}
 
 			template <typename O>
-			_normal_iterator<iterator_type>& operator =(const _normal_iterator<O> & other) {current = other.base(); return *this;}
+			normal_iterator<iterator_type>& operator =(const normal_iterator<O> & other) {current = other.base(); return *this;}
 
 			iterator_type base() const     {return current;}
 
@@ -56,50 +56,50 @@ namespace simstd
 		};
 
 		template<typename Type1, typename Type2>
-		bool operator ==(const _normal_iterator<Type1>& lhs, const _normal_iterator<Type2>& rhs)
+		bool operator ==(const normal_iterator<Type1>& lhs, const normal_iterator<Type2>& rhs)
 		{
 			return lhs.base() == rhs.base();
 		}
 
 		template<typename Type1, typename Type2>
-		bool operator < (const _normal_iterator<Type1>& lhs, const _normal_iterator<Type2>& rhs)
+		bool operator < (const normal_iterator<Type1>& lhs, const normal_iterator<Type2>& rhs)
 		{
 			return lhs.base() < rhs.base();
 		}
 
 		template<typename Type1, typename Type2>
-		bool operator !=(const _normal_iterator<Type1>& lhs, const _normal_iterator<Type2>& rhs)
+		bool operator !=(const normal_iterator<Type1>& lhs, const normal_iterator<Type2>& rhs)
 		{
 			return simstd::rel_ops::operator !=(lhs, rhs);
 		}
 
 		template<typename Type1, typename Type2>
-		bool operator <= (const _normal_iterator<Type1>& lhs, const _normal_iterator<Type2>& rhs)
+		bool operator <= (const normal_iterator<Type1>& lhs, const normal_iterator<Type2>& rhs)
 		{
 			return simstd::rel_ops::operator <=(lhs, rhs);
 		}
 
 		template<typename Type1, typename Type2>
-		bool operator > (const _normal_iterator<Type1>& lhs, const _normal_iterator<Type2>& rhs)
+		bool operator > (const normal_iterator<Type1>& lhs, const normal_iterator<Type2>& rhs)
 		{
 			return simstd::rel_ops::operator >(lhs, rhs);
 		}
 
 		template<typename Type1, typename Type2>
-		bool operator >=(const _normal_iterator<Type1>& lhs, const _normal_iterator<Type2>& rhs)
+		bool operator >=(const normal_iterator<Type1>& lhs, const normal_iterator<Type2>& rhs)
 		{
 			return simstd::rel_ops::operator >=(lhs, rhs);
 		}
 
 		template<typename Type>
-		_normal_iterator<Type> operator +(typename _normal_iterator<Type>::difference_type n, const _normal_iterator<Type> & it)
+		normal_iterator<Type> operator +(typename normal_iterator<Type>::difference_type n, const normal_iterator<Type> & it)
 		{
 			return it + n;
 		}
 
 		template<typename Type>
 		typename
-		_normal_iterator<Type>::difference_type operator -(const _normal_iterator<Type>& lhs, const _normal_iterator<Type>& rhs)
+		normal_iterator<Type>::difference_type operator -(const normal_iterator<Type>& lhs, const normal_iterator<Type>& rhs)
 		{
 			return lhs.base() - rhs.base();
 		}

@@ -8,7 +8,7 @@ namespace simstd
 {
 	namespace pvt {
 		template<typename Iterator>
-		class _const_value_iterator : public iterator<random_access_iterator_tag, void, void, void, void>
+		class _const_value_iterator : public iterator<random_access_iterator_tag, Iterator>
 		{
 			typedef _const_value_iterator<Iterator>         this_type;
 
@@ -106,11 +106,27 @@ namespace simstd
 			typedef _const_value_iterator<const_pointer> const_iterator;
 
 		public:
-			explicit _value_generator(size_type n, const value_type & v) : value(v), begin_(0), end_(begin_ + n) {}
-			_value_generator(const this_type & other) : value(other.value), begin_(other.begin_), end_(other.end_) {}
+			explicit _value_generator(size_type n, const value_type & v) :
+				value(v),
+				begin_(0),
+				end_(begin_ + n)
+			{
+			}
+			_value_generator(const this_type & other) :
+				value(other.value),
+				begin_(other.begin_),
+				end_(other.end_)
+			{
+			}
 
-			const_iterator begin() const {return const_iterator(&value, begin_);}
-			const_iterator end() const {return const_iterator(&value, end_);}
+			const_iterator begin() const
+			{
+				return const_iterator(&value, begin_);
+			}
+			const_iterator end() const
+			{
+				return const_iterator(&value, end_);
+			}
 
 		private:
 			value_type value;

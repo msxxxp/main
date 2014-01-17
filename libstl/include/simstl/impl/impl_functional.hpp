@@ -6,7 +6,8 @@
 
 namespace simstd {
 	template<typename T>
-	struct plus {
+	struct plus
+	{
 		typedef T result_type;
 		typedef T first_argument_type;
 		typedef T second_argument_type;
@@ -18,7 +19,8 @@ namespace simstd {
 	};
 
 	template<typename T>
-	struct minus {
+	struct minus
+	{
 		typedef T result_type;
 		typedef T first_argument_type;
 		typedef T second_argument_type;
@@ -30,7 +32,8 @@ namespace simstd {
 	};
 
 	template<typename T>
-	struct multiplies {
+	struct multiplies
+	{
 		typedef T result_type;
 		typedef T first_argument_type;
 		typedef T second_argument_type;
@@ -42,7 +45,8 @@ namespace simstd {
 	};
 
 	template<typename T>
-	struct divides {
+	struct divides
+	{
 		typedef T result_type;
 		typedef T first_argument_type;
 		typedef T second_argument_type;
@@ -54,7 +58,8 @@ namespace simstd {
 	};
 
 	template<typename T>
-	struct modulus {
+	struct modulus
+	{
 		typedef T result_type;
 		typedef T first_argument_type;
 		typedef T second_argument_type;
@@ -66,7 +71,8 @@ namespace simstd {
 	};
 
 	template<typename T>
-	struct negate {
+	struct negate
+	{
 		typedef T result_type;
 		typedef T argument_type;
 
@@ -77,7 +83,8 @@ namespace simstd {
 	};
 
 	template<typename T>
-	struct equal_to {
+	struct equal_to
+	{
 		typedef bool result_type;
 		typedef T first_argument_type;
 		typedef T second_argument_type;
@@ -89,7 +96,8 @@ namespace simstd {
 	};
 
 	template<typename T>
-	struct not_equal_to {
+	struct not_equal_to
+	{
 		typedef bool result_type;
 		typedef T first_argument_type;
 		typedef T second_argument_type;
@@ -101,7 +109,8 @@ namespace simstd {
 	};
 
 	template<typename T>
-	struct less {
+	struct less
+	{
 		typedef bool result_type;
 		typedef T first_argument_type;
 		typedef T second_argument_type;
@@ -125,7 +134,8 @@ namespace simstd {
 //	};
 //
 	template<typename T>
-	struct less_equal {
+	struct less_equal
+	{
 		typedef bool result_type;
 		typedef T first_argument_type;
 		typedef T second_argument_type;
@@ -137,7 +147,8 @@ namespace simstd {
 	};
 
 	template<typename T>
-	struct greater {
+	struct greater
+	{
 		typedef bool result_type;
 		typedef T first_argument_type;
 		typedef T second_argument_type;
@@ -149,7 +160,8 @@ namespace simstd {
 	};
 
 	template<typename T>
-	struct greater_equal {
+	struct greater_equal
+	{
 		typedef bool result_type;
 		typedef T first_argument_type;
 		typedef T second_argument_type;
@@ -161,7 +173,8 @@ namespace simstd {
 	};
 
 	template<typename T>
-	struct logical_and {
+	struct logical_and
+	{
 		typedef bool result_type;
 		typedef T first_argument_type;
 		typedef T second_argument_type;
@@ -173,7 +186,8 @@ namespace simstd {
 	};
 
 	template<typename T>
-	struct logical_or {
+	struct logical_or
+	{
 		typedef bool result_type;
 		typedef T first_argument_type;
 		typedef T second_argument_type;
@@ -185,7 +199,8 @@ namespace simstd {
 	};
 
 	template<typename T>
-	struct logical_not {
+	struct logical_not
+	{
 		typedef bool result_type;
 		typedef T argument_type;
 
@@ -196,7 +211,8 @@ namespace simstd {
 	};
 
 	template<typename T>
-	struct bit_and {
+	struct bit_and
+	{
 		typedef T result_type;
 		typedef T first_argument_type;
 		typedef T second_argument_type;
@@ -208,7 +224,8 @@ namespace simstd {
 	};
 
 	template<typename T>
-	struct bit_or {
+	struct bit_or
+	{
 		typedef T result_type;
 		typedef T first_argument_type;
 		typedef T second_argument_type;
@@ -220,7 +237,8 @@ namespace simstd {
 	};
 
 	template<typename T>
-	struct bit_xor {
+	struct bit_xor
+	{
 		typedef T result_type;
 		typedef T first_argument_type;
 		typedef T second_argument_type;
@@ -232,7 +250,8 @@ namespace simstd {
 	};
 
 	template<typename Predicate>
-	class unary_negate {
+	class unary_negate
+	{
 	public:
 		typedef bool result_type;
 		typedef typename Predicate::argument_type argument_type;
@@ -258,7 +277,8 @@ namespace simstd {
 	}
 
 	template<typename Predicate>
-	class binary_negate {
+	class binary_negate
+	{
 	public:
 		typedef bool result_type;
 		typedef typename Predicate::first_argument_type first_argument_type;

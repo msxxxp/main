@@ -29,8 +29,8 @@ namespace simstd {
 		typedef typename alloc_traits::reference reference;
 		typedef typename alloc_traits::const_reference const_reference;
 		typedef typename alloc_traits::difference_type difference_type;
-		typedef simstd::pvt::_normal_iterator<pointer> iterator;
-		typedef simstd::pvt::_normal_iterator<const_pointer> const_iterator;
+		typedef simstd::pvt::normal_iterator<pointer> iterator;
+		typedef simstd::pvt::normal_iterator<const_pointer> const_iterator;
 		typedef simstd::reverse_iterator<iterator> reverse_iterator;
 		typedef simstd::reverse_iterator<const_iterator> const_reverse_iterator;
 
@@ -616,8 +616,8 @@ namespace simstd {
 		typedef typename alloc_traits::reference reference;
 		typedef typename alloc_traits::const_reference const_reference;
 		typedef typename alloc_traits::difference_type difference_type;
-		typedef simstd::pvt::_normal_iterator<pointer> iterator;
-		typedef simstd::pvt::_normal_iterator<const_pointer> const_iterator;
+		typedef simstd::pvt::normal_iterator<pointer> iterator;
+		typedef simstd::pvt::normal_iterator<const_pointer> const_iterator;
 		typedef simstd::reverse_iterator<iterator> reverse_iterator;
 		typedef simstd::reverse_iterator<const_iterator> const_reverse_iterator;
 

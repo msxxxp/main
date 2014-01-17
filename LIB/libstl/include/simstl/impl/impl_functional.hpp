@@ -1,10 +1,10 @@
-#ifndef SARALIB_STL_FUNCTIONAL_HPP_
-#define SARALIB_STL_FUNCTIONAL_HPP_
+﻿#ifndef LIBSTL_FUNCTIONAL_HPP_
+#define LIBSTL_FUNCTIONAL_HPP_
 
 #include "impl_types.hpp"
 #include "impl_rel_ops.hpp"
 
-namespace sarastd {
+namespace simstd {
 	template<typename T>
 	struct plus {
 		typedef T result_type;
@@ -96,7 +96,7 @@ namespace sarastd {
 
 		result_type operator ()(const first_argument_type& a, const second_argument_type& b) const
 		{
-			return sarastd::rel_ops::operator !=(a, b);
+			return simstd::rel_ops::operator !=(a, b);
 		}
 	};
 
@@ -132,7 +132,7 @@ namespace sarastd {
 
 		result_type operator ()(const first_argument_type& a, const second_argument_type& b) const
 		{
-			return sarastd::rel_ops::operator <=(a, b);
+			return simstd::rel_ops::operator <=(a, b);
 		}
 	};
 
@@ -144,7 +144,7 @@ namespace sarastd {
 
 		result_type operator ()(const first_argument_type& a, const second_argument_type& b) const
 		{
-			return sarastd::rel_ops::operator >(a, b);
+			return simstd::rel_ops::operator >(a, b);
 		}
 	};
 
@@ -156,7 +156,7 @@ namespace sarastd {
 
 		result_type operator ()(const first_argument_type& a, const second_argument_type& b) const
 		{
-			return sarastd::rel_ops::operator >=(a, b);
+			return simstd::rel_ops::operator >=(a, b);
 		}
 	};
 

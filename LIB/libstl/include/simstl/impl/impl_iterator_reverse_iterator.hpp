@@ -1,10 +1,10 @@
-#ifndef SARALIB_STL_ITERATOR_REVERSE_ITERATOR_HPP_
-#define SARALIB_STL_ITERATOR_REVERSE_ITERATOR_HPP_
+﻿#ifndef LIBSTL_ITERATOR_REVERSE_ITERATOR_HPP_
+#define LIBSTL_ITERATOR_REVERSE_ITERATOR_HPP_
 
 #include "impl_types.hpp"
 #include "impl_iterator_base.hpp"
 
-namespace sarastd
+namespace simstd
 {
 	template<typename Pointer>
 	class reverse_iterator
@@ -68,25 +68,25 @@ namespace sarastd
 	template<typename Type1, typename Type2>
 	bool operator !=(const reverse_iterator<Type1>& lhs, const reverse_iterator<Type2>& rhs)
 	{
-		return sarastd::rel_ops::operator !=(lhs, rhs);
+		return simstd::rel_ops::operator !=(lhs, rhs);
 	}
 
 	template<typename Type1, typename Type2>
 	bool operator <=(const reverse_iterator<Type1>& lhs, const reverse_iterator<Type2>& rhs)
 	{
-		return sarastd::rel_ops::operator <=(lhs, rhs);
+		return simstd::rel_ops::operator <=(lhs, rhs);
 	}
 
 	template<typename Type1, typename Type2>
 	bool operator >(const reverse_iterator<Type1>& lhs, const reverse_iterator<Type2>& rhs)
 	{
-		return sarastd::rel_ops::operator >(lhs, rhs);
+		return simstd::rel_ops::operator >(lhs, rhs);
 	}
 
 	template<typename Type1, typename Type2>
 	bool operator >=(const reverse_iterator<Type1>& lhs, const reverse_iterator<Type2>& rhs)
 	{
-		return sarastd::rel_ops::operator >=(lhs, rhs);
+		return simstd::rel_ops::operator >=(lhs, rhs);
 	}
 
 	template<typename Type>

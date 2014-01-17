@@ -1,5 +1,5 @@
-#ifndef SARALIB_STL_NEW_
-#define SARALIB_STL_NEW_
+﻿#ifndef LIBSTL_NEW_
+#define LIBSTL_NEW_
 
 #include "impl/impl_new.hpp"
 

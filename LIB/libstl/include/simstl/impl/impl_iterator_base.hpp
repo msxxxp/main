@@ -1,9 +1,9 @@
-#ifndef SARALIB_STL_ITERATOR_BASE_HPP_
-#define SARALIB_STL_ITERATOR_BASE_HPP_
+﻿#ifndef LIBSTL_ITERATOR_BASE_HPP_
+#define LIBSTL_ITERATOR_BASE_HPP_
 
 #include "impl_types.hpp"
 
-namespace sarastd
+namespace simstd
 {
 	struct input_iterator_tag
 	{
@@ -42,7 +42,7 @@ namespace sarastd
 	{
 		typedef random_access_iterator_tag iterator_category;
 		typedef Type                       value_type;
-		typedef sarastd::ptrdiff_t         difference_type;
+		typedef simstd::ptrdiff_t          difference_type;
 		typedef Type*                      pointer;
 		typedef Type&                      reference;
 	};
@@ -52,20 +52,20 @@ namespace sarastd
 	{
 		typedef random_access_iterator_tag iterator_category;
 		typedef Type                       value_type;
-		typedef sarastd::ptrdiff_t         difference_type;
+		typedef simstd::ptrdiff_t          difference_type;
 		typedef const Type*                pointer;
 		typedef const Type&                reference;
 	};
 
 	namespace pvt {
 		template<typename Iterator>
-		typename iterator_traits<Iterator>::iterator_category _iterator_category(const Iterator &)
+		typename iterator_traits<Iterator>::iterator_category iterator_category(const Iterator &)
 		{
 			return typename iterator_traits<Iterator>::iterator_category();
 		}
 
 		template<typename InputIterator>
-		typename iterator_traits<InputIterator>::difference_type _distance(InputIterator first, InputIterator last, input_iterator_tag)
+		typename iterator_traits<InputIterator>::difference_type distance(InputIterator first, InputIterator last, input_iterator_tag)
 		{
 			typename iterator_traits<InputIterator>::difference_type n = 0;
 			while (first != last)
@@ -77,20 +77,20 @@ namespace sarastd
 		}
 
 		template<typename RandomIterator>
-		typename iterator_traits<RandomIterator>::difference_type _distance(RandomIterator first, RandomIterator last, random_access_iterator_tag)
+		typename iterator_traits<RandomIterator>::difference_type distance(RandomIterator first, RandomIterator last, random_access_iterator_tag)
 		{
 			return last - first;
 		}
 
 		template<typename InputIterator, typename Distance>
-		void _advance(InputIterator& current, Distance n, input_iterator_tag)
+		void advance(InputIterator& current, Distance n, input_iterator_tag)
 		{
 			while (n--)
 				++current;
 		}
 
 		template<typename BidirIterator, typename Distance>
-		void _advance(BidirIterator & current, Distance n, bidirectional_iterator_tag)
+		void advance(BidirIterator & current, Distance n, bidirectional_iterator_tag)
 		{
 			if (n > 0)
 				while (n--)
@@ -101,7 +101,7 @@ namespace sarastd
 		}
 
 		template<typename RandomIterator, typename Distance>
-		void _advance(RandomIterator & current, Distance n, random_access_iterator_tag)
+		void advance(RandomIterator & current, Distance n, random_access_iterator_tag)
 		{
 			current += n;
 		}
@@ -110,14 +110,14 @@ namespace sarastd
 	template<typename InputIterator>
 	typename iterator_traits<InputIterator>::difference_type distance(InputIterator first, InputIterator last)
 	{
-		return sarastd::pvt::_distance(first, last, sarastd::pvt::_iterator_category(first));
+		return simstd::pvt::distance(first, last, simstd::pvt::iterator_category(first));
 	}
 
 	template<typename InputIterator, typename Distance>
 	void advance(InputIterator & current, Distance n)
 	{
 		typename iterator_traits<InputIterator>::difference_type d = n;
-		sarastd::pvt::_advance(current, d, sarastd::pvt::_iterator_category(current));
+		simstd::pvt::advance(current, d, simstd::pvt::iterator_category(current));
 	}
 
 	template<typename ForwardIterator>
@@ -138,7 +138,7 @@ namespace sarastd
 	template<
 		typename Category,
 		typename Type,
-		typename Distance = sarastd::ptrdiff_t,
+		typename Distance = simstd::ptrdiff_t,
 		typename Pointer = Type*,
 		typename Reference = Type&>
 	struct iterator

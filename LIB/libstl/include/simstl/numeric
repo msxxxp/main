@@ -1,5 +1,5 @@
-#ifndef SARALIB_STL_NUMERIC_
-#define SARALIB_STL_NUMERIC_
+﻿#ifndef LIBSTL_NUMERIC_
+#define LIBSTL_NUMERIC_
 
 #include "impl/impl_numeric.hpp"
 

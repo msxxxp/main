@@ -1,5 +1,5 @@
-#ifndef SARALIB_STL_VECTOR_HPP_
-#define SARALIB_STL_VECTOR_HPP_
+﻿#ifndef LIBSTL_VECTOR_HPP_
+#define LIBSTL_VECTOR_HPP_
 
 #include "impl_types.hpp"
 #include "impl_algorithm_base.hpp"
@@ -12,27 +12,27 @@
 #include "impl_memory.hpp"
 #include "impl_vector_impl.hpp"
 
-namespace sarastd {
+namespace simstd {
 	ssize_t vector_test();
 
-	template<typename Type, typename Allocator = sarastd::allocator<Type> >
+	template<typename Type, typename Allocator = simstd::allocator<Type> >
 	class vector {
 		typedef vector this_type;
 
 	public:
 		typedef Type value_type;
 		typedef Allocator allocator_type;
-		typedef sarastd::size_t size_type;
+		typedef simstd::size_t size_type;
 		typedef allocator_traits<allocator_type> alloc_traits;
 		typedef typename alloc_traits::pointer pointer;
 		typedef typename alloc_traits::const_pointer const_pointer;
 		typedef typename alloc_traits::reference reference;
 		typedef typename alloc_traits::const_reference const_reference;
 		typedef typename alloc_traits::difference_type difference_type;
-		typedef sarastd::pvt::_normal_iterator<pointer> iterator;
-		typedef sarastd::pvt::_normal_iterator<const_pointer> const_iterator;
-		typedef sarastd::reverse_iterator<iterator> reverse_iterator;
-		typedef sarastd::reverse_iterator<const_iterator> const_reverse_iterator;
+		typedef simstd::pvt::_normal_iterator<pointer> iterator;
+		typedef simstd::pvt::_normal_iterator<const_pointer> const_iterator;
+		typedef simstd::reverse_iterator<iterator> reverse_iterator;
+		typedef simstd::reverse_iterator<const_iterator> const_reverse_iterator;
 
 	public:
 		~vector();
@@ -102,60 +102,60 @@ namespace sarastd {
 		void     swap(this_type& other);
 
 	protected:
-		typedef sarastd::pvt::_vector_impl<value_type, allocator_type> impl_type;
+		typedef simstd::pvt::_vector_impl<value_type, allocator_type> impl_type;
 		impl_type m_impl;
 
 	private:
 		void _resize_increase(size_type count, const value_type& value);
 
 		template<typename InputIterator>
-		void _insert_back(InputIterator first, InputIterator last, sarastd::input_iterator_tag);
+		void _insert_back(InputIterator first, InputIterator last, simstd::input_iterator_tag);
 
 		template<typename ForwardIterator>
-		void _insert_back(ForwardIterator first, ForwardIterator last, sarastd::forward_iterator_tag);
+		void _insert_back(ForwardIterator first, ForwardIterator last, simstd::forward_iterator_tag);
 
 		template<typename InputIterator>
-		iterator _insert(const_iterator pos, InputIterator first, InputIterator last, sarastd::input_iterator_tag);
+		iterator _insert(const_iterator pos, InputIterator first, InputIterator last, simstd::input_iterator_tag);
 
 		template<typename ForwardIterator>
-		iterator _insert(const_iterator pos, ForwardIterator first, ForwardIterator last, sarastd::forward_iterator_tag);
+		iterator _insert(const_iterator pos, ForwardIterator first, ForwardIterator last, simstd::forward_iterator_tag);
 	};
 
 	///=============================================================================================
 	template<typename Type, typename Allocator>
 	bool operator ==(const vector<Type, Allocator>& lhs, const vector<Type, Allocator>& rhs)
 	{
-		return (lhs.size() == rhs.size() && sarastd::equal(lhs.begin(), lhs.end(), rhs.begin()));
+		return (lhs.size() == rhs.size() && simstd::equal(lhs.begin(), lhs.end(), rhs.begin()));
 	}
 
 	template<typename Type, typename Allocator>
 	bool operator !=(const vector<Type, Allocator>& lhs, const vector<Type, Allocator>& rhs)
 	{
-		return sarastd::rel_ops::operator !=(lhs, rhs);
+		return simstd::rel_ops::operator !=(lhs, rhs);
 	}
 
 	template<typename Type, typename Allocator>
 	bool operator <(const vector<Type, Allocator>& lhs, const vector<Type, Allocator>& rhs)
 	{
-		return sarastd::lexicographical_compare(lhs.begin(), lhs.end(), rhs.begin(), rhs.end());
+		return simstd::lexicographical_compare(lhs.begin(), lhs.end(), rhs.begin(), rhs.end());
 	}
 
 	template<typename Type, typename Allocator>
 	bool operator >(const vector<Type, Allocator>& lhs, const vector<Type, Allocator>& rhs)
 	{
-		return sarastd::rel_ops::operator >(lhs, rhs);
+		return simstd::rel_ops::operator >(lhs, rhs);
 	}
 
 	template<typename Type, typename Allocator>
 	bool operator <=(const vector<Type, Allocator>& lhs, const vector<Type, Allocator>& rhs)
 	{
-		return sarastd::rel_ops::operator <=(lhs, rhs);
+		return simstd::rel_ops::operator <=(lhs, rhs);
 	}
 
 	template<typename Type, typename Allocator>
 	bool operator >=(const vector<Type, Allocator>& lhs, const vector<Type, Allocator>& rhs)
 	{
-		return sarastd::rel_ops::operator >=(lhs, rhs);
+		return simstd::rel_ops::operator >=(lhs, rhs);
 	}
 
 	template<typename Type, typename Allocator>
@@ -195,7 +195,7 @@ namespace sarastd {
 	vector<Type, Allocator>::vector(InputIterator first, InputIterator last) :
 		m_impl()
 	{
-		_insert_back(first, last, sarastd::pvt::_iterator_category(first));
+		_insert_back(first, last, simstd::pvt::iterator_category(first));
 	}
 
 	template<typename Type, typename Allocator>
@@ -435,30 +435,30 @@ namespace sarastd {
 	typename
 	vector<Type, Allocator>::iterator vector<Type, Allocator>::insert(const_iterator cpos, size_type n, const value_type& value)
 	{
-		sarastd::pvt::_value_generator<Type> generator(value, n);
-		return _insert(cpos, generator.begin(), generator.end(), sarastd::pvt::_iterator_category(generator.begin()));
+		simstd::pvt::_value_generator<Type> generator(value, n);
+		return _insert(cpos, generator.begin(), generator.end(), simstd::pvt::iterator_category(generator.begin()));
 //		iterator pos(begin());
-//		sarastd::advance(pos, sarastd::distance(cbegin(), cpos));
+//		simstd::advance(pos, simstd::distance(cbegin(), cpos));
 //		if (m_impl.check_capacity(n)) {
 //			iterator oldEnd(end());
 //			size_type elems_between = oldEnd - pos;
 //			if (elems_between < n) {
-//				sarastd::uninitialized_fill_n(oldEnd, n - elems_between, value);
-//				sarastd::uninitialized_copy(pos, oldEnd, oldEnd + n - elems_between);
-//				sarastd::fill_n(pos, elems_between, value);
+//				simstd::uninitialized_fill_n(oldEnd, n - elems_between, value);
+//				simstd::uninitialized_copy(pos, oldEnd, oldEnd + n - elems_between);
+//				simstd::fill_n(pos, elems_between, value);
 //			} else {
-//				sarastd::uninitialized_copy(end() - n, end(), end());
-//				sarastd::copy_backward(pos, end() - n, end());
-//				sarastd::fill(pos, pos + n, value);
+//				simstd::uninitialized_copy(end() - n, end(), end());
+//				simstd::copy_backward(pos, end() - n, end());
+//				simstd::fill(pos, pos + n, value);
 //			}
 //			m_impl.end += n;
 //			return pos;
 //		}
 //		impl_type newImpl(m_impl.get_new_capacity(n), m_impl.begin, &*pos);
 //		iterator ret(newImpl.end);
-//		sarastd::uninitialized_fill_n(ret, n, value);
+//		simstd::uninitialized_fill_n(ret, n, value);
 //		newImpl.end += n;
-//		sarastd::uninitialized_copy(pos, end(), iterator(newImpl.end));
+//		simstd::uninitialized_copy(pos, end(), iterator(newImpl.end));
 //		newImpl.end += (end() - pos);
 //		newImpl.swap(m_impl);
 //		return ret;
@@ -469,7 +469,7 @@ namespace sarastd {
 	typename
 	vector<Type, Allocator>::iterator vector<Type, Allocator>::insert(const_iterator pos, InputIterator first, InputIterator last)
 	{
-		return _insert(pos, first, last, sarastd::pvt::_iterator_category(first));
+		return _insert(pos, first, last, simstd::pvt::iterator_category(first));
 	}
 
 	template<typename Type, typename Allocator>
@@ -478,10 +478,10 @@ namespace sarastd {
 	{
 		iterator first(begin());
 		iterator last(begin());
-		sarastd::advance(first, sarastd::distance(cbegin(), cfirst));
-		sarastd::advance(last, sarastd::distance(cbegin(), clast));
-		sarastd::move(last, end(), first);
-		size_type n = sarastd::distance(cfirst, clast);
+		simstd::advance(first, simstd::distance(cbegin(), cfirst));
+		simstd::advance(last, simstd::distance(cbegin(), clast));
+		simstd::move(last, end(), first);
+		size_type n = simstd::distance(cfirst, clast);
 		m_impl.destroy(m_impl.end - n, m_impl.end);
 		m_impl.end -= n;
 		return iterator(first);
@@ -498,7 +498,7 @@ namespace sarastd {
 	void vector<Type, Allocator>::push_back(const value_type& value)
 	{
 		m_impl.adjust_capacity(1);
-		sarastd::uninitialized_fill_n(end(), 1, value);
+		simstd::uninitialized_fill_n(end(), 1, value);
 		++m_impl.end;
 	}
 
@@ -534,66 +534,66 @@ namespace sarastd {
 	void vector<Type, Allocator>::_resize_increase(size_type count, const value_type& value)
 	{
 		reserve(count);
-		sarastd::uninitialized_fill_n(end(), count - size(), value);
+		simstd::uninitialized_fill_n(end(), count - size(), value);
 		m_impl.end += (count - size());
 	}
 
 	template<typename Type, typename Allocator>
 	template<typename InputIterator>
-	void vector<Type, Allocator>::_insert_back(InputIterator first, InputIterator last, sarastd::input_iterator_tag)
+	void vector<Type, Allocator>::_insert_back(InputIterator first, InputIterator last, simstd::input_iterator_tag)
 	{
-		sarastd::copy(first, last, sarastd::back_inserter(*this));
+		simstd::copy(first, last, simstd::back_inserter(*this));
 	}
 
 	template<typename Type, typename Allocator>
 	template<typename ForwardIterator>
-	void vector<Type, Allocator>::_insert_back(ForwardIterator first, ForwardIterator last, sarastd::forward_iterator_tag)
+	void vector<Type, Allocator>::_insert_back(ForwardIterator first, ForwardIterator last, simstd::forward_iterator_tag)
 	{
-		m_impl.adjust_capacity(sarastd::distance(first, last));
-		_insert_back(first, last, sarastd::input_iterator_tag());
+		m_impl.adjust_capacity(simstd::distance(first, last));
+		_insert_back(first, last, simstd::input_iterator_tag());
 	}
 
 	template<typename Type, typename Allocator>
 	template<typename InputIterator>
 	typename
-	vector<Type, Allocator>::iterator vector<Type, Allocator>::_insert(const_iterator pos, InputIterator first, InputIterator last, sarastd::input_iterator_tag)
+	vector<Type, Allocator>::iterator vector<Type, Allocator>::_insert(const_iterator pos, InputIterator first, InputIterator last, simstd::input_iterator_tag)
 	{
-		difference_type distance = sarastd::distance(cbegin(), pos);
-		sarastd::copy(first, last, sarastd::inserter(*this, pos));
+		difference_type distance = simstd::distance(cbegin(), pos);
+		simstd::copy(first, last, simstd::inserter(*this, pos));
 		return begin() + distance;
 	}
 
 	template<typename Type, typename Allocator>
 	template<typename ForwardIterator>
 	typename
-	vector<Type, Allocator>::iterator vector<Type, Allocator>::_insert(const_iterator cpos, ForwardIterator first, ForwardIterator last, sarastd::forward_iterator_tag)
+	vector<Type, Allocator>::iterator vector<Type, Allocator>::_insert(const_iterator cpos, ForwardIterator first, ForwardIterator last, simstd::forward_iterator_tag)
 	{
 		iterator pos(begin());
-		sarastd::advance(pos, sarastd::distance(cbegin(), cpos));
-		difference_type distance = sarastd::distance(begin(), pos);
-		difference_type n = sarastd::distance(first, last);
+		simstd::advance(pos, simstd::distance(cbegin(), cpos));
+		difference_type distance = simstd::distance(begin(), pos);
+		difference_type n = simstd::distance(first, last);
 		iterator oldEnd(end());
 		if (m_impl.check_capacity(n)) {
 			difference_type elems_between = oldEnd - pos;
 			if (elems_between < n) {
 				ForwardIterator mid(first);
-				sarastd::advance(mid, elems_between);
-				sarastd::uninitialized_copy(mid, last, oldEnd);
-				sarastd::uninitialized_copy(pos, oldEnd, oldEnd + n - elems_between);
-				sarastd::copy(first, mid, pos);
+				simstd::advance(mid, elems_between);
+				simstd::uninitialized_copy(mid, last, oldEnd);
+				simstd::uninitialized_copy(pos, oldEnd, oldEnd + n - elems_between);
+				simstd::copy(first, mid, pos);
 			} else {
-				sarastd::uninitialized_copy(oldEnd - n, oldEnd, oldEnd);
-				sarastd::copy_backward(pos, oldEnd - n, oldEnd);
-				sarastd::copy(first, last, pos);
+				simstd::uninitialized_copy(oldEnd - n, oldEnd, oldEnd);
+				simstd::copy_backward(pos, oldEnd - n, oldEnd);
+				simstd::copy(first, last, pos);
 			}
 			m_impl.end += n;
 			return pos;
 		}
 		impl_type newImpl(m_impl.get_new_capacity(n), m_impl.begin, &*pos);
 		iterator ret(newImpl.end);
-		sarastd::uninitialized_copy(first, last, ret);
+		simstd::uninitialized_copy(first, last, ret);
 		newImpl.end += n;
-		sarastd::uninitialized_copy(pos, oldEnd, ret + n);
+		simstd::uninitialized_copy(pos, oldEnd, ret + n);
 		newImpl.end += (oldEnd - pos);
 		newImpl.swap(m_impl);
 		return ret;
@@ -601,14 +601,14 @@ namespace sarastd {
 
 	///=============================================================================================
 	template<typename Type>
-	class movable_vector: public vector<Type, sarastd::pvt::_movable_allocator<Type> >
+	class movable_vector: public vector<Type, simstd::pvt::_movable_allocator<Type> >
 	{
-		typedef vector<Type, sarastd::pvt::_movable_allocator<Type> > base_type;
+		typedef vector<Type, simstd::pvt::_movable_allocator<Type> > base_type;
 		typedef movable_vector<Type> this_type;
 
 	public:
 		typedef Type value_type;
-		typedef sarastd::pvt::_movable_allocator<Type> allocator_type;
+		typedef simstd::pvt::_movable_allocator<Type> allocator_type;
 		typedef typename base_type::size_type size_type;
 		typedef allocator_traits<allocator_type> alloc_traits;
 		typedef typename alloc_traits::pointer pointer;
@@ -616,10 +616,10 @@ namespace sarastd {
 		typedef typename alloc_traits::reference reference;
 		typedef typename alloc_traits::const_reference const_reference;
 		typedef typename alloc_traits::difference_type difference_type;
-		typedef sarastd::pvt::_normal_iterator<pointer> iterator;
-		typedef sarastd::pvt::_normal_iterator<const_pointer> const_iterator;
-		typedef sarastd::reverse_iterator<iterator> reverse_iterator;
-		typedef sarastd::reverse_iterator<const_iterator> const_reverse_iterator;
+		typedef simstd::pvt::_normal_iterator<pointer> iterator;
+		typedef simstd::pvt::_normal_iterator<const_pointer> const_iterator;
+		typedef simstd::reverse_iterator<iterator> reverse_iterator;
+		typedef simstd::reverse_iterator<const_iterator> const_reverse_iterator;
 
 		movable_vector() {}
 		explicit movable_vector(size_type n) : base_type(n) {}

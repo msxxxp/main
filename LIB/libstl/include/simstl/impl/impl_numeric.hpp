@@ -1,11 +1,11 @@
-#ifndef SARALIB_STL_NUMERIC_HPP_
-#define SARALIB_STL_NUMERIC_HPP_
+﻿#ifndef LIBSTL_NUMERIC_HPP_
+#define LIBSTL_NUMERIC_HPP_
 
 #include "impl_types.hpp"
 #include "impl_functional.hpp"
 #include "impl_pair.hpp"
 
-namespace sarastd {
+namespace simstd {
 	template<typename ForwardIterator, typename T>
 	void iota(ForwardIterator first, ForwardIterator last, T value)
 	{
@@ -61,7 +61,7 @@ namespace sarastd {
 		if (first == last)
 			return d_first;
 
-		typedef typename sarastd::iterator_traits<InputIt>::value_type value_t;
+		typedef typename simstd::iterator_traits<InputIt>::value_type value_t;
 		value_t acc = *first;
 		*d_first = acc;
 		while (++first != last) {
@@ -78,7 +78,7 @@ namespace sarastd {
 		if (first == last)
 			return d_first;
 
-		typedef typename sarastd::iterator_traits<InputIt>::value_type value_t;
+		typedef typename simstd::iterator_traits<InputIt>::value_type value_t;
 		value_t acc = *first;
 		*d_first = acc;
 		while (++first != last) {
@@ -95,7 +95,7 @@ namespace sarastd {
 		if (first == last)
 			return d_first;
 
-		typename sarastd::iterator_traits<InputIt>::value_type sum = *first;
+		typename simstd::iterator_traits<InputIt>::value_type sum = *first;
 		*d_first = sum;
 
 		while (++first != last) {
@@ -108,7 +108,7 @@ namespace sarastd {
 	template<typename InputIt, typename OutputIt>
 	OutputIt partial_sum(InputIt first, InputIt last, OutputIt d_first)
 	{
-		return sarastd::partial_sum(first, last, d_first, sarastd::plus<typename sarastd::iterator_traits<InputIt>::value_type>());
+		return simstd::partial_sum(first, last, d_first, simstd::plus<typename simstd::iterator_traits<InputIt>::value_type>());
 	}
 
 }

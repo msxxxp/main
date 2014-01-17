@@ -1,10 +1,10 @@
-#ifndef SARALIB_STL_VECTOR_IMPL_HPP_
-#define SARALIB_STL_VECTOR_IMPL_HPP_
+﻿#ifndef LIBSTL_VECTOR_IMPL_HPP_
+#define LIBSTL_VECTOR_IMPL_HPP_
 
 #include "impl_types.hpp"
 #include "impl_memory.hpp"
 
-namespace sarastd {
+namespace simstd {
 
 	namespace pvt {
 		template<typename Type, typename Allocator>
@@ -62,7 +62,7 @@ namespace sarastd {
 			begin(0), end(0), end_of_storage(0)
 		{
 			create_storage(capa);
-			sarastd::uninitialized_copy(first, last, end);
+			simstd::uninitialized_copy(first, last, end);
 			end += (last - first);
 		}
 
@@ -70,11 +70,11 @@ namespace sarastd {
 		void _vector_impl<Type, Allocator>::swap(this_type& other)
 		{
 #if defined(__GNUC__) && (__GNUC__ < 3)
-			sarastd::swap(begin, other.begin);
-			sarastd::swap(end, other.end);
-			sarastd::swap(end_of_storage, other.end_of_storage);
+			simstd::swap(begin, other.begin);
+			simstd::swap(end, other.end);
+			simstd::swap(end_of_storage, other.end_of_storage);
 #else
-			using sarastd::swap;
+			using simstd::swap;
 			swap(begin, other.begin);
 			swap(end, other.end);
 			swap(end_of_storage, other.end_of_storage);
@@ -135,7 +135,7 @@ namespace sarastd {
 		typename
 		_vector_impl<Type, Allocator>::size_type _vector_impl<Type, Allocator>::get_new_capacity(size_type addToSize) const
 		{
-			return size() + sarastd::max(size_type(4), sarastd::max(size(), addToSize));
+			return size() + simstd::max(size_type(4), simstd::max(size(), addToSize));
 		}
 
 		template<typename Type, typename Allocator>
@@ -147,10 +147,10 @@ namespace sarastd {
 
 		///=========================================================================================
 		template<typename Type>
-		struct _vector_impl<Type, sarastd::pvt::_movable_allocator<Type> >: private sarastd::pvt::_movable_allocator<Type> {
-			typedef _vector_impl<Type, sarastd::pvt::_movable_allocator<Type> > this_type;
+		struct _vector_impl<Type, simstd::pvt::_movable_allocator<Type> >: private simstd::pvt::_movable_allocator<Type> {
+			typedef _vector_impl<Type, simstd::pvt::_movable_allocator<Type> > this_type;
 			typedef Type value_type;
-			typedef sarastd::pvt::_movable_allocator<Type> allocator_type;
+			typedef simstd::pvt::_movable_allocator<Type> allocator_type;
 			typedef typename allocator_traits<allocator_type>::size_type size_type;
 			typedef typename allocator_traits<allocator_type>::pointer pointer;
 			typedef typename allocator_type::movable_handle movable_handle;
@@ -183,7 +183,7 @@ namespace sarastd {
 		};
 
 		template<typename Type>
-		_vector_impl<Type, sarastd::pvt::_movable_allocator<Type> >::~_vector_impl()
+		_vector_impl<Type, simstd::pvt::_movable_allocator<Type> >::~_vector_impl()
 		{
 			if (handle) {
 				lock();
@@ -195,39 +195,39 @@ namespace sarastd {
 		}
 
 		template<typename Type>
-		_vector_impl<Type, sarastd::pvt::_movable_allocator<Type> >::_vector_impl() :
+		_vector_impl<Type, simstd::pvt::_movable_allocator<Type> >::_vector_impl() :
 			begin(0), end(0), end_of_storage(0), handle(0)
 		{
 		}
 
 		template<typename Type>
-		_vector_impl<Type, sarastd::pvt::_movable_allocator<Type> >::_vector_impl(size_type capa) :
+		_vector_impl<Type, simstd::pvt::_movable_allocator<Type> >::_vector_impl(size_type capa) :
 			begin(0), end(0), end_of_storage(0), handle(0)
 		{
 			create_storage(capa);
 		}
 
 		template<typename Type>
-		_vector_impl<Type, sarastd::pvt::_movable_allocator<Type> >::_vector_impl(size_type capa, pointer first, pointer last) :
+		_vector_impl<Type, simstd::pvt::_movable_allocator<Type> >::_vector_impl(size_type capa, pointer first, pointer last) :
 			begin(0), end(0), end_of_storage(0), handle(0)
 		{
 			create_storage(capa);
 			lock();
-			sarastd::uninitialized_copy(first, last, end);
+			simstd::uninitialized_copy(first, last, end);
 			end += (last - first);
 			unlock();
 		}
 
 		template<typename Type>
-		void _vector_impl<Type, sarastd::pvt::_movable_allocator<Type> >::swap(this_type& other)
+		void _vector_impl<Type, simstd::pvt::_movable_allocator<Type> >::swap(this_type& other)
 		{
 #if defined(__GNUC__) && (__GNUC__ < 3)
-			sarastd::swap(begin, other.begin);
-			sarastd::swap(end, other.end);
-			sarastd::swap(end_of_storage, other.end_of_storage);
-			sarastd::swap(handle, other.handle);
+			simstd::swap(begin, other.begin);
+			simstd::swap(end, other.end);
+			simstd::swap(end_of_storage, other.end_of_storage);
+			simstd::swap(handle, other.handle);
 #else
-			using sarastd::swap;
+			using simstd::swap;
 			swap(begin, other.begin);
 			swap(end, other.end);
 			swap(end_of_storage, other.end_of_storage);
@@ -236,7 +236,7 @@ namespace sarastd {
 		}
 
 		template<typename Type>
-		void _vector_impl<Type, sarastd::pvt::_movable_allocator<Type> >::create_storage(size_type capa)
+		void _vector_impl<Type, simstd::pvt::_movable_allocator<Type> >::create_storage(size_type capa)
 		{
 			handle = (capa) ? allocator_type::allocate(capa) : 0;
 			end = begin = 0;
@@ -244,14 +244,14 @@ namespace sarastd {
 		}
 
 		template<typename Type>
-		void _vector_impl<Type, sarastd::pvt::_movable_allocator<Type> >::destroy(pointer first, pointer last)
+		void _vector_impl<Type, simstd::pvt::_movable_allocator<Type> >::destroy(pointer first, pointer last)
 		{
 			for (; first != last; ++first)
 				allocator_type::destroy(first);
 		}
 
 		template<typename Type>
-		void _vector_impl<Type, sarastd::pvt::_movable_allocator<Type> >::reserve(size_type newCapacity)
+		void _vector_impl<Type, simstd::pvt::_movable_allocator<Type> >::reserve(size_type newCapacity)
 		{
 			if (capacity() < newCapacity) {
 				lock();
@@ -263,27 +263,27 @@ namespace sarastd {
 
 		template<typename Type>
 		typename
-		_vector_impl<Type, sarastd::pvt::_movable_allocator<Type> >::size_type _vector_impl<Type, sarastd::pvt::_movable_allocator<Type> >::size() const
+		_vector_impl<Type, simstd::pvt::_movable_allocator<Type> >::size_type _vector_impl<Type, simstd::pvt::_movable_allocator<Type> >::size() const
 		{
 			return end - begin;
 		}
 
 		template<typename Type>
 		typename
-		_vector_impl<Type, sarastd::pvt::_movable_allocator<Type> >::size_type _vector_impl<Type, sarastd::pvt::_movable_allocator<Type> >::max_size() const
+		_vector_impl<Type, simstd::pvt::_movable_allocator<Type> >::size_type _vector_impl<Type, simstd::pvt::_movable_allocator<Type> >::max_size() const
 		{
 			return 0xFFFFFFFFu;
 		}
 
 		template<typename Type>
 		typename
-		_vector_impl<Type, sarastd::pvt::_movable_allocator<Type> >::size_type _vector_impl<Type, sarastd::pvt::_movable_allocator<Type> >::capacity() const
+		_vector_impl<Type, simstd::pvt::_movable_allocator<Type> >::size_type _vector_impl<Type, simstd::pvt::_movable_allocator<Type> >::capacity() const
 		{
 			return end_of_storage - begin;
 		}
 
 		template<typename Type>
-		bool _vector_impl<Type, sarastd::pvt::_movable_allocator<Type> >::check_capacity(size_type addToSize) const
+		bool _vector_impl<Type, simstd::pvt::_movable_allocator<Type> >::check_capacity(size_type addToSize) const
 		{
 			if ((size() + addToSize) > capacity())
 				return false;
@@ -292,30 +292,30 @@ namespace sarastd {
 
 		template<typename Type>
 		typename
-		_vector_impl<Type, sarastd::pvt::_movable_allocator<Type> >::size_type _vector_impl<Type, sarastd::pvt::_movable_allocator<Type> >::get_new_capacity(size_type addToSize) const
+		_vector_impl<Type, simstd::pvt::_movable_allocator<Type> >::size_type _vector_impl<Type, simstd::pvt::_movable_allocator<Type> >::get_new_capacity(size_type addToSize) const
 		{
-			return size() + sarastd::max(size_type(4), sarastd::max(size(), addToSize));
+			return size() + simstd::max(size_type(4), simstd::max(size(), addToSize));
 		}
 
 		template<typename Type>
-		void _vector_impl<Type, sarastd::pvt::_movable_allocator<Type> >::adjust_capacity(size_type addToSize)
+		void _vector_impl<Type, simstd::pvt::_movable_allocator<Type> >::adjust_capacity(size_type addToSize)
 		{
 			if (!check_capacity(addToSize))
 				reserve(get_new_capacity(addToSize));
 		}
 
 		template<typename Type>
-		void _vector_impl<Type, sarastd::pvt::_movable_allocator<Type> >::lock() const
+		void _vector_impl<Type, simstd::pvt::_movable_allocator<Type> >::lock() const
 		{
 			pointer oldBegin = begin;
 			begin = (pointer)allocator_type::lock(handle);
-			sarastd::ptrdiff_t diff = begin - oldBegin;
+			simstd::ptrdiff_t diff = begin - oldBegin;
 			end += diff;
 			end_of_storage += diff;
 		}
 
 		template<typename Type>
-		void _vector_impl<Type, sarastd::pvt::_movable_allocator<Type> >::unlock() const
+		void _vector_impl<Type, simstd::pvt::_movable_allocator<Type> >::unlock() const
 		{
 			allocator_type::unlock(handle);
 		}

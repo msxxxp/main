@@ -1,5 +1,5 @@
-#ifndef SARALIB_STL_MEMORY_HPP_
-#define SARALIB_STL_MEMORY_HPP_
+﻿#ifndef LIBSTL_MEMORY_HPP_
+#define LIBSTL_MEMORY_HPP_
 
 #include "impl_types.hpp"
 #include "impl_rel_ops.hpp"
@@ -8,7 +8,7 @@
 #include "impl_pair.hpp"
 #include "impl_ref_counter.hpp"
 
-namespace sarastd {
+namespace simstd {
 
 	namespace pvt {
 		template<typename Type>
@@ -18,21 +18,21 @@ namespace sarastd {
 		}
 
 		template<typename Type>
-		Type* _allocate(sarastd::size_t cnt)
+		Type* _allocate(simstd::size_t cnt)
 		{
-			return static_cast<Type*>(::operator new(sizeof(Type) * cnt, sarastd::nothrow));
+			return static_cast<Type*>(::operator new(sizeof(Type) * cnt, simstd::nothrow));
 		}
 
 		template<typename Type>
-		void _deallocate(Type* ptr, sarastd::size_t /*cnt*/ = 0)
+		void _deallocate(Type* ptr, simstd::size_t /*cnt*/ = 0)
 		{
-			::operator delete(ptr, sarastd::nothrow);
+			::operator delete(ptr, simstd::nothrow);
 		}
 
 		template<typename Type1, typename Type2>
 		void _construct(Type1* ptr, const Type2& val)
 		{
-			::new (static_cast<void*>(ptr), sarastd::nothrow) Type1(val);
+			::new (static_cast<void*>(ptr), simstd::nothrow) Type1(val);
 		}
 
 		template<typename Type>
@@ -55,7 +55,7 @@ namespace sarastd {
 //		static void _destroy(ForwardIterator first, ForwardIterator last)
 //		{
 //			for (; first != last; ++first)
-//				sarastd::_destroy(sarastd::_addressof(*first));
+//				simstd::_destroy(simstd::_addressof(*first));
 //		}
 //	};
 //
@@ -71,14 +71,14 @@ namespace sarastd {
 //	void _destroy(ForwardIterator first, ForwardIterator last)
 //	{
 //		typedef typename iterator_traits<ForwardIterator>::value_type Value_type;
-//		sarastd::_Destroy_aux<__has_trivial_destructor(Value_type)>::_destroy(first, last);
+//		simstd::_Destroy_aux<__has_trivial_destructor(Value_type)>::_destroy(first, last);
 //	}
 //
 //	template<typename ForwardIterator, typename Allocator>
 //	void _destroy(ForwardIterator first, ForwardIterator last, Allocator& alloc)
 //	{
 //		for (; first != last; ++first)
-//			alloc.destroy(sarastd::_addressof(*first));
+//			alloc.destroy(simstd::_addressof(*first));
 //	}
 //
 //	template<typename ForwardIterator, typename Type>
@@ -88,16 +88,16 @@ namespace sarastd {
 //	}
 
 	template<typename Type>
-	sarastd::pair<Type*, sarastd::ptrdiff_t> get_temporary_buffer(sarastd::ptrdiff_t cnt)
+	simstd::pair<Type*, simstd::ptrdiff_t> get_temporary_buffer(simstd::ptrdiff_t cnt)
 	{
-		Type* ptr = static_cast<Type*>(::operator new(sizeof(Type) * cnt, sarastd::nothrow));
-		return sarastd::pair<Type*, ptrdiff_t>(ptr, ptr ? cnt : 0);
+		Type* ptr = static_cast<Type*>(::operator new(sizeof(Type) * cnt, simstd::nothrow));
+		return simstd::pair<Type*, ptrdiff_t>(ptr, ptr ? cnt : 0);
 	}
 
 	template<typename Type>
 	void return_temporary_buffer(Type* ptr)
 	{
-		::operator delete(ptr, sarastd::nothrow);
+		::operator delete(ptr, simstd::nothrow);
 	}
 
 	///=============================================================================================
@@ -123,8 +123,8 @@ namespace sarastd {
 		typedef const Type* const_pointer;
 		typedef Type& reference;
 		typedef const Type& const_reference;
-		typedef sarastd::size_t size_type;
-		typedef sarastd::ptrdiff_t difference_type;
+		typedef simstd::size_t size_type;
+		typedef simstd::ptrdiff_t difference_type;
 
 		~allocator();
 		allocator();
@@ -149,25 +149,25 @@ namespace sarastd {
 	template<typename Type>
 	typename allocator<Type>::pointer allocator<Type>::allocate(size_type cnt)
 	{
-		return sarastd::pvt::_allocate<Type>(cnt);
+		return simstd::pvt::_allocate<Type>(cnt);
 	}
 
 	template<typename Type>
 	void allocator<Type>::deallocate(pointer ptr, size_type cnt)
 	{
-		sarastd::pvt::_deallocate(ptr, cnt);
+		simstd::pvt::_deallocate(ptr, cnt);
 	}
 
 	template<typename Type>
 	void allocator<Type>::construct(pointer ptr, const_reference val)
 	{
-		sarastd::pvt::_construct(ptr, val);
+		simstd::pvt::_construct(ptr, val);
 	}
 
 	template<typename Type>
 	void allocator<Type>::destroy(pointer ptr)
 	{
-		sarastd::pvt::_destroy(ptr);
+		simstd::pvt::_destroy(ptr);
 	}
 
 	///=============================================================================================
@@ -179,8 +179,8 @@ namespace sarastd {
 			typedef const Type* const_pointer;
 			typedef Type& reference;
 			typedef const Type& const_reference;
-			typedef sarastd::size_t size_type;
-			typedef sarastd::ptrdiff_t difference_type;
+			typedef simstd::size_t size_type;
+			typedef simstd::ptrdiff_t difference_type;
 			typedef void* movable_handle;
 
 			~_movable_allocator();
@@ -233,13 +233,13 @@ namespace sarastd {
 		template<typename Type>
 		void _movable_allocator<Type>::construct(pointer ptr, const_reference val)
 		{
-			sarastd::pvt::_construct(ptr, val);
+			simstd::pvt::_construct(ptr, val);
 		}
 
 		template<typename Type>
 		void _movable_allocator<Type>::destroy(pointer ptr)
 		{
-			sarastd::pvt::_destroy(ptr);
+			simstd::pvt::_destroy(ptr);
 		}
 	}
 
@@ -248,7 +248,7 @@ namespace sarastd {
 	ForwardIt uninitialized_copy(InputIt first, InputIt last, ForwardIt d_first)
 	{
 		for (; first != last; ++first, ++d_first) {
-			sarastd::pvt::_construct(sarastd::pvt::_addressof(*d_first), *first);
+			simstd::pvt::_construct(simstd::pvt::_addressof(*d_first), *first);
 		}
 		return d_first;
 	}
@@ -257,7 +257,7 @@ namespace sarastd {
 	ForwardIt uninitialized_copy_n(InputIt first, Size cnt, ForwardIt d_first)
 	{
 		for (; cnt > 0; ++first, ++d_first, --cnt) {
-			sarastd::pvt::_construct(sarastd::pvt::_addressof(*d_first), *first);
+			simstd::pvt::_construct(simstd::pvt::_addressof(*d_first), *first);
 		}
 		return d_first;
 	}
@@ -266,7 +266,7 @@ namespace sarastd {
 	void uninitialized_fill(ForwardIt first, ForwardIt last, const T& val)
 	{
 		for (; first != last; ++first) {
-			sarastd::pvt::_construct(sarastd::pvt::_addressof(*first), val);
+			simstd::pvt::_construct(simstd::pvt::_addressof(*first), val);
 		}
 	}
 
@@ -274,7 +274,7 @@ namespace sarastd {
 	void uninitialized_fill_n(ForwardIt first, Size cnt, const T& val)
 	{
 		for (; cnt > 0; ++first, --cnt) {
-			sarastd::pvt::_construct(sarastd::pvt::_addressof(*first), val);
+			simstd::pvt::_construct(simstd::pvt::_addressof(*first), val);
 		}
 	}
 
@@ -309,7 +309,7 @@ namespace sarastd {
 	template<typename OutputIterator, typename Type>
 	raw_storage_iterator<OutputIterator, Type>& raw_storage_iterator<OutputIterator, Type>::operator =(const Type& element)
 	{
-		sarastd::pvt::_construct(sarastd::pvt::_addressof(*_M_iter), element);
+		simstd::pvt::_construct(simstd::pvt::_addressof(*_M_iter), element);
 		return *this;
 	}
 
@@ -557,15 +557,15 @@ namespace sarastd {
 		void swap(this_type & b) throw()
 		{
 #if defined(__GNUC__) && (__GNUC__ < 3)
-			sarastd::swap(m_impl, b.m_impl);
+			simstd::swap(m_impl, b.m_impl);
 #else
-			using sarastd::swap;
+			using simstd::swap;
 			swap(m_impl, b.m_impl);
 #endif
 		}
 
 	private:
-		typedef typename sarastd::default_delete<Type> default_deleter;
+		typedef typename simstd::default_delete<Type> default_deleter;
 
 		struct shared_ptr_impl: public pvt::ref_counter
 		{
@@ -609,25 +609,25 @@ namespace sarastd {
 	template<typename T, typename U>
 	bool operator !=(const shared_ptr<T> & a, const shared_ptr<U> & b)
 	{
-		return sarastd::rel_ops::operator !=(a, b);
+		return simstd::rel_ops::operator !=(a, b);
 	}
 
 	template<typename T, typename U>
 	bool operator >(const shared_ptr<T> & a, const shared_ptr<U> & b)
 	{
-		return sarastd::rel_ops::operator >(a, b);
+		return simstd::rel_ops::operator >(a, b);
 	}
 
 	template<typename T, typename U>
 	bool operator <=(const shared_ptr<T> & a, const shared_ptr<U> & b)
 	{
-		return sarastd::rel_ops::operator <=(a, b);
+		return simstd::rel_ops::operator <=(a, b);
 	}
 
 	template<typename T, typename U>
 	bool operator >=(const shared_ptr<T> & a, const shared_ptr<U> & b)
 	{
-		return sarastd::rel_ops::operator >=(a, b);
+		return simstd::rel_ops::operator >=(a, b);
 	}
 
 	template<typename T>

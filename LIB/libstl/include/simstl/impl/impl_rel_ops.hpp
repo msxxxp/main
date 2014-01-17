@@ -1,9 +1,9 @@
-#ifndef SARALIB_STL_GENERIC_HPP_
-#define SARALIB_STL_GENERIC_HPP_
+﻿#ifndef LIBSTL_GENERIC_HPP_
+#define LIBSTL_GENERIC_HPP_
 
 #include "impl_types.hpp"
 
-namespace sarastd {
+namespace simstd {
 	namespace rel_ops {
 		template<typename T1, typename T2>
 		bool operator !=(const T1& x, const T2& y)

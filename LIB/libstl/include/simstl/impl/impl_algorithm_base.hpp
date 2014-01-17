@@ -1,9 +1,9 @@
-#ifndef SARALIB_STL_ALGORITHM_BASE_HPP_
-#define SARALIB_STL_ALGORITHM_BASE_HPP_
+﻿#ifndef LIBSTL_ALGORITHM_BASE_HPP_
+#define LIBSTL_ALGORITHM_BASE_HPP_
 
 #include "impl_types.hpp"
 
-namespace sarastd {
+namespace simstd {
 	template<typename Type>
 	void swap(Type & a, Type & b)
 	{
@@ -12,10 +12,10 @@ namespace sarastd {
 		b = tmp;
 	}
 
-	template<typename Type, sarastd::size_t Num>
+	template<typename Type, simstd::size_t Num>
 	void swap(Type (&a)[Num], Type (&b)[Num])
 	{
-		for (sarastd::size_t n = 0; n < Num; ++n)
+		for (simstd::size_t n = 0; n < Num; ++n)
 			swap(a[n], b[n]);
 	}
 
@@ -23,9 +23,9 @@ namespace sarastd {
 	void iter_swap(ForwardIt1 a, ForwardIt2 b)
 	{
 #if defined(__GNUC__) && (__GNUC__ < 3)
-		sarastd::swap(*a, *b);
+		simstd::swap(*a, *b);
 #else
-		using sarastd::swap;
+		using simstd::swap;
 		swap(*a, *b);
 #endif
 	}

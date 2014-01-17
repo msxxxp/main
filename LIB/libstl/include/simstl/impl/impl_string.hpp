@@ -1,5 +1,5 @@
-#ifndef SARALIB_STL_STRING_HPP_
-#define SARALIB_STL_STRING_HPP_
+﻿#ifndef LIBSTL_STRING_HPP_
+#define LIBSTL_STRING_HPP_
 
 #include "impl_types.hpp"
 #include "impl_string_char_traits.hpp"
@@ -9,7 +9,7 @@
 #include "impl_iterator_reverse_iterator.hpp"
 #include "impl_memory.hpp"
 
-namespace sarastd {
+namespace simstd {
 	ssize_t string_test();
 
 	template<typename CharType, typename Traits>
@@ -28,10 +28,10 @@ namespace sarastd {
 		typedef value_type * pointer;
 		typedef const value_type * const_pointer;
 
-		typedef sarastd::pvt::_normal_iterator<pointer> iterator;
-		typedef sarastd::pvt::_normal_iterator<const_pointer> const_iterator;
-		typedef sarastd::reverse_iterator<iterator> reverse_iterator;
-		typedef sarastd::reverse_iterator<const_iterator> const_reverse_iterator;
+		typedef simstd::pvt::_normal_iterator<pointer> iterator;
+		typedef simstd::pvt::_normal_iterator<const_pointer> const_iterator;
+		typedef simstd::reverse_iterator<iterator> reverse_iterator;
+		typedef simstd::reverse_iterator<const_iterator> const_reverse_iterator;
 
 		static const size_type npos = ~static_cast<size_type>(0);
 
@@ -183,11 +183,11 @@ namespace sarastd {
 
 	///=============================================================================================
 	template<typename CharType, typename Traits>
-	struct basic_string<CharType, Traits>::string_impl: public sarastd::pvt::ref_counter {
+	struct basic_string<CharType, Traits>::string_impl: public simstd::pvt::ref_counter {
 		static string_impl * allocate(size_type capa)
 		{
-			string_impl * impl = (string_impl*)sarastd::pvt::_allocate<char>(sizeof(string_impl) + capa * sizeof(value_type));
-			sarastd::pvt::_construct(impl, capa);
+			string_impl * impl = (string_impl*)simstd::pvt::_allocate<char>(sizeof(string_impl) + capa * sizeof(value_type));
+			simstd::pvt::_construct(impl, capa);
 			return impl;
 		}
 
@@ -265,8 +265,8 @@ namespace sarastd {
 	template<typename CharType, typename Traits>
 	void basic_string<CharType, Traits>::string_impl::deallocate() const
 	{
-		sarastd::pvt::_destroy(this);
-		sarastd::pvt::_deallocate((char*)this);
+		simstd::pvt::_destroy(this);
+		simstd::pvt::_deallocate((char*)this);
 	}
 
 	///=============================================================================================
@@ -349,7 +349,7 @@ namespace sarastd {
 	template<typename CharType, typename Traits>
 	void basic_string<CharType, Traits>::swap(this_type & in)
 	{
-		using sarastd::swap;
+		using simstd::swap;
 		swap(m_data, in.m_data);
 	}
 
@@ -515,7 +515,7 @@ namespace sarastd {
 	template<typename CharType, typename Traits>
 	typename basic_string<CharType, Traits>::iterator basic_string<CharType, Traits>::insert(const_iterator pos, value_type ch)
 	{
-		typename sarastd::iterator_traits<const_iterator>::difference_type posFirst = sarastd::distance(cbegin(), pos);
+		typename simstd::iterator_traits<const_iterator>::difference_type posFirst = simstd::distance(cbegin(), pos);
 		insert(posFirst, 0, 1, ch);
 		return iterator(_str() + posFirst);
 	}
@@ -523,7 +523,7 @@ namespace sarastd {
 	template<typename CharType, typename Traits>
 	typename basic_string<CharType, Traits>::iterator basic_string<CharType, Traits>::insert(iterator pos, size_type count, value_type ch)
 	{
-		typename sarastd::iterator_traits<const_iterator>::difference_type posFirst = sarastd::distance(begin(), pos);
+		typename simstd::iterator_traits<const_iterator>::difference_type posFirst = simstd::distance(begin(), pos);
 		insert(posFirst, 0, count, ch);
 		return iterator(_str() + posFirst);
 	}
@@ -643,8 +643,8 @@ namespace sarastd {
 	{
 		if (str) {
 //			printf("      (%Iu, %Iu): '%s'\n", size(), capacity(), c_str());
-			pos = sarastd::min(pos, size());
-			len = sarastd::min(len, size() - pos);
+			pos = simstd::min(pos, size());
+			len = simstd::min(len, size() - pos);
 //			printf("      (pos: %Iu, len: %Iu)\n", pos, len);
 			if (is_same_str(str) || is_shared()) {
 				this_type tmp(c_str(), pos, get_necessary_capacity(count - len));
@@ -685,22 +685,22 @@ namespace sarastd {
 	template<typename CharType, typename Traits>
 	typename basic_string<CharType, Traits>::this_type & basic_string<CharType, Traits>::erase(size_type pos, size_type count)
 	{
-		size_type posLast = (count == npos) ? size() : sarastd::min(size(), pos + count);
-		erase(sarastd::next(cbegin(), pos), sarastd::next(cbegin(), posLast));
+		size_type posLast = (count == npos) ? size() : simstd::min(size(), pos + count);
+		erase(simstd::next(cbegin(), pos), simstd::next(cbegin(), posLast));
 		return *this;
 	}
 
 	template<typename CharType, typename Traits>
 	typename basic_string<CharType, Traits>::iterator basic_string<CharType, Traits>::erase(const_iterator position)
 	{
-		return erase(position, sarastd::next(position, 1));
+		return erase(position, simstd::next(position, 1));
 	}
 
 	template<typename CharType, typename Traits>
 	typename basic_string<CharType, Traits>::iterator basic_string<CharType, Traits>::erase(const_iterator first, const_iterator last)
 	{
-		typename sarastd::iterator_traits<const_iterator>::difference_type posFirst = sarastd::distance(cbegin(), first);
-		typename sarastd::iterator_traits<const_iterator>::difference_type posLast = sarastd::distance(cbegin(), sarastd::min(last, cend()));
+		typename simstd::iterator_traits<const_iterator>::difference_type posFirst = simstd::distance(cbegin(), first);
+		typename simstd::iterator_traits<const_iterator>::difference_type posLast = simstd::distance(cbegin(), simstd::min(last, cend()));
 		if (is_shared()) {
 			this_type tmp(c_str(), posFirst, capacity());
 			tmp.append(c_str() + posLast, size() - posLast);
@@ -740,7 +740,7 @@ namespace sarastd {
 	template<typename CharType, typename Traits>
 	typename basic_string<CharType, Traits>::size_type basic_string<CharType, Traits>::rfind(const_pointer str, size_type pos, size_type count) const
 	{
-		pos = sarastd::min(pos, size());
+		pos = simstd::min(pos, size());
 		if (count != 0 && count <= pos) {
 			pos -= (count - 1);
 			while (pos > 0)
@@ -759,7 +759,7 @@ namespace sarastd {
 	template<typename CharType, typename Traits>
 	typename basic_string<CharType, Traits>::size_type basic_string<CharType, Traits>::rfind(value_type ch, size_type pos) const
 	{
-		pos = sarastd::min(pos, size());
+		pos = simstd::min(pos, size());
 		while (pos > 0)
 			if (traits_type::eq(at(--pos), ch))
 				return pos;
@@ -778,7 +778,7 @@ namespace sarastd {
 	template<typename CharType, typename Traits>
 	typename basic_string<CharType, Traits>::size_type basic_string<CharType, Traits>::find_last_of(const this_type & str, size_type pos) const
 	{
-		pos = sarastd::min(pos, size());
+		pos = simstd::min(pos, size());
 		while (pos > 0)
 			if (traits_type::find(str.c_str(), str.size(), at(--pos)))
 				return pos;
@@ -797,7 +797,7 @@ namespace sarastd {
 	template<typename CharType, typename Traits>
 	typename basic_string<CharType, Traits>::size_type basic_string<CharType, Traits>::find_last_not_of(const this_type & str, size_type pos) const
 	{
-		pos = sarastd::min(pos, size());
+		pos = simstd::min(pos, size());
 		while (pos > 0)
 			if (traits_type::find(str.c_str(), str.size(), at(--pos)) == nullptr)
 				return pos;
@@ -820,14 +820,14 @@ namespace sarastd {
 	template<typename CharType, typename Traits>
 	typename basic_string<CharType, Traits>::size_type basic_string<CharType, Traits>::get_new_capacity(size_type capacity) const
 	{
-		return sarastd::max(size_type(MIN_ALLOC_BLOCK), capacity);
+		return simstd::max(size_type(MIN_ALLOC_BLOCK), capacity);
 	}
 
 	template<typename CharType, typename Traits>
 	typename basic_string<CharType, Traits>::size_type basic_string<CharType, Traits>::get_necessary_capacity(ptrdiff_t addToSize) const
 	{
 		if (capacity() < (size() + addToSize))
-			return size() + sarastd::max((ptrdiff_t)size(), addToSize);
+			return size() + simstd::max((ptrdiff_t)size(), addToSize);
 		return capacity();
 	}
 
@@ -843,7 +843,7 @@ namespace sarastd {
 	template<typename CharType, typename Traits>
 	int basic_string<CharType, Traits>::compare(const_pointer str1, size_type count1, const_pointer str2, size_type count2)
 	{
-		int result = traits_type::compare(str1, str2, sarastd::min(count1, count2));
+		int result = traits_type::compare(str1, str2, simstd::min(count1, count2));
 		if (result != 0)
 			return result;
 		if (count1 < count2)

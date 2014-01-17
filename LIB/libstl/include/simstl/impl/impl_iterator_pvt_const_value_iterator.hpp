@@ -1,10 +1,10 @@
-#ifndef SARALIB_STL_ITERATOR_CONST_VALUE_ITERATOR_HPP_
-#define SARALIB_STL_ITERATOR_CONST_VALUE_ITERATOR_HPP_
+﻿#ifndef LIBSTL_ITERATOR_CONST_VALUE_ITERATOR_HPP_
+#define LIBSTL_ITERATOR_CONST_VALUE_ITERATOR_HPP_
 
 #include "impl_types.hpp"
 #include "impl_iterator_base.hpp"
 
-namespace sarastd
+namespace simstd
 {
 	namespace pvt {
 		template<typename Iterator>
@@ -20,7 +20,7 @@ namespace sarastd
 			typedef typename traits_type::difference_type   difference_type;
 			typedef typename traits_type::reference         reference;
 			typedef typename traits_type::pointer           pointer;
-			typedef sarastd::size_t size_type;
+			typedef simstd::size_t size_type;
 
 			_const_value_iterator(iterator_type v, iterator_type it): value(v), current(it) {}
 
@@ -56,7 +56,7 @@ namespace sarastd
 		template<typename Iterator>
 		bool operator !=(const _const_value_iterator<Iterator>& lhs, const _const_value_iterator<Iterator>& rhs)
 		{
-			return sarastd::rel_ops::operator !=(lhs, rhs);
+			return simstd::rel_ops::operator !=(lhs, rhs);
 		}
 
 		template<typename Iterator>
@@ -68,19 +68,19 @@ namespace sarastd
 		template<typename Iterator>
 		bool operator <=(const _const_value_iterator<Iterator>& lhs, const _const_value_iterator<Iterator>& rhs)
 		{
-			return sarastd::rel_ops::operator <=(lhs, rhs);
+			return simstd::rel_ops::operator <=(lhs, rhs);
 		}
 
 		template<typename Iterator>
 		bool operator >(const _const_value_iterator<Iterator>& lhs, const _const_value_iterator<Iterator>& rhs)
 		{
-			return sarastd::rel_ops::operator >(lhs, rhs);
+			return simstd::rel_ops::operator >(lhs, rhs);
 		}
 
 		template<typename Iterator>
 		bool operator >=(const _const_value_iterator<Iterator>& lhs, const _const_value_iterator<Iterator>& rhs)
 		{
-			return sarastd::rel_ops::operator >=(lhs, rhs);
+			return simstd::rel_ops::operator >=(lhs, rhs);
 		}
 
 		template<typename Iterator>
@@ -101,7 +101,7 @@ namespace sarastd
 		{
 			typedef _value_generator<Type> this_type;
 			typedef Type value_type;
-			typedef sarastd::size_t size_type;
+			typedef simstd::size_t size_type;
 			typedef const Type* const_pointer;
 			typedef _const_value_iterator<const_pointer> const_iterator;
 

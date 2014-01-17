@@ -1,11 +1,11 @@
-#ifndef SARALIB_STL_ALGORITHM_HPP_
-#define SARALIB_STL_ALGORITHM_HPP_
+﻿#ifndef LIBSTL_ALGORITHM_HPP_
+#define LIBSTL_ALGORITHM_HPP_
 
 #include "impl_types.hpp"
 #include "impl_iterator_base.hpp"
 #include "impl_pair.hpp"
 
-namespace sarastd {
+namespace simstd {
 	template<typename InputIt, typename UnaryPredicate>
 	bool all_of(InputIt first, InputIt last, UnaryPredicate p)
 	{
@@ -62,21 +62,21 @@ namespace sarastd {
 	}
 
 	template<class InputIt1, class InputIt2, class BinaryPredicate>
-	sarastd::pair<InputIt1, InputIt2> mismatch(InputIt1 first1, InputIt1 last1, InputIt2 first2, BinaryPredicate p)
+	simstd::pair<InputIt1, InputIt2> mismatch(InputIt1 first1, InputIt1 last1, InputIt2 first2, BinaryPredicate p)
 	{
 		while (first1 != last1 && p(*first1, *first2)) {
 			++first1, ++first2;
 		}
-		return sarastd::make_pair(first1, first2);
+		return simstd::make_pair(first1, first2);
 	}
 
 	template<class InputIt1, class InputIt2>
-	sarastd::pair<InputIt1, InputIt2> mismatch(InputIt1 first1, InputIt1 last1, InputIt2 first2)
+	simstd::pair<InputIt1, InputIt2> mismatch(InputIt1 first1, InputIt1 last1, InputIt2 first2)
 	{
 		while (first1 != last1 && *first1 == *first2) {
 			++first1, ++first2;
 		}
-		return sarastd::make_pair(first1, first2);
+		return simstd::make_pair(first1, first2);
 	}
 
 	template<typename InputIt, typename T>
@@ -189,7 +189,7 @@ namespace sarastd {
 	{
 		Size curr_count = 0;
 		ForwardIt result, t_last = first;
-		sarastd::advance(t_last, sarastd::distance(first, last) - count + 1);
+		simstd::advance(t_last, simstd::distance(first, last) - count + 1);
 
 		for (; first != t_last; ++first) {
 			curr_count = 0;
@@ -209,7 +209,7 @@ namespace sarastd {
 	{
 		Size curr_count = 0;
 		ForwardIt result, t_last = first;
-		sarastd::advance(t_last, sarastd::distance(first, last) - count + 1);
+		simstd::advance(t_last, simstd::distance(first, last) - count + 1);
 
 		for (; first != t_last; ++first) {
 			curr_count = 0;
@@ -354,7 +354,7 @@ namespace sarastd {
 	ForwardIt1 swap_ranges(ForwardIt1 first1, ForwardIt1 last1, ForwardIt2 first2)
 	{
 		while (first1 != last1) {
-			sarastd::iter_swap(first1, first2);
+			simstd::iter_swap(first1, first2);
 			++first1;
 			++first2;
 		}
@@ -365,7 +365,7 @@ namespace sarastd {
 	void reverse(BidirIt first, BidirIt last)
 	{
 		while ((first != last) && (first != --last)) {
-			sarastd::swap(*first, *last);
+			simstd::swap(*first, *last);
 			++first;
 		}
 	}
@@ -385,7 +385,7 @@ namespace sarastd {
 	{
 		ForwardIt next = n_first;
 		while (first != next) {
-			sarastd::swap(*first, *next);
+			simstd::swap(*first, *next);
 			++first;
 			++next;
 			if (next == last)
@@ -398,17 +398,17 @@ namespace sarastd {
 	template<typename ForwardIt, typename OutputIt>
 	OutputIt rotate_copy(ForwardIt first, ForwardIt n_first, ForwardIt last, OutputIt d_first)
 	{
-		d_first = sarastd::copy(n_first, last, d_first);
-		return sarastd::copy(first, n_first, d_first);
+		d_first = simstd::copy(n_first, last, d_first);
+		return simstd::copy(first, n_first, d_first);
 	}
 
 	template<typename RandomIt, typename RandomFunc>
 	void random_shuffle(RandomIt first, RandomIt last, RandomFunc& r)
 	{
-		typename sarastd::iterator_traits<RandomIt>::difference_type i, n;
+		typename simstd::iterator_traits<RandomIt>::difference_type i, n;
 		n = last - first;
 		for (i = n - 1; i > 0; --i) {
-			using sarastd::swap;
+			using simstd::swap;
 			swap(first[i], first[r(i + 1)]);
 		}
 	}
@@ -502,7 +502,7 @@ namespace sarastd {
 	{
 		while (first1 != last1) {
 			if (first2 == last2)
-				return sarastd::copy(first1, last1, d_first);
+				return simstd::copy(first1, last1, d_first);
 
 			if (comp(*first1, *first2)) {
 				*d_first = *first1;
@@ -523,7 +523,7 @@ namespace sarastd {
 	{
 		while (first1 != last1) {
 			if (first2 == last2)
-				return sarastd::copy(first1, last1, d_first);
+				return simstd::copy(first1, last1, d_first);
 
 			if (*first1 < *first2) {
 				*d_first = *first1;
@@ -580,7 +580,7 @@ namespace sarastd {
 	{
 		while (first1 != last1) {
 			if (first2 == last2)
-				return sarastd::copy(first1, last1, d_first);
+				return simstd::copy(first1, last1, d_first);
 
 			if (comp(*first1, *first2)) {
 				*d_first = *first1;
@@ -596,7 +596,7 @@ namespace sarastd {
 				++first2;
 			}
 		}
-		return sarastd::copy(first2, last2, d_first);
+		return simstd::copy(first2, last2, d_first);
 	}
 
 	template<typename InputIt1, typename InputIt2, typename OutputIt>
@@ -604,7 +604,7 @@ namespace sarastd {
 	{
 		while (first1 != last1) {
 			if (first2 == last2)
-				return sarastd::copy(first1, last1, d_first);
+				return simstd::copy(first1, last1, d_first);
 
 			if (*first1 < *first2) {
 				*d_first = *first1;
@@ -620,7 +620,7 @@ namespace sarastd {
 				++first2;
 			}
 		}
-		return sarastd::copy(first2, last2, d_first);
+		return simstd::copy(first2, last2, d_first);
 	}
 
 	template<typename InputIt1, typename InputIt2, typename OutputIt, typename Compare>
@@ -628,7 +628,7 @@ namespace sarastd {
 	{
 		for (; first1 != last1; ++d_first) {
 			if (first2 == last2)
-				return sarastd::copy(first1, last1, d_first);
+				return simstd::copy(first1, last1, d_first);
 			if (comp(*first2, *first1)) {
 				*d_first = *first2;
 				++first2;
@@ -639,7 +639,7 @@ namespace sarastd {
 				++first1;
 			}
 		}
-		return sarastd::copy(first2, last2, d_first);
+		return simstd::copy(first2, last2, d_first);
 	}
 
 	template<typename InputIt1, typename InputIt2, typename OutputIt>
@@ -647,7 +647,7 @@ namespace sarastd {
 	{
 		for (; first1 != last1; ++d_first) {
 			if (first2 == last2)
-				return sarastd::copy(first1, last1, d_first);
+				return simstd::copy(first1, last1, d_first);
 			if (*first2 < *first1) {
 				*d_first = *first2;
 				++first2;
@@ -658,7 +658,7 @@ namespace sarastd {
 				++first1;
 			}
 		}
-		return sarastd::copy(first2, last2, d_first);
+		return simstd::copy(first2, last2, d_first);
 	}
 
 	template<typename ForwardIt, typename Compare>
@@ -726,15 +726,15 @@ namespace sarastd {
 	}
 
 	template<typename T, typename Compare>
-	sarastd::pair<const T&, const T&> minmax(const T& a, const T& b, Compare comp)
+	simstd::pair<const T&, const T&> minmax(const T& a, const T& b, Compare comp)
 	{
-		return comp(b, a) ? sarastd::make_pair(b, a) : sarastd::make_pair(a, b);
+		return comp(b, a) ? simstd::make_pair(b, a) : simstd::make_pair(a, b);
 	}
 
 	template<typename T>
-	sarastd::pair<const T&, const T&> minmax(const T& a, const T& b)
+	simstd::pair<const T&, const T&> minmax(const T& a, const T& b)
 	{
-		return (b < a) ? sarastd::make_pair(b, a) : sarastd::make_pair(a, b);
+		return (b < a) ? simstd::make_pair(b, a) : simstd::make_pair(a, b);
 	}
 
 	template<typename BidirIt>
@@ -754,12 +754,12 @@ namespace sarastd {
 				i2 = last;
 				while (!(*i < *--i2))
 					;
-				sarastd::iter_swap(i, i2);
-				sarastd::reverse(i1, last);
+				simstd::iter_swap(i, i2);
+				simstd::reverse(i1, last);
 				return true;
 			}
 			if (i == first) {
-				sarastd::reverse(first, last);
+				simstd::reverse(first, last);
 				return false;
 			}
 		}
@@ -782,12 +782,12 @@ namespace sarastd {
 				i2 = last;
 				while (!(*--i2 < *i))
 					;
-				sarastd::iter_swap(i, i2);
-				sarastd::reverse(i1, last);
+				simstd::iter_swap(i, i2);
+				simstd::reverse(i1, last);
 				return true;
 			}
 			if (i == first) {
-				sarastd::reverse(first, last);
+				simstd::reverse(first, last);
 				return false;
 			}
 		}

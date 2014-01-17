@@ -1,12 +1,12 @@
-#ifndef SARALIB_STL_ALGORITHM_HEAP_HPP_
-#define SARALIB_STL_ALGORITHM_HEAP_HPP_
+﻿#ifndef LIBSTL_ALGORITHM_HEAP_HPP_
+#define LIBSTL_ALGORITHM_HEAP_HPP_
 
 #include "impl_types.hpp"
 #include "impl_algorithm_base.hpp"
 #include "impl_functional.hpp"
 #include "impl_iterator_base.hpp"
 
-namespace sarastd {
+namespace simstd {
 
 	namespace pvt {
 		template<typename RandomIt, typename Distance, typename T, typename Compare>
@@ -37,31 +37,31 @@ namespace sarastd {
 				position = childPosition - 1;
 			}
 
-			sarastd::pvt::promote_heap<RandomIt, Distance, T, Compare>(first, topPosition, position, value, compare);
+			simstd::pvt::promote_heap<RandomIt, Distance, T, Compare>(first, topPosition, position, value, compare);
 		}
 
 		template<typename RandomIt, typename Distance, typename Compare>
 		void remove_heap(RandomIt first, Distance heapSize, Distance position, Compare compare)
 		{
-			typedef typename sarastd::iterator_traits<RandomIt>::difference_type difference_type;
-			typedef typename sarastd::iterator_traits<RandomIt>::value_type value_type;
+			typedef typename simstd::iterator_traits<RandomIt>::difference_type difference_type;
+			typedef typename simstd::iterator_traits<RandomIt>::value_type value_type;
 
 			const value_type tempBottom(*(first + heapSize - 1));
 			*(first + heapSize - 1) = *(first + position);
-			sarastd::pvt::adjust_heap<RandomIt, difference_type, value_type, Compare>(first, (difference_type)0, (difference_type)(heapSize - 1), (difference_type)position, tempBottom, compare);
+			simstd::pvt::adjust_heap<RandomIt, difference_type, value_type, Compare>(first, (difference_type)0, (difference_type)(heapSize - 1), (difference_type)position, tempBottom, compare);
 		}
 
 		template<typename RandomIt, typename Distance, typename Compare>
 		void change_heap(RandomIt first, Distance heapSize, Distance position, Compare compare)
 		{
-			typedef typename sarastd::iterator_traits<RandomIt>::difference_type difference_type;
-			typedef typename sarastd::iterator_traits<RandomIt>::value_type value_type;
+			typedef typename simstd::iterator_traits<RandomIt>::difference_type difference_type;
+			typedef typename simstd::iterator_traits<RandomIt>::value_type value_type;
 
-			sarastd::pvt::remove_heap<RandomIt, Distance, Compare>(first, heapSize, position, compare);
+			simstd::pvt::remove_heap<RandomIt, Distance, Compare>(first, heapSize, position, compare);
 
 			value_type tempBottom(*(first + heapSize - 1));
 
-			sarastd::pvt::promote_heap<RandomIt, difference_type, value_type, Compare>(first, (difference_type)0, (difference_type)(heapSize - 1), tempBottom, compare);
+			simstd::pvt::promote_heap<RandomIt, difference_type, value_type, Compare>(first, (difference_type)0, (difference_type)(heapSize - 1), tempBottom, compare);
 		}
 	}
 
@@ -81,15 +81,15 @@ namespace sarastd {
 	template<typename RandomIt>
 	bool is_heap(RandomIt first, RandomIt last)
 	{
-		typedef sarastd::less<typename sarastd::iterator_traits<RandomIt>::value_type> less;
-		return sarastd::is_heap<RandomIt, less>(first, last, less());
+		typedef simstd::less<typename simstd::iterator_traits<RandomIt>::value_type> less;
+		return simstd::is_heap<RandomIt, less>(first, last, less());
 	}
 
 	template<typename RandomIt, typename Compare>
 	void make_heap(RandomIt first, RandomIt last, Compare compare)
 	{
-		typedef typename sarastd::iterator_traits<RandomIt>::difference_type difference_type;
-		typedef typename sarastd::iterator_traits<RandomIt>::value_type value_type;
+		typedef typename simstd::iterator_traits<RandomIt>::difference_type difference_type;
+		typedef typename simstd::iterator_traits<RandomIt>::value_type value_type;
 
 		const difference_type heapSize = last - first;
 
@@ -99,7 +99,7 @@ namespace sarastd {
 			do {
 				--parentPosition;
 				const value_type temp(*(first + parentPosition));
-				sarastd::pvt::adjust_heap<RandomIt, difference_type, value_type, Compare>(first, parentPosition, heapSize, parentPosition, temp, compare);
+				simstd::pvt::adjust_heap<RandomIt, difference_type, value_type, Compare>(first, parentPosition, heapSize, parentPosition, temp, compare);
 			} while (parentPosition != 0);
 		}
 	}
@@ -107,58 +107,58 @@ namespace sarastd {
 	template<typename RandomIt>
 	void make_heap(RandomIt first, RandomIt last)
 	{
-		typedef sarastd::less<typename sarastd::iterator_traits<RandomIt>::value_type> less;
-		sarastd::make_heap<RandomIt, less>(first, last, less());
+		typedef simstd::less<typename simstd::iterator_traits<RandomIt>::value_type> less;
+		simstd::make_heap<RandomIt, less>(first, last, less());
 	}
 
 	template<typename RandomIt, typename Compare>
 	void push_heap(RandomIt first, RandomIt last, Compare compare)
 	{
-		typedef typename sarastd::iterator_traits<RandomIt>::difference_type difference_type;
-		typedef typename sarastd::iterator_traits<RandomIt>::value_type value_type;
+		typedef typename simstd::iterator_traits<RandomIt>::difference_type difference_type;
+		typedef typename simstd::iterator_traits<RandomIt>::value_type value_type;
 
 		const value_type tempBottom(*(last - 1));
 
-		sarastd::pvt::promote_heap<RandomIt, difference_type, value_type, Compare>(first, (difference_type)0, (difference_type)(last - first - 1), tempBottom, compare);
+		simstd::pvt::promote_heap<RandomIt, difference_type, value_type, Compare>(first, (difference_type)0, (difference_type)(last - first - 1), tempBottom, compare);
 	}
 
 	template<typename RandomIt>
 	void push_heap(RandomIt first, RandomIt last)
 	{
-		typedef sarastd::less<typename sarastd::iterator_traits<RandomIt>::value_type> less;
-		sarastd::push_heap<RandomIt, less>(first, last, less());
+		typedef simstd::less<typename simstd::iterator_traits<RandomIt>::value_type> less;
+		simstd::push_heap<RandomIt, less>(first, last, less());
 	}
 
 	template<typename RandomIt, typename Compare>
 	void pop_heap(RandomIt first, RandomIt last, Compare compare)
 	{
-		typedef typename sarastd::iterator_traits<RandomIt>::difference_type difference_type;
-		typedef typename sarastd::iterator_traits<RandomIt>::value_type value_type;
+		typedef typename simstd::iterator_traits<RandomIt>::difference_type difference_type;
+		typedef typename simstd::iterator_traits<RandomIt>::value_type value_type;
 
 		const value_type tempBottom(*(last - 1));
 		*(last - 1) = *first;
-		sarastd::pvt::adjust_heap<RandomIt, difference_type, value_type, Compare>(first, (difference_type)0, (difference_type)(last - first - 1), 0, tempBottom, compare);
+		simstd::pvt::adjust_heap<RandomIt, difference_type, value_type, Compare>(first, (difference_type)0, (difference_type)(last - first - 1), 0, tempBottom, compare);
 	}
 
 	template<typename RandomIt>
 	void pop_heap(RandomIt first, RandomIt last)
 	{
-		typedef sarastd::less<typename sarastd::iterator_traits<RandomIt>::value_type> less;
-		sarastd::pop_heap<RandomIt, less>(first, last, less());
+		typedef simstd::less<typename simstd::iterator_traits<RandomIt>::value_type> less;
+		simstd::pop_heap<RandomIt, less>(first, last, less());
 	}
 
 	template<typename RandomIt, typename Compare>
 	void sort_heap(RandomIt first, RandomIt last, Compare compare)
 	{
 		for (; (last - first) > 1; --last)
-			sarastd::pop_heap<RandomIt, Compare>(first, last, compare);
+			simstd::pop_heap<RandomIt, Compare>(first, last, compare);
 	}
 
 	template<typename RandomIt>
 	void sort_heap(RandomIt first, RandomIt last)
 	{
-		typedef sarastd::less<typename sarastd::iterator_traits<RandomIt>::value_type> less;
-		sarastd::sort_heap<RandomIt, less>(first, last, less());
+		typedef simstd::less<typename simstd::iterator_traits<RandomIt>::value_type> less;
+		simstd::sort_heap<RandomIt, less>(first, last, less());
 	}
 }
 

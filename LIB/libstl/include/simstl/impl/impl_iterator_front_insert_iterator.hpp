@@ -1,10 +1,10 @@
-#ifndef SARALIB_STL_ITERATOR_FRONT_INSERT_ITERATOR_HPP_
-#define SARALIB_STL_ITERATOR_FRONT_INSERT_ITERATOR_HPP_
+﻿#ifndef LIBSTL_ITERATOR_FRONT_INSERT_ITERATOR_HPP_
+#define LIBSTL_ITERATOR_FRONT_INSERT_ITERATOR_HPP_
 
 #include "impl_types.hpp"
 #include "impl_iterator_base.hpp"
 
-namespace sarastd
+namespace simstd
 {
 	template<typename Container>
 	class front_insert_iterator : public iterator<output_iterator_tag, void, void, void, void>

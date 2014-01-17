@@ -1,11 +1,11 @@
-#ifndef SARALIB_STL_ITERATOR_NORMAL_ITERATOR_HPP_
-#define SARALIB_STL_ITERATOR_NORMAL_ITERATOR_HPP_
+﻿#ifndef LIBSTL_ITERATOR_NORMAL_ITERATOR_HPP_
+#define LIBSTL_ITERATOR_NORMAL_ITERATOR_HPP_
 
 #include "impl_types.hpp"
 #include "impl_iterator_base.hpp"
 #include "impl_rel_ops.hpp"
 
-namespace sarastd
+namespace simstd
 {
 	namespace pvt {
 		template<typename Pointer>
@@ -70,25 +70,25 @@ namespace sarastd
 		template<typename Type1, typename Type2>
 		bool operator !=(const _normal_iterator<Type1>& lhs, const _normal_iterator<Type2>& rhs)
 		{
-			return sarastd::rel_ops::operator !=(lhs, rhs);
+			return simstd::rel_ops::operator !=(lhs, rhs);
 		}
 
 		template<typename Type1, typename Type2>
 		bool operator <= (const _normal_iterator<Type1>& lhs, const _normal_iterator<Type2>& rhs)
 		{
-			return sarastd::rel_ops::operator <=(lhs, rhs);
+			return simstd::rel_ops::operator <=(lhs, rhs);
 		}
 
 		template<typename Type1, typename Type2>
 		bool operator > (const _normal_iterator<Type1>& lhs, const _normal_iterator<Type2>& rhs)
 		{
-			return sarastd::rel_ops::operator >(lhs, rhs);
+			return simstd::rel_ops::operator >(lhs, rhs);
 		}
 
 		template<typename Type1, typename Type2>
 		bool operator >=(const _normal_iterator<Type1>& lhs, const _normal_iterator<Type2>& rhs)
 		{
-			return sarastd::rel_ops::operator >=(lhs, rhs);
+			return simstd::rel_ops::operator >=(lhs, rhs);
 		}
 
 		template<typename Type>

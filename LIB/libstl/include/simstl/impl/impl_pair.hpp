@@ -1,14 +1,15 @@
-#ifndef SARALIB_STL_PAIR_HPP_
-#define SARALIB_STL_PAIR_HPP_
+﻿#ifndef LIBSTL_PAIR_HPP_
+#define LIBSTL_PAIR_HPP_
 
 #include "impl_types.hpp"
 #include "impl_rel_ops.hpp"
 #include "impl_algorithm_base.hpp"
 
-namespace sarastd {
+namespace simstd {
 
 	template<typename T1, typename T2>
-	struct pair {
+	struct pair
+	{
 		typedef T1 first_type;
 		typedef T2 second_type;
 
@@ -29,20 +30,23 @@ namespace sarastd {
 
 	template<typename T1, typename T2>
 	pair<T1, T2>::pair() :
-		first(), second()
+		first(),
+		second()
 	{
 	}
 
 	template<typename T1, typename T2>
 	pair<T1, T2>::pair(const T1& x, const T2& y) :
-		first(x), second(y)
+		first(x),
+		second(y)
 	{
 	}
 
 	template<typename T1, typename T2>
 	template<typename U1, typename U2>
 	pair<T1, T2>::pair(const pair<U1, U2>& p) :
-		first(p.first), second(p.second)
+		first(p.first),
+		second(p.second)
 	{
 	}
 
@@ -58,10 +62,10 @@ namespace sarastd {
 	void pair<T1, T2>::swap(pair& other)
 	{
 #if defined(__GNUC__) && (__GNUC__ < 3)
-		sarastd::swap(first, other.first);
-		sarastd::swap(second, other.second);
+		simstd::swap(first, other.first);
+		simstd::swap(second, other.second);
 #else
-		using sarastd::swap;
+		using simstd::swap;
 		swap(first, other.first);
 		swap(second, other.second);
 #endif
@@ -69,9 +73,9 @@ namespace sarastd {
 
 	///=============================================================================================
 	template<typename T1, typename T2>
-	sarastd::pair<T1, T2> make_pair(T1 t, T2 u)
+	simstd::pair<T1, T2> make_pair(T1 t, T2 u)
 	{
-		return sarastd::pair<T1, T2>(t, u);
+		return simstd::pair<T1, T2>(t, u);
 	}
 
 	template<typename T1, typename T2>
@@ -81,9 +85,9 @@ namespace sarastd {
 	}
 
 	template<typename T1, typename T2>
-	bool operator < (const pair<T1, T2>& lhs, const pair<T1, T2>& rhs)
+	bool operator <(const pair<T1, T2>& lhs, const pair<T1, T2>& rhs)
 	{
-        return ((lhs.first < rhs.first) || (!(rhs.first < lhs.first) && (lhs.second < rhs.second)));
+		return ((lhs.first < rhs.first) || (!(rhs.first < lhs.first) && (lhs.second < rhs.second)));
 	}
 
 	template<typename T1, typename T2>
@@ -99,7 +103,7 @@ namespace sarastd {
 	}
 
 	template<typename T1, typename T2>
-	bool operator > (const pair<T1, T2>& lhs, const pair<T1, T2>& rhs)
+	bool operator >(const pair<T1, T2>& lhs, const pair<T1, T2>& rhs)
 	{
 		return rel_ops::operator >(lhs, rhs);
 	}

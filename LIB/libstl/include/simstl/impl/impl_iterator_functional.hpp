@@ -1,10 +1,10 @@
-#ifndef SARALIB_STL_ITERATOR_FUNCTIONAL_HPP_
-#define SARALIB_STL_ITERATOR_FUNCTIONAL_HPP_
+﻿#ifndef LIBSTL_ITERATOR_FUNCTIONAL_HPP_
+#define LIBSTL_ITERATOR_FUNCTIONAL_HPP_
 
 #include "impl_types.hpp"
 #include "impl_iterator_base.hpp"
 
-namespace sarastd
+namespace simstd
 {
 	template<typename Container>
 	typename
@@ -14,10 +14,10 @@ namespace sarastd
 	typename
 	Container::const_iterator begin(const Container & c) {return c.begin();}
 
-	template<typename Type, sarastd::size_t N>
+	template<typename Type, simstd::size_t N>
 	Type* begin(Type (&array)[N]) {return array;}
 
-	template<typename Type, sarastd::size_t N>
+	template<typename Type, simstd::size_t N>
 	const Type* cbegin(Type (&array)[N]) {return array;}
 
 	template<typename Container>
@@ -32,10 +32,10 @@ namespace sarastd
 	typename
 	Container::const_iterator end(const Container & c) {return c.end();}
 
-	template<typename Type, sarastd::size_t N>
+	template<typename Type, simstd::size_t N>
 	Type* end(Type (&array)[N]) {return array + N;}
 
-	template<typename Type, sarastd::size_t N>
+	template<typename Type, simstd::size_t N>
 	const Type* cend(Type (&array)[N]) {return array + N;}
 
 	template<typename Container>
@@ -51,10 +51,10 @@ namespace sarastd
 	typename
 	Container::const_reverse_iterator rbegin(const Container & c) {return c.rbegin();}
 
-	template<typename Type, sarastd::size_t N>
+	template<typename Type, simstd::size_t N>
 	reverse_iterator<Type*> rbegin(Type (&array)[N]) {return reverse_iterator<Type*>(array + N);}
 
-	template<typename Type, sarastd::size_t N>
+	template<typename Type, simstd::size_t N>
 	reverse_iterator<const Type*> crbegin(Type (&array)[N]) {return reverse_iterator<const Type*>(array + N);}
 
 	template<typename Container>
@@ -69,10 +69,10 @@ namespace sarastd
 	typename
 	Container::const_reverse_iterator rend(const Container & c) {return c.rend();}
 
-	template<typename Type, sarastd::size_t N>
+	template<typename Type, simstd::size_t N>
 	reverse_iterator<Type*> rend(Type (&array)[N]) {return reverse_iterator<Type*>(array);}
 
-	template<typename Type, sarastd::size_t N>
+	template<typename Type, simstd::size_t N>
 	reverse_iterator<const Type*> crend(Type (&array)[N]) {return reverse_iterator<const Type*>(array);}
 
 	template<typename Container>

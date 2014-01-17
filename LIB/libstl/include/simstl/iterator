@@ -1,5 +1,5 @@
-#ifndef SARALIB_STL_ITERATOR_
-#define SARALIB_STL_ITERATOR_
+﻿#ifndef LIBSTL_ITERATOR_
+#define LIBSTL_ITERATOR_
 
 #include "impl/impl_iterator_base.hpp"
 #include "impl/impl_iterator_back_insert_iterator.hpp"

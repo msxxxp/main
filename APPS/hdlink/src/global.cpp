@@ -2,6 +2,7 @@
 
 namespace Global {
 	std::unique_ptr<CryptProvider> cryptProvider;
+	PathsList allInputPaths;
 	size_t minFileSize = 1024;
 	size_t firstBlockHash = 65 * 1024;
 	bool showStatistics = true;

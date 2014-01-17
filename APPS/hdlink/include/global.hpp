@@ -3,11 +3,16 @@
 
 #include <libbase/std.hpp>
 #include <CryptProvider.hpp>
+#include <Path.hpp>
 #include <memory>
+#include <vector>
+
+typedef std::vector<parent_type> PathsList;
 
 namespace Global {
 
 	extern std::unique_ptr<CryptProvider> cryptProvider;
+	extern PathsList allInputPaths;
 	extern size_t minFileSize; // Minimum file size so that hard linking will be checked...
 	extern size_t firstBlockHash;
 	extern bool showStatistics;

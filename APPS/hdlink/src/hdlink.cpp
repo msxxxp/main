@@ -19,8 +19,11 @@
  **/
 
 #include <libext/exception.hpp>
+#include <libext/filesystem.hpp>
 #include <liblog/logger.hpp>
 #include <libbase/cstr.hpp>
+#include <libbase/path.hpp>
+#include <libbase/filesystem.hpp>
 #include <hdlink.hpp>
 #include <global.hpp>
 
@@ -116,37 +119,26 @@ struct ParseSinglePath: public Base::Command_p {
 
 	ssize_t execute()
 	{
-		wchar_t extendedPath[Base::MAX_PATH_LEN];
-		Copy(extendedPath, PATH_PREFIX_NT, extendedPath.size());
-		Cat(extendedPath, FullPath(path).c_str(), extendedPath.size());
-		::GetLongPathNameW(extendedPath, extendedPath, extendedPath.size());
-		PWSTR tmp = (PWSTR)find_last_not_of((PCWSTR)extendedPath, L"\\ ");
-		if (tmp && (tmp - extendedPath) < (ssize_t)extendedPath.size()) {
-			tmp[1] = STR_END;		//erase tailing path separators
-		}
+		ustring extendedPath = Base::Path::ensure_prefix(m_path);
+		extendedPath = Base::Path::get_fullpath(extendedPath.c_str());
+		Base::Path::Inplace::ensure_no_end_separator(extendedPath);
 
-		Path* Result = nullptr;
-		if (Empty(extendedPath) || !is_exists(extendedPath)) {
-			logError(L"Path \"%s\" is not existing or accessible!\n", extendedPath.data());
-		} else {
+		if (!extendedPath.empty() && Fsys::is_exist(extendedPath)) {
 			{
-				ConsoleColor col(FOREGROUND_INTENSITY | FOREGROUND_RED | FOREGROUND_GREEN);
-				logInfo(L"Adding directory: ");
+//				ConsoleColor col(FOREGROUND_INTENSITY | FOREGROUND_RED | FOREGROUND_GREEN);
+//				logInfo(L"Adding directory: ");
 			}
-			logInfo(L"\"%s\"\n", path);
-			Result = new Path(shared_ptr<Path>(), AutoUTF(extendedPath));
+			LogInfo(L"'%s'\n", extendedPath.c_str());
+			Global::allInputPaths.emplace_back(std::make_shared<Path>(extendedPath));
+		} else {
+			LogWarn(L"Path '%s' is not existing or accessible\n", extendedPath.data());
 		}
-		return Result;
 		return 0;
 	}
 
 private:
 	const wchar_t * m_path;
 };
-
-Path* parsePath(PCWSTR path)
-{
-}
 
 struct CmdParser: public Base::Command_p {
 	CmdParser(const wchar_t * cmdLine) :
@@ -188,6 +180,8 @@ struct CmdParser: public Base::Command_p {
 //				action.reset(new ArcCompressPiped(arc_lib, argv[i + 1], argv[i + 3], argv[i + 2]));
 				continue;
 			}
+
+
 		}
 	}
 

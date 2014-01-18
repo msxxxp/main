@@ -2,5 +2,7 @@
 #define LIBSTL_STRING_
 
 #include "impl/impl_string.hpp"
+#include "impl/impl_string_convert_a.hpp"
+#include "impl/impl_string_convert_w.hpp"
 
 #endif

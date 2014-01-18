@@ -4,6 +4,8 @@
 #include "impl_types.hpp"
 #include <string.h>
 #include <wchar.h>
+//#include <cstring>
+//#include <cwchar>
 
 namespace simstd {
 	template<typename CharType>

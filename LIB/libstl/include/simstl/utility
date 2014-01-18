@@ -1,6 +1,7 @@
 ﻿#ifndef LIBSTL_UTILITY_
 #define LIBSTL_UTILITY_
 
-#include "impl/impl_rel_ops.hpp"
+#include <simstl/impl/utility/pair.hpp>
+#include <simstl/impl/utility/rel_ops.hpp>
 
 #endif

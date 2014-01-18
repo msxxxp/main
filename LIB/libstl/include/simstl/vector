@@ -1,6 +1,8 @@
 ﻿#ifndef LIBSTL_VECTOR_
 #define LIBSTL_VECTOR_
 
-#include "impl/impl_vector.hpp"
+#include <simstl/impl/vector/base.hpp>
+#include <simstl/impl/vector/impl.hpp>
+#include <simstl/impl/vector/movable_vector.hpp>
 
 #endif

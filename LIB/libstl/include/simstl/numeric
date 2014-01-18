@@ -1,6 +1,6 @@
 ﻿#ifndef LIBSTL_NUMERIC_
 #define LIBSTL_NUMERIC_
 
-#include "impl/impl_numeric.hpp"
+#include <simstl/impl/numeric.hpp>
 
 #endif

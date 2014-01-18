@@ -22,4 +22,3 @@ bool Hash::operator ==(const Hash & other) const
 	++statistics().hashCompares;
 	return Memory::compare(m_hash, other.m_hash, size());
 }
-

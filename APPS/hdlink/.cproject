@@ -23,14 +23,14 @@
 								<option id="gnu.cpp.link.option.paths.1436458739" name="Library search path (-L)" superClass="gnu.cpp.link.option.paths" valueType="libPaths">
 									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/liblog/Release}&quot;"/>
 									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/liblog/Release-x64}&quot;"/>
+									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/liblog/x64-Release}&quot;"/>
 									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/libext/Debug-x64}&quot;"/>
 									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/libbase/Debug-x64}&quot;"/>
 									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/libbase/x64-Debug}&quot;"/>
-									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/liblog/x64-Release}&quot;"/>
 									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/libext/x64-Debug}&quot;"/>
 								</option>
 								<option id="gnu.cpp.link.option.flags.1705469309" name="Linker flags" superClass="gnu.cpp.link.option.flags" value="-m64 -Wl,-Map=hdlink.exe.map" valueType="string"/>
-								<option id="gnu.cpp.link.option.libs.1339011293" superClass="gnu.cpp.link.option.libs" valueType="libs">
+								<option id="gnu.cpp.link.option.libs.1339011293" name="Libraries (-l)" superClass="gnu.cpp.link.option.libs" valueType="libs">
 									<listOptionValue builtIn="false" srcPrefixMapping="" srcRootPath="" value="liblog"/>
 									<listOptionValue builtIn="false" srcPrefixMapping="" srcRootPath="" value="libext"/>
 									<listOptionValue builtIn="false" srcPrefixMapping="" srcRootPath="" value="libbase"/>
@@ -93,6 +93,7 @@
 						<entry flags="VALUE_WORKSPACE_PATH" kind="includePath" name="/liblog"/>
 						<entry flags="VALUE_WORKSPACE_PATH" kind="libraryPath" name="/liblog/Release"/>
 						<entry flags="VALUE_WORKSPACE_PATH" kind="libraryPath" name="/liblog/Release-x64"/>
+						<entry flags="VALUE_WORKSPACE_PATH" kind="libraryPath" name="/liblog/x64-Release"/>
 						<entry flags="RESOLVED" kind="libraryFile" name="liblog" srcPrefixMapping="" srcRootPath=""/>
 					</externalSetting>
 				</externalSettings>

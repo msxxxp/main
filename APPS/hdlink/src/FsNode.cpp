@@ -26,4 +26,3 @@ bool FsNode::path_equals(FsNode * other) const
 	}
 	return true;
 }
-

@@ -173,7 +173,7 @@ namespace simstd {
 	///=============================================================================================
 	namespace pvt {
 		template<typename Type>
-		struct _movable_allocator {
+		struct movable_allocator {
 			typedef Type value_type;
 			typedef Type* pointer;
 			typedef const Type* const_pointer;
@@ -183,8 +183,8 @@ namespace simstd {
 			typedef simstd::ptrdiff_t difference_type;
 			typedef void* movable_handle;
 
-			~_movable_allocator();
-			_movable_allocator();
+			~movable_allocator();
+			movable_allocator();
 
 			movable_handle allocate(size_type cnt);
 			void deallocate(movable_handle hnd);
@@ -197,47 +197,47 @@ namespace simstd {
 		};
 
 		template<typename Type>
-		_movable_allocator<Type>::~_movable_allocator()
+		movable_allocator<Type>::~movable_allocator()
 		{
 		}
 
 		template<typename Type>
-		_movable_allocator<Type>::_movable_allocator()
+		movable_allocator<Type>::movable_allocator()
 		{
 		}
 
 		template<typename Type>
-		typename _movable_allocator<Type>::movable_handle _movable_allocator<Type>::allocate(size_type cnt)
+		typename movable_allocator<Type>::movable_handle movable_allocator<Type>::allocate(size_type cnt)
 		{
 			return (movable_handle)_system_movable_malloc(sizeof(Type) * cnt);
 		}
 
 		template<typename Type>
-		void _movable_allocator<Type>::deallocate(movable_handle hnd)
+		void movable_allocator<Type>::deallocate(movable_handle hnd)
 		{
 			_system_movable_free(hnd);
 		}
 
 		template<typename Type>
-		typename _movable_allocator<Type>::pointer _movable_allocator<Type>::lock(movable_handle hnd) const
+		typename movable_allocator<Type>::pointer movable_allocator<Type>::lock(movable_handle hnd) const
 		{
 			return (pointer)_system_movable_lock(hnd);
 		}
 
 		template<typename Type>
-		void _movable_allocator<Type>::unlock(movable_handle hnd) const
+		void movable_allocator<Type>::unlock(movable_handle hnd) const
 		{
 			_system_movable_unlock(hnd);
 		}
 
 		template<typename Type>
-		void _movable_allocator<Type>::construct(pointer ptr, const_reference val)
+		void movable_allocator<Type>::construct(pointer ptr, const_reference val)
 		{
 			simstd::pvt::_construct(ptr, val);
 		}
 
 		template<typename Type>
-		void _movable_allocator<Type>::destroy(pointer ptr)
+		void movable_allocator<Type>::destroy(pointer ptr)
 		{
 			simstd::pvt::_destroy(ptr);
 		}

@@ -8,8 +8,8 @@ namespace simstd {
 
 	namespace pvt {
 		template<typename Type, typename Allocator>
-		struct _vector_impl: private Allocator {
-			typedef _vector_impl this_type;
+		struct vector_impl: private Allocator {
+			typedef vector_impl this_type;
 			typedef Type value_type;
 			typedef Allocator allocator_type;
 			typedef typename allocator_traits<allocator_type>::size_type size_type;
@@ -19,10 +19,10 @@ namespace simstd {
 			pointer end;
 			pointer end_of_storage;
 
-			~_vector_impl();
-			_vector_impl();
-			_vector_impl(size_type capa);
-			_vector_impl(size_type capa, pointer first, pointer last);
+			~vector_impl();
+			vector_impl();
+			vector_impl(size_type capa);
+			vector_impl(size_type capa, pointer first, pointer last);
 			void swap(this_type& other);
 			void destroy(pointer first, pointer last);
 			void reserve(size_type newCapacity);
@@ -38,27 +38,27 @@ namespace simstd {
 		};
 
 		template<typename Type, typename Allocator>
-		_vector_impl<Type, Allocator>::~_vector_impl()
+		vector_impl<Type, Allocator>::~vector_impl()
 		{
 			if (begin)
 				allocator_type::deallocate(begin, capacity());
 		}
 
 		template<typename Type, typename Allocator>
-		_vector_impl<Type, Allocator>::_vector_impl() :
+		vector_impl<Type, Allocator>::vector_impl() :
 			begin(0), end(0), end_of_storage(0)
 		{
 		}
 
 		template<typename Type, typename Allocator>
-		_vector_impl<Type, Allocator>::_vector_impl(size_type capa) :
+		vector_impl<Type, Allocator>::vector_impl(size_type capa) :
 			begin(0), end(0), end_of_storage(0)
 		{
 			create_storage(capa);
 		}
 
 		template<typename Type, typename Allocator>
-		_vector_impl<Type, Allocator>::_vector_impl(size_type capa, pointer first, pointer last) :
+		vector_impl<Type, Allocator>::vector_impl(size_type capa, pointer first, pointer last) :
 			begin(0), end(0), end_of_storage(0)
 		{
 			create_storage(capa);
@@ -67,7 +67,7 @@ namespace simstd {
 		}
 
 		template<typename Type, typename Allocator>
-		void _vector_impl<Type, Allocator>::swap(this_type& other)
+		void vector_impl<Type, Allocator>::swap(this_type& other)
 		{
 #if defined(__GNUC__) && (__GNUC__ < 3)
 			simstd::swap(begin, other.begin);
@@ -82,21 +82,21 @@ namespace simstd {
 		}
 
 		template<typename Type, typename Allocator>
-		void _vector_impl<Type, Allocator>::create_storage(size_type capa)
+		void vector_impl<Type, Allocator>::create_storage(size_type capa)
 		{
 			end = begin = (capa) ? allocator_type::allocate(capa) : 0;
 			end_of_storage = begin + (begin ? capa : 0);
 		}
 
 		template<typename Type, typename Allocator>
-		void _vector_impl<Type, Allocator>::destroy(pointer first, pointer last)
+		void vector_impl<Type, Allocator>::destroy(pointer first, pointer last)
 		{
 			for (; first != last; ++first)
 				allocator_type::destroy(first);
 		}
 
 		template<typename Type, typename Allocator>
-		void _vector_impl<Type, Allocator>::reserve(size_type newCapacity)
+		void vector_impl<Type, Allocator>::reserve(size_type newCapacity)
 		{
 			if (capacity() < newCapacity)
 				this_type(newCapacity, begin, end).swap(*this);
@@ -104,27 +104,27 @@ namespace simstd {
 
 		template<typename Type, typename Allocator>
 		typename
-		_vector_impl<Type, Allocator>::size_type _vector_impl<Type, Allocator>::size() const
+		vector_impl<Type, Allocator>::size_type vector_impl<Type, Allocator>::size() const
 		{
 			return end - begin;
 		}
 
 		template<typename Type, typename Allocator>
 		typename
-		_vector_impl<Type, Allocator>::size_type _vector_impl<Type, Allocator>::max_size() const
+		vector_impl<Type, Allocator>::size_type vector_impl<Type, Allocator>::max_size() const
 		{
 			return 0xFFFFFFFFu;
 		}
 
 		template<typename Type, typename Allocator>
 		typename
-		_vector_impl<Type, Allocator>::size_type _vector_impl<Type, Allocator>::capacity() const
+		vector_impl<Type, Allocator>::size_type vector_impl<Type, Allocator>::capacity() const
 		{
 			return end_of_storage - begin;
 		}
 
 		template<typename Type, typename Allocator>
-		bool _vector_impl<Type, Allocator>::check_capacity(size_type addToSize) const
+		bool vector_impl<Type, Allocator>::check_capacity(size_type addToSize) const
 		{
 			if ((size() + addToSize) > capacity())
 				return false;
@@ -133,13 +133,13 @@ namespace simstd {
 
 		template<typename Type, typename Allocator>
 		typename
-		_vector_impl<Type, Allocator>::size_type _vector_impl<Type, Allocator>::get_new_capacity(size_type addToSize) const
+		vector_impl<Type, Allocator>::size_type vector_impl<Type, Allocator>::get_new_capacity(size_type addToSize) const
 		{
 			return size() + simstd::max(size_type(4), simstd::max(size(), addToSize));
 		}
 
 		template<typename Type, typename Allocator>
-		void _vector_impl<Type, Allocator>::adjust_capacity(size_type addToSize)
+		void vector_impl<Type, Allocator>::adjust_capacity(size_type addToSize)
 		{
 			if (!check_capacity(addToSize))
 				reserve(get_new_capacity(addToSize));
@@ -147,10 +147,10 @@ namespace simstd {
 
 		///=========================================================================================
 		template<typename Type>
-		struct _vector_impl<Type, simstd::pvt::_movable_allocator<Type> >: private simstd::pvt::_movable_allocator<Type> {
-			typedef _vector_impl<Type, simstd::pvt::_movable_allocator<Type> > this_type;
+		struct vector_impl<Type, simstd::pvt::movable_allocator<Type> >: private simstd::pvt::movable_allocator<Type> {
+			typedef vector_impl<Type, simstd::pvt::movable_allocator<Type> > this_type;
 			typedef Type value_type;
-			typedef simstd::pvt::_movable_allocator<Type> allocator_type;
+			typedef simstd::pvt::movable_allocator<Type> allocator_type;
 			typedef typename allocator_traits<allocator_type>::size_type size_type;
 			typedef typename allocator_traits<allocator_type>::pointer pointer;
 			typedef typename allocator_type::movable_handle movable_handle;
@@ -159,10 +159,10 @@ namespace simstd {
 			mutable pointer end;
 			mutable pointer end_of_storage;
 
-			~_vector_impl();
-			_vector_impl();
-			_vector_impl(size_type capa);
-			_vector_impl(size_type capa, pointer first, pointer last);
+			~vector_impl();
+			vector_impl();
+			vector_impl(size_type capa);
+			vector_impl(size_type capa, pointer first, pointer last);
 			void swap(this_type& other);
 			void destroy(pointer first, pointer last);
 			void reserve(size_type newCapacity);
@@ -183,7 +183,7 @@ namespace simstd {
 		};
 
 		template<typename Type>
-		_vector_impl<Type, simstd::pvt::_movable_allocator<Type> >::~_vector_impl()
+		vector_impl<Type, simstd::pvt::movable_allocator<Type> >::~vector_impl()
 		{
 			if (handle) {
 				lock();
@@ -195,20 +195,20 @@ namespace simstd {
 		}
 
 		template<typename Type>
-		_vector_impl<Type, simstd::pvt::_movable_allocator<Type> >::_vector_impl() :
+		vector_impl<Type, simstd::pvt::movable_allocator<Type> >::vector_impl() :
 			begin(0), end(0), end_of_storage(0), handle(0)
 		{
 		}
 
 		template<typename Type>
-		_vector_impl<Type, simstd::pvt::_movable_allocator<Type> >::_vector_impl(size_type capa) :
+		vector_impl<Type, simstd::pvt::movable_allocator<Type> >::vector_impl(size_type capa) :
 			begin(0), end(0), end_of_storage(0), handle(0)
 		{
 			create_storage(capa);
 		}
 
 		template<typename Type>
-		_vector_impl<Type, simstd::pvt::_movable_allocator<Type> >::_vector_impl(size_type capa, pointer first, pointer last) :
+		vector_impl<Type, simstd::pvt::movable_allocator<Type> >::vector_impl(size_type capa, pointer first, pointer last) :
 			begin(0), end(0), end_of_storage(0), handle(0)
 		{
 			create_storage(capa);
@@ -219,7 +219,7 @@ namespace simstd {
 		}
 
 		template<typename Type>
-		void _vector_impl<Type, simstd::pvt::_movable_allocator<Type> >::swap(this_type& other)
+		void vector_impl<Type, simstd::pvt::movable_allocator<Type> >::swap(this_type& other)
 		{
 #if defined(__GNUC__) && (__GNUC__ < 3)
 			simstd::swap(begin, other.begin);
@@ -236,7 +236,7 @@ namespace simstd {
 		}
 
 		template<typename Type>
-		void _vector_impl<Type, simstd::pvt::_movable_allocator<Type> >::create_storage(size_type capa)
+		void vector_impl<Type, simstd::pvt::movable_allocator<Type> >::create_storage(size_type capa)
 		{
 			handle = (capa) ? allocator_type::allocate(capa) : 0;
 			end = begin = 0;
@@ -244,14 +244,14 @@ namespace simstd {
 		}
 
 		template<typename Type>
-		void _vector_impl<Type, simstd::pvt::_movable_allocator<Type> >::destroy(pointer first, pointer last)
+		void vector_impl<Type, simstd::pvt::movable_allocator<Type> >::destroy(pointer first, pointer last)
 		{
 			for (; first != last; ++first)
 				allocator_type::destroy(first);
 		}
 
 		template<typename Type>
-		void _vector_impl<Type, simstd::pvt::_movable_allocator<Type> >::reserve(size_type newCapacity)
+		void vector_impl<Type, simstd::pvt::movable_allocator<Type> >::reserve(size_type newCapacity)
 		{
 			if (capacity() < newCapacity) {
 				lock();
@@ -263,27 +263,27 @@ namespace simstd {
 
 		template<typename Type>
 		typename
-		_vector_impl<Type, simstd::pvt::_movable_allocator<Type> >::size_type _vector_impl<Type, simstd::pvt::_movable_allocator<Type> >::size() const
+		vector_impl<Type, simstd::pvt::movable_allocator<Type> >::size_type vector_impl<Type, simstd::pvt::movable_allocator<Type> >::size() const
 		{
 			return end - begin;
 		}
 
 		template<typename Type>
 		typename
-		_vector_impl<Type, simstd::pvt::_movable_allocator<Type> >::size_type _vector_impl<Type, simstd::pvt::_movable_allocator<Type> >::max_size() const
+		vector_impl<Type, simstd::pvt::movable_allocator<Type> >::size_type vector_impl<Type, simstd::pvt::movable_allocator<Type> >::max_size() const
 		{
 			return 0xFFFFFFFFu;
 		}
 
 		template<typename Type>
 		typename
-		_vector_impl<Type, simstd::pvt::_movable_allocator<Type> >::size_type _vector_impl<Type, simstd::pvt::_movable_allocator<Type> >::capacity() const
+		vector_impl<Type, simstd::pvt::movable_allocator<Type> >::size_type vector_impl<Type, simstd::pvt::movable_allocator<Type> >::capacity() const
 		{
 			return end_of_storage - begin;
 		}
 
 		template<typename Type>
-		bool _vector_impl<Type, simstd::pvt::_movable_allocator<Type> >::check_capacity(size_type addToSize) const
+		bool vector_impl<Type, simstd::pvt::movable_allocator<Type> >::check_capacity(size_type addToSize) const
 		{
 			if ((size() + addToSize) > capacity())
 				return false;
@@ -292,20 +292,20 @@ namespace simstd {
 
 		template<typename Type>
 		typename
-		_vector_impl<Type, simstd::pvt::_movable_allocator<Type> >::size_type _vector_impl<Type, simstd::pvt::_movable_allocator<Type> >::get_new_capacity(size_type addToSize) const
+		vector_impl<Type, simstd::pvt::movable_allocator<Type> >::size_type vector_impl<Type, simstd::pvt::movable_allocator<Type> >::get_new_capacity(size_type addToSize) const
 		{
 			return size() + simstd::max(size_type(4), simstd::max(size(), addToSize));
 		}
 
 		template<typename Type>
-		void _vector_impl<Type, simstd::pvt::_movable_allocator<Type> >::adjust_capacity(size_type addToSize)
+		void vector_impl<Type, simstd::pvt::movable_allocator<Type> >::adjust_capacity(size_type addToSize)
 		{
 			if (!check_capacity(addToSize))
 				reserve(get_new_capacity(addToSize));
 		}
 
 		template<typename Type>
-		void _vector_impl<Type, simstd::pvt::_movable_allocator<Type> >::lock() const
+		void vector_impl<Type, simstd::pvt::movable_allocator<Type> >::lock() const
 		{
 			pointer oldBegin = begin;
 			begin = (pointer)allocator_type::lock(handle);
@@ -315,7 +315,7 @@ namespace simstd {
 		}
 
 		template<typename Type>
-		void _vector_impl<Type, simstd::pvt::_movable_allocator<Type> >::unlock() const
+		void vector_impl<Type, simstd::pvt::movable_allocator<Type> >::unlock() const
 		{
 			allocator_type::unlock(handle);
 		}

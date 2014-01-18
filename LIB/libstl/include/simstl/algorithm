@@ -7,7 +7,9 @@
 #include "impl/impl_algorithm.hpp"
 
 namespace simstd {
-	ssize_t algorithm_test();
+	namespace Test {
+		ssize_t _algorithm(wPrintFunc);
+	}
 }
 
 #endif

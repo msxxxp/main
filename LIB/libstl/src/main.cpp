@@ -8,7 +8,16 @@
 #include <simstl/string>
 #include <simstl/utility>
 #include <simstl/vector>
+#include <simstl/movable_vector>
+
+#include <cstdio>
+#include <cstring>
+#include <cwchar>
 
 int main()
 {
+	simstd::Test::a_string(std::printf);
+	simstd::Test::w_string(std::wprintf);
+	simstd::Test::_vector(std::printf);
+	simstd::Test::_algorithm(std::wprintf);
 }

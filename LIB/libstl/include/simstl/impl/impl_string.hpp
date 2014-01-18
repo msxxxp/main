@@ -10,7 +10,10 @@
 #include "impl_memory.hpp"
 
 namespace simstd {
-	ssize_t string_test();
+	namespace Test {
+		ssize_t a_string(aPrintFunc printFunc);
+		ssize_t w_string(wPrintFunc printFunc);
+	}
 
 	template<typename CharType, typename Traits>
 	class basic_string {

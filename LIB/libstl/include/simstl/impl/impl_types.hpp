@@ -17,6 +17,11 @@ namespace simstd {
 	typedef int ssize_t;
 	typedef int ptrdiff_t;
 #endif
+
+	namespace Test {
+		typedef int (*aPrintFunc)(const char *, ...);
+		typedef int (*wPrintFunc)(const wchar_t *, ...);
+	}
 }
 
 #endif

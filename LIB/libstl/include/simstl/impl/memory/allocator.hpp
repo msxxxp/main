@@ -1,7 +1,7 @@
 ﻿#ifndef LIBSTL_MEMORY_ALLOCATOR_HPP_
 #define LIBSTL_MEMORY_ALLOCATOR_HPP_
 
-#include <simstl/impl/types.hpp>
+#include <simstl/types.hpp>
 
 namespace simstd {
 
@@ -12,8 +12,8 @@ namespace simstd {
 		typedef const Type* const_pointer;
 		typedef Type& reference;
 		typedef const Type& const_reference;
-		typedef simstd::size_t size_type;
-		typedef simstd::ptrdiff_t difference_type;
+		typedef size_t size_type;
+		typedef ptrdiff_t difference_type;
 
 		~allocator();
 		allocator();

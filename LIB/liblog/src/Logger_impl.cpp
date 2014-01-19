@@ -2,6 +2,8 @@
 #include <libbase/console.hpp>
 #include <libbase/cstr.hpp>
 #include <libbase/memory.hpp>
+#include <patterns/Uncopyable.hpp>
+
 #include "Logger_impl.hpp"
 #include "Module_impl.hpp"
 
@@ -35,7 +37,7 @@ namespace Logger {
 	};
 
 	///================================================================================= Logger_impl
-	struct Logger_impl: public Logger_i, private Base::Uncopyable {
+	struct Logger_impl: public Logger_i, private Pattern::Uncopyable {
 		~Logger_impl();
 
 		Module_i * get_module(const wchar_t * name) override;

@@ -1,7 +1,7 @@
 ﻿#ifndef LIBSTL_NEW_HPP_
 #define LIBSTL_NEW_HPP_
 
-#include <simstl/impl/types.hpp>
+#include <simstl/types.hpp>
 
 namespace simstd {
 	struct nothrow_t
@@ -16,11 +16,11 @@ namespace simstd {
 }
 
 extern "C" {
-	void * _system_malloc(simstd::size_t size);
+	void * _system_malloc(size_t size);
 
 	void _system_free(void * ptr);
 
-	void * _system_movable_malloc(simstd::size_t size);
+	void * _system_movable_malloc(size_t size);
 
 	void _system_movable_free(void * handle);
 
@@ -30,12 +30,12 @@ extern "C" {
 }
 
 ///=========================================================================== no exception versions
-inline void* operator new(simstd::size_t size, const simstd::nothrow_t&) throw()
+inline void* operator new(size_t size, const simstd::nothrow_t&) throw()
 {
 	return _system_malloc(size);
 }
 
-inline void* operator new[](simstd::size_t size, const simstd::nothrow_t&) throw()
+inline void* operator new[](size_t size, const simstd::nothrow_t&) throw()
 {
 	return _system_malloc(size);
 }
@@ -52,12 +52,12 @@ inline void operator delete[](void * ptr, const simstd::nothrow_t&) throw()
 
 ///===================================================================== Default no exception global
 #ifdef NO_STD_NEW
-inline void* operator new(simstd::size_t size)
+inline void* operator new(size_t size)
 {
 	return operator new(size, simstd::nothrow);
 }
 
-inline void* operator new[](simstd::size_t size)
+inline void* operator new[](size_t size)
 {
 	return operator new[](size, simstd::nothrow);
 }
@@ -74,12 +74,12 @@ inline void operator delete[](void * ptr)
 #endif
 
 ///=============================================================================== Default placement
-//inline void* operator new(simstd::size_t, void* p) throw()
+//inline void* operator new(size_t, void* p) throw()
 //{
 //	return p;
 //}
 //
-//inline void* operator new[](simstd::size_t, void* p) throw()
+//inline void* operator new[](size_t, void* p) throw()
 //{
 //	return p;
 //}
@@ -93,12 +93,12 @@ inline void operator delete[](void * ptr)
 //}
 
 ///=============================================================================== Special placement
-inline void* operator new(simstd::size_t, void* p, const simstd::nothrow_t&) throw()
+inline void* operator new(size_t, void* p, const simstd::nothrow_t&) throw()
 {
 	return p;
 }
 
-inline void* operator new[](simstd::size_t, void* p, const simstd::nothrow_t&) throw()
+inline void* operator new[](size_t, void* p, const simstd::nothrow_t&) throw()
 {
 	return p;
 }

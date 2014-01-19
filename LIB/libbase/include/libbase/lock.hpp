@@ -4,13 +4,15 @@
 #include <libbase/std.hpp>
 #include <libbase/pvt/lock/unique_lock.hpp>
 #include <libbase/pvt/lock/lock.hpp>
+#include <patterns/Destroyable.hpp>
+#include <patterns/Uncopyable.hpp>
 
 namespace Lock {
 
 	struct ScopeGuard;
 
 	///=============================================================================================
-	struct SyncUnit_i: public Base::Destroyable, private Base::Uncopyable {
+	struct SyncUnit_i: public Pattern::Destroyable, private Pattern::Uncopyable {
 		ScopeGuard lock_scope();
 
 		ScopeGuard lock_scope_read();
@@ -44,7 +46,7 @@ namespace Lock {
 	SyncUnit_i * get_ReadWrite();
 
 	///================================================================================== ScopeGuard
-	struct ScopeGuard: private Base::Uncopyable {
+	struct ScopeGuard: private Pattern::Uncopyable {
 		~ScopeGuard();
 
 		ScopeGuard();
@@ -63,7 +65,7 @@ namespace Lock {
 
 	///=================================================================================== LockGuard
 	template<typename Mutex>
-	class LockGuard: private Base::Uncopyable {
+	class LockGuard: private Pattern::Uncopyable {
 	public:
 		typedef Mutex mutex_type;
 
@@ -89,7 +91,7 @@ namespace Lock {
 	};
 
 	///============================================================================= CriticalSection
-	struct CriticalSection: private Base::Uncopyable {
+	struct CriticalSection: private Pattern::Uncopyable {
 		~CriticalSection()
 		{
 			::DeleteCriticalSection(&m_sync);
@@ -120,7 +122,7 @@ namespace Lock {
 	};
 
 	///=================================================================================== Semaphore
-	struct Semaphore: private Base::Uncopyable {
+	struct Semaphore: private Pattern::Uncopyable {
 		~Semaphore()
 		{
 			::CloseHandle(m_handle);

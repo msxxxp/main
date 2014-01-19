@@ -8,7 +8,6 @@
 #include <simstl/string>
 #include <simstl/utility>
 #include <simstl/vector>
-#include <simstl/movable_vector>
 
 #include <cstdio>
 #include <cstring>

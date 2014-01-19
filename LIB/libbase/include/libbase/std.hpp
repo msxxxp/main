@@ -105,41 +105,6 @@ namespace Base {
 		::MessageBoxW(nullptr, text, capt, MB_OK);
 	}
 
-	///================================================================================== Uncopyable
-	class Uncopyable {
-	protected:
-		~Uncopyable() = default;
-
-		Uncopyable() = default;
-
-	private:
-#ifdef _MSC_VER
-		Uncopyable(const Uncopyable &);
-#else
-		Uncopyable(const Uncopyable &) = delete;
-#endif
-
-#ifdef _MSC_VER
-		Uncopyable & operator = (const Uncopyable &);
-#else
-		Uncopyable & operator = (const Uncopyable &) = delete;
-#endif
-	};
-
-	///=================================================================================== Command_p
-	struct Command_p {
-		virtual ~Command_p() = default;
-
-		virtual ssize_t execute() = 0;
-	};
-
-	///================================================================================= Destroyable
-	struct Destroyable {
-		virtual ~Destroyable() = default;
-
-		virtual void destroy() const = 0;
-	};
-
 	///=============================================================================================
 	struct Va_list {
 		~Va_list();

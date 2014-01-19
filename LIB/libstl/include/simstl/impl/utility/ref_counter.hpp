@@ -1,7 +1,7 @@
 ﻿#ifndef LIBSTL_REF_COUNTER_HPP_
 #define LIBSTL_REF_COUNTER_HPP_
 
-#include <simstl/impl/types.hpp>
+#include <simstl/types.hpp>
 
 namespace simstd {
 	namespace pvt {
@@ -18,7 +18,7 @@ namespace simstd {
 
 			bool is_shared() const;
 
-			simstd::size_t count_ref() const;
+			size_t count_ref() const;
 
 		private:
 			virtual void destroy() const;
@@ -30,7 +30,7 @@ namespace simstd {
 			ref_counter & operator =(const ref_counter & rhs);    // forbidden
 
 		private:
-			simstd::size_t m_refcnt;
+			size_t m_refcnt;
 		};
 
 		inline ref_counter::ref_counter() :
@@ -48,7 +48,7 @@ namespace simstd {
 			return m_refcnt > 1;
 		}
 
-		inline simstd::size_t ref_counter::count_ref() const
+		inline size_t ref_counter::count_ref() const
 		{
 			return m_refcnt;
 		}

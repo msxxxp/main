@@ -3,12 +3,13 @@
 
 #include <libbase/std.hpp>
 #include <libbase/thread.hpp>
+#include <patterns/Uncopyable.hpp>
 
 #include <vector>
 
 namespace Base {
 
-	struct ThreadPool: private Base::Uncopyable, private std::vector<Thread> {
+	struct ThreadPool: private Pattern::Uncopyable, private std::vector<Thread> {
 		typedef std::vector<Thread> base_type;
 		using base_type::back;
 		using base_type::begin;

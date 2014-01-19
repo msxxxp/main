@@ -1,7 +1,7 @@
 ﻿#ifndef LIBSTL_FUNCTIONAL_HPP_
 #define LIBSTL_FUNCTIONAL_HPP_
 
-#include <simstl/impl/types.hpp>
+#include <simstl/types.hpp>
 #include <simstl/impl/utility/rel_ops.hpp>
 
 namespace simstd {

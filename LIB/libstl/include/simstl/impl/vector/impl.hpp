@@ -1,7 +1,7 @@
 ﻿#ifndef LIBSTL_VECTOR_IMPL_HPP_
 #define LIBSTL_VECTOR_IMPL_HPP_
 
-#include <simstl/impl/types.hpp>
+#include <simstl/types.hpp>
 #include <simstl/impl/memory/base.hpp>
 #include <simstl/impl/memory/allocator_traits.hpp>
 #include <simstl/impl/memory/allocator.hpp>
@@ -312,7 +312,7 @@ namespace simstd {
 		{
 			pointer oldBegin = begin;
 			begin = (pointer)allocator_type::lock(handle);
-			simstd::ptrdiff_t diff = begin - oldBegin;
+			ptrdiff_t diff = begin - oldBegin;
 			end += diff;
 			end_of_storage += diff;
 		}

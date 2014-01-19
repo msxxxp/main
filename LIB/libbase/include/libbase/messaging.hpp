@@ -2,6 +2,7 @@
 #define LIBBASE_MESSAGING_HPP_
 
 #include <libbase/std.hpp>
+#include <patterns/Uncopyable.hpp>
 
 namespace Base {
 
@@ -50,7 +51,7 @@ namespace Base {
 	};
 
 	///======================================================================================= Queue
-	class Queue: private Base::Uncopyable {
+	class Queue: private Pattern::Uncopyable {
 	public:
 		~Queue();
 

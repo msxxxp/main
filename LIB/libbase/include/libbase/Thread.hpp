@@ -2,6 +2,7 @@
 #define LIBBASE_THREAD_HPP_
 
 #include <libbase/std.hpp>
+#include <patterns/Uncopyable.hpp>
 
 namespace Base {
 
@@ -38,7 +39,7 @@ namespace Base {
 //		(((Type*)(ptr))->*mem_func)(nullptr);
 //	}
 
-	struct Thread: private Uncopyable {
+	struct Thread: private Pattern::Uncopyable {
 		typedef HANDLE handle_t;
 		typedef DWORD id_t;
 

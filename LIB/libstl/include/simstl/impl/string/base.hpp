@@ -1,13 +1,13 @@
 ﻿#ifndef LIBSTL_STRING_HPP_
 #define LIBSTL_STRING_HPP_
 
+#include <simstl/types.hpp>
 #include <simstl/impl/algorithm/base.hpp>
 #include <simstl/impl/iterator/base.hpp>
 #include <simstl/impl/iterator/pvt_normal_iterator.hpp>
 #include <simstl/impl/iterator/reverse_iterator.hpp>
 #include <simstl/impl/memory/base.hpp>
 #include <simstl/impl/string/char_traits.hpp>
-#include <simstl/impl/types.hpp>
 #include <simstl/impl/utility/ref_counter.hpp>
 
 namespace simstd {

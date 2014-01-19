@@ -1,6 +1,7 @@
 #ifndef LIBBASE_PVT_UNIQUE_LOCK_HPP_
 #define LIBBASE_PVT_UNIQUE_LOCK_HPP_
 
+#include <patterns/Uncopyable.hpp>
 //#include <atomic>
 #include <tuple>
 
@@ -24,7 +25,7 @@ namespace Lock {
 	constexpr adopt_lock_t adopt_lock{};
 
 	template<typename SyncUnit>
-	class unique_lock: private Base::Uncopyable {
+	class unique_lock: private Pattern::Uncopyable {
 		typedef unique_lock<SyncUnit> this_type;
 
 	public:

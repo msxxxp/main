@@ -1,9 +1,9 @@
 ﻿#ifndef LIBSTL_ALGORITHM_SORT_HPP_
 #define LIBSTL_ALGORITHM_SORT_HPP_
 
+#include <simstl/types.hpp>
 #include <simstl/impl/functional.hpp>
 #include <simstl/impl/iterator/base.hpp>
-#include <simstl/impl/types.hpp>
 #include <simstl/impl/utility/pair.hpp>
 #include <simstl/impl/memory/base.hpp>
 #include <simstl/impl/memory/functional.hpp>
@@ -135,7 +135,7 @@ namespace simstd {
 	}
 
 	namespace pvt {
-		const simstd::ptrdiff_t ISORT_MAX = 32; // maximum size for insertion sort
+		const ptrdiff_t ISORT_MAX = 32; // maximum size for insertion sort
 
 		template<typename T, typename Compare>
 		const T& median(const T& a, const T& b, const T& c, Compare compare)
@@ -301,7 +301,7 @@ namespace simstd {
 
 			if (nCount > 1) {
 				// We need to allocate an array of nCount value_type objects as a temporary buffer.
-				simstd::pair<value_type*, simstd::ptrdiff_t> pBuffer = simstd::get_temporary_buffer(nCount);
+				simstd::pair<value_type*, ptrdiff_t> pBuffer = simstd::get_temporary_buffer(nCount);
 				simstd::uninitialized_fill(pBuffer.first, pBuffer.first + nCount, value_type());
 
 				simstd::pvt::merge_sort_buffer<RandomIt, value_type, Compare>(first, last, pBuffer, compare);

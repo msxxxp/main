@@ -2,9 +2,10 @@
 #define LIBBASE_DLL_HPP_
 
 #include <libbase/std.hpp>
+#include <patterns/Uncopyable.hpp>
 
 namespace Base {
-	struct DynamicLibrary: private Uncopyable {
+	struct DynamicLibrary: private Pattern::Uncopyable {
 		virtual ~DynamicLibrary() noexcept;
 
 		virtual bool is_valid() const noexcept;

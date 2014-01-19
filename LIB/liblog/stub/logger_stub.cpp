@@ -1,8 +1,9 @@
 #include <liblog/logger.hpp>
+#include <patterns/Uncopyable.hpp>
 
 namespace Logger {
 	///================================================================================= Module_impl
-	struct Module_impl: public Module_i, private Base::Uncopyable {
+	struct Module_impl: public Module_i, private Pattern::Uncopyable {
 		void destroy() const override {}
 
 		const wchar_t * get_name() const override {return Base::EMPTY_STR;}

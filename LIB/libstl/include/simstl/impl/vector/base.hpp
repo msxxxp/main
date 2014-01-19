@@ -9,7 +9,7 @@
 #include <simstl/impl/iterator/back_insert_iterator.hpp>
 #include <simstl/impl/memory/allocator.hpp>
 #include <simstl/impl/memory/allocator_traits.hpp>
-#include <simstl/impl/types.hpp>
+#include <simstl/types.hpp>
 #include <simstl/impl/vector/impl.hpp>
 
 namespace simstd {
@@ -24,7 +24,7 @@ namespace simstd {
 	public:
 		typedef Type value_type;
 		typedef Allocator allocator_type;
-		typedef simstd::size_t size_type;
+		typedef size_t size_type;
 		typedef allocator_traits<allocator_type> alloc_traits;
 		typedef typename alloc_traits::pointer pointer;
 		typedef typename alloc_traits::const_pointer const_pointer;

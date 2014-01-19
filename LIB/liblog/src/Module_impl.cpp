@@ -6,7 +6,7 @@
 #include "Module_impl.hpp"
 
 namespace Logger {
-	typedef sarastd::wstring ustring;
+	typedef simstd::wstring ustring;
 
 	namespace {
 		const size_t default_buffer_size = 4 * 1024;
@@ -43,7 +43,7 @@ namespace Logger {
 	const size_t default_buffer_size = 4 * 1024;
 
 	///================================================================================= Module_impl
-	struct Module_impl: public Module_i, private Base::Uncopyable {
+	struct Module_impl: public Module_i, private Pattern::Uncopyable {
 		~Module_impl();
 
 		Module_impl(const wchar_t * name, const Target_t & tgt, Level lvl);

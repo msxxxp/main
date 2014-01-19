@@ -3,19 +3,17 @@
 #include <libbase/atexit.hpp>
 #include <libbase/console.hpp>
 
-#include <memory>
-
 namespace {
 	void setup_logger()
 	{
 		using namespace Logger;
-//		Base::Console::printf(L"%S:%d\n", __PRETTY_FUNCTION__, __LINE__);
+		Base::Console::printf(L"%S:%d\n", __PRETTY_FUNCTION__, __LINE__);
 		Default::set_level(Level::Trace);
-//		Base::Console::printf(L"%S:%d\n", __PRETTY_FUNCTION__, __LINE__);
+		Base::Console::printf(L"%S:%d\n", __PRETTY_FUNCTION__, __LINE__);
 		Default::set_prefix(Prefix::Full/* | Prefix::Place*/);
-//		Base::Console::printf(L"%S:%d\n", __PRETTY_FUNCTION__, __LINE__);
+		Base::Console::printf(L"%S:%d\n", __PRETTY_FUNCTION__, __LINE__);
 		Default::set_target(get_TargetToConsole());
-//		Base::Console::printf(L"%S:%d\n", __PRETTY_FUNCTION__, __LINE__);
+		Base::Console::printf(L"%S:%d\n", __PRETTY_FUNCTION__, __LINE__);
 	}
 }
 
@@ -79,14 +77,14 @@ int wWmain()
 int main()
 #endif
 {
-//	//	Base::Console::printf(L"%S:%d\n", __PRETTY_FUNCTION__, __LINE__);
+	Base::Console::printf(L"%S:%d\n", __PRETTY_FUNCTION__, __LINE__);
 	setup_logger();
-//
-//	//	Base::Console::printf(L"%S:%d\n", __PRETTY_FUNCTION__, __LINE__);
-//	LogTrace();
-//
-//	//	Base::Console::printf(L"%S:%d\n", __PRETTY_FUNCTION__, __LINE__);
-//
+
+	Base::Console::printf(L"%S:%d\n", __PRETTY_FUNCTION__, __LINE__);
+	LogTrace();
+
+	Base::Console::printf(L"%S:%d\n", __PRETTY_FUNCTION__, __LINE__);
+
 //	{
 //		std::shared_ptr<A> sptr(std::make_shared<B>());
 //	}
@@ -100,7 +98,6 @@ int main()
 	LogTrace();
 
 	return 0;
-
 }
 
 /// ========================================================================== Startup (entry point)

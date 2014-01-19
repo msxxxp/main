@@ -2,12 +2,13 @@
 #define LIBBASE_THREAD_HOLDER_HPP_
 
 #include <libbase/thread.hpp>
+#include <patterns/Uncopyable.hpp>
 
 #include <vector>
 
 namespace Base {
 
-	struct ThreadsHolder: private Base::Uncopyable {
+	struct ThreadsHolder: private Pattern::Uncopyable {
 
 		~ThreadsHolder();
 

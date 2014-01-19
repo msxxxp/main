@@ -1,6 +1,0 @@
-﻿#ifndef LIBSTL_MOVABLE_VECTOR_
-#define LIBSTL_MOVABLE_VECTOR_
-
-#include <simstl/impl/vector/movable_vector.hpp>
-
-#endif

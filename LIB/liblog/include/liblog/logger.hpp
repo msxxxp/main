@@ -3,6 +3,7 @@
 
 #include <libbase/std.hpp>
 #include <libbase/lock.hpp>
+#include <patterns/Uncopyable.hpp>
 
 #ifdef ENABLE_LOGGER
 #include <memory>
@@ -138,7 +139,7 @@ namespace Logger {
 	Target_t get_TargetToMult(const Target_t & first, const Target_t & second);
 
 	///==================================================================================== Module_i
-	struct Module_i: public Base::Destroyable {
+	struct Module_i: public Pattern::Destroyable {
 		virtual ~Module_i();
 
 		virtual const wchar_t * get_name() const = 0;

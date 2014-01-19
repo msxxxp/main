@@ -1,7 +1,7 @@
 ﻿#ifndef LIBSTL_ITERATOR_BASE_HPP_
 #define LIBSTL_ITERATOR_BASE_HPP_
 
-#include <simstl/impl/types.hpp>
+#include <simstl/types.hpp>
 
 namespace simstd
 {
@@ -42,7 +42,7 @@ namespace simstd
 	{
 		typedef random_access_iterator_tag iterator_category;
 		typedef Type                       value_type;
-		typedef simstd::ptrdiff_t          difference_type;
+		typedef ptrdiff_t          difference_type;
 		typedef Type*                      pointer;
 		typedef Type&                      reference;
 	};
@@ -52,7 +52,7 @@ namespace simstd
 	{
 		typedef random_access_iterator_tag iterator_category;
 		typedef Type                       value_type;
-		typedef simstd::ptrdiff_t          difference_type;
+		typedef ptrdiff_t          difference_type;
 		typedef const Type*                pointer;
 		typedef const Type&                reference;
 	};
@@ -138,7 +138,7 @@ namespace simstd
 	template<
 		typename Category,
 		typename Type,
-		typename Distance = simstd::ptrdiff_t,
+		typename Distance = ptrdiff_t,
 		typename Pointer = Type*,
 		typename Reference = Type&>
 	struct iterator

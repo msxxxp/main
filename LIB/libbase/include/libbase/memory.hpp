@@ -2,6 +2,7 @@
 #define LIBBASE_MEMORY_HPP_
 
 #include <libbase/std.hpp>
+#include <patterns/Uncopyable.hpp>
 #include <algorithm>
 
 namespace Base {
@@ -54,7 +55,7 @@ namespace Base {
 
 	///==================================================================================== auto_buf
 	template<typename Type>
-	struct auto_buf: private Uncopyable {
+	struct auto_buf: private Pattern::Uncopyable {
 		typedef auto_buf this_type;
 		typedef Type value_type;
 		typedef size_t size_type;
@@ -161,7 +162,7 @@ namespace Base {
 
 	///==================================================================================== auto_buf
 	template<typename Type>
-	class auto_array: private Uncopyable {
+	class auto_array: private Pattern::Uncopyable {
 		typedef auto_array this_type;
 		typedef Type value_type;
 		typedef Type * pointer;
@@ -272,7 +273,7 @@ namespace Base {
 
 	///================================================================================== auto_close
 	template<typename Type>
-	class auto_close: private Uncopyable {
+	class auto_close: private Pattern::Uncopyable {
 		typedef Type value_type;
 
 	public:
@@ -404,7 +405,7 @@ namespace Base {
 
 	///================================================================================ auto_destroy
 	template<typename Pointer>
-	struct auto_destroy: private Base::Uncopyable {
+	struct auto_destroy: private Pattern::Uncopyable {
 		~auto_destroy()
 		{
 			m_ptr->destroy();

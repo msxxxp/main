@@ -2,7 +2,7 @@
 #define LIBSTL_ITERATOR_FUNCTIONAL_HPP_
 
 #include <simstl/impl/iterator/reverse_iterator.hpp>
-#include <simstl/impl/types.hpp>
+#include <simstl/types.hpp>
 
 namespace simstd {
 	template<typename Container>
@@ -17,13 +17,13 @@ namespace simstd {
 		return c.begin();
 	}
 
-	template<typename Type, simstd::size_t N>
+	template<typename Type, size_t N>
 	Type* begin(Type (&array)[N])
 	{
 		return array;
 	}
 
-	template<typename Type, simstd::size_t N>
+	template<typename Type, size_t N>
 	const Type* cbegin(Type (&array)[N])
 	{
 		return array;
@@ -47,13 +47,13 @@ namespace simstd {
 		return c.end();
 	}
 
-	template<typename Type, simstd::size_t N>
+	template<typename Type, size_t N>
 	Type* end(Type (&array)[N])
 	{
 		return array + N;
 	}
 
-	template<typename Type, simstd::size_t N>
+	template<typename Type, size_t N>
 	const Type* cend(Type (&array)[N])
 	{
 		return array + N;
@@ -78,13 +78,13 @@ namespace simstd {
 		return c.rbegin();
 	}
 
-	template<typename Type, simstd::size_t N>
+	template<typename Type, size_t N>
 	reverse_iterator<Type*> rbegin(Type (&array)[N])
 	{
 		return reverse_iterator<Type*>(array + N);
 	}
 
-	template<typename Type, simstd::size_t N>
+	template<typename Type, size_t N>
 	reverse_iterator<const Type*> crbegin(Type (&array)[N])
 	{
 		return reverse_iterator<const Type*>(array + N);
@@ -108,13 +108,13 @@ namespace simstd {
 		return c.rend();
 	}
 
-	template<typename Type, simstd::size_t N>
+	template<typename Type, size_t N>
 	reverse_iterator<Type*> rend(Type (&array)[N])
 	{
 		return reverse_iterator<Type*>(array);
 	}
 
-	template<typename Type, simstd::size_t N>
+	template<typename Type, size_t N>
 	reverse_iterator<const Type*> crend(Type (&array)[N])
 	{
 		return reverse_iterator<const Type*>(array);

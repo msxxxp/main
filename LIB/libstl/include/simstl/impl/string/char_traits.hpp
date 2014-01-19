@@ -1,7 +1,7 @@
 ﻿#ifndef LIBSTL_STRING_CHAR_TRAITS_HPP_
 #define LIBSTL_STRING_CHAR_TRAITS_HPP_
 
-#include <simstl/impl/types.hpp>
+#include <simstl/types.hpp>
 #include <string.h>
 #include <wchar.h>
 //#include <cstring>

@@ -2,7 +2,7 @@
 #define LIBSTL_STRING_CONVERT_A_HPP_
 
 #include <simstl/impl/string/base.hpp>
-#include <simstl/impl/types.hpp>
+#include <simstl/types.hpp>
 
 namespace simstd {
 

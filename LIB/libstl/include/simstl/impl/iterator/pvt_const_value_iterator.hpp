@@ -2,7 +2,7 @@
 #define LIBSTL_ITERATOR_CONST_VALUE_ITERATOR_HPP_
 
 #include <simstl/impl/iterator/base.hpp>
-#include <simstl/impl/types.hpp>
+#include <simstl/types.hpp>
 
 namespace simstd
 {
@@ -20,7 +20,7 @@ namespace simstd
 			typedef typename traits_type::difference_type   difference_type;
 			typedef typename traits_type::reference         reference;
 			typedef typename traits_type::pointer           pointer;
-			typedef simstd::size_t size_type;
+			typedef size_t size_type;
 
 			_const_value_iterator(iterator_type v, iterator_type it): value(v), current(it) {}
 
@@ -101,7 +101,7 @@ namespace simstd
 		{
 			typedef _value_generator<Type> this_type;
 			typedef Type value_type;
-			typedef simstd::size_t size_type;
+			typedef size_t size_type;
 			typedef const Type* const_pointer;
 			typedef _const_value_iterator<const_pointer> const_iterator;
 

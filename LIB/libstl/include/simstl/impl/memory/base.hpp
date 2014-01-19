@@ -1,8 +1,8 @@
 ﻿#ifndef LIBSTL_MEMORY_HPP_
 #define LIBSTL_MEMORY_HPP_
 
+#include <simstl/types.hpp>
 #include <simstl/impl/new.hpp>
-#include <simstl/impl/types.hpp>
 #include <simstl/impl/utility/pair.hpp>
 
 namespace simstd {
@@ -15,13 +15,13 @@ namespace simstd {
 		}
 
 		template<typename Type>
-		Type* _allocate(simstd::size_t cnt)
+		Type* _allocate(size_t cnt)
 		{
 			return static_cast<Type*>(::operator new(sizeof(Type) * cnt, simstd::nothrow));
 		}
 
 		template<typename Type>
-		void _deallocate(Type* ptr, simstd::size_t /*cnt*/ = 0)
+		void _deallocate(Type* ptr, size_t /*cnt*/ = 0)
 		{
 			::operator delete(ptr, simstd::nothrow);
 		}
@@ -85,7 +85,7 @@ namespace simstd {
 //	}
 
 	template<typename Type>
-	simstd::pair<Type*, simstd::ptrdiff_t> get_temporary_buffer(simstd::ptrdiff_t cnt)
+	simstd::pair<Type*, ptrdiff_t> get_temporary_buffer(ptrdiff_t cnt)
 	{
 		Type* ptr = static_cast<Type*>(::operator new(sizeof(Type) * cnt, simstd::nothrow));
 		return simstd::pair<Type*, ptrdiff_t>(ptr, ptr ? cnt : 0);

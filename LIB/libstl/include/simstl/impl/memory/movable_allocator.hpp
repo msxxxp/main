@@ -1,8 +1,8 @@
 ﻿#ifndef LIBSTL_MEMORY_MOVABLE_ALLOCATOR_HPP_
 #define LIBSTL_MEMORY_MOVABLE_ALLOCATOR_HPP_
 
+#include <simstl/types.hpp>
 #include <simstl/impl/new.hpp>
-#include <simstl/impl/types.hpp>
 
 namespace simstd {
 
@@ -14,8 +14,8 @@ namespace simstd {
 			typedef const Type* const_pointer;
 			typedef Type& reference;
 			typedef const Type& const_reference;
-			typedef simstd::size_t size_type;
-			typedef simstd::ptrdiff_t difference_type;
+			typedef size_t size_type;
+			typedef ptrdiff_t difference_type;
 			typedef void* movable_handle;
 
 			~movable_allocator();

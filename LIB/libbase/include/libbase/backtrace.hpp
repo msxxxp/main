@@ -2,12 +2,13 @@
 #define	LIBBASE_BACKTRACE_HPP_
 
 #include <libbase/std.hpp>
+#include <patterns/Uncopyable.hpp>
 
 #include <vector>
 
 namespace Backtrace {
 
-	struct Frame: private Base::Uncopyable
+	struct Frame: private Pattern::Uncopyable
 	{
 		~Frame();
 

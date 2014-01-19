@@ -1,6 +1,6 @@
 #include <libbase/std.hpp>
 #include <libbase/atexit.hpp>
-//#include <libbase/console.hpp>
+#include <libbase/console.hpp>
 
 #include <atomic>
 
@@ -21,7 +21,7 @@ namespace Base {
 			if (reinterpret_cast<intptr_t>(*pf) == static_cast<intptr_t>(-1)) {
 				continue;
 			} else {
-//				Base::Console::printf(L"%S:%d, pf: %p\n", __PRETTY_FUNCTION__, __LINE__, *pf);
+				Base::Console::printf(L"%S:%d, pf: %p\n", __PRETTY_FUNCTION__, __LINE__, *pf);
 				(*pf)();
 			}
 		}
@@ -29,18 +29,19 @@ namespace Base {
 
 	void invoke_ctors()
 	{
-//		Base::Console::printf(L"%S:%d, __CTOR_LIST__: %p\n", __PRETTY_FUNCTION__, __LINE__, __CTOR_LIST__);
+		Base::Console::printf(L"%S:%d, __CTOR_LIST__: %p\n", __PRETTY_FUNCTION__, __LINE__, __CTOR_LIST__);
 		invoke_crt_functions(__CTOR_LIST__, 1);
 	}
 
 	void invoke_dtors()
 	{
-//		Base::Console::printf(L"%S:%d, __DTOR_LIST__: %p\n", __PRETTY_FUNCTION__, __LINE__, __DTOR_LIST__);
+		Base::Console::printf(L"%S:%d, __DTOR_LIST__: %p\n", __PRETTY_FUNCTION__, __LINE__, __DTOR_LIST__);
 		invoke_crt_functions(__DTOR_LIST__, 1);
 	}
 
 	void init_atexit()
 	{
+		Base::Console::printf(L"%S():%d\n", __FUNCTION__, __LINE__);
 		for (ssize_t i = 0; i < MAX_ATEXITLIST_ENTRIES; ++i)
 			atExitArray[i] = reinterpret_cast<CrtFunction>(-1);
 		atexit(reinterpret_cast<CrtFunction>(0));
@@ -51,7 +52,7 @@ namespace Base {
 
 	void invoke_atexit()
 	{
-//		Base::Console::printf(L"%S:%d, atexit_index: %Id\n", __PRETTY_FUNCTION__, __LINE__, ssize_t(atexit_index));
+		Base::Console::printf(L"%S():%d\n", __FUNCTION__, __LINE__);
 		invoke_crt_functions(&atExitArray[MAX_ATEXITLIST_ENTRIES - 1], -1);
 	}
 
@@ -59,7 +60,7 @@ namespace Base {
 	{
 		ssize_t ind = atExitIndex++;
 
-//		Base::Console::printf(L"%S:%d, func: %p, index: %Id\n", __PRETTY_FUNCTION__, __LINE__, pf, ind);
+		Base::Console::printf(L"%S:%d, func: %p, index: %Id\n", __PRETTY_FUNCTION__, __LINE__, pf, ind);
 		if (ind < MAX_ATEXITLIST_ENTRIES)
 		{
 			atExitArray[ind] = pf;
@@ -70,6 +71,7 @@ namespace Base {
 
 	void cxa_pure_virtual()
 	{
+		Base::Console::printf(L"%S():%d\n", __FUNCTION__, __LINE__);
 //		::abort_message("pure virtual method called");
 	}
 

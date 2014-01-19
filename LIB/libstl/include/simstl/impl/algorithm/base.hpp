@@ -1,7 +1,7 @@
 ﻿#ifndef LIBSTL_ALGORITHM_BASE_HPP_
 #define LIBSTL_ALGORITHM_BASE_HPP_
 
-#include <simstl/impl/types.hpp>
+#include <simstl/types.hpp>
 
 namespace simstd {
 	template<typename Type>
@@ -12,10 +12,10 @@ namespace simstd {
 		b = tmp;
 	}
 
-	template<typename Type, simstd::size_t Num>
+	template<typename Type, size_t Num>
 	void swap(Type (&a)[Num], Type (&b)[Num])
 	{
-		for (simstd::size_t n = 0; n < Num; ++n)
+		for (size_t n = 0; n < Num; ++n)
 			swap(a[n], b[n]);
 	}
 

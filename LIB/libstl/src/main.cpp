@@ -21,6 +21,7 @@
 #include <cstring>
 #include <cwchar>
 
+
 int main()
 {
 	simstd::Test::a_string(std::printf);

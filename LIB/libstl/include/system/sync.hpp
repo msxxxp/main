@@ -72,33 +72,6 @@ namespace sync {
 		SyncUnit_i * m_unit;
 	};
 
-	///=================================================================================== LockGuard
-	template<typename Mutex>
-	class LockGuard: private pattern::Uncopyable {
-	public:
-		typedef Mutex mutex_type;
-
-		explicit LockGuard(mutex_type & m) :
-			m_sync(m)
-		{
-			m_sync.lock();
-		}
-
-		LockGuard(mutex_type & m, bool doNotLock) :
-			m_sync(m)
-		{
-			UNUSED(doNotLock);
-		}
-
-		~LockGuard()
-		{
-			m_sync.unlock();
-		}
-
-	private:
-		mutex_type & m_sync;
-	};
-
 	///============================================================================= CriticalSection
 	struct CriticalSection: private pattern::Uncopyable {
 		~CriticalSection()

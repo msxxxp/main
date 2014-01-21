@@ -7,8 +7,6 @@
 #include <extra/pattern.hpp>
 #include <system/sub_memory/memory.hpp>
 
-#include <algorithm> // TODO
-
 namespace memory {
 
 	template<typename Type>
@@ -197,7 +195,7 @@ namespace memory {
 		this_type & operator =(this_type && rhs)
 		{
 			if (this != &rhs)
-				this_type(std::move(rhs)).swap(*this);
+				this_type(simstd::move(rhs)).swap(*this);
 			return *this;
 		}
 
@@ -428,7 +426,7 @@ namespace memory {
 
 		auto_destroy & operator =(auto_destroy && right)
 		{
-			auto_destroy(std::move(right)).swap(*this);
+			auto_destroy(simstd::move(right)).swap(*this);
 			return *this;
 		}
 

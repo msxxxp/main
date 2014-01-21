@@ -21,8 +21,8 @@ namespace Cstr {
 	struct Char_types
 	{
 		typedef uint32_t   int_type;
-//		typedef std::streampos  pos_type;
-//		typedef std::streamoff  off_type;
+//		typedef simstd::streampos  pos_type;
+//		typedef simstd::streamoff  off_type;
 //		typedef mbstate_t  state_type;
 	};
 
@@ -372,7 +372,7 @@ namespace Cstr {
 	//inline PSTR RFind(PCSTR where, PCSTR what) {
 	//	PCSTR last1 = where + Len(where);
 	//	PCSTR last2 = what + Len(what);
-	//	last2 = std::find_end(where, last1, what, last2);
+	//	last2 = simstd::find_end(where, last1, what, last2);
 	//	return (last1 == last2) ? nullptr : const_cast<PSTR>(last2);
 	//}
 	//
@@ -383,7 +383,7 @@ namespace Cstr {
 	//inline PWSTR RFind(PCWSTR where, PCWSTR what) {
 	//	PCWSTR last1 = where + Len(where);
 	//	PCWSTR last2 = what + Len(what);
-	//	last2 = std::find_end(where, last1, what, last2);
+	//	last2 = simstd::find_end(where, last1, what, last2);
 	//	return (last1 == last2) ? nullptr : const_cast<PWSTR>(last2);
 	//}
 	//

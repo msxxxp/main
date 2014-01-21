@@ -3,8 +3,6 @@
 
 #include <simstl/algorithm>
 
-#include <algorithm> // TODO remove
-
 namespace sync {
 
 	ScopeGuard::~ScopeGuard()
@@ -33,7 +31,7 @@ namespace sync {
 
 	ScopeGuard & ScopeGuard::operator =(ScopeGuard && right)
 	{
-		ScopeGuard(std::move(right)).swap(*this);
+		ScopeGuard(simstd::move(right)).swap(*this);
 		return *this;
 	}
 

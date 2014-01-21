@@ -39,7 +39,7 @@ namespace memory {
 	auto_close<HANDLE> & auto_close<HANDLE>::operator =(this_type && rhs)
 	{
 		if (this->m_hndl != rhs.m_hndl)
-			this_type(std::move(rhs)).swap(*this);
+			this_type(simstd::move(rhs)).swap(*this);
 		return *this;
 	}
 

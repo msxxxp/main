@@ -3,6 +3,8 @@
 #include <system/console.hpp>
 #include <system/crt.hpp>
 
+#include <simstl/algorithm>
+
 namespace {
 	void setup_logger()
 	{
@@ -19,13 +21,13 @@ namespace {
 //public:
 //	~A()
 //	{
-//		Base::Console::printf(L"%S\n", __PRETTY_FUNCTION__);
+//		Base::console::printf(L"%S\n", __PRETTY_FUNCTION__);
 //	}
 //
 //	A() :
 //		m_int(1)
 //	{
-//		Base::Console::printf(L"%S\n", __PRETTY_FUNCTION__);
+//		Base::console::printf(L"%S\n", __PRETTY_FUNCTION__);
 //	}
 //
 //	int get_int() const
@@ -41,13 +43,13 @@ namespace {
 //public:
 //	~B()
 //	{
-//		Base::Console::printf(L"%S\n", __PRETTY_FUNCTION__);
+//		Base::console::printf(L"%S\n", __PRETTY_FUNCTION__);
 //	}
 //
 //	B() :
 //		m_double(10)
 //	{
-//		Base::Console::printf(L"%S\n", __PRETTY_FUNCTION__);
+//		Base::console::printf(L"%S\n", __PRETTY_FUNCTION__);
 //	}
 //
 //	double get_double() const
@@ -69,12 +71,54 @@ std::tuple<double, char> get_student(int /*id*/)
 	//    throw std::invalid_argument("id");
 }
 
+class A: private pattern::Uncopyable
+{
+public:
+	A():
+		_i()
+	{
+		console::printf(L"%S[%d]\n", __PRETTY_FUNCTION__, __LINE__);
+	}
+
+	A(A&& a):
+		_i()
+	{
+		console::printf(L"%S[%d]\n", __PRETTY_FUNCTION__, __LINE__);
+		swap(a);
+	}
+
+	A& operator =(A&& a)
+	{
+		console::printf(L"%S[%d]\n", __PRETTY_FUNCTION__, __LINE__);
+		A(simstd::move(a)).swap(*this);
+		return *this;
+	}
+
+	void swap(A& a)
+	{
+		console::printf(L"%S[%d]\n", __PRETTY_FUNCTION__, __LINE__);
+		using simstd::swap;
+		swap(_i, a._i);
+	}
+
+private:
+	int _i;
+};
+
+A get_a()
+{
+	return A();
+}
+
 #ifdef NDEBUG
 int wWmain()
 #else
 int main()
 #endif
 {
+	A a(get_a());
+	A b(simstd::move(a));
+
 	console::printf(L"%S:%d\n", __PRETTY_FUNCTION__, __LINE__);
 	setup_logger();
 
@@ -115,7 +159,7 @@ extern "C" {
 	{
 		//	int	WinMainCRTStartup() {
 		crt::init_atexit();
-		//		Base::Console::printf(L"%S:%d\n", __PRETTY_FUNCTION__, __LINE__);
+		//		Base::console::printf(L"%S:%d\n", __PRETTY_FUNCTION__, __LINE__);
 		int Result = 0;
 
 		//		STARTUPINFO StartupInfo = {sizeof(STARTUPINFO), 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0};

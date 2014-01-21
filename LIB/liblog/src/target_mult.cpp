@@ -1,6 +1,8 @@
 #include <liblog/logger.hpp>
 
-namespace Logger {
+#include <system/sync.hpp>
+
+namespace logger {
 
 	struct LogToMult: public Target_i {
 		LogToMult(const Target_t & first, const Target_t & second);
@@ -11,7 +13,7 @@ namespace Logger {
 
 		void out(const wchar_t * str, size_t size) const override;
 
-		Lock::ScopeGuard lock_scope() const override;
+		sync::ScopeGuard lock_scope() const override;
 
 	private:
 		Target_t m_first;
@@ -40,7 +42,7 @@ namespace Logger {
 		m_second->out(str, size);
 	}
 
-	Lock::ScopeGuard LogToMult::lock_scope() const
+	sync::ScopeGuard LogToMult::lock_scope() const
 	{
 		return m_first->lock_scope();
 //		m_second->lock();

@@ -40,7 +40,6 @@
 								</option>
 								<option id="gnu.cpp.compiler.option.include.paths.2091167897" name="Include paths (-I)" superClass="gnu.cpp.compiler.option.include.paths" valueType="includePath">
 									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/libstl/include}&quot;"/>
-									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/libbase/include}&quot;"/>
 									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/${ProjName}/include}&quot;"/>
 								</option>
 								<option id="gnu.cpp.compiler.option.warnings.pedantic.351751174" name="Pedantic (-pedantic)" superClass="gnu.cpp.compiler.option.warnings.pedantic" value="false" valueType="boolean"/>
@@ -53,8 +52,7 @@
 					<sourceEntries>
 						<entry excluding="stub|src|src/logger_stub.cpp|thread|include" flags="VALUE_WORKSPACE_PATH|RESOLVED" kind="sourcePath" name=""/>
 						<entry flags="VALUE_WORKSPACE_PATH|RESOLVED" kind="sourcePath" name="include"/>
-						<entry excluding="logger_stub.cpp" flags="VALUE_WORKSPACE_PATH|RESOLVED" kind="sourcePath" name="src"/>
-						<entry excluding="logger_stub.cpp" flags="VALUE_WORKSPACE_PATH|RESOLVED" kind="sourcePath" name="stub"/>
+						<entry excluding="stub|logger_stub.cpp" flags="VALUE_WORKSPACE_PATH|RESOLVED" kind="sourcePath" name="src"/>
 					</sourceEntries>
 				</configuration>
 			</storageModule>
@@ -98,7 +96,6 @@
 								</option>
 								<option id="gnu.cpp.compiler.option.include.paths.815869944" name="Include paths (-I)" superClass="gnu.cpp.compiler.option.include.paths" valueType="includePath">
 									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/libstl/include}&quot;"/>
-									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/libbase/include}&quot;"/>
 									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/${ProjName}/include}&quot;"/>
 								</option>
 								<option id="gnu.cpp.compiler.option.warnings.pedantic.1220914145" name="Pedantic (-pedantic)" superClass="gnu.cpp.compiler.option.warnings.pedantic" value="false" valueType="boolean"/>
@@ -111,8 +108,7 @@
 					<sourceEntries>
 						<entry excluding="stub|src|src/logger_stub.cpp|thread|include" flags="VALUE_WORKSPACE_PATH|RESOLVED" kind="sourcePath" name=""/>
 						<entry flags="VALUE_WORKSPACE_PATH|RESOLVED" kind="sourcePath" name="include"/>
-						<entry excluding="logger_stub.cpp" flags="VALUE_WORKSPACE_PATH|RESOLVED" kind="sourcePath" name="src"/>
-						<entry excluding="logger_stub.cpp" flags="VALUE_WORKSPACE_PATH|RESOLVED" kind="sourcePath" name="stub"/>
+						<entry excluding="stub|logger_stub.cpp" flags="VALUE_WORKSPACE_PATH|RESOLVED" kind="sourcePath" name="src"/>
 					</sourceEntries>
 				</configuration>
 			</storageModule>
@@ -157,7 +153,6 @@
 								</option>
 								<option id="gnu.cpp.compiler.option.include.paths.698894894" name="Include paths (-I)" superClass="gnu.cpp.compiler.option.include.paths" valueType="includePath">
 									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/libstl/include}&quot;"/>
-									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/libbase/include}&quot;"/>
 									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/${ProjName}/include}&quot;"/>
 								</option>
 								<option id="gnu.cpp.compiler.option.warnings.pedantic.245594942" name="Pedantic (-pedantic)" superClass="gnu.cpp.compiler.option.warnings.pedantic" value="false" valueType="boolean"/>
@@ -171,7 +166,6 @@
 						<entry excluding="stub|src|src/Module_impl.cpp|src/Logger_i.cpp|src/Logger_impl.cpp|src/target_console.cpp|thread|include|src/logger.cpp|src/target_sys.cpp|src/target_file.cpp|src/target_mult.cpp" flags="VALUE_WORKSPACE_PATH|RESOLVED" kind="sourcePath" name=""/>
 						<entry flags="VALUE_WORKSPACE_PATH|RESOLVED" kind="sourcePath" name="include"/>
 						<entry flags="VALUE_WORKSPACE_PATH|RESOLVED" kind="sourcePath" name="src"/>
-						<entry flags="VALUE_WORKSPACE_PATH|RESOLVED" kind="sourcePath" name="stub"/>
 					</sourceEntries>
 				</configuration>
 			</storageModule>
@@ -216,7 +210,6 @@
 								</option>
 								<option id="gnu.cpp.compiler.option.include.paths.1827392402" name="Include paths (-I)" superClass="gnu.cpp.compiler.option.include.paths" valueType="includePath">
 									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/libstl/include}&quot;"/>
-									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/libbase/include}&quot;"/>
 									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/${ProjName}/include}&quot;"/>
 								</option>
 								<option id="gnu.cpp.compiler.option.warnings.pedantic.987402351" name="Pedantic (-pedantic)" superClass="gnu.cpp.compiler.option.warnings.pedantic" value="false" valueType="boolean"/>
@@ -230,7 +223,6 @@
 						<entry excluding="stub|src|src/Module_impl.cpp|src/Logger_i.cpp|src/Logger_impl.cpp|src/target_console.cpp|thread|include|src/logger.cpp|src/target_sys.cpp|src/target_file.cpp|src/target_mult.cpp" flags="VALUE_WORKSPACE_PATH|RESOLVED" kind="sourcePath" name=""/>
 						<entry flags="VALUE_WORKSPACE_PATH|RESOLVED" kind="sourcePath" name="include"/>
 						<entry flags="VALUE_WORKSPACE_PATH|RESOLVED" kind="sourcePath" name="src"/>
-						<entry flags="VALUE_WORKSPACE_PATH|RESOLVED" kind="sourcePath" name="stub"/>
 					</sourceEntries>
 				</configuration>
 			</storageModule>
@@ -253,10 +245,10 @@
 		<configuration configurationName="Debug-x64">
 			<resource resourceType="PROJECT" workspacePath="/liblog"/>
 		</configuration>
-		<configuration configurationName="Release-x64">
+		<configuration configurationName="x64">
 			<resource resourceType="PROJECT" workspacePath="/liblog"/>
 		</configuration>
-		<configuration configurationName="x64">
+		<configuration configurationName="Release-x64">
 			<resource resourceType="PROJECT" workspacePath="/liblog"/>
 		</configuration>
 		<configuration configurationName="Release-x32-NoStr">

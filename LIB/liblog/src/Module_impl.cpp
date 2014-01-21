@@ -1,11 +1,14 @@
 #include <liblog/logger.hpp>
-#include <libbase/std.hpp>
-#include <libbase/console.hpp>
-#include <libbase/cstr.hpp>
+
+#include <system/console.hpp>
+#include <system/cstr.hpp>
+#include <system/sync.hpp>
+#include <simstl/memory>
+
 #include <simstl/string>
 #include "Module_impl.hpp"
 
-namespace Logger {
+namespace logger {
 	typedef simstd::wstring ustring;
 
 	namespace {
@@ -14,13 +17,13 @@ namespace Logger {
 		ustring format_str(PCWSTR fmt, va_list args)
 		{
 			wchar_t buf[default_buffer_size];
-			Base::safe_vsnprintf(buf, Base::lengthof(buf), fmt, args);
+			safe_vsnprintf(buf, lengthof(buf), fmt, args);
 			return ustring(buf);
 		}
 
 		ustring format_str(PCWSTR fmt, ...)
 		{
-			Base::Va_list args;
+			Va_list args;
 			va_start(args, fmt);
 			return format_str(fmt, args);
 		}
@@ -43,7 +46,7 @@ namespace Logger {
 	const size_t default_buffer_size = 4 * 1024;
 
 	///================================================================================= Module_impl
-	struct Module_impl: public Module_i, private Pattern::Uncopyable {
+	struct Module_impl: public Module_i, private pattern::Uncopyable {
 		~Module_impl();
 
 		Module_impl(const wchar_t * name, const Target_t & tgt, Level lvl);
@@ -72,7 +75,7 @@ namespace Logger {
 
 		void out(Level lvl, const wchar_t * format, ...) const override;
 
-		Lock::ScopeGuard lock_scope() const override;
+		sync::ScopeGuard lock_scope() const override;
 
 	private:
 		ustring create_prefix(Level lvl) const;
@@ -82,7 +85,7 @@ namespace Logger {
 		void out_args(Level lvl, const ustring & prefix, const wchar_t * frmat, va_list args) const;
 
 		ustring m_name;
-		std::shared_ptr<Target_i> m_target;
+		simstd::shared_ptr<Target_i> m_target;
 		Level m_lvl;
 		size_t m_prefix;
 		uint32_t m_color:1;
@@ -174,13 +177,13 @@ namespace Logger {
 	void Module_impl::out(Level lvl, const wchar_t * format, ...) const
 	{
 		if (m_enabled && lvl >= m_lvl) {
-			Base::Va_list args;
+			Va_list args;
 			va_start(args, format);
 			out_args(lvl, create_prefix(lvl), format, args);
 		}
 	}
 
-	Lock::ScopeGuard Module_impl::lock_scope() const
+	sync::ScopeGuard Module_impl::lock_scope() const
 	{
 		return m_target->lock_scope();
 	}

@@ -1,8 +1,16 @@
+﻿#include <system/configure.hpp>
+#include <system/console.hpp>
+#include <system/crt.hpp>
+#include <system/cstr.hpp>
+#include <system/memory.hpp>
+#include <system/sync.hpp>
+
 #include <simstl/iosfwd>
 #include <simstl/algorithm>
 #include <simstl/functional>
 #include <simstl/iterator>
 #include <simstl/memory>
+#include <simstl/mutex>
 #include <simstl/new>
 #include <simstl/numeric>
 #include <simstl/string>

@@ -1,0 +1,6 @@
+﻿#ifndef LIBSTL_MUTEX_
+#define LIBSTL_MUTEX_
+
+#include <simstl/impl/new.hpp>
+
+#endif

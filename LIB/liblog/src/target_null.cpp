@@ -1,7 +1,8 @@
 #include <liblog/logger.hpp>
-//#include <libbase/console.hpp>
 
-namespace Logger {
+#include <system/sync.hpp>
+
+namespace logger {
 
 	struct LogToNull: public Target_i {
 		~LogToNull();
@@ -12,17 +13,17 @@ namespace Logger {
 
 		void out(const wchar_t * str, size_t size) const override;
 
-		Lock::ScopeGuard lock_scope() const override;
+		sync::ScopeGuard lock_scope() const override;
 	};
 
 	LogToNull::~LogToNull()
 	{
-//		Base::Console::printf(L"%S:%d\n", __PRETTY_FUNCTION__, __LINE__);
+//		console::printf(L"%S:%d\n", __PRETTY_FUNCTION__, __LINE__);
 	}
 
 	LogToNull::LogToNull()
 	{
-//		Base::Console::printf(L"%S:%d\n", __PRETTY_FUNCTION__, __LINE__);
+//		console::printf(L"%S:%d\n", __PRETTY_FUNCTION__, __LINE__);
 	}
 
 	void LogToNull::out(const Module_i * /*lgr*/, Level /*lvl*/, const wchar_t * /*str*/, size_t /*size*/) const
@@ -33,9 +34,9 @@ namespace Logger {
 	{
 	}
 
-	Lock::ScopeGuard LogToNull::lock_scope() const
+	sync::ScopeGuard LogToNull::lock_scope() const
 	{
-		return Lock::ScopeGuard();
+		return sync::ScopeGuard();
 	}
 
 	Target_t get_TargetToNull()

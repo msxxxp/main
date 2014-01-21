@@ -1,4 +1,4 @@
-#ifndef LIBSTL_STRING_CONVERT_W_HPP_
+﻿#ifndef LIBSTL_STRING_CONVERT_W_HPP_
 #define LIBSTL_STRING_CONVERT_W_HPP_
 
 #include <simstl/impl/string/base.hpp>

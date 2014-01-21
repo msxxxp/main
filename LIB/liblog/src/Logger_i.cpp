@@ -1,10 +1,10 @@
 #include <liblog/logger.hpp>
 #include "Logger_impl.hpp"
 
-namespace Logger {
+namespace logger {
 
 	Logger_i::~Logger_i()
 	{
 	}
 
-}  // namespace Logger
+}  // namespace logger

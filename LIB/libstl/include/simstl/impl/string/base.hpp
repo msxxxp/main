@@ -8,7 +8,7 @@
 #include <simstl/impl/iterator/reverse_iterator.hpp>
 #include <simstl/impl/memory/base.hpp>
 #include <simstl/impl/string/char_traits.hpp>
-#include <simstl/impl/utility/ref_counter.hpp>
+#include <extra/pattern.hpp>
 
 namespace simstd {
 	namespace Test {
@@ -187,7 +187,7 @@ namespace simstd {
 
 	///=============================================================================================
 	template<typename CharType, typename Traits>
-	struct basic_string<CharType, Traits>::string_impl: public simstd::pvt::ref_counter {
+	struct basic_string<CharType, Traits>::string_impl: public pattern::RefCounter {
 		static string_impl * allocate(size_type capa)
 		{
 			string_impl * impl = (string_impl*)simstd::pvt::_allocate<char>(sizeof(string_impl) + capa * sizeof(value_type));

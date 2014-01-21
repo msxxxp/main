@@ -1,7 +1,7 @@
 ﻿#ifndef LIBSTL_MEMORY_SHARED_PTR_HPP_
 #define LIBSTL_MEMORY_SHARED_PTR_HPP_
 
-#include <simstl/impl/utility/ref_counter.hpp>
+#include <extra/pattern.hpp>
 
 namespace simstd {
 
@@ -25,10 +25,10 @@ namespace simstd {
 
 	template<typename Type>
 	class shared_ptr {
-		typedef Type element_type;
-		typedef shared_ptr this_type;
+		typedef shared_ptr<Type> this_type;
 
 	public:
+		typedef Type element_type;
 		typedef size_t size_type;
 
 		~shared_ptr() throw()
@@ -137,7 +137,7 @@ namespace simstd {
 	private:
 		typedef typename simstd::default_delete<Type> default_deleter;
 
-		struct shared_ptr_impl: public pvt::ref_counter
+		struct shared_ptr_impl: public pattern::RefCounter
 		{
 			shared_ptr_impl(element_type * ptr) : m_ptr(ptr) {}
 

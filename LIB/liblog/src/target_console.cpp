@@ -1,12 +1,11 @@
 ﻿#include <liblog/logger.hpp>
 
-#include <libbase/console.hpp>
-#include <libbase/lock.hpp>
-#include <libbase/memory.hpp>
+#include <system/console.hpp>
+#include <system/sync.hpp>
+#include <simstl/memory>
+#include <extra/pattern.hpp>
 
-#include <patterns/Uncopyable.hpp>
-
-namespace Logger {
+namespace logger {
 
 	WORD LogLevelColors[static_cast<ssize_t>(Level::Force) + 1] = {
 		FOREGROUND_INTENSITY,
@@ -20,7 +19,7 @@ namespace Logger {
 		0x00,
 	};
 
-	struct LogToConsole: public Target_i, private Pattern::Uncopyable {
+	struct LogToConsole: public Target_i, private pattern::Uncopyable {
 		~LogToConsole();
 
 		LogToConsole();
@@ -29,45 +28,45 @@ namespace Logger {
 
 		void out(const wchar_t * str, size_t size) const override;
 
-		Lock::ScopeGuard lock_scope() const override;
+		sync::ScopeGuard lock_scope() const override;
 
 	private:
-		Base::auto_destroy<Lock::SyncUnit_i*> m_sync;
+		memory::auto_destroy<sync::SyncUnit_i*> m_sync;
 	};
 
 	LogToConsole::~LogToConsole()
 	{
-//		Base::Console::printf(L"%S():%d\n", __FUNCTION__, __LINE__);
+//		console::printf(L"%S():%d\n", __FUNCTION__, __LINE__);
 	}
 
 	LogToConsole::LogToConsole() :
-		m_sync(Lock::get_CritSection())
+		m_sync(sync::get_CritSection())
 	{
-//		Base::Console::printf(L"%S():%d\n", __FUNCTION__, __LINE__);
+//		console::printf(L"%S():%d\n", __FUNCTION__, __LINE__);
 	}
 
 	void LogToConsole::out(const Module_i * lgr, Level lvl, const wchar_t * str, size_t size) const
 	{
 		auto lockScope(m_sync->lock_scope());
-//		Base::Console::printf(L"%S():%d\n", __FUNCTION__, __LINE__);
+//		console::printf(L"%S():%d\n", __FUNCTION__, __LINE__);
 		if (lgr->is_color_mode()) {
-			Base::Console::Color color(LogLevelColors[static_cast<ssize_t>(lvl)]);
-			Base::Console::out(str, size);
+			console::Color color(LogLevelColors[static_cast<ssize_t>(lvl)]);
+			console::puts(str, size);
 		} else {
-			Base::Console::out(str, size);
+			console::puts(str, size);
 		}
 	}
 
 	void LogToConsole::out(const wchar_t * str, size_t size) const
 	{
 		auto lockScope(m_sync->lock_scope());
-//		Base::Console::printf(L"%S():%d\n", __FUNCTION__, __LINE__);
-		Base::Console::out(str, size);
+//		console::printf(L"%S():%d\n", __FUNCTION__, __LINE__);
+		console::puts(str, size);
 	}
 
-	Lock::ScopeGuard LogToConsole::lock_scope() const
+	sync::ScopeGuard LogToConsole::lock_scope() const
 	{
-//		Base::Console::printf(L"%S():%d\n", __FUNCTION__, __LINE__);
+//		console::printf(L"%S():%d\n", __FUNCTION__, __LINE__);
 		return m_sync->lock_scope();
 	}
 

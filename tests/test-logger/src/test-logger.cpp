@@ -1,19 +1,17 @@
 #include <liblog/logger.hpp>
-#include <libbase/std.hpp>
-#include <libbase/atexit.hpp>
-#include <libbase/console.hpp>
+
+#include <system/console.hpp>
+#include <system/crt.hpp>
 
 namespace {
 	void setup_logger()
 	{
-		using namespace Logger;
-		Base::Console::printf(L"%S:%d\n", __PRETTY_FUNCTION__, __LINE__);
+		using namespace logger;
+		console::printf(L"%S:%d\n", __PRETTY_FUNCTION__, __LINE__);
 		Default::set_level(Level::Trace);
-		Base::Console::printf(L"%S:%d\n", __PRETTY_FUNCTION__, __LINE__);
+		console::printf(L"%S:%d\n", __PRETTY_FUNCTION__, __LINE__);
 		Default::set_prefix(Prefix::Full/* | Prefix::Place*/);
-		Base::Console::printf(L"%S:%d\n", __PRETTY_FUNCTION__, __LINE__);
-		Default::set_target(get_TargetToConsole());
-		Base::Console::printf(L"%S:%d\n", __PRETTY_FUNCTION__, __LINE__);
+		console::printf(L"%S:%d\n", __PRETTY_FUNCTION__, __LINE__);
 	}
 }
 
@@ -77,13 +75,13 @@ int wWmain()
 int main()
 #endif
 {
-	Base::Console::printf(L"%S:%d\n", __PRETTY_FUNCTION__, __LINE__);
+	console::printf(L"%S:%d\n", __PRETTY_FUNCTION__, __LINE__);
 	setup_logger();
 
-	Base::Console::printf(L"%S:%d\n", __PRETTY_FUNCTION__, __LINE__);
+	console::printf(L"%S:%d\n", __PRETTY_FUNCTION__, __LINE__);
 	LogTrace();
 
-	Base::Console::printf(L"%S:%d\n", __PRETTY_FUNCTION__, __LINE__);
+	console::printf(L"%S:%d\n", __PRETTY_FUNCTION__, __LINE__);
 
 //	{
 //		std::shared_ptr<A> sptr(std::make_shared<B>());
@@ -103,20 +101,20 @@ int main()
 /// ========================================================================== Startup (entry point)
 #ifdef NDEBUG
 extern "C" {
-	int atexit(Base::CrtFunction pf)
+	int atexit(crt::Function pf)
 	{
-		return Base::atexit(pf);
+		return crt::atexit(pf);
 	}
 
 	void __cxa_pure_virtual(void)
 	{
-		Base::cxa_pure_virtual();
+		crt::cxa_pure_virtual();
 	}
 
 	int mainCRTStartup()
 	{
 		//	int	WinMainCRTStartup() {
-		Base::init_atexit();
+		crt::init_atexit();
 		//		Base::Console::printf(L"%S:%d\n", __PRETTY_FUNCTION__, __LINE__);
 		int Result = 0;
 
@@ -127,7 +125,7 @@ extern "C" {
 		//						  StartupInfo.dwFlags & STARTF_USESHOWWINDOW ? StartupInfo.wShowWindow : SW_SHOWDEFAULT);
 		Result = wWmain();
 
-		Base::invoke_atexit();
+		crt::invoke_atexit();
 		::ExitProcess(Result);
 		return Result;
 	}

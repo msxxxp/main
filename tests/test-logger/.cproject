@@ -27,9 +27,8 @@
 									<listOptionValue builtIn="false" value="ENABLE_LOGGER"/>
 								</option>
 								<option id="gnu.cpp.compiler.option.include.paths.1753968247" name="Include paths (-I)" superClass="gnu.cpp.compiler.option.include.paths" valueType="includePath">
-									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/libstl/include}&quot;"/>
 									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/liblog/include}&quot;"/>
-									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/libbase/include}&quot;"/>
+									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/libstl/include}&quot;"/>
 								</option>
 								<option id="gnu.cpp.compiler.option.warnings.extrawarn.302951759" name="Extra warnings (-Wextra)" superClass="gnu.cpp.compiler.option.warnings.extrawarn" value="true" valueType="boolean"/>
 								<option id="gnu.cpp.compiler.option.warnings.toerrors.918283619" name="Warnings as errors (-Werror)" superClass="gnu.cpp.compiler.option.warnings.toerrors" value="true" valueType="boolean"/>
@@ -41,12 +40,10 @@
 								<option id="gnu.cpp.link.option.strip.184391048" name="Omit all symbol information (-s)" superClass="gnu.cpp.link.option.strip" value="true" valueType="boolean"/>
 								<option id="gnu.cpp.link.option.paths.1259026971" name="Library search path (-L)" superClass="gnu.cpp.link.option.paths" valueType="libPaths">
 									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/liblog/x64-Release}&quot;"/>
-									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/libbase/x64-Release}&quot;"/>
 									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/libstl/x64-Release}&quot;"/>
 								</option>
 								<option id="gnu.cpp.link.option.libs.345359101" name="Libraries (-l)" superClass="gnu.cpp.link.option.libs" valueType="libs">
 									<listOptionValue builtIn="false" value="liblog"/>
-									<listOptionValue builtIn="false" value="libbase"/>
 									<listOptionValue builtIn="false" value="libstl"/>
 									<listOptionValue builtIn="false" value="gcc"/>
 									<listOptionValue builtIn="false" value="ntdll"/>
@@ -164,7 +161,7 @@
 								</option>
 								<option id="gnu.cpp.compiler.option.include.paths.437565513" name="Include paths (-I)" superClass="gnu.cpp.compiler.option.include.paths" valueType="includePath">
 									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/liblog/include}&quot;"/>
-									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/libbase/include}&quot;"/>
+									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/libstl/include}&quot;"/>
 								</option>
 								<option id="gnu.cpp.compiler.option.warnings.extrawarn.1685576679" name="Extra warnings (-Wextra)" superClass="gnu.cpp.compiler.option.warnings.extrawarn" value="true" valueType="boolean"/>
 								<option id="gnu.cpp.compiler.option.warnings.toerrors.562173060" name="Warnings as errors (-Werror)" superClass="gnu.cpp.compiler.option.warnings.toerrors" value="true" valueType="boolean"/>
@@ -175,18 +172,18 @@
 							<tool command="g++" commandLinePattern="${COMMAND} ${FLAGS} ${OUTPUT_FLAG} ${OUTPUT_PREFIX}${OUTPUT} ${INPUTS}" errorParsers="org.eclipse.cdt.core.GLDErrorParser" id="cdt.managedbuild.tool.gnu.cpp.linker.mingw.exe.release.1144304773" name="MinGW C++ Linker" superClass="cdt.managedbuild.tool.gnu.cpp.linker.mingw.exe.release">
 								<option id="gnu.cpp.link.option.strip.143406804" name="Omit all symbol information (-s)" superClass="gnu.cpp.link.option.strip" value="true" valueType="boolean"/>
 								<option id="gnu.cpp.link.option.paths.39837479" name="Library search path (-L)" superClass="gnu.cpp.link.option.paths" valueType="libPaths">
-									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/liblog/Release-x32-stub}&quot;"/>
-									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/libbase/Release-x32}&quot;"/>
+									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/liblog/x32-Release}&quot;"/>
+									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/libstl/x32-Release}&quot;"/>
 								</option>
 								<option id="gnu.cpp.link.option.libs.2140925556" name="Libraries (-l)" superClass="gnu.cpp.link.option.libs" valueType="libs">
 									<listOptionValue builtIn="false" value="liblog"/>
-									<listOptionValue builtIn="false" value="libbase"/>
+									<listOptionValue builtIn="false" value="libstl"/>
+									<listOptionValue builtIn="false" value="gcc"/>
 									<listOptionValue builtIn="false" value="ntdll"/>
 									<listOptionValue builtIn="false" value="kernel32"/>
 									<listOptionValue builtIn="false" value="msvcrt"/>
-									<listOptionValue builtIn="false" value="gcc"/>
 								</option>
-								<option id="gnu.cpp.link.option.flags.1931220377" name="Linker flags" superClass="gnu.cpp.link.option.flags" value="-Wl,-Map=test-logger.map -m32" valueType="string"/>
+								<option id="gnu.cpp.link.option.flags.1931220377" name="Linker flags" superClass="gnu.cpp.link.option.flags" value="-Wl,-Map=test-logger.map -m32 -static" valueType="string"/>
 								<option id="gnu.cpp.link.option.nostart.1743922675" name="Do not use standard start files (-nostartfiles)" superClass="gnu.cpp.link.option.nostart" value="true" valueType="boolean"/>
 								<option id="gnu.cpp.link.option.nodeflibs.196681418" name="Do not use default libraries (-nodefaultlibs)" superClass="gnu.cpp.link.option.nodeflibs" value="true" valueType="boolean"/>
 								<option id="gnu.cpp.link.option.nostdlibs.663586173" name="No startup or default libs (-nostdlib)" superClass="gnu.cpp.link.option.nostdlibs" value="true" valueType="boolean"/>

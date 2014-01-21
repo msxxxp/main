@@ -1,13 +1,6 @@
 #ifndef LIBBASE_FWD_HPP_
 #define LIBBASE_FWD_HPP_
 
-namespace Cstr {
-	template<typename CharType>
-	struct char_traits
-	{
-	};
-}
-
 #if defined(NoStlString) || defined(USE_LITE_STRING) || defined(NO_STD_STRING)
 	#include <simstl/iosfwd>
 #else

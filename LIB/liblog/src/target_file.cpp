@@ -1,9 +1,10 @@
 ﻿#include <liblog/logger.hpp>
 
-#include <libbase/lock.hpp>
-#include <libbase/memory.hpp>
+#include <system/memory.hpp>
+#include <system/sync.hpp>
+#include <simstl/memory>
 
-namespace Logger {
+namespace logger {
 
 	struct LogToFile: public Target_i {
 		~LogToFile();
@@ -14,11 +15,11 @@ namespace Logger {
 
 		void out(const wchar_t * str, size_t size) const override;
 
-		Lock::ScopeGuard lock_scope() const override;
+		sync::ScopeGuard lock_scope() const override;
 
 	private:
-		Base::auto_destroy<Lock::SyncUnit_i*> m_sync;
-		Base::auto_close<HANDLE> m_file;
+		memory::auto_destroy<sync::SyncUnit_i*> m_sync;
+		memory::auto_close<HANDLE> m_file;
 	};
 
 	LogToFile::~LogToFile()
@@ -26,7 +27,7 @@ namespace Logger {
 	}
 
 	LogToFile::LogToFile(const wchar_t * path, bool overwrite) :
-		m_sync(Lock::get_CritSection()),
+		m_sync(sync::get_CritSection()),
 		m_file(::CreateFileW(path, GENERIC_WRITE, FILE_SHARE_READ, nullptr, overwrite ? CREATE_ALWAYS : OPEN_ALWAYS, FILE_ATTRIBUTE_NORMAL, nullptr))
 	{
 		if (m_file.is_valid()) {
@@ -48,7 +49,7 @@ namespace Logger {
 		}
 	}
 
-	Lock::ScopeGuard LogToFile::lock_scope() const
+	sync::ScopeGuard LogToFile::lock_scope() const
 	{
 		return m_sync->lock_scope();
 	}

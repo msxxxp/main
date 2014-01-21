@@ -1,18 +1,18 @@
 #include <liblog/logger.hpp>
-#include <libbase/console.hpp>
-#include <libbase/cstr.hpp>
-#include <libbase/memory.hpp>
-#include <patterns/Uncopyable.hpp>
+#include <system/configure.hpp>
+#include <system/console.hpp>
+#include <system/cstr.hpp>
+//#include <libbase/memory.hpp>
+#include <extra/pattern.hpp>
+#include <simstl/vector>
 
 #include "Logger_impl.hpp"
 #include "Module_impl.hpp"
 
-#include <vector>
-
-namespace Logger {
+namespace logger {
 
 	///=============================================================================================
-	struct pModule_less: public std::binary_function<const Module_i *, const Module_i *, bool> {
+	struct pModule_less {
 		bool operator ()(const Module_i * lhs, const Module_i * rhs) const
 		{
 			return Cstr::compare(lhs->get_name(), rhs->get_name()) < 0;
@@ -37,7 +37,7 @@ namespace Logger {
 	};
 
 	///================================================================================= Logger_impl
-	struct Logger_impl: public Logger_i, private Pattern::Uncopyable {
+	struct Logger_impl: public Logger_i, private pattern::Uncopyable {
 		~Logger_impl();
 
 		Module_i * get_module(const wchar_t * name) override;
@@ -49,8 +49,8 @@ namespace Logger {
 	private:
 		Logger_impl();
 
-		typedef std::vector<Module_i*> ModulesArray;
-		typedef Base::auto_destroy<Lock::SyncUnit_i*> SyncUnit;
+		typedef simstd::vector<Module_i*> ModulesArray;
+		typedef memory::auto_destroy<sync::SyncUnit_i*> SyncUnit;
 
 		ModulesArray m_modules;
 		SyncUnit     m_sync;
@@ -76,7 +76,7 @@ namespace Logger {
 	}
 
 	Logger_impl::Logger_impl() :
-		m_sync(Lock::get_CritSection())
+		m_sync(sync::get_CritSection())
 	{
 		auto lockScope(m_sync->lock_scope());
 		defaultModule = register_module(defaultModuleName, defaultTarget, defaultLevel);
@@ -86,7 +86,7 @@ namespace Logger {
 	Module_i * Logger_impl::get_module(const wchar_t * name)
 	{
 		auto lockScope(m_sync->lock_scope());
-		auto range = std::equal_range(m_modules.begin(), m_modules.end(), name, pModule_PCWSTR_less());
+		auto range = simstd::equal_range(m_modules.begin(), m_modules.end(), name, pModule_PCWSTR_less());
 		if (range.first != range.second)
 			return *range.first;
 		return register_module(name, Default::get_target(), Default::get_level());
@@ -95,20 +95,20 @@ namespace Logger {
 	Module_i * Logger_impl::register_module(const wchar_t * name, const Target_t & target, Level lvl)
 	{
 		auto lockScope(m_sync->lock_scope());
-		auto range = std::equal_range(m_modules.begin(), m_modules.end(), name, pModule_PCWSTR_less());
+		auto range = simstd::equal_range(m_modules.begin(), m_modules.end(), name, pModule_PCWSTR_less());
 		if (range.first != range.second) {
 			return *range.first;
 		}
 		auto module = create_Module_impl(name, target, lvl);
-		m_modules.emplace(range.second, module);
+		m_modules.insert(range.second, module);
 		return module;
 	}
 
 	void Logger_impl::free_module(Module_i * module)
 	{
 		auto lockScope(m_sync->lock_scope());
-		auto range = std::equal_range(m_modules.begin(), m_modules.end(), module, pModule_less());
-		for_each(range.first, range.second, [](Module_i * found_module) {
+		auto range = simstd::equal_range(m_modules.begin(), m_modules.end(), module, pModule_less());
+		simstd::for_each(range.first, range.second, [](Module_i * found_module) {
 			found_module->destroy();
 		});
 		m_modules.erase(range.first, range.second);
@@ -116,7 +116,7 @@ namespace Logger {
 
 	Level Logger_impl::defaultLevel = Level::Atten;
 	size_t Logger_impl::defaultPrefix = Prefix::Medium;
-	Target_t Logger_impl::defaultTarget = get_TargetToNull();
+	Target_t Logger_impl::defaultTarget = get_TargetToConsole();
 	Module_i * Logger_impl::defaultModule = nullptr;
 	const wchar_t * const Logger_impl::defaultModuleName = L"default";
 

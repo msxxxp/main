@@ -1,9 +1,9 @@
 #include <liblog/logger.hpp>
 
-namespace Logger {
+namespace logger {
 
 	Target_i::~Target_i()
 	{
 	}
 
-}  // namespace Logger
+}  // namespace logger

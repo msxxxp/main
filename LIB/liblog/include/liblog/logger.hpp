@@ -1,55 +1,55 @@
 ﻿#ifndef LIBLOG_LOGGER_HPP_
 #define LIBLOG_LOGGER_HPP_
 
-#include <libbase/std.hpp>
-#include <libbase/lock.hpp>
-#include <patterns/Uncopyable.hpp>
+#include <system/configure.hpp>
+#include <system/sync.hpp>
+#include <extra/pattern.hpp>
 
 #ifdef ENABLE_LOGGER
-#include <memory>
+#include <simstl/memory>
 #else
-#include <libbase/console.hpp>
+#include <system/console.hpp>
 #endif
 
 #ifdef ENABLE_LOGGER
-#       define LogTrace()                         get_logger_module()->out(THIS_PLACE, Logger::Level::Trace, L"\n")
-#       define LogTraceIf(condition)              if (condition) get_logger_module()->out(THIS_PLACE, Logger::Level::Trace, L"\n")
+#       define LogTrace()                         get_logger_module()->out(THIS_PLACE, logger::Level::Trace, L"\n")
+#       define LogTraceIf(condition)              if (condition) get_logger_module()->out(THIS_PLACE, logger::Level::Trace, L"\n")
 //#   ifdef _MSC_VER
-//#       define LogNoise(format, ...)              get_logger_module()->out(THIS_PLACE, Logger::Level::Trace, format, __VA_ARGS__)
-//#       define LogNoiseIf(condition, format, ...) if (condition) get_logger_module()->out(THIS_PLACE, Logger::Level::Trace, format, __VA_ARGS__)
-//#       define LogDebug(format, ...)	          get_logger_module()->out(THIS_PLACE, Logger::Level::Debug, format, __VA_ARGS__)
-//#       define LogDebugIf(condition, format, ...) if (condition) get_logger_module()->out(THIS_PLACE, Logger::Level::Debug, format, __VA_ARGS__)
-//#       define LogInfo(format, ...)	              get_logger_module()->out(THIS_PLACE, Logger::Level::Info, format, __VA_ARGS__)
-//#       define LogReport(format, ...)	          get_logger_module()->out(THIS_PLACE, Logger::Level::Report, format, __VA_ARGS__)
-//#       define LogAtten(format, ...)	          get_logger_module()->out(THIS_PLACE, Logger::Level::Atten, format, __VA_ARGS__)
-//#       define LogWarn(format, ...)	              get_logger_module()->out(THIS_PLACE, Logger::Level::Warn, format, __VA_ARGS__)
-//#       define LogWarnIf(condition, format, ...)  if (condition) get_logger_module()->out(THIS_PLACE, Logger::Level::Warn, format, __VA_ARGS__)
-//#       define LogError(format, ...)	          get_logger_module()->out(THIS_PLACE, Logger::Level::Error, format, __VA_ARGS__)
-//#       define LogErrorIf(condition, format, ...) if (condition) get_logger_module()->out(THIS_PLACE, Logger::Level::Error, format, __VA_ARGS__)
-//#       define LogFatal(format, ...)	          get_logger_module()->out(THIS_PLACE, Logger::Level::Fatal, format, __VA_ARGS__)
+//#       define LogNoise(format, ...)              get_logger_module()->out(THIS_PLACE, logger::Level::Trace, format, __VA_ARGS__)
+//#       define LogNoiseIf(condition, format, ...) if (condition) get_logger_module()->out(THIS_PLACE, logger::Level::Trace, format, __VA_ARGS__)
+//#       define LogDebug(format, ...)	          get_logger_module()->out(THIS_PLACE, logger::Level::Debug, format, __VA_ARGS__)
+//#       define LogDebugIf(condition, format, ...) if (condition) get_logger_module()->out(THIS_PLACE, logger::Level::Debug, format, __VA_ARGS__)
+//#       define LogInfo(format, ...)	              get_logger_module()->out(THIS_PLACE, logger::Level::Info, format, __VA_ARGS__)
+//#       define LogReport(format, ...)	          get_logger_module()->out(THIS_PLACE, logger::Level::Report, format, __VA_ARGS__)
+//#       define LogAtten(format, ...)	          get_logger_module()->out(THIS_PLACE, logger::Level::Atten, format, __VA_ARGS__)
+//#       define LogWarn(format, ...)	              get_logger_module()->out(THIS_PLACE, logger::Level::Warn, format, __VA_ARGS__)
+//#       define LogWarnIf(condition, format, ...)  if (condition) get_logger_module()->out(THIS_PLACE, logger::Level::Warn, format, __VA_ARGS__)
+//#       define LogError(format, ...)	          get_logger_module()->out(THIS_PLACE, logger::Level::Error, format, __VA_ARGS__)
+//#       define LogErrorIf(condition, format, ...) if (condition) get_logger_module()->out(THIS_PLACE, logger::Level::Error, format, __VA_ARGS__)
+//#       define LogFatal(format, ...)	          get_logger_module()->out(THIS_PLACE, logger::Level::Fatal, format, __VA_ARGS__)
 //#   else
-#       define LogNoise(format, ...)              get_logger_module()->out(THIS_PLACE, Logger::Level::Trace, format, ##__VA_ARGS__)
-#       define LogNoiseIf(condition, format, ...) if (condition) get_logger_module()->out(THIS_PLACE, Logger::Level::Trace, format, ##__VA_ARGS__)
-#       define LogDebug(format, ...)              get_logger_module()->out(THIS_PLACE, Logger::Level::Debug, format, ##__VA_ARGS__)
-#       define LogDebugIf(condition, format, ...) if (condition) get_logger_module()->out(THIS_PLACE, Logger::Level::Debug, format, ##__VA_ARGS__)
-#       define LogInfo(format, ...)               get_logger_module()->out(THIS_PLACE, Logger::Level::Info, format, ##__VA_ARGS__)
-#       define LogInfoIf(condition, format, ...)  if (condition) get_logger_module()->out(THIS_PLACE, Logger::Level::Info, format, ##__VA_ARGS__)
-#       define LogReport(format, ...)             get_logger_module()->out(THIS_PLACE, Logger::Level::Report, format, ##__VA_ARGS__)
-#       define LogReportIf(condition,format, ...) if (condition) get_logger_module()->out(THIS_PLACE, Logger::Level::Report, format, ##__VA_ARGS__)
-#       define LogAtten(format, ...)              get_logger_module()->out(THIS_PLACE, Logger::Level::Atten, format, ##__VA_ARGS__)
-#       define LogAttenIf(condition, format, ...) if (condition) get_logger_module()->out(THIS_PLACE, Logger::Level::Atten, format, ##__VA_ARGS__)
-#       define LogWarn(format, ...)               get_logger_module()->out(THIS_PLACE, Logger::Level::Warn, format, ##__VA_ARGS__)
-#       define LogWarnIf(condition, format, ...)  if (condition) get_logger_module()->out(THIS_PLACE, Logger::Level::Warn, format, ##__VA_ARGS__)
-#       define LogError(format, ...)              get_logger_module()->out(THIS_PLACE, Logger::Level::Error, format, ##__VA_ARGS__)
-#       define LogErrorIf(condition, format, ...) if (condition) get_logger_module()->out(THIS_PLACE, Logger::Level::Error, format, ##__VA_ARGS__)
-#       define LogFatal(format, ...)              get_logger_module()->out(THIS_PLACE, Logger::Level::Fatal, format, ##__VA_ARGS__)
-#       define LogFatalIf(condition, format, ...) if (condition) get_logger_module()->out(THIS_PLACE, Logger::Level::Fatal, format, ##__VA_ARGS__)
-#       define LogAlert(format, ...)              get_logger_module()->out(THIS_PLACE, Logger::Level::Alert, format, ##__VA_ARGS__)
-#       define LogAlertIf(condition, format, ...) if (condition) get_logger_module()->out(THIS_PLACE, Logger::Level::Alert, format, ##__VA_ARGS__)
-#       define LogEmerg(format, ...)              get_logger_module()->out(THIS_PLACE, Logger::Level::Emerg, format, ##__VA_ARGS__)
-#       define LogEmergIf(condition, format, ...) if (condition) get_logger_module()->out(THIS_PLACE, Logger::Level::Emerg, format, ##__VA_ARGS__)
-#       define LogForce(format, ...)              get_logger_module()->out(THIS_PLACE, Logger::Level::Force, format, ##__VA_ARGS__)
-#       define LogForceIf(condition, format, ...) if (condition) get_logger_module()->out(THIS_PLACE, Logger::Level::Force, format, ##__VA_ARGS__)
+#       define LogNoise(format, ...)              get_logger_module()->out(THIS_PLACE, logger::Level::Trace, format, ##__VA_ARGS__)
+#       define LogNoiseIf(condition, format, ...) if (condition) get_logger_module()->out(THIS_PLACE, logger::Level::Trace, format, ##__VA_ARGS__)
+#       define LogDebug(format, ...)              get_logger_module()->out(THIS_PLACE, logger::Level::Debug, format, ##__VA_ARGS__)
+#       define LogDebugIf(condition, format, ...) if (condition) get_logger_module()->out(THIS_PLACE, logger::Level::Debug, format, ##__VA_ARGS__)
+#       define LogInfo(format, ...)               get_logger_module()->out(THIS_PLACE, logger::Level::Info, format, ##__VA_ARGS__)
+#       define LogInfoIf(condition, format, ...)  if (condition) get_logger_module()->out(THIS_PLACE, logger::Level::Info, format, ##__VA_ARGS__)
+#       define LogReport(format, ...)             get_logger_module()->out(THIS_PLACE, logger::Level::Report, format, ##__VA_ARGS__)
+#       define LogReportIf(condition,format, ...) if (condition) get_logger_module()->out(THIS_PLACE, logger::Level::Report, format, ##__VA_ARGS__)
+#       define LogAtten(format, ...)              get_logger_module()->out(THIS_PLACE, logger::Level::Atten, format, ##__VA_ARGS__)
+#       define LogAttenIf(condition, format, ...) if (condition) get_logger_module()->out(THIS_PLACE, logger::Level::Atten, format, ##__VA_ARGS__)
+#       define LogWarn(format, ...)               get_logger_module()->out(THIS_PLACE, logger::Level::Warn, format, ##__VA_ARGS__)
+#       define LogWarnIf(condition, format, ...)  if (condition) get_logger_module()->out(THIS_PLACE, logger::Level::Warn, format, ##__VA_ARGS__)
+#       define LogError(format, ...)              get_logger_module()->out(THIS_PLACE, logger::Level::Error, format, ##__VA_ARGS__)
+#       define LogErrorIf(condition, format, ...) if (condition) get_logger_module()->out(THIS_PLACE, logger::Level::Error, format, ##__VA_ARGS__)
+#       define LogFatal(format, ...)              get_logger_module()->out(THIS_PLACE, logger::Level::Fatal, format, ##__VA_ARGS__)
+#       define LogFatalIf(condition, format, ...) if (condition) get_logger_module()->out(THIS_PLACE, logger::Level::Fatal, format, ##__VA_ARGS__)
+#       define LogAlert(format, ...)              get_logger_module()->out(THIS_PLACE, logger::Level::Alert, format, ##__VA_ARGS__)
+#       define LogAlertIf(condition, format, ...) if (condition) get_logger_module()->out(THIS_PLACE, logger::Level::Alert, format, ##__VA_ARGS__)
+#       define LogEmerg(format, ...)              get_logger_module()->out(THIS_PLACE, logger::Level::Emerg, format, ##__VA_ARGS__)
+#       define LogEmergIf(condition, format, ...) if (condition) get_logger_module()->out(THIS_PLACE, logger::Level::Emerg, format, ##__VA_ARGS__)
+#       define LogForce(format, ...)              get_logger_module()->out(THIS_PLACE, logger::Level::Force, format, ##__VA_ARGS__)
+#       define LogForceIf(condition, format, ...) if (condition) get_logger_module()->out(THIS_PLACE, logger::Level::Force, format, ##__VA_ARGS__)
 //#   endif
 #else
 #   define LogTrace()
@@ -74,16 +74,16 @@
 #   define LogAlertIf(condition, format, ...)          (void)(condition)
 #   define LogEmerg(format, ...)
 #   define LogEmergIf(condition, format, ...)          (void)(condition)
-#   define LogForce(format, ...)                       Base::Console::printf(format, ##__VA_ARGS__)
-#   define LogForceIf(condition, format, ...)          if (condition) Base::Console::printf(format, ##__VA_ARGS__)
+#   define LogForce(format, ...)                       console::printf(format, ##__VA_ARGS__)
+#   define LogForceIf(condition, format, ...)          if (condition) console::printf(format, ##__VA_ARGS__)
 #endif
 
-namespace Logger {
+namespace logger {
 	struct Module_i;
 	struct Target_i;
 }
 
-namespace Logger {
+namespace logger {
 
 	enum class Level : ssize_t {
 		Trace,
@@ -123,10 +123,10 @@ namespace Logger {
 
 		virtual void out(const wchar_t * str, size_t size) const = 0;
 
-		virtual Lock::ScopeGuard lock_scope() const = 0;
+		virtual sync::ScopeGuard lock_scope() const = 0;
 	};
 
-	typedef std::shared_ptr<Target_i> Target_t;
+	typedef simstd::shared_ptr<Target_i> Target_t;
 
 	Target_t get_TargetToNull();
 
@@ -139,7 +139,7 @@ namespace Logger {
 	Target_t get_TargetToMult(const Target_t & first, const Target_t & second);
 
 	///==================================================================================== Module_i
-	struct Module_i: public Pattern::Destroyable {
+	struct Module_i: public pattern::Destroyable {
 		virtual ~Module_i();
 
 		virtual const wchar_t * get_name() const = 0;
@@ -164,7 +164,7 @@ namespace Logger {
 
 		virtual void out(Level lvl, const wchar_t * format, ...) const = 0;
 
-		virtual Lock::ScopeGuard lock_scope() const = 0;
+		virtual sync::ScopeGuard lock_scope() const = 0;
 	};
 
 	namespace Default {
@@ -220,7 +220,7 @@ namespace Logger {
 		module->set_enabled(enabled);
 	}
 
-	inline Lock::ScopeGuard lock_scope(Module_i * module)
+	inline sync::ScopeGuard lock_scope(Module_i * module)
 	{
 		return module->lock_scope();
 	}
@@ -340,7 +340,7 @@ namespace Logger {
 		UNUSED(enabled);
 	}
 
-	inline Lock::ScopeGuard lock_module(Module_i * module)
+	inline sync::ScopeGuard lock_module(Module_i * module)
 	{
 		UNUSED(module);
 		return Lock::ScopeGuard();
@@ -349,9 +349,9 @@ namespace Logger {
 #endif
 }
 
-inline Logger::Module_i * get_logger_module()
+inline logger::Module_i * get_logger_module()
 {
-	return Logger::Default::get_module();
+	return logger::Default::get_module();
 }
 
 #endif

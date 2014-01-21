@@ -3,7 +3,7 @@
 
 #include <liblog/logger.hpp>
 
-namespace Logger {
+namespace logger {
 
 	Module_i * create_Module_impl(const wchar_t * name, const Target_t & tgt, Level lvl);
 

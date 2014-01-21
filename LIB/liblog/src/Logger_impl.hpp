@@ -3,7 +3,7 @@
 
 #include <liblog/logger.hpp>
 
-namespace Logger {
+namespace logger {
 
 	///==================================================================================== Logger_i
 	struct Logger_i {

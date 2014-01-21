@@ -437,7 +437,7 @@ namespace simstd {
 	typename
 	vector<Type, Allocator>::iterator vector<Type, Allocator>::insert(const_iterator cpos, size_type n, const value_type& value)
 	{
-		simstd::pvt::_value_generator<Type> generator(value, n);
+		simstd::pvt::_value_generator<Type> generator(n, value);
 		return _insert(cpos, generator.begin(), generator.end(), simstd::pvt::iterator_category(generator.begin()));
 //		iterator pos(begin());
 //		simstd::advance(pos, simstd::distance(cbegin(), cpos));

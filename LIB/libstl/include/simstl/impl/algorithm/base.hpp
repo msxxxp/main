@@ -32,9 +32,9 @@ namespace simstd {
 	template<typename Type>
 	void swap(Type & a, Type & b)
 	{
-		Type tmp(a);
-		a = b;
-		b = tmp;
+		Type tmp(move(a));
+		a = move(b);
+		b = move(tmp);
 	}
 
 	template<typename Type, size_t Num>
@@ -150,9 +150,9 @@ namespace simstd {
 
 	template<typename InputIt, typename OutputIt>
 	OutputIt move(InputIt first, InputIt last, OutputIt d_first)
-	{    // copy behavior
+	{
 		while (first != last) {
-			*d_first = *first;
+			*d_first = move(*first);
 			++first;
 			++d_first;
 		}

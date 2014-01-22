@@ -1,3 +1,4 @@
+#include <system/configure.hpp>
 #include <simstl/chrono>
 
 namespace simstl {

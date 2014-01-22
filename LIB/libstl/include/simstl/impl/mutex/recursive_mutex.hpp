@@ -1,13 +1,13 @@
 #ifndef LIBSTL_MUTEX_RECURSIVE_MUTEX_HPP_
 #define LIBSTL_MUTEX_RECURSIVE_MUTEX_HPP_
 
-#include <simstl/impl/mutex/recursive_mutex_base.hpp>
+#include <system/sub_sync/Mutex.hpp>
 
 namespace simstd {
 
-	class recursive_mutex: public pvt::recursive_mutex_base
+	class recursive_mutex: private sync::Mutex
 	{
-		typedef pvt::recursive_mutex_base base_type;
+		typedef sync::Mutex base_type;
 
 	public:
 		typedef base_type::native_handle_type native_handle_type;

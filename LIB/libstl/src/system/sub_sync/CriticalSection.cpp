@@ -1,51 +1,38 @@
-﻿#include <system/configure.hpp>
-#include <system/sync.hpp>
+#include <system/configure.hpp>
+#include <system/sub_sync/CriticalSection.hpp>
 
 namespace sync {
 
-	struct CriticalSection_impl: public SyncUnit_i, private CriticalSection {
-		~CriticalSection_impl() = default;
-
-		void _lock() override;
-
-		void _lock_read() override;
-
-		bool _try_lock() override;
-
-		bool _try_lock_read() override;
-
-		void _unlock() override;
-	};
-
-	void CriticalSection_impl::_lock()
+	CriticalSection::~CriticalSection()
 	{
-		CriticalSection::lock();
+		::DeleteCriticalSection(reinterpret_cast<PCRITICAL_SECTION>(m_handle));
+		delete reinterpret_cast<PCRITICAL_SECTION>(m_handle);
 	}
 
-	void CriticalSection_impl::_lock_read()
+	CriticalSection::CriticalSection():
+		m_handle(reinterpret_cast<native_handle_type>(new CRITICAL_SECTION))
 	{
-		CriticalSection::lock();
+		::InitializeCriticalSection(reinterpret_cast<PCRITICAL_SECTION>(m_handle));
 	}
 
-	bool CriticalSection_impl::_try_lock()
+	void CriticalSection::lock()
 	{
-		return CriticalSection::try_lock();
+		::EnterCriticalSection(reinterpret_cast<PCRITICAL_SECTION>(m_handle));
 	}
 
-	bool CriticalSection_impl::_try_lock_read()
+	bool CriticalSection::try_lock()
 	{
-		return CriticalSection::try_lock();
+		return ::TryEnterCriticalSection(reinterpret_cast<PCRITICAL_SECTION>(m_handle));
 	}
 
-	void CriticalSection_impl::_unlock()
+	void CriticalSection::unlock()
 	{
-		CriticalSection::unlock();
+		::LeaveCriticalSection(reinterpret_cast<PCRITICAL_SECTION>(m_handle));
 	}
 
-	///=============================================================================================
-	SyncUnit_i * get_CritSection()
+	CriticalSection::native_handle_type CriticalSection::native_handle()
 	{
-		return new CriticalSection_impl;
+		return m_handle;
 	}
 
 }

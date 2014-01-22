@@ -2,6 +2,9 @@
 #define LIBSTL_SYSTEM_SYNC_HPP_
 
 #include <system/configure.hpp>
+#include <system/sub_sync/CriticalSection.hpp>
+#include <system/sub_sync/Mutex.hpp>
+#include <system/sub_sync/Semaphore.hpp>
 #include <extra/pattern.hpp>
 
 namespace sync {
@@ -70,73 +73,6 @@ namespace sync {
 
 	private:
 		SyncUnit_i * m_unit;
-	};
-
-	///============================================================================= CriticalSection
-	struct CriticalSection: private pattern::Uncopyable {
-		~CriticalSection()
-		{
-			::DeleteCriticalSection(&m_sync);
-		}
-
-		CriticalSection()
-		{
-			::InitializeCriticalSection(&m_sync);
-		}
-
-		void lock() const
-		{
-			::EnterCriticalSection(&m_sync);
-		}
-
-		bool try_lock() const
-		{
-			return ::TryEnterCriticalSection(&m_sync);
-		}
-
-		void unlock() const
-		{
-			::LeaveCriticalSection(&m_sync);
-		}
-
-	private:
-		mutable CRITICAL_SECTION m_sync;
-	};
-
-	///=================================================================================== Semaphore
-	struct Semaphore: private pattern::Uncopyable {
-		~Semaphore()
-		{
-			::CloseHandle(m_handle);
-		}
-
-		Semaphore(PCWSTR name = nullptr) :
-			m_handle(::CreateSemaphoreW(nullptr, 0, LONG_MAX, name))
-		{
-		}
-
-		operator HANDLE() const
-		{
-			return m_handle;
-		}
-
-		HANDLE handle() const
-		{
-			return m_handle;
-		}
-
-		WaitResult_t wait(Timeout_t wait_millisec = WAIT_FOREVER) const
-		{
-			return (WaitResult_t)::WaitForSingleObjectEx(m_handle, wait_millisec, true);
-		}
-
-		void release(size_t cnt = 1) const
-		{
-			::ReleaseSemaphore(m_handle, cnt, nullptr);
-		}
-
-	private:
-		mutable HANDLE m_handle;
 	};
 
 ///=============================================================================================

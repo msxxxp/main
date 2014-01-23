@@ -2,11 +2,6 @@
 
 namespace console {
 
-	Color::~Color()
-	{
-		restore();
-	}
-
 	Color::Color(WORD color) :
 		m_color(0)
 	{

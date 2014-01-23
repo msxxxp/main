@@ -1,31 +1,50 @@
 #ifndef LIBSTL_SYSTEM_SYNC_CRITICALSECTION_HPP_
 #define LIBSTL_SYSTEM_SYNC_CRITICALSECTION_HPP_
 
+#include <system/configure.hpp>
 #include <extra/pattern.hpp>
 
 namespace sync {
 
 	class CriticalSection: private pattern::Uncopyable
 	{
-		struct native_handle;
+		typedef CRITICAL_SECTION native_impl_type;
 
 	public:
-		typedef native_handle * native_handle_type;
+		typedef native_impl_type * native_handle_type;
 
-		~CriticalSection();
+		~CriticalSection()
+		{
+			::DeleteCriticalSection(&m_impl);
+		}
 
-		CriticalSection();
+		CriticalSection()
+		{
+			::InitializeCriticalSection(&m_impl);
+		}
 
-		void lock();
+		void lock()
+		{
+			::EnterCriticalSection(&m_impl);
+		}
 
-		bool try_lock();
+		bool try_lock()
+		{
+			return ::TryEnterCriticalSection(&m_impl);
+		}
 
-		void unlock();
+		void unlock()
+		{
+			::LeaveCriticalSection(&m_impl);
+		}
 
-		native_handle_type native_handle();
+		native_handle_type native_handle()
+		{
+			return &m_impl;
+		}
 
 	private:
-		native_handle_type m_handle;
+		native_impl_type m_impl;
 	};
 
 }

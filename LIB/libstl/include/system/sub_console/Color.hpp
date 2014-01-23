@@ -16,6 +16,11 @@ namespace console {
 		WORD m_color;
 	};
 
+	inline Color::~Color()
+	{
+		restore();
+	}
+
 }
 
 #endif

@@ -7,10 +7,10 @@ namespace sync {
 
 	class Semaphore: private pattern::Uncopyable
 	{
-		struct native_handle;
+		struct native_imp_type;
 
 	public:
-		typedef native_handle * native_handle_type;
+		typedef native_imp_type * native_handle_type;
 
 		~Semaphore();
 

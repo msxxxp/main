@@ -7,10 +7,10 @@ namespace sync {
 
 	class Mutex: private pattern::Uncopyable
 	{
-		struct native_handle;
+		struct native_impl_type;
 
 	public:
-		typedef native_handle * native_handle_type;
+		typedef native_impl_type * native_handle_type;
 
 		~Mutex();
 

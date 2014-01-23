@@ -1,13 +1,14 @@
-#include <libbase/thread.hpp>
+#include <system/configure.hpp>
+#include <system/thread.hpp>
+#include <system/sync.hpp>
 
-#include <libbase/messaging.hpp>
 #include <liblog/logger.hpp>
 
-namespace Base {
+namespace thread {
 	namespace {
-		Logger::Module_i * get_logger_module()
+		logger::Module_i * get_logger_module()
 		{
-			auto static module = Logger::get_module(L"threads");
+			auto static module = logger::get_module(L"threads");
 			return module;
 		}
 	}
@@ -47,7 +48,7 @@ namespace Base {
 		return 0;
 	}
 
-	void ThreadRoutine_i::put_message(const Base::Message & message)
+	void ThreadRoutine_i::put_message(const sync::Message & message)
 	{
 		UNUSED(message);
 		LogNoise(L"type: %Id, code: %Id, param: %Id, data: %p\n", message.get_type(), message.get_code(), message.get_param(), message.get_data());

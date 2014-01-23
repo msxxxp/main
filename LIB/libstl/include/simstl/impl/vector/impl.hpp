@@ -5,6 +5,7 @@
 #include <simstl/impl/memory/base.hpp>
 #include <simstl/impl/memory/allocator_traits.hpp>
 #include <simstl/impl/memory/allocator.hpp>
+#include <simstl/impl/memory/functional.hpp>
 #include <simstl/impl/memory/movable_allocator.hpp>
 
 namespace simstd {

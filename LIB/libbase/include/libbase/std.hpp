@@ -5,10 +5,6 @@
 #include "pvt/memory.hpp"
 #include "pvt/fwd.hpp"
 
-#define DEFINE_FUNC(name)     F##name name
-#define GET_DLL_FUNC(name)    name = (F##name)get_function(#name)
-#define GET_DLL_FUNC_NT(name) name = (F##name)get_function_nt(#name)
-
 
 typedef const void * PCVOID;
 
@@ -26,9 +22,6 @@ namespace Base {
 	const UINT CP_UTF32be = 1203;
 //	const size_t CP_AUTODETECT = (UINT)-1;
 	const UINT DEFAULT_CP = CP_UTF8;
-
-	PCWSTR to_str(WaitResult_t waitResult);
-
 
 	///=============================================================================================
 	inline void mbox(PCSTR text, PCSTR capt = "")

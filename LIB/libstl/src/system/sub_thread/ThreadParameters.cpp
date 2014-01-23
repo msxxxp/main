@@ -1,6 +1,6 @@
-#include <libbase/thread.hpp>
+#include <system/thread.hpp>
 
-namespace Base {
+namespace thread {
 
 	struct ThreadParameters {
 		static DWORD WINAPI run_thread_with_param(void * param);

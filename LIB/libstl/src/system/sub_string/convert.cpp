@@ -1,23 +1,22 @@
-﻿//#include <system/configure.hpp>
-//#include <libbase/cstr.hpp>
-//#include <libbase/string.hpp>
-//
-//namespace Base {
-//	namespace String {
-//
-//		astring w2cp(PCWSTR in, UINT cp)
-//		{
-//			auto_array<CHAR> buf(Cstr::convert(in, cp));
-//			Cstr::convert(buf.data(), buf.size(), in, cp);
-//			return astring(&buf[0]);
-//		}
-//
-//		ustring cp2w(PCSTR in, UINT cp)
-//		{
-//			auto_array<wchar_t> buf(Cstr::convert(in, cp));
-//			Cstr::convert(buf.data(), buf.size(), in, cp);
-//			return ustring(buf.data());
-//		}
-//
-//	}
-//}
+﻿#include <system/configure.hpp>
+#include <system/cstr.hpp>
+#include <system/string.hpp>
+#include <simstl/string>
+
+namespace String {
+
+	simstd::string w2cp(const wchar_t * in, UINT cp)
+	{
+		memory::auto_array<CHAR> buf(Cstr::convert(in, cp));
+		Cstr::convert(buf.data(), buf.size(), in, cp);
+		return simstd::string(&buf[0]);
+	}
+
+	simstd::wstring cp2w(const char * in, UINT cp)
+	{
+		memory::auto_array<wchar_t> buf(Cstr::convert(in, cp));
+		Cstr::convert(buf.data(), buf.size(), in, cp);
+		return simstd::wstring(buf.data());
+	}
+
+}

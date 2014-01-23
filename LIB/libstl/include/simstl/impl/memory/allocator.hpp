@@ -2,6 +2,7 @@
 #define LIBSTL_MEMORY_ALLOCATOR_HPP_
 
 #include <simstl/types.hpp>
+#include <simstl/impl/memory/base.hpp>
 
 namespace simstd {
 

@@ -1,15 +1,15 @@
-#include <libbase/thread.hpp>
+#include <system/configure.hpp>
+#include <system/thread.hpp>
+#include <system/totext.hpp>
 
-#include <libbase/err.hpp>
-#include <libbase/string.hpp>
 #include <liblog/logger.hpp>
 
-namespace Base {
+namespace thread {
 
 	namespace {
-		Logger::Module_i * get_logger_module()
+		logger::Module_i * get_logger_module()
 		{
-			auto static module = Logger::get_module(L"threads");
+			auto static module = logger::get_module(L"threads");
 			return module;
 		}
 	}
@@ -70,7 +70,7 @@ namespace Base {
 		ULONG p = (ULONG)prio;
 		NTSTATUS ret = NtSetInformationThread(m_handle, ThreadIoPriority, &p, sizeof(p));
 		LogNoiseIf(!ret, L"id: %u, prio: '%s'\n", m_id, to_str(prio));
-		LogErrorIf( ret, L"id: %u, prio: '%s' -> %s\n", m_id, to_str(prio), NTStatusAsStr(ret).c_str());
+		LogErrorIf( ret, L"id: %u, prio: '%s' -> %s\n", m_id, to_str(prio), totext::nt_status(ret).c_str());
 		return ret;
 	}
 
@@ -79,7 +79,7 @@ namespace Base {
 		ULONG prio = 0;
 		NTSTATUS ret = NtQueryInformationThread(m_handle, ThreadIoPriority, &prio, sizeof(prio), nullptr);
 		LogNoiseIf(!ret, L"id: %u -> '%s'\n", m_id, to_str((Thread::IoPriority_t)prio));
-		LogErrorIf( ret, L"id: %u -> '%s'\n", m_id, NTStatusAsStr(ret).c_str());
+		LogErrorIf( ret, L"id: %u -> '%s'\n", m_id,  totext::nt_status(ret).c_str());
 		return (Thread::IoPriority_t)prio;
 	}
 

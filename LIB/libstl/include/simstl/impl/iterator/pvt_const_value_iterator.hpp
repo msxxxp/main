@@ -2,6 +2,7 @@
 #define LIBSTL_ITERATOR_CONST_VALUE_ITERATOR_HPP_
 
 #include <simstl/impl/iterator/base.hpp>
+#include <simstl/impl/utility/rel_ops.hpp>
 #include <simstl/types.hpp>
 
 namespace simstd

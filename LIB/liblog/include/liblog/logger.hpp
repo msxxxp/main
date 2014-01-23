@@ -343,7 +343,7 @@ namespace logger {
 	inline sync::ScopeGuard lock_module(Module_i * module)
 	{
 		UNUSED(module);
-		return Lock::ScopeGuard();
+		return sync::ScopeGuard();
 	}
 
 #endif

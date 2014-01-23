@@ -3,17 +3,6 @@
 
 #include <libbase/std.hpp>
 #include <libbase/cstr.hpp>
-
-#if defined(NoStlString) || defined(USE_LITE_STRING) || defined(NO_STD_STRING)
-#include <simstl/string>
-typedef sarastd::basic_string<char, Cstr::char_traits<char> > astring;
-typedef sarastd::basic_string<wchar_t, Cstr::char_traits<wchar_t> > ustring;
-#else
-#include <string>
-typedef std::string astring;
-typedef std::wstring ustring;
-#endif
-
 #include <libbase/memory.hpp>
 
 namespace Base {
@@ -21,35 +10,6 @@ namespace Base {
 	ssize_t ustring_test();
 
 	namespace String {
-
-		astring w2cp(PCWSTR in, UINT cp);
-		ustring cp2w(PCSTR in, UINT cp);
-
-		ustring format(PCWSTR format, ...);
-		ustring format(PCWSTR format, va_list args);
-
-		astring format(PCSTR format, ...);
-		astring format(PCSTR format, va_list args);
-
-		astring to_string(int value);
-		astring to_string(long value);
-		astring to_string(long long value);
-		astring to_string(unsigned value);
-		astring to_string(unsigned long value);
-		astring to_string(unsigned long long value);
-		astring to_string(float value);
-		astring to_string(double value);
-		astring to_string(long double value);
-
-		ustring to_wstring(int value);
-		ustring to_wstring(long value);
-		ustring to_wstring(long long value);
-		ustring to_wstring(unsigned value);
-		ustring to_wstring(unsigned long value);
-		ustring to_wstring(unsigned long long value);
-		ustring to_wstring(float value);
-		ustring to_wstring(double value);
-		ustring to_wstring(long double value);
 
 		namespace Inplace {
 			astring & trim_left(astring & str, const astring & chrs = " \t\r\n");

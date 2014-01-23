@@ -1,4 +1,5 @@
-﻿#include <simstl/string>
+﻿/*
+#include <simstl/string>
 
 #include <cassert>
 #include <string>
@@ -242,3 +243,4 @@ ssize_t simstd::Test::a_string(simstd::Test::aPrintFunc printFunc)
 
 	return 0;
 }
+*/

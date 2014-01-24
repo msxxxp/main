@@ -749,7 +749,7 @@ namespace simstd {
 		if (count != 0 && count <= pos) {
 			pos -= (count - 1);
 			while (pos > 0)
-				if (traits_type::find(c_str() + --pos, str))
+				if (find(str, pos, count) != npos)
 					return pos;
 		}
 		return npos;

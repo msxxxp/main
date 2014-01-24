@@ -4,5 +4,6 @@
 #include <system/configure.hpp>
 
 #include <system/sub_process/environment.hpp>
+#include <system/sub_process/process.hpp>
 
 #endif

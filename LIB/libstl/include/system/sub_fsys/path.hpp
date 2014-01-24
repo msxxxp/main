@@ -1,10 +1,12 @@
-﻿#ifndef LIBBASE_PATH_HPP_
-#define LIBBASE_PATH_HPP_
+﻿#ifndef LIBSTL_SYSTEM_FSYS_PATH_HPP_
+#define LIBSTL_SYSTEM_FSYS_PATH_HPP_
 
-#include <libbase/std.hpp>
-#include <libbase/string.hpp>
+#include <system/fsys.hpp>
 
-namespace Base {
+#include <simstd/iosfwd>
+#include <simstd/string>
+
+namespace fsys {
 	namespace Filename {
 		bool is_valid(PCWSTR name);
 		inline bool is_valid(const ustring & name)
@@ -124,7 +126,7 @@ namespace Base {
 
 }
 
-namespace Base {
+namespace fsys {
 
 	ustring PathNice(PCWSTR path);
 	inline ustring PathNice(const ustring &path)

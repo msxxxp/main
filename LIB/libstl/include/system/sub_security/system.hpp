@@ -5,10 +5,6 @@
 
 namespace Base {
 
-	namespace Process {
-		ustring get_path();
-	}
-
 	struct SecurityAttributes: SECURITY_ATTRIBUTES {
 		SecurityAttributes(bool inherit = false, PVOID psd = nullptr)
 		{

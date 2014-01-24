@@ -1,8 +1,8 @@
 ﻿#ifndef LIBBASE_TIME_HPP_
 #define LIBBASE_TIME_HPP_
 
-#include <libbase/std.hpp>
-#include <libbase/memory.hpp>
+#include <system/configure.hpp>
+#include <system/memory.hpp>
 
 namespace Base {
 
@@ -121,7 +121,7 @@ namespace Base {
 	struct WinSysTime: public SYSTEMTIME {
 		WinSysTime()
 		{
-			Memory::zero(this, sizeof(*this));
+			memory::zero(this, sizeof(*this));
 			now();
 		}
 

@@ -1,6 +1,6 @@
 #include "MessageManager.hpp"
 
-namespace Base {
+namespace sync {
 
 	MessageManager::~MessageManager()
 	{

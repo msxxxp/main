@@ -1,6 +1,7 @@
-#include <libbase/messaging.hpp>
+#include <system/configure.hpp>
+#include <system/sync.hpp>
 
-namespace Base {
+namespace sync {
 
 	Message::~Message()
 	{

@@ -1,13 +1,16 @@
+#include <system/configure.hpp>
+#include <system/sync.hpp>
+
 #include "MessageManager.hpp"
-#include <libbase/messaging.hpp>
-#include <libbase/lock.hpp>
 
-#include <algorithm>
-#include <vector>
+#include <simstl/algorithm>
+#include <simstl/vector>
+#include <simstl/utility>
+#include <simstl/mutex>
 
-namespace Base {
+namespace sync {
 
-	typedef std::pair<Observable *, Observer *> mapping;
+	typedef simstd::pair<Observable *, Observer *> mapping;
 
 	inline bool operator ==(const mapping & left, const Observer * right)
 	{
@@ -24,11 +27,7 @@ namespace Base {
 		return left < right.first;
 	}
 
-	struct SimpleMessageManager: public MessageManager, private Lock::CriticalSection, private std::vector<mapping> {
-		SimpleMessageManager()
-		{
-		}
-
+	struct SimpleMessageManager: public MessageManager, private simstd::vector<mapping> {
 		~SimpleMessageManager();
 
 		void register_observer(Observable * subject, Observer * observer) override;
@@ -40,6 +39,9 @@ namespace Base {
 		void unregister_all(Observer * observer) override;
 
 		void notify(const Observable * subject, Message const& event) const override;
+
+	private:
+		mutable CriticalSection m_cs;
 	};
 
 	SimpleMessageManager::~SimpleMessageManager()
@@ -48,42 +50,37 @@ namespace Base {
 
 	void SimpleMessageManager::register_observer(Observable * subject, Observer * observer)
 	{
-		lock();
-		emplace(std::upper_bound(begin(), end(), subject), subject, observer);
-		unlock();
+		simstd::lock_guard<CriticalSection> guard(m_cs);
+		emplace(simstd::upper_bound(begin(), end(), subject), subject, observer);
 	}
 
 	void SimpleMessageManager::unregister_observer(Observable * subject, Observer * observer)
 	{
-		lock();
-		auto range = std::equal_range(begin(), end(), subject);
+		simstd::lock_guard<CriticalSection> guard(m_cs);
+		auto range = simstd::equal_range(begin(), end(), subject);
 		erase(remove(range.first, range.second, observer), range.second);
-		unlock();
 	}
 
 	void SimpleMessageManager::unregister_all(Observable * subject)
 	{
-		lock();
-		auto range = std::equal_range(begin(), end(), subject);
+		simstd::lock_guard<CriticalSection> guard(m_cs);
+		auto range = simstd::equal_range(begin(), end(), subject);
 		erase(range.first, range.second);
-		unlock();
 	}
 
 	void SimpleMessageManager::unregister_all(Observer * observer)
 	{
-		lock();
+		simstd::lock_guard<CriticalSection> guard(m_cs);
 		erase(remove(begin(), end(), observer), end());
-		unlock();
 	}
 
 	void SimpleMessageManager::notify(const Observable * subject, const Message & event) const
 	{
-		lock();
-		auto range = std::equal_range(begin(), end(), subject);
-		std::for_each(range.first, range.second, [event](const mapping & pair) {
+		simstd::lock_guard<CriticalSection> guard(m_cs);
+		auto range = simstd::equal_range(begin(), end(), subject);
+		simstd::for_each(range.first, range.second, [event](const mapping & pair) {
 			pair.second->notify(event);
 		});
-		unlock();
 	}
 
 	MessageManager * get_simple_message_manager()

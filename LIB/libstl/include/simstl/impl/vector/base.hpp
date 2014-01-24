@@ -42,21 +42,23 @@ namespace simstd {
 		vector();
 		explicit vector(size_type n);
 		vector(size_type n, const value_type& val);
-		vector(const this_type& other);
 
 		template<typename InputIterator>
 		vector(InputIterator first, InputIterator last);
+		vector(const this_type& other);
+		vector(this_type&& other);
 
 		this_type& operator =(const this_type& other);
+		this_type& operator =(this_type&& other);
 
 		template<typename InputIterator>
 		void assign(InputIterator first, InputIterator last);
 		void assign(size_type n, const value_type& value);
 
-		reference       operator [](size_type pos);
-		const_reference operator [](size_type pos) const;
 		reference       at(size_type pos);
 		const_reference at(size_type pos) const;
+		reference       operator [](size_type pos);
+		const_reference operator [](size_type pos) const;
 
 		reference         front();
 		const_reference   front() const;
@@ -90,16 +92,25 @@ namespace simstd {
 		template<typename InputIterator>
 		iterator insert(const_iterator pos, InputIterator first, InputIterator last);
 		iterator insert(const_iterator pos, const value_type& value);
+		iterator insert(const_iterator pos, value_type&& value);
 		iterator insert(const_iterator pos, size_type n, const value_type& value);
 
-		iterator erase(const_iterator first, const_iterator last);
-		iterator erase(const_iterator pos);
+		template<typename... Args>
+		iterator emplace(const_iterator pos, Args&&... args);
 
-		void     push_back(const value_type& value);
+		iterator erase(const_iterator pos);
+		iterator erase(const_iterator first, const_iterator last);
+
+//		void     push_back(const value_type& value);
+		void     push_back(value_type&& value);
+
+		template<typename... Args>
+		void     emplace_back(Args&&... args);
+
 		void     pop_back();
 
-		void     resize(size_type count, const value_type& value);
 		void     resize(size_type count);
+		void     resize(size_type count, const value_type& value);
 
 		void     swap(this_type& other);
 
@@ -496,8 +507,16 @@ namespace simstd {
 		return erase(pos, pos + 1);
 	}
 
+//	template<typename Type, typename Allocator>
+//	void vector<Type, Allocator>::push_back(const value_type& value)
+//	{
+//		m_impl.adjust_capacity(1);
+//		simstd::uninitialized_fill_n(end(), 1, value);
+//		++m_impl.end;
+//	}
+
 	template<typename Type, typename Allocator>
-	void vector<Type, Allocator>::push_back(const value_type& value)
+	void vector<Type, Allocator>::push_back(value_type&& value)
 	{
 		m_impl.adjust_capacity(1);
 		simstd::uninitialized_fill_n(end(), 1, value);

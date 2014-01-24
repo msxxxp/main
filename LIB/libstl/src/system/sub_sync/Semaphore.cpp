@@ -24,6 +24,11 @@ namespace sync {
 		return WAIT_OBJECT_0 == ::WaitForSingleObjectEx(reinterpret_cast<HANDLE>(m_handle), timeout_millisec, true);
 	}
 
+	WaitResult_t Semaphore::try_lock_ex(size_t timeout_millisec)
+	{
+		return static_cast<WaitResult_t>(::WaitForSingleObjectEx(reinterpret_cast<HANDLE>(m_handle), timeout_millisec, true));
+	}
+
 	void Semaphore::unlock(size_t cnt)
 	{
 		::ReleaseSemaphore(reinterpret_cast<HANDLE>(m_handle), cnt, nullptr);

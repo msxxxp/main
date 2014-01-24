@@ -1,20 +1,20 @@
-#include <libbase/messaging.hpp>
+#include <system/configure.hpp>
+#include <system/sync.hpp>
 
-#include <libbase/lock.hpp>
 #include <liblog/logger.hpp>
 
-#include <vector>
+#include <simstl/vector>
 
-namespace Base {
+namespace sync {
 	namespace {
-		Logger::Module_i * get_logger_module()
+		logger::Module_i * get_logger_module()
 		{
-			auto static module = Logger::get_module(L"message");
+			auto static module = logger::get_module(L"message");
 			return module;
 		}
 	}
 
-	struct Queue::Queue_impl: private Lock::CriticalSection, private Lock::Semaphore, private std::vector<Message>
+	struct Queue::Queue_impl: private CriticalSection, private Semaphore, private simstd::vector<Message>
 	{ // deque would bring exceptions dependence
 		void put_message(value_type const& message);
 
@@ -26,12 +26,12 @@ namespace Base {
 		CriticalSection::lock();
 		emplace_back(message);
 		CriticalSection::unlock();
-		Semaphore::release(1);
+		Semaphore::unlock();
 	}
 
 	WaitResult_t Queue::Queue_impl::get_message(value_type & message, size_t timeout_msec)
 	{
-		auto waitResult = Semaphore::wait(timeout_msec);
+		auto waitResult = Semaphore::try_lock_ex(timeout_msec);
 		if (waitResult == WaitResult_t::SUCCESS) {
 			CriticalSection::lock();
 			message = front();
@@ -63,13 +63,13 @@ namespace Base {
 	Queue & Queue::operator = (Queue && right)
 	{
 		if (this != &right)
-			Queue(std::move(right)).swap(*this);
+			Queue(simstd::move(right)).swap(*this);
 		return *this;
 	}
 
 	void Queue::swap(Queue & right)
 	{
-		using std::swap;
+		using simstd::swap;
 		swap(m_impl, right.m_impl);
 	}
 

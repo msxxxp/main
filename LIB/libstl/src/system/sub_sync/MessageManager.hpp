@@ -1,7 +1,7 @@
 #ifndef _LIBBASE_MESSAGEMANAGER_PVT_HPP_
 #define _LIBBASE_MESSAGEMANAGER_PVT_HPP_
 
-namespace Base {
+namespace sync {
 
 	struct Message;
 	struct Observer;

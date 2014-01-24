@@ -2,10 +2,6 @@
 #define LIBSTL_SYSTEM_SYNC_HPP_
 
 #include <system/configure.hpp>
-#include <system/sub_sync/CriticalSection.hpp>
-#include <system/sub_sync/Mutex.hpp>
-#include <system/sub_sync/Semaphore.hpp>
-#include <extra/pattern.hpp>
 
 namespace sync {
 
@@ -21,6 +17,13 @@ namespace sync {
 		ABANDONED = WAIT_ABANDONED,
 	};
 
+}
+#include <system/sub_sync/CriticalSection.hpp>
+#include <system/sub_sync/Mutex.hpp>
+#include <system/sub_sync/Semaphore.hpp>
+#include <extra/pattern.hpp>
+
+namespace sync {
 	struct ScopeGuard;
 
 	///=============================================================================================

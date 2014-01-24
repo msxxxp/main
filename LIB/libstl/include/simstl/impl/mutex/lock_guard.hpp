@@ -32,6 +32,12 @@ namespace simstd {
 		mutex_type & m_sync;
 	};
 
+	template<typename Mutex>
+	lock_guard<Mutex> auto_lock(Mutex & mutex)
+	{
+		return lock_guard<Mutex>(mutex);
+	}
+
 }    // namespace simstd
 
 #endif

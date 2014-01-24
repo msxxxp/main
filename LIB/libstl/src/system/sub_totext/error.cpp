@@ -2,8 +2,8 @@
 #include <system/totext.hpp>
 #include <system/string.hpp>
 
-#include <simstl/algorithm>
-#include <simstl/string>
+#include <simstd/algorithm>
+#include <simstd/string>
 
 namespace totext {
 

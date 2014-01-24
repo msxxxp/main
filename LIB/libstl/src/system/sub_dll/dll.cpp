@@ -1,5 +1,5 @@
 #include <system/linkage.hpp>
-#include <simstl/algorithm>
+#include <simstd/algorithm>
 
 namespace linkage {
 

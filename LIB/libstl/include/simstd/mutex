@@ -1,0 +1,12 @@
+﻿#ifndef LIBSTL_MUTEX_
+#define LIBSTL_MUTEX_
+
+#include <simstd/impl/mutex/types.hpp>
+#include <simstd/impl/mutex/functional.hpp>
+#include <simstd/impl/mutex/lock_guard.hpp>
+#include <simstd/impl/mutex/once.hpp>
+#include <simstd/impl/mutex/recursive_mutex.hpp>
+#include <simstd/impl/mutex/recursive_timed_mutex.hpp>
+#include <simstd/impl/mutex/unique_lock.hpp>
+
+#endif

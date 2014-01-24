@@ -3,7 +3,7 @@
 
 #include <system/configure.hpp>
 
-#include <simstl/iosfwd>
+#include <simstd/iosfwd>
 
 namespace totext {
 

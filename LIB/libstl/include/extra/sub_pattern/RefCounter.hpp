@@ -1,7 +1,7 @@
 ﻿#ifndef LIBSTL_EXTRA_PATTERN_REFCOUNTER_HPP_
 #define LIBSTL_EXTRA_PATTERN_REFCOUNTER_HPP_
 
-#include <simstl/types.hpp>
+#include <simstd/types.hpp>
 
 namespace pattern {
 

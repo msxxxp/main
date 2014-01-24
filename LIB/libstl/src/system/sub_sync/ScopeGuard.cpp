@@ -1,7 +1,7 @@
 ﻿#include <system/configure.hpp>
 #include <system/sync.hpp>
 
-#include <simstl/algorithm>
+#include <simstd/algorithm>
 
 namespace sync {
 

@@ -1,8 +1,0 @@
-﻿#ifndef LIBSTL_STRING_
-#define LIBSTL_STRING_
-
-#include <simstl/impl/string/base.hpp>
-#include <simstl/impl/string/convert_a.hpp>
-#include <simstl/impl/string/convert_w.hpp>
-
-#endif

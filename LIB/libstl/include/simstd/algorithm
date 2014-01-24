@@ -1,0 +1,15 @@
+﻿#ifndef LIBSTL_ALGORITHM_
+#define LIBSTL_ALGORITHM_
+
+#include <simstd/impl/algorithm/base.hpp>
+#include <simstd/impl/algorithm/extra.hpp>
+#include <simstd/impl/algorithm/heap.hpp>
+#include <simstd/impl/algorithm/sort.hpp>
+
+namespace simstd {
+	namespace Test {
+		ssize_t _algorithm(wPrintFunc);
+	}
+}
+
+#endif

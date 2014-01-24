@@ -2,7 +2,7 @@
 #define LIBSTL_SYSTEM_STRING_FORMAT_HPP_
 
 #include <system/configure.hpp>
-#include <simstl/iosfwd>
+#include <simstd/iosfwd>
 
 namespace String {
 

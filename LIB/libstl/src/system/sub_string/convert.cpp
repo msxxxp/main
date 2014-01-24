@@ -1,7 +1,7 @@
 ﻿#include <system/configure.hpp>
 #include <system/cstr.hpp>
 #include <system/string.hpp>
-#include <simstl/string>
+#include <simstd/string>
 
 namespace String {
 

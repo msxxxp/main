@@ -6,7 +6,7 @@
 #include <system/sync.hpp>
 #include <extra/pattern.hpp>
 
-#include <simstl/vector>
+#include <simstd/vector>
 
 namespace thread {
 

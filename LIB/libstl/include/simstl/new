@@ -1,6 +1,0 @@
-﻿#ifndef LIBSTL_NEW_
-#define LIBSTL_NEW_
-
-#include <simstl/impl/new.hpp>
-
-#endif

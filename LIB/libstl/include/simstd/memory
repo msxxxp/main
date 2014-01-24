@@ -1,0 +1,13 @@
+﻿#ifndef LIBSTL_MEMORY_
+#define LIBSTL_MEMORY_
+
+#include <simstd/impl/memory/base.hpp>
+#include <simstd/impl/memory/allocator.hpp>
+#include <simstd/impl/memory/allocator_traits.hpp>
+#include <simstd/impl/memory/auto_ptr.hpp>
+#include <simstd/impl/memory/functional.hpp>
+#include <simstd/impl/memory/movable_allocator.hpp>
+#include <simstd/impl/memory/raw_storage_iterator.hpp>
+#include <simstd/impl/memory/shared_ptr.hpp>
+
+#endif

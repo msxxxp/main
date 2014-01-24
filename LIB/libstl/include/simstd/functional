@@ -1,0 +1,6 @@
+﻿#ifndef LIBSTL_FUNCTIONAL_
+#define LIBSTL_FUNCTIONAL_
+
+#include <simstd/impl/functional.hpp>
+
+#endif

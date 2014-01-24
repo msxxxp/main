@@ -1,10 +1,11 @@
-#include <libbase/backtrace.hpp>
+#include <system/backtrace.hpp>
+#include <system/string.hpp>
+#include <system/totext.hpp>
 
-#include <libbase/err.hpp>
-#include <libbase/string.hpp>
 #include <liblog/logger.hpp>
 
-#include <algorithm>
+#include <simstd/algorithm>
+#include <simstd/string>
 
 #include <dbghelp.h>
 
@@ -56,7 +57,7 @@ int init_bfd_ctx(bfd_ctx * bc, PCWSTR image)
 	bc->handle = NULL;
 	bc->symbol = NULL;
 
-	bfd *b = bfd_openr(Base::String::w2cp(image, CP_OEMCP).c_str(), 0);
+	bfd *b = bfd_openr(String::w2cp(image, CP_OEMCP).c_str(), 0);
 	if (!b) {
 		LogFatal(L"Failed to open bfd from (%s)\n", image);
 		return 1;
@@ -146,12 +147,12 @@ void find(bfd_ctx * b, size_t offset, const char *& file, const char *& func, si
 }
 #endif
 
-namespace Backtrace {
+namespace backtrace {
 
 	namespace {
-		Logger::Module_i * get_logger_module()
+		logger::Module_i * get_logger_module()
 		{
-			auto static module = Logger::get_module(L"backtra");
+			auto static module = logger::get_module(L"backtra");
 			return module;
 		}
 	}
@@ -179,7 +180,7 @@ namespace Backtrace {
 		addr(0), offset(0), module_base(0), line(0), func(L"?")
 	{
 		IMAGEHLP_MODULEW64 modinfo;
-		Memory::zero(modinfo);
+		memory::zero(modinfo);
 		modinfo.SizeOfStruct = sizeof(modinfo) - 8;
 		BOOL ret = SymGetModuleInfoW64(GetCurrentProcess(), frame, &modinfo);
 		LogErrorIf(ret == FALSE, L"%s\n", Base::ErrAsStr().c_str());
@@ -228,7 +229,7 @@ namespace Backtrace {
 //			LogErrorIf(err == FALSE, L"%s\n", ErrAsStr().c_str());
 			if (err != FALSE) {
 				line = info.LineNumber;
-				source = Base::String::cp2w(Base::filename_only(info.FileName), CP_ACP);
+				source = String::cp2w(filename_only(info.FileName), CP_ACP);
 			}
 		}
 		return ret;
@@ -253,13 +254,13 @@ namespace Backtrace {
 			LogDebug(L"line: %d\n", line);
 
 			if (file)
-				source = Base::String::cp2w(Base::filename_only(file, '/'), CP_OEMCP);
+				source = String::cp2w(filename_only(file, '/'), CP_OEMCP);
 			if (fun) {
 				char buf[MAX_PATH];
 				size_t size = sizeof(buf);
 				int st = 0;
 				abi::__cxa_demangle(fun, buf, &size, &st);
-				func = Base::String::cp2w(st ? fun : buf, CP_OEMCP);
+				func = String::cp2w(st ? fun : buf, CP_OEMCP);
 			}
 		}
 		release_set(set);
@@ -292,13 +293,13 @@ namespace Backtrace {
 
 	Frame & Frame::operator =(Frame && right)
 	{
-		Frame(std::move(right)).swap(*this);
+		Frame(simstd::move(right)).swap(*this);
 		return *this;
 	}
 
 	void Frame::swap(Frame & right)
 	{
-		using std::swap;
+		using simstd::swap;
 		swap(m_frame, right.m_frame);
 		swap(m_data, right.m_data);
 	}
@@ -349,9 +350,9 @@ namespace Backtrace {
 	{
 		wchar_t buf[MAX_PATH];
 		if (!source().empty())
-			_snwprintf(buf, Base::lengthof(buf), L"[%s] (%p) %s:0x%Ix {%s:%Iu}", module().c_str(), addr(), func().c_str(), offset(), source().c_str(), line());
+			safe_snprintf(buf, lengthof(buf), L"[%s] (%p) %s:0x%Ix {%s:%Iu}", module().c_str(), addr(), func().c_str(), offset(), source().c_str(), line());
 		else
-			_snwprintf(buf, Base::lengthof(buf), L"[%s] (%p) %s:0x%Ix", module().c_str(), addr(), func().c_str(), offset());
+			safe_snprintf(buf, lengthof(buf), L"[%s] (%p) %s:0x%Ix", module().c_str(), addr(), func().c_str(), offset());
 		return ustring(buf);
 	}
 
@@ -387,7 +388,7 @@ namespace Backtrace {
 		SymbolInit::inst(path);
 
 		CONTEXT ctx;
-		Memory::zero(ctx);
+		memory::zero(ctx);
 		ctx.ContextFlags = CONTEXT_FULL;
 		RtlCaptureContext(&ctx);
 

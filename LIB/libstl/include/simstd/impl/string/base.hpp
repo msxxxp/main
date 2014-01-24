@@ -318,6 +318,7 @@ namespace simstd {
 	basic_string<CharType, Traits> & basic_string<CharType, Traits>::operator =(this_type && right)
 	{
 		swap(right);
+		return *this;
 	}
 
 	template<typename CharType, typename Traits>
@@ -1050,5 +1051,8 @@ namespace simstd {
 	typedef basic_string<wchar_t, char_traits<wchar_t> > wstring;
 
 }
+
+typedef simstd::string astring;
+typedef simstd::wstring ustring;
 
 #endif

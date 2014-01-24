@@ -51,7 +51,7 @@ namespace sync {
 	void SimpleMessageManager::register_observer(Observable * subject, Observer * observer)
 	{
 		simstd::lock_guard<CriticalSection> guard(m_cs);
-		emplace(simstd::upper_bound(begin(), end(), subject), subject, observer);
+		emplace(simstd::upper_bound(cbegin(), cend(), subject), subject, observer);
 	}
 
 	void SimpleMessageManager::unregister_observer(Observable * subject, Observer * observer)

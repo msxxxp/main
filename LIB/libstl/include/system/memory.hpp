@@ -2,6 +2,7 @@
 #define LIBSTL_SYSTEM_MEMORY_HPP_
 
 #include <system/configure.hpp>
+
 #include <simstd/algorithm>
 #include <simstd/memory>
 #include <extra/pattern.hpp>

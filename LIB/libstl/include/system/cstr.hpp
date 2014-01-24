@@ -2,6 +2,7 @@
 #define LIBSTL_SYSTEM_CSTR_HPP_
 
 #include <system/configure.hpp>
+
 #include <system/memory.hpp>
 #include <wchar.h>
 

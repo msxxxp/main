@@ -11,8 +11,9 @@ namespace simstd {
 	typedef simstd::basic_string<char, simstd::char_traits<char> > string;
 	typedef simstd::basic_string<wchar_t, simstd::char_traits<wchar_t> > wstring;
 
-	typedef simstd::basic_string<char, simstd::char_traits<char> > astring;
-	typedef simstd::basic_string<wchar_t, simstd::char_traits<wchar_t> > ustring;
 }
+
+typedef simstd::basic_string<char, simstd::char_traits<char> > astring;
+typedef simstd::basic_string<wchar_t, simstd::char_traits<wchar_t> > ustring;
 
 #endif

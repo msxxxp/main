@@ -6,6 +6,12 @@
 namespace simstd {
 
 	template<typename _Tp>
+	_Tp* addressof(_Tp& __r) noexcept
+	{
+		return reinterpret_cast<_Tp*>(&const_cast<char&>(reinterpret_cast<const volatile char&>(__r)));
+	}
+
+	template<typename _Tp>
 	struct remove_reference
 	{
 		typedef _Tp type;
@@ -22,6 +28,18 @@ namespace simstd {
 	{
 		typedef _Tp type;
 	};
+
+	template<typename _Tp>
+	constexpr _Tp&& forward(typename remove_reference<_Tp>::type& __t) noexcept
+	{
+		return static_cast<_Tp&&>(__t);
+	}
+
+	template<typename _Tp>
+	constexpr _Tp&& forward(typename remove_reference<_Tp>::type&& __t) noexcept
+	{
+		return static_cast<_Tp&&>(__t);
+	}
 
 	template<typename _Tp>
 	constexpr typename remove_reference<_Tp>::type&& move(_Tp&& __t) noexcept

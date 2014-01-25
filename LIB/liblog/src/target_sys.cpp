@@ -2,7 +2,7 @@
 
 #include <system/sync.hpp>
 #include <system/cstr.hpp>
-#include <simstl/memory>
+#include <simstd/memory>
 
 #include "event_msg.h"
 

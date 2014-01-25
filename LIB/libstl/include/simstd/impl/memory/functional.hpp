@@ -37,6 +37,24 @@ namespace simstd {
 		}
 	}
 
+	template<typename InputIt, typename ForwardIt>
+	ForwardIt uninitialized_move(InputIt first, InputIt last, ForwardIt d_first)
+	{
+		for (; first != last; ++first, ++d_first) {
+			simstd::pvt::_construct(simstd::addressof(*d_first), simstd::move(*first));
+		}
+		return d_first;
+	}
+
+	template<typename InputIt, typename Size, typename ForwardIt>
+	ForwardIt uninitialized_move_n(InputIt first, Size cnt, ForwardIt d_first)
+	{
+		for (; cnt > 0; ++first, ++d_first, --cnt) {
+			simstd::pvt::_construct(simstd::addressof(*d_first), simstd::move(*first));
+		}
+		return d_first;
+	}
+
 }
 
 #endif

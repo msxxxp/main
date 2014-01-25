@@ -6,7 +6,7 @@
 #include <extra/pattern.hpp>
 
 #ifdef ENABLE_LOGGER
-#include <simstl/memory>
+#include <simstd/memory>
 #else
 #include <system/console.hpp>
 #endif

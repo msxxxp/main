@@ -3,9 +3,9 @@
 #include <system/console.hpp>
 #include <system/cstr.hpp>
 #include <system/sync.hpp>
-#include <simstl/memory>
+#include <simstd/memory>
 
-#include <simstl/string>
+#include <simstd/string>
 #include "Module_impl.hpp"
 
 namespace logger {

@@ -3,7 +3,11 @@
 #include <system/console.hpp>
 #include <system/crt.hpp>
 
-#include <simstl/algorithm>
+#include <simstd/algorithm>
+#include <simstd/vector>
+
+#include <algorithm>
+#include <vector>
 
 namespace {
 	void setup_logger()
@@ -17,92 +21,53 @@ namespace {
 	}
 }
 
-//class A {
-//public:
-//	~A()
-//	{
-//		Base::console::printf(L"%S\n", __PRETTY_FUNCTION__);
-//	}
-//
-//	A() :
-//		m_int(1)
-//	{
-//		Base::console::printf(L"%S\n", __PRETTY_FUNCTION__);
-//	}
-//
-//	int get_int() const
-//	{
-//		return m_int;
-//	}
-//
-//private:
-//	int m_int;
-//};
-//
-//class B: public A {
-//public:
-//	~B()
-//	{
-//		Base::console::printf(L"%S\n", __PRETTY_FUNCTION__);
-//	}
-//
-//	B() :
-//		m_double(10)
-//	{
-//		Base::console::printf(L"%S\n", __PRETTY_FUNCTION__);
-//	}
-//
-//	double get_double() const
-//	{
-//		return m_double;
-//	}
-//
-//private:
-//	double m_double;
-//};
-
-#include <tuple>
-
-std::tuple<double, char> get_student(int /*id*/)
-{
-	return std::make_tuple(3.8, 'A');
-	//    if (id == 1) return std::make_tuple(2.9, 'C', "Milhouse Van Houten");
-	//    if (id == 2) return std::make_tuple(1.7, 'D', "Ralph Wiggum");
-	//    throw std::invalid_argument("id");
-}
-
 class A: private pattern::Uncopyable
 {
 public:
 	A():
-		_i()
+		_i(),
+		_str(L"")
 	{
-		console::printf(L"%S[%d]\n", __PRETTY_FUNCTION__, __LINE__);
+		console::printf(L"%S[%d] %Iu '%s'\n", __PRETTY_FUNCTION__, __LINE__, _i, _str);
+	}
+
+	A(size_t i, const wchar_t * str):
+		_i(i),
+		_str(str)
+	{
+		console::printf(L"%S[%d] %Iu '%s'\n", __PRETTY_FUNCTION__, __LINE__, _i, _str);
 	}
 
 	A(A&& a):
-		_i()
+		_i(),
+		_str(L"")
 	{
-		console::printf(L"%S[%d]\n", __PRETTY_FUNCTION__, __LINE__);
 		swap(a);
+		console::printf(L"%S[%d] %Iu '%s'\n", __PRETTY_FUNCTION__, __LINE__, _i, _str);
 	}
 
 	A& operator =(A&& a)
 	{
-		console::printf(L"%S[%d]\n", __PRETTY_FUNCTION__, __LINE__);
 		A(simstd::move(a)).swap(*this);
+		console::printf(L"%S[%d] %Iu '%s'\n", __PRETTY_FUNCTION__, __LINE__, _i, _str);
 		return *this;
 	}
 
 	void swap(A& a)
 	{
-		console::printf(L"%S[%d]\n", __PRETTY_FUNCTION__, __LINE__);
 		using simstd::swap;
 		swap(_i, a._i);
+		console::printf(L"%S[%d] %Iu '%s'\n", __PRETTY_FUNCTION__, __LINE__, _i, _str);
+	}
+
+	void print() const
+	{
+		console::printf(L"%S[%d] %Iu '%s'\n", __PRETTY_FUNCTION__, __LINE__, _i, _str);
 	}
 
 private:
-	int _i;
+	size_t _i;
+	const wchar_t * _str;
 };
 
 A get_a()
@@ -116,27 +81,31 @@ int wWmain()
 int main()
 #endif
 {
-	A a(get_a());
-	A b(simstd::move(a));
-
 	console::printf(L"%S:%d\n", __PRETTY_FUNCTION__, __LINE__);
 	setup_logger();
 
-	console::printf(L"%S:%d\n", __PRETTY_FUNCTION__, __LINE__);
 	LogTrace();
 
-	console::printf(L"%S:%d\n", __PRETTY_FUNCTION__, __LINE__);
+	const A a1(1, L"1");
+		  A a2(2, L"2");
+	const A a3(3, L"3");
+		  A a4(4, L"4");
 
-//	{
-//		std::shared_ptr<A> sptr(std::make_shared<B>());
-//	}
+	simstd::vector<A> va;
+	va.push_back(A(0, L"0"));
+//	va.push_back(a1);
+//	va.push_back(a2);
+//	va.emplace_back(a3);
+//	va.emplace_back(a4);
+	va.emplace_back(5, L"5");
+	va.push_back(A(6, L"6"));
 
-	{
-		auto student0 = get_student(0);
-		LogDebug(L"ID: %f, GPA: %c\n", std::get<0>(student0), std::get<1>(student0));
-		LogDebug(L"ID: %d, GPA: %c\n", (int )std::get<0>(student0), std::get<1>(student0));
+//	va.push_back(simstd::move(a1));
+	va.push_back(simstd::move(a2));
+//	va.emplace_back(simstd::move(a3));
+	va.emplace_back(simstd::move(a4));
 
-	}
+
 	LogTrace();
 
 	return 0;

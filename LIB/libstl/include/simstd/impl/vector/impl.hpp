@@ -28,6 +28,10 @@ namespace simstd {
 			vector_impl(size_type capa);
 			vector_impl(size_type capa, pointer first, pointer last);
 			void swap(this_type& other);
+
+			template<typename... Args>
+			void construct(pointer ptr, Args&&... args);
+
 			void destroy(pointer first, pointer last);
 			void reserve(size_type newCapacity);
 			void adjust_capacity(size_type addToSize);
@@ -66,7 +70,7 @@ namespace simstd {
 			begin(0), end(0), end_of_storage(0)
 		{
 			create_storage(capa);
-			simstd::uninitialized_copy(first, last, end);
+			simstd::uninitialized_move(first, last, end);
 			end += (last - first);
 		}
 
@@ -90,6 +94,13 @@ namespace simstd {
 		{
 			end = begin = (capa) ? allocator_type::allocate(capa) : 0;
 			end_of_storage = begin + (begin ? capa : 0);
+		}
+
+		template<typename Type, typename Allocator>
+		template<typename... Args>
+		void vector_impl<Type, Allocator>::construct(pointer ptr, Args&&... args)
+		{
+			allocator_type::construct(ptr, simstd::forward<Args>(args)...);
 		}
 
 		template<typename Type, typename Allocator>

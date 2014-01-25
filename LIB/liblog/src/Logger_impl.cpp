@@ -2,9 +2,8 @@
 #include <system/configure.hpp>
 #include <system/console.hpp>
 #include <system/cstr.hpp>
-//#include <libbase/memory.hpp>
 #include <extra/pattern.hpp>
-#include <simstl/vector>
+#include <simstd/vector>
 
 #include "Logger_impl.hpp"
 #include "Module_impl.hpp"

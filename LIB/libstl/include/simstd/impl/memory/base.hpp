@@ -32,6 +32,12 @@ namespace simstd {
 			::new (static_cast<void*>(ptr), simstd::nothrow) Type1(val);
 		}
 
+		template<typename Type, typename... Args>
+		void _construct(Type* ptr, Args&&... args)
+		{
+			::new (static_cast<void*>(ptr), simstd::nothrow) Type(simstd::forward<Args>(args)...);
+		}
+
 		template<typename Type>
 		void _destroy(Type* ptr)
 		{

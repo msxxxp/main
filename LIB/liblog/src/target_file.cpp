@@ -2,7 +2,7 @@
 
 #include <system/memory.hpp>
 #include <system/sync.hpp>
-#include <simstl/memory>
+#include <simstd/memory>
 
 namespace logger {
 

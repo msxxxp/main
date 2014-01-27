@@ -8,6 +8,7 @@
 #include <simstd/impl/iterator/insert_iterator.hpp>
 #include <simstd/impl/iterator/pvt_const_value_iterator.hpp>
 #include <simstd/impl/iterator/pvt_normal_iterator.hpp>
+#include <simstd/impl/iterator/move_iterator.hpp>
 #include <simstd/impl/iterator/reverse_iterator.hpp>
 
 #endif

@@ -170,11 +170,19 @@ namespace simstd {
 	OutputIt move(InputIt first, InputIt last, OutputIt d_first)
 	{
 		while (first != last) {
-			*d_first = move(*first);
+			*d_first = simstd::move(*first);
 			++first;
 			++d_first;
 		}
 		return d_first;
+	}
+
+	template<class BidirIt1, class BidirIt2>
+	BidirIt2 move_backward(BidirIt1 first, BidirIt1 last, BidirIt2 d_last)
+	{
+		while (first != last)
+			*(--d_last) = simstd::move(*(--last));
+		return d_last;
 	}
 
 	template<typename ForwardIt, typename T>

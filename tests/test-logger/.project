@@ -3,6 +3,8 @@
 	<name>test-logger</name>
 	<comment></comment>
 	<projects>
+		<project>liblog</project>
+		<project>libstl</project>
 	</projects>
 	<buildSpec>
 		<buildCommand>

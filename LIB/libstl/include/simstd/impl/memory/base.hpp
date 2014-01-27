@@ -2,17 +2,19 @@
 #define LIBSTL_MEMORY_HPP_
 
 #include <simstd/types.hpp>
+#include <simstd/impl/memory/allocator.hpp>
+#include <simstd/impl/memory/allocator_traits.hpp>
 #include <simstd/impl/new.hpp>
 #include <simstd/impl/utility/pair.hpp>
 
 namespace simstd {
 
 	namespace pvt {
-		template<typename Type>
-		Type* _addressof(Type& ref)
-		{
-			return reinterpret_cast<Type*>(&const_cast<char&>(reinterpret_cast<const volatile char&>(ref)));
-		}
+//		template<typename Type>
+//		Type* _addressof(Type& ref)
+//		{
+//			return reinterpret_cast<Type*>(&const_cast<char&>(reinterpret_cast<const volatile char&>(ref)));
+//		}
 
 		template<typename Type>
 		Type* _allocate(size_t cnt)
@@ -30,6 +32,22 @@ namespace simstd {
 		void _construct(Type1* ptr, const Type2& val)
 		{
 			::new (static_cast<void*>(ptr), simstd::nothrow) Type1(val);
+		}
+
+		template<typename Allocator, typename ForwardIterator>
+		void _construct_default(Allocator& allocator, ForwardIterator first, ForwardIterator last)
+		{
+			typedef allocator_traits<Allocator> traits_type;
+			for (; first != last; ++first)
+				traits_type::construct(allocator, simstd::addressof(*first));
+		}
+
+		template<typename Allocator, typename ForwardIterator, typename Type>
+		void _construct_copy(Allocator& allocator, ForwardIterator first, ForwardIterator last, const Type& value)
+		{
+			typedef allocator_traits<Allocator> traits_type;
+			for (; first != last; ++first)
+				traits_type::construct(allocator, simstd::addressof(*first), value);
 		}
 
 		template<typename Type, typename... Args>
@@ -50,6 +68,15 @@ namespace simstd {
 			for (; first != last; ++first)
 				first->~Type();
 		}
+
+		template<typename Allocator, typename ForwardIterator>
+		void _destroy(Allocator& allocator, ForwardIterator first, ForwardIterator last)
+		{
+			typedef allocator_traits<Allocator> traits_type;
+			for (; first != last; ++first)
+				traits_type::destroy(allocator, simstd::addressof(*first));
+		}
+
 	}
 
 //	template<bool>

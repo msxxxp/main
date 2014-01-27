@@ -27,6 +27,8 @@
 									<listOptionValue builtIn="false" value="ENABLE_LOGGER"/>
 								</option>
 								<option id="gnu.cpp.compiler.option.include.paths.1753968247" name="Include paths (-I)" superClass="gnu.cpp.compiler.option.include.paths" valueType="includePath">
+									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/libstl}&quot;"/>
+									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/liblog}&quot;"/>
 									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/liblog/include}&quot;"/>
 									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/libstl/include}&quot;"/>
 								</option>
@@ -39,6 +41,8 @@
 							<tool command="g++" commandLinePattern="${COMMAND} ${FLAGS} ${OUTPUT_FLAG} ${OUTPUT_PREFIX}${OUTPUT} ${INPUTS}" errorParsers="org.eclipse.cdt.core.GLDErrorParser" id="cdt.managedbuild.tool.gnu.cpp.linker.mingw.exe.release.186449539" name="MinGW C++ Linker" superClass="cdt.managedbuild.tool.gnu.cpp.linker.mingw.exe.release">
 								<option id="gnu.cpp.link.option.strip.184391048" name="Omit all symbol information (-s)" superClass="gnu.cpp.link.option.strip" value="true" valueType="boolean"/>
 								<option id="gnu.cpp.link.option.paths.1259026971" name="Library search path (-L)" superClass="gnu.cpp.link.option.paths" valueType="libPaths">
+									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/liblog/Release}&quot;"/>
+									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/liblog/Release-x64}&quot;"/>
 									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/liblog/x64-Release}&quot;"/>
 									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/libstl/x64-Release}&quot;"/>
 								</option>
@@ -66,7 +70,24 @@
 					</sourceEntries>
 				</configuration>
 			</storageModule>
-			<storageModule moduleId="org.eclipse.cdt.core.externalSettings"/>
+			<storageModule moduleId="org.eclipse.cdt.core.externalSettings">
+				<externalSettings containerId="liblog;cdt.managedbuild.config.gnu.mingw.lib.release.554916237" factoryId="org.eclipse.cdt.core.cfg.export.settings.sipplier">
+					<externalSetting>
+						<entry flags="VALUE_WORKSPACE_PATH" kind="includePath" name="/liblog"/>
+						<entry flags="VALUE_WORKSPACE_PATH" kind="libraryPath" name="/liblog/Release"/>
+						<entry flags="VALUE_WORKSPACE_PATH" kind="libraryPath" name="/liblog/Release-x64"/>
+						<entry flags="VALUE_WORKSPACE_PATH" kind="libraryPath" name="/liblog/x64-Release"/>
+						<entry flags="RESOLVED" kind="libraryFile" name="liblog" srcPrefixMapping="" srcRootPath=""/>
+					</externalSetting>
+				</externalSettings>
+				<externalSettings containerId="libstl;cdt.managedbuild.config.gnu.mingw.lib.release.259653931" factoryId="org.eclipse.cdt.core.cfg.export.settings.sipplier">
+					<externalSetting>
+						<entry flags="VALUE_WORKSPACE_PATH" kind="includePath" name="/libstl"/>
+						<entry flags="VALUE_WORKSPACE_PATH" kind="libraryPath" name="/libstl/x64-Release"/>
+						<entry flags="RESOLVED" kind="libraryFile" name="libstl" srcPrefixMapping="" srcRootPath=""/>
+					</externalSetting>
+				</externalSettings>
+			</storageModule>
 		</cconfiguration>
 		<cconfiguration id="cdt.managedbuild.config.gnu.mingw.exe.release.946314105.803761064">
 			<storageModule buildSystemId="org.eclipse.cdt.managedbuilder.core.configurationDataProvider" id="cdt.managedbuild.config.gnu.mingw.exe.release.946314105.803761064" moduleId="org.eclipse.cdt.core.settings" name="Debug-x64">
@@ -225,6 +246,9 @@
 		<configuration configurationName="Release">
 			<resource resourceType="PROJECT" workspacePath="/test-logger"/>
 		</configuration>
+		<configuration configurationName="Release-x32"/>
+		<configuration configurationName="Debug-x64"/>
+		<configuration configurationName="Release-x64"/>
 		<configuration configurationName="Debug">
 			<resource resourceType="PROJECT" workspacePath="/test-logger"/>
 		</configuration>

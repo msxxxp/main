@@ -2,6 +2,7 @@
 #define LIBSTL_ITERATOR_REVERSE_ITERATOR_HPP_
 
 #include <simstd/impl/iterator/base.hpp>
+#include <simstd/utility>
 
 namespace simstd
 {

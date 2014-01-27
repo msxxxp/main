@@ -1,11 +1,10 @@
-﻿#ifndef LIBSTL_MOVABLE_VECTOR_HPP_
-#define LIBSTL_MOVABLE_VECTOR_HPP_
+﻿#ifndef LIBSTL_VECTOR_MOVABLE_VECTOR_HPP_
+#define LIBSTL_VECTOR_MOVABLE_VECTOR_HPP_
 
-#include <simstd/impl/iterator/pvt_normal_iterator.hpp>
-#include <simstd/impl/iterator/reverse_iterator.hpp>
-#include <simstd/impl/memory/allocator_traits.hpp>
-#include <simstd/impl/memory/movable_allocator.hpp>
-#include <simstd/impl/vector/base.hpp>
+#include <simstd/types.hpp>
+#include <simstd/iterator>
+#include <simstd/memory>
+#include <simstd/vector>
 
 namespace simstd {
 

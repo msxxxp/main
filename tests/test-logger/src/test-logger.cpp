@@ -21,9 +21,14 @@ namespace {
 	}
 }
 
-class A: private pattern::Uncopyable
+class A//: private pattern::Uncopyable
 {
 public:
+	~A()
+	{
+		console::printf(L"%S[%d] %Iu '%s'\n", __PRETTY_FUNCTION__, __LINE__, _i, _str);
+	}
+
 	A():
 		_i(),
 		_str(L"")
@@ -36,6 +41,20 @@ public:
 		_str(str)
 	{
 		console::printf(L"%S[%d] %Iu '%s'\n", __PRETTY_FUNCTION__, __LINE__, _i, _str);
+	}
+
+	A(const A& a):
+		_i(a._i),
+		_str(a._str)
+	{
+		console::printf(L"%S[%d] %Iu '%s'\n", __PRETTY_FUNCTION__, __LINE__, _i, _str);
+	}
+
+	A& operator =(const A& a)
+	{
+		A(a).swap(*this);
+		console::printf(L"%S[%d] %Iu '%s'\n", __PRETTY_FUNCTION__, __LINE__, _i, _str);
+		return *this;
 	}
 
 	A(A&& a):
@@ -57,7 +76,8 @@ public:
 	{
 		using simstd::swap;
 		swap(_i, a._i);
-		console::printf(L"%S[%d] %Iu '%s'\n", __PRETTY_FUNCTION__, __LINE__, _i, _str);
+		swap(_str, a._str);
+//		console::printf(L"%S[%d] %Iu '%s'\n", __PRETTY_FUNCTION__, __LINE__, _i, _str);
 	}
 
 	void print() const
@@ -75,6 +95,11 @@ A get_a()
 	return A();
 }
 
+void print_a(const A& a)
+{
+	a.print();
+}
+
 #ifdef NDEBUG
 int wWmain()
 #else
@@ -86,25 +111,46 @@ int main()
 
 	LogTrace();
 
-	const A a1(1, L"1");
-		  A a2(2, L"2");
-	const A a3(3, L"3");
-		  A a4(4, L"4");
+	namespace qwe = std;
+//	const A a01(1, L"01");
+//		  A a02(2, L"02");
+//	const A a11(11, L"11");
+//		  A a12(12, L"12");
 
-	simstd::vector<A> va;
-	va.push_back(A(0, L"0"));
-//	va.push_back(a1);
-//	va.push_back(a2);
-//	va.emplace_back(a3);
-//	va.emplace_back(a4);
-	va.emplace_back(5, L"5");
-	va.push_back(A(6, L"6"));
+	qwe::vector<A> va;
+//	va.push_back(A(0, L"0"));
+//	va.push_back(a01);
+//	va.push_back(a02);
+//	va.push_back(simstd::move(a01));
+//	va.push_back(simstd::move(a02));
+//
+//	va.emplace_back(10, L"10");
+//	va.emplace_back(a11);
+//	va.emplace_back(a12);
+//	va.emplace_back(simstd::move(a11));
+//	va.emplace_back(simstd::move(a12));
+	va.emplace_back(A(0, L"0"));
+	va.emplace_back(A(2, L"2"));
+	va.emplace_back(A(4, L"4"));
 
-//	va.push_back(simstd::move(a1));
-	va.push_back(simstd::move(a2));
-//	va.emplace_back(simstd::move(a3));
-	va.emplace_back(simstd::move(a4));
+	console::printf(L"size: %Iu, capa: %Iu\n", va.size(), va.capacity());
+	qwe::for_each(va.begin(), va.end(), print_a);
 
+	va.emplace(va.begin() + 1, 1, L"1");
+
+	console::printf(L"size: %Iu, capa: %Iu\n", va.size(), va.capacity());
+	qwe::for_each(va.begin(), va.end(), print_a);
+
+	va.emplace(va.begin() + 3, 3, L"3");
+
+	console::printf(L"size: %Iu, capa: %Iu\n", va.size(), va.capacity());
+	qwe::for_each(va.begin(), va.end(), print_a);
+
+	va.pop_back();
+	va.pop_back();
+
+	console::printf(L"size: %Iu, capa: %Iu\n", va.size(), va.capacity());
+	qwe::for_each(va.begin(), va.end(), print_a);
 
 	LogTrace();
 

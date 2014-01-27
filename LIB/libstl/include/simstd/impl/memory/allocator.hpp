@@ -87,7 +87,7 @@ namespace simstd {
 
 	template<typename Type>
 	template<class TypeOther>
-	allocator<Type>::allocator(const allocator<TypeOther>& other)
+	allocator<Type>::allocator(const allocator<TypeOther>& /*other*/)
 	{
 	}
 

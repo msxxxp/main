@@ -8,11 +8,12 @@
 
 #include <system/console.hpp>
 #define FuncTrace() console::printf(L"%S()[%d]\n", __FUNCTION__, __LINE__)
+//#define FuncTrace()
 
 
 namespace simstd {
 	namespace Test {
-		ssize_t _vector(aPrintFunc printFunc);
+		ssize_t _vector(wPrintFunc printFunc);
 	}
 
 	template<typename Type, typename Allocator = simstd::allocator<Type> >
@@ -37,15 +38,16 @@ namespace simstd {
 	public:
 		~vector();
 
-		vector();
-		explicit vector(const allocator_type& allocator);
+		explicit vector(const allocator_type& allocator = allocator_type());
 		explicit vector(size_type n, const allocator_type& allocator = allocator_type());
 		vector(size_type n, const value_type& val, const allocator_type& allocator = allocator_type());
-
 		template<typename InputIterator>
-		vector(InputIterator first, InputIterator last);
+		vector(InputIterator first, InputIterator last, const allocator_type& allocator = allocator_type());
 		vector(const this_type& other);
+		vector(const this_type& other, const allocator_type& allocator);
 		vector(this_type&& other);
+		vector(this_type&& other, const allocator_type& allocator);
+//		vector(simstd::initializer_list<Type> init, const Allocator& allocator = allocator_type());
 
 		this_type& operator =(const this_type& other);
 		this_type& operator =(this_type&& other);
@@ -194,23 +196,10 @@ namespace simstd {
 	}
 
 	template<typename Type, typename Allocator>
-	vector<Type, Allocator>::vector() :
-		m_impl()
-	{
-	}
-
-	template<typename Type, typename Allocator>
 	vector<Type, Allocator>::vector(const allocator_type& allocator) :
 		m_impl(allocator)
 	{
 	}
-
-//	template<typename Type, typename Allocator>
-//	vector<Type, Allocator>::vector(size_type n) :
-//		m_impl()
-//	{
-//		_resize_increase(n, value_type());
-//	}
 
 	template<typename Type, typename Allocator>
 	vector<Type, Allocator>::vector(size_type n, const allocator_type& allocator):
@@ -230,8 +219,8 @@ namespace simstd {
 
 	template<typename Type, typename Allocator>
 	template<typename InputIterator>
-	vector<Type, Allocator>::vector(InputIterator first, InputIterator last) :
-		m_impl()
+	vector<Type, Allocator>::vector(InputIterator first, InputIterator last, const allocator_type& allocator) :
+		m_impl(allocator)
 	{
 		_insert_back(first, last, simstd::pvt::iterator_category(first));
 	}
@@ -240,13 +229,38 @@ namespace simstd {
 	vector<Type, Allocator>::vector(const this_type& other) :
 		m_impl(other.size(), other.m_impl.allocator)
 	{
-		m_impl.end = simstd::uninitialized_copy(other.m_impl.begin, other.m_impl.end, m_impl.begin);
+		m_impl.end = simstd::uninitialized_copy(other.m_impl.begin, other.m_impl.end, m_impl.end);
+	}
+
+	template<typename Type, typename Allocator>
+	vector<Type, Allocator>::vector(const this_type& other, const allocator_type& allocator) :
+		m_impl(other.size(), allocator)
+	{
+		m_impl.end = simstd::uninitialized_copy(other.m_impl.begin, other.m_impl.end, m_impl.end);
+	}
+
+	template<typename Type, typename Allocator>
+	vector<Type, Allocator>::vector(this_type&& other) :
+		m_impl(simstd::move(other.m_impl))
+	{
+	}
+
+	template<typename Type, typename Allocator>
+	vector<Type, Allocator>::vector(this_type&& other, const allocator_type& allocator) :
+		m_impl(simstd::move(other.m_impl), allocator)
+	{
+		if (allocator != other.m_impl.allocator)
+		{
+			m_impl.end = simstd::uninitialized_copy(simstd::make_move_iterator(other.m_impl.begin), simstd::make_move_iterator(other.m_impl.end), m_impl.end);
+			other.clear();
+		}
 	}
 
 	template<typename Type, typename Allocator>
 	typename
 	vector<Type, Allocator>::this_type& vector<Type, Allocator>::operator =(const this_type& other)
 	{
+		FuncTrace();
 		this_type(other).swap(*this);
 		return *this;
 	}
@@ -254,6 +268,7 @@ namespace simstd {
 	template<typename Type, typename Allocator>
 	void vector<Type, Allocator>::assign(size_type n, const value_type& value)
 	{
+		FuncTrace();
 		this_type(n, value).swap(*this);
 	}
 
@@ -261,6 +276,7 @@ namespace simstd {
 	template<typename InputIterator>
 	void vector<Type, Allocator>::assign(InputIterator first, InputIterator last)
 	{
+		FuncTrace();
 		this_type(first, last).swap(*this);
 	}
 
@@ -615,7 +631,6 @@ namespace simstd {
 	typename
 	vector<Type, Allocator>::iterator vector<Type, Allocator>::_erase(const_iterator cfirst, const_iterator clast)
 	{
-//		auto itemsToErase = simstd::distance(cfirst, clast);
 		auto first = simstd::next(begin(), simstd::distance(cbegin(), cfirst));
 		auto last = simstd::next(begin(), simstd::distance(cbegin(), clast));
 		auto newEnd = simstd::move(last, end(), first);
@@ -645,6 +660,7 @@ namespace simstd {
 	template<typename InputIterator>
 	void vector<Type, Allocator>::_insert_back(InputIterator first, InputIterator last, simstd::input_iterator_tag)
 	{
+		FuncTrace();
 		simstd::copy(first, last, simstd::back_inserter(*this));
 	}
 
@@ -652,8 +668,9 @@ namespace simstd {
 	template<typename ForwardIterator>
 	void vector<Type, Allocator>::_insert_back(ForwardIterator first, ForwardIterator last, simstd::forward_iterator_tag)
 	{
+		FuncTrace();
 		m_impl.adjust_capacity(simstd::distance(first, last));
-		_insert_back(first, last, simstd::input_iterator_tag());
+		m_impl.end = simstd::uninitialized_copy(first, last, m_impl.end);
 	}
 
 	template<typename Type, typename Allocator>

@@ -26,6 +26,6 @@ int main()
 {
 	simstd::Test::a_string(std::printf);
 	simstd::Test::w_string(std::wprintf);
-	simstd::Test::_vector(std::printf);
+	simstd::Test::_vector(std::wprintf);
 	simstd::Test::_algorithm(std::wprintf);
 }

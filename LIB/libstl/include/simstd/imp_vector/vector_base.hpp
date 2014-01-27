@@ -26,11 +26,12 @@ namespace simstd {
 			pointer end_of_storage;
 
 			~vector_base();
-			vector_base();
-			vector_base(size_type capa, const allocator_type& alloc = allocator_type());
-//			vector_base(size_type capa, pointer first, pointer last);
+			vector_base(const allocator_type& alloc);
+			vector_base(size_type capa, const allocator_type& alloc);
+			vector_base(size_type capa, const this_type& other);
+			vector_base(size_type capa, const this_type& other, const allocator_type& alloc);
 			vector_base(this_type&& other);
-			vector_base(vector_base&& other, const allocator_type& alloc);
+			vector_base(this_type&& other, const allocator_type& alloc);
 			void swap(this_type& other);
 
 			template<typename ... Args>
@@ -60,8 +61,8 @@ namespace simstd {
 		}
 
 		template<typename Type, typename Allocator>
-		vector_base<Type, Allocator>::vector_base() :
-			allocator(),
+		vector_base<Type, Allocator>::vector_base(const allocator_type& alloc) :
+			allocator(alloc),
 			begin(0),
 			end(0),
 			end_of_storage(0)
@@ -78,17 +79,27 @@ namespace simstd {
 			create_storage(capa);
 		}
 
-//		template<typename Type, typename Allocator>
-//		vector_base<Type, Allocator>::vector_base(size_type capa, pointer first, pointer last) :
-//			allocator(),
-//			begin(0),
-//			end(0),
-//			end_of_storage(0)
-//		{
-//			create_storage(capa);
-//			simstd::uninitialized_move(first, last, end);
-//			end += (last - first);
-//		}
+		template<typename Type, typename Allocator>
+		vector_base<Type, Allocator>::vector_base(size_type capa, const this_type& other) :
+			allocator(other.allocator),
+			begin(0),
+			end(0),
+			end_of_storage(0)
+		{
+			create_storage(simstd::max(capa, other.size()));
+			end = simstd::uninitialized_copy(other.begin, other.end, end);
+		}
+
+		template<typename Type, typename Allocator>
+		vector_base<Type, Allocator>::vector_base(size_type capa, const this_type& other, const allocator_type& alloc) :
+			allocator(alloc),
+			begin(0),
+			end(0),
+			end_of_storage(0)
+		{
+			create_storage(simstd::max(capa, other.size()));
+			end = simstd::uninitialized_copy(other.begin, other.end, end);
+		}
 
 		template<typename Type, typename Allocator>
 		vector_base<Type, Allocator>::vector_base(this_type&& other) :
@@ -101,33 +112,27 @@ namespace simstd {
 		}
 
 		template<typename Type, typename Allocator>
-		vector_base<Type, Allocator>::vector_base(vector_base&& other, const allocator_type& alloc) :
-			allocator(allocator),
+		vector_base<Type, Allocator>::vector_base(this_type&& other, const allocator_type& alloc) :
+			allocator(alloc),
 			begin(0),
 			end(0),
 			end_of_storage(0)
 		{
-			if (other.allocator == alloc) {
+			if (allocator == other.allocator) {
 				swap(other);
 			} else {
-//				size_t __n = __x._M_impl._M_finish - __x._M_impl._M_start;
-//				_M_create_storage(__n);
+				create_storage(other.size());
+				end = simstd::uninitialized_copy(simstd::make_move_iterator(other.begin), simstd::make_move_iterator(other.end), end);
 			}
 		}
 
 		template<typename Type, typename Allocator>
 		void vector_base<Type, Allocator>::swap(this_type& other)
 		{
-#if defined(__GNUC__) && (__GNUC__ < 3)
-			simstd::swap(begin, other.begin);
-			simstd::swap(end, other.end);
-			simstd::swap(end_of_storage, other.end_of_storage);
-#else
 			using simstd::swap;
 			swap(begin, other.begin);
 			swap(end, other.end);
 			swap(end_of_storage, other.end_of_storage);
-#endif
 		}
 
 		template<typename Type, typename Allocator>
@@ -156,10 +161,8 @@ namespace simstd {
 		{
 			if (capacity() < newCapacity) {
 				this_type tmp(newCapacity, allocator);
-				tmp.end = simstd::uninitialized_copy(simstd::make_move_iterator(begin), simstd::make_move_iterator(end), tmp.begin);
+				tmp.end = simstd::uninitialized_copy(simstd::make_move_iterator(begin), simstd::make_move_iterator(end), tmp.end);
 				tmp.swap(*this);
-
-				tmp.destroy(tmp.begin, tmp.end);
 			}
 		}
 
@@ -184,7 +187,7 @@ namespace simstd {
 		template<typename Type, typename Allocator>
 		bool vector_base<Type, Allocator>::check_capacity_if_size_grows(size_type addToSize) const
 		{
-			if (addToSize > end_of_storage - end)
+			if (addToSize > (end_of_storage - end))
 				return false;
 			return true;
 		}

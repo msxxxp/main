@@ -107,11 +107,14 @@ int main()
 #endif
 {
 	console::printf(L"%S:%d\n", __PRETTY_FUNCTION__, __LINE__);
-	setup_logger();
+//	setup_logger();
 
-	LogTrace();
+//	LogTrace();
 
-	namespace qwe = std;
+	simstd::Test::_vector(console::wprintf);
+	return 0;
+
+	namespace qwe = simstd;
 //	const A a01(1, L"01");
 //		  A a02(2, L"02");
 //	const A a11(11, L"11");
@@ -152,7 +155,7 @@ int main()
 	console::printf(L"size: %Iu, capa: %Iu\n", va.size(), va.capacity());
 	qwe::for_each(va.begin(), va.end(), print_a);
 
-	LogTrace();
+//	LogTrace();
 
 	return 0;
 }

@@ -63,6 +63,8 @@ namespace console {
 
 	int printf(const wchar_t * format, ...);
 
+	int wprintf(const wchar_t * format, ...);
+
 	int printf(const char * format, ...);
 
 }

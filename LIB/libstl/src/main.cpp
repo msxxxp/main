@@ -8,6 +8,7 @@
 #include <simstd/iosfwd>
 #include <simstd/algorithm>
 #include <simstd/functional>
+#include <simstd/initializer_list>
 #include <simstd/iterator>
 #include <simstd/memory>
 #include <simstd/mutex>

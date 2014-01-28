@@ -35,19 +35,21 @@ namespace simstd {
 		}
 
 		template<typename Allocator, typename ForwardIterator>
-		void _construct_default(Allocator& allocator, ForwardIterator first, ForwardIterator last)
+		ForwardIterator _construct_default(Allocator& allocator, ForwardIterator first, ForwardIterator last)
 		{
 			typedef allocator_traits<Allocator> traits_type;
 			for (; first != last; ++first)
 				traits_type::construct(allocator, simstd::addressof(*first));
+			return first;
 		}
 
 		template<typename Allocator, typename ForwardIterator, typename Type>
-		void _construct_copy(Allocator& allocator, ForwardIterator first, ForwardIterator last, const Type& value)
+		ForwardIterator _construct_copy(Allocator& allocator, ForwardIterator first, ForwardIterator last, const Type& value)
 		{
 			typedef allocator_traits<Allocator> traits_type;
 			for (; first != last; ++first)
 				traits_type::construct(allocator, simstd::addressof(*first), value);
+			return first;
 		}
 
 		template<typename Type, typename... Args>

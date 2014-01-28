@@ -1,53 +1,65 @@
-﻿#ifndef LIBSTL_STRING_HPP_
-#define LIBSTL_STRING_HPP_
+﻿#ifndef LIBSTL_STRING_BASIC_STRING_HPP_
+#define LIBSTL_STRING_BASIC_STRING_HPP_
 
-#include <simstd/types.hpp>
-#include <simstd/impl/algorithm/base.hpp>
-#include <simstd/impl/iterator/base.hpp>
-#include <simstd/impl/iterator/pvt_normal_iterator.hpp>
-#include <simstd/impl/iterator/reverse_iterator.hpp>
-#include <simstd/impl/memory/base.hpp>
-#include <simstd/impl/string/char_traits.hpp>
+#include <simstd/string>
+#include <simstd/algorithm>
+#include <simstd/initializer_list>
+#include <simstd/iterator>
+#include <simstd/memory>
+#include <system/crt.hpp>
 #include <extra/pattern.hpp>
 
 namespace simstd {
+
 	namespace Test {
 		ssize_t a_string(aPrintFunc printFunc);
 		ssize_t w_string(wPrintFunc printFunc);
 	}
 
+}
+
+namespace simstd {
+
 	template<typename CharType, typename Traits>
 	class basic_string {
 		static const size_t MIN_ALLOC_BLOCK = 16;
-		typedef basic_string this_type;
+		typedef basic_string                                this_type;
 
 	public:
-		typedef Traits    traits_type;
-		typedef size_t    size_type;
-		typedef ptrdiff_t difference_type;
+		typedef Traits                                      traits_type;
+		typedef size_t                                      size_type;
+		typedef ptrdiff_t                                   difference_type;
 
-		typedef typename traits_type::char_type value_type;
-		typedef value_type & reference;
-		typedef const value_type & const_reference;
-		typedef value_type * pointer;
-		typedef const value_type * const_pointer;
+		typedef typename traits_type::char_type             value_type;
+		typedef value_type &                                reference;
+		typedef const value_type &                          const_reference;
+		typedef value_type *                                pointer;
+		typedef const value_type *                          const_pointer;
 
-		typedef simstd::pvt::normal_iterator<pointer> iterator;
+		typedef simstd::pvt::normal_iterator<pointer>       iterator;
 		typedef simstd::pvt::normal_iterator<const_pointer> const_iterator;
-		typedef simstd::reverse_iterator<iterator> reverse_iterator;
-		typedef simstd::reverse_iterator<const_iterator> const_reverse_iterator;
+		typedef simstd::reverse_iterator<iterator>          reverse_iterator;
+		typedef simstd::reverse_iterator<const_iterator>    const_reverse_iterator;
 
 		static const size_type npos = ~static_cast<size_type>(0);
 
 		~basic_string();
 
 		basic_string();
-		basic_string(const this_type & right);
-		basic_string(size_type count, value_type in);
-		basic_string(const_pointer in, size_type count = npos);
+		basic_string(size_type count, value_type ch);
+		basic_string(const this_type& other, size_type pos, size_type count = npos);
+		basic_string(const_pointer str, size_type count);
+		basic_string(const_pointer str);
+		template<typename InputIt>
+		basic_string(InputIt first, InputIt last);
+		basic_string(const this_type& other);
+		basic_string(this_type&& other);
+		basic_string(simstd::initializer_list<value_type> ilist);
 
-		basic_string(this_type && right);
+		this_type & operator =(const this_type & right);
 		this_type & operator =(this_type && right);
+		this_type & operator =(const_pointer right);
+		this_type & operator =(value_type ch);
 
 		bool empty() const;
 
@@ -96,10 +108,6 @@ namespace simstd {
 		this_type & insert(size_type index, const_pointer str, size_type count);
 		this_type & insert(size_type index, const this_type & str);
 		this_type & insert(size_type index, const this_type & str, size_type index_str, size_type count);
-
-		this_type & operator =(const this_type & right);
-		this_type & operator =(const_pointer right);
-		this_type & operator =(value_type ch);
 
 		this_type & operator +=(const this_type & str);
 		this_type & operator +=(const_pointer str);
@@ -195,7 +203,7 @@ namespace simstd {
 			return impl;
 		}
 
-		virtual ~string_impl();
+		~string_impl();
 
 		string_impl(size_type capa = 1);
 
@@ -221,7 +229,7 @@ namespace simstd {
 		}
 
 	private:
-		void deallocate() const;
+		void deallocate() const override;
 
 		size_type m_capa;
 		size_type m_size;
@@ -244,6 +252,7 @@ namespace simstd {
 	template<typename CharType, typename Traits>
 	void basic_string<CharType, Traits>::string_impl::append(const_pointer str, size_type count)
 	{
+		assert(count <= capacity() - size());
 		if (str && count) {
 			traits_type::copy(m_str + m_size, str, count);
 			set_size(m_size + count);
@@ -312,6 +321,13 @@ namespace simstd {
 		m_data(string_impl::allocate(get_new_capacity(0)))
 	{
 		swap(right);
+	}
+
+	template<typename CharType, typename Traits>
+	basic_string<CharType, Traits>::basic_string(simstd::initializer_list<value_type> ilist) :
+		m_data(string_impl::allocate(get_new_capacity(ilist.size())))
+	{
+		m_data.append(ilist.begin(), ilist.end());
 	}
 
 	template<typename CharType, typename Traits>

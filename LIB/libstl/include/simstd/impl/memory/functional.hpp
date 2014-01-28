@@ -22,19 +22,21 @@ namespace simstd {
 	}
 
 	template<typename ForwardIt, typename T>
-	void uninitialized_fill(ForwardIt first, ForwardIt last, const T& val)
+	ForwardIt uninitialized_fill(ForwardIt first, ForwardIt last, const T& val)
 	{
 		for (; first != last; ++first) {
 			simstd::pvt::_construct(simstd::addressof(*first), val);
 		}
+		return first;
 	}
 
 	template<typename ForwardIt, typename Size, typename T>
-	void uninitialized_fill_n(ForwardIt first, Size cnt, const T& val)
+	ForwardIt uninitialized_fill_n(ForwardIt first, Size cnt, const T& val)
 	{
 		for (; cnt > 0; ++first, --cnt) {
 			simstd::pvt::_construct(simstd::addressof(*first), val);
 		}
+		return first;
 	}
 
 }

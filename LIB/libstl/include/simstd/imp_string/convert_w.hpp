@@ -1,8 +1,7 @@
 ﻿#ifndef LIBSTL_STRING_CONVERT_W_HPP_
 #define LIBSTL_STRING_CONVERT_W_HPP_
 
-#include <simstd/impl/string/base.hpp>
-#include <simstd/types.hpp>
+#include <simstd/string>
 
 namespace simstd {
 

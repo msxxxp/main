@@ -205,16 +205,14 @@ namespace simstd {
 	vector<Type, Allocator>::vector(size_type n, const allocator_type& allocator):
 		m_impl(n, allocator)
 	{
-		simstd::pvt::_construct_default(m_impl.allocator, m_impl.begin, m_impl.begin + n);
-		m_impl.end = m_impl.begin + n;
+		m_impl.end = simstd::pvt::_construct_default(m_impl.allocator, m_impl.begin, m_impl.begin + n);
 	}
 
 	template<typename Type, typename Allocator>
 	vector<Type, Allocator>::vector(size_type n, const value_type& value, const allocator_type& allocator) :
 		m_impl(n, allocator)
 	{
-		simstd::pvt::_construct_copy(m_impl.allocator, m_impl.begin, m_impl.begin + n, value);
-		m_impl.end = m_impl.begin + n;
+		m_impl.end = simstd::uninitialized_fill_n(m_impl.begin, n, value);
 	}
 
 	template<typename Type, typename Allocator>
@@ -249,11 +247,6 @@ namespace simstd {
 	vector<Type, Allocator>::vector(this_type&& other, const allocator_type& allocator) :
 		m_impl(simstd::move(other.m_impl), allocator)
 	{
-		if (allocator != other.m_impl.allocator)
-		{
-			m_impl.end = simstd::uninitialized_copy(simstd::make_move_iterator(other.m_impl.begin), simstd::make_move_iterator(other.m_impl.end), m_impl.end);
-			other.clear();
-		}
 	}
 
 	template<typename Type, typename Allocator>
@@ -477,10 +470,8 @@ namespace simstd {
 	void vector<Type, Allocator>::clear()
 	{
 		FuncTrace();
-		if (!empty()) {
-			m_impl.destroy(m_impl.begin, m_impl.end);
-			m_impl.end = m_impl.begin;
-		}
+		if (!empty())
+			m_impl.clear();
 	}
 
 	template<typename Type, typename Allocator>
@@ -621,7 +612,6 @@ namespace simstd {
 			++newImpl.end;
 
 			newImpl.end = simstd::uninitialized_copy(simstd::make_move_iterator(&*pos), simstd::make_move_iterator(m_impl.end), newImpl.end);
-			FuncTrace();
 			newImpl.swap(m_impl);
 		}
 		return iterator(m_impl.begin + distance);
@@ -644,8 +634,7 @@ namespace simstd {
 	void vector<Type, Allocator>::_emplace_back(Args&&... args)
 	{
 		m_impl.adjust_capacity(1);
-		m_impl.construct(m_impl.end, simstd::forward<Args>(args)...);
-		++m_impl.end;
+		m_impl.construct(m_impl.end++, simstd::forward<Args>(args)...);
 	}
 
 	template<typename Type, typename Allocator>

@@ -39,6 +39,7 @@ namespace simstd {
 
 			void destroy(pointer first, pointer last);
 			void reserve(size_type newCapacity);
+			void clear();
 			void adjust_capacity(size_type addToSize);
 			bool check_capacity_if_size_grows(size_type addToSize) const;
 			size_type get_new_capacity(size_type addToSize) const;
@@ -54,8 +55,7 @@ namespace simstd {
 		vector_base<Type, Allocator>::~vector_base()
 		{
 			if (begin) {
-				destroy(begin, end);
-				end = begin;
+				clear();
 				traits_type::deallocate(allocator, begin, capacity());
 			}
 		}
@@ -123,6 +123,7 @@ namespace simstd {
 			} else {
 				create_storage(other.size());
 				end = simstd::uninitialized_copy(simstd::make_move_iterator(other.begin), simstd::make_move_iterator(other.end), end);
+				other.clear();
 			}
 		}
 
@@ -164,6 +165,13 @@ namespace simstd {
 				tmp.end = simstd::uninitialized_copy(simstd::make_move_iterator(begin), simstd::make_move_iterator(end), tmp.end);
 				tmp.swap(*this);
 			}
+		}
+
+		template<typename Type, typename Allocator>
+		void vector_base<Type, Allocator>::clear()
+		{
+			destroy(begin, end);
+			end = begin;
 		}
 
 		template<typename Type, typename Allocator>

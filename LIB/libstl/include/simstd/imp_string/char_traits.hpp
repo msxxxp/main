@@ -1,13 +1,16 @@
 ﻿#ifndef LIBSTL_STRING_CHAR_TRAITS_HPP_
 #define LIBSTL_STRING_CHAR_TRAITS_HPP_
 
-#include <simstd/types.hpp>
+#include <simstd/string>
+
 #include <string.h>
 #include <wchar.h>
+
 //#include <cstring>
 //#include <cwchar>
 
 namespace simstd {
+
 	template<typename CharType>
 	struct char_traits
 	{

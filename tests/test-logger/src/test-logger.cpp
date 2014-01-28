@@ -8,6 +8,7 @@
 
 #include <algorithm>
 #include <vector>
+#include <string>
 
 namespace {
 	void setup_logger()
@@ -99,6 +100,8 @@ void print_a(const A& a)
 {
 	a.print();
 }
+
+#include <deque>
 
 #ifdef NDEBUG
 int wWmain()

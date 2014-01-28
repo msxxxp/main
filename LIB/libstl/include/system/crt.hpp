@@ -2,6 +2,7 @@
 #define LIBSTL_SYSTEM_CRT_
 
 #include <system/configure.hpp>
+#include <system/sub_crt/assert.hpp>
 
 namespace crt {
 

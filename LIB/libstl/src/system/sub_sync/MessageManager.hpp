@@ -4,8 +4,8 @@
 namespace sync {
 
 	struct Message;
-	struct Observer;
-	struct Observable;
+	class Observer;
+	class Observable;
 
 	class MessageManager {
 	public:

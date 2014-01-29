@@ -1,6 +1,7 @@
 #ifndef LIBSTL_CHRONO_
 #define LIBSTL_CHRONO_
 
+#include <system/configure.hpp>
 #include <chrono>
 
 namespace simstd {

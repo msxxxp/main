@@ -168,7 +168,7 @@ namespace backtrace {
 
 		size_t addr;
 		size_t offset;
-		size_t module_base;
+		uint64_t module_base;
 		size_t line;
 		ustring source;
 		ustring func;

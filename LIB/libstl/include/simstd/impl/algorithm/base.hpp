@@ -6,7 +6,7 @@
 namespace simstd {
 
 	template<typename _Tp>
-	_Tp* addressof(_Tp& __r) noexcept
+	_Tp* addressof(_Tp& __r) //noexcept
 	{
 		return reinterpret_cast<_Tp*>(&const_cast<char&>(reinterpret_cast<const volatile char&>(__r)));
 	}
@@ -30,19 +30,19 @@ namespace simstd {
 	};
 
 	template<typename _Tp>
-	constexpr _Tp&& forward(typename remove_reference<_Tp>::type& __t) noexcept
+	/*constexpr*/ _Tp&& forward(typename remove_reference<_Tp>::type& __t) //noexcept
 	{
 		return static_cast<_Tp&&>(__t);
 	}
 
 	template<typename _Tp>
-	constexpr _Tp&& forward(typename remove_reference<_Tp>::type&& __t) noexcept
+	/*constexpr*/ _Tp&& forward(typename remove_reference<_Tp>::type&& __t) //noexcept
 	{
 		return static_cast<_Tp&&>(__t);
 	}
 
 	template<typename _Tp>
-	constexpr typename remove_reference<_Tp>::type&& move(_Tp&& __t) noexcept
+	/*constexpr*/ typename remove_reference<_Tp>::type&& move(_Tp&& __t) //noexcept
 	{
 		return static_cast<typename remove_reference<_Tp>::type&&>(__t);
 	}
@@ -73,10 +73,10 @@ namespace simstd {
 #endif
 	}
 
-//#ifdef min
-//#undef min
-//#undef max
-//#endif
+#ifdef min
+#undef min
+#undef max
+#endif
 
 	template<typename T, typename Compare>
 	const T& max(const T& a, const T& b, Compare comp)

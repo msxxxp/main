@@ -4,7 +4,8 @@
 #ifdef _MSC_VER
 	typedef int WINBOOL;
 	typedef SSIZE_T ssize_t;
-#define noexcept
+//#define constexpr const
+//#define noexcept
 #define __PRETTY_FUNCTION__ __FUNCSIG__
 #endif
 

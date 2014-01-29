@@ -1,6 +1,8 @@
 #include <system/configure.hpp>
 #include <system/memory.hpp>
 
+#ifndef _MSC_VER
+
 void * operator new(size_t size) noexcept
 {
 	return memory::malloc<void*>(size, HEAP_ZERO_MEMORY);
@@ -20,3 +22,5 @@ void operator delete [](void * ptr) noexcept
 {
 	::operator delete(ptr);
 }
+
+#endif

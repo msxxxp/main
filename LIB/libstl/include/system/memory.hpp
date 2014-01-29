@@ -36,7 +36,7 @@ namespace memory {
 
 	inline size_t bytes_to_mega(intmax_t in)
 	{
-		return (in > 0) ? in >> 20 : 0;
+		return static_cast<size_t>((in > 0) ? in >> 20 : 0);
 	}
 
 	///▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒ constraints

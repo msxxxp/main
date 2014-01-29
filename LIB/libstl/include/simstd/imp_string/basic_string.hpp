@@ -3,7 +3,6 @@
 
 #include <simstd/string>
 #include <simstd/algorithm>
-#include <simstd/initializer_list>
 #include <simstd/iterator>
 #include <simstd/memory>
 #include <system/crt.hpp>
@@ -22,7 +21,6 @@ namespace simstd {
 
 	template<typename CharType, typename Traits>
 	class basic_string {
-		static const size_t MIN_ALLOC_BLOCK = 16;
 		typedef basic_string                                this_type;
 
 	public:
@@ -48,13 +46,12 @@ namespace simstd {
 		basic_string();
 		basic_string(size_type count, value_type ch);
 		basic_string(const this_type& other, size_type pos, size_type count = npos);
-		basic_string(const_pointer str, size_type count);
-		basic_string(const_pointer str);
+		basic_string(const_pointer str, size_type count = npos);
 		template<typename InputIt>
 		basic_string(InputIt first, InputIt last);
 		basic_string(const this_type& other);
 		basic_string(this_type&& other);
-		basic_string(simstd::initializer_list<value_type> ilist);
+//		basic_string(std::initializer_list<value_type> ilist);
 
 		this_type & operator =(const this_type & right);
 		this_type & operator =(this_type && right);
@@ -167,6 +164,8 @@ namespace simstd {
 
 		bool is_shared() const;
 
+		static const size_t MIN_ALLOC_BLOCK = 16;
+
 		template<typename C, typename T> friend basic_string<C, T> operator +(const basic_string<C, T> & left, const basic_string<C, T> & right);
 		template<typename C, typename T> friend basic_string<C, T> operator +(const C * left, const basic_string<C, T> & right);
 		template<typename C, typename T> friend basic_string<C, T> operator +(C left, const basic_string<C, T> & right);
@@ -211,29 +210,38 @@ namespace simstd {
 
 		void append(value_type ch, size_type count);
 
+		void append(const_pointer first, const_pointer last);
+
 		void set_size(size_type new_size);
+
+		void change_size(size_type new_size);
 
 		size_type get_capacity() const
 		{
-			return m_capa;
+			return end_of_storage - begin;
+		}
+
+		size_type get_free_capacity() const
+		{
+			return end_of_storage - end;
 		}
 
 		size_type get_size() const
 		{
-			return m_size;
+			return end - begin;
 		}
 
 		pointer get_str_data() const
 		{
-			return const_cast<pointer>(m_str);
+			return const_cast<pointer>(begin);
 		}
 
 	private:
 		void deallocate() const override;
 
-		size_type m_capa;
-		size_type m_size;
-		value_type m_str[1];
+		value_type* end_of_storage;
+		value_type* end;
+		value_type  begin[1];
 	};
 
 	template<typename CharType, typename Traits>
@@ -243,36 +251,46 @@ namespace simstd {
 
 	template<typename CharType, typename Traits>
 	basic_string<CharType, Traits>::string_impl::string_impl(size_type capa) :
-		m_capa(capa),
-		m_size(0)
+		end_of_storage(begin + capa),
+		end(begin)
 	{
-		m_str[0] = static_cast<CharType>(0);
+		begin[0] = static_cast<CharType>(0);
 	}
 
 	template<typename CharType, typename Traits>
 	void basic_string<CharType, Traits>::string_impl::append(const_pointer str, size_type count)
 	{
-		assert(count <= capacity() - size());
+		assert(count <= get_free_capacity());
 		if (str && count) {
-			traits_type::copy(m_str + m_size, str, count);
-			set_size(m_size + count);
+			traits_type::copy(end, str, count);
+			change_size(count);
 		}
 	}
 
 	template<typename CharType, typename Traits>
 	void basic_string<CharType, Traits>::string_impl::append(value_type ch, size_type count)
 	{
+		assert(count <= get_free_capacity());
 		if (count) {
-			traits_type::assign(m_str + m_size, count, ch);
-			set_size(m_size + count);
+			traits_type::assign(end, count, ch);
+			change_size(count);
 		}
 	}
 
 	template<typename CharType, typename Traits>
 	void basic_string<CharType, Traits>::string_impl::set_size(size_type new_size)
 	{
-		m_size = new_size;
-		m_str[m_size] = static_cast<CharType>(0);
+		end = begin + new_size;
+		assert(end < end_of_storage);
+		*end = static_cast<CharType>(0);
+	}
+
+	template<typename CharType, typename Traits>
+	void basic_string<CharType, Traits>::string_impl::change_size(size_type delta)
+	{
+		end += delta;
+		assert(end < end_of_storage);
+		*end = static_cast<CharType>(0);
 	}
 
 	template<typename CharType, typename Traits>
@@ -323,18 +341,37 @@ namespace simstd {
 		swap(right);
 	}
 
+//	template<typename CharType, typename Traits>
+//	basic_string<CharType, Traits>::basic_string(std::initializer_list<value_type> ilist) :
+//		m_data(string_impl::allocate(get_new_capacity(ilist.size())))
+//	{
+//		m_data->append(ilist.begin(), ilist.end());
+//	}
+
 	template<typename CharType, typename Traits>
-	basic_string<CharType, Traits>::basic_string(simstd::initializer_list<value_type> ilist) :
-		m_data(string_impl::allocate(get_new_capacity(ilist.size())))
+	typename basic_string<CharType, Traits>::this_type & basic_string<CharType, Traits>::operator =(const this_type & right)
 	{
-		m_data.append(ilist.begin(), ilist.end());
+		return assign(right);
 	}
 
 	template<typename CharType, typename Traits>
-	basic_string<CharType, Traits> & basic_string<CharType, Traits>::operator =(this_type && right)
+	typename basic_string<CharType, Traits>::this_type & basic_string<CharType, Traits>::operator =(this_type && right)
 	{
+		clear();
 		swap(right);
 		return *this;
+	}
+
+	template<typename CharType, typename Traits>
+	typename basic_string<CharType, Traits>::this_type & basic_string<CharType, Traits>::operator =(const_pointer right)
+	{
+		return assign(right);
+	}
+
+	template<typename CharType, typename Traits>
+	typename basic_string<CharType, Traits>::this_type & basic_string<CharType, Traits>::operator =(value_type ch)
+	{
+		return assign(1, ch);
 	}
 
 	template<typename CharType, typename Traits>
@@ -501,35 +538,40 @@ namespace simstd {
 	template<typename CharType, typename Traits>
 	typename basic_string<CharType, Traits>::this_type & basic_string<CharType, Traits>::assign(size_type count, value_type ch)
 	{
-		this_type(count, ch).swap(*this);
+		clear();
+		append(count, ch);
 		return *this;
 	}
 
 	template<typename CharType, typename Traits>
 	typename basic_string<CharType, Traits>::this_type & basic_string<CharType, Traits>::assign(const this_type & str)
 	{
-		this_type(str).swap(*this);
+		clear();
+		append(str);
 		return *this;
 	}
 
 	template<typename CharType, typename Traits>
 	typename basic_string<CharType, Traits>::this_type & basic_string<CharType, Traits>::assign(const this_type & str, size_type pos, size_type count)
 	{
-		this_type(str.c_str() + pos, count).swap(*this);
+		clear();
+		append(str.c_str() + pos, count);
 		return *this;
 	}
 
 	template<typename CharType, typename Traits>
 	typename basic_string<CharType, Traits>::this_type & basic_string<CharType, Traits>::assign(const_pointer str, size_type count)
 	{
-		this_type(str, count).swap(*this);
+		clear();
+		append(str, count);
 		return *this;
 	}
 
 	template<typename CharType, typename Traits>
 	typename basic_string<CharType, Traits>::this_type & basic_string<CharType, Traits>::assign(const_pointer str)
 	{
-		this_type(str).swap(*this);
+		clear();
+		append(str);
 		return *this;
 	}
 
@@ -577,24 +619,6 @@ namespace simstd {
 	typename basic_string<CharType, Traits>::this_type & basic_string<CharType, Traits>::insert(size_type index, const this_type & str, size_type index_str, size_type count)
 	{
 		return replace(index, 0, str.c_str(), count);
-	}
-
-	template<typename CharType, typename Traits>
-	typename basic_string<CharType, Traits>::this_type & basic_string<CharType, Traits>::operator =(const this_type & right)
-	{
-		return assign(right);
-	}
-
-	template<typename CharType, typename Traits>
-	typename basic_string<CharType, Traits>::this_type & basic_string<CharType, Traits>::operator =(const_pointer right)
-	{
-		return assign(right);
-	}
-
-	template<typename CharType, typename Traits>
-	typename basic_string<CharType, Traits>::this_type & basic_string<CharType, Traits>::operator =(value_type ch)
-	{
-		return assign(1, ch);
 	}
 
 	template<typename CharType, typename Traits>

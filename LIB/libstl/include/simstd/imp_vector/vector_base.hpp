@@ -195,7 +195,7 @@ namespace simstd {
 		template<typename Type, typename Allocator>
 		bool vector_base<Type, Allocator>::check_capacity_if_size_grows(size_type addToSize) const
 		{
-			if (addToSize > (end_of_storage - end))
+			if (addToSize > static_cast<size_type>(end_of_storage - end))
 				return false;
 			return true;
 		}

@@ -177,7 +177,7 @@ ssize_t simstd::Test::_vector(simstd::Test::wPrintFunc printFunc)
 {
 	using namespace simstd;
 
-	srand(time(0));
+	srand(static_cast<unsigned>(time(0)));
 
 	//	{
 	////		auto_ptr<Base> a(new Base(5));
@@ -244,7 +244,7 @@ ssize_t simstd::Test::_vector(simstd::Test::wPrintFunc printFunc)
 	print_cont(L"v71", v71, printFunc);
 	print_cont(L"v81", v81, printFunc);
 
-	return 0;
+//	return 0;
 
 	vec_t v(10);
 	printFunc(L"generate v\n");
@@ -291,7 +291,7 @@ ssize_t simstd::Test::_vector(simstd::Test::wPrintFunc printFunc)
 //		printFunc(L" )\n");
 	}
 
-	return 0;
+//	return 0;
 
 //	BaseCl b1(1);
 //	BaseCl b2(2);

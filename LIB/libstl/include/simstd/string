@@ -1,6 +1,7 @@
 ﻿#ifndef LIBSTL_STRING_
 #define LIBSTL_STRING_
 
+#include <system/configure.hpp>
 #include <simstd/types.hpp>
 #include <simstd/imp_string/char_traits.hpp>
 #include <simstd/imp_string/basic_string.hpp>

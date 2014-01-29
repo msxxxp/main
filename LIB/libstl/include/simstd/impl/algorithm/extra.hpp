@@ -745,7 +745,7 @@ namespace simstd {
 		if (first == --i)
 			return false;
 
-		while (1) {
+		for (;;) {
 			BidirIt i1, i2;
 
 			i1 = i;

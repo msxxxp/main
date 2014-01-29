@@ -144,6 +144,7 @@ namespace simstd {
 	template<typename PtrType>
 	void allocator<Type>::destroy(PtrType* ptr)
 	{
+		UNUSED(ptr); // stupid VC
 		ptr->~Type();
 	}
 

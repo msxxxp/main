@@ -1,6 +1,7 @@
 ﻿#ifndef LIBSTL_NUMERIC_
 #define LIBSTL_NUMERIC_
 
+#include <system/configure.hpp>
 #include <simstd/impl/numeric.hpp>
 
 #endif

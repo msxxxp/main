@@ -4,9 +4,19 @@
 struct Va_list {
 	~Va_list();
 
-	operator va_list & ()
+	operator va_list& ()
 	{
 		return m_args;
+	}
+
+	operator va_list* ()
+	{
+		return &m_args;
+	}
+
+	va_list* operator &()
+	{
+		return &m_args;
 	}
 
 private:

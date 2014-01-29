@@ -2,9 +2,14 @@
 #define LIBSTL_SYSTEM_CSTR_HPP_
 
 #include <system/configure.hpp>
+#include <system/sub_cstr/mstring.hpp>
 
 #include <system/memory.hpp>
+
+#include <string.h>
 #include <wchar.h>
+
+#include <simstd/string>
 
 #ifndef _MSC_VER
 extern "C" {
@@ -33,7 +38,7 @@ namespace Cstr {
 	};
 
 	template<>
-	struct char_traits<char>
+	struct char_traits<char>: public simstd::char_traits<char>
 	{
 		typedef char              char_type;
 		typedef int               int_type;
@@ -41,35 +46,35 @@ namespace Cstr {
 //		typedef streamoff         off_type;
 //		typedef mbstate_t         state_type;
 
-		static void assign(char_type & c1, const char_type & c2) noexcept {c1 = c2;}
-
-		static bool eq(const char_type & c1, const char_type & c2) noexcept {return c1 == c2;}
-
-		static bool lt(const char_type & c1, const char_type & c2) noexcept {return c1 < c2;}
-
-		static int compare(const char_type * str1, const char_type* str2, size_t count) {return memcmp(str1, str2, count);}
-
-		static size_t length(const char_type * str) {return strlen(str);}
-
-		static const char_type * find(const char_type * where, size_t length, const char_type & what) {return (const char_type*)memchr(where, what, length);}
-
-		static char_type * move(char_type * dest, const char_type * src, size_t count) {return (char_type*)memmove(dest, src, count);}
-
-		static char_type * copy(char_type * dest, const char_type * src, size_t count) {return (char_type*)memcpy(dest, src, count);}
-
-		static char_type * assign(char_type * str, size_t count, char_type chr) {return (char_type*)memset(str, chr, count);}
-
-		static char_type to_char_type(const int_type & c) noexcept {return static_cast<char_type>(c);}
-
-		// To keep both the byte 0xff and the eof symbol 0xffffffff
-		// from ending up as 0xffffffff.
-		static int_type to_int_type(const char_type & c) noexcept {return static_cast<int_type>(c);}
-
-		static bool eq_int_type(const int_type & c1, const int_type & c2) noexcept {return c1 == c2;}
-
-		static int_type eof() noexcept {return static_cast<int_type>(-1);}
-
-		static int_type not_eof(const int_type & c) noexcept {return (c == eof()) ? 0 : c;}
+//		static void assign(char_type & c1, const char_type & c2) noexcept {c1 = c2;}
+//
+//		static bool eq(const char_type & c1, const char_type & c2) noexcept {return c1 == c2;}
+//
+//		static bool lt(const char_type & c1, const char_type & c2) noexcept {return c1 < c2;}
+//
+//		static int compare(const char_type * str1, const char_type* str2, size_t count) {return memcmp(str1, str2, count);}
+//
+//		static size_t length(const char_type * str) {return strlen(str);}
+//
+//		static const char_type * find(const char_type * where, size_t length, const char_type & what) {return (const char_type*)memchr(where, what, length);}
+//
+//		static char_type * move(char_type * dest, const char_type * src, size_t count) {return (char_type*)memmove(dest, src, count);}
+//
+//		static char_type * copy(char_type * dest, const char_type * src, size_t count) {return (char_type*)memcpy(dest, src, count);}
+//
+//		static char_type * assign(char_type * str, size_t count, char_type chr) {return (char_type*)memset(str, chr, count);}
+//
+//		static char_type to_char_type(const int_type & c) noexcept {return static_cast<char_type>(c);}
+//
+//		// To keep both the byte 0xff and the eof symbol 0xffffffff
+//		// from ending up as 0xffffffff.
+//		static int_type to_int_type(const char_type & c) noexcept {return static_cast<int_type>(c);}
+//
+//		static bool eq_int_type(const int_type & c1, const int_type & c2) noexcept {return c1 == c2;}
+//
+//		static int_type eof() noexcept {return static_cast<int_type>(-1);}
+//
+//		static int_type not_eof(const int_type & c) noexcept {return (c == eof()) ? 0 : c;}
 
 		/// nonstandard
 		static bool is_empty(const char_type * str) {return str == nullptr || *str == static_cast<char_type>(0);}
@@ -108,7 +113,7 @@ namespace Cstr {
 	};
 
 	template<>
-	struct char_traits<wchar_t>
+	struct char_traits<wchar_t>: public simstd::char_traits<wchar_t>
 	{
 		typedef wchar_t           char_type;
 		typedef wint_t            int_type;
@@ -116,33 +121,33 @@ namespace Cstr {
 //		typedef wstreampos        pos_type;
 //		typedef mbstate_t         state_type;
 
-		static void assign(char_type & c1, const char_type & c2) noexcept {c1 = c2;}
-
-		static bool eq(const char_type & c1, const char_type & c2) noexcept {return c1 == c2;}
-
-		static bool lt(const char_type & c1, const char_type & c2) noexcept {return c1 < c2;}
-
-		static int compare(const char_type * str1, const char_type* str2, size_t count) {return ::wmemcmp(str1, str2, count);}
-
-		static size_t length(const char_type * str) {return ::wcslen(str);}
-
-		static const char_type * find(const char_type * s, size_t n, const char_type & ch) {return wmemchr(s, ch, n);}
-
-		static char_type * move(char_type * dest, const char_type * src, size_t count) {return wmemmove(dest, src, count);}
-
-		static char_type * copy(char_type * dest, const char_type * src, size_t count) {return wmemcpy(dest, src, count);}
-
-		static char_type * assign(char_type * s, size_t n, char_type a) {return wmemset(s, a, n);}
-
-		static char_type to_char_type(const int_type & c) noexcept {return char_type(c);}
-
-		static int_type to_int_type(const char_type & c) noexcept {return int_type(c);}
-
-		static bool eq_int_type(const int_type & c1, const int_type & c2) noexcept {return c1 == c2;}
-
-		static int_type eof() noexcept {return static_cast<int_type>((wint_t)(0xFFFF));}
-
-		static int_type not_eof(const int_type & c) noexcept {return (c == eof()) ? 0 : c;}
+//		static void assign(char_type & c1, const char_type & c2) noexcept {c1 = c2;}
+//
+//		static bool eq(const char_type & c1, const char_type & c2) noexcept {return c1 == c2;}
+//
+//		static bool lt(const char_type & c1, const char_type & c2) noexcept {return c1 < c2;}
+//
+//		static int compare(const char_type * str1, const char_type* str2, size_t count) {return ::wmemcmp(str1, str2, count);}
+//
+//		static size_t length(const char_type * str) {return ::wcslen(str);}
+//
+//		static const char_type * find(const char_type * s, size_t n, const char_type & ch) {return wmemchr(s, ch, n);}
+//
+//		static char_type * move(char_type * dest, const char_type * src, size_t count) {return wmemmove(dest, src, count);}
+//
+//		static char_type * copy(char_type * dest, const char_type * src, size_t count) {return wmemcpy(dest, src, count);}
+//
+//		static char_type * assign(char_type * s, size_t n, char_type a) {return wmemset(s, a, n);}
+//
+//		static char_type to_char_type(const int_type & c) noexcept {return char_type(c);}
+//
+//		static int_type to_int_type(const char_type & c) noexcept {return int_type(c);}
+//
+//		static bool eq_int_type(const int_type & c1, const int_type & c2) noexcept {return c1 == c2;}
+//
+//		static int_type eof() noexcept {return static_cast<int_type>((wint_t)(0xFFFF));}
+//
+//		static int_type not_eof(const int_type & c) noexcept {return (c == eof()) ? 0 : c;}
 
 		/// nonstandard
 		static bool is_empty(const char_type * str) {return str == nullptr || *str == static_cast<char_type>(0);}
@@ -489,6 +494,7 @@ namespace Cstr {
 	inline uint64_t to_uint64(PCWSTR in, int base = 10)
 	{
 #ifdef _MSC_VER
+		UNUSED(base);
 		return _wtoi64(in);
 #else
 		PWSTR end_ptr;
@@ -499,6 +505,7 @@ namespace Cstr {
 	inline int64_t to_int64(PCWSTR in, int base = 10)
 	{
 #ifdef _MSC_VER
+		UNUSED(base);
 		return _wtoi64(in);
 #else
 		PWSTR end_ptr;

@@ -1,12 +1,14 @@
 ﻿#ifndef LIBSTL_IOSFWD_
 #define LIBSTL_IOSFWD_
 
+#include <system/configure.hpp>
+
 namespace simstd {
 	template<typename CharType>
 	struct char_traits;
 
 	template<typename CharType, typename Traits>
-	struct basic_string;
+	class basic_string;
 
 	typedef simstd::basic_string<char, simstd::char_traits<char> > string;
 	typedef simstd::basic_string<wchar_t, simstd::char_traits<wchar_t> > wstring;

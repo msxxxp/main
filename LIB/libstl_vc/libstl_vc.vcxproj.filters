@@ -1,0 +1,338 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <Filter Include="Source Files">
+      <UniqueIdentifier>{4FC737F1-C7A5-4376-A066-2A32D752A2FF}</UniqueIdentifier>
+      <Extensions>cpp;c;cc;cxx;def;odl;idl;hpj;bat;asm;asmx</Extensions>
+    </Filter>
+    <Filter Include="Header Files">
+      <UniqueIdentifier>{93995380-89BD-4b04-88EB-625FBE52EBFB}</UniqueIdentifier>
+      <Extensions>h;hh;hpp;hxx;hm;inl;inc;xsd</Extensions>
+    </Filter>
+    <Filter Include="Resource Files">
+      <UniqueIdentifier>{67DA6AB6-F800-4c08-8B7A-83BB121AAD01}</UniqueIdentifier>
+      <Extensions>rc;ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe;resx;tiff;tif;png;wav;mfcribbon-ms</Extensions>
+    </Filter>
+    <Filter Include="Header Files\include">
+      <UniqueIdentifier>{afd41b0c-340b-45bb-85e4-7a5d8ef0b086}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\src">
+      <UniqueIdentifier>{7b087e9f-6b54-4e08-97e3-e8781c883e84}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\src\extra">
+      <UniqueIdentifier>{c61af5ef-7afe-495c-9e92-32293d132fdc}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\src\simstd">
+      <UniqueIdentifier>{7f63e630-252e-4747-bbcd-1a2bcc64c8fc}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\src\system">
+      <UniqueIdentifier>{b86ebd1d-473b-440b-bd5b-eec14c314b46}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\src\tests">
+      <UniqueIdentifier>{f80230e9-a091-4cec-a919-e4858a673cd6}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\include\extra">
+      <UniqueIdentifier>{319c9f4f-c00c-46a0-926f-8a9bfe3d4fe0}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\include\simstd">
+      <UniqueIdentifier>{44858c0b-5655-4650-96f5-b7e89ba1343d}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\include\system">
+      <UniqueIdentifier>{82bb22ae-bf92-4917-8ddb-d9a2c98c1434}</UniqueIdentifier>
+    </Filter>
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="..\libstl\src\main.cpp">
+      <Filter>Source Files\src</Filter>
+    </ClCompile>
+    <ClCompile Include="..\libstl\src\system\sub_backtrace\backtrace.cpp">
+      <Filter>Source Files\src\system</Filter>
+    </ClCompile>
+    <ClCompile Include="..\libstl\src\system\sub_configure\obligatory\sprintf.cpp">
+      <Filter>Source Files\src\system</Filter>
+    </ClCompile>
+    <ClCompile Include="..\libstl\src\system\sub_configure\obligatory\swprintf.cpp">
+      <Filter>Source Files\src\system</Filter>
+    </ClCompile>
+    <ClCompile Include="..\libstl\src\system\sub_configure\obligatory\Va_list.cpp">
+      <Filter>Source Files\src\system</Filter>
+    </ClCompile>
+    <ClCompile Include="..\libstl\src\system\sub_console\aprintf.cpp">
+      <Filter>Source Files\src\system</Filter>
+    </ClCompile>
+    <ClCompile Include="..\libstl\src\system\sub_console\Color.cpp">
+      <Filter>Source Files\src\system</Filter>
+    </ClCompile>
+    <ClCompile Include="..\libstl\src\system\sub_console\console.cpp">
+      <Filter>Source Files\src\system</Filter>
+    </ClCompile>
+    <ClCompile Include="..\libstl\src\system\sub_console\wprintf.cpp">
+      <Filter>Source Files\src\system</Filter>
+    </ClCompile>
+    <ClCompile Include="..\libstl\src\system\sub_crt\assert.cpp">
+      <Filter>Source Files\src\system</Filter>
+    </ClCompile>
+    <ClCompile Include="..\libstl\src\system\sub_crt\crt.cpp">
+      <Filter>Source Files\src\system</Filter>
+    </ClCompile>
+    <ClCompile Include="..\libstl\src\system\sub_dll\dll.cpp">
+      <Filter>Source Files\src\system</Filter>
+    </ClCompile>
+    <ClCompile Include="..\libstl\src\system\sub_environment\environment.cpp">
+      <Filter>Source Files\src\system</Filter>
+    </ClCompile>
+    <ClCompile Include="..\libstl\src\system\sub_filesystem\Directory.cpp">
+      <Filter>Source Files\src\system</Filter>
+    </ClCompile>
+    <ClCompile Include="..\libstl\src\system\sub_filesystem\dll_shlwapi.cpp">
+      <Filter>Source Files\src\system</Filter>
+    </ClCompile>
+    <ClCompile Include="..\libstl\src\system\sub_filesystem\dll_shlwapi_str.cpp">
+      <Filter>Source Files\src\system</Filter>
+    </ClCompile>
+    <ClCompile Include="..\libstl\src\system\sub_filesystem\File.cpp">
+      <Filter>Source Files\src\system</Filter>
+    </ClCompile>
+    <ClCompile Include="..\libstl\src\system\sub_filesystem\FileMap_t.cpp">
+      <Filter>Source Files\src\system</Filter>
+    </ClCompile>
+    <ClCompile Include="..\libstl\src\system\sub_filesystem\filename.cpp">
+      <Filter>Source Files\src\system</Filter>
+    </ClCompile>
+    <ClCompile Include="..\libstl\src\system\sub_filesystem\file_path.cpp">
+      <Filter>Source Files\src\system</Filter>
+    </ClCompile>
+    <ClCompile Include="..\libstl\src\system\sub_filesystem\Fsys.cpp">
+      <Filter>Source Files\src\system</Filter>
+    </ClCompile>
+    <ClCompile Include="..\libstl\src\system\sub_filesystem\path.cpp">
+      <Filter>Source Files\src\system</Filter>
+    </ClCompile>
+    <ClCompile Include="..\libstl\src\system\sub_memory\memory.cpp">
+      <Filter>Source Files\src\system</Filter>
+    </ClCompile>
+    <ClCompile Include="..\libstl\src\system\sub_memory\new_delete.cpp">
+      <Filter>Source Files\src\system</Filter>
+    </ClCompile>
+    <ClCompile Include="..\libstl\src\system\sub_memory\system_alloc.cpp">
+      <Filter>Source Files\src\system</Filter>
+    </ClCompile>
+    <ClCompile Include="..\libstl\src\system\sub_process\exec.cpp">
+      <Filter>Source Files\src\system</Filter>
+    </ClCompile>
+    <ClCompile Include="..\libstl\src\system\sub_process\process.cpp">
+      <Filter>Source Files\src\system</Filter>
+    </ClCompile>
+    <ClCompile Include="..\libstl\src\system\sub_string\aformat.cpp">
+      <Filter>Source Files\src\system</Filter>
+    </ClCompile>
+    <ClCompile Include="..\libstl\src\system\sub_string\char.cpp">
+      <Filter>Source Files\src\system</Filter>
+    </ClCompile>
+    <ClCompile Include="..\libstl\src\system\sub_string\convert.cpp">
+      <Filter>Source Files\src\system</Filter>
+    </ClCompile>
+    <ClCompile Include="..\libstl\src\system\sub_string\mstring.cpp">
+      <Filter>Source Files\src\system</Filter>
+    </ClCompile>
+    <ClCompile Include="..\libstl\src\system\sub_string\str.cpp">
+      <Filter>Source Files\src\system</Filter>
+    </ClCompile>
+    <ClCompile Include="..\libstl\src\system\sub_string\wformat.cpp">
+      <Filter>Source Files\src\system</Filter>
+    </ClCompile>
+    <ClCompile Include="..\libstl\src\system\sub_string\wstr.cpp">
+      <Filter>Source Files\src\system</Filter>
+    </ClCompile>
+    <ClCompile Include="..\libstl\src\system\sub_sync\CriticalSection_impl.cpp">
+      <Filter>Source Files\src\system</Filter>
+    </ClCompile>
+    <ClCompile Include="..\libstl\src\system\sub_sync\Delivery.cpp">
+      <Filter>Source Files\src\system</Filter>
+    </ClCompile>
+    <ClCompile Include="..\libstl\src\system\sub_sync\lock.cpp">
+      <Filter>Source Files\src\system</Filter>
+    </ClCompile>
+    <ClCompile Include="..\libstl\src\system\sub_sync\Message.cpp">
+      <Filter>Source Files\src\system</Filter>
+    </ClCompile>
+    <ClCompile Include="..\libstl\src\system\sub_sync\MessageManager.cpp">
+      <Filter>Source Files\src\system</Filter>
+    </ClCompile>
+    <ClCompile Include="..\libstl\src\system\sub_sync\MessageManager_simple.cpp">
+      <Filter>Source Files\src\system</Filter>
+    </ClCompile>
+    <ClCompile Include="..\libstl\src\system\sub_sync\Mutex.cpp">
+      <Filter>Source Files\src\system</Filter>
+    </ClCompile>
+    <ClCompile Include="..\libstl\src\system\sub_sync\Observable.cpp">
+      <Filter>Source Files\src\system</Filter>
+    </ClCompile>
+    <ClCompile Include="..\libstl\src\system\sub_sync\Observer.cpp">
+      <Filter>Source Files\src\system</Filter>
+    </ClCompile>
+    <ClCompile Include="..\libstl\src\system\sub_sync\Queue.cpp">
+      <Filter>Source Files\src\system</Filter>
+    </ClCompile>
+    <ClCompile Include="..\libstl\src\system\sub_sync\ReadWrite.cpp">
+      <Filter>Source Files\src\system</Filter>
+    </ClCompile>
+    <ClCompile Include="..\libstl\src\system\sub_sync\ScopeGuard.cpp">
+      <Filter>Source Files\src\system</Filter>
+    </ClCompile>
+    <ClCompile Include="..\libstl\src\system\sub_sync\Semaphore.cpp">
+      <Filter>Source Files\src\system</Filter>
+    </ClCompile>
+    <ClCompile Include="..\libstl\src\system\sub_sync\totext.cpp">
+      <Filter>Source Files\src\system</Filter>
+    </ClCompile>
+    <ClCompile Include="..\libstl\src\system\sub_thread\Thread.cpp">
+      <Filter>Source Files\src\system</Filter>
+    </ClCompile>
+    <ClCompile Include="..\libstl\src\system\sub_thread\ThreadParameters.cpp">
+      <Filter>Source Files\src\system</Filter>
+    </ClCompile>
+    <ClCompile Include="..\libstl\src\system\sub_thread\ThreadPool.cpp">
+      <Filter>Source Files\src\system</Filter>
+    </ClCompile>
+    <ClCompile Include="..\libstl\src\system\sub_thread\ThreadRoutine_i.cpp">
+      <Filter>Source Files\src\system</Filter>
+    </ClCompile>
+    <ClCompile Include="..\libstl\src\system\sub_thread\threads_holder.cpp">
+      <Filter>Source Files\src\system</Filter>
+    </ClCompile>
+    <ClCompile Include="..\libstl\src\system\sub_thread\Thread_io.cpp">
+      <Filter>Source Files\src\system</Filter>
+    </ClCompile>
+    <ClCompile Include="..\libstl\src\system\sub_time\time.cpp">
+      <Filter>Source Files\src\system</Filter>
+    </ClCompile>
+    <ClCompile Include="..\libstl\src\system\sub_totext\error.cpp">
+      <Filter>Source Files\src\system</Filter>
+    </ClCompile>
+    <ClCompile Include="..\libstl\src\system\sub_win64\win64.cpp">
+      <Filter>Source Files\src\system</Filter>
+    </ClCompile>
+    <ClCompile Include="..\libstl\src\system\sub_window\window.cpp">
+      <Filter>Source Files\src\system</Filter>
+    </ClCompile>
+    <ClCompile Include="..\libstl\src\simstd\sub_chrono\perfomance_clock.cpp">
+      <Filter>Source Files\src\simstd</Filter>
+    </ClCompile>
+    <ClCompile Include="..\libstl\src\extra\sub_pattern\RefCounter.cpp">
+      <Filter>Source Files\src\extra</Filter>
+    </ClCompile>
+    <ClCompile Include="src\tests\test_algorithm.cpp">
+      <Filter>Source Files\src\tests</Filter>
+    </ClCompile>
+    <ClCompile Include="src\tests\test_a_string.cpp">
+      <Filter>Source Files\src\tests</Filter>
+    </ClCompile>
+    <ClCompile Include="src\tests\test_mstring.cpp">
+      <Filter>Source Files\src\tests</Filter>
+    </ClCompile>
+    <ClCompile Include="src\tests\test_sstr.cpp">
+      <Filter>Source Files\src\tests</Filter>
+    </ClCompile>
+    <ClCompile Include="src\tests\test_vector.cpp">
+      <Filter>Source Files\src\tests</Filter>
+    </ClCompile>
+    <ClCompile Include="src\tests\test_w_string.cpp">
+      <Filter>Source Files\src\tests</Filter>
+    </ClCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="..\libstl\src\system\sub_sync\MessageManager.hpp">
+      <Filter>Source Files\src\system</Filter>
+    </ClInclude>
+    <ClInclude Include="..\libstl\include\simstd\types.hpp">
+      <Filter>Header Files\include\simstd</Filter>
+    </ClInclude>
+    <ClInclude Include="..\libstl\include\system\fsys.hpp">
+      <Filter>Header Files\include\system</Filter>
+    </ClInclude>
+    <ClInclude Include="..\libstl\include\system\linkage.hpp">
+      <Filter>Header Files\include\system</Filter>
+    </ClInclude>
+    <ClInclude Include="..\libstl\include\system\memory.hpp">
+      <Filter>Header Files\include\system</Filter>
+    </ClInclude>
+    <ClInclude Include="..\libstl\include\system\process.hpp">
+      <Filter>Header Files\include\system</Filter>
+    </ClInclude>
+    <ClInclude Include="..\libstl\include\system\string.hpp">
+      <Filter>Header Files\include\system</Filter>
+    </ClInclude>
+    <ClInclude Include="..\libstl\include\system\sync.hpp">
+      <Filter>Header Files\include\system</Filter>
+    </ClInclude>
+    <ClInclude Include="..\libstl\include\system\thread.hpp">
+      <Filter>Header Files\include\system</Filter>
+    </ClInclude>
+    <ClInclude Include="..\libstl\include\system\totext.hpp">
+      <Filter>Header Files\include\system</Filter>
+    </ClInclude>
+    <ClInclude Include="..\libstl\include\system\win64.hpp">
+      <Filter>Header Files\include\system</Filter>
+    </ClInclude>
+    <ClInclude Include="..\libstl\include\system\backtrace.hpp">
+      <Filter>Header Files\include\system</Filter>
+    </ClInclude>
+    <ClInclude Include="..\libstl\include\system\configure.hpp">
+      <Filter>Header Files\include\system</Filter>
+    </ClInclude>
+    <ClInclude Include="..\libstl\include\system\console.hpp">
+      <Filter>Header Files\include\system</Filter>
+    </ClInclude>
+    <ClInclude Include="..\libstl\include\system\crt.hpp">
+      <Filter>Header Files\include\system</Filter>
+    </ClInclude>
+    <ClInclude Include="..\libstl\include\system\cstr.hpp">
+      <Filter>Header Files\include\system</Filter>
+    </ClInclude>
+    <ClInclude Include="..\libstl\include\extra\pattern.hpp">
+      <Filter>Header Files\include\extra</Filter>
+    </ClInclude>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="..\libstl\include\simstd\algorithm">
+      <Filter>Header Files\include\simstd</Filter>
+    </None>
+    <None Include="..\libstl\include\simstd\chrono">
+      <Filter>Header Files\include\simstd</Filter>
+    </None>
+    <None Include="..\libstl\include\simstd\functional">
+      <Filter>Header Files\include\simstd</Filter>
+    </None>
+    <None Include="..\libstl\include\simstd\initializer_list">
+      <Filter>Header Files\include\simstd</Filter>
+    </None>
+    <None Include="..\libstl\include\simstd\iosfwd">
+      <Filter>Header Files\include\simstd</Filter>
+    </None>
+    <None Include="..\libstl\include\simstd\iterator">
+      <Filter>Header Files\include\simstd</Filter>
+    </None>
+    <None Include="..\libstl\include\simstd\memory">
+      <Filter>Header Files\include\simstd</Filter>
+    </None>
+    <None Include="..\libstl\include\simstd\mutex">
+      <Filter>Header Files\include\simstd</Filter>
+    </None>
+    <None Include="..\libstl\include\simstd\new">
+      <Filter>Header Files\include\simstd</Filter>
+    </None>
+    <None Include="..\libstl\include\simstd\numeric">
+      <Filter>Header Files\include\simstd</Filter>
+    </None>
+    <None Include="..\libstl\include\simstd\string">
+      <Filter>Header Files\include\simstd</Filter>
+    </None>
+    <None Include="..\libstl\include\simstd\utility">
+      <Filter>Header Files\include\simstd</Filter>
+    </None>
+    <None Include="..\libstl\include\simstd\vector">
+      <Filter>Header Files\include\simstd</Filter>
+    </None>
+  </ItemGroup>
+</Project>

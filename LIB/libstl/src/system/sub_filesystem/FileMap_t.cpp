@@ -25,7 +25,7 @@ namespace fsys {
 		HANDLE m_map = ::CreateFileMappingW(file, nullptr, protect, high_part_64(m_size), low_part_64(m_size), nullptr);
 		if (m_map) {
 			ACCESS_MASK access = m_write ? FILE_MAP_WRITE : FILE_MAP_READ;
-			m_data = ::MapViewOfFile(m_map, access, 0, 0, size);
+			m_data = ::MapViewOfFile(m_map, access, 0, 0, static_cast<size_t>(size));
 			::CloseHandle(m_map);
 		}
 		::CloseHandle(file);

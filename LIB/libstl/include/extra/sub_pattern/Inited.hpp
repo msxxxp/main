@@ -1,8 +1,6 @@
 ﻿#ifndef LIBSTL_EXTRA_PATTERN_INITED_HPP_
 #define LIBSTL_EXTRA_PATTERN_INITED_HPP_
 
-#include <simstd/types.hpp>
-
 namespace pattern {
 
 	template<typename Type, unsigned long long DEFAULT = 0ULL>

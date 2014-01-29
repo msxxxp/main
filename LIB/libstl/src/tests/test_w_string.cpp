@@ -1,10 +1,12 @@
-﻿#include <simstd/string>
+﻿#include <system/cstr.hpp>
+#include <simstd/string>
 
-#include <cassert>
-#include <string>
+//#include <cassert>
+//#include <string>
 
-ssize_t simstd::Test::w_string(simstd::Test::wPrintFunc printFunc)
+ssize_t simstd::Test::w_string(simstd::Test::wPrintFunc /*printFunc*/)
 {
+/*
 	wstring str1(5, L'h');
 	printFunc(L"str1: '%s' size: %d\n", str1.c_str(), (int)str1.size());
 	assert(Cstr::compare(str1.c_str(), L"hhhhh") == 0);
@@ -113,5 +115,6 @@ ssize_t simstd::Test::w_string(simstd::Test::wPrintFunc printFunc)
 	assert(Cstr::compare(str2.c_str(), L"again6") == 0);
 	assert(str2.size() == 6);
 
+*/
 	return 0;
 }

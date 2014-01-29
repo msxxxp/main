@@ -1,6 +1,7 @@
 ﻿#ifndef LIBSTL_MEMORY_
 #define LIBSTL_MEMORY_
 
+#include <system/configure.hpp>
 #include <simstd/impl/memory/allocator.hpp>
 #include <simstd/impl/memory/allocator_traits.hpp>
 #include <simstd/impl/memory/base.hpp>

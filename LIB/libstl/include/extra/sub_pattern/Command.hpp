@@ -1,8 +1,6 @@
 ﻿#ifndef LIBSTL_EXTRA_PATTERN_COMMAND_HPP_
 #define LIBSTL_EXTRA_PATTERN_COMMAND_HPP_
 
-#include <simstd/types.hpp>
-
 namespace pattern {
 	struct Command
 	{

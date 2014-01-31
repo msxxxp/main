@@ -1,14 +1,22 @@
 ﻿#include <system/configure.hpp>
+#include <system/backtrace.hpp>
 #include <system/console.hpp>
 #include <system/crt.hpp>
 #include <system/cstr.hpp>
+#include <system/fsys.hpp>
+#include <system/linkage.hpp>
 #include <system/memory.hpp>
+#include <system/process.hpp>
+#include <system/string.hpp>
 #include <system/sync.hpp>
+#include <system/thread.hpp>
+#include <system/totext.hpp>
+#include <system/win64.hpp>
 
 #include <simstd/iosfwd>
 #include <simstd/algorithm>
+#include <simstd/chrono>
 #include <simstd/functional>
-//#include <simstd/initializer_list>
 #include <simstd/iterator>
 #include <simstd/memory>
 #include <simstd/mutex>
@@ -18,15 +26,10 @@
 #include <simstd/utility>
 #include <simstd/vector>
 
-#include <cstdio>
-#include <cstring>
-#include <cwchar>
+#include <extra/bits.hpp>
+#include <extra/pattern.hpp>
 
-
-int main()
+int stub()
 {
-	simstd::Test::a_string(std::printf);
-	simstd::Test::w_string(std::wprintf);
-	simstd::Test::_vector(std::wprintf);
-	simstd::Test::_algorithm(std::wprintf);
+	return 0;
 }

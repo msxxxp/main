@@ -1,0 +1,63 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<?fileVersion 4.0.0?><cproject storage_type_id="org.eclipse.cdt.core.XmlProjectDescriptionStorage">
+	<storageModule moduleId="org.eclipse.cdt.core.settings">
+		<cconfiguration id="org.eclipse.cdt.msvc.lib.release.768402410">
+			<storageModule buildSystemId="org.eclipse.cdt.managedbuilder.core.configurationDataProvider" id="org.eclipse.cdt.msvc.lib.release.768402410" moduleId="org.eclipse.cdt.core.settings" name="Release">
+				<externalSettings>
+					<externalSetting>
+						<entry flags="VALUE_WORKSPACE_PATH" kind="includePath" name="/libstl_vc"/>
+						<entry flags="VALUE_WORKSPACE_PATH" kind="libraryPath" name="/libstl_vc/Release"/>
+						<entry flags="RESOLVED" kind="libraryFile" name="libstl_vc" srcPrefixMapping="" srcRootPath=""/>
+					</externalSetting>
+				</externalSettings>
+				<extensions>
+					<extension id="org.eclipse.cdt.core.VCErrorParser" point="org.eclipse.cdt.core.ErrorParser"/>
+					<extension id="org.eclipse.cdt.core.PE" point="org.eclipse.cdt.core.BinaryParser"/>
+				</extensions>
+			</storageModule>
+			<storageModule moduleId="cdtBuildSystem" version="4.0.0">
+				<configuration artifactExtension="lib" artifactName="${ProjName}" buildArtefactType="org.eclipse.cdt.build.core.buildArtefactType.staticLib" buildProperties="org.eclipse.cdt.build.core.buildType=org.eclipse.cdt.build.core.buildType.release,org.eclipse.cdt.build.core.buildArtefactType=org.eclipse.cdt.build.core.buildArtefactType.staticLib" description="" id="org.eclipse.cdt.msvc.lib.release.768402410" name="Release" parent="org.eclipse.cdt.msvc.lib.release">
+					<folderInfo id="org.eclipse.cdt.msvc.lib.release.768402410." name="/" resourcePath="">
+						<toolChain id="org.eclipse.cdt.msvc.toolchain.lib.release.1452397818" name="Microsoft Visual C++" superClass="org.eclipse.cdt.msvc.toolchain.lib.release" unusedChildren="org.eclipse.cdt.msvc.cl.c.lib.release">
+							<targetPlatform id="org.eclipse.cdt.msvc.targetPlatform.lib.release.186068851" superClass="org.eclipse.cdt.msvc.targetPlatform.lib.release"/>
+							<builder buildPath="${workspace_loc:/libstl_vc}/Release" id="org.eclipse.cdt.msvc.builder.1640543774" keepEnvironmentInBuildfile="false" managedBuildOn="true" name="CDT Internal Builder" parallelBuildOn="true" parallelizationNumber="optimal" superClass="org.eclipse.cdt.msvc.builder"/>
+							<tool id="org.eclipse.cdt.msvc.link.1040551028" name="Linker (link)" superClass="org.eclipse.cdt.msvc.link"/>
+							<tool id="org.eclipse.cdt.msvc.rc.lib.release.1184052001" name="Resource Compiler (rc)" superClass="org.eclipse.cdt.msvc.rc.lib.release">
+								<inputType id="org.eclipse.cdt.msvc.rc.inputType.775576910" superClass="org.eclipse.cdt.msvc.rc.inputType"/>
+							</tool>
+							<tool id="org.eclipse.cdt.msvc.cl.lib.release.820676691" name="C++ Compiler (cl)" superClass="org.eclipse.cdt.msvc.cl.lib.release">
+								<option id="org.eclipse.cdt.msvc.cl.option.optimization.621131759" name="Optimization" superClass="org.eclipse.cdt.msvc.cl.option.optimization"/>
+								<option id="org.eclipse.cdt.msvc.cl.option.debugFormat.1040065219" name="Debug Information Format" superClass="org.eclipse.cdt.msvc.cl.option.debugFormat"/>
+								<option id="org.eclipse.cdt.msvc.cl.option.includes.1499556326" name="Include Path (/I)" superClass="org.eclipse.cdt.msvc.cl.option.includes" valueType="includePath">
+									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/${ProjName}/include}&quot;"/>
+									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/liblog/include}&quot;"/>
+								</option>
+								<inputType id="org.eclipse.cdt.msvc.cl.inputType.1390524513" superClass="org.eclipse.cdt.msvc.cl.inputType"/>
+							</tool>
+							<tool id="org.eclipse.cdt.msvc.lib.lib.release.1512188167" name="Library Manager (lib)" superClass="org.eclipse.cdt.msvc.lib.lib.release"/>
+						</toolChain>
+					</folderInfo>
+				</configuration>
+			</storageModule>
+			<storageModule moduleId="org.eclipse.cdt.core.externalSettings"/>
+		</cconfiguration>
+	</storageModule>
+	<storageModule moduleId="cdtBuildSystem" version="4.0.0">
+		<project id="libstl_vc.org.eclipse.cdt.msvc.projectType.lib.789348329" name="Static Library" projectType="org.eclipse.cdt.msvc.projectType.lib"/>
+	</storageModule>
+	<storageModule moduleId="org.eclipse.cdt.core.LanguageSettingsProviders"/>
+	<storageModule moduleId="refreshScope" versionNumber="2">
+		<configuration configurationName="Release">
+			<resource resourceType="PROJECT" workspacePath="/libstl_vc"/>
+		</configuration>
+	</storageModule>
+	<storageModule moduleId="scannerConfiguration">
+		<autodiscovery enabled="true" problemReportingEnabled="true" selectedProfileId=""/>
+		<scannerConfigBuildInfo instanceId="org.eclipse.cdt.msvc.lib.release.768402410;org.eclipse.cdt.msvc.lib.release.768402410.;org.eclipse.cdt.msvc.cl.c.lib.release.671331031;org.eclipse.cdt.msvc.cl.inputType.c.285826293">
+			<autodiscovery enabled="true" problemReportingEnabled="true" selectedProfileId="org.eclipse.cdt.msw.build.clScannerInfo"/>
+		</scannerConfigBuildInfo>
+		<scannerConfigBuildInfo instanceId="org.eclipse.cdt.msvc.lib.release.768402410;org.eclipse.cdt.msvc.lib.release.768402410.;org.eclipse.cdt.msvc.cl.lib.release.820676691;org.eclipse.cdt.msvc.cl.inputType.1390524513">
+			<autodiscovery enabled="true" problemReportingEnabled="true" selectedProfileId="org.eclipse.cdt.msw.build.clScannerInfo"/>
+		</scannerConfigBuildInfo>
+	</storageModule>
+</cproject>

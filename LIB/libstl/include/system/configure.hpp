@@ -8,6 +8,9 @@
 #pragma warning(disable: 4221)
 #pragma warning(disable: 4244)
 #pragma warning(disable: 4267)
+
+// temp
+#pragma warning(disable: 4291)
 #else
 #endif
 
@@ -24,6 +27,7 @@
 #include <system/sub_configure/obligatory/make_ll.hpp>
 #include <system/sub_configure/obligatory/safe.hpp>
 #include <system/sub_configure/obligatory/this_file.hpp>
+#include <system/sub_configure/obligatory/types.hpp>
 #include <system/sub_configure/obligatory/Va_list.hpp>
 
 #endif

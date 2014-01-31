@@ -7,4 +7,14 @@
 #define THIS_PLACE       THIS_FILE, __LINE__, __PRETTY_FUNCTION__
 #define THIS_PLACE_SHORT THIS_FILE, __LINE__, __FUNCTION__
 
+inline void mbox(PCSTR text, PCSTR capt = "")
+{
+	::MessageBoxA(nullptr, text, capt, MB_OK);
+}
+
+inline void mbox(PCWSTR text, PCWSTR capt = L"")
+{
+	::MessageBoxW(nullptr, text, capt, MB_OK);
+}
+
 #endif

@@ -24,15 +24,6 @@ namespace Base {
 	const UINT DEFAULT_CP = CP_UTF8;
 
 	///=============================================================================================
-	inline void mbox(PCSTR text, PCSTR capt = "")
-	{
-		::MessageBoxA(nullptr, text, capt, MB_OK);
-	}
-
-	inline void mbox(PCWSTR text, PCWSTR capt = L"")
-	{
-		::MessageBoxW(nullptr, text, capt, MB_OK);
-	}
 
 
 }

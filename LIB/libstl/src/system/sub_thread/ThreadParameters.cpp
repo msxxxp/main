@@ -21,14 +21,16 @@ namespace thread {
 	}
 
 	DWORD WINAPI ThreadParameters::run_thread_with_param(void * param) {
-		ThreadParameters l_param(*(ThreadParameters*)param);
-		delete (ThreadParameters*)param;
+		ThreadParameters* p_param = reinterpret_cast<ThreadParameters*>(param);
+		ThreadParameters l_param(*p_param);
+		delete p_param;
 		return l_param.routine->run(l_param.data);
 	}
 
 	VOID WINAPI ThreadParameters::alert_thread_with_param(ULONG_PTR param) {
-		ThreadParameters l_param(*(ThreadParameters*)param);
-		delete (ThreadParameters*)param;
+		ThreadParameters* p_param = reinterpret_cast<ThreadParameters*>(param);
+		ThreadParameters l_param(*p_param);
+		delete p_param;
 		return l_param.routine->alert(l_param.data);
 	}
 

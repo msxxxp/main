@@ -1,5 +1,4 @@
 ﻿#include <system/configure.hpp>
-#include <system/backtrace.hpp>
 #include <system/console.hpp>
 #include <system/crt.hpp>
 #include <system/cstr.hpp>
@@ -11,6 +10,7 @@
 #include <system/sync.hpp>
 #include <system/thread.hpp>
 #include <system/totext.hpp>
+#include <system/traceback.hpp>
 #include <system/win64.hpp>
 
 #include <simstd/iosfwd>

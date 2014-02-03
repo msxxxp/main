@@ -1,17 +1,22 @@
-﻿#ifndef LIBBASE_CONSOLE_HPP_
-#define LIBBASE_CONSOLE_HPP_
+﻿#ifndef LIBBASE_CONSOLE_CONSOLE_HPP_
+#define LIBBASE_CONSOLE_CONSOLE_HPP_
 
-#include <libbase/std.hpp>
-#include <libbase/cstr.hpp>
+#include <system/console.hpp>
 
-namespace Base {
+namespace console {
 
-	size_t fileout(PCSTR str, size_t len, HANDLE hndl);
+	enum class Handle : uint32_t {
+		INPUT  = STD_INPUT_HANDLE,
+		OUTPUT = STD_OUTPUT_HANDLE,
+		ERR    = STD_ERROR_HANDLE,
+	};
 
-	size_t fileout(PCWSTR str, size_t len, HANDLE hndl);
-
-	size_t fileout(wchar_t ch, size_t len, HANDLE hndl);
-
+//	size_t fileout(PCSTR str, size_t len, HANDLE hndl);
+//
+//	size_t fileout(PCWSTR str, size_t len, HANDLE hndl);
+//
+//	size_t fileout(wchar_t ch, size_t len, HANDLE hndl);
+//
 /*
  #ifndef NDEBUG
  extern PCSTR FUNC_ENTER_FORMAT;

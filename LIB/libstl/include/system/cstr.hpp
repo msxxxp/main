@@ -26,7 +26,7 @@ namespace Cstr {
 	template<typename CharType>
 	struct Char_types
 	{
-		typedef uint32_t   int_type;
+		typedef uint32_t int_type;
 //		typedef simstd::streampos  pos_type;
 //		typedef simstd::streamoff  off_type;
 //		typedef mbstate_t  state_type;

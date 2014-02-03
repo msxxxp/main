@@ -1,5 +1,5 @@
-#ifndef LIBSTL_SYSTEM_BACKTRACE_HPP_
-#define LIBSTL_SYSTEM_BACKTRACE_HPP_
+#ifndef LIBSTL_SYSTEM_TRACEBACK_HPP_
+#define LIBSTL_SYSTEM_TRACEBACK_HPP_
 
 #include <system/configure.hpp>
 #include <extra/pattern.hpp>
@@ -7,7 +7,7 @@
 #include <simstd/iosfwd>
 #include <simstd/vector>
 
-namespace backtrace {
+namespace traceback {
 
 	struct Frame: private pattern::Uncopyable
 	{
@@ -23,11 +23,11 @@ namespace backtrace {
 
 		size_t frame() const {return m_frame;}
 
-		const simstd::wstring & source() const;
+		const ustring & source() const;
 
-		const simstd::wstring & func() const;
+		const ustring & func() const;
 
-		const simstd::wstring & module() const;
+		const ustring & module() const;
 
 		size_t addr() const;
 
@@ -35,7 +35,7 @@ namespace backtrace {
 
 		size_t line() const;
 
-		simstd::wstring to_str() const;
+		ustring to_str() const;
 
 	private:
 		void InitData() const;

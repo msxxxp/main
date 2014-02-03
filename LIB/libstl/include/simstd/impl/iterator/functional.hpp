@@ -5,6 +5,7 @@
 #include <simstd/types.hpp>
 
 namespace simstd {
+
 	template<typename Container>
 	typename Container::iterator begin(Container & c)
 	{
@@ -125,6 +126,7 @@ namespace simstd {
 	{
 		rend(c);
 	}
+
 }
 
 #endif

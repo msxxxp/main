@@ -1,4 +1,5 @@
 ﻿#include <system/console.hpp>
+#include <system/cstr.hpp>
 #include <system/memory.hpp>
 
 namespace console {
@@ -24,12 +25,27 @@ namespace console {
 		return written;
 	}
 
+	size_t puts(const wchar_t * str, size_t len, Handle hnd)
+	{
+		return puts(hnd, str, len);
+	}
+
+	size_t puts(const wchar_t * str, Handle hnd)
+	{
+		return puts(hnd, str, Cstr::length(str));
+	}
+
 	size_t vprintf(Handle hnd, const wchar_t * format, va_list vl)
 	{
 		memory::auto_array<wchar_t> buf(DEFAULT_PRINTF_BUFFER);
 		while (!safe_vsnprintf(buf.data(), buf.size(), format, vl))
 			buf.reserve(buf.size() * sizeof(wchar_t));
 		return puts(hnd, buf.data(), Cstr::length(buf.data()));
+	}
+
+	size_t vprintf(const wchar_t * format, va_list vl)
+	{
+		return vprintf(Handle::OUTPUT, format, vl);
 	}
 
 	int printf(Handle hnd, const wchar_t * format, ...)

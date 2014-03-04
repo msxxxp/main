@@ -1,9 +1,10 @@
 ﻿#ifndef WIN_NET_SD_HPP
 #define WIN_NET_SD_HPP
 
-#include <libbase/std.hpp>
+#include <system/configure.hpp>
+#include <system/string.hpp>
+#include <extra/pattern.hpp>
 #include <liblog/logger.hpp>
-#include <libbase/string.hpp>
 #include <libext/sid.hpp>
 #include <libext/trustee.hpp>
 
@@ -57,7 +58,7 @@ namespace Ext {
 	/// Group SID	- sid группы (не используется вендой, лишь для совместимости с POSIX)
 	/// DACL		- список записей контроля доступа
 	/// SACL		- список записей аудита
-	struct WinSD: private Base::Uncopyable {
+	struct WinSD: private pattern::Uncopyable {
 		typedef WinSD this_class;
 
 		virtual ~WinSD();

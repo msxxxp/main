@@ -4,9 +4,7 @@
 	@link (odbc32)
 **/
 #include <libext/odbc.hpp>
-#include <libbase/string.hpp>
-
-using namespace Base;
+#include <simstd/string>
 
 namespace Ext {
 
@@ -30,7 +28,7 @@ bool ODBC_base::FindAndSetDriver(SQLHENV conn, DBServer type, const ustring & ds
 
 	if (conn) {
 		SQLWCHAR szDriverDesc[SQL_MAX_MESSAGE_LENGTH];
-		SQLRETURN err = ::SQLDriversW(conn, SQL_FETCH_FIRST, szDriverDesc, Base::lengthof(szDriverDesc) - 1, 0, 0, -1, 0);
+		SQLRETURN err = ::SQLDriversW(conn, SQL_FETCH_FIRST, szDriverDesc, lengthof(szDriverDesc) - 1, 0, 0, -1, 0);
 		while (SQL_SUCCEEDED(err)) {
 			ustring tmp(szDriverDesc);
 			if (tmp.find(ds) != ustring::npos) {
@@ -38,7 +36,7 @@ bool ODBC_base::FindAndSetDriver(SQLHENV conn, DBServer type, const ustring & ds
 				Result = true;
 				break;
 			}
-			err = ::SQLDriversW(conn, SQL_FETCH_NEXT, szDriverDesc, Base::lengthof(szDriverDesc) - 1, 0, 0, -1, 0);
+			err = ::SQLDriversW(conn, SQL_FETCH_NEXT, szDriverDesc, lengthof(szDriverDesc) - 1, 0, 0, -1, 0);
 		}
 	}
 	return Result;
@@ -46,7 +44,7 @@ bool ODBC_base::FindAndSetDriver(SQLHENV conn, DBServer type, const ustring & ds
 
 bool ODBC_base::GetStr(SQLHSTMT hstm, size_t col, ustring & out) {
 	SQLLEN size = 0;
-	auto_array<wchar_t> buf(4096);
+	memory::auto_array<wchar_t> buf(4096);
 	SQLRETURN err = ::SQLGetData(hstm, col, SQL_C_WCHAR, buf, buf.size(), &size);
 	if (SQL_SUCCEEDED(err)) {
 		out = (size == SQL_NULL_DATA) ? L"NULL" : buf.data();
@@ -58,12 +56,12 @@ ustring ODBC_base::GetState(SQLSMALLINT type, SQLHANDLE handle, SQLSMALLINT RecN
 	SQLWCHAR Msg[SQL_MAX_MESSAGE_LENGTH];
 	SQLINTEGER NativeError;
 	SQLSMALLINT MsgLen;
-	::SQLGetDiagRecW(type, handle, RecNum, state, &NativeError, Msg, Base::lengthof(Msg), &MsgLen);
+	::SQLGetDiagRecW(type, handle, RecNum, state, &NativeError, Msg, lengthof(Msg), &MsgLen);
 	return Msg;
 }
 
 ustring ODBC_base::MakeConnStr(const ustring & drv, const ustring &host, const ustring &port, const ustring &schm, const ustring &name, const ustring &pass, const ustring &add) {
-	using namespace Base::String::Inplace;
+	using namespace String::Inplace;
 	ustring Result(L"Driver");
 	add_word(Result, drv, L"={");
 	add_word(Result, L"}");
@@ -94,7 +92,7 @@ ustring ODBC_base::MakeConnStr(const ustring & drv, const ustring &host, const u
 
 ustring ODBC_base::MakeConnStr(DBServer srv, const ustring &host, const ustring &schm, const ustring &name, const ustring &pass, bool tc) {
 	ustring tp(host);
-	ustring th = Base::String::CutWord(tp, L":");
+	ustring th = String::CutWord(tp, L":");
 
 	ustring Result;
 	switch (srv) {
@@ -200,7 +198,7 @@ ustring ODBC_Conn::GetInfo(SQLUSMALLINT type) const {
 	SQLRETURN err = ::SQLGetInfoW(m_hdbc, type, NULL, bufSize, &bufSize);
 	OdbcChk(err, SQL_HANDLE_DBC, m_hdbc);
 	bufSize = sizeof(SQLWCHAR) * (bufSize + 1);
-	auto_array<SQLWCHAR> data(bufSize);
+	memory::auto_array<SQLWCHAR> data(bufSize);
 	err = ::SQLGetInfoW(m_hdbc, type, data, bufSize, &bufSize);
 	OdbcChk(err, SQL_HANDLE_DBC, m_hdbc);
 	return data.data();
@@ -241,7 +239,7 @@ void ODBC_Conn::Exec(const ustring &query) const {
 		SQLSMALLINT MsgLen;
 		if ((err == SQL_SUCCESS_WITH_INFO) || (err == SQL_ERROR)) {
 			int i = 1;
-			while (::SQLGetDiagRecW(SQL_HANDLE_STMT, hstm, i++, errstate, &NativeError, Msg, Base::lengthof(Msg), &MsgLen) != SQL_NO_DATA) {
+			while (::SQLGetDiagRecW(SQL_HANDLE_STMT, hstm, i++, errstate, &NativeError, Msg, lengthof(Msg), &MsgLen) != SQL_NO_DATA) {
 //				cout << "errstate: " << errstate << endl;
 //				cout << "Msg:      " << Msg << endl;
 			}
@@ -269,7 +267,7 @@ void ODBC_Conn::ExecAndWait(const ustring &query, DWORD wait) const {
 		if ((err == SQL_SUCCESS_WITH_INFO) || (err == SQL_ERROR)) {
 			int i = 1;
 			while (err != SQL_NO_DATA) {
-				err = ::SQLGetDiagRecW(SQL_HANDLE_STMT, hstm, i++, errstate, &NativeError, Msg, Base::lengthof(Msg), &MsgLen);
+				err = ::SQLGetDiagRecW(SQL_HANDLE_STMT, hstm, i++, errstate, &NativeError, Msg, lengthof(Msg), &MsgLen);
 //				cout << "errstate: " << errstate << endl;
 //				cout << "Msg:      " << Msg << endl;
 			}
@@ -304,7 +302,7 @@ void ODBC_Query::InitFields() {
 		NumRows = RowCount();
 
 		if (NumFields) {
-			auto_array<wchar_t> name(1024);
+			memory::auto_array<wchar_t> name(1024);
 			SQLSMALLINT NameLength;
 			for (DWORD i = 0; i < NumFields; ++i) {
 				ColType col;
@@ -348,7 +346,7 @@ bool ODBC_Query::GetRow(bool prNULL) {
 	SQLRETURN err = 0;
 	if (NumFields) {
 		SQLLEN size = 0;
-		auto_array<wchar_t> buf(4096);
+		memory::auto_array<wchar_t> buf(4096);
 		RowData.clear();
 		for (DWORD i = 1; i <= NumFields; ++i) {
 			err = ::SQLGetData(m_hstm, i, SQL_C_WCHAR, buf, buf.size(), &size);
@@ -446,7 +444,7 @@ bool ODBC_Query::IsNull(size_t index) const {
 	bool Result = true;
 	if (NumFields && index <= NumFields) {
 		SQLLEN size = 5;
-		auto_array<wchar_t> buf(size);
+		memory::auto_array<wchar_t> buf(size);
 		SQLRETURN err = ::SQLGetData(m_hstm, index, SQL_C_WCHAR, buf, buf.size(), &size);
 		if (SQL_SUCCEEDED(err)) {
 			Result = (size == SQL_NULL_DATA) ? true : false;
@@ -482,11 +480,11 @@ ustring ODBC_Query::FieldShortName(int index) const {
 int ODBC_Query::FieldIndex(const ustring &name, bool Short) {
 	int index = 0;
 	if (Short) {
-		for (std::vector<ColType>::iterator f = Fields.begin(); f != Fields.end(); f++, index++)
+		for (simstd::vector<ColType>::iterator f = Fields.begin(); f != Fields.end(); f++, index++)
 			if (name == f->name)
 				return index;
 	} else {
-		for (std::vector<ColType>::iterator f = Fields.begin(); f != Fields.end(); f++, index++)
+		for (simstd::vector<ColType>::iterator f = Fields.begin(); f != Fields.end(); f++, index++)
 			if (name == f->name)
 				return index;
 	}

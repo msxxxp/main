@@ -1,6 +1,8 @@
 ﻿#include <libext/dacl.hpp>
 #include <libext/exception.hpp>
 
+#include <simstd/string>
+
 namespace Ext {
 
 	///=================================================================================== ExpAccess
@@ -9,7 +11,7 @@ namespace Ext {
 	}
 
 	ExpAccess::ExpAccess(PSID sid, ACCESS_MASK acc, ACCESS_MODE mode, DWORD inh) {
-		::BuildExplicitAccessWithNameW(this, (PWSTR)Base::EMPTY_STR, acc, mode, inh);
+		::BuildExplicitAccessWithNameW(this, (PWSTR)EMPTY_STR, acc, mode, inh);
 		this->Trustee.ptstrName = (LPWSTR)sid;
 		this->Trustee.TrusteeForm = TRUSTEE_IS_SID;
 	}

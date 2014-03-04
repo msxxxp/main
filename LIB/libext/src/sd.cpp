@@ -2,9 +2,8 @@
 #include <libext/exception.hpp>
 //#include <libext/dacl.hpp>
 #include <libext/priv.hpp>
-#include <libbase/std.hpp>
-#include <libbase/bit.hpp>
-#include <libbase/bit_str.hpp>
+#include <extra/bits.hpp>
+//#include <libbase/bit_str.hpp>
 
 #include <sddl.h>
 
@@ -32,11 +31,11 @@ namespace Ext {
 	}
 
 	bool WinSD::is_protected(PSECURITY_DESCRIPTOR sd) {
-		return Base::Flags::check(get_control(sd), (WORD)SE_DACL_PROTECTED);
+		return bits::Flags::check(get_control(sd), (WORD)SE_DACL_PROTECTED);
 	}
 
 	bool WinSD::is_selfrelative(PSECURITY_DESCRIPTOR sd) {
-		return Base::Flags::check(get_control(sd), (WORD)SE_SELF_RELATIVE);
+		return bits::Flags::check(get_control(sd), (WORD)SE_SELF_RELATIVE);
 	}
 
 	size_t WinSD::size(PSECURITY_DESCRIPTOR sd) {

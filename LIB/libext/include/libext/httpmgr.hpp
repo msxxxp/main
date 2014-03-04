@@ -11,11 +11,11 @@
 
 #include <http.h>
 
-#include <libbase/std.hpp>
-#include <libbase/memory.hpp>
+#include <system/configure.hpp>
+#include <system/memory.hpp>
+#include <extra/pattern.hpp>
 
-using namespace Base;
-
+#include <simstd/iosfwd>
 
 namespace Ext {
 
@@ -57,7 +57,7 @@ namespace Http {
 	};
 
 	///=================================================================================== HttpBindParam
-	struct HttpBindParam : public HTTP_SERVICE_CONFIG_SSL_PARAM, private Uncopyable {
+	struct HttpBindParam : public HTTP_SERVICE_CONFIG_SSL_PARAM, private pattern::Uncopyable {
 		~HttpBindParam();
 
 		HttpBindParam(const ustring & hash);
@@ -93,9 +93,9 @@ namespace Http {
 
 		Server();
 
-		bool get_ssl(const HttpBindIP & ip, auto_buf<PHTTP_SERVICE_CONFIG_SSL_SET> & info) const;
+		bool get_ssl(const HttpBindIP & ip, memory::auto_buf<PHTTP_SERVICE_CONFIG_SSL_SET> & info) const;
 
-		bool get_ssl(SslQuery & query, auto_buf<PHTTP_SERVICE_CONFIG_SSL_SET> & info) const;
+		bool get_ssl(SslQuery & query, memory::auto_buf<PHTTP_SERVICE_CONFIG_SSL_SET> & info) const;
 
 		void set(const SslSet & info) const;
 

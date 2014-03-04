@@ -1,7 +1,7 @@
 ﻿#include <libext/sd.hpp>
 #include <libext/exception.hpp>
 #include <libext/priv.hpp>
-#include <libbase/bit.hpp>
+#include <extra/bits.hpp>
 
 namespace Ext {
 
@@ -19,18 +19,18 @@ namespace Ext {
 		WORD control = WinSD::get_control(sd);
 
 		PACL dacl = nullptr;
-		if (Base::Flags::check(control, (WORD)SE_DACL_PRESENT)) {
+		if (bits::Flags::check(control, (WORD)SE_DACL_PRESENT)) {
 			dacl = WinSD::get_dacl(sd);
 			flag |= DACL_SECURITY_INFORMATION;
-			flag |= (Base::Flags::check(control, (WORD)SE_DACL_PROTECTED)) ?
+			flag |= (bits::Flags::check(control, (WORD)SE_DACL_PROTECTED)) ?
 				PROTECTED_DACL_SECURITY_INFORMATION : UNPROTECTED_DACL_SECURITY_INFORMATION;
 		}
 
 		PACL sacl = nullptr;
-//		if (Base::WinFlag::Check(control, (WORD)SE_SACL_PRESENT)) {
+//		if (WinFlag::Check(control, (WORD)SE_SACL_PRESENT)) {
 //			sacl = WinSD::get_sacl(sd);
 //			flag |= SACL_SECURITY_INFORMATION;
-//			flag |= (Base::WinFlag::Check(control, (WORD)SE_SACL_PROTECTED)) ?
+//			flag |= (WinFlag::Check(control, (WORD)SE_SACL_PROTECTED)) ?
 //				PROTECTED_SACL_SECURITY_INFORMATION : UNPROTECTED_SACL_SECURITY_INFORMATION;
 //		}
 

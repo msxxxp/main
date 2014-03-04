@@ -2,6 +2,8 @@
 
 #include <libext/exception.hpp>
 
+#include <simstd/string>
+
 namespace Ext {
 
 	///============================================================================== DinamicLibrary
@@ -33,8 +35,8 @@ namespace Ext {
 
 	ustring DynamicLibrary::get_path() const
 	{
-		wchar_t buf[Base::MAX_PATH_LEN];
-		CheckApi(base_type::get_path(buf, Base::lengthof(buf)));
+		wchar_t buf[MAX_PATH_LEN];
+		CheckApi(base_type::get_path(buf, lengthof(buf)));
 		return ustring(buf);
 	}
 

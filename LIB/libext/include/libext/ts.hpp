@@ -9,15 +9,15 @@
 #ifndef WIN_TS_HPP
 #define WIN_TS_HPP
 
-#include <libbase/std.hpp>
+#include <system/configure.hpp>
 
-#include <vector>
+#include <simstd/vector>
 
 namespace Ext {
 
 	///▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒ net_ts
 	///===================================================================================== WinTSHandle
-	struct WinTSHandle: private Base::Uncopyable {
+	struct WinTSHandle: private pattern::Uncopyable {
 		~WinTSHandle();
 
 		WinTSHandle();
@@ -95,7 +95,7 @@ namespace Ext {
 	};
 
 	///==================================================================================== WinTSessions
-	class WinTS: public std::vector<WinTSInfo> {
+	class WinTS: public simstd::vector<WinTSInfo> {
 	public:
 		WinTS() {
 		}

@@ -8,11 +8,10 @@
 **/
 
 #include <libext/httpmgr.hpp>
-#include <libbase/std.hpp>
-#include <libbase/string.hpp>
 #include <libext/exception.hpp>
 
-using namespace Base;
+#include <system/string.hpp>
+#include <simstd/string>
 
 namespace Ext {
 
@@ -26,7 +25,7 @@ namespace Http {
 	HttpBindIP::HttpBindIP(const ustring & ipport) {
 		pIpPort = new (sockaddr);
 		ustring	port = ipport;
-		ustring	ip = Base::String::CutWord(port, L":");
+		ustring	ip = String::CutWord(port, L":");
 		Assign(ip, port);
 	}
 
@@ -37,12 +36,12 @@ namespace Http {
 
 	HttpBindIP::HttpBindIP(const HTTP_SERVICE_CONFIG_SSL_KEY & in) {
 		pIpPort = new (sockaddr);
-		Memory::copy(pIpPort, in.pIpPort, sizeof(sockaddr));
+		memory::copy(pIpPort, in.pIpPort, sizeof(sockaddr));
 	}
 
 	HttpBindIP::HttpBindIP(const HttpBindIP & in) {
 		pIpPort = new (sockaddr);
-		Memory::copy(pIpPort, in.pIpPort, sizeof(sockaddr));
+		memory::copy(pIpPort, in.pIpPort, sizeof(sockaddr));
 	}
 
 	HttpBindIP & HttpBindIP::operator=(const HttpBindIP & in) {
@@ -65,7 +64,7 @@ namespace Http {
 
 	ustring HttpBindIP::get_port() const {
 		sockaddr_in * tmp = (sockaddr_in*)pIpPort;
-		return Base::to_str(ntohs(tmp->sin_port));
+		return simstd::to_wstring(ntohs(tmp->sin_port));
 	}
 
 	ustring	HttpBindIP::as_str() const {
@@ -73,13 +72,13 @@ namespace Http {
 	}
 
 	bool HttpBindIP::copy(HTTP_SERVICE_CONFIG_SSL_KEY & out) const {
-		out.pIpPort = Memory::malloc<PSOCKADDR>(sizeof(SOCKADDR), HEAP_ZERO_MEMORY);
-		Memory::copy(out.pIpPort, pIpPort, sizeof(*pIpPort));
+		out.pIpPort = memory::malloc<PSOCKADDR>(sizeof(SOCKADDR), HEAP_ZERO_MEMORY);
+		memory::copy(out.pIpPort, pIpPort, sizeof(*pIpPort));
 		return true;
 	}
 
 	void HttpBindIP::swap(HttpBindIP & rhs) {
-		using std::swap;
+		using simstd::swap;
 		swap(pIpPort, rhs.pIpPort);
 	}
 
@@ -103,11 +102,11 @@ namespace Http {
 
 	///=================================================================================== HttpBindParam
 	HttpBindParam::~HttpBindParam() {
-		Memory::free(pSslHash);
+		memory::free(pSslHash);
 	}
 
 	HttpBindParam::HttpBindParam(const ustring & hash) {
-		Memory::zero(this, sizeof(*this));
+		memory::zero(this, sizeof(*this));
 		PBYTE buf;
 		size_t size;
 		to_hash(hash, buf, size);
@@ -117,30 +116,30 @@ namespace Http {
 	}
 
 	bool HttpBindParam::copy(HTTP_SERVICE_CONFIG_SSL_PARAM & out) const {
-		Memory::zero(&out, sizeof(out));
+		memory::zero(&out, sizeof(out));
 
 //		out.AppId = GUID_of_application;
 		out.DefaultFlags = HTTP_SERVICE_CONFIG_SSL_FLAG_NEGOTIATE_CLIENT_CERT;
 		out.pSslCertStoreName = (PWSTR)L"MY";
 
 		out.SslHashLength = SslHashLength;
-		out.pSslHash = Memory::malloc<PVOID>(out.SslHashLength, HEAP_ZERO_MEMORY);
-		Memory::copy(out.pSslHash, pSslHash, out.SslHashLength);
+		out.pSslHash = memory::malloc<PVOID>(out.SslHashLength, HEAP_ZERO_MEMORY);
+		memory::copy(out.pSslHash, pSslHash, out.SslHashLength);
 		return true;
 	}
 
 	ustring as_str(const HTTP_SERVICE_CONFIG_SSL_PARAM & m_data) {
-		return Base::to_str((PBYTE)m_data.pSslHash, m_data.SslHashLength);
+		return to_str((PBYTE)m_data.pSslHash, m_data.SslHashLength);
 	}
 
 	///==================================================================================== SslQuery
 	SslQuery::~SslQuery() {
-		Memory::free(KeyDesc.pIpPort);
+		memory::free(KeyDesc.pIpPort);
 	}
 
 	SslQuery::SslQuery() {
 		QueryDesc = HttpServiceConfigQueryNext;
-		Memory::zero(&KeyDesc, sizeof(KeyDesc));
+		memory::zero(&KeyDesc, sizeof(KeyDesc));
 		dwToken = 0;
 	}
 
@@ -161,8 +160,8 @@ namespace Http {
 	}
 
 	SslSet::SslSet(const HttpBindIP & ip, const HttpBindParam & param) {
-		Memory::zero(&KeyDesc, sizeof(KeyDesc));
-		Memory::zero(&ParamDesc, sizeof(ParamDesc));
+		memory::zero(&KeyDesc, sizeof(KeyDesc));
+		memory::zero(&ParamDesc, sizeof(ParamDesc));
 		ip.copy(KeyDesc);
 		param.copy(ParamDesc);
 	}
@@ -177,12 +176,12 @@ namespace Http {
 		CheckApiError(::HttpInitialize(httpVer, HTTP_INITIALIZE_CONFIG, nullptr));
 	}
 
-	bool Server::get_ssl(const HttpBindIP & ip, auto_buf<PHTTP_SERVICE_CONFIG_SSL_SET> & info) const {
+	bool Server::get_ssl(const HttpBindIP & ip, memory::auto_buf<PHTTP_SERVICE_CONFIG_SSL_SET> & info) const {
 		SslQuery query(ip);
 		return get_ssl(query, info);
 	}
 
-	bool Server::get_ssl(SslQuery & query, auto_buf<PHTTP_SERVICE_CONFIG_SSL_SET> & info) const {
+	bool Server::get_ssl(SslQuery & query, memory::auto_buf<PHTTP_SERVICE_CONFIG_SSL_SET> & info) const {
 		ULONG ReturnLength = 0;
 		ULONG err =::HttpQueryServiceConfiguration(NULL, HttpServiceConfigSSLCertInfo, &query, sizeof(query),
 		                                           info.data(), info.size(), &ReturnLength, NULL);
@@ -204,14 +203,14 @@ namespace Http {
 
 	void Server::del(const HttpBindIP & ip) const {
 		HTTP_SERVICE_CONFIG_SSL_SET	info;
-		Memory::zero(info);
+		memory::zero(info);
 		info.KeyDesc = ip;
 		CheckApiError(::HttpDeleteServiceConfiguration(NULL, HttpServiceConfigSSLCertInfo, (PVOID) &info, sizeof(info), NULL));
 	}
 
 	bool Server::find(const ustring & hash) const {
 		SslQuery query;
-		auto_buf<PHTTP_SERVICE_CONFIG_SSL_SET> info;
+		memory::auto_buf<PHTTP_SERVICE_CONFIG_SSL_SET> info;
 		while (get_ssl(query, info)) {
 			if (hash == as_str(info->ParamDesc))
 				return true;
@@ -220,7 +219,7 @@ namespace Http {
 	}
 
 	bool Server::is_exist(const ustring & ip, const ustring & port) {
-		auto_buf<PHTTP_SERVICE_CONFIG_SSL_SET> info(512);
+		memory::auto_buf<PHTTP_SERVICE_CONFIG_SSL_SET> info(512);
 		return get_ssl(HttpBindIP(ip, port), info) || get_ssl(HttpBindIP(L"0.0.0.0", port), info);
 	}
 #endif

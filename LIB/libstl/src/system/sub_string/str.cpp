@@ -1,11 +1,32 @@
-﻿#include <system/string.hpp>
-#include <system/cstr.hpp>
+﻿#include <system/cstr.hpp>
+#include <system/string.hpp>
 
 #include <simstd/string>
 
 namespace String {
 
+	astring get_empty_astring()
+	{
+		return astring();
+	}
+
+	ustring get_empty_ustring()
+	{
+		return ustring();
+	}
+
+	astring get_trim_default_achars()
+	{
+		return astring(" \t\r\n");
+	}
+
+	ustring get_trim_default_uchars()
+	{
+		return ustring(L" \t\r\n");
+	}
+
 	namespace Inplace {
+
 		astring & trim_left(astring & str, const astring & chrs)
 		{
 			astring::size_type pos = str.find_first_not_of(chrs);
@@ -98,6 +119,36 @@ namespace String {
 
 	}
 
+	astring trim(const astring & str, const astring & chrs)
+	{
+		astring tmp(str);
+		return Inplace::trim(tmp, chrs);
+	}
+
+	ustring trim(const ustring & str, const ustring & chrs)
+	{
+		ustring tmp(str);
+		return Inplace::trim(tmp, chrs);
+	}
+
+	ustring replace_all(const ustring & str, const ustring & from, const ustring & to)
+	{
+		ustring ret(str);
+		return Inplace::replace_all(ret, from, to);
+	}
+
+	ustring to_lower(const ustring & str)
+	{
+		ustring ret(str);
+		return Inplace::to_lower(ret);
+	}
+
+	ustring to_upper(const ustring & str)
+	{
+		ustring ret(str);
+		return Inplace::to_upper(ret);
+	}
+
 	ustring GetWord(const ustring &str, wchar_t d)
 	{
 		ustring::size_type pos = str.find(d);
@@ -115,7 +166,7 @@ namespace String {
 			++pos;
 		}
 		inout.erase(0, pos);
-		return Inplace::trim(Result);
+		return Inplace::trim(Result, get_trim_default_uchars());
 	}
 
 	ustring CutWordEx(ustring &inout, const ustring &delim, bool delDelim)
@@ -125,7 +176,7 @@ namespace String {
 		if (delDelim && pos != ustring::npos)
 			pos += delim.size();
 		inout.erase(0, pos);
-		return Inplace::trim(Result);
+		return Inplace::trim(Result, get_trim_default_uchars());
 	}
 
 //	UINT CheckUnicode(const PVOID buf, size_t size)
@@ -252,6 +303,70 @@ namespace String {
 		return (pos != ustring::npos) ? in.substr(pos + 1) : ustring();
 	}
 
+	size_t length(const astring &in)
+	{
+		return in.size();
+	}
+
+	size_t length(const ustring &in)
+	{
+		return in.size();
+	}
+
+	astring to_str_a(int64_t num, int base)
+	{
+		CHAR buf[64];
+		::_i64toa(num, buf, base);
+		return astring(buf);
+	}
+
+	ustring to_str(int64_t num, int base)
+	{
+		wchar_t buf[64];
+		::_i64tow(num, buf, base);
+		return ustring(buf);
+	}
+
+	astring oem(PCWSTR in)
+	{
+		return String::w2cp(in, CP_OEMCP);
+	}
+
+	astring oem(const ustring &in)
+	{
+		return String::w2cp(in.c_str(), CP_OEMCP);
+	}
+
+	astring ansi(PCWSTR in)
+	{
+		return String::w2cp(in, CP_ACP);
+	}
+
+	astring ansi(const ustring &in)
+	{
+		return String::w2cp(in.c_str(), CP_ACP);
+	}
+
+	astring utf8(PCWSTR in)
+	{
+		return String::w2cp(in, CP_UTF8);
+	}
+
+	astring utf8(const ustring &in)
+	{
+		return String::w2cp(in.c_str(), CP_UTF8);
+	}
+
+	ustring utf16(PCSTR in, UINT cp)
+	{
+		return String::cp2w(in, cp);
+	}
+
+	ustring utf16(const astring &in, UINT cp)
+	{
+		return String::cp2w(in.c_str(), cp);
+	}
+
 	ustring & Add(ustring & str, const wchar_t add)
 	{
 		auto pos = str.size() - 1;
@@ -286,7 +401,7 @@ namespace String {
 		if (pos1 > 0 && str[pos1 - 1] == L'-')
 			--pos1;
 		ustring tmp(str.substr(pos1, pos2 - pos1));
-		num = Cstr::to_int64(tmp.c_str(), base);
+		num = cstr::to_int64(tmp.c_str(), base);
 		str.erase(0, pos2);
 		return true;
 	}
@@ -367,7 +482,7 @@ namespace String {
 			hash = memory::malloc < PVOID > (size);
 			for (size_t i = 0; i < size; ++i) {
 				astring tmp = str.substr(i * 2, 2);
-				((PBYTE)hash)[i] = (BYTE)Cstr::to_int32(tmp.c_str(), 16);
+				((PBYTE)hash)[i] = (BYTE)cstr::to_int32(tmp.c_str(), 16);
 			}
 			return true;
 		}
@@ -413,7 +528,7 @@ memory::auto_array<BYTE> to_hash(const ustring & str)
 	memory::auto_array<BYTE> ret(size);
 	for (size_t i = 0; i < size; ++i) {
 		ustring tmp = str.substr(i * 2, 2);
-		ret[i] = (BYTE)Cstr::to_int32(tmp.c_str(), 16);
+		ret[i] = (BYTE)cstr::to_int32(tmp.c_str(), 16);
 	}
 	return ret;
 }

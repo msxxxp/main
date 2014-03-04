@@ -1,8 +1,7 @@
 ﻿#ifndef LIBSTL_SYSTEM_LINKAGE_DLL_HPP_
 #define LIBSTL_SYSTEM_LINKAGE_DLL_HPP_
 
-#include <system/configure.hpp>
-#include <extra/pattern.hpp>
+#include <system/linkage.hpp>
 
 namespace linkage {
 

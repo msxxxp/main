@@ -1,10 +1,10 @@
 #include <libext/filesystem.hpp>
 #include <liblog/logger.hpp>
 
-namespace Fsys {
-	Logger::Module_i * get_logger_module()
+namespace fsys {
+	logger::Module_i * get_logger_module()
 	{
-		auto static module = Logger::get_module(L"Fsys");
+		auto static module = logger::get_module(L"fsys");
 		return module;
 	}
 }

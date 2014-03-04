@@ -1,16 +1,17 @@
 ﻿#ifndef LIBSTL_SYSTEM_STRING_FORMAT_HPP_
 #define LIBSTL_SYSTEM_STRING_FORMAT_HPP_
 
-#include <system/configure.hpp>
-#include <simstd/iosfwd>
+#include <system/string.hpp>
 
 namespace String {
 
-	simstd::wstring format(const wchar_t * format, ...);
-	simstd::wstring format(const wchar_t * format, va_list args);
+	ustring format(const wchar_t * format, ...);
 
-	simstd::string format(const char * format, ...);
-	simstd::string format(const char * format, va_list args);
+	ustring format(const wchar_t * format, va_list args);
+
+	astring format(const char * format, ...);
+
+	astring format(const char * format, va_list args);
 
 }
 

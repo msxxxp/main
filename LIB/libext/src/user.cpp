@@ -7,7 +7,7 @@
 #include <libext/user.hpp>
 #include <libext/exception.hpp>
 #include <libext/sid.hpp>
-#include <libbase/bit.hpp>
+#include <extra/bits.hpp>
 
 #include <lm.h>
 
@@ -122,7 +122,7 @@ namespace Ext {
 	void User::add(const ustring & name, const ustring & pass, const ustring & dom) {
 		DWORD dwLevel = 1;
 		USER_INFO_1 info;
-		Memory::zero(info);
+		memory::zero(info);
 		info.usri1_name = const_cast<wchar_t*>(name.c_str());
 		info.usri1_password = const_cast<wchar_t*>(pass.c_str());
 		info.usri1_priv = USER_PRIV_USER;
@@ -215,9 +215,9 @@ namespace Ext {
 		const DWORD level = 1008;
 		DWORD dwFlags = get_flags(name, dom);
 		if (value)
-			Base::Flags::set(dwFlags, in);
+			bits::Flags::set(dwFlags, in);
 		else
-			Base::Flags::unset(dwFlags, in);
+			bits::Flags::unset(dwFlags, in);
 		USER_INFO_1008 info;
 		info.usri1008_flags = dwFlags;
 		set_info(name, dom, level, &info);
@@ -345,7 +345,7 @@ namespace Ext {
 	}
 
 	WinUsers::iterator WinUsers::find(const ustring & name) {
-		return std::find(begin(), end(), name);
+		return simstd::find(begin(), end(), name);
 	}
 
 	void WinUsers::add(const ustring & name, const ustring & pass) {

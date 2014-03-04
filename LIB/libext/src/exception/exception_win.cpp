@@ -1,7 +1,7 @@
 ﻿#include "exception_pvt.hpp"
-#include <libbase/err.hpp>
 #include <liblog/logger.hpp>
-#include <libbase/backtrace.hpp>
+#include <system/totext.hpp>
+//#include <libbase/backtrace.hpp>
 
 namespace Ext {
 
@@ -46,7 +46,7 @@ namespace Ext {
 
 	ustring WinError::what() const
 	{
-		return ustring(Base::ErrAsStr(code()).c_str());
+		return ustring(totext::api_error(code()).c_str());
 	}
 
 	DWORD WinError::code() const
@@ -54,16 +54,16 @@ namespace Ext {
 		return m_code;
 	}
 
-	void WinError::format_error(Base::mstring & out) const
+	void WinError::format_error(cstr::mstring & out) const
 	{
-		wchar_t buf[Base::MAX_PATH_LEN] = {0};
+		wchar_t buf[MAX_PATH_LEN] = {0};
 
-		_snwprintf(buf, Base::lengthof(buf), L"Error: %s", what().c_str());
+		safe_snprintf(buf, lengthof(buf), L"Error: %s", what().c_str());
 		out.push_back(buf);
 #ifndef NDEBUG
-		_snwprintf(buf, Base::lengthof(buf), L"Exception: %s", type().c_str());
+		_snwprintf(buf, lengthof(buf), L"Exception: %s", type().c_str());
 		out.push_back(buf);
-		_snwprintf(buf, Base::lengthof(buf), L"Where: %s", where());
+		_snwprintf(buf, lengthof(buf), L"Where: %s", where());
 		out.push_back(buf);
 #endif
 	}

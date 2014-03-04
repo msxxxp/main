@@ -1,11 +1,14 @@
 ﻿#ifndef _LIBEXT_EXCEPTION_HPP_
 #define _LIBEXT_EXCEPTION_HPP_
 
-#include <libbase/std.hpp>
-#include <libbase/wstr.hpp>
-#include <libbase/backtrace.hpp>
+#include <system/configure.hpp>
+#include <system/cstr.hpp>
+#include <simstd/iosfwd>
 
-#include <memory>
+#include <simstd/memory>
+
+//#include <libbase/wstr.hpp>
+//#include <libbase/backtrace.hpp>
 
 #define THROW_PLACE THIS_FILE, __LINE__, __PRETTY_FUNCTION__
 
@@ -33,13 +36,13 @@ namespace Ext {
 
 		virtual DWORD code() const = 0;
 
-		virtual void format_error(Base::mstring & out) const = 0;
+		virtual void format_error(cstr::mstring & out) const = 0;
 
 		PCWSTR where() const;
 
 		AbstractError * get_prev() const;
 
-		Base::mstring format_error() const;
+		cstr::mstring format_error() const;
 
 	protected:
 #ifndef NDEBUG
@@ -54,8 +57,8 @@ namespace Ext {
 #ifndef NDEBUG
 		ustring	m_where;
 #endif
-		std::shared_ptr<AbstractError> m_prev_exc;
-//		Base::Backtrace m_backtrace;
+		simstd::shared_ptr<AbstractError> m_prev_exc;
+//		simstd::Backtrace m_backtrace;
 	};
 
 

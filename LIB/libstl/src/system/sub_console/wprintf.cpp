@@ -32,7 +32,7 @@ namespace console {
 
 	size_t puts(const wchar_t * str, Handle hnd)
 	{
-		return puts(hnd, str, Cstr::length(str));
+		return puts(hnd, str, cstr::length(str));
 	}
 
 	size_t vprintf(Handle hnd, const wchar_t * format, va_list vl)
@@ -40,7 +40,7 @@ namespace console {
 		memory::auto_array<wchar_t> buf(DEFAULT_PRINTF_BUFFER);
 		while (!safe_vsnprintf(buf.data(), buf.size(), format, vl))
 			buf.reserve(buf.size() * sizeof(wchar_t));
-		return puts(hnd, buf.data(), Cstr::length(buf.data()));
+		return puts(hnd, buf.data(), cstr::length(buf.data()));
 	}
 
 	size_t vprintf(const wchar_t * format, va_list vl)

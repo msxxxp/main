@@ -1,6 +1,6 @@
 ﻿#include <libext/sd.hpp>
 #include <libext/exception.hpp>
-#include <libbase/bit.hpp>
+#include <extra/bits.hpp>
 
 namespace Ext {
 
@@ -11,11 +11,11 @@ namespace Ext {
 			if ((mode & 0700) == 0700) {
 				sm += L"FA";
 			} else {
-				if (Base::Flags::check(mode, (mode_t)S_IRUSR))
+				if (bits::Flags::check(mode, (mode_t)S_IRUSR))
 					sm += L"FR";
-				if (Base::Flags::check(mode, (mode_t)S_IWUSR))
+				if (bits::Flags::check(mode, (mode_t)S_IWUSR))
 					sm += L"FWSDWDWO";
-				if (Base::Flags::check(mode, (mode_t)S_IXUSR))
+				if (bits::Flags::check(mode, (mode_t)S_IXUSR))
 					sm += L"FX";
 			}
 			Result += ustring(L"(A;OICI;") + sm + L";;;" + Sid(owner).as_str() + L")";
@@ -25,11 +25,11 @@ namespace Ext {
 			if ((mode & 070) == 070) {
 				sm += L"FA";
 			} else {
-				if (Base::Flags::check(mode, (mode_t)S_IRGRP))
+				if (bits::Flags::check(mode, (mode_t)S_IRGRP))
 					sm += L"FR";
-				if (Base::Flags::check(mode, (mode_t)S_IWGRP))
+				if (bits::Flags::check(mode, (mode_t)S_IWGRP))
 					sm += L"FWSDWDWO";
-				if (Base::Flags::check(mode, (mode_t)S_IXGRP))
+				if (bits::Flags::check(mode, (mode_t)S_IXGRP))
 					sm += L"FX";
 			}
 			Result += ustring(L"(A;OICI;") + sm + L";;;" + Sid(group).as_str() + L")";
@@ -39,11 +39,11 @@ namespace Ext {
 			if ((mode & 07) == 07) {
 				sm += L"FA";
 			} else {
-				if (Base::Flags::check(mode, (mode_t)S_IROTH))
+				if (bits::Flags::check(mode, (mode_t)S_IROTH))
 					sm += L"FR";
-				if (Base::Flags::check(mode, (mode_t)S_IWOTH))
+				if (bits::Flags::check(mode, (mode_t)S_IWOTH))
 					sm += L"FWSDWDWO";
-				if (Base::Flags::check(mode, (mode_t)S_IXOTH))
+				if (bits::Flags::check(mode, (mode_t)S_IXOTH))
 					sm += L"FX";
 			}
 			Result += ustring(L"(A;OICI;") + sm + L";;;WD)";

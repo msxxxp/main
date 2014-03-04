@@ -1,7 +1,9 @@
 ﻿#ifndef WIN_NET_EXEC_HPP
 #define WIN_NET_EXEC_HPP
 
-#include <libbase/std.hpp>
+#include <system/configure.hpp>
+
+#include <simstd/iosfwd>
 
 namespace Ext {
 

@@ -85,7 +85,7 @@
 //
 //	wstr::size_type wstr::size() const
 //	{
-//		return Cstr::length(m_data);
+//		return cstr::length(m_data);
 //	}
 //
 //	wstr::wstr(pointer ptr, bool /*construct*/) :
@@ -101,28 +101,28 @@
 //	wstr::pointer wstr::make_copy(const_pointer str, size_type length)
 //	{
 //		pointer ret = Memory::calloc<pointer>(length + 1);
-//		Cstr::copy(ret, str, length);
+//		cstr::copy(ret, str, length);
 //		ret[length] = 0;
 //		return ret;
 //	}
 //
 //	wstr::pointer wstr::make_copy(const_pointer str)
 //	{
-//		return make_copy(str, Cstr::length(str));
+//		return make_copy(str, cstr::length(str));
 //	}
 //
 //	wstr::pointer wstr::make_copy(const_pointer str1, size_type length1, const_pointer str2, size_type length2)
 //	{
 //		pointer ret = Memory::calloc<pointer>(length1 + length2 + 1);
-//		Cstr::copy(ret, str1, length1);
-//		Cstr::copy(ret + length1, str2, length2);
+//		cstr::copy(ret, str1, length1);
+//		cstr::copy(ret + length1, str2, length2);
 //		ret[length1 + length2] = 0;
 //		return ret;
 //	}
 //
 //	wstr::pointer wstr::make_copy(const_pointer str1, const_pointer str2)
 //	{
-//		return make_copy(str1, Cstr::length(str1), str2, Cstr::length(str2));
+//		return make_copy(str1, cstr::length(str1), str2, cstr::length(str2));
 //	}
 //
 //	void wstr::free(pointer str)

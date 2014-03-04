@@ -9,12 +9,14 @@
 #ifndef WIN_REG_HPP
 #define WIN_REG_HPP
 
-#include <libbase/std.hpp>
-#include <libbase/memory.hpp>
+#include <system/configure.hpp>
+#include <system/memory.hpp>
+
+#include <simstd/iosfwd>
 
 namespace Ext {
 
-//	struct WinReg: private Base::Uncopyable {
+//	struct WinReg: private pattern::Uncopyable {
 //		~WinReg() {
 //			CloseKey();
 //		}
@@ -125,7 +127,7 @@ namespace Ext {
 
 		bool get(PCWSTR name, bool def) const;
 
-		void set(PCWSTR name, PCVOID value, size_t size);
+		void set(PCWSTR name, const void* value, size_t size);
 
 		void set(PCWSTR name, PCWSTR value);
 

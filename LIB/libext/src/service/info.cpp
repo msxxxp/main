@@ -17,7 +17,7 @@ namespace Ext {
 	{
 		try {
 			Service svc(scm, name.c_str(), SERVICE_QUERY_CONFIG);
-			Base::auto_buf<LPQUERY_SERVICE_CONFIGW> conf(svc.QueryConfig());
+			memory::auto_buf<LPQUERY_SERVICE_CONFIGW> conf(svc.QueryConfig());
 			binaryPathName = conf->lpBinaryPathName;
 			loadOrderGroup = conf->lpLoadOrderGroup;
 			dependencies = conf->lpDependencies;
@@ -42,7 +42,7 @@ namespace Ext {
 		LogTrace();
 		memset(&status, 0, sizeof(status));
 		try {
-			Base::auto_buf<LPQUERY_SERVICE_CONFIGW> conf(svc.QueryConfig());
+			memory::auto_buf<LPQUERY_SERVICE_CONFIGW> conf(svc.QueryConfig());
 			displayName = conf->lpDisplayName;
 			status = svc.get_status();
 			binaryPathName = conf->lpBinaryPathName;

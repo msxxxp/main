@@ -1,11 +1,8 @@
-﻿#include <libbase/std.hpp>
-#include <libbase/memory.hpp>
+﻿#include <system/memory.hpp>
 #include <libext/fileversion.hpp>
 #include <libext/dll.hpp>
 
 #include <libext/exception.hpp>
-
-using namespace Base;
 
 namespace Ext {
 
@@ -38,13 +35,13 @@ namespace Ext {
 	FileVersion::FileVersion(PCWSTR path) {
 		DWORD size = version_dll::inst().GetFileVersionInfoSizeW(path, nullptr);
 		CheckApi(size);
-		auto_array<BYTE> data(size);
+		memory::auto_array<BYTE> data(size);
 		CheckApi(version_dll::inst().GetFileVersionInfoW(path, 0, size, data.data()));
 		UINT bufLen;
 		VS_FIXEDFILEINFO * ffi;
 		CheckApi(version_dll::inst().VerQueryValueW(data, L"\\", (PVOID*)&ffi, &bufLen));
 		wchar_t tmp[MAX_PATH];
-		_snwprintf(tmp, Base::lengthof(tmp), L"%d.%d"
+		_snwprintf(tmp, lengthof(tmp), L"%d.%d"
 		           ,HIWORD(ffi->dwFileVersionMS)
 		           ,LOWORD(ffi->dwFileVersionMS)
 		           //	           ,HIWORD(ffi->dwFileVersionLS)

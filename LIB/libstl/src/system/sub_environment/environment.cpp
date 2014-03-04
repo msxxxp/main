@@ -21,9 +21,9 @@ namespace process {
 
 		bool add(const wchar_t * name, const wchar_t * val)
 		{
-			memory::auto_array<wchar_t> buf(::GetEnvironmentVariableW(name, nullptr, 0) + Cstr::length(val));
+			memory::auto_array<wchar_t> buf(::GetEnvironmentVariableW(name, nullptr, 0) + cstr::length(val));
 			::GetEnvironmentVariableW(name, buf.data(), buf.size());
-			Cstr::cat(buf.data(), val);
+			cstr::cat(buf.data(), val);
 			return ::SetEnvironmentVariableW(name, buf.data()) != 0;
 		}
 

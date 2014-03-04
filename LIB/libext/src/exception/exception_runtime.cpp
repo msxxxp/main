@@ -1,6 +1,8 @@
 ﻿#include "exception_pvt.hpp"
 #include <liblog/logger.hpp>
 
+#include <simstd/string>
+
 namespace Ext {
 
 	///================================================================================ RuntimeError
@@ -13,7 +15,7 @@ namespace Ext {
 
 		virtual DWORD code() const;
 
-		virtual void format_error(Base::mstring & out) const;
+		virtual void format_error(cstr::mstring & out) const;
 
 	protected:
 #ifndef NDEBUG
@@ -85,7 +87,7 @@ namespace Ext {
 		return m_code;
 	}
 
-	void RuntimeError::format_error(Base::mstring & out) const
+	void RuntimeError::format_error(cstr::mstring & out) const
 	{
 		out.push_back(what().c_str());
 		if (get_prev()) {

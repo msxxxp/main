@@ -1,4 +1,3 @@
-#include <libbase/std.hpp>
 #include <libext/dll.hpp>
 #include <libext/exception.hpp>
 #include <libext/dacl.hpp>
@@ -143,13 +142,13 @@ namespace Ext {
 
 		Authz(PSID sid) {
 			LUID unusedId;
-			Memory::zero(unusedId);
+			memory::zero(unusedId);
 			CheckApi(Authz_dll::inst().AuthzInitializeContextFromSid(0, sid, Authz_dll::inst(), nullptr, unusedId, nullptr, &m_cln));
 		}
 
 		ACCESS_MASK access(PSECURITY_DESCRIPTOR psd) {
 			AUTHZ_ACCESS_REQUEST AccessRequest;
-			Memory::zero(AccessRequest);
+			memory::zero(AccessRequest);
 			AccessRequest.DesiredAccess = MAXIMUM_ALLOWED;
 			AccessRequest.PrincipalSelfSid = NULL;
 			AccessRequest.ObjectTypeList = NULL;
@@ -159,7 +158,7 @@ namespace Ext {
 			BYTE     Buffer[1024];
 			RtlZeroMemory(Buffer, sizeof(Buffer));
 			AUTHZ_ACCESS_REPLY AccessReply;
-			Memory::zero(AccessReply);
+			memory::zero(AccessReply);
 			AccessReply.ResultListLength = 1;
 			AccessReply.GrantedAccessMask = (PACCESS_MASK) (Buffer);
 			AccessReply.Error = (PDWORD) (Buffer + sizeof(ACCESS_MASK));

@@ -1,7 +1,6 @@
-﻿#include <libbase/std.hpp>
-#include <libbase/err.hpp>
-#include <libbase/console.hpp>
-#include <libext/exception.hpp>
+﻿#include <libext/exception.hpp>
+#include <system/console.hpp>
+#include <system/totext.hpp>
 
 namespace Ext {
 
@@ -12,7 +11,7 @@ namespace Ext {
 	ustring ThrowPlaceString(PCSTR file, int line, PCSTR func)
 	{
 		wchar_t buf[MAX_PATH];
-		::_snwprintf(buf, Base::lengthof(buf), THROW_PLACE_FORMAT, file, line, func);
+		::_snwprintf(buf, lengthof(buf), THROW_PLACE_FORMAT, file, line, func);
 		return ustring(buf);
 	}
 #endif
@@ -60,10 +59,10 @@ namespace Ext {
 		return m_prev_exc.get();
 	}
 
-	Base::mstring AbstractError::format_error() const
+	cstr::mstring AbstractError::format_error() const
 	{
-		Base::mstring msg;
+		cstr::mstring msg;
 		format_error(msg);
-		return std::move(msg);
+		return simstd::move(msg);
 	}
 }

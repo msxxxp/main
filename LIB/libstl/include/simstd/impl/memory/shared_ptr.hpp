@@ -14,6 +14,14 @@ namespace simstd {
 		}
 	};
 
+	template<>
+	struct default_delete<nullptr_t>
+	{
+		void operator ()(nullptr_t /*ptr*/) const
+		{
+		}
+	};
+
 	template<typename Type>
 	struct default_delete<Type[]>
 	{
@@ -41,13 +49,25 @@ namespace simstd {
 		{
 		}
 
-		explicit shared_ptr(element_type * ptr) :
-			m_impl(new shared_ptr_impl(ptr))
+		constexpr shared_ptr(nullptr_t ptr) noexcept :
+			m_impl(new shared_ptr_impl_std(ptr))
 		{
+		}
+
+		explicit shared_ptr(element_type * ptr) :
+			m_impl(new shared_ptr_impl_std(ptr))
+		{
+			static_assert(sizeof(Type) > 0, "incomplete type");
 		}
 
 		template<typename Deleter>
 		shared_ptr(element_type * ptr, Deleter d) :
+			m_impl(new shared_ptr_impl_deleter<Deleter>(ptr, d))
+		{
+		}
+
+		template<typename Deleter>
+		shared_ptr(nullptr_t ptr, Deleter d) :
 			m_impl(new shared_ptr_impl_deleter<Deleter>(ptr, d))
 		{
 		}
@@ -143,12 +163,20 @@ namespace simstd {
 
 			element_type * get() const {return m_ptr;}
 
+			void destroy() const override = 0;
+
+			void deallocate() const override {delete this;}
+
 		private:
-			void destroy() const {default_deleter()(m_ptr);}
-
-			void deallocate() const {delete this;}
-
 			element_type * m_ptr;
+		};
+
+		struct shared_ptr_impl_std: public shared_ptr_impl
+		{
+			shared_ptr_impl_std(element_type * ptr) : shared_ptr_impl(ptr) {}
+
+		private:
+			void destroy() const override {default_deleter()(get());}
 		};
 
 		template<typename Deleter>
@@ -156,7 +184,7 @@ namespace simstd {
 			shared_ptr_impl_deleter(element_type * ptr, Deleter d) : shared_ptr_impl(ptr), m_deleter(d) {}
 
 		private:
-			void destroy() const {m_deleter(get());}
+			void destroy() const override {m_deleter(get());}
 
 			Deleter m_deleter;
 		};

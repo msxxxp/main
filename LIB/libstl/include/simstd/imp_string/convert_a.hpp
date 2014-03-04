@@ -23,21 +23,21 @@ namespace simstd {
 
 	string to_string(long double value);
 
-	int stoi(const string& str, size_t *pos = 0, int base = 10);
+	int stoi(const string& str, size_t *pos = nullptr, int base = 10);
 
-	long stol(const string& str, size_t *pos = 0, int base = 10);
+	long stol(const string& str, size_t *pos = nullptr, int base = 10);
 
-	long long stoll(const string& str, size_t *pos = 0, int base = 10);
+	long long stoll(const string& str, size_t *pos = nullptr, int base = 10);
 
-	unsigned long stoul(const string& str, size_t *pos = 0, int base = 10);
+	unsigned long stoul(const string& str, size_t *pos = nullptr, int base = 10);
 
-	unsigned long long stoull(const string& str, size_t *pos = 0, int base = 10);
+	unsigned long long stoull(const string& str, size_t *pos = nullptr, int base = 10);
 
-	float stof(const string& str, size_t *pos = 0);
+	float stof(const string& str, size_t *pos = nullptr);
 
-	double stod(const string& str, size_t *pos = 0);
+	double stod(const string& str, size_t *pos = nullptr);
 
-	long double stold(const string& str, size_t *pos = 0);
+	long double stold(const string& str, size_t *pos = nullptr);
 }
 
 #endif

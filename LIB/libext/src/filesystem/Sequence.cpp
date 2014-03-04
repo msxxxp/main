@@ -1,17 +1,15 @@
-#include <libbase/std.hpp>
-#include <libbase/memory.hpp>
-#include <libbase/path.hpp>
-#include <libbase/cstr.hpp>
+#include <system/memory.hpp>
+#include <system/cstr.hpp>
 #include <liblog/logger.hpp>
 #include <libext/dll.hpp>
 #include <libext/filesystem.hpp>
 #include <libext/exception.hpp>
 
-namespace Fsys {
+namespace fsys {
 
 	ustring Sequence::FindStat::full_path() const
 	{
-		return Base::MakePath(m_path, name());
+		return fsys::MakePath(m_path, name());
 	}
 
 	Sequence::Sequence(const ustring & path, flags_type flags) :
@@ -51,7 +49,7 @@ namespace Fsys {
 			FindStat & st = m_impl->m_stat;
 			if (m_impl->m_find_handle == INVALID_HANDLE_VALUE) {
 				st.m_path = m_impl->m_seq->path();
-				ustring pattern = Base::MakePath(m_impl->m_seq->path(), m_impl->m_seq->mask());
+				ustring pattern = fsys::MakePath(m_impl->m_seq->path(), m_impl->m_seq->mask());
 				m_impl->m_find_handle = ::FindFirstFileW(pattern.c_str(), &st.m_stat);
 				if (m_impl->m_find_handle == INVALID_HANDLE_VALUE) {
 					m_impl.reset(new impl);

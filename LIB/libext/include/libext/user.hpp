@@ -1,10 +1,11 @@
 ﻿#ifndef WIN_USER_HPP
 #define WIN_USER_HPP
 
-#include <libbase/std.hpp>
-#include <libbase/string.hpp>
-
-#include <vector>
+#include <system/configure.hpp>
+#include <system/memory.hpp>
+#include <extra/pattern.hpp>
+#include <simstd/iosfwd>
+#include <simstd/vector>
 
 namespace Ext {
 	class Sid;
@@ -89,8 +90,8 @@ namespace Ext {
 		bool is_disabled() const;
 	};
 
-	struct WinUsers: private std::vector<UserInfo> {
-		typedef std::vector<UserInfo> this_type;
+	struct WinUsers: private simstd::vector<UserInfo> {
+		typedef simstd::vector<UserInfo> this_type;
 		typedef UserInfo value_type;
 
 		typedef this_type::iterator iterator;
@@ -169,8 +170,8 @@ namespace Ext {
 		bool operator ==(const ustring & nm) const;
 	};
 
-	struct WinGroups: private std::vector<GroupInfo> {
-		typedef std::vector<GroupInfo> this_type;
+	struct WinGroups: private simstd::vector<GroupInfo> {
+		typedef simstd::vector<GroupInfo> this_type;
 		typedef GroupInfo value_type;
 		typedef this_type::iterator iterator;
 		typedef this_type::const_iterator const_iterator;

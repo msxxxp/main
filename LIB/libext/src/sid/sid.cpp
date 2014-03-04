@@ -6,8 +6,7 @@
 	@link ()
  **/
 
-#include <libbase/std.hpp>
-#include <libbase/memory.hpp>
+#include <system/memory.hpp>
 //#include <libbase/str.hpp>
 #include <libext/sid.hpp>
 #include <libext/exception.hpp>
@@ -15,8 +14,6 @@
 extern "C" {
 	WINADVAPI BOOL WINAPI ConvertStringSidToSidW(PCWSTR StringSid, PSID * Sid);
 }
-
-using namespace Base;
 
 namespace Ext {
 
@@ -48,7 +45,7 @@ namespace Ext {
 	Sid::Sid(this_type && rhs):
 		m_sid(nullptr)
 	{
-		using std::swap;
+		using simstd::swap;
 		swap(m_sid, rhs.m_sid);
 	}
 
@@ -60,7 +57,7 @@ namespace Ext {
 
 	Sid & Sid::operator = (this_type && rhs) {
 		if (this != &rhs)
-			this_type(std::move(rhs)).swap(*this);
+			this_type(simstd::move(rhs)).swap(*this);
 		return *this;
 	}
 
@@ -83,12 +80,12 @@ namespace Ext {
 
 	void Sid::detach(value_type & sid) {
 		sid = get_sid(WinNullSid);
-		using std::swap;
+		using simstd::swap;
 		swap(m_sid, sid);
 	}
 
 	void Sid::swap(this_type & rhs) {
-		using std::swap;
+		using simstd::swap;
 		swap(m_sid, rhs.m_sid);
 	}
 

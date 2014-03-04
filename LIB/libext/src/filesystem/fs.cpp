@@ -4,37 +4,34 @@
 #include <libext/reg.hpp>
 #include <libext/sd.hpp>
 
-#include <libbase/std.hpp>
-#include <libbase/path.hpp>
+#include <system/fsys.hpp>
 
 #include <winioctl.h>
-
-using namespace Base;
 
 extern "C" {
 	INT WINAPI SHCreateDirectoryExW(HWND, PCWSTR, PSECURITY_ATTRIBUTES);
 }
 
-namespace Fsys {
+namespace fsys {
 	bool del_by_mask(PCWSTR mask) {
 		bool Result = false;
 		WIN32_FIND_DATAW wfd;
 		HANDLE hFind = ::FindFirstFileW(mask, &wfd);
 		if (hFind != INVALID_HANDLE_VALUE) {
 			Result = true;
-			ustring fullpath = Path::extract_from_mask(mask);
+			ustring fullpath = fsys::Path::extract_from_mask(mask);
 			do {
-				if (!Filename::is_valid(wfd.cFileName))
+				if (!fsys::Filename::is_valid(wfd.cFileName))
 					continue;
-				ustring path = MakePath(fullpath, wfd.cFileName);
+				ustring path = fsys::MakePath(fullpath, wfd.cFileName);
 				if (wfd.dwFileAttributes & FILE_ATTRIBUTE_REPARSE_POINT) {
-					Fsys::Link::del(path);
+					fsys::Link::del(path);
 				}
 				if (wfd.dwFileAttributes & FILE_ATTRIBUTE_DIRECTORY) {
-					del_by_mask(MakePath(path, L"*"));
-					Result = Directory::del_nt(path.c_str());
+					fsys::del_by_mask(fsys::MakePath(path, L"*"));
+					Result = fsys::Directory::del_nt(path.c_str());
 				} else {
-					Result = File::del_nt(path.c_str());
+					Result = fsys::File::del_nt(path.c_str());
 				}
 			} while (::FindNextFileW(hFind, &wfd));
 			::FindClose(hFind);
@@ -74,20 +71,20 @@ namespace Fsys {
 	namespace Directory {
 		bool remove_dir(PCWSTR path, bool follow_links) {
 			bool Result = false;
-			if (Path::is_mask(path)) {
-				Result = Fsys::del_by_mask(path);
+			if (fsys::Path::is_mask(path)) {
+				Result = fsys::del_by_mask(path);
 			} else {
-				if (!Fsys::is_exist(path))
+				if (!fsys::is_exist(path))
 					return true;
-				if (Fsys::is_dir(path)) {
-					if (!follow_links && Fsys::is_link(path)) {
-						Fsys::Link::del(path);
+				if (fsys::is_dir(path)) {
+					if (!follow_links && fsys::is_link(path)) {
+						fsys::Link::del(path);
 					} else {
-						Fsys::del_by_mask(MakePath(path, L"*"));
-						Result = Directory::del_nt(path);
+						fsys::del_by_mask(fsys::MakePath(path, L"*"));
+						Result = fsys::Directory::del_nt(path);
 					}
 				} else {
-					Result = File::del_nt(path);
+					Result = fsys::File::del_nt(path);
 				}
 			}
 			return Result;
@@ -106,8 +103,8 @@ namespace Fsys {
 			Ext::set_owner(path.c_str(), owner, type);
 		} catch (...) {
 		}
-		if (Fsys::is_dir(path)) {
-			Fsys::Sequence dir(path);
+		if (fsys::is_dir(path)) {
+			fsys::Sequence dir(path);
 			for (auto it = dir.begin(); it != dir.end(); ++it) {
 				if (it->is_dir()) {
 					SetOwnerRecur(it->full_path(), owner, type);
@@ -197,7 +194,7 @@ namespace Ext {
 		//
 		//			DWORD Written;
 		//			while (size > 0) {
-		//				DWORD WriteSize = std::min(BufSize, size);
+		//				DWORD WriteSize = simstd::min(BufSize, size);
 		//				WipeFile.Write(buf, WriteSize, Written);
 		//				size -= WriteSize;
 		//			}

@@ -24,12 +24,17 @@
 #include <simstd/numeric>
 #include <simstd/string>
 #include <simstd/utility>
+#include <simstd/ratio>
 #include <simstd/vector>
+#include <simstd/type_traits>
 
 #include <extra/bits.hpp>
 #include <extra/pattern.hpp>
 
 int stub()
 {
+	cstr::length("qwert");
+
+//	std::tuple
 	return 0;
 }

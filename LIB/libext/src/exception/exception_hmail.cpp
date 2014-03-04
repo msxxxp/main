@@ -1,5 +1,5 @@
 ﻿#include "exception_pvt.hpp"
-#include <libbase/err.hpp>
+#include <system/totext.hpp>
 
 namespace Ext {
 
@@ -23,7 +23,7 @@ namespace Ext {
 	}
 
 	ustring	HMailError::what() const {
-		return ustring(Base::ErrAsStr(code(), L"hMailServer.exe").c_str());
+		return ustring(totext::api_error(code(), L"hMailServer.exe").c_str());
 	}
 
 #ifndef NDEBUG

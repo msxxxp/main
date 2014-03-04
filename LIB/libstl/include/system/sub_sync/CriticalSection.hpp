@@ -1,8 +1,7 @@
 #ifndef LIBSTL_SYSTEM_SYNC_CRITICALSECTION_HPP_
 #define LIBSTL_SYSTEM_SYNC_CRITICALSECTION_HPP_
 
-#include <system/configure.hpp>
-#include <extra/pattern.hpp>
+#include <system/sync.hpp>
 
 namespace sync {
 

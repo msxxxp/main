@@ -1,8 +1,7 @@
 ﻿#include <libext/dacl.hpp>
 #include <libext/exception.hpp>
 #include <liblog/logger.hpp>
-#include <libbase/bit.hpp>
-#include <libbase/bit_str.hpp>
+#include <extra/bits.hpp>
 
 namespace Ext {
 
@@ -59,7 +58,7 @@ namespace Ext {
 					}
 				}
 				LogInfo(L"\tAceType: %s\n", pszString);
-				LogInfo(L"\tACE Mask: %s\n", Base::BitMask<DWORD>::to_str_bin(pACE->Mask).c_str());
+				LogInfo(L"\tACE Mask: %s\n", bits::BitMask<DWORD>::to_str_bin(pACE->Mask).c_str());
 
 				LogInfo(L"\tACE Flags:\n", pszString);
 				lIndex2 = 7;

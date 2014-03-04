@@ -1,20 +1,22 @@
 #ifndef _LIBEXT_SERVICES_HPP_
 #define _LIBEXT_SERVICES_HPP_
 
+#include <system/configure.hpp>
+#include <system/sync.hpp>
 #include <libext/service.hpp>
-#include <libbase/messaging.hpp>
 
-#include <memory>
-#include <vector>
+#include <simstd/iosfwd>
+#include <simstd/memory>
+#include <simstd/vector>
 
 namespace Ext {
 
-	struct Services: public Base::Observable, private std::vector<Service::Info_t> {
+	struct Services: public sync::Observable, private simstd::vector<Service::Info_t> {
 
 		struct Filter;
 
 		typedef Service::Info_t value_type;
-		typedef std::vector<Service::Info_t> base_type;
+		typedef simstd::vector<Service::Info_t> base_type;
 
 		typedef base_type::size_type size_type;
 		typedef base_type::iterator iterator;

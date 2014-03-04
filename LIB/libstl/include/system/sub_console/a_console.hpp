@@ -5,6 +5,10 @@
 
 namespace console {
 
+	size_t fputs(const char * str, size_t len, HANDLE hndl);
+
+	size_t fputs(const char * str, HANDLE hndl);
+
 	size_t putc(Handle hnd, char ch);
 
 	size_t puts(Handle hnd, const char * str, size_t len);

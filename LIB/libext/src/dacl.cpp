@@ -1,10 +1,7 @@
 ﻿#include <libext/dacl.hpp>
 #include <libext/exception.hpp>
 #include <libext/sd.hpp>
-#include <libbase/std.hpp>
-#include <libbase/bit_str.hpp>
-
-using namespace Base;
+//#include <libbase/bit_str.hpp>
 
 namespace Ext {
 
@@ -105,18 +102,18 @@ namespace Ext {
 
 	void WinDacl::detach(PACL & acl) {
 		acl = WinDacl::create(64);
-		using std::swap;
+		using simstd::swap;
 		swap(m_dacl, acl);
 	}
 
 	void WinDacl::swap(PACL & acl) {
 		CheckApi(is_valid(acl));
-		using std::swap;
+		using simstd::swap;
 		swap(m_dacl, acl);
 	}
 
 	void WinDacl::swap(WinDacl & rhs) {
-		using std::swap;
+		using simstd::swap;
 		swap(m_dacl, rhs.m_dacl);
 	}
 
@@ -238,7 +235,7 @@ namespace Ext {
 	PACL WinDacl::copy(PACL acl) {
 		size_t	size = WinDacl::size(acl);
 		PACL m_dacl = (PACL)CheckPointer(::LocalAlloc(LPTR, size));
-		Memory::copy(m_dacl, acl, size);
+		memory::copy(m_dacl, acl, size);
 		return m_dacl;
 	}
 

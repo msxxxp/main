@@ -1,6 +1,8 @@
 ﻿#include <libext/sid.hpp>
 #include <libext/exception.hpp>
 
+#include <simstd/string>
+
 namespace Ext {
 
 	ustring Sid::get_name() const {

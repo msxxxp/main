@@ -1,14 +1,16 @@
 ﻿#ifndef _LIBEXT_DLL_HPP_
 #define _LIBEXT_DLL_HPP_
 
-#include <libbase/std.hpp>
-#include <libbase/dll.hpp>
+#include <system/configure.hpp>
+#include <system/linkage.hpp>
+
+#include <simstd/iosfwd>
 
 namespace Ext {
 
 	///============================================================================== DinamicLibrary
-	class DynamicLibrary: private Base::DynamicLibrary {
-		typedef Base::DynamicLibrary base_type;
+	class DynamicLibrary: private linkage::DynamicLibrary {
+		typedef linkage::DynamicLibrary base_type;
 		typedef DynamicLibrary this_type;
 
 	public:
@@ -22,8 +24,8 @@ namespace Ext {
 
 		this_type & operator = (const this_type & rhs);
 
-		using Base::DynamicLibrary::get_hmodule;
-		using Base::DynamicLibrary::get_flags;
+		using linkage::DynamicLibrary::get_hmodule;
+		using linkage::DynamicLibrary::get_flags;
 
 		ustring get_path() const;
 

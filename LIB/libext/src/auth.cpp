@@ -6,10 +6,9 @@
 	@link (advapi32)
  **/
 
-#include <libbase/std.hpp>
-#include <libbase/string.hpp>
 #include <libext/auth.hpp>
 #include <libext/exception.hpp>
+#include <system/string.hpp>
 
 #include <ntsecapi.h>
 
@@ -42,7 +41,7 @@ namespace Ext {
 
 	void Credential_t::set(PCWSTR name, PCWSTR pass, PCWSTR target) {
 		CREDENTIALW cred;
-		Memory::zero(cred);
+		memory::zero(cred);
 		cred.Type = CRED_TYPE_GENERIC;
 		cred.Persist = CRED_PERSIST_LOCAL_MACHINE;
 		cred.TargetName = target ? (PWSTR)target : (PWSTR)name;
@@ -83,7 +82,7 @@ namespace Ext {
 	void parse_username(PCWSTR fullname, ustring & dom, ustring name) {
 		wchar_t d[MAX_PATH];
 		wchar_t n[MAX_PATH];
-		CheckApiError(CredUIParseUserName(fullname, d, Base::lengthof(d), n, Base::lengthof(n)));
+		CheckApiError(CredUIParseUserName(fullname, d, lengthof(d), n, lengthof(n)));
 		dom = d;
 		name = n;
 	}

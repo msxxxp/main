@@ -1,7 +1,9 @@
 ﻿#ifndef _LIBEXT_FILEVERSION_HPP_
 #define _LIBEXT_FILEVERSION_HPP_
 
-#include <libbase/std.hpp>
+#include <system/configure.hpp>
+
+#include <simstd/string>
 
 namespace Ext {
 

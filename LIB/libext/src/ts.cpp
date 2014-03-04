@@ -1,12 +1,9 @@
-﻿#include <libbase/std.hpp>
-#include <libbase/string.hpp>
+﻿#include <system/configure.hpp>
 #include <libext/dll.hpp>
 #include <libext/ts.hpp>
 #include <libext/exception.hpp>
 
 #include <wtsapi32.h>
-
-using namespace Base;
 
 namespace Ext {
 
@@ -175,7 +172,7 @@ namespace Ext {
 				push_back(info);
 		}
 		Wtsapi32_dll::inst().WTSFreeMemory(all_info);
-		std::sort(begin(), end());
+		simstd::sort(begin(), end());
 	}
 
 	bool WinTS::FindSess(PCWSTR /*in*/) const {

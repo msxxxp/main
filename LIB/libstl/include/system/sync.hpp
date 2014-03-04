@@ -2,6 +2,7 @@
 #define LIBSTL_SYSTEM_SYNC_HPP_
 
 #include <system/configure.hpp>
+#include <extra/pattern.hpp>
 
 namespace sync {
 
@@ -18,10 +19,10 @@ namespace sync {
 	};
 
 }
+
 #include <system/sub_sync/CriticalSection.hpp>
 #include <system/sub_sync/Mutex.hpp>
 #include <system/sub_sync/Semaphore.hpp>
-#include <extra/pattern.hpp>
 
 namespace sync {
 	struct ScopeGuard;
@@ -261,4 +262,5 @@ namespace totext {
 	const wchar_t * c_str(sync::WaitResult_t waitResult);
 
 }  // namespace totext
+
 #endif

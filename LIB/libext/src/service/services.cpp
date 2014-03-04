@@ -4,8 +4,8 @@
 
 #include <liblog/logger.hpp>
 
-#include <algorithm>
-#include <string>
+#include <simstd/algorithm>
+#include <simstd/string>
 
 namespace Ext {
 
@@ -27,8 +27,8 @@ namespace Ext {
 		void set_host(const ustring & host = ustring(), PCWSTR user = nullptr, PCWSTR pass = nullptr);
 
 	private:
-		std::shared_ptr<Ext::RemoteConnection> m_conn;
-		mutable std::shared_ptr<Ext::Service::Manager> m_scm;
+		simstd::shared_ptr<Ext::RemoteConnection> m_conn;
+		mutable simstd::shared_ptr<Ext::Service::Manager> m_scm;
 		Service::EnumerateType_t m_type;
 		mutable bool m_writable;
 	};
@@ -81,11 +81,11 @@ namespace Ext {
 	void Services::Filter::set_host(const ustring & host, PCWSTR user, PCWSTR pass)
 	{
 		LogNoise(L"host: '%s', user: '%s'\n", host.c_str(), user);
-		std::shared_ptr<Ext::RemoteConnection> tmp_conn(new Ext::RemoteConnection(host, user, pass));
-		std::shared_ptr<Ext::Service::Manager> tmp_scm(new Ext::Service::Manager(tmp_conn.get(), SC_MANAGER_CONNECT | SC_MANAGER_ENUMERATE_SERVICE));
+		simstd::shared_ptr<Ext::RemoteConnection> tmp_conn(new Ext::RemoteConnection(host, user, pass));
+		simstd::shared_ptr<Ext::Service::Manager> tmp_scm(new Ext::Service::Manager(tmp_conn.get(), SC_MANAGER_CONNECT | SC_MANAGER_ENUMERATE_SERVICE));
 		m_writable = false;
 
-		using std::swap;
+		using simstd::swap;
 		swap(m_scm, tmp_scm);
 		swap(m_conn, tmp_conn);
 	}
@@ -132,7 +132,7 @@ namespace Ext {
 		::EnumServicesStatusExW(m_filter->get_read_manager(), SC_ENUM_PROCESS_INFO, (DWORD)m_filter->get_type(), SERVICE_STATE_ALL, nullptr, 0, &dwBufNeed, &dwNumberOfService, nullptr, nullptr);
 		CheckApi(::GetLastError() == ERROR_MORE_DATA);
 
-		Base::auto_buf<LPENUM_SERVICE_STATUS_PROCESSW> enum_svc(dwBufNeed);
+		memory::auto_buf<LPENUM_SERVICE_STATUS_PROCESSW> enum_svc(dwBufNeed);
 		CheckApi(::EnumServicesStatusExW(m_filter->get_read_manager(), SC_ENUM_PROCESS_INFO, (DWORD)m_filter->get_type(), SERVICE_STATE_ALL, (PBYTE)enum_svc.data(), enum_svc.size(), &dwBufNeed, &dwNumberOfService, nullptr, nullptr));
 		clear();
 		for (ULONG i = 0; i < dwNumberOfService; ++i) {
@@ -144,12 +144,12 @@ namespace Ext {
 
 	Services::iterator Services::find(const ustring & name)
 	{
-		return std::find(begin(), end(), name);
+		return simstd::find(begin(), end(), name);
 	}
 
 	Services::const_iterator Services::find(const ustring & name) const
 	{
-		return std::find(begin(), end(), name);
+		return simstd::find(begin(), end(), name);
 	}
 
 	void Services::add(const Service::Create_t & info)
@@ -271,7 +271,7 @@ namespace Ext {
 		set_changed(true);
 		if (!m_batch_started) {
 			LogTrace();
-			notify_all(Base::Message());
+			notify_all(sync::Message());
 		}
 	}
 
@@ -279,7 +279,7 @@ namespace Ext {
 	{
 		LogTrace();
 		m_batch_started = false;
-		notify_all(Base::Message());
+		notify_all(sync::Message());
 	}
 
 	void Services::set_wait_state(bool new_state)

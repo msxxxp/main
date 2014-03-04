@@ -1,14 +1,11 @@
 ﻿#include <libext/service.hpp>
 #include <libext/exception.hpp>
 #include <libext/rc.hpp>
-#include <libbase/std.hpp>
-#include <libbase/bit.hpp>
-#include <libbase/cstr.hpp>
+//#include <libbase/bit.hpp>
+#include <system/cstr.hpp>
 #include <liblog/logger.hpp>
 
 #include <vector>
-
-using namespace Base;
 
 namespace {
 //	const size_t SERVICE_CONFIG_DELAYED_AUTO_START_INFO = 3;
@@ -56,19 +53,19 @@ namespace Ext {
 		return *this;
 	}
 
-	Base::auto_buf<LPQUERY_SERVICE_CONFIGW> Service::QueryConfig() const {
+	memory::auto_buf<LPQUERY_SERVICE_CONFIGW> Service::QueryConfig() const {
 //		LogDebug(L"handle: %p\n", m_hndl);
 		DWORD bytesNeeded = 0;
 		CheckApi(!::QueryServiceConfigW(m_hndl, nullptr, 0, &bytesNeeded) && ::GetLastError() == ERROR_INSUFFICIENT_BUFFER);
-		Base::auto_buf<LPQUERY_SERVICE_CONFIGW> buf(bytesNeeded);
+		memory::auto_buf<LPQUERY_SERVICE_CONFIGW> buf(bytesNeeded);
 		CheckApi(::QueryServiceConfigW(m_hndl, buf, buf.size(), &bytesNeeded));
 		return buf;
 	}
 
-	Base::auto_buf<PBYTE> Service::QueryConfig2(DWORD level) const {
+	memory::auto_buf<PBYTE> Service::QueryConfig2(DWORD level) const {
 		DWORD bytesNeeded = 0;
 		CheckApi(!::QueryServiceConfig2W(m_hndl, level, nullptr, 0, &bytesNeeded) && ::GetLastError() == ERROR_INSUFFICIENT_BUFFER);
-		Base::auto_buf<PBYTE> buf(bytesNeeded);
+		memory::auto_buf<PBYTE> buf(bytesNeeded);
 		CheckApi(::QueryServiceConfig2W(m_hndl, level, buf, buf.size(), &bytesNeeded));
 		return buf;
 	}
@@ -177,15 +174,15 @@ namespace Ext {
 	}
 
 	ustring Service::get_description() const {
-		auto_buf<PBYTE> conf(QueryConfig2(SERVICE_CONFIG_DESCRIPTION));
+		memory::auto_buf<PBYTE> conf(QueryConfig2(SERVICE_CONFIG_DESCRIPTION));
 		LPSERVICE_DESCRIPTIONW lpsd = (LPSERVICE_DESCRIPTIONW)conf.data();
-		return ustring((lpsd->lpDescription) ? lpsd->lpDescription : Base::EMPTY_STR);
+		return ustring((lpsd->lpDescription) ? lpsd->lpDescription : EMPTY_STR);
 	}
 
 	bool Service::get_delayed() const {
 		bool ret = false;
 		try {
-			auto_buf<PBYTE> conf(QueryConfig2(SERVICE_CONFIG_DELAYED_AUTO_START_INFO));
+			memory::auto_buf<PBYTE> conf(QueryConfig2(SERVICE_CONFIG_DELAYED_AUTO_START_INFO));
 			LPSERVICE_DELAYED_AUTO_START_INFO lpsd = (LPSERVICE_DELAYED_AUTO_START_INFO)conf.data();
 			ret = lpsd->fDelayedAutostart;
 		} catch (Ext::AbstractError & e) {
@@ -227,31 +224,31 @@ namespace Ext {
 	}
 
 	Service Service::start(SC_HANDLE scm, PCWSTR name) {
-		return std::move(Service(scm, name, SERVICE_START | SERVICE_QUERY_CONFIG | SERVICE_QUERY_STATUS).start());
+		return simstd::move(Service(scm, name, SERVICE_START | SERVICE_QUERY_CONFIG | SERVICE_QUERY_STATUS).start());
 	}
 
 	Service Service::stop(SC_HANDLE scm, PCWSTR name) {
-		return std::move(Service(scm, name, SERVICE_STOP | SERVICE_QUERY_CONFIG | SERVICE_QUERY_STATUS).stop());
+		return simstd::move(Service(scm, name, SERVICE_STOP | SERVICE_QUERY_CONFIG | SERVICE_QUERY_STATUS).stop());
 	}
 
 	Service Service::restart(SC_HANDLE scm, PCWSTR name) {
-		return std::move(Service(scm, name, SERVICE_STOP | SERVICE_START | SERVICE_QUERY_CONFIG | SERVICE_QUERY_STATUS).stop().wait_state(State_t::STOPPED, 30000).start());
+		return simstd::move(Service(scm, name, SERVICE_STOP | SERVICE_START | SERVICE_QUERY_CONFIG | SERVICE_QUERY_STATUS).stop().wait_state(State_t::STOPPED, 30000).start());
 	}
 
 	Service Service::contin(SC_HANDLE scm, PCWSTR name) {
-		return std::move(Service(scm, name, SERVICE_START | SERVICE_QUERY_CONFIG | SERVICE_QUERY_STATUS).contin());
+		return simstd::move(Service(scm, name, SERVICE_START | SERVICE_QUERY_CONFIG | SERVICE_QUERY_STATUS).contin());
 	}
 
 	Service Service::pause(SC_HANDLE scm, PCWSTR name) {
-		return std::move(Service(scm, name, SERVICE_STOP | SERVICE_QUERY_CONFIG | SERVICE_QUERY_STATUS).pause());
+		return simstd::move(Service(scm, name, SERVICE_STOP | SERVICE_QUERY_CONFIG | SERVICE_QUERY_STATUS).pause());
 	}
 
 	Service Service::set_config(SC_HANDLE scm, PCWSTR name, const Service::Config_t & info) {
-		return std::move(Service(scm, name, SERVICE_CHANGE_CONFIG | SERVICE_QUERY_CONFIG | SERVICE_QUERY_STATUS).set_config(info));
+		return simstd::move(Service(scm, name, SERVICE_CHANGE_CONFIG | SERVICE_QUERY_CONFIG | SERVICE_QUERY_STATUS).set_config(info));
 	}
 
 	Service Service::set_logon(SC_HANDLE scm, PCWSTR name, const Service::Logon_t & info) {
-		return std::move(Service(scm, name, SERVICE_CHANGE_CONFIG | SERVICE_QUERY_CONFIG | SERVICE_QUERY_STATUS).set_logon(info));
+		return simstd::move(Service(scm, name, SERVICE_CHANGE_CONFIG | SERVICE_QUERY_CONFIG | SERVICE_QUERY_STATUS).set_logon(info));
 	}
 
 	Service::Status_t Service::get_status(SC_HANDLE scm, PCWSTR name) {

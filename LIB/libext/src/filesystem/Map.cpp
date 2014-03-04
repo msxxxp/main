@@ -1,12 +1,12 @@
-#include <libbase/std.hpp>
-#include <libbase/path.hpp>
-#include <libbase/cstr.hpp>
-#include <libbase/memory.hpp>
+#include <system/configure.hpp>
+#include <system/cstr.hpp>
+#include <system/fsys.hpp>
+#include <system/memory.hpp>
 #include <libext/dll.hpp>
 #include <libext/filesystem.hpp>
 #include <libext/exception.hpp>
 
-namespace Fsys {
+namespace fsys {
 
 	namespace File {
 
@@ -50,7 +50,7 @@ namespace Fsys {
 				if ((m_impl->m_seq->size() - m_impl->m_offs) < m_impl->m_seq->get_frame())
 					m_impl->m_size = m_impl->m_seq->size() - m_impl->m_offs;
 				ACCESS_MASK amask = (m_impl->m_seq->is_writeble()) ? FILE_MAP_WRITE : FILE_MAP_READ;
-				m_impl->m_data = ::MapViewOfFile(m_impl->m_seq->map(), amask, Base::high_part_64(m_impl->m_offs), Base::low_part_64(m_impl->m_offs), m_impl->m_size);
+				m_impl->m_data = ::MapViewOfFile(m_impl->m_seq->map(), amask, high_part_64(m_impl->m_offs), low_part_64(m_impl->m_offs), m_impl->m_size);
 				CheckApi(m_impl->m_data != nullptr);
 				m_impl->m_offs += m_impl->m_size;
 			}
@@ -111,8 +111,8 @@ namespace Fsys {
 		}
 
 		Map::Map(const Facade & wf, size_type size, bool write) :
-			m_size(std::min(wf.size(), size)), m_frame(check_frame(DEFAULT_FRAME)), m_map(CheckHandle(::CreateFileMapping(wf, nullptr, (write) ? PAGE_READWRITE : PAGE_READONLY,
-					Base::high_part_64(m_size), Base::low_part_64(m_size), nullptr))),
+			m_size(simstd::min(wf.size(), size)), m_frame(check_frame(DEFAULT_FRAME)), m_map(CheckHandle(::CreateFileMapping(wf, nullptr, (write) ? PAGE_READWRITE : PAGE_READONLY,
+					high_part_64(m_size), low_part_64(m_size), nullptr))),
 			m_write(write) {
 			}
 
@@ -157,7 +157,7 @@ namespace Fsys {
 		{
 			static SYSTEM_INFO info(get_system_info());
 			size_type ret = (!size || size % info.dwAllocationGranularity) ? (size / info.dwAllocationGranularity + 1) * info.dwAllocationGranularity : size;
-			return std::min(m_size, ret);
+			return simstd::min(m_size, ret);
 		}
 
 	}

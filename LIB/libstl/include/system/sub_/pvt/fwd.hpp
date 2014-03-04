@@ -6,13 +6,11 @@
 #else
 
 	#ifdef _MSC_VER
-		#include <string>
+//		#include <string>
 	#else
-		#include <iosfwd>
+//		#include <iosfwd>
 	#endif
 
-	typedef std::string astring;
-	typedef std::wstring ustring;
 #endif
 
 #endif

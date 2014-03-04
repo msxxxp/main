@@ -10,6 +10,9 @@
 
 #include <lm.h>
 
+#include <simstd/algorithm>
+#include <simstd/string>
+
 namespace Ext {
 
 	///======================================================================================= Group
@@ -177,7 +180,7 @@ namespace Ext {
 
 	WinGroups::iterator WinGroups::find(const ustring & name)
 	{
-		return std::find(begin(), end(), name);
+		return simstd::find(begin(), end(), name);
 	}
 
 	void WinGroups::add(const ustring & name)

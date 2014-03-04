@@ -2,6 +2,7 @@
 #define LIBSTL_EXTRA_PATTERN_UNCOPYABLE_HPP_
 
 namespace pattern {
+
 	class Uncopyable {
 	protected:
 		~Uncopyable() = default;
@@ -9,18 +10,19 @@ namespace pattern {
 		Uncopyable() = default;
 
 	private:
-#ifdef _MSC_VER
-		Uncopyable(const Uncopyable &);
-#else
+//#ifdef _MSC_VER
+//		Uncopyable(const Uncopyable &);
+//#else
 		Uncopyable(const Uncopyable &) = delete;
-#endif
+//#endif
 
-#ifdef _MSC_VER
-		Uncopyable & operator = (const Uncopyable &);
-#else
+//#ifdef _MSC_VER
+//		Uncopyable & operator = (const Uncopyable &);
+//#else
 		Uncopyable & operator = (const Uncopyable &) = delete;
-#endif
+//#endif
 	};
+
 }
 
 #endif

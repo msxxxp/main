@@ -82,7 +82,7 @@ namespace bits {
 			while (flag) {
 				if (bits::Flags::check(in, (Type)flag)) {
 					wchar_t buf[64];
-					Cstr::convert_num(buf, flag);
+					cstr::convert_num(buf, flag);
 					String::Inplace::add_word(Result, buf, L",");
 				}
 				flag >>= 1;

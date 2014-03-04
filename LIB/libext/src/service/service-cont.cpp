@@ -2,9 +2,7 @@
 #include <libext/service.hpp>
 #include <libext/exception.hpp>
 
-#include <libbase/console.hpp>
-
-using namespace Base;
+#include <system/console.hpp>
 
 namespace Ext {
 
@@ -99,11 +97,11 @@ namespace Ext {
 //	}
 //
 //	WinServices::iterator WinServices::find(const ustring & name) {
-//		return std::find(begin(), end(), name);
+//		return simstd::find(begin(), end(), name);
 //	}
 //
 //	WinServices::const_iterator WinServices::find(const ustring & name) const {
-//		return std::find(begin(), end(), name);
+//		return simstd::find(begin(), end(), name);
 //	}
 //
 //	void WinServices::add(const ustring & /*name*/, const ustring & /*path*/) {

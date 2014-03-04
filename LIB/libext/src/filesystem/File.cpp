@@ -1,8 +1,6 @@
-﻿#include <libbase/std.hpp>
-#include <libbase/filesystem.hpp>
-#include <libbase/path.hpp>
-#include <libbase/cstr.hpp>
-#include <libbase/memory.hpp>
+﻿#include <system/fsys.hpp>
+#include <system/cstr.hpp>
+#include <system/memory.hpp>
 #include <liblog/logger.hpp>
 #include <libext/dll.hpp>
 #include <libext/filesystem.hpp>
@@ -10,12 +8,12 @@
 
 #include <wchar.h>
 
-namespace Fsys {
+namespace fsys {
 
 	namespace File {
 		bool is_exist(PCWSTR path)
 		{
-			bool ret = Fsys::is_exist(path) && Fsys::is_file(path);
+			bool ret = fsys::is_exist(path) && fsys::is_file(path);
 			LogNoise(L"'%s' -> %d\n", path, ret);
 			return ret;
 		}
@@ -24,7 +22,7 @@ namespace Fsys {
 		{
 			WIN32_FILE_ATTRIBUTE_DATA info;
 			CheckApi(::GetFileAttributesExW(path, GetFileExInfoStandard, &info));
-			return Base::make_uint64(info.nFileSizeHigh, info.nFileSizeLow);
+			return make_uint64(info.nFileSizeHigh, info.nFileSizeLow);
 		}
 
 		uint64_t get_size(HANDLE hFile)
@@ -50,17 +48,17 @@ namespace Fsys {
 
 		void create(PCWSTR path, LPSECURITY_ATTRIBUTES lpsa)
 		{
-			Base::auto_close<HANDLE> file(CheckHandle(::CreateFileW(path, 0, 0, lpsa,
+			memory::auto_close<HANDLE> file(CheckHandle(::CreateFileW(path, 0, 0, lpsa,
 					CREATE_NEW, FILE_ATTRIBUTE_NORMAL, nullptr)));
 		}
 
 		void create(PCWSTR path, PCSTR content, LPSECURITY_ATTRIBUTES lpsa)
 		{
-			Base::auto_close<HANDLE> file(CheckHandle(::CreateFileW(path, GENERIC_WRITE, 0, lpsa,
+			memory::auto_close<HANDLE> file(CheckHandle(::CreateFileW(path, GENERIC_WRITE, 0, lpsa,
 					CREATE_NEW, FILE_ATTRIBUTE_NORMAL, nullptr)));
 			DWORD bytesWritten = 0;
 			DWORD bytesToWrite = Cstr::length(content);
-			CheckApi(::WriteFile(file, (PCVOID )content, bytesToWrite, &bytesWritten, nullptr) && bytesToWrite == bytesWritten);
+			CheckApi(::WriteFile(file, (const void*)content, bytesToWrite, &bytesWritten, nullptr) && bytesToWrite == bytesWritten);
 		}
 
 		void create_hardlink(PCWSTR path, PCWSTR new_path)
@@ -75,7 +73,7 @@ namespace Fsys {
 
 		void read(PCWSTR path, astring &buf)
 		{
-			Base::auto_close<HANDLE> file(::CreateFileW(path, GENERIC_READ, 0, nullptr, OPEN_EXISTING,
+			memory::auto_close<HANDLE> file(::CreateFileW(path, GENERIC_READ, 0, nullptr, OPEN_EXISTING,
 			FILE_FLAG_OPEN_REPARSE_POINT | FILE_FLAG_BACKUP_SEMANTICS,
 			                                            nullptr));
 			if (file != INVALID_HANDLE_VALUE) {
@@ -87,7 +85,7 @@ namespace Fsys {
 
 		uint64_t get_inode(PCWSTR path, size_t * nlink)
 		{
-			Base::auto_close<HANDLE> file(CheckHandle(::CreateFileW(path, FILE_READ_ATTRIBUTES,
+			memory::auto_close<HANDLE> file(CheckHandle(::CreateFileW(path, FILE_READ_ATTRIBUTES,
 					FILE_SHARE_READ | FILE_SHARE_WRITE | FILE_SHARE_DELETE,
 					nullptr, OPEN_EXISTING,
 					FILE_FLAG_OPEN_REPARSE_POINT | FILE_FLAG_BACKUP_SEMANTICS,
@@ -96,7 +94,7 @@ namespace Fsys {
 			CheckApi(::GetFileInformationByHandle(file, &info));
 			if (nlink)
 				*nlink = info.nNumberOfLinks;
-			return Base::make_uint64(info.nFileIndexHigh, info.nFileIndexLow);
+			return make_uint64(info.nFileIndexHigh, info.nFileIndexLow);
 		}
 
 		size_t write(HANDLE file, PCVOID data, size_t bytesToWrite)
@@ -109,7 +107,7 @@ namespace Fsys {
 		void write(PCWSTR path, PCVOID data, size_t bytesToWrite, bool rewrite)
 		{
 			DWORD creationDisposition = rewrite ? CREATE_ALWAYS : CREATE_NEW;
-			Base::auto_close<HANDLE> file(CheckHandle(::CreateFileW(path, GENERIC_WRITE, 0, nullptr,
+			memory::auto_close<HANDLE> file(CheckHandle(::CreateFileW(path, GENERIC_WRITE, 0, nullptr,
 					creationDisposition, FILE_ATTRIBUTE_NORMAL, nullptr)));
 			write(file, data, bytesToWrite);
 		}

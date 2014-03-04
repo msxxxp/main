@@ -1,7 +1,9 @@
 ﻿#ifndef WIN_NET_AUTH_HPP
 #define WIN_NET_AUTH_HPP
 
-#include <libbase/std.hpp>
+#include <system/configure.hpp>
+
+#include <simstd/iosfwd>
 
 #include <wincred.h>
 

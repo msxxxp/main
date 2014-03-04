@@ -1,7 +1,7 @@
 #ifndef LIBSTL_SYSTEM_SYNC_MUTEX_HPP_
 #define LIBSTL_SYSTEM_SYNC_MUTEX_HPP_
 
-#include <extra/pattern.hpp>
+#include <system/sync.hpp>
 
 namespace sync {
 

@@ -1,12 +1,12 @@
 ﻿#include <libext/filesystem.hpp>
 #include <libext/exception.hpp>
 //#include <libext/priv.hpp>
-#include <libbase/std.hpp>
-#include <libbase/memory.hpp>
-#include <libbase/path.hpp>
-#include <libbase/cstr.hpp>
+#include <system/memory.hpp>
+#include <system/cstr.hpp>
 
-namespace Fsys {
+#include <simstd/string>
+
+namespace fsys {
 
 //#ifndef SE_CREATE_SYMBOLIC_LINK_NAME
 //#define SE_CREATE_SYMBOLIC_LINK_NAME      L"SeCreateSymbolicLinkPrivilege"
@@ -84,11 +84,11 @@ namespace Fsys {
 
 	REPARSE_BUF::REPARSE_BUF(PCWSTR path)
 	{
-		DWORD attr = Fsys::get_attr(path);
+		DWORD attr = fsys::get_attr(path);
 		if (!(attr & FILE_ATTRIBUTE_REPARSE_POINT)) {
 			CheckApiError(ERROR_NOT_A_REPARSE_POINT);
 		}
-		Base::auto_close<HANDLE> link(CheckHandle(OpenLinkHandle(path)));
+		memory::auto_close<HANDLE> link(CheckHandle(OpenLinkHandle(path)));
 		DWORD returned;
 		CheckApi(::DeviceIoControl(link, FSCTL_GET_REPARSE_POINT, nullptr, 0, buf, size(),
 		                           &returned, nullptr) && IsReparseTagValid(rdb.ReparseTag));
@@ -132,17 +132,17 @@ namespace Fsys {
 
 	void REPARSE_BUF::set_to(PCWSTR path) const
 	{
-		DWORD attr = Fsys::get_attr(path);
+		DWORD attr = fsys::get_attr(path);
 		if (attr & FILE_ATTRIBUTE_READONLY) {
-			Fsys::set_attr(path, attr & ~FILE_ATTRIBUTE_READONLY);
+			fsys::set_attr(path, attr & ~FILE_ATTRIBUTE_READONLY);
 		}
 
-		Base::auto_close<HANDLE> hLink(CheckHandle(OpenLinkHandle(path, GENERIC_WRITE)));
+		memory::auto_close<HANDLE> hLink(CheckHandle(OpenLinkHandle(path, GENERIC_WRITE)));
 		DWORD dwBytesReturned;
 		CheckApi(::DeviceIoControl(hLink, FSCTL_SET_REPARSE_POINT, (PVOID)&rdb, rdb.ReparseDataLength + REPARSE_DATA_BUFFER_HEADER_SIZE, nullptr, 0, &dwBytesReturned, nullptr));
 
 		if (attr & FILE_ATTRIBUTE_READONLY) {
-			Fsys::set_attr(path, attr);
+			fsys::set_attr(path, attr);
 		}
 	}
 
@@ -158,7 +158,7 @@ namespace Fsys {
 
 	size_t REPARSE_BUF::size() const
 	{
-		return Base::lengthof(buf);
+		return lengthof(buf);
 	}
 
 	PREPARSE_DATA_BUFFER REPARSE_BUF::operator ->() const
@@ -195,23 +195,23 @@ namespace Fsys {
 				File::create(to);
 			}
 			rdb.set_to(to);
-			Fsys::set_attr(to, stat.attr());
+			fsys::set_attr(to, stat.attr());
 		}
 
 		void create_sym(PCWSTR path, PCWSTR new_path)
 		{
-			if (Fsys::is_dir(path))
+			if (fsys::is_dir(path))
 				Directory::create(new_path);
 			else
 				File::create(new_path);
 
-			Base::auto_close<HANDLE> hLink(CheckHandle(OpenLinkHandle(new_path, GENERIC_WRITE)));
-			ustring SubstituteName(ustring(Base::REPARSE_PREFIX) + Base::Path::remove_prefix(path));
+			memory::auto_close<HANDLE> hLink(CheckHandle(OpenLinkHandle(new_path, GENERIC_WRITE)));
+			ustring SubstituteName(ustring(REPARSE_PREFIX) + fsys::Path::remove_prefix(path));
 			REPARSE_BUF rdb(IO_REPARSE_TAG_SYMLINK, path, Cstr::length(path), SubstituteName.c_str(), SubstituteName.size());
 			try {
 				rdb.set_to(new_path);
 			} catch (...) {
-				Fsys::del_nt(new_path);
+				fsys::del_nt(new_path);
 				throw;
 			}
 		}
@@ -219,8 +219,8 @@ namespace Fsys {
 		void create_junc(PCWSTR path, PCWSTR new_path)
 		{
 			Directory::create(new_path);
-			Base::auto_close<HANDLE> hLink(CheckHandle(OpenLinkHandle(new_path, GENERIC_WRITE)));
-			ustring SubstituteName(ustring(Base::REPARSE_PREFIX) + Base::Path::remove_prefix(path));
+			memory::auto_close<HANDLE> hLink(CheckHandle(OpenLinkHandle(new_path, GENERIC_WRITE)));
+			ustring SubstituteName(ustring(REPARSE_PREFIX) + fsys::Path::remove_prefix(path));
 			REPARSE_BUF rdb(IO_REPARSE_TAG_MOUNT_POINT, path, Cstr::length(path), SubstituteName.c_str(), SubstituteName.size());
 			try {
 				rdb.set_to(new_path);
@@ -232,33 +232,33 @@ namespace Fsys {
 
 		void break_link(PCWSTR path)
 		{
-			DWORD attr = Fsys::get_attr(path);
+			DWORD attr = fsys::get_attr(path);
 			if (!(attr & FILE_ATTRIBUTE_REPARSE_POINT)) {
 				CheckApiError(ERROR_NOT_A_REPARSE_POINT);
 			}
 
 			REPARSE_BUF rdb(path);
 			if (attr & FILE_ATTRIBUTE_READONLY) {
-				Fsys::set_attr(path, attr & ~FILE_ATTRIBUTE_READONLY);
+				fsys::set_attr(path, attr & ~FILE_ATTRIBUTE_READONLY);
 			}
 
-			Base::auto_close<HANDLE> hLink(CheckHandle(OpenLinkHandle(path, GENERIC_WRITE)));
+			memory::auto_close<HANDLE> hLink(CheckHandle(OpenLinkHandle(path, GENERIC_WRITE)));
 
 			REPARSE_GUID_DATA_BUFFER rgdb;
-			Memory::zero(rgdb);
+			memory::zero(rgdb);
 			rgdb.ReparseTag = rdb->ReparseTag;
 			DWORD dwBytesReturned;
 			CheckApi(::DeviceIoControl(hLink, FSCTL_DELETE_REPARSE_POINT, &rgdb, REPARSE_GUID_DATA_BUFFER_HEADER_SIZE, nullptr, 0, &dwBytesReturned, 0));
 
 			if (attr & FILE_ATTRIBUTE_READONLY) {
-				Fsys::set_attr(path, attr);
+				fsys::set_attr(path, attr);
 			}
 		}
 
 		void del(PCWSTR path)
 		{
 			break_link(path);
-			Fsys::del(path);
+			fsys::del(path);
 		}
 
 		ustring read(PCWSTR path)

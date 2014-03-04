@@ -3,6 +3,8 @@
 
 #include <system/configure.hpp>
 
+#include <simstd/iosfwd>
+
 #include <system/sub_string/convert.hpp>
 #include <system/sub_string/format.hpp>
 #include <system/sub_string/string.hpp>

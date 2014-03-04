@@ -20,7 +20,7 @@
 //	{
 //		const_pointer ptr = mstr;
 //		while (ptr && *ptr) {
-//			ptr += (Cstr::length(ptr) + 1);
+//			ptr += (cstr::length(ptr) + 1);
 //			++m_size;
 //		}
 //		m_capa = ptr - mstr;
@@ -57,12 +57,12 @@
 //
 //	void mstring::push_back(const_pointer str)
 //	{
-//		if (!Cstr::is_empty(str)) {
-//			size_t size = Cstr::length(str) + 1;
+//		if (!cstr::is_empty(str)) {
+//			size_t size = cstr::length(str) + 1;
 //			size_t new_index = m_capa;
 //			m_capa += size;
 //			Memory::realloc(m_data, sizeof(value_type) * (m_capa + 1));
-//			Cstr::char_traits<value_type>::copy(&m_data[new_index], str, size);
+//			cstr::char_traits<value_type>::copy(&m_data[new_index], str, size);
 //			m_data[m_capa] = static_cast<value_type>(0);
 //			++m_size;
 //		}
@@ -88,7 +88,7 @@
 //		auto ptr = c_str();
 //		size_t cnt = 0;
 //		while (*ptr && (cnt++ < index)) {
-//			ptr += (Cstr::length(ptr) + 1);
+//			ptr += (cstr::length(ptr) + 1);
 //		}
 //		return ptr;
 //	}
@@ -105,7 +105,7 @@
 //	{
 //		if (m_capa) {
 //			m_data = Memory::calloc<pointer>(m_capa + 1);
-//			Cstr::char_traits<value_type>::copy(m_data, mstr, m_capa);
+//			cstr::char_traits<value_type>::copy(m_data, mstr, m_capa);
 //			m_data[m_capa] = static_cast<value_type>(0);
 //		}
 //	}

@@ -12,12 +12,12 @@ namespace crt {
 }
 
 #ifdef NDEBUG
-#	define assert(_Expression) ((void)0)
+#	define assert(_Expression_) ((void)0)
 #else
-#	define assert(_Expression) \
+#	define assert(_Expression_) \
            (void) \
-           ((!!(_Expression)) || \
-           (crt::assrt(#_Expression, __FILE__, __LINE__), 0))
+           ((!!(_Expression_)) || \
+           (crt::assrt(#_Expression_, __FILE__, __LINE__), 0))
 #endif
 
 #endif

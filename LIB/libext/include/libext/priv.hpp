@@ -1,13 +1,15 @@
 #ifndef _WIN_DEF_PRIV_H_
 #define _WIN_DEF_PRIV_H_
 
-#include <libbase/std.hpp>
-#include <libbase/memory.hpp>
+#include <system/configure.hpp>
+#include <system/memory.hpp>
+#include <simstd/iosfwd>
+#include <extra/pattern.hpp>
 
 namespace Ext {
 
 	///==================================================================================== WinToken
-	struct WinToken: private Base::Uncopyable {
+	struct WinToken: private pattern::Uncopyable {
 		WinToken(ACCESS_MASK mask = TOKEN_QUERY);
 
 		WinToken(HANDLE process, ACCESS_MASK mask);
@@ -20,7 +22,7 @@ namespace Ext {
 		static bool check_membership(PSID sid, HANDLE token = nullptr);
 
 	private:
-		Base::auto_close<HANDLE> m_token;
+		memory::auto_close<HANDLE> m_token;
 	};
 
 	///===================================================================================== WinPriv
@@ -62,7 +64,7 @@ namespace Ext {
 	}
 
 	///=================================================================================== Privilege
-	struct Privilege: private Base::Uncopyable {
+	struct Privilege: private pattern::Uncopyable {
 		~Privilege();
 
 		explicit Privilege(PCWSTR priv_name);

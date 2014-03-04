@@ -1,7 +1,7 @@
 ﻿#include <libext/priv.hpp>
 #include <libext/exception.hpp>
 
-using namespace Base;
+#include <simstd/string>
 
 namespace Ext {
 
@@ -43,7 +43,7 @@ namespace Ext {
 			::GetTokenInformation(token, TokenPrivileges, nullptr, 0, &size);
 			CheckApi(::GetLastError() == ERROR_INSUFFICIENT_BUFFER);
 
-			auto_buf<PTOKEN_PRIVILEGES> ptp(size);
+			memory::auto_buf<PTOKEN_PRIVILEGES> ptp(size);
 			CheckApi(::GetTokenInformation(token, TokenPrivileges, ptp, ptp.size(), &size));
 
 			for (DWORD i = 0; i < ptp->PrivilegeCount; ++i) {
@@ -73,7 +73,7 @@ namespace Ext {
 		{
 			BOOL ret = false;
 			PRIVILEGE_SET ps;
-			Memory::zero(ps);
+			memory::zero(ps);
 			ps.PrivilegeCount = 1;
 			ps.Privilege[0].Luid = priv;
 
@@ -99,7 +99,7 @@ namespace Ext {
 		void modify(HANDLE token, const LUID & priv, bool enable)
 		{
 			TOKEN_PRIVILEGES tp;
-			Memory::zero(tp);
+			memory::zero(tp);
 			tp.PrivilegeCount = 1;
 			tp.Privileges[0].Luid = priv;
 			tp.Privileges[0].Attributes = (enable) ? SE_PRIVILEGE_ENABLED : 0;
@@ -126,7 +126,7 @@ namespace Ext {
 			DWORD size = 0, lang = 0;
 			::LookupPrivilegeDisplayNameW(nullptr, priv_name, nullptr, &size, &lang);
 			CheckApi(::GetLastError() == ERROR_INSUFFICIENT_BUFFER);
-			auto_array<wchar_t> name(size);
+			memory::auto_array<wchar_t> name(size);
 			CheckApi(::LookupPrivilegeDisplayNameW(nullptr, priv_name, name, &size, &lang));
 			return ustring(name);
 		}
@@ -136,7 +136,7 @@ namespace Ext {
 	Privilege::~Privilege()
 	{
 		if (m_disable) {
-			auto_close<HANDLE> token;
+			memory::auto_close<HANDLE> token;
 			if (::OpenProcessToken(::GetCurrentProcess(), TOKEN_ADJUST_PRIVILEGES, &token)) {
 				m_tp.Privileges[0].Attributes = 0;
 				::AdjustTokenPrivileges(token, false, &m_tp, sizeof(m_tp), nullptr, nullptr);
@@ -147,11 +147,11 @@ namespace Ext {
 	Privilege::Privilege(PCWSTR priv_name) :
 		m_disable(false)
 	{
-		auto_close<HANDLE> token;
+		memory::auto_close<HANDLE> token;
 		if (::OpenProcessToken(::GetCurrentProcess(), TOKEN_QUERY | TOKEN_ADJUST_PRIVILEGES, &token)) {
 			BOOL Result = false;
 			PRIVILEGE_SET ps;
-			Memory::zero(ps);
+			memory::zero(ps);
 			ps.PrivilegeCount = 1;
 			ps.Privilege[0].Luid = WinPriv::as_luid(priv_name);
 			if (::PrivilegeCheck(token, &ps, &Result) && !Result) {

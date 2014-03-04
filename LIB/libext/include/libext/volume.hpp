@@ -1,7 +1,7 @@
 #ifndef _WIN_NET_VOLUME_H_
 #define _WIN_NET_VOLUME_H_
 
-#include <libbase/std.hpp>
+#include <system/configure.hpp>
 
 namespace Ext {
 
@@ -29,7 +29,7 @@ ustring GetVolumeByFileName(PCWSTR fileName);
 
 void GetDriveGeometry(PCWSTR name, DISK_GEOMETRY &g);
 
-void GetVolumeDiskExtents(PCWSTR name, Base::auto_buf<PVOLUME_DISK_EXTENTS> &v);
+void GetVolumeDiskExtents(PCWSTR name, memory::auto_buf<PVOLUME_DISK_EXTENTS> &v);
 
 ustring GetDrives();
 

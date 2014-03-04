@@ -1,6 +1,8 @@
 ﻿#include <libext/sid.hpp>
 #include <libext/exception.hpp>
 
+#include <simstd/string>
+
 namespace Ext {
 
 	ustring Sid::get_full_name() const {
@@ -12,7 +14,7 @@ namespace Ext {
 		get_name_dom(sid, nam, dom, srv);
 		if (!dom.empty() && !nam.empty()) {
 			dom.reserve(dom.size() + nam.size() + 1);
-			dom += Base::PATH_SEPARATOR;
+			dom += PATH_SEPARATOR;
 			dom += nam;
 			return dom;
 		}

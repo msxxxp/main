@@ -1,14 +1,17 @@
 ﻿#ifndef _LIBEXT_FILESYSTEM_HPP
 #define _LIBEXT_FILESYSTEM_HPP
 
-#include <libbase/std.hpp>
-#include <libbase/filesystem.hpp>
+#include <system/configure.hpp>
+#include <system/fsys.hpp>
+#include <system/memory.hpp>
+#include <extra/pattern.hpp>
 #include <liblog/logger.hpp>
 
-#include <memory>
+#include <simstd/memory>
+#include <simstd/string>
 
-namespace Fsys {
-	Logger::Module_i * get_logger_module();
+namespace fsys {
+	logger::Module_i * get_logger_module();
 
 	namespace File {
 		struct Facade;
@@ -85,7 +88,7 @@ namespace Fsys {
 
 	HANDLE DuplicateHandle(HANDLE hndl);
 
-	struct DeleteCmd: public Base::Command_p {
+	struct DeleteCmd: public pattern::Command {
 		DeleteCmd(const ustring &path):
 			m_path(path) {
 		}
@@ -139,17 +142,17 @@ namespace Fsys {
 
 		uint64_t ctime() const
 		{
-			return Base::make_uint64(ftCreationTime.dwHighDateTime, ftCreationTime.dwLowDateTime);
+			return make_uint64(ftCreationTime.dwHighDateTime, ftCreationTime.dwLowDateTime);
 		}
 
 		uint64_t atime() const
 		{
-			return Base::make_uint64(ftLastAccessTime.dwHighDateTime, ftLastAccessTime.dwLowDateTime);
+			return make_uint64(ftLastAccessTime.dwHighDateTime, ftLastAccessTime.dwLowDateTime);
 		}
 
 		uint64_t mtime() const
 		{
-			return Base::make_uint64(ftLastWriteTime.dwHighDateTime, ftLastWriteTime.dwLowDateTime);
+			return make_uint64(ftLastWriteTime.dwHighDateTime, ftLastWriteTime.dwLowDateTime);
 		}
 
 		FILETIME ctime_ft() const
@@ -169,7 +172,7 @@ namespace Fsys {
 
 		uint64_t size() const
 		{
-			return Base::make_uint64(nFileSizeHigh, nFileSizeLow);
+			return make_uint64(nFileSizeHigh, nFileSizeLow);
 		}
 
 		DWORD device() const
@@ -184,22 +187,22 @@ namespace Fsys {
 
 		int64_t inode() const
 		{
-			return Base::make_uint64(nFileIndexHigh, nFileIndexLow) & 0x0000FFFFFFFFFFFFULL;
+			return make_uint64(nFileIndexHigh, nFileIndexLow) & 0x0000FFFFFFFFFFFFULL;
 		}
 
 		bool is_dir() const
 		{
-			return Fsys::is_dir(dwFileAttributes);
+			return fsys::is_dir(dwFileAttributes);
 		}
 
 		bool is_file() const
 		{
-			return Fsys::is_file(dwFileAttributes);
+			return fsys::is_file(dwFileAttributes);
 		}
 
 		bool is_lnk() const
 		{
-			return Fsys::is_link(dwFileAttributes);
+			return fsys::is_link(dwFileAttributes);
 		}
 
 		bool operator ==(const Stat & rhs) const
@@ -210,7 +213,7 @@ namespace Fsys {
 	protected:
 		Stat()
 		{
-			Memory::zero((BY_HANDLE_FILE_INFORMATION*)this, sizeof(BY_HANDLE_FILE_INFORMATION));
+			memory::zero((BY_HANDLE_FILE_INFORMATION*)this, sizeof(BY_HANDLE_FILE_INFORMATION));
 		}
 
 		void refresh(HANDLE hndl);
@@ -228,7 +231,7 @@ namespace Fsys {
 	}
 
 	///==================================================================================== Sequence
-	class Sequence: private Base::Uncopyable {
+	class Sequence: private pattern::Uncopyable {
 		typedef Sequence this_type;
 		class const_input_iterator;
 
@@ -243,7 +246,7 @@ namespace Fsys {
 
 			uint64_t size() const
 			{
-				return Base::make_uint64(m_stat.nFileSizeHigh, m_stat.nFileSizeLow);
+				return make_uint64(m_stat.nFileSizeHigh, m_stat.nFileSizeLow);
 			}
 
 			size_t attr() const
@@ -268,17 +271,17 @@ namespace Fsys {
 
 			bool is_file() const
 			{
-				return !Fsys::is_dir(m_stat.dwFileAttributes);
+				return !fsys::is_dir(m_stat.dwFileAttributes);
 			}
 
 			bool is_dir() const
 			{
-				return Fsys::is_dir(m_stat.dwFileAttributes);
+				return fsys::is_dir(m_stat.dwFileAttributes);
 			}
 
 			bool is_link() const
 			{
-				return Fsys::is_link(m_stat.dwFileAttributes);
+				return fsys::is_link(m_stat.dwFileAttributes);
 			}
 
 		private:
@@ -365,7 +368,7 @@ namespace Fsys {
 			FindStat         m_stat;
 		};
 
-		std::shared_ptr<impl> m_impl;
+		simstd::shared_ptr<impl> m_impl;
 
 		friend class Sequence;
 	};
@@ -416,45 +419,45 @@ namespace Fsys {
 
 		uint64_t get_inode(PCWSTR path, size_t * nlink);
 
-		size_t write(HANDLE file, PCVOID data, size_t bytesToWrite);
+		size_t write(HANDLE file, const void* data, size_t bytesToWrite);
 		inline size_t write(HANDLE file, const ustring & data) {
-			return write(file, (PCVOID)data.c_str(), data.size() * sizeof(wchar_t));
+			return write(file, (const void*)data.c_str(), data.size() * sizeof(wchar_t));
 		}
 
-		void write(PCWSTR path, PCVOID data, size_t bytesToWrite, bool rewrite = false);
+		void write(PCWSTR path, const void* data, size_t bytesToWrite, bool rewrite = false);
 		inline void write(PCWSTR path, PCWSTR data, size_t size, bool rewrite = false) {
 			write(path, data, size * sizeof(wchar_t), rewrite);
 		}
 		inline void write(const ustring & path, const ustring & data, bool rewrite = false) {
-			write(path.c_str(), (PCVOID)data.c_str(), data.size() * sizeof(wchar_t), rewrite);
+			write(path.c_str(), (const void*)data.c_str(), data.size() * sizeof(wchar_t), rewrite);
 		}
 
-		struct CopyCmd: public Base::Command_p {
+		struct CopyCmd: public pattern::Command {
 			CopyCmd(const ustring & path, const ustring & dest):
 				m_path(path),
 				m_dest(dest) {
 			}
 			bool Execute() const {
-				return Fsys::File::copy(m_path.c_str(), m_dest.c_str());
+				return fsys::File::copy(m_path.c_str(), m_dest.c_str());
 			}
 		private:
 			ustring m_path, m_dest;
 		};
 
-		struct MoveCmd: public Base::Command_p {
+		struct MoveCmd: public pattern::Command {
 			MoveCmd(const ustring & path, const ustring & dest):
 				m_path(path),
 				m_dest(dest) {
 			}
 			bool Execute() const {
-				return Fsys::File::move(m_path.c_str(), m_dest.c_str());
+				return fsys::File::move(m_path.c_str(), m_dest.c_str());
 			}
 		private:
 			ustring m_path, m_dest;
 		};
 
 		///=========================================================================================
-		struct Facade: private Fsys::Stat, private Base::Uncopyable {
+		struct Facade: private fsys::Stat, private pattern::Uncopyable {
 			~Facade();
 
 			explicit Facade(HANDLE hndl);
@@ -471,9 +474,9 @@ namespace Fsys {
 
 			bool read_nt(PVOID buf, size_t size, DWORD & read);
 
-			DWORD write(PCVOID buf, size_t size);
+			DWORD write(const void* buf, size_t size);
 
-			bool write_nt(PCVOID buf, size_t size, DWORD & written);
+			bool write_nt(const void* buf, size_t size, DWORD & written);
 
 			void set_attr(DWORD at);
 
@@ -533,7 +536,7 @@ namespace Fsys {
 
 		///=============================================================================== File::Map
 		/// Отображение файла в память блоками
-		class Map: private Base::Uncopyable {
+		class Map: private pattern::Uncopyable {
 			class file_map_iterator;
 			typedef Map this_type;
 
@@ -610,7 +613,7 @@ namespace Fsys {
 			file_map_iterator(const Map * seq);
 
 			struct impl;
-			std::shared_ptr<impl> m_impl;
+			simstd::shared_ptr<impl> m_impl;
 
 			friend class Map;
 		};
@@ -689,7 +692,7 @@ namespace Fsys {
 			return read(path.c_str());
 		}
 
-		struct CreateSymCmd: public Base::Command_p {
+		struct CreateSymCmd: public pattern::Command {
 			CreateSymCmd(const ustring & path, const ustring & new_path):
 				m_path(path),
 				m_new_path(new_path) {

@@ -12,15 +12,16 @@
 
 #include <libext/rcfwd.hpp>
 
-#include <libbase/std.hpp>
-#include <libbase/memory.hpp>
-#include <libbase/wstr.hpp>
-//#include <libbase/command_p.hpp>
+#include <system/configure.hpp>
+#include <system/memory.hpp>
+#include <system/cstr.hpp>
+#include <extra/pattern.hpp>
 
+#include <simstd/string>
 
 namespace Ext {
 
-	struct Service: Base::Uncopyable {
+	struct Service: pattern::Uncopyable {
 
 		struct Manager;
 
@@ -167,7 +168,7 @@ namespace Ext {
 			ustring binaryPathName;
 			ustring loadOrderGroup;
 			DWORD tagId;
-			Base::mstring dependencies;
+			cstr::mstring dependencies;
 			ustring serviceStartName;
 			ustring description;
 			SERVICE_STATUS_PROCESS status;
@@ -199,7 +200,7 @@ namespace Ext {
 
 
 		///================================================================================= Manager
-		struct Manager: Base::Uncopyable {
+		struct Manager: pattern::Uncopyable {
 			~Manager();
 
 			Manager(RemoteConnection * conn = nullptr, ACCESS_MASK acc = SC_MANAGER_CONNECT);
@@ -284,8 +285,8 @@ namespace Ext {
 		{
 		}
 
-		Base::auto_buf<LPQUERY_SERVICE_CONFIGW> QueryConfig() const;
-		Base::auto_buf<PBYTE> QueryConfig2(DWORD level) const;
+		memory::auto_buf<LPQUERY_SERVICE_CONFIGW> QueryConfig() const;
+		memory::auto_buf<PBYTE> QueryConfig2(DWORD level) const;
 
 		SC_HANDLE m_hndl;
 

@@ -20,9 +20,6 @@ namespace simstd {
 			LARGE_INTEGER perfomanceNow;
 			::QueryPerformanceCounter(&perfomanceNow);
 
-			using std::chrono::duration_cast;
-			using std::chrono::nanoseconds;
-			using std::chrono::seconds;
 			return time_point(duration((perfomanceNow.QuadPart * duration_cast<nanoseconds>(seconds(1))) / perfomanceFrequency.QuadPart));
 		}
 

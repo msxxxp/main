@@ -150,7 +150,7 @@ namespace Ext {
 	LSA_UNICODE_STRING Policy::ToLsaString(PCWSTR in)
 	{
 		LSA_UNICODE_STRING ret;
-		Memory::zero(ret);
+		memory::zero(ret);
 		ret.Buffer = (PWSTR)in;
 		ret.Length = Cstr::length(in) * sizeof(wchar_t);
 		ret.MaximumLength = ret.Length;
@@ -162,7 +162,7 @@ namespace Ext {
 		LSA_UNICODE_STRING lsaName(ToLsaString(dom));
 		LSA_HANDLE hPolicy = nullptr;
 		LSA_OBJECT_ATTRIBUTES oa;
-		Memory::zero(oa);
+		memory::zero(oa);
 
 		CheckApi(::LsaNtStatusToWinError(::LsaOpenPolicy(&lsaName, &oa, POLICY_ALL_ACCESS, &hPolicy)));
 		return hPolicy;

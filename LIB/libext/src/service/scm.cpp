@@ -36,7 +36,7 @@ namespace Ext {
 	{
 		LogTrace();
 		SC_HANDLE l_hndl = open(conn, acc);
-		std::swap(m_hndl, l_hndl);
+		simstd::swap(m_hndl, l_hndl);
 		close(l_hndl);
 	}
 
@@ -60,7 +60,7 @@ namespace Ext {
 		Service tmp(hndl);
 		if (info.delayedStart)
 			tmp.set_delayed(info.delayedStart);
-		return std::move(tmp);
+		return simstd::move(tmp);
 	}
 
 	bool Service::Manager::is_exist(PCWSTR name) const

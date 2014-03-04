@@ -1,7 +1,9 @@
-#ifndef LIBBASE_PVT_MEMORY_HPP_
-#define LIBBASE_PVT_MEMORY_HPP_
+#ifndef LIBSTL_SYSTEM_MEMORY_MEMORY_HPP_
+#define LIBSTL_SYSTEM_MEMORY_MEMORY_HPP_
 
-#include <type_traits>
+#include <system/memory.hpp>
+
+#include <simstd/type_traits>
 
 #ifdef NDEBUG
 	#define MemoryAllocate(p1) memory::malloc(p1)
@@ -11,6 +13,39 @@
 
 #define MemoryFree(p1) memory::free(p1)
 #define MemorySize(p1) memory::size(p1)
+
+namespace memory {
+
+	template<typename Type>
+	inline Type & reverse_bytes(Type & inout)
+	{
+		simstd::reverse((char*)&inout, ((char*)&inout) + sizeof(inout));
+		return inout;
+	}
+
+	inline WORD & swap_bytes(WORD & inout)
+	{
+		inout = static_cast<WORD>(inout >> 8 | inout << 8);
+		return inout;
+	}
+
+	inline DWORD & swap_words(DWORD &inout)
+	{
+		inout = inout >> 16 | inout << 16;
+		return inout;
+	}
+
+	inline intmax_t mega_to_bytes(size_t in)
+	{
+		return (in != 0) ? (intmax_t)in << 20 : -1ll;
+	}
+
+	inline size_t bytes_to_mega(intmax_t in)
+	{
+		return static_cast<size_t>((in > 0) ? in >> 20 : 0);
+	}
+
+}
 
 namespace memory {
 #ifdef MEMORY_DEBUG
@@ -37,14 +72,14 @@ namespace memory {
 	template<typename Pointer>
 	inline size_t size(Pointer in)
 	{
-		static_assert(std::is_pointer<Pointer>::value, "Pointer type is required");
+		static_assert(simstd::is_pointer<Pointer>::value, "Pointer type is required");
 		return (in) ? ::HeapSize(get_heap(), 0, (void*)in) : 0;
 	}
 
 	template<typename Pointer>
 	inline Pointer malloc(size_t size, DWORD flags = 0/*HEAP_ZERO_MEMORY*/)
 	{
-		static_assert(std::is_pointer<Pointer>::value, "Pointer type is required");
+		static_assert(simstd::is_pointer<Pointer>::value, "Pointer type is required");
 #ifdef MEMORY_DEBUG
 		Watchdog::allocations++;
 		Watchdog::allocations_size += size;
@@ -55,7 +90,7 @@ namespace memory {
 	template<typename Pointer>
 	inline Pointer calloc(size_t count, DWORD flags = 0)
 	{
-		static_assert(std::is_pointer<Pointer>::value, "Pointer type is required");
+		static_assert(simstd::is_pointer<Pointer>::value, "Pointer type is required");
 		Pointer tmp_ptr = nullptr;
 #ifdef MEMORY_DEBUG
 		Watchdog::allocations++;
@@ -67,7 +102,7 @@ namespace memory {
 	template<typename Pointer>
 	inline Pointer ealloc(DWORD flags = 0)
 	{
-		static_assert(std::is_pointer<Pointer>::value, "Pointer type is required");
+		static_assert(simstd::is_pointer<Pointer>::value, "Pointer type is required");
 		Pointer tmp_ptr = nullptr;
 #ifdef MEMORY_DEBUG
 		Watchdog::allocations++;
@@ -79,7 +114,7 @@ namespace memory {
 	template<typename Pointer>
 	inline void free(Pointer & in)
 	{
-		static_assert(std::is_pointer<Pointer>::value, "Pointer type is required");
+		static_assert(simstd::is_pointer<Pointer>::value, "Pointer type is required");
 #ifdef MEMORY_DEBUG
 		Watchdog::deletions++;
 		Watchdog::deletions_size += memory::size(in);
@@ -101,23 +136,23 @@ namespace memory {
 		Watchdog::allocations++;
 		Watchdog::allocations_size += size;
 #endif
-		static_assert(std::is_pointer<Pointer>::value, "Pointer type is required");
+		static_assert(simstd::is_pointer<Pointer>::value, "Pointer type is required");
 		return (in = static_cast<Pointer>((in) ? ::HeapReAlloc(get_heap(), flags, (void*)in, size) : ::HeapAlloc(get_heap(), flags, size)));
 	}
 
 	template<typename Pointer1, typename Pointer2>
 	inline bool compare(Pointer1 m1, Pointer2 m2, size_t size)
 	{
-		static_assert(std::is_pointer<Pointer1>::value, "Pointer type is required");
-		static_assert(std::is_pointer<Pointer2>::value, "Pointer type is required");
+		static_assert(simstd::is_pointer<Pointer1>::value, "Pointer type is required");
+		static_assert(simstd::is_pointer<Pointer2>::value, "Pointer type is required");
 		return ::memcmp((const void*)m1, (const void*)m2, size) == 0;
 	}
 
 	template<typename Pointer1, typename Pointer2>
 	inline Pointer1 copy(Pointer1 dest, Pointer2 src, size_t size)
 	{
-		static_assert(std::is_pointer<Pointer1>::value, "Pointer type is required");
-		static_assert(std::is_pointer<Pointer2>::value, "Pointer type is required");
+		static_assert(simstd::is_pointer<Pointer1>::value, "Pointer type is required");
+		static_assert(simstd::is_pointer<Pointer2>::value, "Pointer type is required");
 		//return ::memcpy_s(dest, sour, size);
 		return static_cast<Pointer1>(::memcpy((void*)dest, (void*)src, size));
 	}
@@ -125,44 +160,44 @@ namespace memory {
 	template<typename Pointer1, typename Pointer2>
 	inline Pointer1 move(Pointer1 dest, Pointer2 src, size_t size)
 	{
-		static_assert(std::is_pointer<Pointer1>::value, "Pointer type is required");
-		static_assert(std::is_pointer<Pointer2>::value, "Pointer type is required");
+		static_assert(simstd::is_pointer<Pointer1>::value, "Pointer type is required");
+		static_assert(simstd::is_pointer<Pointer2>::value, "Pointer type is required");
 		return static_cast<Pointer1>(::memmove((void*)dest, (void*)src, size));
 	}
 
 	template<typename Pointer1, typename Pointer2>
 	inline Pointer1 dup(Pointer2 src, size_t size)
 	{
-		static_assert(std::is_pointer<Pointer1>::value, "Pointer type is required");
-		static_assert(std::is_pointer<Pointer2>::value, "Pointer type is required");
+		static_assert(simstd::is_pointer<Pointer1>::value, "Pointer type is required");
+		static_assert(simstd::is_pointer<Pointer2>::value, "Pointer type is required");
 		return memory::copy(memory::malloc<Pointer1>(size), src, size);
 	}
 
 	template<typename Pointer>
 	inline Pointer fill(Pointer in, size_t bytes, int fill)
 	{
-		static_assert(std::is_pointer<Pointer>::value, "Pointer type is required");
+		static_assert(simstd::is_pointer<Pointer>::value, "Pointer type is required");
 		return static_cast<Pointer>(::memset((void*)in, fill, bytes));
 	}
 
 	template<typename NonPointer>
 	inline void fill(NonPointer & in, int fill)
 	{
-		static_assert(!std::is_pointer<NonPointer>::value, "Nonpointer type is required");
+		static_assert(!simstd::is_pointer<NonPointer>::value, "Nonpointer type is required");
 		::memset((void*)&in, fill, sizeof(in));
 	}
 
 	template<typename Pointer>
 	inline Pointer zero(Pointer in, size_t bytes)
 	{
-		static_assert(std::is_pointer<Pointer>::value, "Pointer type is required");
+		static_assert(simstd::is_pointer<Pointer>::value, "Pointer type is required");
 		return static_cast<Pointer>(::memset((void*)in, 0, bytes));
 	}
 
 	template<typename NonPointer>
 	inline void zero(NonPointer & in)
 	{
-		static_assert(!std::is_pointer<NonPointer>::value, "Nonpointer type is required");
+		static_assert(!simstd::is_pointer<NonPointer>::value, "Nonpointer type is required");
 		::memset((void*)&in, 0, sizeof(in));
 	}
 }

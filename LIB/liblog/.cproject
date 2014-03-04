@@ -245,10 +245,10 @@
 		<configuration configurationName="Debug-x64">
 			<resource resourceType="PROJECT" workspacePath="/liblog"/>
 		</configuration>
-		<configuration configurationName="x64">
+		<configuration configurationName="Release-x64">
 			<resource resourceType="PROJECT" workspacePath="/liblog"/>
 		</configuration>
-		<configuration configurationName="Release-x64">
+		<configuration configurationName="x64">
 			<resource resourceType="PROJECT" workspacePath="/liblog"/>
 		</configuration>
 		<configuration configurationName="Release-x32-NoStr">
@@ -290,8 +290,31 @@
 				</scannerInfoProvider>
 			</profile>
 		</scannerConfigBuildInfo>
-		<scannerConfigBuildInfo instanceId="cdt.managedbuild.config.gnu.mingw.lib.release.554916237;cdt.managedbuild.config.gnu.mingw.lib.release.554916237.;cdt.managedbuild.tool.gnu.c.compiler.mingw.lib.release.1060130166;cdt.managedbuild.tool.gnu.c.compiler.input.638589791">
+		<scannerConfigBuildInfo instanceId="cdt.managedbuild.config.gnu.mingw.lib.debug.1580188066.2146723721;cdt.managedbuild.config.gnu.mingw.lib.debug.1580188066.2146723721.;cdt.managedbuild.tool.gnu.c.compiler.mingw.lib.debug.1293307836;cdt.managedbuild.tool.gnu.c.compiler.input.971844741">
 			<autodiscovery enabled="true" problemReportingEnabled="true" selectedProfileId="org.eclipse.cdt.managedbuilder.core.GCCManagedMakePerProjectProfileC"/>
+			<profile id="org.eclipse.cdt.managedbuilder.core.GCCManagedMakePerProjectProfileC">
+				<buildOutputProvider>
+					<openAction enabled="true" filePath=""/>
+					<parser enabled="true"/>
+				</buildOutputProvider>
+				<scannerInfoProvider id="specsFile">
+					<runAction arguments="-E -P -v -dD &quot;${plugin_state_location}/specs.c&quot; -m32" command="gcc" useDefault="true"/>
+					<parser enabled="true"/>
+				</scannerInfoProvider>
+			</profile>
+		</scannerConfigBuildInfo>
+		<scannerConfigBuildInfo instanceId="cdt.managedbuild.config.gnu.mingw.lib.release.554916237.2008357368.1067110866;cdt.managedbuild.config.gnu.mingw.lib.release.554916237.2008357368.1067110866.;cdt.managedbuild.tool.gnu.cpp.compiler.mingw.lib.release.428782331;cdt.managedbuild.tool.gnu.cpp.compiler.input.1934763352">
+			<autodiscovery enabled="true" problemReportingEnabled="true" selectedProfileId="org.eclipse.cdt.managedbuilder.core.GCCManagedMakePerProjectProfileCPP"/>
+			<profile id="org.eclipse.cdt.managedbuilder.core.GCCManagedMakePerProjectProfileCPP">
+				<buildOutputProvider>
+					<openAction enabled="true" filePath=""/>
+					<parser enabled="true"/>
+				</buildOutputProvider>
+				<scannerInfoProvider id="specsFile">
+					<runAction arguments="-E -P -v -dD &quot;${plugin_state_location}/specs.cpp&quot; -std=c++11 -m32" command="g++" useDefault="true"/>
+					<parser enabled="true"/>
+				</scannerInfoProvider>
+			</profile>
 		</scannerConfigBuildInfo>
 		<scannerConfigBuildInfo instanceId="cdt.managedbuild.config.gnu.mingw.lib.release.554916237.920073374;cdt.managedbuild.config.gnu.mingw.lib.release.554916237.920073374.;cdt.managedbuild.tool.gnu.cpp.compiler.mingw.lib.release.493056675;cdt.managedbuild.tool.gnu.cpp.compiler.input.1425160179">
 			<autodiscovery enabled="true" problemReportingEnabled="true" selectedProfileId="org.eclipse.cdt.managedbuilder.core.GCCManagedMakePerProjectProfileCPP"/>
@@ -319,18 +342,11 @@
 				</scannerInfoProvider>
 			</profile>
 		</scannerConfigBuildInfo>
-		<scannerConfigBuildInfo instanceId="cdt.managedbuild.config.gnu.mingw.lib.debug.1580188066.2146723721;cdt.managedbuild.config.gnu.mingw.lib.debug.1580188066.2146723721.;cdt.managedbuild.tool.gnu.c.compiler.mingw.lib.debug.1293307836;cdt.managedbuild.tool.gnu.c.compiler.input.971844741">
+		<scannerConfigBuildInfo instanceId="cdt.managedbuild.config.gnu.mingw.lib.release.554916237;cdt.managedbuild.config.gnu.mingw.lib.release.554916237.;cdt.managedbuild.tool.gnu.c.compiler.mingw.lib.release.1060130166;cdt.managedbuild.tool.gnu.c.compiler.input.638589791">
 			<autodiscovery enabled="true" problemReportingEnabled="true" selectedProfileId="org.eclipse.cdt.managedbuilder.core.GCCManagedMakePerProjectProfileC"/>
-			<profile id="org.eclipse.cdt.managedbuilder.core.GCCManagedMakePerProjectProfileC">
-				<buildOutputProvider>
-					<openAction enabled="true" filePath=""/>
-					<parser enabled="true"/>
-				</buildOutputProvider>
-				<scannerInfoProvider id="specsFile">
-					<runAction arguments="-E -P -v -dD &quot;${plugin_state_location}/specs.c&quot; -m32" command="gcc" useDefault="true"/>
-					<parser enabled="true"/>
-				</scannerInfoProvider>
-			</profile>
+		</scannerConfigBuildInfo>
+		<scannerConfigBuildInfo instanceId="cdt.managedbuild.config.gnu.mingw.lib.debug.1580188066;cdt.managedbuild.config.gnu.mingw.lib.debug.1580188066.;cdt.managedbuild.tool.gnu.c.compiler.mingw.lib.debug.1030312357;cdt.managedbuild.tool.gnu.c.compiler.input.626924880">
+			<autodiscovery enabled="true" problemReportingEnabled="true" selectedProfileId="org.eclipse.cdt.managedbuilder.core.GCCManagedMakePerProjectProfileC"/>
 		</scannerConfigBuildInfo>
 		<scannerConfigBuildInfo instanceId="cdt.managedbuild.config.gnu.mingw.lib.debug.1580188066.2146723721;cdt.managedbuild.config.gnu.mingw.lib.debug.1580188066.2146723721.;cdt.managedbuild.tool.gnu.cpp.compiler.mingw.lib.debug.614691210;cdt.managedbuild.tool.gnu.cpp.compiler.input.598917932">
 			<autodiscovery enabled="true" problemReportingEnabled="true" selectedProfileId="org.eclipse.cdt.managedbuilder.core.GCCManagedMakePerProjectProfileCPP"/>
@@ -344,22 +360,6 @@
 					<parser enabled="true"/>
 				</scannerInfoProvider>
 			</profile>
-		</scannerConfigBuildInfo>
-		<scannerConfigBuildInfo instanceId="cdt.managedbuild.config.gnu.mingw.lib.release.554916237.2008357368.1067110866;cdt.managedbuild.config.gnu.mingw.lib.release.554916237.2008357368.1067110866.;cdt.managedbuild.tool.gnu.cpp.compiler.mingw.lib.release.428782331;cdt.managedbuild.tool.gnu.cpp.compiler.input.1934763352">
-			<autodiscovery enabled="true" problemReportingEnabled="true" selectedProfileId="org.eclipse.cdt.managedbuilder.core.GCCManagedMakePerProjectProfileCPP"/>
-			<profile id="org.eclipse.cdt.managedbuilder.core.GCCManagedMakePerProjectProfileCPP">
-				<buildOutputProvider>
-					<openAction enabled="true" filePath=""/>
-					<parser enabled="true"/>
-				</buildOutputProvider>
-				<scannerInfoProvider id="specsFile">
-					<runAction arguments="-E -P -v -dD &quot;${plugin_state_location}/specs.cpp&quot; -std=c++11 -m32" command="g++" useDefault="true"/>
-					<parser enabled="true"/>
-				</scannerInfoProvider>
-			</profile>
-		</scannerConfigBuildInfo>
-		<scannerConfigBuildInfo instanceId="cdt.managedbuild.config.gnu.mingw.lib.debug.1580188066;cdt.managedbuild.config.gnu.mingw.lib.debug.1580188066.;cdt.managedbuild.tool.gnu.c.compiler.mingw.lib.debug.1030312357;cdt.managedbuild.tool.gnu.c.compiler.input.626924880">
-			<autodiscovery enabled="true" problemReportingEnabled="true" selectedProfileId="org.eclipse.cdt.managedbuilder.core.GCCManagedMakePerProjectProfileC"/>
 		</scannerConfigBuildInfo>
 	</storageModule>
 </cproject>

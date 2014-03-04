@@ -1,7 +1,7 @@
 #ifndef _WIN_TIME_H_
 #define _WIN_TIME_H_
 
-#include <libbase/std.hpp>
+#include <system/configure.hpp>
 
 namespace Ext {
 

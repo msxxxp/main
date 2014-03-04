@@ -1,7 +1,7 @@
 #ifndef LIBEXT_PIPE_HPP_
 #define LIBEXT_PIPE_HPP_
 
-#include <libbase/std.hpp>
+#include <system/configure.hpp>
 
 namespace Ext {
 

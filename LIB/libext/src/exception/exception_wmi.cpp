@@ -1,5 +1,5 @@
 ﻿#include "exception_pvt.hpp"
-#include <libbase/err.hpp>
+#include <system/totext.hpp>
 
 namespace Ext {
 
@@ -23,8 +23,8 @@ namespace Ext {
 		return L"WmiError";
 	}
 
-	ustring	WmiError::what() const {
-		return ustring(Base::ErrAsStrWmi(code()).c_str());
+	ustring WmiError::what() const {
+		return ustring(totext::wmi_error(code()).c_str());
 	}
 
 

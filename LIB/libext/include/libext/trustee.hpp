@@ -1,10 +1,12 @@
 #ifndef _LIBEXT_TRUSTEE_HPP_
 #define _LIBEXT_TRUSTEE_HPP_
 
-#include <libbase/std.hpp>
+#include <system/configure.hpp>
 #include <libext/sid.hpp>
 
 #include <aclapi.h>
+
+#include <simstd/iosfwd>
 
 namespace Ext {
 

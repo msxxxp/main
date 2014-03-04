@@ -2,6 +2,7 @@
 
 #include <system/console.hpp>
 #include <system/sync.hpp>
+#include <system/memory.hpp>
 #include <simstd/memory>
 #include <extra/pattern.hpp>
 

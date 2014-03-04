@@ -14,24 +14,24 @@ namespace logger {
 	struct pModule_less {
 		bool operator ()(const Module_i * lhs, const Module_i * rhs) const
 		{
-			return Cstr::compare(lhs->get_name(), rhs->get_name()) < 0;
+			return cstr::compare(lhs->get_name(), rhs->get_name()) < 0;
 		}
 	};
 
 	struct pModule_PCWSTR_less {
 		bool operator ()(Module_i * lhs, const wchar_t * rhs) const
 		{
-			return Cstr::compare(lhs->get_name(), rhs) < 0;
+			return cstr::compare(lhs->get_name(), rhs) < 0;
 		}
 
 		bool operator ()(const wchar_t * left, Module_i * right) const
 		{
-			return Cstr::compare(left, right->get_name()) < 0;
+			return cstr::compare(left, right->get_name()) < 0;
 		}
 
 		bool operator ()(const Module_i * lhs, const Module_i * rhs) const
 		{
-			return Cstr::compare(lhs->get_name(), rhs->get_name()) < 0;
+			return cstr::compare(lhs->get_name(), rhs->get_name()) < 0;
 		}
 	};
 

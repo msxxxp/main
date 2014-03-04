@@ -1,13 +1,13 @@
-﻿#include <libbase/std.hpp>
+﻿#include <system/configure.hpp>
+#include <system/memory.hpp>
 #include <liblog/logger.hpp>
-#include <libbase/memory.hpp>
 #include <libext/filesystem.hpp>
 #include <libext/exception.hpp>
 
-namespace Fsys {
+namespace fsys {
 	Stat::Stat(PCWSTR path)
 	{
-		Base::auto_close<HANDLE> hndl(HandleRead(path));
+		memory::auto_close<HANDLE> hndl(HandleRead(path));
 		refresh(hndl);
 	}
 
@@ -40,7 +40,7 @@ namespace Fsys {
 
 	Stat & Stat::operator =(PCWSTR path)
 	{
-		Base::auto_close<HANDLE> hndl(HandleRead(path));
+		memory::auto_close<HANDLE> hndl(HandleRead(path));
 		refresh(hndl);
 		return *this;
 	}

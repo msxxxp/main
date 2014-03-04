@@ -15,13 +15,13 @@ namespace Ext {
 		LogTrace();
 		if (this != &rhs)
 			this->swap(rhs);
-//			WinSD(std::move(rhs)).swap(*this);
+//			WinSD(simstd::move(rhs)).swap(*this);
 		return *this;
 	}
 
 	void WinSD::swap(WinSD & rhs) {
 		LogTrace();
-		using std::swap;
+		using simstd::swap;
 		swap(m_sd, rhs.m_sd);
 	}
 

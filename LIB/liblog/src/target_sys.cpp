@@ -78,21 +78,21 @@ namespace logger {
 	void LogToSys::app_register(const wchar_t * name, const wchar_t * path)
 	{
 		wchar_t path_buf[MAX_PATH_LEN], *fullpath = path_buf;
-		if (Cstr::is_empty(path)) {
+		if (cstr::is_empty(path)) {
 			::GetModuleFileNameW(0, path_buf, lengthof(path_buf));
 		} else {
 			fullpath = (wchar_t *)path;
 		}
 
 		auto key1 = L"SYSTEM\\CurrentControlSet\\Services\\EventLog\\Application\\";
-		auto key_length = Cstr::length(key1);
+		auto key_length = cstr::length(key1);
 		wchar_t value[MAX_PATH_LEN];
-		Cstr::copy(value, key1, lengthof(value));
-		Cstr::cat(value, name, lengthof(value) - key_length);
+		cstr::copy(value, key1, lengthof(value));
+		cstr::cat(value, name, lengthof(value) - key_length);
 		HKEY hKey = nullptr;
 		::RegCreateKeyW(HKEY_LOCAL_MACHINE, value, &hKey);
 		// Add the Event ID message-file name to the subkey.
-		::RegSetValueExW(hKey, L"EventMessageFile", 0, REG_EXPAND_SZ, (LPBYTE)fullpath, (DWORD)((Cstr::length(fullpath) + 1) * sizeof(wchar_t)));
+		::RegSetValueExW(hKey, L"EventMessageFile", 0, REG_EXPAND_SZ, (LPBYTE)fullpath, (DWORD)((cstr::length(fullpath) + 1) * sizeof(wchar_t)));
 		// Set the supported types flags.
 		DWORD dwData = EVENTLOG_SUCCESS | EVENTLOG_ERROR_TYPE | EVENTLOG_WARNING_TYPE | EVENTLOG_INFORMATION_TYPE;
 		::RegSetValueExW(hKey, L"TypesSupported", 0, REG_DWORD, (LPBYTE)&dwData, sizeof(dwData));

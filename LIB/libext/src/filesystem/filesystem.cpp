@@ -1,8 +1,6 @@
-#include <libbase/std.hpp>
-#include <libbase/filesystem.hpp>
-#include <libbase/memory.hpp>
-#include <libbase/path.hpp>
-#include <libbase/cstr.hpp>
+#include <system/fsys.hpp>
+#include <system/memory.hpp>
+#include <system/cstr.hpp>
 #include <libext/dll.hpp>
 #include <libext/filesystem.hpp>
 #include <libext/exception.hpp>
@@ -32,7 +30,7 @@ namespace {
 //			LARGE_INTEGER m_data;
 //		};
 
-//		struct TemporarySetAttributes: private Base::Uncopyable {
+//		struct TemporarySetAttributes: private pattern::Uncopyable {
 //			~TemporarySetAttributes()
 //			{
 //				if (m_attr != INVALID_FILE_ATTRIBUTES)
@@ -75,7 +73,7 @@ namespace {
 	};
 }
 
-namespace Fsys {
+namespace fsys {
 	bool is_exist(PCWSTR path)
 	{
 		DWORD attr = get_attr_nt(path);
@@ -126,7 +124,7 @@ namespace Fsys {
 	void del_recycle(PCWSTR path)
 	{
 		SHFILEOPSTRUCTW info;
-		Memory::zero(info);
+		memory::zero(info);
 		info.wFunc = FO_DELETE;
 		info.pFrom = path;
 		info.fFlags = FOF_ALLOWUNDO | FOF_NOCONFIRMATION | FOF_NOERRORUI | FOF_SILENT;
@@ -146,15 +144,15 @@ namespace Fsys {
 	ustring device_path_to_disk(PCWSTR path)
 	{
 		wchar_t local_disks[MAX_PATH] = {0}, *p = local_disks;
-		CheckApi(::GetLogicalDriveStringsW(Base::lengthof(local_disks) - 1, local_disks));
+		CheckApi(::GetLogicalDriveStringsW(lengthof(local_disks) - 1, local_disks));
 		wchar_t drive[3] = L" :";
 		wchar_t device[MAX_PATH];
 		while (*p) {
 			*drive = *p;
-			CheckApi(::QueryDosDeviceW(drive, device, Base::lengthof(device)));
+			CheckApi(::QueryDosDeviceW(drive, device, lengthof(device)));
 			if (Cstr::find(path, device) == path) {
-				wchar_t new_path[Base::MAX_PATH_LEN];
-				_snwprintf(new_path, Base::lengthof(new_path), L"%s%s", drive, path + Cstr::length(device));
+				wchar_t new_path[MAX_PATH_LEN];
+				_snwprintf(new_path, lengthof(new_path), L"%s%s", drive, path + Cstr::length(device));
 				return ustring(new_path);
 			}
 			while (*p++)
@@ -166,10 +164,10 @@ namespace Fsys {
 	ustring get_path(HANDLE hndl)
 	{
 		CheckHandle(hndl);
-		Base::auto_close<HANDLE> hmap(CheckHandleErr(::CreateFileMappingW(hndl, nullptr, PAGE_READONLY, 0, 1, nullptr)));
-		Base::auto_close<PVOID const> view(CheckPointerErr(::MapViewOfFile(hmap, FILE_MAP_READ, 0, 0, 1)), ::UnmapViewOfFile);
-		wchar_t path[Base::MAX_PATH_LEN];
-		CheckApi(psapi_dll::inst().GetMappedFileNameW(::GetCurrentProcess(), view, path, Base::lengthof(path)));
+		memory::auto_close<HANDLE> hmap(CheckHandleErr(::CreateFileMappingW(hndl, nullptr, PAGE_READONLY, 0, 1, nullptr)));
+		memory::auto_close<PVOID const> view(CheckPointerErr(::MapViewOfFile(hmap, FILE_MAP_READ, 0, 0, 1)), ::UnmapViewOfFile);
+		wchar_t path[MAX_PATH_LEN];
+		CheckApi(psapi_dll::inst().GetMappedFileNameW(::GetCurrentProcess(), view, path, lengthof(path)));
 		return device_path_to_disk(path);
 	}
 

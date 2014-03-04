@@ -2,7 +2,6 @@
 #define LIBSTL_SYSTEM_SYNC_SEMAPHORE_HPP_
 
 #include <system/sync.hpp>
-#include <extra/pattern.hpp>
 
 namespace sync {
 

@@ -1,13 +1,12 @@
-#include <libbase/std.hpp>
-#include <libbase/path.hpp>
-#include <libbase/cstr.hpp>
-#include <libbase/memory.hpp>
-#include <liblog/logger.hpp>
 #include <libext/dll.hpp>
 #include <libext/filesystem.hpp>
 #include <libext/exception.hpp>
+#include <liblog/logger.hpp>
+#include <system/fsys.hpp>
+#include <system/cstr.hpp>
+#include <system/memory.hpp>
 
-namespace Fsys {
+namespace fsys {
 
 	namespace File {
 
@@ -15,7 +14,7 @@ namespace Fsys {
 		{
 			::CloseHandle(m_hndl);
 			if (m_delOnClose) {
-				bool ret = Fsys::File::del_nt(m_path.c_str());
+				bool ret = fsys::File::del_nt(m_path.c_str());
 				LogAtten(L"Auto delete on close: '%s' -> %d\n", m_path.c_str(), ret);
 				UNUSED(ret);
 			}
@@ -26,7 +25,7 @@ namespace Fsys {
 			m_path(get_path(m_hndl)),
 			m_delOnClose(false)
 		{
-			Fsys::Stat::refresh(m_hndl);
+			fsys::Stat::refresh(m_hndl);
 		}
 
 		Facade::Facade(const ustring & path, bool write) :
@@ -34,7 +33,7 @@ namespace Fsys {
 			m_path(path),
 			m_delOnClose(false)
 		{
-			Fsys::Stat::refresh(m_hndl);
+			fsys::Stat::refresh(m_hndl);
 		}
 
 		Facade::Facade(const ustring & path, ACCESS_MASK access, DWORD share, PSECURITY_ATTRIBUTES sa, DWORD creat, DWORD flags) :
@@ -42,7 +41,7 @@ namespace Fsys {
 			m_path(path),
 			m_delOnClose(false)
 		{
-			Fsys::Stat::refresh(m_hndl);
+			fsys::Stat::refresh(m_hndl);
 		}
 
 		uint64_t Facade::size() const
@@ -74,14 +73,14 @@ namespace Fsys {
 			return ::ReadFile(m_hndl, buf, size, &read, nullptr);
 		}
 
-		DWORD Facade::write(PCVOID buf, size_t size)
+		DWORD Facade::write(const void* buf, size_t size)
 		{
 			DWORD written;
 			CheckApi(write_nt(buf, size, written));
 			return written;
 		}
 
-		bool Facade::write_nt(PCVOID buf, size_t size, DWORD & written)
+		bool Facade::write_nt(const void* buf, size_t size, DWORD & written)
 		{
 //			LogNoise(L"%p, %Iu\n", buf, size);
 			return ::WriteFile(m_hndl, buf, size, &written, nullptr);

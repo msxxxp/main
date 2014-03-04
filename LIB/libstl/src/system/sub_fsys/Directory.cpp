@@ -31,6 +31,10 @@ namespace fsys {
 			return ::CreateDirectoryW(path, lpsa) || (::GetLastError() == ERROR_ALREADY_EXISTS && fsys::is_dir_nt(path));
 		}
 
+		bool copy_link(PCWSTR path, PCWSTR dest, LPSECURITY_ATTRIBUTES lpsa)
+		{
+			return ::CreateDirectoryExW(path, dest, lpsa);
+		}
 	}
 
 }

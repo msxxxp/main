@@ -1,8 +1,6 @@
-#include <libbase/std.hpp>
-#include <libbase/filesystem.hpp>
-#include <libbase/memory.hpp>
-#include <libbase/path.hpp>
-#include <libbase/cstr.hpp>
+#include <system/fsys.hpp>
+#include <system/memory.hpp>
+#include <system/cstr.hpp>
 #include <libext/dll.hpp>
 #include <libext/filesystem.hpp>
 #include <libext/exception.hpp>
@@ -11,11 +9,11 @@ extern "C" {
 	INT WINAPI SHCreateDirectoryExW(HWND, PCWSTR, PSECURITY_ATTRIBUTES);
 }
 
-namespace Fsys {
+namespace fsys {
 
 	namespace Directory {
 		bool is_exist(PCWSTR path) {
-			return Fsys::is_exist(path) && Fsys::is_dir(path);
+			return fsys::is_exist(path) && fsys::is_dir(path);
 		}
 
 		void create(PCWSTR path, LPSECURITY_ATTRIBUTES lpsa) {
@@ -24,11 +22,11 @@ namespace Fsys {
 
 		bool create_full_nt(const ustring & p, LPSECURITY_ATTRIBUTES sa) throw() {
 			try {
-				ustring path(Base::Path::get_fullpath(p));
-				path = Base::PathNice(path);
-				path = Base::Path::ensure_prefix(Base::Path::ensure_end_separator(path));
+				ustring path(fsys::Path::get_fullpath(p));
+				path = fsys::PathNice(path);
+				path = fsys::Path::ensure_prefix(fsys::Path::ensure_end_separator(path));
 
-				if (Base::Path::get_root(path) == path)
+				if (fsys::Path::get_root(path) == path)
 					return false;
 
 				if (create_nt(path.c_str(), sa)) {
@@ -38,11 +36,11 @@ namespace Fsys {
 				size_t pos = path.find(L":");
 				if (pos == ustring::npos)
 					return false;
-				pos = path.find_first_of(Base::PATH_SEPARATORS, pos + 1);
+				pos = path.find_first_of(PATH_SEPARATORS, pos + 1);
 				if (pos == ustring::npos)
 					return false;
 				do {
-					pos = path.find_first_of(Base::PATH_SEPARATORS, pos + 1);
+					pos = path.find_first_of(PATH_SEPARATORS, pos + 1);
 					ustring tmp(path.substr(0, pos));
 					if (!create_nt(tmp.c_str(), sa))
 						return false;

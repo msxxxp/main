@@ -3,7 +3,7 @@
 
 #include <system/sub_sync/Mutex.hpp>
 
-#include <chrono>
+#include <simstd/chrono>
 
 namespace simstd {
 
@@ -23,10 +23,10 @@ namespace simstd {
 		using base_type::native_handle;
 
 		template<class Rep, class Period>
-		bool try_lock_for(const std::chrono::duration<Rep, Period>& timeout_duration);
+		bool try_lock_for(const chrono::duration<Rep, Period>& timeout_duration);
 
 		template<class Clock, class Duration>
-		bool try_lock_until(const std::chrono::time_point<Clock, Duration>& timeout_time);
+		bool try_lock_until(const chrono::time_point<Clock, Duration>& timeout_time);
 	};
 
 	inline bool recursive_timed_mutex::try_lock()
@@ -35,18 +35,18 @@ namespace simstd {
 	}
 
 	template<class Rep, class Period>
-	bool recursive_timed_mutex::try_lock_for(const std::chrono::duration<Rep, Period>& timeout_duration)
+	bool recursive_timed_mutex::try_lock_for(const chrono::duration<Rep, Period>& timeout_duration)
 	{
-		using namespace std::chrono;
+		using namespace chrono;
 		return base_type::try_lock(duration_cast<milliseconds>(timeout_duration).count());
 	}
 
 	template<class Clock, class Duration>
-	bool recursive_timed_mutex::try_lock_until(const std::chrono::time_point<Clock, Duration>& timeout_time)
+	bool recursive_timed_mutex::try_lock_until(const chrono::time_point<Clock, Duration>& timeout_time)
 	{
-		typedef std::chrono::steady_clock clock_t;
+		typedef chrono::steady_clock clock_t;
 
-		using namespace std::chrono;
+		using namespace chrono;
 		return base_type::try_lock(duration_cast<milliseconds>(timeout_time - clock_t::now()).count());
 	}
 

@@ -1,10 +1,7 @@
-﻿#include <libbase/std.hpp>
-#include <libbase/memory.hpp>
-#include <libbase/path.hpp>
+﻿#include <system/memory.hpp>
+#include <system/fsys.hpp>
 #include <libext/exception.hpp>
 #include <libext/exec.hpp>
-
-using namespace Base;
 
 namespace Ext {
 
@@ -13,14 +10,14 @@ namespace Ext {
 
 	void Exec::Run(const ustring &cmd) {
 		PROCESS_INFORMATION pi;
-		Memory::zero(pi);
+		memory::zero(pi);
 		STARTUPINFOW si;
-		Memory::zero(si);
+		memory::zero(si);
 		si.cb = sizeof(si);
 		si.wShowWindow = SW_HIDE;
 		si.dwFlags = STARTF_USESHOWWINDOW;
 
-		ustring app = Validate(cmd);
+		ustring app = fsys::Validate(cmd);
 		CheckApi(::CreateProcessW(nullptr, (PWSTR)app.c_str(), nullptr, nullptr, false,
 		                          CREATE_DEFAULT_ERROR_MODE, nullptr, nullptr, &si, &pi));
 		::CloseHandle(pi.hThread);
@@ -31,16 +28,16 @@ namespace Ext {
 		DWORD Result = 0;
 
 		// Pipe for read stdout
-		Base::auto_close<HANDLE> hPipeOutRead, hPipeOutWrite;
+		memory::auto_close<HANDLE> hPipeOutRead, hPipeOutWrite;
 		//	WinHandle hPipeOutRead, hPipeOutWrite;
 		CheckApi(::CreatePipe(&hPipeOutRead, &hPipeOutWrite, nullptr, 0));
 		CheckApi(::SetHandleInformation(hPipeOutWrite, HANDLE_FLAG_INHERIT, HANDLE_FLAG_INHERIT));
 
 		// fork process
 		PROCESS_INFORMATION pi;
-		Memory::zero(pi);
+		memory::zero(pi);
 		STARTUPINFOW si;
-		Memory::zero(si);
+		memory::zero(si);
 
 		si.cb = sizeof(si);
 		si.hStdOutput = hPipeOutWrite;
@@ -48,12 +45,12 @@ namespace Ext {
 		si.wShowWindow = SW_HIDE;
 		si.dwFlags = STARTF_USESHOWWINDOW | STARTF_USESTDHANDLES;
 
-		ustring app = Validate(cmd);
+		ustring app = fsys::Validate(cmd);
 		CheckApi(::CreateProcessW(nullptr, (PWSTR)app.c_str(), nullptr, nullptr, true,
 		                          CREATE_DEFAULT_ERROR_MODE, nullptr, nullptr, &si, &pi));
 		hPipeOutWrite.close();
 		::CloseHandle(pi.hThread);
-		Base::auto_close<HANDLE> hProc(pi.hProcess);
+		memory::auto_close<HANDLE> hProc(pi.hProcess);
 		DWORD timeout = TIMEOUT;
 		out.clear();
 		CHAR buf[1024 * 1024];
@@ -69,8 +66,8 @@ namespace Ext {
 			}
 			while (::PeekNamedPipe(hPipeOutRead, nullptr, 0, nullptr, &dwAvail, nullptr) && dwAvail) {
 				while (::PeekNamedPipe(hPipeOutRead, nullptr, 0, nullptr, &dwAvail, nullptr) && dwAvail) {
-					Memory::zero(buf, Base::lengthof(buf));
-					::ReadFile(hPipeOutRead, buf, Base::lengthof(buf), &dwRead, nullptr);
+					memory::zero(buf, lengthof(buf));
+					::ReadFile(hPipeOutRead, buf, lengthof(buf), &dwRead, nullptr);
 					out += buf;
 				}
 				::Sleep(TIMEOUT_DX / 20);
@@ -86,7 +83,7 @@ namespace Ext {
 		DWORD Result = 0;
 
 		// Pipe for write stdin
-		Base::auto_close<HANDLE> hPipeInRead, hPipeInWrite;
+		memory::auto_close<HANDLE> hPipeInRead, hPipeInWrite;
 		CheckApi(::CreatePipe(&hPipeInRead, &hPipeInWrite, nullptr, in.size() + 1));
 		CheckApi(::SetHandleInformation(hPipeInRead, HANDLE_FLAG_INHERIT, HANDLE_FLAG_INHERIT));
 
@@ -94,15 +91,15 @@ namespace Ext {
 		CheckApi(::WriteFile(hPipeInWrite, in.c_str(), in.size(), &dwWritten, nullptr));
 
 		// Pipe for read stdout
-		Base::auto_close<HANDLE> hPipeOutRead, hPipeOutWrite;
+		memory::auto_close<HANDLE> hPipeOutRead, hPipeOutWrite;
 		CheckApi(::CreatePipe(&hPipeOutRead, &hPipeOutWrite, nullptr, 0));
 		CheckApi(::SetHandleInformation(hPipeOutWrite, HANDLE_FLAG_INHERIT, HANDLE_FLAG_INHERIT));
 
 		// fork process
 		PROCESS_INFORMATION pi;
-		Memory::zero(pi);
+		memory::zero(pi);
 		STARTUPINFOW si;
-		Memory::zero(si);
+		memory::zero(si);
 		si.cb = sizeof(si);
 		si.hStdInput = hPipeInRead;
 		si.hStdOutput = hPipeOutWrite;
@@ -110,7 +107,7 @@ namespace Ext {
 		si.wShowWindow = SW_HIDE;
 		si.dwFlags = STARTF_USESHOWWINDOW | STARTF_USESTDHANDLES;
 
-		ustring app = Validate(cmd);
+		ustring app = fsys::Validate(cmd);
 		CheckApi(::CreateProcessW(nullptr, (PWSTR)app.c_str(), nullptr, nullptr, true,
 		                          CREATE_DEFAULT_ERROR_MODE, nullptr, nullptr, &si, &pi));
 		hPipeInRead.close();
@@ -118,7 +115,7 @@ namespace Ext {
 		hPipeOutWrite.close();
 		::CloseHandle(pi.hThread);
 
-		Base::auto_close<HANDLE> hProc(pi.hProcess);
+		memory::auto_close<HANDLE> hProc(pi.hProcess);
 		DWORD timeout = TIMEOUT;
 		CHAR buf[1024 * 1024];
 		DWORD dwRead;
@@ -134,7 +131,7 @@ namespace Ext {
 			}
 			while (::PeekNamedPipe(hPipeOutRead, nullptr, 0, nullptr, &dwAvail, nullptr) && dwAvail) {
 				while (::PeekNamedPipe(hPipeOutRead, nullptr, 0, nullptr, &dwAvail, nullptr) && dwAvail) {
-					Memory::zero(buf, sizeof(buf));
+					memory::zero(buf, sizeof(buf));
 					::ReadFile(hPipeOutRead, buf, sizeof(buf), &dwRead, nullptr);
 					out += buf;
 				}
@@ -152,18 +149,18 @@ namespace Ext {
 
 		// fork process
 		PROCESS_INFORMATION pi;
-		Memory::zero(pi);
+		memory::zero(pi);
 		STARTUPINFOW si;
-		Memory::zero(si);
+		memory::zero(si);
 		si.cb = sizeof(si);
 		si.wShowWindow = SW_HIDE;
 		si.dwFlags = STARTF_USESHOWWINDOW;
 
-		ustring app = Validate(cmd);
+		ustring app = fsys::Validate(cmd);
 		CheckApi(::CreateProcessW(nullptr, (PWSTR)app.c_str(), nullptr, nullptr, true,
 		                          CREATE_DEFAULT_ERROR_MODE, nullptr, nullptr, &si, &pi));
 		::CloseHandle(pi.hThread);
-		Base::auto_close<HANDLE> hProc(pi.hProcess);
+		memory::auto_close<HANDLE> hProc(pi.hProcess);
 		if (::WaitForSingleObject(hProc, wait) == WAIT_OBJECT_0) {
 			::GetExitCodeProcess(hProc, &Result);
 		} else {
@@ -173,12 +170,12 @@ namespace Ext {
 	}
 
 	void Exec::RunAsUser(const ustring &cmd, HANDLE hToken) {
-		ustring app = Validate(cmd);
+		ustring app = fsys::Validate(cmd);
 
 		PROCESS_INFORMATION pi;
-		Memory::zero(pi);
+		memory::zero(pi);
 		STARTUPINFOW si;
-		Memory::zero(si);
+		memory::zero(si);
 		si.cb = sizeof(si);
 
 		CheckApi(::CreateProcessAsUserW(hToken, nullptr, (PWSTR)app.c_str(), nullptr, nullptr, false, CREATE_DEFAULT_ERROR_MODE, nullptr, nullptr, &si, &pi));
@@ -187,12 +184,12 @@ namespace Ext {
 	}
 
 	void Exec::RunAsUser(const ustring &cmd, const ustring &user, const ustring &pass) {
-		ustring app = Validate(cmd);
+		ustring app = fsys::Validate(cmd);
 
 		PROCESS_INFORMATION pi;
-		Memory::zero(pi);
+		memory::zero(pi);
 		STARTUPINFOW si;
-		Memory::zero(si);
+		memory::zero(si);
 		si.cb = sizeof(si);
 
 		CheckApi(::CreateProcessWithLogonW(user.c_str(), nullptr, pass.c_str(), 0, nullptr, (PWSTR)app.c_str(), CREATE_DEFAULT_ERROR_MODE, nullptr, nullptr, &si, &pi));
@@ -205,7 +202,7 @@ namespace Ext {
 		DWORD Result = 0;
 
 		// Pipe for write stdin
-		Base::auto_close<HANDLE> hPipeInRead, hPipeInWrite;
+		memory::auto_close<HANDLE> hPipeInRead, hPipeInWrite;
 		CheckApi(::CreatePipe(&hPipeInRead, &hPipeInWrite, nullptr, in.size() + 1));
 		CheckApi(::SetHandleInformation(hPipeInRead, HANDLE_FLAG_INHERIT, HANDLE_FLAG_INHERIT));
 
@@ -213,15 +210,15 @@ namespace Ext {
 		CheckApi(::WriteFile(hPipeInWrite, in.c_str(), in.size(), &dwWritten, nullptr));
 
 		// Pipe for read stdout
-		auto_close<HANDLE> hPipeOutRead, hPipeOutWrite;
+		memory::auto_close<HANDLE> hPipeOutRead, hPipeOutWrite;
 		CheckApi(::CreatePipe(&hPipeOutRead, &hPipeOutWrite, nullptr, 0));
 		CheckApi(::SetHandleInformation(hPipeOutWrite, HANDLE_FLAG_INHERIT, HANDLE_FLAG_INHERIT));
 
 		// fork process
 		PROCESS_INFORMATION pi;
-		Memory::zero(pi);
+		memory::zero(pi);
 		STARTUPINFOW si;
-		Memory::zero(si);
+		memory::zero(si);
 		si.cb = sizeof(si);
 		si.hStdInput = hPipeInRead;
 		si.hStdOutput = hPipeOutWrite;
@@ -242,14 +239,14 @@ namespace Ext {
 		//	PROFILEINFOW pinfo;
 		//	::CreateEnvironmentBlock(&lpEnvironment, hToken, false);
 		//	::LoadUserProfileW(hToken, &pinfo);
-		ustring app = Validate(cmd);
+		ustring app = fsys::Validate(cmd);
 		CheckApi(::CreateProcessAsUserW(hToken, nullptr, (PWSTR)app.c_str(), nullptr, nullptr, true, CREATE_DEFAULT_ERROR_MODE, nullptr, nullptr, &si, &pi));
 		hPipeInRead.close();
 		hPipeInWrite.close();
 		hPipeOutWrite.close();
 		::CloseHandle(pi.hThread);
 
-		auto_close<HANDLE> hProc(pi.hProcess);
+		memory::auto_close<HANDLE> hProc(pi.hProcess);
 		DWORD timeout = TIMEOUT;
 		CHAR buf[1024 * 1024];
 		DWORD dwRead;
@@ -265,7 +262,7 @@ namespace Ext {
 			}
 			while (::PeekNamedPipe(hPipeOutRead, nullptr, 0, nullptr, &dwAvail, nullptr) && dwAvail) {
 				while (::PeekNamedPipe(hPipeOutRead, nullptr, 0, nullptr, &dwAvail, nullptr) && dwAvail) {
-					Memory::zero(buf, sizeof(buf));
+					memory::zero(buf, sizeof(buf));
 					::ReadFile(hPipeOutRead, buf, sizeof(buf), &dwRead, nullptr);
 					out += buf;
 				}
@@ -710,7 +707,7 @@ int Execute(const wchar_t *CmdStr, // Ком.строка для исполне�
 
 	void WinJob::SetTimeLimit(size_t seconds) {
 		JOBOBJECT_BASIC_LIMIT_INFORMATION jobli;
-		Memory::zero(jobli);
+		memory::zero(jobli);
 		jobli.PerJobUserTimeLimit.QuadPart = seconds * 10000;
 		CheckApi(::SetInformationJobObject(m_job, JobObjectBasicLimitInformation, &jobli, sizeof(jobli)));
 	}
@@ -728,12 +725,12 @@ int Execute(const wchar_t *CmdStr, // Ком.строка для исполне�
 	}
 
 	void WinJob::RunAsUser(const ustring &cmd, HANDLE hToken) {
-		ustring app = Validate(cmd);
+		ustring app = fsys::Validate(cmd);
 
 		PROCESS_INFORMATION pi;
-		Memory::zero(pi);
+		memory::zero(pi);
 		STARTUPINFOW si;
-		Memory::zero(si);
+		memory::zero(si);
 		si.cb = sizeof(si);
 
 		CheckApi(::CreateProcessAsUserW(hToken, nullptr, (PWSTR)app.c_str(), nullptr, nullptr, false, CREATE_SUSPENDED | CREATE_DEFAULT_ERROR_MODE, nullptr, nullptr, &si, &pi));
@@ -747,7 +744,7 @@ int Execute(const wchar_t *CmdStr, // Ком.строка для исполне�
 		DWORD Result = 0;
 
 		// Pipe for write stdin
-		auto_close<HANDLE> hPipeInRead, hPipeInWrite;
+		memory::auto_close<HANDLE> hPipeInRead, hPipeInWrite;
 		CheckApi(::CreatePipe(&hPipeInRead, &hPipeInWrite, nullptr, in.size() + 1));
 		CheckApi(::SetHandleInformation(hPipeInRead, HANDLE_FLAG_INHERIT, HANDLE_FLAG_INHERIT));
 
@@ -755,15 +752,15 @@ int Execute(const wchar_t *CmdStr, // Ком.строка для исполне�
 		CheckApi(::WriteFile(hPipeInWrite, in.c_str(), in.size(), &dwWritten, nullptr));
 
 		// Pipe for read stdout
-		auto_close<HANDLE> hPipeOutRead, hPipeOutWrite;
+		memory::auto_close<HANDLE> hPipeOutRead, hPipeOutWrite;
 		CheckApi(::CreatePipe(&hPipeOutRead, &hPipeOutWrite, nullptr, 0));
 		CheckApi(::SetHandleInformation(hPipeOutWrite, HANDLE_FLAG_INHERIT, HANDLE_FLAG_INHERIT));
 
 		// fork process
 		PROCESS_INFORMATION pi;
-		Memory::zero(pi);
+		memory::zero(pi);
 		STARTUPINFOW si;
-		Memory::zero(si);
+		memory::zero(si);
 		si.cb = sizeof(si);
 		si.hStdInput = hPipeInRead;
 		si.hStdOutput = hPipeOutWrite;
@@ -771,7 +768,7 @@ int Execute(const wchar_t *CmdStr, // Ком.строка для исполне�
 		si.wShowWindow = SW_HIDE;
 		si.dwFlags = STARTF_USESHOWWINDOW | STARTF_USESTDHANDLES;
 
-		ustring app = Validate(cmd);
+		ustring app = fsys::Validate(cmd);
 		CheckApi(::CreateProcessAsUserW(hToken, nullptr, (PWSTR)app.c_str(), nullptr, nullptr, true, CREATE_SUSPENDED | CREATE_DEFAULT_ERROR_MODE, nullptr, nullptr, &si, &pi));
 		hPipeInRead.close();
 		hPipeInWrite.close();
@@ -780,7 +777,7 @@ int Execute(const wchar_t *CmdStr, // Ком.строка для исполне�
 		::ResumeThread(pi.hThread);
 		::CloseHandle(pi.hThread);
 
-		auto_close<HANDLE> hProc(pi.hProcess);
+		memory::auto_close<HANDLE> hProc(pi.hProcess);
 		CHAR buf[1024 * 1024];
 		DWORD dwRead;
 		DWORD dwAvail = 0;
@@ -793,7 +790,7 @@ int Execute(const wchar_t *CmdStr, // Ком.строка для исполне�
 			}
 			while (::PeekNamedPipe(hPipeOutRead, nullptr, 0, nullptr, &dwAvail, nullptr) && dwAvail) {
 				while (::PeekNamedPipe(hPipeOutRead, nullptr, 0, nullptr, &dwAvail, nullptr) && dwAvail) {
-					Memory::zero(buf, sizeof(buf));
+					memory::zero(buf, sizeof(buf));
 					::ReadFile(hPipeOutRead, buf, sizeof(buf), &dwRead, nullptr);
 					out += buf;
 				}

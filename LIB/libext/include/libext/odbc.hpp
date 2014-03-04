@@ -6,17 +6,14 @@
 #ifndef WIN_ODBC_HPP
 #define WIN_ODBC_HPP
 
-#include <libbase/std.hpp>
-#include <libbase/string.hpp>
-#include <libbase/memory.hpp>
+#include <system/configure.hpp>
+#include <system/memory.hpp>
+#include <system/string.hpp>
 
 #include <sql.h>
 #include <sqlext.h>
 
-#include <vector>
-
-using namespace Base;
-
+#include <simstd/vector>
 
 namespace Ext {
 
@@ -57,12 +54,12 @@ namespace ODBC_base {
 ///======================================================================================= OdbcError
 struct OdbcError {
 	OdbcError(DWORD code): m_code(code) {
-		Memory::zero(m_state, sizeof(m_state));
+		memory::zero(m_state, sizeof(m_state));
 	}
 
 	OdbcError(DWORD code, SQLSMALLINT type, SQLHANDLE hndl): m_code(code) {
-		Memory::zero(m_state, sizeof(m_state));
-		m_msg = Base::String::copy_after_last(ODBC_base::GetState(type, hndl, 1, m_state), L"]");
+		memory::zero(m_state, sizeof(m_state));
+		m_msg = String::copy_after_last(ODBC_base::GetState(type, hndl, 1, m_state), L"]");
 	}
 
 	ustring	msg(PCWSTR msg) {
@@ -104,7 +101,7 @@ inline void OdbcChk(SQLRETURN r, SQLSMALLINT type, SQLHANDLE hndl) {
 }
 
 ///======================================================================================= ODBC_Conn
-class ODBC_Conn : private Base::Uncopyable {
+class ODBC_Conn : private pattern::Uncopyable {
 	SQLHENV	m_henv;
 	SQLHDBC	m_hdbc;
 	bool	connected;
@@ -155,14 +152,14 @@ public:
 };
 
 ///====================================================================================== ODBC_Query
-class ODBC_Query : private Base::Uncopyable {
+class ODBC_Query : private pattern::Uncopyable {
 	ODBC_Conn const	*m_conn;
 	SQLHSTMT		m_hstm;
 
 //	StringVector	Fields;
 //	StringVector	ShortFields;
-	std::vector<ColType> Fields;
-	std::vector<ustring> RowData;
+	simstd::vector<ColType> Fields;
+	simstd::vector<ustring> RowData;
 	size_t	NumFields;
 	size_t	NumRows;
 	bool	eof;

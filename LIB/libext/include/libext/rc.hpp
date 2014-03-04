@@ -1,8 +1,8 @@
 ﻿#ifndef _LIBEXT_RC_HPP_
 #define _LIBEXT_RC_HPP_
 
-#include <libbase/std.hpp>
-#include <libbase/string.hpp>
+#include <system/configure.hpp>
+#include <system/string.hpp>
 
 namespace Ext {
 

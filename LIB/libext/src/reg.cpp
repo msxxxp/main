@@ -1,12 +1,10 @@
 ﻿#include <libext/reg.hpp>
 #include <libext/exception.hpp>
 #include <liblog/logger.hpp>
-#include <libbase/cstr.hpp>
-#include <libbase/bit.hpp>
+#include <system/cstr.hpp>
+//#include <libbase/bit.hpp>
 
-#include <cassert>
-
-using namespace Base;
+#include <simstd/string>
 
 namespace Ext {
 
@@ -20,7 +18,7 @@ namespace Ext {
 //	bool	WinReg::OpenKey(HKEY hkey, const ustring & path, ACCESS_MASK acc) const {
 //		CloseKey();
 //		bool	Result = false;
-//		if (Base::WinFlag::Check(acc, (ACCESS_MASK)KEY_READ))
+//		if (WinFlag::Check(acc, (ACCESS_MASK)KEY_READ))
 //			Result = ::RegOpenKeyExW(hkey, path.c_str(), 0, acc, &hKeyOpend) == ERROR_SUCCESS;
 //		else
 //			Result = ::RegCreateKeyExW(hkey, path.c_str(), 0, nullptr, 0, acc, 0, &hKeyOpend, 0) == ERROR_SUCCESS;
@@ -154,15 +152,15 @@ namespace Ext {
 	}
 
 	Register::Register(Register && right):
-		m_hndl(std::move(right.m_hndl)),
-		m_access(std::move(right.m_access))
+		m_hndl(simstd::move(right.m_hndl)),
+		m_access(simstd::move(right.m_access))
 	{
 		assert(right.m_hndl == nullptr);
 	}
 
 	Register & Register::operator = (Register & right) {
-		m_hndl = std::move(right.m_hndl);
-		m_access = std::move(right.m_access);
+		m_hndl = simstd::move(right.m_hndl);
+		m_access = simstd::move(right.m_access);
 		assert(right.m_hndl == nullptr);
 		return *this;
 	}
@@ -183,7 +181,7 @@ namespace Ext {
 
 	ustring Register::get(PCWSTR name, PCWSTR def) const {
 //		LogDebug(L"name: '%s', def: '%s'\n", name, def);
-		Base::auto_array<wchar_t> buf(Cstr::length(def) + 1, def);
+		memory::auto_array<wchar_t> buf(Cstr::length(def) + 1, def);
 		DWORD l_size = buf.size_in_bytes();
 		if (::RegQueryValueExW(m_hndl, name, nullptr, nullptr, (PBYTE)buf.data(), &l_size) == ERROR_MORE_DATA) {
 			buf.reserve(l_size / sizeof(wchar_t));
@@ -228,7 +226,7 @@ namespace Ext {
 		return ret;
 	}
 
-	void Register::set(PCWSTR name, PCVOID value, size_t size) {
+	void Register::set(PCWSTR name, const void* value, size_t size) {
 		CheckApiError(::RegSetValueExW(m_hndl, name, 0, REG_BINARY, (PBYTE)&value, size));
 	}
 
@@ -249,6 +247,6 @@ namespace Ext {
 	}
 
 	Register Register::open_subkey_stored_in_key(PCWSTR key_name, ACCESS_MASK acc) const {
-		return Register(get(key_name, Base::EMPTY_STR).c_str(), m_hndl, acc ? acc : m_access);
+		return Register(get(key_name, EMPTY_STR).c_str(), m_hndl, acc ? acc : m_access);
 	}
 }

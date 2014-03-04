@@ -1,11 +1,9 @@
 ﻿#include <libext/rc.hpp>
 #include <libext/dll.hpp>
 #include <libext/exception.hpp>
-#include <libbase/std.hpp>
 #include <liblog/logger.hpp>
-#include <libbase/string.hpp>
 
-using namespace Base;
+#include <simstd/string>
 
 namespace Ext {
 
@@ -34,7 +32,7 @@ namespace Ext {
 		ustring MakeIPCstring(const ustring & host) {
 			PCWSTR prefix = (host[0] != PATH_SEPARATOR_C || host[1] != PATH_SEPARATOR_C) ? NETWORK_PATH_PREFIX : EMPTY_STR;
 			wchar_t ipc[MAX_PATH]; ipc[0] = 0;
-			_snwprintf(ipc, Base::lengthof(ipc), L"%s%s%s", prefix, host.c_str(), L"\\IPC$");
+			_snwprintf(ipc, lengthof(ipc), L"%s%s%s", prefix, host.c_str(), L"\\IPC$");
 			return ustring(ipc);
 		}
 	}
@@ -59,7 +57,7 @@ namespace Ext {
 			LogTrace();
 			ustring ipc = MakeIPCstring(host);
 			NETRESOURCE NetRes;
-			Memory::zero(NetRes);
+			memory::zero(NetRes);
 			NetRes.dwType = RESOURCETYPE_ANY;
 			NetRes.lpRemoteName = (PWSTR)ipc.c_str();
 			if (Cstr::is_empty(user)) {

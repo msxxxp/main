@@ -1,7 +1,8 @@
 ﻿#ifndef _LIBEXT_EXCEPTION_PVT_HPP_
 #define _LIBEXT_EXCEPTION_PVT_HPP_
 
-#include <libbase/std.hpp>
+#include <system/configure.hpp>
+#include <system/cstr.hpp>
 #include <libext/exception.hpp>
 
 namespace Ext {
@@ -16,7 +17,7 @@ namespace Ext {
 
 		virtual DWORD code() const override;
 
-		virtual void format_error(Base::mstring & out) const override;
+		virtual void format_error(cstr::mstring & out) const override;
 
 	protected:
 #ifndef NDEBUG

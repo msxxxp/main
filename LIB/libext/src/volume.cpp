@@ -1,14 +1,11 @@
-#include <libbase/std.hpp>
-#include <libbase/string.hpp>
 #include <libext/exception.hpp>
 #include <libext/volume.hpp>
-
-using namespace Base;
+#include <system/string.hpp>
 
 namespace Ext {
 
 	void EnumVolumes(ENUMVOLUMECALLBACK callback, PVOID callbackData){
-		auto_array<wchar_t> buf(MAX_VOL_LEN);
+		memory::auto_array<wchar_t> buf(MAX_VOL_LEN);
 		HANDLE hndl = CheckHandle(::FindFirstVolumeW(buf, buf.size()));
 		while (callback(buf, callbackData) && ::FindNextVolumeW(hndl, buf, buf.size()))
 			;
@@ -16,7 +13,7 @@ namespace Ext {
 	}
 
 	void EnumVolumeMountPoints(ENUMVOLUMECALLBACK callback, PCWSTR volName, PVOID callbackData){
-		auto_array<wchar_t> buf(MAX_MOUNT_POINT_LEN);
+		memory::auto_array<wchar_t> buf(MAX_MOUNT_POINT_LEN);
 		HANDLE hndl = CheckHandle(::FindFirstVolumeMountPointW(volName, buf, buf.size()));
 		while (callback(buf, callbackData) && ::FindNextVolumeMountPointW(hndl, buf, buf.size()));
 		::FindVolumeMountPointClose(hndl);
@@ -62,21 +59,21 @@ namespace Ext {
 	}
 
 	ustring GetVolumeByFileName(PCWSTR fileName) {
-		auto_array<wchar_t> path(MAX_MOUNT_POINT_LEN);
+		memory::auto_array<wchar_t> path(MAX_MOUNT_POINT_LEN);
 		CheckApi(::GetVolumePathNameW(fileName, path, path.size()));
-		auto_array<wchar_t> name(MAX_VOL_LEN);
+		memory::auto_array<wchar_t> name(MAX_VOL_LEN);
 		CheckApi(::GetVolumeNameForVolumeMountPointW(path, name, MAX_VOL_LEN));
 		return ustring(name);
 	}
 
 	void GetDriveGeometry(PCWSTR name, DISK_GEOMETRY &g) {
-		auto_close<HANDLE> hndl(CheckHandle(::CreateFileW(name, GENERIC_READ, FILE_SHARE_READ|FILE_SHARE_WRITE, nullptr, OPEN_EXISTING, 0, nullptr)));
+		memory::auto_close<HANDLE> hndl(CheckHandle(::CreateFileW(name, GENERIC_READ, FILE_SHARE_READ|FILE_SHARE_WRITE, nullptr, OPEN_EXISTING, 0, nullptr)));
 		DWORD size;
 		CheckApi(::DeviceIoControl(hndl, IOCTL_DISK_GET_DRIVE_GEOMETRY, nullptr, 0, &g, sizeof(g), &size, nullptr));
 	}
 
-	void GetVolumeDiskExtents(PCWSTR name, auto_buf<PVOLUME_DISK_EXTENTS> &buf){
-		auto_close<HANDLE> hndl(CheckHandle(::CreateFileW(name, GENERIC_READ, FILE_SHARE_READ|FILE_SHARE_WRITE, nullptr, OPEN_EXISTING, 0, nullptr)));
+	void GetVolumeDiskExtents(PCWSTR name, memory::auto_buf<PVOLUME_DISK_EXTENTS> &buf){
+		memory::auto_close<HANDLE> hndl(CheckHandle(::CreateFileW(name, GENERIC_READ, FILE_SHARE_READ|FILE_SHARE_WRITE, nullptr, OPEN_EXISTING, 0, nullptr)));
 		DWORD outSize = 0;
 		buf.reserve(sizeof(VOLUME_DISK_EXTENTS));
 		bool res = ::DeviceIoControl(hndl, IOCTL_VOLUME_GET_VOLUME_DISK_EXTENTS, nullptr, 0, buf, buf.size(), &outSize, nullptr);
@@ -90,12 +87,12 @@ namespace Ext {
 	ustring GetDrives() {
 		wchar_t	Result[MAX_PATH] = {0};
 		wchar_t	szTemp[MAX_PATH_LEN];
-		if (::GetLogicalDriveStringsW(Base::lengthof(szTemp), szTemp)) {
+		if (::GetLogicalDriveStringsW(lengthof(szTemp), szTemp)) {
 			bool	bFound = false;
 			wchar_t	*p = szTemp;
 			do {
-				Cstr::cat(Result, p, Base::lengthof(Result));
-				Cstr::cat(Result, L";", Base::lengthof(Result));
+				Cstr::cat(Result, p, lengthof(Result));
+				Cstr::cat(Result, L";", lengthof(Result));
 				while (*p++);
 			} while (!bFound && *p); // end of string
 		}

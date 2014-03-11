@@ -3,8 +3,8 @@
 
 #include <system/configure.hpp>
 #include <system/sub_console/console.hpp>
-#include <system/sub_console/a_console.hpp>
-#include <system/sub_console/w_console.hpp>
+#include <system/sub_console/aprintf.hpp>
+#include <system/sub_console/wprintf.hpp>
 #include <system/sub_console/Color.hpp>
 
 #endif

@@ -1,5 +1,5 @@
-﻿#ifndef LIBBASE_CONSOLE_CONSOLE_HPP_
-#define LIBBASE_CONSOLE_CONSOLE_HPP_
+﻿#ifndef LIBSTL_SYSTEM_CONSOLE_CONSOLE_HPP_
+#define LIBSTL_SYSTEM_CONSOLE_CONSOLE_HPP_
 
 #include <system/console.hpp>
 
@@ -11,12 +11,8 @@ namespace console {
 		ERR    = STD_ERROR_HANDLE,
 	};
 
-//	size_t fileout(PCSTR str, size_t len, HANDLE hndl);
-//
-//	size_t fileout(PCWSTR str, size_t len, HANDLE hndl);
-//
-//	size_t fileout(wchar_t ch, size_t len, HANDLE hndl);
-//
+}
+
 /*
  #ifndef NDEBUG
  extern PCSTR FUNC_ENTER_FORMAT;
@@ -38,7 +34,5 @@ namespace console {
 
  #endif
  */
-
-}
 
 #endif

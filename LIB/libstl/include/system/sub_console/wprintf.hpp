@@ -1,17 +1,19 @@
-﻿#ifndef LIBBASE_CONSOLE_W_CONSOLE_HPP_
-#define LIBBASE_CONSOLE_W_CONSOLE_HPP_
+﻿#ifndef LIBSTL_SYSTEM_CONSOLE_WPRINTF_HPP_
+#define LIBSTL_SYSTEM_CONSOLE_WPRINTF_HPP_
 
 #include <system/console.hpp>
 
 namespace console {
 
-	size_t putc(Handle hnd, wchar_t ch);
+	size_t fputs(const wchar_t * str, size_t len, HANDLE hndl);
 
-	size_t puts(Handle hnd, const wchar_t * str, size_t len);
+	size_t fputs(const wchar_t * str, HANDLE hndl);
 
 	size_t puts(const wchar_t * str, size_t len, Handle hnd = Handle::OUTPUT);
 
 	size_t puts(const wchar_t * str, Handle hnd = Handle::OUTPUT);
+
+	size_t putc(Handle hnd, wchar_t ch);
 
 	size_t vprintf(Handle hnd, const wchar_t * format, va_list vl);
 

@@ -2,61 +2,51 @@
 #include <system/cstr.hpp>
 #include <system/memory.hpp>
 
-namespace console {
-
+namespace {
 	const size_t DEFAULT_PRINTF_BUFFER = 8 * 1024;
+}
+
+namespace console {
 
 	size_t fputs(const char * str, size_t len, HANDLE hndl)
 	{
 		DWORD written = 0;
 		if (len) {
 			if (!::WriteConsoleA(hndl, str, len, &written, nullptr)) {
-				::WriteFile(hndl, str, len * sizeof(char), &written, nullptr);
-				written /= sizeof(char);
+				::WriteFile(hndl, str, len * sizeof(*str), &written, nullptr);
+				written /= sizeof(*str);
 			}
 		}
 		return written;
 	}
 
-	size_t puts(const char * str, HANDLE hndl)
+	size_t fputs(const char * str, HANDLE hndl)
 	{
+		return fputs(str, cstr::length(str), hndl);
+	}
+
+	size_t puts(const char * str, size_t len, Handle hnd)
+	{
+		return fputs(str, len, ::GetStdHandle(static_cast<DWORD>(hnd)));
+	}
+
+	size_t puts(const char * str, Handle hnd)
+	{
+		return fputs(str, ::GetStdHandle(static_cast<DWORD>(hnd)));
 	}
 
 	size_t putc(Handle hnd, char ch)
 	{
 		char str[] = {ch, ASTR_END_C};
-		return puts(hnd, str, lengthof(str));
-	}
-
-	size_t puts(Handle hnd, const char * str, size_t len)
-	{
-		DWORD written = 0;
-		if (len) {
-			HANDLE hndl = ::GetStdHandle(static_cast<DWORD>(hnd));
-			if (!::WriteConsoleA(hndl, str, len, &written, nullptr)) {
-				::WriteFile(hndl, str, len * sizeof(char), &written, nullptr);
-				written /= sizeof(char);
-			}
-		}
-		return written;
-	}
-
-	size_t puts(const char * str, size_t len, Handle hnd)
-	{
-		return puts(hnd, str, len);
-	}
-
-	size_t puts(const char * str, Handle hnd)
-	{
-		return puts(hnd, str, cstr::length(str));
+		return puts(str, lengthof(str), hnd);
 	}
 
 	size_t vprintf(Handle hnd, const char * format, va_list vl)
 	{
 		memory::auto_array<char> buf(DEFAULT_PRINTF_BUFFER);
 		while (!safe_vsnprintf(buf.data(), buf.size(), format, vl))
-			buf.reserve(buf.size() * sizeof(char));
-		return puts(hnd, buf.data(), cstr::length(buf.data()));
+			buf.reserve(buf.size() * 2);
+		return puts(buf.data(), cstr::length(buf.data()), hnd);
 	}
 
 	size_t vprintf(const char * format, va_list vl)

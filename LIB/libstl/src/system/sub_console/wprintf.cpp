@@ -2,45 +2,51 @@
 #include <system/cstr.hpp>
 #include <system/memory.hpp>
 
+namespace {
+	const size_t DEFAULT_PRINTF_BUFFER = 8 * 1024;
+}
+
 namespace console {
 
-	const size_t DEFAULT_PRINTF_BUFFER = 8 * 1024;
-
-	size_t putc(Handle hnd, wchar_t ch)
-	{
-		wchar_t str[] = {ch, WSTR_END_C};
-		return puts(hnd, str, lengthof(str));
-	}
-
-	size_t puts(Handle hnd, const wchar_t * str, size_t len)
+	size_t fputs(const wchar_t * str, size_t len, HANDLE hndl)
 	{
 		DWORD written = 0;
 		if (len) {
-			HANDLE hndl = ::GetStdHandle(static_cast<DWORD>(hnd));
 			if (!::WriteConsoleW(hndl, str, len, &written, nullptr)) {
-				::WriteFile(hndl, str, len * sizeof(wchar_t), &written, nullptr);
-				written /= sizeof(wchar_t);
+				::WriteFile(hndl, str, len * sizeof(*str), &written, nullptr);
+				written /= sizeof(*str);
 			}
 		}
 		return written;
 	}
 
+	size_t fputs(const wchar_t * str, HANDLE hndl)
+	{
+		return fputs(str, cstr::length(str), hndl);
+	}
+
 	size_t puts(const wchar_t * str, size_t len, Handle hnd)
 	{
-		return puts(hnd, str, len);
+		return fputs(str, len, ::GetStdHandle(static_cast<DWORD>(hnd)));
 	}
 
 	size_t puts(const wchar_t * str, Handle hnd)
 	{
-		return puts(hnd, str, cstr::length(str));
+		return fputs(str, ::GetStdHandle(static_cast<DWORD>(hnd)));
+	}
+
+	size_t putc(Handle hnd, wchar_t ch)
+	{
+		wchar_t str[] = {ch, WSTR_END_C};
+		return puts(str, lengthof(str), hnd);
 	}
 
 	size_t vprintf(Handle hnd, const wchar_t * format, va_list vl)
 	{
 		memory::auto_array<wchar_t> buf(DEFAULT_PRINTF_BUFFER);
 		while (!safe_vsnprintf(buf.data(), buf.size(), format, vl))
-			buf.reserve(buf.size() * sizeof(wchar_t));
-		return puts(hnd, buf.data(), cstr::length(buf.data()));
+			buf.reserve(buf.size() * 2);
+		return puts(buf.data(), cstr::length(buf.data()), hnd);
 	}
 
 	size_t vprintf(const wchar_t * format, va_list vl)

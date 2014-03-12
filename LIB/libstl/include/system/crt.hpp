@@ -3,19 +3,6 @@
 
 #include <system/configure.hpp>
 #include <system/sub_crt/assert.hpp>
-
-namespace crt {
-
-	typedef void (*Function)(void);
-
-	void init_atexit();
-
-	void invoke_atexit();
-
-	int atexit(Function pf);
-
-	void cxa_pure_virtual();
-
-}
+#include <system/sub_crt/atexit.hpp>
 
 #endif

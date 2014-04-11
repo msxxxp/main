@@ -4,8 +4,8 @@
 #include <atomic>
 
 extern "C" {
-	const crt::Function __CTOR_LIST__[1];
-	const crt::Function __DTOR_LIST__[1];
+	extern const crt::Function __CTOR_LIST__[1];
+	extern const crt::Function __DTOR_LIST__[1];
 }
 
 namespace {

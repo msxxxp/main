@@ -96,15 +96,15 @@ namespace simstd {
 		{
 		};
 
-		template<>
-		struct is_integral<__int128> : public true_type
-		{
-		};
-
-		template<>
-		struct is_integral<unsigned __int128> : public true_type
-		{
-		};
+//		template<>
+//		struct is_integral<__int128> : public true_type
+//		{
+//		};
+//
+//		template<>
+//		struct is_integral<unsigned __int128> : public true_type
+//		{
+//		};
 
 		template<typename >
 		struct is_floating_point: public false_type

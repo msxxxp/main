@@ -2,7 +2,6 @@
 #define LIBSTL_INITIALIZER_LIST_
 
 #include <system/configure.hpp>
-#include <simstd/types.hpp>
 
 #include <initializer_list>
 

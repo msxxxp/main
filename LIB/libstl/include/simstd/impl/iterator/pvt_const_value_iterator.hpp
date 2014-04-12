@@ -1,9 +1,9 @@
 ﻿#ifndef LIBSTL_ITERATOR_CONST_VALUE_ITERATOR_HPP_
 #define LIBSTL_ITERATOR_CONST_VALUE_ITERATOR_HPP_
 
+#include <system/base_types.hpp>
 #include <simstd/impl/iterator/base.hpp>
 #include <simstd/impl/utility/rel_ops.hpp>
-#include <simstd/types.hpp>
 
 namespace simstd
 {

@@ -14,11 +14,7 @@
 #else
 #endif
 
-#include <stdint.h>
-
-namespace simstd {
-	typedef decltype(nullptr) nullptr_t;
-}
+#include <system/base_types.hpp>
 
 #include <system/sub_configure/os/windows.hpp>
 #ifdef _MSC_VER

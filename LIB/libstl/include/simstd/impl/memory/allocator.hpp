@@ -1,7 +1,7 @@
 ﻿#ifndef LIBSTL_MEMORY_ALLOCATOR_HPP_
 #define LIBSTL_MEMORY_ALLOCATOR_HPP_
 
-#include <simstd/types.hpp>
+#include <system/base_types.hpp>
 #include <simstd/impl/memory/base.hpp>
 #include <simstd/impl/new.hpp>
 

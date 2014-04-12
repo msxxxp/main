@@ -1,8 +1,8 @@
 ﻿#ifndef LIBSTL_ITERATOR_FUNCTIONAL_HPP_
 #define LIBSTL_ITERATOR_FUNCTIONAL_HPP_
 
+#include <system/base_types.hpp>
 #include <simstd/impl/iterator/reverse_iterator.hpp>
-#include <simstd/types.hpp>
 
 namespace simstd {
 

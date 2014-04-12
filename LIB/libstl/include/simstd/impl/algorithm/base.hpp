@@ -1,7 +1,7 @@
 ﻿#ifndef LIBSTL_ALGORITHM_BASE_HPP_
 #define LIBSTL_ALGORITHM_BASE_HPP_
 
-#include <simstd/types.hpp>
+#include <system/base_types.hpp>
 
 namespace simstd {
 

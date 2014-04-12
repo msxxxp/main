@@ -1,7 +1,7 @@
 ﻿#ifndef LIBSTL_GENERIC_HPP_
 #define LIBSTL_GENERIC_HPP_
 
-#include <simstd/types.hpp>
+#include <system/base_types.hpp>
 
 namespace simstd {
 	namespace rel_ops {

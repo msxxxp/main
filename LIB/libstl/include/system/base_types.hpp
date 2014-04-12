@@ -1,7 +1,11 @@
-﻿#ifndef LIBSTL_TYPES_HPP_
-#define LIBSTL_TYPES_HPP_
+﻿#ifndef LIBSTL_SYSTEM_BASE_TYPES_HPP_
+#define LIBSTL_SYSTEM_BASE_TYPES_HPP_
 
 #include <stdint.h>
+
+namespace simstd {
+	typedef decltype(nullptr) nullptr_t;
+}
 
 //#ifdef __x86_64__
 //#define nullptr 0LL

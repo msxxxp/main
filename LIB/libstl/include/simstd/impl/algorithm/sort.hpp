@@ -1,7 +1,7 @@
 ﻿#ifndef LIBSTL_ALGORITHM_SORT_HPP_
 #define LIBSTL_ALGORITHM_SORT_HPP_
 
-#include <simstd/types.hpp>
+#include <system/base_types.hpp>
 #include <simstd/impl/functional.hpp>
 #include <simstd/impl/iterator/base.hpp>
 #include <simstd/impl/utility/pair.hpp>

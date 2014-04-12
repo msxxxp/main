@@ -1,7 +1,7 @@
 ﻿#ifndef LIBSTL_PAIR_HPP_
 #define LIBSTL_PAIR_HPP_
 
-#include <simstd/types.hpp>
+#include <system/base_types.hpp>
 #include <simstd/impl/algorithm/base.hpp>
 #include <simstd/impl/utility/rel_ops.hpp>
 

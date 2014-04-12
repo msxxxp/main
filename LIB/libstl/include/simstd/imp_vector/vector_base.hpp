@@ -1,7 +1,7 @@
 ﻿#ifndef LIBSTL_VECTOR_VECTOR_BASE_HPP_
 #define LIBSTL_VECTOR_VECTOR_BASE_HPP_
 
-#include <simstd/types.hpp>
+#include <system/base_types.hpp>
 #include <simstd/iterator>
 #include <simstd/memory>
 #include <simstd/vector>

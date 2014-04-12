@@ -1,7 +1,7 @@
 ﻿#ifndef LIBSTL_NEW_HPP_
 #define LIBSTL_NEW_HPP_
 
-#include <simstd/types.hpp>
+#include <system/base_types.hpp>
 
 namespace simstd {
 	struct nothrow_t

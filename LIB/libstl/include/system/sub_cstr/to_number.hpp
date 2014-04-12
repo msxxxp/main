@@ -12,26 +12,26 @@ extern "C" {
 
 namespace cstr {
 
-	inline int64_t to_int64(PCSTR in)
+	inline int64_t to_int64(const char * in)
 	{
 		return _atoi64(in);
 	}
 
-	inline uint32_t to_uint32(PCSTR in, int base = 10)
+	inline uint32_t to_uint32(const char * in, int base = 10)
 	{
-		PSTR end_ptr;
+		char * end_ptr;
 		return ::strtoul(in, &end_ptr, base);
 	}
 
-	inline int32_t to_int32(PCSTR in, int base = 10)
+	inline int32_t to_int32(const char * in, int base = 10)
 	{
-		PSTR end_ptr;
+		char * end_ptr;
 		return ::strtol(in, &end_ptr, base);
 	}
 
-	inline double to_double(PCSTR in)
+	inline double to_double(const char * in)
 	{
-		PSTR end_ptr;
+		char * end_ptr;
 		return ::strtod(in, &end_ptr);
 	}
 

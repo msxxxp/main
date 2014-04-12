@@ -66,7 +66,7 @@ namespace linkage {
 		return ::GetModuleFileNameW(m_hnd, path, size);
 	}
 
-	FARPROC DynamicLibrary::get_function(PCSTR name) const noexcept
+	FARPROC DynamicLibrary::get_function(const char * name) const noexcept
 	{
 		return ::GetProcAddress(m_hnd, name);
 	}

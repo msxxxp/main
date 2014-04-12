@@ -135,14 +135,14 @@ namespace cstr {
 		return cstr::char_traits<CharType>::find(where, what);
 	}
 
-	//inline PSTR RFind(PCSTR where, PCSTR what) {
-	//	PCSTR last1 = where + Len(where);
-	//	PCSTR last2 = what + Len(what);
+	//inline char * RFind(const char * where, const char * what) {
+	//	const char * last1 = where + Len(where);
+	//	const char * last2 = what + Len(what);
 	//	last2 = simstd::find_end(where, last1, what, last2);
-	//	return (last1 == last2) ? nullptr : const_cast<PSTR>(last2);
+	//	return (last1 == last2) ? nullptr : const_cast<char *>(last2);
 	//}
 	//
-	//inline PSTR RFind(PCSTR where, CHAR what) {
+	//inline char * RFind(const char * where, CHAR what) {
 	//	return ::strrchr(where, what);
 	//}
 	//
@@ -157,7 +157,7 @@ namespace cstr {
 	//	return ::wcsrchr(where, what);
 	//}
 
-	inline size_t span(PCSTR str, PCSTR strCharSet)
+	inline size_t span(const char * str, const char * strCharSet)
 	{
 		return ::strcspn(str, strCharSet);
 	}
@@ -167,7 +167,7 @@ namespace cstr {
 		return ::wcscspn(str, strCharSet);
 	}
 
-	inline PSTR reverse(PSTR in)
+	inline char * reverse(char * in)
 	{
 		return ::_strrev(in);
 	}
@@ -196,12 +196,12 @@ namespace cstr {
 		return cstr::char_traits<CharType>::assign(str, count, chr);
 	}
 
-	inline size_t convert(PCSTR from, UINT cp)
+	inline size_t convert(const char * from, UINT cp)
 	{
 		return ::MultiByteToWideChar(cp, 0, from, -1, nullptr, 0);
 	}
 
-	inline size_t convert(wchar_t * to, size_t size, PCSTR from, UINT cp)
+	inline size_t convert(wchar_t * to, size_t size, const char * from, UINT cp)
 	{
 		return ::MultiByteToWideChar(cp, 0, from, -1, to, (int)size);
 	}
@@ -211,7 +211,7 @@ namespace cstr {
 		return ::WideCharToMultiByte(cp, 0, from, -1, nullptr, 0, nullptr, nullptr);
 	}
 
-	inline size_t convert(PSTR to, size_t size, const wchar_t * from, UINT cp)
+	inline size_t convert(char * to, size_t size, const wchar_t * from, UINT cp)
 	{
 		return ::WideCharToMultiByte(cp, 0, from, -1, to, (int)size, nullptr, nullptr);
 	}

@@ -29,7 +29,7 @@ namespace linkage {
 
 		bool get_path(wchar_t * path, size_t size) const noexcept;
 
-		FARPROC get_function(PCSTR name) const noexcept;
+		FARPROC get_function(const char * name) const noexcept;
 
 	private:
 		HMODULE m_hnd;

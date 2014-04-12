@@ -89,7 +89,7 @@ namespace String {
 	astring utf8(const wchar_t * in);
 	astring utf8(const ustring &in);
 
-	ustring utf16(PCSTR in, UINT cp = CP_UTF8);
+	ustring utf16(const char * in, UINT cp = CP_UTF8);
 	ustring utf16(const astring &in, UINT cp = CP_UTF8);
 }
 

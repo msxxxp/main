@@ -5,7 +5,7 @@
 
 namespace cstr {
 
-	inline PSTR convert_num(PSTR to, int64_t num, ssize_t base = 10)
+	inline char * convert_num(char * to, int64_t num, ssize_t base = 10)
 	{
 		return ::_i64toa(num, to, base); //lltoa
 	}

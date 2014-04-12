@@ -15,9 +15,9 @@ namespace console {
 
 /*
  #ifndef NDEBUG
- extern PCSTR FUNC_ENTER_FORMAT;
- extern PCSTR FUNC_LEAVE_FORMAT;
- extern PCSTR FUNC_TRACE_FORMAT;
+ extern const char * FUNC_ENTER_FORMAT;
+ extern const char * FUNC_LEAVE_FORMAT;
+ extern const char * FUNC_TRACE_FORMAT;
 
  #define FuncLogger() struct FL_struc__ { \
 	FL_struc__(const char * fl, int l, const char * f):_fn(f) {printf(FUNC_ENTER_FORMAT, _fn, fl, l);} \

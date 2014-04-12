@@ -9,7 +9,7 @@
 //	}
 
 //#ifndef NDEBUG
-//	PCSTR FUNC_ENTER_FORMAT = "Enter >>>>>>>>    %s \t\t[%s:%d]\n";
-//	PCSTR FUNC_LEAVE_FORMAT = "Leave <<<<<<<<    %s\n";
-//	PCSTR FUNC_TRACE_FORMAT = "Trace =========== %s \t\t[%s:%d]\n";
+//	const char * FUNC_ENTER_FORMAT = "Enter >>>>>>>>    %s \t\t[%s:%d]\n";
+//	const char * FUNC_LEAVE_FORMAT = "Leave <<<<<<<<    %s\n";
+//	const char * FUNC_TRACE_FORMAT = "Trace =========== %s \t\t[%s:%d]\n";
 //#endif

@@ -31,7 +31,7 @@ const wchar_t * const MASK_CHARS = L"*?";
 
 const wchar_t PATH_SEPARATOR_C = L'\\';
 
-inline void mbox(PCSTR text, PCSTR capt = "")
+inline void mbox(const char * text, const char * capt = "")
 {
 	::MessageBoxA(nullptr, text, capt, MB_OK);
 }

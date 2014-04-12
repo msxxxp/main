@@ -357,7 +357,7 @@ namespace String {
 		return String::w2cp(in.c_str(), CP_UTF8);
 	}
 
-	ustring utf16(PCSTR in, UINT cp)
+	ustring utf16(const char * in, UINT cp)
 	{
 		return String::cp2w(in, cp);
 	}
@@ -456,7 +456,7 @@ namespace String {
 	astring Hash2Str(const PBYTE hash, size_t size)
 	{
 		memory::auto_array<char> buf((size + 1) * 2);
-		PSTR tmp = buf.data();
+		char * tmp = buf.data();
 		for (size_t i = 0; i < size; ++i) {
 			safe_snprintf(tmp, buf.size() - i * 2, "%02x", hash[i]);
 			tmp += 2;
@@ -467,7 +467,7 @@ namespace String {
 	astring Hash2StrNum(const PBYTE hash, size_t size)
 	{
 		memory::auto_array<char> buf((size + 1) * 4);
-		PSTR tmp = buf.data();
+		char * tmp = buf.data();
 		for (size_t i = 0; i < size; ++i) {
 			tmp += safe_snprintf(tmp, buf.size() - i * 2, "%02i ", hash[i]);
 		}

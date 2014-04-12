@@ -19,7 +19,7 @@ struct bfd_ctx {
 };
 
 struct bfd_set {
-	PCWSTR name;
+	const wchar_t * name;
 	struct bfd_ctx * bc;
 	struct bfd_set *next;
 };
@@ -52,7 +52,7 @@ void release_set(bfd_set * set)
 	}
 }
 
-int init_bfd_ctx(bfd_ctx * bc, PCWSTR image)
+int init_bfd_ctx(bfd_ctx * bc, const wchar_t * image)
 {
 	bc->handle = NULL;
 	bc->symbol = NULL;
@@ -90,7 +90,7 @@ int init_bfd_ctx(bfd_ctx * bc, PCWSTR image)
 	return 0;
 }
 
-bfd_ctx * get_bc(bfd_set * set, PCWSTR image)
+bfd_ctx * get_bc(bfd_set * set, const wchar_t * image)
 {
 	while (set->name) {
 		if (wcscmp(set->name, image) == 0)
@@ -358,7 +358,7 @@ namespace traceback {
 
 	///=============================================================================================
 	struct SymbolInit {
-		static SymbolInit & inst(PCWSTR path = nullptr)
+		static SymbolInit & inst(const wchar_t * path = nullptr)
 		{
 			static SymbolInit instance(path);
 			return instance;
@@ -370,7 +370,7 @@ namespace traceback {
 			LogErrorIf(!SymCleanup(GetCurrentProcess()), L"%s\n", Base::ErrAsStr().c_str());
 		}
 
-		SymbolInit(PCWSTR path)
+		SymbolInit(const wchar_t * path)
 		{
 			SymSetOptions(SymGetOptions() | SYMOPT_FAIL_CRITICAL_ERRORS | SYMOPT_LOAD_LINES);
 			LogErrorIf(!SymInitializeW(GetCurrentProcess(), path, TRUE), L"%s\n", Base::ErrAsStr().c_str());
@@ -382,7 +382,7 @@ namespace traceback {
 	};
 
 	///=============================================================================================
-	Enum::Enum(PCWSTR path, size_t depth)
+	Enum::Enum(const wchar_t * path, size_t depth)
 	{
 		LogNoise(L"path: '%s' depth: %Iu\n", path, depth);
 		SymbolInit::inst(path);

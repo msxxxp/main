@@ -1,8 +1,6 @@
 #ifndef LIBSTL_SYSTEM_CRT_ASSERT_HPP_
 #define LIBSTL_SYSTEM_CRT_ASSERT_HPP_
 
-#include <system/crt.hpp>
-
 namespace crt {
 
 	void assrt(const char* message, const char* file, int line);

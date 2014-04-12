@@ -106,7 +106,7 @@ namespace thread {
 		return (sync::WaitResult_t)::WaitForSingleObjectEx(m_handle, timeout, true);
 	}
 
-	PCWSTR to_str(Thread::Priority_t prio)
+	const wchar_t * to_str(Thread::Priority_t prio)
 	{
 		switch (prio) {
 			case Thread::Priority_t::IDLE:
@@ -127,7 +127,7 @@ namespace thread {
 		return L"unknown";
 	}
 
-	PCWSTR to_str(Thread::IoPriority_t prio)
+	const wchar_t * to_str(Thread::IoPriority_t prio)
 	{
 		switch (prio) {
 			case Thread::IoPriority_t::VERY_LOW:

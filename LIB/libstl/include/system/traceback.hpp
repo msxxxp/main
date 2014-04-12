@@ -49,7 +49,7 @@ namespace traceback {
 	struct Enum: private simstd::vector<Frame> {
 		typedef simstd::vector<Frame> base_type;
 
-		Enum(PCWSTR path = nullptr, size_t depth = MAX_DEPTH);
+		Enum(const wchar_t * path = nullptr, size_t depth = MAX_DEPTH);
 
 		using base_type::begin;
 		using base_type::end;

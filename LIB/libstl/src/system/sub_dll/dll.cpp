@@ -13,7 +13,7 @@ namespace linkage {
 		return m_hnd;
 	}
 
-	DynamicLibrary::DynamicLibrary(PCWSTR path, DWORD flags) noexcept :
+	DynamicLibrary::DynamicLibrary(const wchar_t * path, DWORD flags) noexcept :
 		m_hnd(::LoadLibraryExW(path, nullptr, flags)),
 		m_flags(flags)
 	{
@@ -61,7 +61,7 @@ namespace linkage {
 		return m_flags;
 	}
 
-	bool DynamicLibrary::get_path(PWSTR path, size_t size) const noexcept
+	bool DynamicLibrary::get_path(wchar_t * path, size_t size) const noexcept
 	{
 		return ::GetModuleFileNameW(m_hnd, path, size);
 	}

@@ -327,7 +327,7 @@ namespace String {
 		return ustring(buf);
 	}
 
-	astring oem(PCWSTR in)
+	astring oem(const wchar_t * in)
 	{
 		return String::w2cp(in, CP_OEMCP);
 	}
@@ -337,7 +337,7 @@ namespace String {
 		return String::w2cp(in.c_str(), CP_OEMCP);
 	}
 
-	astring ansi(PCWSTR in)
+	astring ansi(const wchar_t * in)
 	{
 		return String::w2cp(in, CP_ACP);
 	}
@@ -347,7 +347,7 @@ namespace String {
 		return String::w2cp(in.c_str(), CP_ACP);
 	}
 
-	astring utf8(PCWSTR in)
+	astring utf8(const wchar_t * in)
 	{
 		return String::w2cp(in, CP_UTF8);
 	}
@@ -427,18 +427,18 @@ namespace String {
 	//}
 
 	/*
-	 PWSTR				CharFirstOf(PCWSTR in, PCWSTR mask) {
+	 wchar_t *				CharFirstOf(const wchar_t * in, const wchar_t * mask) {
 	 size_t	lin = Len(in);
 	 size_t	len = Len(mask);
 	 for (size_t i = 0; i < lin; ++i) {
 	 for (size_t j = 0; j < len; ++j) {
 	 if (in[i] == mask[j])
-	 return (PWSTR)&in[i];
+	 return (wchar_t *)&in[i];
 	 }
 	 }
 	 return nullptr;
 	 }
-	 PWSTR				CharFirstNotOf(PCWSTR in, PCWSTR mask) {
+	 wchar_t *				CharFirstNotOf(const wchar_t * in, const wchar_t * mask) {
 	 size_t	lin = Len(in);
 	 size_t	len = Len(mask);
 	 for (size_t i = 0; i < lin; ++i) {
@@ -446,7 +446,7 @@ namespace String {
 	 if (in[i] == mask[j])
 	 break;
 	 if (j == len - 1)
-	 return (PWSTR)&in[i];
+	 return (wchar_t *)&in[i];
 	 }
 	 }
 	 return nullptr;
@@ -514,7 +514,7 @@ ustring to_str(const FILETIME & in)
 ustring to_str(const PBYTE hash, size_t size)
 {
 	memory::auto_array<wchar_t> buf((size + 1) * 2);
-	PWSTR tmp = buf.data();
+	wchar_t * tmp = buf.data();
 	for (size_t i = 0; i < size; ++i) {
 		safe_snprintf(tmp, buf.size() - i * 2, L"%02x", hash[i]);
 		tmp += 2;

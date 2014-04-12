@@ -23,6 +23,8 @@ namespace console {
 
 	int printf(const char * format, ...);
 
+	int aprintf(const char * format, ...);
+
 }
 
 #endif

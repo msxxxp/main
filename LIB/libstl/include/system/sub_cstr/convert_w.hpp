@@ -1,7 +1,7 @@
 ﻿#ifndef LIBSTL_CSTR_CONVERT_W_HPP_
 #define LIBSTL_CSTR_CONVERT_W_HPP_
 
-#include <system/cstr.hpp>
+#include <system/base_types.hpp>
 
 namespace cstr {
 

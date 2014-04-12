@@ -5,17 +5,17 @@
 
 namespace fsys {
 
-	ustring MakePath(PCWSTR path, PCWSTR name)
+	ustring MakePath(const wchar_t * path, const wchar_t * name)
 	{
 		return Path::ensure_end_separator(path) + name;
 	}
 
-	ustring PathNice(PCWSTR path)
+	ustring PathNice(const wchar_t * path)
 	{
 		return Path::canonicalize(Path::expand(path));
 	}
 
-	ustring Secure(PCWSTR path)
+	ustring Secure(const wchar_t * path)
 	{
 		ustring Result(path);
 		String::replace_all(Result, L"..", L"");
@@ -23,7 +23,7 @@ namespace fsys {
 		return Validate(Result);
 	}
 
-	ustring Validate(PCWSTR path)
+	ustring Validate(const wchar_t * path)
 	{
 		ustring Result(Path::canonicalize(Path::expand(path)));
 		String::replace_all(Result, L"...", L"");
@@ -41,7 +41,7 @@ namespace fsys {
 		return ustring(buf);
 	}
 
-	ustring TempFile(PCWSTR path)
+	ustring TempFile(const wchar_t * path)
 	{
 		wchar_t buf[MAX_PATH];
 		wchar_t pid[32];
@@ -102,7 +102,7 @@ namespace fsys {
 	}
 
 	///=================================================================================================
-	bool substr_match(const ustring& str, size_t pos, PCWSTR mstr)
+	bool substr_match(const ustring& str, size_t pos, const wchar_t * mstr)
 	{
 		size_t mstr_len = cstr::length(mstr);
 		if ((pos > str.size()) || (pos + mstr_len > str.size())) {

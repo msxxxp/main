@@ -10,7 +10,7 @@ namespace cstr {
 		return ::_i64toa(num, to, base); //lltoa
 	}
 
-	inline PWSTR convert_num(PWSTR to, int64_t num, ssize_t base = 10)
+	inline wchar_t * convert_num(wchar_t * to, int64_t num, ssize_t base = 10)
 	{
 		return ::_i64tow(num, to, base); //lltow
 	}

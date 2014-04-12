@@ -27,7 +27,7 @@ namespace Base {
 			Handler_t(UINT message_, Window * context_, FuncPointer func_): message(message_), context(context_), func(func_) {}
 		};
 
-		bool create(HWND parent, PCWSTR title, DWORD exstyle, DWORD style, int x, int y, int w, int h, HMENU id);
+		bool create(HWND parent, const wchar_t * title, DWORD exstyle, DWORD style, int x, int y, int w, int h, HMENU id);
 
 		static LRESULT CALLBACK MainHandler(HWND hwnd, UINT message, WPARAM wparam, LPARAM lparam);
 

@@ -1,8 +1,6 @@
 #ifndef LIBSTL_SYSTEM_CRT_ATEXIT_HPP_
 #define LIBSTL_SYSTEM_CRT_ATEXIT_HPP_
 
-#include <system/crt.hpp>
-
 namespace crt {
 
 	typedef void (*Function)(void);

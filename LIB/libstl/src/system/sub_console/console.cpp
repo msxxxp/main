@@ -1,6 +1,6 @@
 ﻿#include <system/console.hpp>
 
-//	size_t fileout(PCWSTR str, size_t len, HANDLE hndl)
+//	size_t fileout(const wchar_t * str, size_t len, HANDLE hndl)
 //	{
 //		DWORD written = 0;
 //		::WriteFile(hndl, str, len * sizeof(*str), &written, nullptr);

@@ -8,13 +8,13 @@ namespace fsys {
 
 	namespace Path {
 
-		ustring canonicalize(PCWSTR path)
+		ustring canonicalize(const wchar_t * path)
 		{
 			wchar_t ret[MAX_PATH_LEN];
 			return canonicalize(ret, path) ? ustring(ret) : ustring();
 		}
 
-		ustring unexpand(PCWSTR path)
+		ustring unexpand(const wchar_t * path)
 		{
 			//	bool	unx = IsPathUnix(path);
 			//	if (unx)
@@ -25,7 +25,7 @@ namespace fsys {
 			//	return ustring();
 		}
 
-		ustring compact(PCWSTR path, size_t size)
+		ustring compact(const wchar_t * path, size_t size)
 		{
 			memory::auto_array<wchar_t> ret(MAX_PATH_LEN);
 			return compact(ret.data(), size, path) ? ustring(ret.data()) : ustring();

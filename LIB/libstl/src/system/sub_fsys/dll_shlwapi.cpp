@@ -5,12 +5,12 @@ namespace fsys {
 
 	namespace {
 		struct shlwapi_dll: private linkage::DynamicLibrary {
-			typedef HRESULT (*FPathMatchSpecExW)(PCWSTR, PCWSTR, DWORD);
-			typedef WINBOOL (*FPathCanonicalizeW)(PWSTR, PCWSTR);
-			typedef WINBOOL (*FPathCompactPathExW)(PWSTR, PCWSTR, UINT, DWORD);
-			typedef WINBOOL (*FPathIsDirectoryEmptyW)(PCWSTR);
-			typedef WINBOOL (*FPathUnExpandEnvStringsW)(PCWSTR, PWSTR, UINT);
-			typedef WINBOOL (*FPathIsRelativeW)(PCWSTR);
+			typedef HRESULT (*FPathMatchSpecExW)(const wchar_t *, const wchar_t *, DWORD);
+			typedef WINBOOL (*FPathCanonicalizeW)(wchar_t *, const wchar_t *);
+			typedef WINBOOL (*FPathCompactPathExW)(wchar_t *, const wchar_t *, UINT, DWORD);
+			typedef WINBOOL (*FPathIsDirectoryEmptyW)(const wchar_t *);
+			typedef WINBOOL (*FPathUnExpandEnvStringsW)(const wchar_t *, wchar_t *, UINT);
+			typedef WINBOOL (*FPathIsRelativeW)(const wchar_t *);
 
 			DEFINE_FUNC(PathMatchSpecExW);
 			DEFINE_FUNC(PathCanonicalizeW);
@@ -40,32 +40,32 @@ namespace fsys {
 	}
 
 	namespace Path {
-		bool is_relative(PCWSTR path)
+		bool is_relative(const wchar_t * path)
 		{
 			return shlwapi_dll::inst().PathIsRelativeW(path);
 		}
 
-		bool canonicalize(PWSTR dest, PCWSTR path)
+		bool canonicalize(wchar_t * dest, const wchar_t * path)
 		{
 			return shlwapi_dll::inst().PathCanonicalizeW(dest, path);
 		}
 
-		bool expand(PWSTR dest, size_t length, PCWSTR path)
+		bool expand(wchar_t * dest, size_t length, const wchar_t * path)
 		{
 			return ::ExpandEnvironmentStringsW(path, dest, length);
 		}
 
-		bool unexpand(PWSTR dest, size_t length, PCWSTR path)
+		bool unexpand(wchar_t * dest, size_t length, const wchar_t * path)
 		{
 			return shlwapi_dll::inst().PathUnExpandEnvStringsW(path, dest, length);
 		}
 
-		bool compact(PWSTR dest, size_t length, PCWSTR path)
+		bool compact(wchar_t * dest, size_t length, const wchar_t * path)
 		{
 			return shlwapi_dll::inst().PathCompactPathExW(dest, path, length, 0);
 		}
 
-		bool is_mask_match(PCWSTR path, PCWSTR mask, DWORD flags)
+		bool is_mask_match(const wchar_t * path, const wchar_t * mask, DWORD flags)
 		{
 			return shlwapi_dll::inst().PathMatchSpecExW(path, mask, flags) == S_OK ;
 		}
@@ -73,7 +73,7 @@ namespace fsys {
 	}
 
 	namespace Directory {
-		bool is_empty(PCWSTR path)
+		bool is_empty(const wchar_t * path)
 		{
 			return shlwapi_dll::inst().PathIsDirectoryEmptyW(path);
 		}

@@ -2,7 +2,7 @@
 
 namespace fsys {
 
-	bool del_nt(PCWSTR path)
+	bool del_nt(const wchar_t * path)
 	{
 		DWORD attr = get_attr_nt(path);
 		if (attr != INVALID_FILE_ATTRIBUTES) {

@@ -4,12 +4,12 @@ namespace fsys {
 
 	namespace Directory {
 
-		inline bool del_simple_nt(PCWSTR path)
+		inline bool del_simple_nt(const wchar_t * path)
 		{
 			return ::RemoveDirectoryW(path);
 		}
 
-		bool del_attrcheck_nt(PCWSTR path)
+		bool del_attrcheck_nt(const wchar_t * path)
 		{
 			DWORD attr = ::GetFileAttributesW(path);
 			if (attr != INVALID_FILE_ATTRIBUTES && ::SetFileAttributesW(path, FILE_ATTRIBUTE_NORMAL)) {
@@ -21,17 +21,17 @@ namespace fsys {
 			return false;
 		}
 
-		bool del_nt(PCWSTR path)
+		bool del_nt(const wchar_t * path)
 		{
 			return del_simple_nt(path) || del_attrcheck_nt(path);
 		}
 
-		bool create_nt(PCWSTR path, LPSECURITY_ATTRIBUTES lpsa)
+		bool create_nt(const wchar_t * path, LPSECURITY_ATTRIBUTES lpsa)
 		{
 			return ::CreateDirectoryW(path, lpsa) || (::GetLastError() == ERROR_ALREADY_EXISTS && fsys::is_dir_nt(path));
 		}
 
-		bool copy_link(PCWSTR path, PCWSTR dest, LPSECURITY_ATTRIBUTES lpsa)
+		bool copy_link(const wchar_t * path, const wchar_t * dest, LPSECURITY_ATTRIBUTES lpsa)
 		{
 			return ::CreateDirectoryExW(path, dest, lpsa);
 		}

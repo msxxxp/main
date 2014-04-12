@@ -8,7 +8,7 @@
 
 namespace fsys {
 	namespace Filename {
-		bool is_valid(PCWSTR name);
+		bool is_valid(const wchar_t * name);
 		inline bool is_valid(const ustring & name)
 		{
 			return is_valid(name.c_str());
@@ -54,7 +54,7 @@ namespace fsys {
 			return Inplace::ensure_no_end_separator(tmp);
 		}
 
-		ustring get_root(PCWSTR path);
+		ustring get_root(const wchar_t * path);
 		inline ustring get_root(const ustring & path)
 		{
 			return get_root(path.c_str());
@@ -62,40 +62,40 @@ namespace fsys {
 
 		ustring get_work_directory();
 
-		bool set_work_directory(PCWSTR path);
+		bool set_work_directory(const wchar_t * path);
 		inline bool set_work_directory(const ustring & path)
 		{
 			return set_work_directory(path.c_str());
 		}
 
-		bool is_relative(PCWSTR path);
+		bool is_relative(const wchar_t * path);
 		inline bool is_relative(const ustring & path)
 		{
 			return is_relative(path.c_str());
 		}
 
-		bool is_mask(PCWSTR path);
+		bool is_mask(const wchar_t * path);
 		inline bool is_mask(const ustring & path)
 		{
 			return is_mask(path.c_str());
 		}
 
-		bool expand(PWSTR dest, size_t length, PCWSTR path);
-		ustring expand(PCWSTR path);
+		bool expand(wchar_t * dest, size_t length, const wchar_t * path);
+		ustring expand(const wchar_t * path);
 		inline ustring expand(const ustring & path)
 		{
 			return expand(path.c_str());
 		}
 
-		bool unexpand(PWSTR dest, size_t length, PCWSTR path);
-		ustring unexpand(PCWSTR path);
+		bool unexpand(wchar_t * dest, size_t length, const wchar_t * path);
+		ustring unexpand(const wchar_t * path);
 		inline ustring unexpand(const ustring & path)
 		{
 			return unexpand(path.c_str());
 		}
 
-		bool compact(PWSTR dest, size_t length, PCWSTR path);
-		ustring compact(PCWSTR path, size_t size);
+		bool compact(wchar_t * dest, size_t length, const wchar_t * path);
+		ustring compact(const wchar_t * path, size_t size);
 		inline ustring compact(const ustring & path, size_t size)
 		{
 			return compact(path.c_str(), size);
@@ -107,20 +107,20 @@ namespace fsys {
 
 		ustring get_special(int csidl, bool create = true);
 
-		ustring get_fullpath(PCWSTR path);
+		ustring get_fullpath(const wchar_t * path);
 		inline ustring get_fullpath(const ustring &path)
 		{
 			return get_fullpath(path.c_str());
 		}
 
-		bool canonicalize(PWSTR dest, PCWSTR path);
-		ustring canonicalize(PCWSTR path);
+		bool canonicalize(wchar_t * dest, const wchar_t * path);
+		ustring canonicalize(const wchar_t * path);
 		inline ustring canonicalize(const ustring &path)
 		{
 			return canonicalize(path.c_str());
 		}
 
-		bool is_mask_match(PCWSTR path, PCWSTR mask, DWORD flags = 0);
+		bool is_mask_match(const wchar_t * path, const wchar_t * mask, DWORD flags = 0);
 
 	}
 
@@ -128,25 +128,25 @@ namespace fsys {
 
 namespace fsys {
 
-	ustring PathNice(PCWSTR path);
+	ustring PathNice(const wchar_t * path);
 	inline ustring PathNice(const ustring &path)
 	{
 		return PathNice(path.c_str());
 	}
 
-	ustring Secure(PCWSTR path);
+	ustring Secure(const wchar_t * path);
 	inline ustring Secure(const ustring &path)
 	{
 		return Secure(path.c_str());
 	}
 
-	ustring Validate(PCWSTR path);
+	ustring Validate(const wchar_t * path);
 	inline ustring Validate(const ustring &path)
 	{
 		return Validate(path.c_str());
 	}
 
-	ustring MakePath(PCWSTR path, PCWSTR name);
+	ustring MakePath(const wchar_t * path, const wchar_t * name);
 	inline ustring MakePath(const ustring & path, const ustring &name)
 	{
 		return MakePath(path.c_str(), name.c_str());
@@ -154,13 +154,13 @@ namespace fsys {
 
 	ustring TempDir();
 
-	ustring TempFile(PCWSTR path);
+	ustring TempFile(const wchar_t * path);
 	inline ustring TempFile(const ustring & path)
 	{
 		return TempFile(path.c_str());
 	}
 
-	bool substr_match(const ustring& str, size_t pos, PCWSTR mstr);
+	bool substr_match(const ustring& str, size_t pos, const wchar_t * mstr);
 
 	void locate_path_root(const ustring& path, size_t& path_root_len, bool& is_unc_path);
 

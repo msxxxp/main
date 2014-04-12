@@ -112,9 +112,9 @@ namespace thread {
 		id_t m_id;
 	};
 
-	PCWSTR to_str(Thread::Priority_t prio);
+	const wchar_t * to_str(Thread::Priority_t prio);
 
-	PCWSTR to_str(Thread::IoPriority_t prio);
+	const wchar_t * to_str(Thread::IoPriority_t prio);
 }
 
 #endif

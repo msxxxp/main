@@ -13,10 +13,10 @@ namespace totext {
 			mod = ::LoadLibraryExW(lib, nullptr, DONT_RESOLVE_DLL_REFERENCES); //LOAD_LIBRARY_AS_DATAFILE
 		}
 
-		PWSTR buf = nullptr;
+		wchar_t * buf = nullptr;
 		::FormatMessageW(FORMAT_MESSAGE_ALLOCATE_BUFFER | FORMAT_MESSAGE_IGNORE_INSERTS | ((mod) ? FORMAT_MESSAGE_FROM_HMODULE : FORMAT_MESSAGE_FROM_SYSTEM), mod, err,
 		                 MAKELANGID(LANG_NEUTRAL, SUBLANG_DEFAULT), //GetSystemDefaultLangID(),
-		                 (PWSTR)&buf, 0, nullptr);
+		                 (wchar_t *)&buf, 0, nullptr);
 
 		if (mod)
 			::FreeLibrary(mod);

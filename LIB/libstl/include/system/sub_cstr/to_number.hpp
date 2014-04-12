@@ -35,43 +35,43 @@ namespace cstr {
 		return ::strtod(in, &end_ptr);
 	}
 
-	inline uint64_t to_uint64(PCWSTR in, int base = 10)
+	inline uint64_t to_uint64(const wchar_t * in, int base = 10)
 	{
 #ifdef _MSC_VER
 		UNUSED(base);
 		return _wtoi64(in);
 #else
-		PWSTR end_ptr;
+		wchar_t * end_ptr;
 		return ::wcstoull(in, &end_ptr, base);
 #endif
 	}
 
-	inline int64_t to_int64(PCWSTR in, int base = 10)
+	inline int64_t to_int64(const wchar_t * in, int base = 10)
 	{
 #ifdef _MSC_VER
 		UNUSED(base);
 		return _wtoi64(in);
 #else
-		PWSTR end_ptr;
+		wchar_t * end_ptr;
 		return ::wcstoll(in, &end_ptr, base);
 #endif
 	}
 
-	inline uint32_t to_uint32(PCWSTR in, int base = 10)
+	inline uint32_t to_uint32(const wchar_t * in, int base = 10)
 	{
-		PWSTR end_ptr;
+		wchar_t * end_ptr;
 		return ::wcstoul(in, &end_ptr, base);
 	}
 
-	inline int32_t to_int32(PCWSTR in, int base = 10)
+	inline int32_t to_int32(const wchar_t * in, int base = 10)
 	{
-		PWSTR end_ptr;
+		wchar_t * end_ptr;
 		return ::wcstol(in, &end_ptr, base);
 	}
 
-	inline double to_double(PCWSTR in)
+	inline double to_double(const wchar_t * in)
 	{
-		PWSTR end_ptr;
+		wchar_t * end_ptr;
 		return ::wcstod(in, &end_ptr);
 	}
 

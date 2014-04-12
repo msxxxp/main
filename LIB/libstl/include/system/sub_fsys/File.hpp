@@ -6,14 +6,36 @@
 namespace fsys {
 	namespace File {
 
-		bool del_nt(PCWSTR path);
+		bool del_nt(const wchar_t * path);
 
-		inline bool copy(PCWSTR path, PCWSTR dest);
+		inline bool copy(const wchar_t * path, const wchar_t * dest);
 
-		inline bool copy_link(PCWSTR path, PCWSTR dest);
+		inline bool copy_link(const wchar_t * path, const wchar_t * dest);
 
-		inline bool move(PCWSTR path, PCWSTR dest, DWORD flag = 0);
+		inline bool move(const wchar_t * path, const wchar_t * dest, DWORD flag = 0);
 
+		struct Map {
+			typedef uint64_t size_type;
+
+			~Map();
+
+			Map(const wchar_t * path, size_type size = static_cast<size_type>(-1), bool write = false);
+
+			size_type size() const;
+
+			PVOID data() const;
+
+			bool is_writeble() const;
+
+			bool is_ok() const;
+
+		private:
+			uint64_t get_size(HANDLE file) const;
+
+			PVOID m_data;
+			size_type m_size;
+			bool m_write;
+		};
 	}
 }
 

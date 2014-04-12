@@ -22,13 +22,13 @@ namespace fsys {
 		return attr & FILE_ATTRIBUTE_REPARSE_POINT;
 	}
 
-	Attributes get_attr_nt(PCWSTR path);
+	Attributes get_attr_nt(const wchar_t * path);
 
-	bool is_file_nt(PCWSTR path);
+	bool is_file_nt(const wchar_t * path);
 
-	bool is_dir_nt(PCWSTR path);
+	bool is_dir_nt(const wchar_t * path);
 
-	bool is_link_nt(PCWSTR path);
+	bool is_link_nt(const wchar_t * path);
 
 }
 

@@ -7,7 +7,7 @@
 namespace Base {
 	template<typename Type>
 	struct NamedValue {
-		PCWSTR name;
+		const wchar_t * name;
 		Type value;
 	};
 
@@ -30,7 +30,7 @@ namespace Base {
 	};
 
 	template<typename Type, int Size>
-	inline PCWSTR GetName(const NameVal<Type, Size> dim[], const Type & in) {
+	inline const wchar_t * GetName(const NameVal<Type, Size> dim[], const Type & in) {
 		for (size_t i = 0; i < Size; ++i) {
 			if (dim[i].value == in) {
 				return dim[i].name;
@@ -40,7 +40,7 @@ namespace Base {
 	}
 
 	template<typename Type, int Size>
-	inline Type GetValue(const NameVal<Type, Size> dim[], PCWSTR name) {
+	inline Type GetValue(const NameVal<Type, Size> dim[], const wchar_t * name) {
 		for (size_t i = 0; i < Size; ++i) {
 			if (::wcscmp(dim[i].name, name)) {
 				return dim[i].value;

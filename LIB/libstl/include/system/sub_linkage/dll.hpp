@@ -11,7 +11,7 @@ namespace linkage {
 		virtual bool is_valid() const noexcept;
 
 	public:
-		DynamicLibrary(PCWSTR path, DWORD flags = 0) noexcept;
+		DynamicLibrary(const wchar_t * path, DWORD flags = 0) noexcept;
 
 		DynamicLibrary(HMODULE hndl, DWORD flags) noexcept;
 
@@ -27,7 +27,7 @@ namespace linkage {
 
 		DWORD get_flags() const noexcept;
 
-		bool get_path(PWSTR path, size_t size) const noexcept;
+		bool get_path(wchar_t * path, size_t size) const noexcept;
 
 		FARPROC get_function(PCSTR name) const noexcept;
 

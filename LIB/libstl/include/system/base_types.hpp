@@ -1,5 +1,5 @@
-﻿#ifndef LIBSTL_SYSTEM_BASE_TYPES_HPP_
-#define LIBSTL_SYSTEM_BASE_TYPES_HPP_
+﻿#ifndef LIBSTL_SYSTEM_BASE_TYPES_
+#define LIBSTL_SYSTEM_BASE_TYPES_
 
 #include <stdint.h>
 

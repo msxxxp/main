@@ -80,13 +80,13 @@ namespace String {
 
 	ustring to_str(int64_t num, int base = 10);
 
-	astring oem(PCWSTR in);
+	astring oem(const wchar_t * in);
 	astring oem(const ustring &in);
 
-	astring ansi(PCWSTR in);
+	astring ansi(const wchar_t * in);
 	astring ansi(const ustring &in);
 
-	astring utf8(PCWSTR in);
+	astring utf8(const wchar_t * in);
 	astring utf8(const ustring &in);
 
 	ustring utf16(PCSTR in, UINT cp = CP_UTF8);
@@ -108,7 +108,7 @@ namespace String {
 //
 //template<typename Type>
 //const Type * find_first_of(const Type * where, const Type * what) {
-//	//	return (PWSTR)(in + ::wcscspn(in, mask));
+//	//	return (wchar_t *)(in + ::wcscspn(in, mask));
 //	using namespace std;
 //	typedef const Type * str_t;
 //	typedef str_t (*func_t)(str_t, Type);
@@ -119,7 +119,7 @@ namespace String {
 //
 //template<typename Type>
 //const Type * find_first_not_of(const Type * where, const Type * what) {
-//	//	return (PWSTR)(in + ::wcsspn(in, mask));
+//	//	return (wchar_t *)(in + ::wcsspn(in, mask));
 //	using namespace std;
 //	typedef const Type * str_t;
 //	typedef str_t (*func_t)(str_t, Type);

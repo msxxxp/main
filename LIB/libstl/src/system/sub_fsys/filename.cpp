@@ -8,7 +8,7 @@ namespace fsys {
 
 	namespace Filename {
 
-		bool is_valid(PCWSTR name)
+		bool is_valid(const wchar_t * name)
 		{
 			//		const wchar_t invalidCharsInName[] = L"\\\"<>:/|?*";
 			return cstr::compare(name, L".") && cstr::compare(name, L"..") && cstr::compare(name, L"...");

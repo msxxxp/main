@@ -17,11 +17,13 @@
 #include <system/base_types.hpp>
 
 #include <system/sub_configure/os/windows.hpp>
+
 #ifdef _MSC_VER
 #	include <system/sub_configure/compiler/vc.hpp>
 #else
 #	include <system/sub_configure/compiler/gcc.hpp>
 #endif
+
 #include <system/sub_configure/obligatory/array.hpp>
 #include <system/sub_configure/obligatory/constants.hpp>
 #include <system/sub_configure/obligatory/definitions.hpp>

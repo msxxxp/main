@@ -6,45 +6,42 @@
 namespace simstd {
 
 	template<typename _Tp>
-	_Tp* addressof(_Tp& __r) //noexcept
+	_Tp* addressof(_Tp& __r) noexcept
 	{
 		return reinterpret_cast<_Tp*>(&const_cast<char&>(reinterpret_cast<const volatile char&>(__r)));
 	}
 
 	namespace pvt {
 		template<typename _Tp>
-		struct remove_reference
-		{
+		struct remove_reference {
 			typedef _Tp type;
 		};
 
 		template<typename _Tp>
-		struct remove_reference<_Tp&>
-		{
+		struct remove_reference<_Tp&> {
 			typedef _Tp type;
 		};
 
 		template<typename _Tp>
-		struct remove_reference<_Tp&&>
-		{
+		struct remove_reference<_Tp&&> {
 			typedef _Tp type;
 		};
 	}
 
 	template<typename _Tp>
-	/*constexpr*/ _Tp&& forward(typename pvt::remove_reference<_Tp>::type& __t) //noexcept
+	constexpr _Tp&& forward(typename pvt::remove_reference<_Tp>::type& __t) noexcept
 	{
 		return static_cast<_Tp&&>(__t);
 	}
 
 	template<typename _Tp>
-	/*constexpr*/ _Tp&& forward(typename pvt::remove_reference<_Tp>::type&& __t) //noexcept
+	constexpr _Tp&& forward(typename pvt::remove_reference<_Tp>::type&& __t) noexcept
 	{
 		return static_cast<_Tp&&>(__t);
 	}
 
 	template<typename _Tp>
-	/*constexpr*/ typename pvt::remove_reference<_Tp>::type&& move(_Tp&& __t) //noexcept
+	constexpr typename pvt::remove_reference<_Tp>::type&& move(_Tp&& __t) noexcept
 	{
 		return static_cast<typename pvt::remove_reference<_Tp>::type&&>(__t);
 	}
@@ -67,16 +64,14 @@ namespace simstd {
 	template<typename ForwardIt1, typename ForwardIt2>
 	void iter_swap(ForwardIt1 a, ForwardIt2 b)
 	{
-#if defined(__GNUC__) && (__GNUC__ < 3)
-		simstd::swap(*a, *b);
-#else
 		using simstd::swap;
 		swap(*a, *b);
-#endif
 	}
 
 #ifdef min
 #undef min
+#endif
+#ifdef max
 #undef max
 #endif
 

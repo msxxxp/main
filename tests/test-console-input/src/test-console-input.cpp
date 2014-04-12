@@ -24,6 +24,7 @@ void MouseEventProc(MOUSE_EVENT_RECORD mer)
 				console::printf(L"left button\n");
 			} else if (mer.dwButtonState == RIGHTMOST_BUTTON_PRESSED) {
 				console::printf(L"right button\n");
+				mbox(L"123", L"456");
 			} else if (mer.dwButtonState == FROM_LEFT_2ND_BUTTON_PRESSED) {
 				console::printf(L"left 2 button\n");
 			} else if (mer.dwButtonState == FROM_LEFT_3RD_BUTTON_PRESSED) {

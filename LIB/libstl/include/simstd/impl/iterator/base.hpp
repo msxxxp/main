@@ -42,7 +42,7 @@ namespace simstd
 	{
 		typedef random_access_iterator_tag iterator_category;
 		typedef Type                       value_type;
-		typedef ptrdiff_t          difference_type;
+		typedef ptrdiff_t                  difference_type;
 		typedef Type*                      pointer;
 		typedef Type&                      reference;
 	};
@@ -52,7 +52,7 @@ namespace simstd
 	{
 		typedef random_access_iterator_tag iterator_category;
 		typedef Type                       value_type;
-		typedef ptrdiff_t          difference_type;
+		typedef ptrdiff_t                  difference_type;
 		typedef const Type*                pointer;
 		typedef const Type&                reference;
 	};

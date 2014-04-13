@@ -57,7 +57,7 @@ namespace fsys {
 			memory::auto_close<HANDLE> file(CheckHandle(::CreateFileW(path, GENERIC_WRITE, 0, lpsa,
 					CREATE_NEW, FILE_ATTRIBUTE_NORMAL, nullptr)));
 			DWORD bytesWritten = 0;
-			DWORD bytesToWrite = Cstr::length(content);
+			DWORD bytesToWrite = cstr::length(content);
 			CheckApi(::WriteFile(file, (const void*)content, bytesToWrite, &bytesWritten, nullptr) && bytesToWrite == bytesWritten);
 		}
 

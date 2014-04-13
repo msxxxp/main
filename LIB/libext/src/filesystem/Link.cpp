@@ -207,7 +207,7 @@ namespace fsys {
 
 			memory::auto_close<HANDLE> hLink(CheckHandle(OpenLinkHandle(new_path, GENERIC_WRITE)));
 			ustring SubstituteName(ustring(REPARSE_PREFIX) + fsys::Path::remove_prefix(path));
-			REPARSE_BUF rdb(IO_REPARSE_TAG_SYMLINK, path, Cstr::length(path), SubstituteName.c_str(), SubstituteName.size());
+			REPARSE_BUF rdb(IO_REPARSE_TAG_SYMLINK, path, cstr::length(path), SubstituteName.c_str(), SubstituteName.size());
 			try {
 				rdb.set_to(new_path);
 			} catch (...) {
@@ -221,7 +221,7 @@ namespace fsys {
 			Directory::create(new_path);
 			memory::auto_close<HANDLE> hLink(CheckHandle(OpenLinkHandle(new_path, GENERIC_WRITE)));
 			ustring SubstituteName(ustring(REPARSE_PREFIX) + fsys::Path::remove_prefix(path));
-			REPARSE_BUF rdb(IO_REPARSE_TAG_MOUNT_POINT, path, Cstr::length(path), SubstituteName.c_str(), SubstituteName.size());
+			REPARSE_BUF rdb(IO_REPARSE_TAG_MOUNT_POINT, path, cstr::length(path), SubstituteName.c_str(), SubstituteName.size());
 			try {
 				rdb.set_to(new_path);
 			} catch (...) {

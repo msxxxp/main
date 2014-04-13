@@ -32,6 +32,9 @@ namespace String {
 
 		ustring & to_upper(ustring & inout);
 
+		astring & add_word(astring & inout, const astring & add);
+		ustring & add_word(ustring & inout, const ustring & add);
+
 		astring & add_word(astring & inout, const astring & add, const astring & delim);
 		ustring & add_word(ustring & inout, const ustring & add, const ustring & delim);
 	}

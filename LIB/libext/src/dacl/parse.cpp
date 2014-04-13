@@ -5,7 +5,7 @@
 
 namespace Ext {
 
-	Cstr::NamedValues<BYTE> aceTypes[] = {
+	cstr::NamedValues<BYTE> aceTypes[] = {
 		{L"ACCESS_ALLOWED_ACE_TYPE", ACCESS_ALLOWED_ACE_TYPE},
 		{L"ACCESS_DENIED_ACE_TYPE", ACCESS_DENIED_ACE_TYPE},
 		{L"SYSTEM_AUDIT_ACE_TYPE", SYSTEM_AUDIT_ACE_TYPE},
@@ -14,7 +14,7 @@ namespace Ext {
 		{L"SYSTEM_AUDIT_OBJECT_ACE_TYPE", SYSTEM_AUDIT_OBJECT_ACE_TYPE},
 	};
 
-	Cstr::NamedValues<ULONG> aceFlags[] = {
+	cstr::NamedValues<ULONG> aceFlags[] = {
 		{L"INHERITED_ACE", INHERITED_ACE},
 		{L"CONTAINER_INHERIT_ACE", CONTAINER_INHERIT_ACE},
 		{L"OBJECT_INHERIT_ACE", OBJECT_INHERIT_ACE},

@@ -2,7 +2,7 @@
 #include <liblog/logger.hpp>
 #include <system/cstr.hpp>
 
-using Cstr::compare_cs;
+using cstr::compare_cs;
 
 namespace Ext {
 

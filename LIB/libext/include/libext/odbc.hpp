@@ -13,6 +13,7 @@
 #include <sql.h>
 #include <sqlext.h>
 
+#include <simstd/string>
 #include <simstd/vector>
 
 namespace Ext {

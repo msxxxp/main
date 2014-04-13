@@ -3,6 +3,7 @@
 
 #include <system/configure.hpp>
 #include <system/string.hpp>
+#include <simstd/string>
 
 namespace Ext {
 

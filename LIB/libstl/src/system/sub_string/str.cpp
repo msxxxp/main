@@ -102,6 +102,11 @@ namespace String {
 			return inout;
 		}
 
+		ustring & add_word(ustring & inout, const ustring & add)
+		{
+			return add_word(inout, add, ustring());
+		}
+
 		ustring & add_word(ustring & inout, const ustring & add, const ustring & delim)
 		{
 			// добаваляет строку через разделитель кроме случаев

@@ -91,8 +91,8 @@ namespace Ext {
 			bool	bFound = false;
 			wchar_t	*p = szTemp;
 			do {
-				Cstr::cat(Result, p, lengthof(Result));
-				Cstr::cat(Result, L";", lengthof(Result));
+				cstr::cat(Result, p, lengthof(Result));
+				cstr::cat(Result, L";", lengthof(Result));
 				while (*p++);
 			} while (!bFound && *p); // end of string
 		}

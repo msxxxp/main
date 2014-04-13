@@ -4,6 +4,7 @@
 #include <system/configure.hpp>
 #include <system/string.hpp>
 #include <extra/pattern.hpp>
+#include <simstd/string>
 #include <liblog/logger.hpp>
 #include <libext/sid.hpp>
 #include <libext/trustee.hpp>

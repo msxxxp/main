@@ -8,18 +8,18 @@ namespace fsys {
 
 		bool del_nt(const wchar_t * path);
 
-		inline bool copy(const wchar_t * path, const wchar_t * dest);
+		bool copy(const wchar_t * path, const wchar_t * dest);
 
-		inline bool copy_link(const wchar_t * path, const wchar_t * dest);
+		bool copy_link(const wchar_t * path, const wchar_t * dest);
 
-		inline bool move(const wchar_t * path, const wchar_t * dest, DWORD flag = 0);
+		bool move(const wchar_t * path, const wchar_t * dest, DWORD flag = 0);
 
-		struct Map {
+		struct Map_nt {
 			typedef uint64_t size_type;
 
-			~Map();
+			~Map_nt();
 
-			Map(const wchar_t * path, size_type size = static_cast<size_type>(-1), bool write = false);
+			Map_nt(const wchar_t * path, size_type size = static_cast<size_type>(-1), bool write = false);
 
 			size_type size() const;
 

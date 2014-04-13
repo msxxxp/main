@@ -64,7 +64,7 @@ namespace fsys {
 			}
 
 			PCWSTR name = st.name();
-			if (!(flags & SearchFlags_t::incDots) && (Cstr::compare(name, L".") == 0 || Cstr::compare(name, L"..") == 0)) {
+			if (!(flags & SearchFlags_t::incDots) && (cstr::compare(name, L".") == 0 || cstr::compare(name, L"..") == 0)) {
 				continue;
 			}
 

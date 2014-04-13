@@ -11,6 +11,7 @@
 
 #include <system/configure.hpp>
 
+#include <simstd/string>
 #include <simstd/vector>
 
 namespace Ext {

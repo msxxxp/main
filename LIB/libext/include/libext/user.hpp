@@ -4,7 +4,7 @@
 #include <system/configure.hpp>
 #include <system/memory.hpp>
 #include <extra/pattern.hpp>
-#include <simstd/iosfwd>
+#include <simstd/string>
 #include <simstd/vector>
 
 namespace Ext {

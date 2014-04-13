@@ -150,9 +150,9 @@ namespace fsys {
 		while (*p) {
 			*drive = *p;
 			CheckApi(::QueryDosDeviceW(drive, device, lengthof(device)));
-			if (Cstr::find(path, device) == path) {
+			if (cstr::find(path, device) == path) {
 				wchar_t new_path[MAX_PATH_LEN];
-				_snwprintf(new_path, lengthof(new_path), L"%s%s", drive, path + Cstr::length(device));
+				_snwprintf(new_path, lengthof(new_path), L"%s%s", drive, path + cstr::length(device));
 				return ustring(new_path);
 			}
 			while (*p++)

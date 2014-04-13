@@ -152,7 +152,7 @@ namespace Ext {
 		LSA_UNICODE_STRING ret;
 		memory::zero(ret);
 		ret.Buffer = (PWSTR)in;
-		ret.Length = Cstr::length(in) * sizeof(wchar_t);
+		ret.Length = cstr::length(in) * sizeof(wchar_t);
 		ret.MaximumLength = ret.Length;
 		return ret;
 	}

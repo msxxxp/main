@@ -84,16 +84,16 @@ namespace Http {
 
 	bool HttpBindIP::is_valid(const ustring & ip) {
 		in_addr	addr;
-		addr.s_addr = inet_addr(utf8(ip).c_str());
+		addr.s_addr = inet_addr(String::utf8(ip).c_str());
 		return addr.s_addr != INADDR_NONE;
 	}
 
 	bool HttpBindIP::Assign(const ustring & ip, const ustring & port) {
-		u_short	prt = htons(Cstr::to_uint32(port.c_str()));
+		u_short	prt = htons(cstr::to_uint32(port.c_str()));
 		if (is_valid(ip) && prt) {
 			sockaddr_in *tmp = (sockaddr_in*)pIpPort;
 			tmp->sin_port		= prt;
-			tmp->sin_addr.s_addr = inet_addr(utf8(ip).c_str());
+			tmp->sin_addr.s_addr = inet_addr(String::utf8(ip).c_str());
 			tmp->sin_family		= AF_INET;
 			return true;
 		}

@@ -5,13 +5,13 @@
 namespace fsys {
 	namespace File {
 
-		Map::~Map()
+		Map_nt::~Map_nt()
 		{
 			if (m_data)
 				::UnmapViewOfFile(m_data);
 		}
 
-		Map::Map(const wchar_t * path, size_type size, bool write) :
+		Map_nt::Map_nt(const wchar_t * path, size_type size, bool write) :
 			m_data(nullptr), m_size(0), m_write(write)
 		{
 			ACCESS_MASK access = write ? GENERIC_READ | GENERIC_WRITE : GENERIC_READ;
@@ -30,27 +30,27 @@ namespace fsys {
 			::CloseHandle(file);
 		}
 
-		Map::size_type Map::size() const
+		Map_nt::size_type Map_nt::size() const
 		{
 			return m_size;
 		}
 
-		PVOID Map::data() const
+		PVOID Map_nt::data() const
 		{
 			return m_data;
 		}
 
-		bool Map::is_writeble() const
+		bool Map_nt::is_writeble() const
 		{
 			return m_write;
 		}
 
-		bool Map::is_ok() const
+		bool Map_nt::is_ok() const
 		{
 			return m_data;
 		}
 
-		uint64_t Map::get_size(HANDLE file) const
+		uint64_t Map_nt::get_size(HANDLE file) const
 		{
 			LARGE_INTEGER size;
 			size.QuadPart = 0ll;

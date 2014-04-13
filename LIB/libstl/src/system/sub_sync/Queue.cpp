@@ -83,8 +83,8 @@ namespace sync {
 	{
 		LogNoise(L"Queue: %p wait: %Id\n", m_impl, timeout_msec);
 		auto ret = m_impl->get_message(message, timeout_msec);
-		LogAttenIf(ret != WaitResult_t::SUCCESS, L"ret: '%s'\n", to_str(ret));
-		LogNoiseIf(ret == WaitResult_t::SUCCESS, L"ret: '%s' Message(type: %Id, code: %Id, param: %Id, data: %p)\n", to_str(ret), message.get_type(), message.get_code(), message.get_param(), message.get_data());
+		LogAttenIf(ret != WaitResult_t::SUCCESS, L"ret: '%s'\n", totext::c_str(ret));
+		LogNoiseIf(ret == WaitResult_t::SUCCESS, L"ret: '%s' Message(type: %Id, code: %Id, param: %Id, data: %p)\n", totext::c_str(ret), message.get_type(), message.get_code(), message.get_param(), message.get_data());
 		return ret;
 	}
 }

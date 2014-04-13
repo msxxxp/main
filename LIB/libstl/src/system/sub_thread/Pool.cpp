@@ -1,5 +1,6 @@
 #include <system/thread.hpp>
 #include <system/totext.hpp>
+#include <simstd/string>
 
 #include <liblog/logger.hpp>
 

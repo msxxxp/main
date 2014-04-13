@@ -183,7 +183,7 @@ namespace traceback {
 		memory::zero(modinfo);
 		modinfo.SizeOfStruct = sizeof(modinfo) - 8;
 		BOOL ret = SymGetModuleInfoW64(GetCurrentProcess(), frame, &modinfo);
-		LogErrorIf(ret == FALSE, L"%s\n", Base::ErrAsStr().c_str());
+		LogErrorIf(ret == FALSE, L"%s\n", totext::api_error().c_str());
 		if (ret != FALSE) {
 			module = modinfo.ModuleName;
 			module_base = modinfo.BaseOfImage;
@@ -211,7 +211,7 @@ namespace traceback {
 
 			DWORD64 displacement;
 			BOOL err = SymFromAddrW(GetCurrentProcess(), frame, &displacement, m_syminfo);
-			LogErrorIf(err == FALSE, L"%s\n", Base::ErrAsStr().c_str());
+			LogErrorIf(err == FALSE, L"%s\n", totext::api_error().c_str());
 			if (err != FALSE) {
 				addr = (size_t)m_syminfo->Address;
 				func = m_syminfo->Name;
@@ -367,13 +367,13 @@ namespace traceback {
 	private:
 		~SymbolInit()
 		{
-			LogErrorIf(!SymCleanup(GetCurrentProcess()), L"%s\n", Base::ErrAsStr().c_str());
+			LogErrorIf(!SymCleanup(GetCurrentProcess()), L"%s\n", totext::api_error().c_str());
 		}
 
 		SymbolInit(const wchar_t * path)
 		{
 			SymSetOptions(SymGetOptions() | SYMOPT_FAIL_CRITICAL_ERRORS | SYMOPT_LOAD_LINES);
-			LogErrorIf(!SymInitializeW(GetCurrentProcess(), path, TRUE), L"%s\n", Base::ErrAsStr().c_str());
+			LogErrorIf(!SymInitializeW(GetCurrentProcess(), path, TRUE), L"%s\n", totext::api_error().c_str());
 
 #if defined(__GNUC__)
 			bfd_init();
@@ -437,13 +437,13 @@ namespace traceback {
 #ifdef ENABLE_LOGGER
 		auto module = get_logger_module();
 		auto scopeLock(module->lock_scope());
-		Logger::set_color_mode(module, true);
-		auto savedPrefix = Logger::get_prefix(module);
-		Logger::set_prefix(module, Logger::Prefix::Time | Logger::Prefix::Thread);
+		logger::set_color_mode(module, true);
+		auto savedPrefix = logger::get_prefix(module);
+		logger::set_prefix(module, logger::Prefix::Time | logger::Prefix::Thread);
 		LogForce(L"Backtrace: [%Iu]\n", size());
 		for (size_t i = 0; i < size(); ++i)
 			LogForce(L"[%02Iu] %s\n", size() - (i + 1), operator[](i).to_str().c_str());
-		Logger::set_prefix(module, savedPrefix);
+		logger::set_prefix(module, savedPrefix);
 #endif
 	}
 

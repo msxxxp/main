@@ -7,8 +7,8 @@
 #include <simstd/vector>
 
 #include <system/console.hpp>
-#define FuncTrace() console::printf(L"%S()[%d]\n", __FUNCTION__, __LINE__)
-//#define FuncTrace()
+//#define FuncTrace() console::printf(L"%S()[%d]\n", __FUNCTION__, __LINE__)
+#define FuncTrace()
 
 
 namespace simstd {

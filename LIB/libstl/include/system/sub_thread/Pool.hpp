@@ -22,12 +22,12 @@ namespace thread {
 
 		~Pool();
 
-//		template<class... Args>
-//		void create_thread(Args&&... args)
-//		{
-//			base_type::emplace_back(args...);
-//			m_handles.push_back(base_type::back().get_handle());
-//		}
+		template<class... Args>
+		void create_thread(Args&&... args)
+		{
+			base_type::emplace_back(args...);
+			m_handles.push_back(base_type::back().get_handle());
+		}
 
 //		void push_back(Thread thread)
 //		{

@@ -1,13 +1,14 @@
-﻿#include <libbase/std.hpp>
-#include <libbase/console.hpp>
-#include <libbase/backtrace.hpp>
-#include <libbase/messaging.hpp>
-#include <libbase/thread.hpp>
-#include <libbase/ThreadPool.hpp>
-#include <libbase/atexit.hpp>
-#include <libbase/wstr.hpp>
-#include <libbase/err.hpp>
+﻿#include <system/console.hpp>
+#include <system/sync.hpp>
+#include <system/thread.hpp>
+#include <system/traceback.hpp>
+//#include <libbase/messaging.hpp>
+//#include <libbase/thread.hpp>
+//#include <libbase/ThreadPool.hpp>
+//#include <libbase/atexit.hpp>
+//#include <libbase/wstr.hpp>
 #include <liblog/logger.hpp>
+//#include <libbase/err.hpp>
 
 //#include <stdio.h>
 //#include <functional>
@@ -80,19 +81,19 @@
 namespace {
 	void setup_logger()
 	{
-		using namespace Logger;
-		set_default_level(Level::Trace);
-		set_default_prefix(Prefix::Full & ~Prefix::Date);
-		set_default_target(get_TargetToConsole());
-//		set_default_target(get_TargetToFile(L"test-threads.log", true));
+		using namespace logger;
+		Default::set_level(Level::Trace);
+		Default::set_prefix(Prefix::Full & ~Prefix::Date);
+		Default::set_target(get_TargetToConsole());
+//		Default::set_target(get_TargetToFile(L"test-threads.log", true));
 
 //		set_module_enabled(false, get_module(L"threads"));
 	}
 }
 
-struct Routine: public Base::ThreadRoutine_i
+struct Routine: public thread::Routine
 {
-	Routine(Base::Queue * queue, ssize_t num):
+	Routine(sync::Queue * queue, ssize_t num):
 		m_queue(queue),
 		m_num(num)
 	{
@@ -102,41 +103,41 @@ struct Routine: public Base::ThreadRoutine_i
 	size_t run(void *) override
 	{
 		LogDebug(L"Start routine\n");
-		Base::Message message;
+		sync::Message message;
 		m_queue->get_message(message, 5000);
 		LogDebug(L"Exit routine\n");
 		return m_num;
 	}
 
 private:
-	Base::Queue * m_queue;
+	sync::Queue * m_queue;
 	ssize_t m_num;
 };
 
 int test_threads()
 {
-	Base::Queue queue;
+	sync::Queue queue;
 	Routine routine1(&queue, 100);
 	Routine routine2(&queue, 200);
-	Base::ThreadPool threads;
+	thread::Pool threads;
 	threads.create_thread(&routine1);
 	threads.create_thread(&routine2);
 
 //	Sleep(5000);
-	threads[0].set_io_priority(Base::Thread::IoPriority_t::VERY_LOW);
-	threads[0].set_io_priority(Base::Thread::IoPriority_t::NORMAL);
-	threads[1].set_io_priority(Base::Thread::IoPriority_t::LOW);
-	threads[1].set_io_priority(Base::Thread::IoPriority_t::HIGH);
-	threads[1].set_io_priority(Base::Thread::IoPriority_t::CRITICAL);
+	threads[0].set_io_priority(thread::IoPriority::VERY_LOW);
+	threads[0].set_io_priority(thread::IoPriority::NORMAL);
+	threads[1].set_io_priority(thread::IoPriority::LOW);
+	threads[1].set_io_priority(thread::IoPriority::HIGH);
+	threads[1].set_io_priority(thread::IoPriority::CRITICAL);
 
 //	Sleep(5000);
-	threads[0].set_priority(Base::Thread::Priority_t::TIME_CRITICAL);
-	threads[1].set_priority(Base::Thread::Priority_t::ABOVE_NORMAL);
+	threads[0].set_priority(thread::Priority::TIME_CRITICAL);
+	threads[1].set_priority(thread::Priority::ABOVE_NORMAL);
 
-	Base::Message message(1, 2, 3, nullptr);
+	sync::Message message(1, 2, 3, nullptr);
 	queue.put_message(message);
 //	queue.put_message(message);
-	while (threads.wait_all(1000) != Base::WaitResult_t::SUCCESS)
+	while (threads.wait_all(1000) != sync::WaitResult_t::SUCCESS)
 		;
 
 	LogInfo(L"threads[0] exited: %d\n", threads[0].get_exitcode());

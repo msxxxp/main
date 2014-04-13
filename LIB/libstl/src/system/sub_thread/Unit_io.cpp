@@ -64,7 +64,7 @@ namespace thread {
 		NtQueryInformationThread(IN HANDLE ThreadHandle, IN THREADINFOCLASS ThreadInformationClass, PVOID ThreadInformation, IN ULONG ThreadInformationLength, PULONG ReturnLength);
 	}
 
-	bool Thread::set_io_priority(IoPriority prio)
+	bool Unit::set_io_priority(IoPriority prio)
 	{
 		ULONG p = (ULONG)prio;
 		NTSTATUS ret = NtSetInformationThread(m_handle, ThreadIoPriority, &p, sizeof(p));
@@ -73,11 +73,11 @@ namespace thread {
 		return ret;
 	}
 
-	IoPriority Thread::get_io_priority() const
+	IoPriority Unit::get_io_priority() const
 	{
 		ULONG prio = 0;
 		NTSTATUS ret = NtQueryInformationThread(m_handle, ThreadIoPriority, &prio, sizeof(prio), nullptr);
-		LogNoiseIf(!ret, L"id: %u -> '%s'\n", m_id, to_str((Thread::IoPriority)prio));
+		LogNoiseIf(!ret, L"id: %u -> '%s'\n", m_id, to_str((Unit::IoPriority)prio));
 		LogErrorIf( ret, L"id: %u -> '%s'\n", m_id,  totext::nt_status(ret).c_str());
 		return (IoPriority)prio;
 	}

@@ -9,8 +9,8 @@
 
 namespace thread {
 
-	struct ThreadPool: private pattern::Uncopyable, private simstd::vector<Thread> {
-		typedef simstd::vector<Thread> base_type;
+	struct ThreadPool: private pattern::Uncopyable, private simstd::vector<Unit> {
+		typedef simstd::vector<Unit> base_type;
 		using base_type::back;
 		using base_type::begin;
 		using base_type::end;
@@ -45,7 +45,7 @@ namespace thread {
 		sync::WaitResult_t wait_any(size_t & index, sync::Timeout_t timeout = sync::WAIT_FOREVER) const;
 
 	private:
-		simstd::vector<Thread::handle_t> m_handles;
+		simstd::vector<Unit::handle_type> m_handles;
 	};
 
 }

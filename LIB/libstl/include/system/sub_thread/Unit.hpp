@@ -7,33 +7,23 @@
 
 namespace thread {
 
-//	template <typename Type, size_t (Type::*mem_func)(void *)>
-//	DWORD WINAPI member_thunk(void * ptr)
-//	{ // http://www.rsdn.ru/Forum/Message.aspx?mid=753888&only=1
-//		return (static_cast<Type*>(ptr)->*mem_func)(nullptr);
-//	}
-//
-//	template <typename Type, void (Type::*mem_func)(void *)>
-//	VOID WINAPI apc_thunk(ULONG_PTR ptr)
-//	{
-//		(((Type*)(ptr))->*mem_func)(nullptr);
-//	}
+	class Unit: private pattern::Uncopyable {
+	public:
+		typedef HANDLE handle_type;
+		typedef DWORD id_type;
 
-	struct Thread: private pattern::Uncopyable {
-		typedef HANDLE handle_t;
-		typedef DWORD id_t;
+	public:
+		~Unit() noexcept;
 
-		~Thread() noexcept;
+		Unit(Routine * routine, bool suspended = false);
 
-		Thread(Routine * routine, bool suspended = false);
+		Unit(Routine * routine, void * data, bool suspended = false, size_t stack_size = 0);
 
-		Thread(Routine * routine, void * data, bool suspended = false, size_t stack_size = 0);
+		Unit(Unit && right);
 
-		Thread(Thread && right);
+		Unit & operator = (Unit && right);
 
-		Thread & operator = (Thread && right);
-
-		void swap(Thread & right) noexcept;
+		void swap(Unit & right) noexcept;
 
 		void alert();
 
@@ -45,24 +35,15 @@ namespace thread {
 
 		size_t get_exitcode() const;
 
-		id_t get_id() const
-		{
-			return m_id;
-		}
+		id_type get_id() const;
 
-		Thread::handle_t get_handle() const
-		{
-			return m_handle;
-		}
+		handle_type get_handle() const;
 
 		Priority get_priority() const;
 
 		IoPriority get_io_priority() const;
 
-		Routine * get_routine() const
-		{
-			return m_routine;
-		}
+		Routine * get_routine() const;
 
 		bool suspend() const;
 
@@ -72,8 +53,8 @@ namespace thread {
 
 	private:
 		Routine * m_routine;
-		handle_t m_handle;
-		id_t m_id;
+		handle_type m_handle;
+		id_type m_id;
 	};
 
 }

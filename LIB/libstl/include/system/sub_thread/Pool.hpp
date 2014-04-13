@@ -9,7 +9,7 @@
 
 namespace thread {
 
-	struct ThreadPool: private pattern::Uncopyable, private simstd::vector<Unit> {
+	struct Pool: private pattern::Uncopyable, private simstd::vector<Unit> {
 		typedef simstd::vector<Unit> base_type;
 		using base_type::back;
 		using base_type::begin;
@@ -18,9 +18,9 @@ namespace thread {
 		using base_type::empty;
 		using base_type::operator[];
 
-		ThreadPool();
+		Pool();
 
-		~ThreadPool();
+		~Pool();
 
 //		template<class... Args>
 //		void create_thread(Args&&... args)

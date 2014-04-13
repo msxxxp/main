@@ -25,12 +25,4 @@ namespace thread {
 
 }
 
-namespace totext {
-
-	const wchar_t * c_str(thread::Priority prio);
-
-	const wchar_t * c_str(thread::IoPriority prio);
-
-}
-
 #endif

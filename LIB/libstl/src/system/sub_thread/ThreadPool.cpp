@@ -1,4 +1,3 @@
-#include <system/configure.hpp>
 #include <system/thread.hpp>
 #include <system/totext.hpp>
 

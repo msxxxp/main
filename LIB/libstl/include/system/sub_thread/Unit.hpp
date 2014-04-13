@@ -1,29 +1,11 @@
 #ifndef LIBSTL_SYSTEM_THREAD_UNIT_HPP_
 #define LIBSTL_SYSTEM_THREAD_UNIT_HPP_
 
-#include <system/configure.hpp>
 #include <system/thread.hpp>
 #include <system/sync.hpp>
 #include <extra/pattern.hpp>
 
 namespace thread {
-
-	struct ThreadRoutine_i {
-		static DWORD WINAPI run_thread(void * routine);
-
-		static VOID WINAPI alert_thread(ULONG_PTR routine);
-
-	public:
-		ThreadRoutine_i();
-
-		virtual ~ThreadRoutine_i() noexcept;
-
-		virtual void alert(void * data);
-
-		virtual size_t run(void * data);
-
-		virtual void put_message(const sync::Message & message);
-	};
 
 //	template <typename Type, size_t (Type::*mem_func)(void *)>
 //	DWORD WINAPI member_thunk(void * ptr)
@@ -41,29 +23,11 @@ namespace thread {
 		typedef HANDLE handle_t;
 		typedef DWORD id_t;
 
-		enum class Priority_t: ssize_t {
-			IDLE          = THREAD_PRIORITY_IDLE,
-			LOWEST        = THREAD_PRIORITY_LOWEST,
-			BELOW_NORMAL  = THREAD_PRIORITY_BELOW_NORMAL,
-			NORMAL        = THREAD_PRIORITY_NORMAL,
-			ABOVE_NORMAL  = THREAD_PRIORITY_ABOVE_NORMAL,
-			HIGHEST       = THREAD_PRIORITY_HIGHEST,
-			TIME_CRITICAL = THREAD_PRIORITY_TIME_CRITICAL,
-		};
-
-		enum class IoPriority_t: ssize_t {
-			VERY_LOW,
-			LOW,
-			NORMAL,
-			HIGH,
-			CRITICAL,
-		};
-
 		~Thread() noexcept;
 
-		Thread(ThreadRoutine_i * routine, bool suspended = false);
+		Thread(Routine * routine, bool suspended = false);
 
-		Thread(ThreadRoutine_i * routine, void * data, bool suspended = false, size_t stack_size = 0);
+		Thread(Routine * routine, void * data, bool suspended = false, size_t stack_size = 0);
 
 		Thread(Thread && right);
 
@@ -75,9 +39,9 @@ namespace thread {
 
 		void alert(void * data);
 
-		bool set_priority(Thread::Priority_t prio);
+		bool set_priority(Priority prio);
 
-		bool set_io_priority(Thread::IoPriority_t prio);
+		bool set_io_priority(IoPriority prio);
 
 		size_t get_exitcode() const;
 
@@ -91,11 +55,11 @@ namespace thread {
 			return m_handle;
 		}
 
-		Thread::Priority_t get_priority() const;
+		Priority get_priority() const;
 
-		Thread::IoPriority_t get_io_priority() const;
+		IoPriority get_io_priority() const;
 
-		ThreadRoutine_i * get_routine() const
+		Routine * get_routine() const
 		{
 			return m_routine;
 		}
@@ -107,14 +71,11 @@ namespace thread {
 		sync::WaitResult_t wait(sync::Timeout_t timeout = sync::WAIT_FOREVER) const;
 
 	private:
-		ThreadRoutine_i * m_routine;
+		Routine * m_routine;
 		handle_t m_handle;
 		id_t m_id;
 	};
 
-	const wchar_t * to_str(Thread::Priority_t prio);
-
-	const wchar_t * to_str(Thread::IoPriority_t prio);
 }
 
 #endif

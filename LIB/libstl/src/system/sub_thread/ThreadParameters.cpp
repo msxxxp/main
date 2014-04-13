@@ -7,14 +7,14 @@ namespace thread {
 
 		static VOID WINAPI alert_thread_with_param(ULONG_PTR param);
 
-		ThreadParameters(ThreadRoutine_i * r, void * d = nullptr);
+		ThreadParameters(Routine * r, void * d = nullptr);
 
-		ThreadRoutine_i * routine;
+		Routine * routine;
 		void * data;
 	};
 
 
-	ThreadParameters::ThreadParameters(ThreadRoutine_i * r, void * d):
+	ThreadParameters::ThreadParameters(Routine * r, void * d):
 		routine(r),
 		data(d)
 	{
@@ -35,7 +35,7 @@ namespace thread {
 	}
 
 
-	Thread::Thread(ThreadRoutine_i * routine, void * data, bool suspended, size_t stack_size):
+	Thread::Thread(Routine * routine, void * data, bool suspended, size_t stack_size):
 		m_routine(routine),
 		m_handle(::CreateThread(nullptr, stack_size, ThreadParameters::run_thread_with_param, new ThreadParameters(m_routine, data), suspended ? CREATE_SUSPENDED : 0, &m_id))
 	{

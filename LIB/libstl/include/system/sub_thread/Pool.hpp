@@ -1,7 +1,6 @@
 #ifndef LIBSTL_SYSTEM_THREAD_POOL_HPP_
 #define LIBSTL_SYSTEM_THREAD_POOL_HPP_
 
-#include <system/configure.hpp>
 #include <system/thread.hpp>
 #include <system/sync.hpp>
 #include <extra/pattern.hpp>

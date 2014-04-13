@@ -1,10 +1,8 @@
-#include <system/configure.hpp>
 #include <system/thread.hpp>
 #include <system/totext.hpp>
+#include <simstd/algorithm>
 
 #include <liblog/logger.hpp>
-
-#include <simstd/algorithm>
 
 namespace thread {
 
@@ -24,9 +22,9 @@ namespace thread {
 		}
 	}
 
-	Thread::Thread(ThreadRoutine_i * routine, bool suspended):
+	Thread::Thread(Routine * routine, bool suspended):
 		m_routine(routine),
-		m_handle(::CreateThread(nullptr, 0, ThreadRoutine_i::run_thread, routine, suspended ? CREATE_SUSPENDED : 0, &m_id))
+		m_handle(::CreateThread(nullptr, 0, Routine::run_thread, routine, suspended ? CREATE_SUSPENDED : 0, &m_id))
 	{
 		LogNoise(L"id: %u\n", m_id);
 	}
@@ -57,10 +55,10 @@ namespace thread {
 	void Thread::alert()
 	{
 		LogNoise(L"id: %u\n", m_id);
-		LogErrorIf(!::QueueUserAPC(ThreadRoutine_i::alert_thread, m_handle, (ULONG_PTR)m_routine), L"-> %s\n", totext::api_error().c_str());
+		LogErrorIf(!::QueueUserAPC(Routine::alert_thread, m_handle, (ULONG_PTR)m_routine), L"-> %s\n", totext::api_error().c_str());
 	}
 
-	bool Thread::set_priority(Thread::Priority_t prio)
+	bool Thread::set_priority(Priority prio)
 	{
 		LogNoise(L"id: %u, prio: '%s'\n", m_id, to_str(prio));
 		bool ret = ::SetThreadPriority(m_handle, (int)prio);
@@ -77,9 +75,9 @@ namespace thread {
 		return ret;
 	}
 
-	Thread::Priority_t Thread::get_priority() const
+	Priority Thread::get_priority() const
 	{
-		Thread::Priority_t prio = (Thread::Priority_t)::GetThreadPriority(m_handle);
+		Priority prio = (Priority)::GetThreadPriority(m_handle);
 		LogNoise(L"id: %u -> '%s'\n", m_id, to_str(prio));
 		return prio;
 	}
@@ -104,44 +102,6 @@ namespace thread {
 	{
 		LogNoise(L"id: %u, timeout: %Id\n", m_id, timeout);
 		return (sync::WaitResult_t)::WaitForSingleObjectEx(m_handle, timeout, true);
-	}
-
-	const wchar_t * to_str(Thread::Priority_t prio)
-	{
-		switch (prio) {
-			case Thread::Priority_t::IDLE:
-				return L"Idle";
-			case Thread::Priority_t::LOWEST:
-				return L"Lowest";
-			case Thread::Priority_t::BELOW_NORMAL:
-				return L"Below normal";
-			case Thread::Priority_t::NORMAL:
-				return L"Normal";
-			case Thread::Priority_t::ABOVE_NORMAL:
-				return L"Above normal";
-			case Thread::Priority_t::HIGHEST:
-				return L"Highest";
-			case Thread::Priority_t::TIME_CRITICAL:
-				return L"Time critical";
-		}
-		return L"unknown";
-	}
-
-	const wchar_t * to_str(Thread::IoPriority_t prio)
-	{
-		switch (prio) {
-			case Thread::IoPriority_t::VERY_LOW:
-				return L"Very low";
-			case Thread::IoPriority_t::LOW:
-				return L"Low";
-			case Thread::IoPriority_t::NORMAL:
-				return L"Normal";
-			case Thread::IoPriority_t::HIGH:
-				return L"High";
-			case Thread::IoPriority_t::CRITICAL:
-				return L"Critical";
-		}
-		return L"unknown";
 	}
 
 }

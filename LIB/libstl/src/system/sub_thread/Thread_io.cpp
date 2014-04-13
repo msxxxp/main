@@ -1,4 +1,3 @@
-#include <system/configure.hpp>
 #include <system/thread.hpp>
 #include <system/totext.hpp>
 
@@ -65,7 +64,7 @@ namespace thread {
 		NtQueryInformationThread(IN HANDLE ThreadHandle, IN THREADINFOCLASS ThreadInformationClass, PVOID ThreadInformation, IN ULONG ThreadInformationLength, PULONG ReturnLength);
 	}
 
-	bool Thread::set_io_priority(Thread::IoPriority_t prio)
+	bool Thread::set_io_priority(IoPriority prio)
 	{
 		ULONG p = (ULONG)prio;
 		NTSTATUS ret = NtSetInformationThread(m_handle, ThreadIoPriority, &p, sizeof(p));
@@ -74,13 +73,13 @@ namespace thread {
 		return ret;
 	}
 
-	Thread::IoPriority_t Thread::get_io_priority() const
+	IoPriority Thread::get_io_priority() const
 	{
 		ULONG prio = 0;
 		NTSTATUS ret = NtQueryInformationThread(m_handle, ThreadIoPriority, &prio, sizeof(prio), nullptr);
-		LogNoiseIf(!ret, L"id: %u -> '%s'\n", m_id, to_str((Thread::IoPriority_t)prio));
+		LogNoiseIf(!ret, L"id: %u -> '%s'\n", m_id, to_str((Thread::IoPriority)prio));
 		LogErrorIf( ret, L"id: %u -> '%s'\n", m_id,  totext::nt_status(ret).c_str());
-		return (Thread::IoPriority_t)prio;
+		return (IoPriority)prio;
 	}
 
 }

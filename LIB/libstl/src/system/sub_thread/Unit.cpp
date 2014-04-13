@@ -60,9 +60,9 @@ namespace thread {
 
 	bool Unit::set_priority(Priority prio)
 	{
-		LogNoise(L"id: %u, prio: '%s'\n", m_id, to_str(prio));
+		LogNoise(L"id: %u, prio: '%s'\n", m_id, totext::c_str(prio));
 		bool ret = ::SetThreadPriority(m_handle, (int)prio);
-		LogErrorIf(!ret, L"id: %u, prio: '%s' -> %s\n", m_id, to_str(prio), totext::api_error().c_str());
+		LogErrorIf(!ret, L"id: %u, prio: '%s' -> %s\n", m_id, totext::c_str(prio), totext::api_error().c_str());
 		return ret;
 	}
 
@@ -93,7 +93,7 @@ namespace thread {
 	Priority Unit::get_priority() const
 	{
 		Priority prio = (Priority)::GetThreadPriority(m_handle);
-		LogNoise(L"id: %u -> '%s'\n", m_id, to_str(prio));
+		LogNoise(L"id: %u -> '%s'\n", m_id, totext::c_str(prio));
 		return prio;
 	}
 

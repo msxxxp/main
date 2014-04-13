@@ -1,13 +1,12 @@
-﻿#include <system/configure.hpp>
-#include <system/totext.hpp>
+﻿#include <system/totext.hpp>
 #include <system/string.hpp>
 
-#include <simstd/algorithm>
 #include <simstd/string>
 
 namespace totext {
 
-	simstd::wstring api_error(DWORD err, const wchar_t * lib) {
+	simstd::wstring api_error(DWORD err, const wchar_t * lib)
+	{
 		HMODULE mod = nullptr;
 		if (err && lib) {
 			mod = ::LoadLibraryExW(lib, nullptr, DONT_RESOLVE_DLL_REFERENCES); //LOAD_LIBRARY_AS_DATAFILE

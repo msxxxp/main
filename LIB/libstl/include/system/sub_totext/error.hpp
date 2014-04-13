@@ -1,7 +1,7 @@
 ﻿#ifndef LIBSTL_SYSTEM_TOTEXT_ERROR_HPP_
 #define LIBSTL_SYSTEM_TOTEXT_ERROR_HPP_
 
-#include <system/configure.hpp>
+#include <system/totext.hpp>
 
 #include <simstd/iosfwd>
 

@@ -23,9 +23,14 @@ namespace thread {
 		CRITICAL,
 	};
 
-	const wchar_t * to_str(Priority prio);
+}
 
-	const wchar_t * to_str(IoPriority prio);
+namespace totext {
+
+	const wchar_t * c_str(thread::Priority prio);
+
+	const wchar_t * c_str(thread::IoPriority prio);
+
 }
 
 #endif

@@ -88,6 +88,18 @@ namespace {
 //		Default::set_target(get_TargetToFile(L"test-threads.log", true));
 
 //		set_module_enabled(false, get_module(L"threads"));
+
+		LogTrace();
+		LogDebug(L"\n");
+		LogInfo(L"\n");
+		LogReport(L"\n");
+		LogAtten(L"\n");
+		LogWarn(L"\n");
+		LogError(L"\n");
+		LogFatal(L"\n");
+		LogAlert(L"\n");
+		LogEmerg(L"\n");
+		LogForce(L"\n");
 	}
 }
 
@@ -120,8 +132,8 @@ int test_threads()
 	Routine routine1(&queue, 100);
 	Routine routine2(&queue, 200);
 	thread::Pool threads;
-	threads.create_thread(&routine1);
-	threads.create_thread(&routine2);
+	threads.create_thread(&routine1, true, 50 * 1024 * 1024);
+	threads.create_thread(&routine2, true, 50 * 1024 * 1024);
 
 //	Sleep(5000);
 	threads[0].set_io_priority(thread::IoPriority::VERY_LOW);
@@ -137,11 +149,17 @@ int test_threads()
 	sync::Message message(1, 2, 3, nullptr);
 	queue.put_message(message);
 //	queue.put_message(message);
-	while (threads.wait_all(1000) != sync::WaitResult_t::SUCCESS)
-		;
 
-	LogInfo(L"threads[0] exited: %d\n", threads[0].get_exitcode());
-	LogInfo(L"threads[1] exited: %d\n", threads[1].get_exitcode());
+	sync::WaitResult_t ret = sync::WaitResult_t::FAILED;
+	do {
+		ret = threads.wait_all(1000);
+	} while (ret != sync::WaitResult_t::FAILED && ret != sync::WaitResult_t::SUCCESS);
+
+	if (ret == sync::WaitResult_t::SUCCESS) {
+		LogInfo(L"threads[0] exited: %d\n", threads[0].get_exitcode());
+		LogInfo(L"threads[1] exited: %d\n", threads[1].get_exitcode());
+	}
+
 	return 0;
 }
 

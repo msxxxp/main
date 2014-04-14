@@ -1,4 +1,5 @@
-﻿#include <simstd/algorithm>
+﻿#include <system/console.hpp>
+#include <simstd/algorithm>
 #include <simstd/vector>
 #include <simstd/iterator>
 

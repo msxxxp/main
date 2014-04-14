@@ -289,7 +289,7 @@ namespace simstd {
 	void basic_string<CharType, Traits>::string_impl::change_size(size_type delta)
 	{
 		end += delta;
-		assert(end < end_of_storage);
+		assert(end <= end_of_storage);
 		*end = static_cast<CharType>(0);
 	}
 

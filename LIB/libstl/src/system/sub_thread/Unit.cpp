@@ -23,22 +23,20 @@ namespace thread {
 		}
 	}
 
-	Unit::Unit(Routine * routine, bool suspended):
-		m_routine(routine),
-		m_handle(::CreateThread(nullptr, 0, Routine::run_thread, routine, suspended ? CREATE_SUSPENDED : 0, &m_id))
+	Unit::Unit(Routine * routine, bool suspended, size_t stack_size) :
+		m_routine(routine), m_handle(::CreateThread(nullptr, stack_size * 1024, Routine::run_thread, routine, suspended ? CREATE_SUSPENDED : 0, &m_id)), m_id()
 	{
-		LogNoise(L"id: %u\n", m_id);
+		LogDebugIf(is_valid(), L"id: %u\n", m_id);
+		LogFatalIf(!is_valid(), L"can't create thread (%p, %Iu) -> %s\n", routine, stack_size, totext::api_error().c_str());
 	}
 
-	Unit::Unit(Unit && right):
-		m_routine(nullptr),
-		m_handle(nullptr),
-		m_id(0)
+	Unit::Unit(Unit && right) :
+		m_routine(nullptr), m_handle(nullptr), m_id(0)
 	{
 		swap(right);
 	}
 
-	Unit & Unit::operator = (Unit && right)
+	Unit & Unit::operator =(Unit && right)
 	{
 		if (this != &right)
 			Unit(simstd::move(right)).swap(*this);
@@ -53,16 +51,23 @@ namespace thread {
 		swap(m_id, right.m_id);
 	}
 
-	void Unit::alert()
+	bool Unit::is_valid() const
 	{
-		LogNoise(L"id: %u\n", m_id);
-		LogErrorIf(!::QueueUserAPC(Routine::alert_thread, m_handle, (ULONG_PTR)m_routine), L"-> %s\n", totext::api_error().c_str());
+		return m_handle && m_handle != INVALID_HANDLE_VALUE;
+	}
+
+	bool Unit::alert()
+	{
+		bool ret = ::QueueUserAPC(Routine::alert_thread, m_handle, (ULONG_PTR )m_routine);
+		LogDebugIf(ret, L"id: %u\n", m_id);
+		LogErrorIf(!ret, L"-> %s\n", totext::api_error().c_str());
+		return ret;
 	}
 
 	bool Unit::set_priority(Priority prio)
 	{
-		LogNoise(L"id: %u, prio: '%s'\n", m_id, totext::c_str(prio));
 		bool ret = ::SetThreadPriority(m_handle, (int)prio);
+		LogDebugIf(ret, L"id: %u, prio: '%s'\n", m_id, totext::c_str(prio));
 		LogErrorIf(!ret, L"id: %u, prio: '%s' -> %s\n", m_id, totext::c_str(prio), totext::api_error().c_str());
 		return ret;
 	}
@@ -71,7 +76,7 @@ namespace thread {
 	{
 		DWORD ret;
 		WINBOOL good = ::GetExitCodeThread(m_handle, &ret);
-		LogNoiseIf(good,  L"id: %u -> %u\n", m_id, ret);
+		LogNoiseIf(good, L"id: %u -> %u\n", m_id, ret);
 		LogErrorIf(!good, L"id: %u -> %s\n", m_id, totext::api_error().c_str());
 		return ret;
 	}
@@ -100,16 +105,16 @@ namespace thread {
 
 	bool Unit::suspend() const
 	{
-		LogNoise(L"id: %u\n", m_id);
 		bool ret = ::SuspendThread(m_handle) != (DWORD)-1;
+		LogDebugIf(ret, L"id: %u\n", m_id);
 		LogErrorIf(!ret, L"id: %u -> %s\n", m_id, totext::api_error().c_str());
 		return ret;
 	}
 
 	bool Unit::resume() const
 	{
-		LogNoise(L"id: %u\n", m_id);
 		bool ret = ::ResumeThread(m_handle) != (DWORD)-1;
+		LogDebugIf(ret, L"id: %u\n", m_id);
 		LogErrorIf(!ret, L"id: %u -> %s\n", m_id, totext::api_error().c_str());
 		return ret;
 	}

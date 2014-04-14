@@ -6,8 +6,8 @@
 #include <simstd/memory>
 #include <simstd/vector>
 
-#include <system/console.hpp>
-//#define FuncTrace() console::printf(L"%S()[%d]\n", __FUNCTION__, __LINE__)
+//#include <system/console.hpp>
+//#define FuncTrace() console::printf(L"%S()[%d]\n", __PRETTY_FUNCTION__, __LINE__)
 #define FuncTrace()
 
 

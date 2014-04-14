@@ -15,7 +15,7 @@ namespace thread {
 	public:
 		~Unit() noexcept;
 
-		Unit(Routine * routine, bool suspended = false);
+		Unit(Routine * routine, bool suspended = false, size_t stack_size = 0);
 
 		Unit(Routine * routine, void * data, bool suspended = false, size_t stack_size = 0);
 
@@ -25,7 +25,9 @@ namespace thread {
 
 		void swap(Unit & right) noexcept;
 
-		void alert();
+		bool is_valid() const;
+
+		bool alert();
 
 		void alert(void * data);
 

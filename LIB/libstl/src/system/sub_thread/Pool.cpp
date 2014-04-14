@@ -28,7 +28,7 @@ namespace thread {
 	{
 		LogNoise(L"timeout: %Id\n", timeout);
 		sync::WaitResult_t ret = (sync::WaitResult_t)::WaitForMultipleObjectsEx(m_handles.size(), &m_handles[0], TRUE, timeout, TRUE);
-		LogErrorIf(ret == sync::WaitResult_t::FAILED, L"%s\n", totext::api_error().c_str());
+		LogErrorIf(ret == sync::WaitResult_t::FAILED, L"-> %s\n", totext::api_error().c_str());
 		LogNoise(L"ret: '%s'\n", totext::c_str(ret));
 		return ret;
 	}

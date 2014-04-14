@@ -205,10 +205,10 @@ namespace logger {
 			prefix += format_str(L"%s ", LogLevelNames[(int)lvl]);
 		}
 		if (m_prefix & Prefix::Module) {
-			prefix += format_str(L"{%8s} ", m_name.c_str());
+			prefix += format_str(L"%11s ", m_name.c_str());
 		}
 		if (m_prefix & Prefix::Thread) {
-			prefix += format_str(L"<%5u> ", ::GetCurrentThreadId());
+			prefix += format_str(L"%5u ", ::GetCurrentThreadId());
 		}
 		return prefix;
 	}
@@ -216,10 +216,10 @@ namespace logger {
 	ustring & Module_impl::add_place(ustring & prefix, const char * file, int line, const char * func) const
 	{
 		if (m_prefix & Prefix::Place) {
-			prefix += format_str(L"%14.14S:%4d ", file, line);
+			prefix += format_str(L"%14.14S:%5d ", file, line);
 		}
 		if (m_prefix & Prefix::Function) {
-			prefix += format_str(L"[%S] ", func);
+			prefix += format_str(L"%S ", func);
 		}
 		return prefix;
 	}

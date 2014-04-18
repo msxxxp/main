@@ -9,7 +9,11 @@ namespace thread {
 	struct Routine {
 		static DWORD WINAPI run_thread(void * routine);
 
+		static DWORD WINAPI run_thread_with_param(void * param);
+
 		static VOID WINAPI alert_thread(ULONG_PTR routine);
+
+		static VOID WINAPI alert_thread_with_param(ULONG_PTR param);
 
 	public:
 		Routine();
@@ -19,6 +23,8 @@ namespace thread {
 		virtual void alert(void * data);
 
 		virtual size_t run(void * data);
+
+		virtual void * get_parameter();
 
 		virtual void put_message(const sync::Message & message);
 	};

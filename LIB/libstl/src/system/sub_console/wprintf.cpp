@@ -54,6 +54,14 @@ namespace console {
 		return vprintf(Handle::OUTPUT, format, vl);
 	}
 
+	size_t fvprintf(HANDLE hndl, const wchar_t * format, va_list vl)
+	{
+		memory::auto_array<wchar_t> buf(DEFAULT_PRINTF_BUFFER);
+		while (!safe_vsnprintf(buf.data(), buf.size(), format, vl))
+			buf.reserve(buf.size() * 2);
+		return fputs(buf.data(), cstr::length(buf.data()), hndl);
+	}
+
 	int printf(Handle hnd, const wchar_t * format, ...)
 	{
 		Va_list vl;
@@ -73,6 +81,13 @@ namespace console {
 		Va_list vl;
 		va_start(vl, format);
 		return vprintf(Handle::OUTPUT, format, vl);
+	}
+
+	int fprintf(HANDLE hndl, const wchar_t * format, ...)
+	{
+		Va_list vl;
+		va_start(vl, format);
+		return fvprintf(hndl, format, vl);
 	}
 
 }

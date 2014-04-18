@@ -15,7 +15,8 @@ namespace thread {
 	DWORD WINAPI Routine::run_thread(void * routine)
 	{
 		LogNoise(L"%p\n", routine);
-		return reinterpret_cast<Routine*>(routine)->run(nullptr);
+		Routine * l_routine = reinterpret_cast<Routine*>(routine);
+		return l_routine->run(l_routine->get_parameter());
 	}
 
 	VOID WINAPI Routine::alert_thread(ULONG_PTR routine)
@@ -45,6 +46,11 @@ namespace thread {
 		UNUSED(data);
 		LogNoise(L"data: %p\n", data);
 		return 0;
+	}
+
+	void * Routine::get_parameter()
+	{
+		return nullptr;
 	}
 
 	void Routine::put_message(const sync::Message & message)

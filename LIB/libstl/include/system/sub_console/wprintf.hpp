@@ -19,11 +19,15 @@ namespace console {
 
 	size_t vprintf(const wchar_t * format, va_list vl);
 
+	size_t fvprintf(HANDLE hndl, const wchar_t * format, va_list vl);
+
 	int printf(Handle hnd, const wchar_t * format, ...);
 
 	int printf(const wchar_t * format, ...);
 
 	int wprintf(const wchar_t * format, ...);
+
+	int fprintf(HANDLE hndl, const wchar_t * format, ...);
 
 }
 

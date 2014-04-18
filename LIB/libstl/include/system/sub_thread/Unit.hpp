@@ -29,7 +29,7 @@ namespace thread {
 
 		bool alert();
 
-		void alert(void * data);
+		bool alert(void * data);
 
 		bool set_priority(Priority prio);
 

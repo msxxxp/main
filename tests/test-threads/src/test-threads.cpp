@@ -132,8 +132,8 @@ int test_threads()
 	Routine routine1(&queue, 100);
 	Routine routine2(&queue, 200);
 	thread::Pool threads;
-	threads.create_thread(&routine1, true, 50 * 1024 * 1024);
-	threads.create_thread(&routine2, true, 50 * 1024 * 1024);
+	threads.create_thread(&routine1, true);
+	threads.create_thread(&routine2, true);
 
 //	Sleep(5000);
 	threads[0].set_io_priority(thread::IoPriority::VERY_LOW);

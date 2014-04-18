@@ -124,6 +124,12 @@ namespace cstr {
 	}
 
 	template<typename CharType>
+	CharType * find(CharType * where, const CharType * what)
+	{
+		return const_cast<CharType *>(cstr::char_traits<CharType>::find(where, what));
+	}
+
+	template<typename CharType>
 	const CharType * find(const CharType * where, const CharType * what)
 	{
 		return cstr::char_traits<CharType>::find(where, what);

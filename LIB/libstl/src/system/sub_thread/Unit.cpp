@@ -24,7 +24,7 @@ namespace thread {
 	}
 
 	Unit::Unit(Routine * routine, bool suspended, size_t stack_size) :
-		m_routine(routine), m_handle(::CreateThread(nullptr, stack_size * 1024, Routine::run_thread, routine, suspended ? CREATE_SUSPENDED : 0, &m_id)), m_id()
+		m_routine(routine), m_handle(::CreateThread(nullptr, stack_size, Routine::run_thread, routine, suspended ? CREATE_SUSPENDED : 0, &m_id)), m_id()
 	{
 		LogDebugIf(is_valid(), L"id: %u\n", m_id);
 		LogFatalIf(!is_valid(), L"can't create thread (%p, %Iu) -> %s\n", routine, stack_size, totext::api_error().c_str());

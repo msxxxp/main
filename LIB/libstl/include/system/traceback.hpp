@@ -9,58 +9,72 @@
 
 namespace traceback {
 
-	struct Frame: private pattern::Uncopyable
+	struct Frame_i
 	{
-		~Frame();
+		virtual ~Frame_i();
 
-		Frame(size_t frame);
+		virtual void * address() const = 0;
 
-		Frame(Frame && right);
+		virtual const ustring & module() const = 0;
 
-		Frame & operator = (Frame && right);
+		virtual const ustring & file() const = 0;
 
-		void swap(Frame & right);
+		virtual const ustring & function() const = 0;
 
-		size_t frame() const {return m_frame;}
+		virtual size_t line() const = 0;
 
-		const ustring & source() const;
+		virtual size_t offset() const = 0;
 
-		const ustring & func() const;
-
-		const ustring & module() const;
-
-		size_t addr() const;
-
-		size_t offset() const;
-
-		size_t line() const;
-
-		ustring to_str() const;
-
-	private:
-		void InitData() const;
-
-		size_t m_frame;
-
-		struct Data;
-		mutable Data * m_data;
+		virtual ustring to_str() const = 0;
 	};
 
-	struct Enum: private simstd::vector<Frame> {
-		typedef simstd::vector<Frame> base_type;
+	Frame_i * read_frame_data(void * address);
 
-		Enum(const wchar_t * path = nullptr, size_t depth = MAX_DEPTH);
+	struct LazyFrame: public Frame_i, private pattern::Uncopyable
+	{
+		~LazyFrame();
+
+		LazyFrame(void * address);
+
+		LazyFrame(LazyFrame && other);
+
+		LazyFrame & operator = (LazyFrame && right);
+
+		void swap(LazyFrame & other);
+
+		void * address() const override;
+
+		const ustring & module() const override;
+
+		const ustring & file() const override;
+
+		const ustring & function() const override;
+
+		size_t line() const override;
+
+		size_t offset() const override;
+
+		ustring to_str() const override;
+
+	private:
+		void init_data() const;
+
+		void * m_address;
+		mutable Frame_i * m_data;
+	};
+
+	struct Enum: private simstd::vector<LazyFrame> {
+		typedef simstd::vector<LazyFrame> base_type;
+
+		Enum(const wchar_t * path = nullptr, size_t depth = get_max_depth());
+
+		static size_t get_max_depth();
 
 		using base_type::begin;
 		using base_type::end;
 		using base_type::empty;
 		using base_type::size;
 		using base_type::operator[];
-
-		void Print() const;
-
-	private:
-		static const size_t MAX_DEPTH = 64;
 	};
 }
 

@@ -1,10 +1,10 @@
 #include <system/traceback.hpp>
 #include <system/string.hpp>
 #include <system/totext.hpp>
+#include <extra/pattern.hpp>
 
 #include <liblog/logger.hpp>
 
-#include <simstd/algorithm>
 #include <simstd/string>
 
 #include <dbghelp.h>
@@ -69,7 +69,7 @@ int init_bfd_ctx(bfd_ctx * bc, const wchar_t * image)
 
 	if (!(r1 && r2 && r3)) {
 		bfd_close(b);
-		LogFatal(L"Failed to init bfd from (%s)\n", image);
+		LogAtten(L"Failed to init bfd from (%s)\n", image);
 		return 1;
 	}
 
@@ -152,299 +152,204 @@ namespace traceback {
 	namespace {
 		logger::Module_i * get_logger_module()
 		{
-			auto static module = logger::get_module(L"traback");
+			auto static module = logger::get_module(L"traceback");
 			return module;
 		}
 	}
 
-	struct Frame::Data {
-		Data(size_t frame);
+	struct Frame: public Frame_i, private pattern::Uncopyable {
+		~Frame();
 
-		bool LoadFromPDB(size_t frame);
+		Frame(void * address);
 
-		bool LoadFromSymbols(size_t frame);
+		void * address() const override;
 
-		bool LoadFromMap(size_t frame);
+		const ustring & module() const override;
 
-		size_t addr;
-		size_t offset;
-		uint64_t module_base;
-		size_t line;
-		ustring source;
-		ustring func;
-		ustring module;
-		ustring image;
+		const ustring & file() const override;
+
+		const ustring & function() const override;
+
+		size_t line() const override;
+
+		size_t offset() const override;
+
+		ustring to_str() const override;
+
+	private:
+		bool LoadFromPDB(void * frame);
+
+		bool LoadFromSymbols(void * frame);
+
+		bool LoadFromMap(void * frame);
+
+		void * m_address;
+		size_t m_offset;
+		size_t m_line;
+		uint64_t m_module_base;
+		ustring m_file;
+		ustring m_function;
+		ustring m_module;
+		ustring m_image;
 	};
 
-	Frame::Data::Data(size_t frame) :
-		addr(0), offset(0), module_base(0), line(0), func(L"?")
+	Frame::~Frame()
 	{
-		IMAGEHLP_MODULEW64 modinfo;
-		memory::zero(modinfo);
-		modinfo.SizeOfStruct = sizeof(modinfo) - 8;
-		BOOL ret = SymGetModuleInfoW64(GetCurrentProcess(), frame, &modinfo);
-		LogErrorIf(ret == FALSE, L"%s\n", totext::api_error().c_str());
-		if (ret != FALSE) {
-			module = modinfo.ModuleName;
-			module_base = modinfo.BaseOfImage;
-			image = modinfo.ImageName;
-//			LogNoise(L"ModuleName: %s\n", modinfo.ModuleName);
-//			LogNoise(L"ImageName: %s\n", modinfo.ImageName);
-//			LogNoise(L"LoadedImageName: %s\n", modinfo.LoadedImageName);
-//			LogNoise(L"LoadedPdbName: %s\n", modinfo.LoadedPdbName);
-//			LogNoise(L"SymType: %d\n", (int)modinfo.SymType);
-		}
-
-		(modinfo.SymType && LoadFromPDB(frame)) || LoadFromSymbols(frame) || LoadFromMap(frame);
 	}
 
-	bool Frame::Data::LoadFromPDB(size_t frame)
+	Frame::Frame(void * address) :
+		m_address(0),
+		m_offset(0),
+		m_line(0),
+		m_module_base(0),
+		m_function(L"?")
+	{
+		IMAGEHLP_MODULEW64 modInfo;
+		memory::zero(modInfo);
+		modInfo.SizeOfStruct = sizeof(modInfo) - 8;
+
+		bool res = ::SymGetModuleInfoW64(::GetCurrentProcess(), reinterpret_cast<DWORD64>(address), &modInfo);
+		LogErrorIf(!res, L"%s\n", totext::api_error().c_str());
+
+		if (res) {
+			m_module = modInfo.ModuleName;
+			m_module_base = modInfo.BaseOfImage;
+			m_image = modInfo.ImageName;
+			LogNoise(L"BaseOfImage:     %I64u\n", modInfo.BaseOfImage);
+			LogNoise(L"ImageSize:       %u\n", modInfo.ImageSize);
+			LogNoise(L"TimeDateStamp:   %u\n", modInfo.TimeDateStamp);
+			LogNoise(L"CheckSum:        %u\n", modInfo.CheckSum);
+			LogNoise(L"NumSyms:         %u\n", modInfo.NumSyms);
+			LogNoise(L"SymType:         %d\n", (int)modInfo.SymType);
+			LogNoise(L"ModuleName:      '%s'\n", modInfo.ModuleName);
+			LogNoise(L"ImageName:       '%s'\n", modInfo.ImageName);
+			LogNoise(L"LoadedImageName: '%s'\n", modInfo.LoadedImageName);
+			LogNoise(L"LoadedPdbName:   '%s'\n", modInfo.LoadedPdbName);
+		}
+
+		(modInfo.SymType && LoadFromPDB(address)) || LoadFromSymbols(address) || LoadFromMap(address);
+	}
+
+	void * Frame::address() const
+	{
+		return m_address;
+	}
+
+	const ustring & Frame::module() const
+	{
+		return m_module;
+	}
+
+	const ustring & Frame::file() const
+	{
+		return m_file;
+	}
+
+	const ustring & Frame::function() const
+	{
+		return m_function;
+	}
+
+	size_t Frame::line() const
+	{
+		return m_line;
+	}
+
+	size_t Frame::offset() const
+	{
+		return m_offset;
+	}
+
+	ustring Frame::to_str() const
+	{
+		return ustring();
+	}
+
+	bool Frame::LoadFromPDB(void * address)
 	{
 		LogTrace();
 		bool ret = false;
 
 		{
 			size_t size = sizeof(SYMBOL_INFOW) + MAX_SYM_NAME * sizeof(wchar_t);
-			SYMBOL_INFOW * m_syminfo = (SYMBOL_INFOW*)malloc(size);
-			m_syminfo->SizeOfStruct = sizeof(*m_syminfo);
-			m_syminfo->MaxNameLen = MAX_SYM_NAME;
+			SYMBOL_INFOW * symInfo = static_cast<SYMBOL_INFOW*>(malloc(size));
+			memory::zero(*symInfo);
+			symInfo->SizeOfStruct = sizeof(*symInfo);
+			symInfo->MaxNameLen = MAX_SYM_NAME;
 
 			DWORD64 displacement;
-			BOOL err = SymFromAddrW(GetCurrentProcess(), frame, &displacement, m_syminfo);
-			LogErrorIf(err == FALSE, L"%s\n", totext::api_error().c_str());
-			if (err != FALSE) {
-				addr = (size_t)m_syminfo->Address;
-				func = m_syminfo->Name;
-				offset = (size_t)displacement;
+			bool res = ::SymFromAddrW(::GetCurrentProcess(), reinterpret_cast<DWORD64>(address), &displacement, symInfo);
+			LogErrorIf(!res, L"%s\n", totext::api_error().c_str());
+			if (res) {
+				m_address = reinterpret_cast<void*>(symInfo->Address);
+				m_function = symInfo->Name;
+				m_offset = (size_t)displacement;
 				ret = true;
 			}
-			free(m_syminfo);
+			free(symInfo);
 		}
 
 		{
-			DWORD dummy;
-			IMAGEHLP_LINE64 info;
+			IMAGEHLP_LINEW64 info;
+			memory::zero(info);
 			info.SizeOfStruct = sizeof(info);
-			BOOL err = SymGetLineFromAddr64(GetCurrentProcess(), frame, &dummy, &info);
-//			LogErrorIf(err == FALSE, L"%s\n", ErrAsStr().c_str());
-			if (err != FALSE) {
-				line = info.LineNumber;
-				source = String::cp2w(filename_only(info.FileName), CP_ACP);
+
+			DWORD dwLineDisplacement = 0;
+			bool res = ::SymGetLineFromAddrW64(::GetCurrentProcess(), reinterpret_cast<DWORD64>(address), &dwLineDisplacement, &info);
+//			LogErrorIf(!res, L"%s\n", totext::api_error().c_str());
+			if (res) {
+				m_line = info.LineNumber;
+				m_file = info.FileName;
 			}
 		}
 		return ret;
 	}
 
-	bool Frame::Data::LoadFromSymbols(size_t frame)
+	bool Frame::LoadFromSymbols(void * address)
 	{
-		addr = frame;
-#if defined(__GNUC__)
 		LogTrace();
+		bool ret = false;
+		m_address = address;
+#if defined(__GNUC__)
 		bfd_set * set = static_cast<bfd_set*>(malloc(sizeof(*set)));
-		memset(set, 0, sizeof(*set));
+		memory::zero(*set);
 
-		bfd_ctx * bc = get_bc(set, image.c_str());
+		bfd_ctx * bc = get_bc(set, m_image.c_str());
 		if (bc) {
 			const char * file = NULL;
-			const char * fun = NULL;
+			const char * func = NULL;
 
-			find(bc, frame, file, fun, line, offset);
-			LogDebug(L"file: '%S'\n", file);
-			LogDebug(L"func: '%S'\n", fun);
-			LogDebug(L"line: %d\n", line);
+			find(bc, reinterpret_cast<size_t>(m_address), file, func, m_line, m_offset);
+			LogNoise(L"file: '%S'\n", file);
+			LogNoise(L"func: '%S'\n", func);
+			LogNoise(L"line: %Id\n", m_line);
+			LogNoise(L"offs: %Id\n", m_offset);
 
 			if (file)
-				source = String::cp2w(filename_only(file, '/'), CP_OEMCP);
-			if (fun) {
+				m_file = String::cp2w(filename_only(file, '/'), CP_OEMCP);
+			if (func) {
 				char buf[MAX_PATH];
 				size_t size = sizeof(buf);
 				int st = 0;
-				abi::__cxa_demangle(fun, buf, &size, &st);
-				func = String::cp2w(st ? fun : buf, CP_OEMCP);
+				abi::__cxa_demangle(func, buf, &size, &st);
+				m_function = String::cp2w(st ? func : buf, CP_OEMCP);
 			}
+			ret = file || func;
 		}
 		release_set(set);
 #endif
+		return ret;
+	}
+
+	bool Frame::LoadFromMap(void * address)
+	{
+		UNUSED(address);
 		return false;
 	}
 
-	bool Frame::Data::LoadFromMap(size_t /*frame*/)
+	Frame_i * read_frame_data(void * address)
 	{
-		return false;
-	}
-
-	Frame::~Frame()
-	{
-		delete m_data;
-	}
-
-	Frame::Frame(size_t frame) :
-		m_frame(frame),
-		m_data(nullptr)
-	{
-	}
-
-	Frame::Frame(Frame && right) :
-		m_frame(),
-		m_data(nullptr)
-	{
-		swap(right);
-	}
-
-	Frame & Frame::operator =(Frame && right)
-	{
-		Frame(simstd::move(right)).swap(*this);
-		return *this;
-	}
-
-	void Frame::swap(Frame & right)
-	{
-		using simstd::swap;
-		swap(m_frame, right.m_frame);
-		swap(m_data, right.m_data);
-	}
-
-	const ustring & Frame::source() const
-	{
-		InitData();
-		return m_data->source;
-	}
-
-	const ustring & Frame::func() const
-	{
-		InitData();
-		return m_data->func;
-	}
-
-	const ustring & Frame::module() const
-	{
-		InitData();
-		return m_data->module;
-	}
-
-	size_t Frame::addr() const
-	{
-		InitData();
-		return m_data->addr;
-	}
-
-	size_t Frame::offset() const
-	{
-		InitData();
-		return m_data->offset;
-	}
-
-	size_t Frame::line() const
-	{
-		InitData();
-		return m_data->line;
-	}
-
-	void Frame::InitData() const
-	{
-		if (!m_data)
-			m_data = new Data(m_frame);
-	}
-
-	ustring Frame::to_str() const
-	{
-		wchar_t buf[MAX_PATH];
-		if (!source().empty())
-			safe_snprintf(buf, lengthof(buf), L"[%s] (%p) %s:0x%Ix {%s:%Iu}", module().c_str(), addr(), func().c_str(), offset(), source().c_str(), line());
-		else
-			safe_snprintf(buf, lengthof(buf), L"[%s] (%p) %s:0x%Ix", module().c_str(), addr(), func().c_str(), offset());
-		return ustring(buf);
-	}
-
-	///=============================================================================================
-	struct SymbolInit {
-		static SymbolInit & inst(const wchar_t * path = nullptr)
-		{
-			static SymbolInit instance(path);
-			return instance;
-		}
-
-	private:
-		~SymbolInit()
-		{
-			LogErrorIf(!SymCleanup(GetCurrentProcess()), L"%s\n", totext::api_error().c_str());
-		}
-
-		SymbolInit(const wchar_t * path)
-		{
-			SymSetOptions(SymGetOptions() | SYMOPT_FAIL_CRITICAL_ERRORS | SYMOPT_LOAD_LINES);
-			LogErrorIf(!SymInitializeW(GetCurrentProcess(), path, TRUE), L"%s\n", totext::api_error().c_str());
-
-#if defined(__GNUC__)
-			bfd_init();
-#endif
-		}
-	};
-
-	///=============================================================================================
-	Enum::Enum(const wchar_t * path, size_t depth)
-	{
-		LogNoise(L"path: '%s' depth: %Iu\n", path, depth);
-		SymbolInit::inst(path);
-
-		CONTEXT ctx;
-		memory::zero(ctx);
-		ctx.ContextFlags = CONTEXT_FULL;
-		RtlCaptureContext(&ctx);
-
-		/* � ��� � Release-������������ ���������� ��������� ���� /Oy- (�� �������� ��������� �� ������), ����� ����� ������.
-		 * http://www.bytetalk.net/2011/06/why-rtlcapturecontext-crashes-on.html
-		 */
-		STACKFRAME64 sf;
-		memset(&sf, 0, sizeof(sf));
-
-		DWORD machine = 0;
-#ifdef _AMD64_
-		sf.AddrPC.Offset = ctx.Rip;
-		sf.AddrPC.Mode = AddrModeFlat;
-		sf.AddrFrame.Offset = ctx.Rbp;
-		sf.AddrFrame.Mode = AddrModeFlat;
-		sf.AddrStack.Offset = ctx.Rsp;
-		sf.AddrStack.Mode = AddrModeFlat;
-		machine = IMAGE_FILE_MACHINE_AMD64;
-#else
-		sf.AddrPC.Offset = ctx.Eip;
-		sf.AddrPC.Mode = AddrModeFlat;
-		sf.AddrFrame.Offset = ctx.Ebp;
-		sf.AddrFrame.Mode = AddrModeFlat;
-		sf.AddrStack.Offset = ctx.Esp;
-		sf.AddrStack.Mode = AddrModeFlat;
-		machine = IMAGE_FILE_MACHINE_I386;
-#endif
-
-		while (depth-- > 0) {
-			BOOL res = StackWalk64(machine, GetCurrentProcess(), GetCurrentThread(), &sf, (void*)&ctx, nullptr, &SymFunctionTableAccess64, &SymGetModuleBase64, nullptr);
-#ifdef _AMD64_
-			if (!res || sf.AddrReturn.Offset == 0)
-				break;
-			emplace_back(sf.AddrReturn.Offset);
-#else
-			if (!res || sf.AddrPC.Offset == 0)
-			break;
-			emplace_back((size_t)sf.AddrPC.Offset);
-#endif
-		}
-		LogNoise(L"depth: %Iu\n", size());
-	}
-
-	void Enum::Print() const
-	{
-#ifdef ENABLE_LOGGER
-		auto module = get_logger_module();
-		auto scopeLock(module->lock_scope());
-		logger::set_color_mode(module, true);
-		auto savedPrefix = logger::get_prefix(module);
-		logger::set_prefix(module, logger::Prefix::Time | logger::Prefix::Thread);
-		LogForce(L"Backtrace: [%Iu]\n", size());
-		for (size_t i = 0; i < size(); ++i)
-			LogForce(L"[%02Iu] %s\n", size() - (i + 1), operator[](i).to_str().c_str());
-		logger::set_prefix(module, savedPrefix);
-#endif
+		return new Frame(address);
 	}
 
 }

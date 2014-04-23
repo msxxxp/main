@@ -121,7 +121,7 @@ namespace memory {
 
 		void close();
 
-		void swap(auto_close & rhs)
+		void swap(this_type & rhs)
 		{
 			using simstd::swap;
 			swap(m_hndl, rhs.m_hndl);

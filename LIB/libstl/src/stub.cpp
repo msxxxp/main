@@ -15,7 +15,7 @@
 
 #include <simstd/iosfwd>
 #include <simstd/algorithm>
-#include <simstd/chrono>
+//#include <simstd/chrono>
 #include <simstd/functional>
 #include <simstd/iterator>
 #include <simstd/memory>
@@ -24,9 +24,9 @@
 #include <simstd/numeric>
 #include <simstd/string>
 #include <simstd/utility>
-#include <simstd/ratio>
+//#include <simstd/ratio>
 #include <simstd/vector>
-#include <simstd/type_traits>
+//#include <simstd/type_traits>
 
 #include <extra/bits.hpp>
 #include <extra/pattern.hpp>

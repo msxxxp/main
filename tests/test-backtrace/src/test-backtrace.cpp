@@ -25,7 +25,6 @@ void Print()
 	for (size_t i = 0; i < tb.size(); ++i)
 		LogForce(L"[%02Iu] %s\n", tb.size() - (i + 1), tb[i].to_str().c_str());
 	logger::set_prefix(module, savedPrefix);
-
 }
 
 void test_backtrace()

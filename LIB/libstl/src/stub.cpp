@@ -33,7 +33,7 @@
 
 int stub()
 {
-	cstr::length("qwert");
+	cstr::length("qwerty");
 
 //	std::tuple
 	return 0;

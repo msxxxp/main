@@ -6,4 +6,4 @@ namespace logger {
 	{
 	}
 
-}  // namespace logger
+}

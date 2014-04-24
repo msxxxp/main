@@ -1,4 +1,5 @@
-﻿#include <system/console.hpp>
+﻿#include <system/crt.hpp>
+#include <system/console.hpp>
 #include <system/sync.hpp>
 #include <system/thread.hpp>
 #include <system/traceback.hpp>
@@ -115,6 +116,7 @@ struct Routine: public thread::Routine
 	size_t run(void *) override
 	{
 		LogDebug(L"Start routine\n");
+		::Sleep(3000);
 		sync::Message message;
 		m_queue->get_message(message, 5000);
 		LogDebug(L"Exit routine\n");
@@ -148,7 +150,10 @@ int test_threads()
 
 	sync::Message message(1, 2, 3, nullptr);
 	queue.put_message(message);
-//	queue.put_message(message);
+	queue.put_message(message);
+
+	threads[0].resume();
+	threads[1].resume();
 
 	sync::WaitResult_t ret = sync::WaitResult_t::FAILED;
 	do {
@@ -170,32 +175,37 @@ int wWmain()
 int main()
 #endif
 {
+	console::printf(L"%S:%d\n", __PRETTY_FUNCTION__, __LINE__);
+
 	setup_logger();
 	LogTrace();
 
 //	return test_window();
 
-	return test_threads();
+	int ret = test_threads();
 
 //	return test_sstr();
+
+	console::printf(L"%S:%d\n", __PRETTY_FUNCTION__, __LINE__);
+	return ret;
 }
 
 /// ========================================================================== Startup (entry point)
 #ifdef NDEBUG
 extern "C" {
-	int atexit(Base::FunctionAtExit pf)
+	int atexit(crt::Function pf)
 	{
-		return Base::atexit(pf);
+		return crt::atexit(pf);
 	}
 
 	void __cxa_pure_virtual(void)
 	{
-		Base::cxa_pure_virtual();
+		crt::cxa_pure_virtual();
 	}
 
 	int	mainCRTStartup() {
 //	int	WinMainCRTStartup() {
-		Base::init_atexit();
+		crt::init_atexit();
 //		Base::Console::printf(L"%S:%d\n", __PRETTY_FUNCTION__, __LINE__);
 		int Result = 0;
 //		STARTUPINFO StartupInfo = {sizeof(STARTUPINFO), 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0};
@@ -204,7 +214,7 @@ extern "C" {
 //		Result = wWinMain(::GetModuleHandle(nullptr), nullptr, ::GetCommandLine(),
 //						  StartupInfo.dwFlags & STARTF_USESHOWWINDOW ? StartupInfo.wShowWindow : SW_SHOWDEFAULT);
 		Result = wWmain();
-		Base::invoke_atexit();
+		crt::invoke_atexit();
 		::ExitProcess(Result);
 		return Result;
 	}

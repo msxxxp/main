@@ -1,11 +1,10 @@
-#ifndef LIBLOG_LOGGER_IMPL_HPP_
-#define LIBLOG_LOGGER_IMPL_HPP_
+#ifndef LIBLOG_LOGGER_I_HPP_
+#define LIBLOG_LOGGER_I_HPP_
 
 #include <liblog/logger.hpp>
 
 namespace logger {
 
-	///==================================================================================== Logger_i
 	struct Logger_i {
 		virtual ~Logger_i();
 

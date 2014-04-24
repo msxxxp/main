@@ -84,22 +84,22 @@
 							<targetPlatform id="cdt.managedbuild.target.gnu.platform.mingw.exe.debug.1112012752" name="Debug Platform" superClass="cdt.managedbuild.target.gnu.platform.mingw.exe.debug"/>
 							<builder buildPath="${workspace_loc:/test-minimum/Debug}" id="cdt.managedbuild.tool.gnu.builder.mingw.base.645022635" keepEnvironmentInBuildfile="false" managedBuildOn="true" name="CDT Internal Builder" parallelBuildOn="true" parallelizationNumber="optimal" superClass="cdt.managedbuild.tool.gnu.builder.mingw.base"/>
 							<tool id="cdt.managedbuild.tool.gnu.cpp.compiler.mingw.exe.debug.905443726" name="GCC C++ Compiler" superClass="cdt.managedbuild.tool.gnu.cpp.compiler.mingw.exe.debug">
-								<option id="gnu.cpp.compiler.mingw.exe.debug.option.optimization.level.2134506065" name="Optimization Level" superClass="gnu.cpp.compiler.mingw.exe.debug.option.optimization.level" value="gnu.cpp.compiler.optimization.level.most" valueType="enumerated"/>
-								<option id="gnu.cpp.compiler.mingw.exe.debug.option.debugging.level.2070911488" name="Debug Level" superClass="gnu.cpp.compiler.mingw.exe.debug.option.debugging.level" value="gnu.cpp.compiler.debugging.level.none" valueType="enumerated"/>
-								<option id="gnu.cpp.compiler.option.other.other.285611482" name="Other flags" superClass="gnu.cpp.compiler.option.other.other" value="-c -fmessage-length=0 -fno-exceptions -fno-rtti -fno-threadsafe-statics -std=c++11" valueType="string"/>
-								<option id="gnu.cpp.compiler.option.preprocessor.def.430795615" name="Defined symbols (-D)" superClass="gnu.cpp.compiler.option.preprocessor.def" valueType="definedSymbols">
+								<option id="gnu.cpp.compiler.mingw.exe.debug.option.optimization.level.2134506065" name="Optimization Level" superClass="gnu.cpp.compiler.mingw.exe.debug.option.optimization.level" useByScannerDiscovery="false" value="gnu.cpp.compiler.optimization.level.most" valueType="enumerated"/>
+								<option id="gnu.cpp.compiler.mingw.exe.debug.option.debugging.level.2070911488" name="Debug Level" superClass="gnu.cpp.compiler.mingw.exe.debug.option.debugging.level" useByScannerDiscovery="false" value="gnu.cpp.compiler.debugging.level.none" valueType="enumerated"/>
+								<option id="gnu.cpp.compiler.option.other.other.285611482" name="Other flags" superClass="gnu.cpp.compiler.option.other.other" useByScannerDiscovery="false" value="-c -fmessage-length=0 -fno-exceptions -fno-rtti -fno-threadsafe-statics -std=c++11" valueType="string"/>
+								<option id="gnu.cpp.compiler.option.preprocessor.def.430795615" name="Defined symbols (-D)" superClass="gnu.cpp.compiler.option.preprocessor.def" useByScannerDiscovery="false" valueType="definedSymbols">
 									<listOptionValue builtIn="false" value="UNICODE"/>
 									<listOptionValue builtIn="false" value="_UNICODE"/>
 									<listOptionValue builtIn="false" value="NDEBUG"/>
-									<listOptionValue builtIn="false" value="ENABLE_LOGGER"/>
+									<listOptionValue builtIn="false" value="ENABLE_LOGGER1"/>
 								</option>
-								<option id="gnu.cpp.compiler.option.warnings.extrawarn.1282404295" name="Extra warnings (-Wextra)" superClass="gnu.cpp.compiler.option.warnings.extrawarn" value="true" valueType="boolean"/>
-								<option id="gnu.cpp.compiler.option.include.paths.799274873" name="Include paths (-I)" superClass="gnu.cpp.compiler.option.include.paths" valueType="includePath">
+								<option id="gnu.cpp.compiler.option.warnings.extrawarn.1282404295" name="Extra warnings (-Wextra)" superClass="gnu.cpp.compiler.option.warnings.extrawarn" useByScannerDiscovery="false" value="true" valueType="boolean"/>
+								<option id="gnu.cpp.compiler.option.include.paths.799274873" name="Include paths (-I)" superClass="gnu.cpp.compiler.option.include.paths" useByScannerDiscovery="false" valueType="includePath">
 									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/liblog/include}&quot;"/>
 									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/libstl/include}&quot;"/>
 								</option>
-								<option id="gnu.cpp.compiler.option.warnings.toerrors.426520889" name="Warnings as errors (-Werror)" superClass="gnu.cpp.compiler.option.warnings.toerrors" value="true" valueType="boolean"/>
-								<option id="gnu.cpp.compiler.option.dialect.std.1043802964" name="Language standard" superClass="gnu.cpp.compiler.option.dialect.std" value="gnu.cpp.compiler.dialect.default" valueType="enumerated"/>
+								<option id="gnu.cpp.compiler.option.warnings.toerrors.426520889" name="Warnings as errors (-Werror)" superClass="gnu.cpp.compiler.option.warnings.toerrors" useByScannerDiscovery="false" value="true" valueType="boolean"/>
+								<option id="gnu.cpp.compiler.option.dialect.std.1043802964" name="Language standard" superClass="gnu.cpp.compiler.option.dialect.std" useByScannerDiscovery="true" value="gnu.cpp.compiler.dialect.default" valueType="enumerated"/>
 								<inputType id="cdt.managedbuild.tool.gnu.cpp.compiler.input.699093620" superClass="cdt.managedbuild.tool.gnu.cpp.compiler.input"/>
 							</tool>
 							<tool id="cdt.managedbuild.tool.gnu.archiver.mingw.base.1802556573" name="GCC Archiver" superClass="cdt.managedbuild.tool.gnu.archiver.mingw.base"/>
@@ -114,14 +114,15 @@
 									<listOptionValue builtIn="false" value="libstl"/>
 									<listOptionValue builtIn="false" value="ntdll"/>
 									<listOptionValue builtIn="false" value="kernel32"/>
+									<listOptionValue builtIn="false" value="mingwex"/>
 									<listOptionValue builtIn="false" value="msvcrt"/>
 									<listOptionValue builtIn="false" value="gcc"/>
 								</option>
 								<option id="gnu.cpp.link.option.flags.1600855296" name="Linker flags" superClass="gnu.cpp.link.option.flags" value="-Wl,-Map=test-threads.map" valueType="string"/>
 								<option id="gnu.cpp.link.option.shared.383464480" name="Shared (-shared)" superClass="gnu.cpp.link.option.shared" value="false" valueType="boolean"/>
 								<option id="gnu.cpp.link.option.paths.1378513621" name="Library search path (-L)" superClass="gnu.cpp.link.option.paths" valueType="libPaths">
-									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/libstl/x64-Release}&quot;"/>
-									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/liblog/Release-x64}&quot;"/>
+									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/liblog/x64-Release}&quot;"/>
+									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/libstl/x64-Debug}&quot;"/>
 								</option>
 								<inputType id="cdt.managedbuild.tool.gnu.cpp.linker.input.2046306666" superClass="cdt.managedbuild.tool.gnu.cpp.linker.input">
 									<additionalInput kind="additionalinputdependency" paths="$(USER_OBJS)"/>

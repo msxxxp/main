@@ -5,7 +5,7 @@
 #include <extra/pattern.hpp>
 #include <simstd/vector>
 
-#include "Logger_impl.hpp"
+#include "Logger_i.hpp"
 #include "Module_impl.hpp"
 
 namespace logger {

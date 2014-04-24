@@ -14,94 +14,13 @@ namespace {
 	void setup_logger()
 	{
 		using namespace logger;
-		console::printf(L"%S:%d\n", __PRETTY_FUNCTION__, __LINE__);
+//		console::printf(L"%S:%d\n", __PRETTY_FUNCTION__, __LINE__);
 		Default::set_level(Level::Trace);
-		console::printf(L"%S:%d\n", __PRETTY_FUNCTION__, __LINE__);
+//		console::printf(L"%S:%d\n", __PRETTY_FUNCTION__, __LINE__);
 		Default::set_prefix(Prefix::Full/* | Prefix::Place*/);
-		console::printf(L"%S:%d\n", __PRETTY_FUNCTION__, __LINE__);
+//		console::printf(L"%S:%d\n", __PRETTY_FUNCTION__, __LINE__);
 	}
 }
-
-class A//: private pattern::Uncopyable
-{
-public:
-	~A()
-	{
-		console::printf(L"%S[%d] %Iu '%s'\n", __PRETTY_FUNCTION__, __LINE__, _i, _str);
-	}
-
-	A():
-		_i(),
-		_str(L"")
-	{
-		console::printf(L"%S[%d] %Iu '%s'\n", __PRETTY_FUNCTION__, __LINE__, _i, _str);
-	}
-
-	A(size_t i, const wchar_t * str):
-		_i(i),
-		_str(str)
-	{
-		console::printf(L"%S[%d] %Iu '%s'\n", __PRETTY_FUNCTION__, __LINE__, _i, _str);
-	}
-
-	A(const A& a):
-		_i(a._i),
-		_str(a._str)
-	{
-		console::printf(L"%S[%d] %Iu '%s'\n", __PRETTY_FUNCTION__, __LINE__, _i, _str);
-	}
-
-	A& operator =(const A& a)
-	{
-		A(a).swap(*this);
-		console::printf(L"%S[%d] %Iu '%s'\n", __PRETTY_FUNCTION__, __LINE__, _i, _str);
-		return *this;
-	}
-
-	A(A&& a):
-		_i(),
-		_str(L"")
-	{
-		swap(a);
-		console::printf(L"%S[%d] %Iu '%s'\n", __PRETTY_FUNCTION__, __LINE__, _i, _str);
-	}
-
-	A& operator =(A&& a)
-	{
-		A(simstd::move(a)).swap(*this);
-		console::printf(L"%S[%d] %Iu '%s'\n", __PRETTY_FUNCTION__, __LINE__, _i, _str);
-		return *this;
-	}
-
-	void swap(A& a)
-	{
-		using simstd::swap;
-		swap(_i, a._i);
-		swap(_str, a._str);
-//		console::printf(L"%S[%d] %Iu '%s'\n", __PRETTY_FUNCTION__, __LINE__, _i, _str);
-	}
-
-	void print() const
-	{
-		console::printf(L"%S[%d] %Iu '%s'\n", __PRETTY_FUNCTION__, __LINE__, _i, _str);
-	}
-
-private:
-	size_t _i;
-	const wchar_t * _str;
-};
-
-A get_a()
-{
-	return A();
-}
-
-void print_a(const A& a)
-{
-	a.print();
-}
-
-#include <deque>
 
 #ifdef NDEBUG
 int wWmain()
@@ -109,56 +28,11 @@ int wWmain()
 int main()
 #endif
 {
-	console::printf(L"%S:%d\n", __PRETTY_FUNCTION__, __LINE__);
-//	setup_logger();
+	setup_logger();
 
-//	LogTrace();
+	LogTrace();
 
-	simstd::Test::_vector(console::wprintf);
-	return 0;
-
-	namespace qwe = simstd;
-//	const A a01(1, L"01");
-//		  A a02(2, L"02");
-//	const A a11(11, L"11");
-//		  A a12(12, L"12");
-
-	qwe::vector<A> va;
-//	va.push_back(A(0, L"0"));
-//	va.push_back(a01);
-//	va.push_back(a02);
-//	va.push_back(simstd::move(a01));
-//	va.push_back(simstd::move(a02));
-//
-//	va.emplace_back(10, L"10");
-//	va.emplace_back(a11);
-//	va.emplace_back(a12);
-//	va.emplace_back(simstd::move(a11));
-//	va.emplace_back(simstd::move(a12));
-	va.emplace_back(A(0, L"0"));
-	va.emplace_back(A(2, L"2"));
-	va.emplace_back(A(4, L"4"));
-
-	console::printf(L"size: %Iu, capa: %Iu\n", va.size(), va.capacity());
-	qwe::for_each(va.begin(), va.end(), print_a);
-
-	va.emplace(va.begin() + 1, 1, L"1");
-
-	console::printf(L"size: %Iu, capa: %Iu\n", va.size(), va.capacity());
-	qwe::for_each(va.begin(), va.end(), print_a);
-
-	va.emplace(va.begin() + 3, 3, L"3");
-
-	console::printf(L"size: %Iu, capa: %Iu\n", va.size(), va.capacity());
-	qwe::for_each(va.begin(), va.end(), print_a);
-
-	va.pop_back();
-	va.pop_back();
-
-	console::printf(L"size: %Iu, capa: %Iu\n", va.size(), va.capacity());
-	qwe::for_each(va.begin(), va.end(), print_a);
-
-//	LogTrace();
+	LogTrace();
 
 	return 0;
 }

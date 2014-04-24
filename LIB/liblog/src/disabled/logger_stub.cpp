@@ -7,11 +7,20 @@ namespace logger {
 	struct Module_impl: public Module_i, private pattern::Uncopyable {
 		void destroy() const override {}
 
-		const wchar_t * get_name() const override {return EMPTY_STR;}
+		const wchar_t * get_name() const override
+		{
+			return EMPTY_STR;
+		}
 
-		Level get_level() const override {return Level::Atten;}
+		Level get_level() const override
+		{
+			return Level::Atten;
+		}
 
-		size_t get_prefix() const override {return 0;}
+		size_t get_prefix() const override
+		{
+			return 0;
+		}
 
 		bool is_color_mode() const override {return false;}
 

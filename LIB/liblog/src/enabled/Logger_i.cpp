@@ -1,4 +1,5 @@
 #include <liblog/logger.hpp>
+
 #include "Logger_i.hpp"
 
 namespace logger {

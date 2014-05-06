@@ -91,7 +91,7 @@
 									<listOptionValue builtIn="false" value="UNICODE"/>
 									<listOptionValue builtIn="false" value="_UNICODE"/>
 									<listOptionValue builtIn="false" value="NDEBUG"/>
-									<listOptionValue builtIn="false" value="ENABLE_LOGGER1"/>
+									<listOptionValue builtIn="false" value="ENABLE_LOGGER"/>
 								</option>
 								<option id="gnu.cpp.compiler.option.warnings.extrawarn.1282404295" name="Extra warnings (-Wextra)" superClass="gnu.cpp.compiler.option.warnings.extrawarn" useByScannerDiscovery="false" value="true" valueType="boolean"/>
 								<option id="gnu.cpp.compiler.option.include.paths.799274873" name="Include paths (-I)" superClass="gnu.cpp.compiler.option.include.paths" useByScannerDiscovery="false" valueType="includePath">

@@ -1,8 +1,10 @@
 #include <liblog/logger.hpp>
+
 #include <system/configure.hpp>
 #include <system/console.hpp>
 #include <system/cstr.hpp>
 #include <extra/pattern.hpp>
+
 #include <simstd/vector>
 
 #include "Logger_i.hpp"
@@ -41,12 +43,12 @@ namespace logger {
 
 		Module_i * get_module(const wchar_t * name) override;
 
-		Module_i * register_module(const wchar_t * name, const Target_t & target, Level lvl) override;
-
 		void free_module(Module_i * module) override;
 
 	private:
 		Logger_impl();
+
+		Module_i * register_module(const wchar_t * name, const Target_t & target, Level lvl);
 
 		typedef simstd::vector<Module_i*> ModulesArray;
 		typedef memory::auto_destroy<sync::SyncUnit_i*> SyncUnit;
@@ -88,7 +90,17 @@ namespace logger {
 		auto range = simstd::equal_range(m_modules.begin(), m_modules.end(), name, pModule_PCWSTR_less());
 		if (range.first != range.second)
 			return *range.first;
-		return register_module(name, Default::get_target(), Default::get_level());
+		return register_module(name, defaults::get_target(), defaults::get_level());
+	}
+
+	void Logger_impl::free_module(Module_i * module)
+	{
+		auto lockScope(m_sync->lock_scope());
+		auto range = simstd::equal_range(m_modules.begin(), m_modules.end(), module, pModule_less());
+		simstd::for_each(range.first, range.second, [](Module_i * found_module) {
+			found_module->destroy();
+		});
+		m_modules.erase(range.first, range.second);
 	}
 
 	Module_i * Logger_impl::register_module(const wchar_t * name, const Target_t & target, Level lvl)
@@ -103,23 +115,13 @@ namespace logger {
 		return module;
 	}
 
-	void Logger_impl::free_module(Module_i * module)
-	{
-		auto lockScope(m_sync->lock_scope());
-		auto range = simstd::equal_range(m_modules.begin(), m_modules.end(), module, pModule_less());
-		simstd::for_each(range.first, range.second, [](Module_i * found_module) {
-			found_module->destroy();
-		});
-		m_modules.erase(range.first, range.second);
-	}
-
 	Level Logger_impl::defaultLevel = Level::Atten;
 	size_t Logger_impl::defaultPrefix = Prefix::Medium;
 	Target_t Logger_impl::defaultTarget = get_TargetToConsole();
 	Module_i * Logger_impl::defaultModule = nullptr;
 	const wchar_t * const Logger_impl::defaultModuleName = L"default";
 
-	namespace Default {
+	namespace defaults {
 		Level get_level()
 		{
 			return Logger_impl::defaultLevel;
@@ -155,11 +157,11 @@ namespace logger {
 			get_instance(); // defaultModule initializes only on Logger construct
 			return Logger_impl::defaultModule;
 		}
-	} // namespace Default
+	} // namespace defaults
 
-	Module_i * get_module(const wchar_t * name, const Target_t & target, Level lvl)
+	Module_i * get_module(const wchar_t * name)
 	{
-		return get_instance().register_module(name, target, lvl);
+		return get_instance().get_module(name);
 	}
 
 	///=============================================================================================

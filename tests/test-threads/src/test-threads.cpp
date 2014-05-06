@@ -82,13 +82,8 @@
 namespace {
 	void setup_logger()
 	{
-		using namespace logger;
-		Default::set_level(Level::Trace);
-		Default::set_prefix(Prefix::Full & ~Prefix::Date);
-		Default::set_target(get_TargetToConsole());
-//		Default::set_target(get_TargetToFile(L"test-threads.log", true));
-
-//		set_module_enabled(false, get_module(L"threads"));
+		LogSetOptions(L"logger:///default?level=tr;prefix=fu;target=co");
+//		LogSetOptions(L"logger:///default?level=tr;prefix=fu;target=fo(test-threads.log)");
 
 		LogTrace();
 		LogDebug(L"\n");

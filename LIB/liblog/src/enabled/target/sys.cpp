@@ -67,7 +67,7 @@ namespace logger {
 
 	void LogToSys::out(const wchar_t * str, size_t /*size*/) const
 	{
-		::ReportEventW(m_hndl, LogLevelTypes[(int)Default::get_level()], 0, EV_MSG_STRING, nullptr, 1, 0, &str, nullptr);
+		::ReportEventW(m_hndl, LogLevelTypes[(int)defaults::get_level()], 0, EV_MSG_STRING, nullptr, 1, 0, &str, nullptr);
 	}
 
 	sync::ScopeGuard LogToSys::lock_scope() const

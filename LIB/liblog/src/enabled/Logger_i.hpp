@@ -10,8 +10,6 @@ namespace logger {
 
 		virtual Module_i * get_module(const wchar_t * name) = 0;
 
-		virtual Module_i * register_module(const wchar_t * name, const Target_t & target, Level lvl) = 0;
-
 		virtual void free_module(Module_i * module) = 0;
 	};
 

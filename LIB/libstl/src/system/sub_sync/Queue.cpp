@@ -45,13 +45,13 @@ namespace sync {
 	Queue::~Queue()
 	{
 		delete m_impl;
-		LogTrace();
+		LogTraceObj();
 	}
 
 	Queue::Queue():
 		m_impl(new Queue_impl)
 	{
-		LogTrace();
+		LogTraceObj();
 	}
 
 	Queue::Queue(Queue && right):

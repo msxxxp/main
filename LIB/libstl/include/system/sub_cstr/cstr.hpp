@@ -88,6 +88,18 @@ namespace cstr {
 	}
 
 	template<typename CharType>
+	int compare_ci_1st_length(const CharType * str1, const CharType * str2)
+	{
+		return cstr::char_traits<CharType>::compare_ci(str1, str2, length(str1));
+	}
+
+	template<typename CharType>
+	int compare_ci_2nd_length(const CharType * str1, const CharType * str2)
+	{
+		return cstr::char_traits<CharType>::compare_ci(str1, str2, length(str2));
+	}
+
+	template<typename CharType>
 	int compare_ci(const CharType * str1, const CharType * str2, size_t count)
 	{
 		return cstr::char_traits<CharType>::compare_ci(str1, str2, count);

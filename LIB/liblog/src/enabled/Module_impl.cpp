@@ -3,9 +3,10 @@
 #include <system/console.hpp>
 #include <system/cstr.hpp>
 #include <system/sync.hpp>
-#include <simstd/memory>
 
+#include <simstd/memory>
 #include <simstd/string>
+
 #include "Module_impl.hpp"
 
 namespace logger {
@@ -28,20 +29,6 @@ namespace logger {
 			return format_str(fmt, args);
 		}
 	}
-
-	const wchar_t * const LogLevelNames[(int)Level::Force + 1] = {
-		L"TR",
-		L"DB",
-		L"IN",
-		L"RP",
-		L"AT",
-		L"WA",
-		L"ER",
-		L"FA",
-		L"AL",
-		L"EM",
-		L"  ",
-	};
 
 	const size_t default_buffer_size = 4 * 1024;
 
@@ -84,12 +71,12 @@ namespace logger {
 
 		void out_args(Level lvl, const ustring & prefix, const wchar_t * frmat, va_list args) const;
 
-		ustring m_name;
-		simstd::shared_ptr<Target_i> m_target;
-		Level m_lvl;
-		size_t m_prefix;
-		uint32_t m_color:1;
-		uint32_t m_enabled:1;
+		ustring       m_name;
+		Target_t      m_target;
+		Level         m_lvl;
+		Prefix::flags m_prefix;
+		uint32_t      m_color:1;
+		uint32_t      m_enabled:1;
 	};
 
 	Module_impl::~Module_impl()
@@ -100,7 +87,7 @@ namespace logger {
 		m_name(name),
 		m_target(tgt),
 		m_lvl(lvl),
-		m_prefix(Default::get_prefix()),
+		m_prefix(defaults::get_prefix()),
 		m_color(1),
 		m_enabled(1)
 	{
@@ -202,7 +189,7 @@ namespace logger {
 			}
 		}
 		if (m_prefix & Prefix::Level) {
-			prefix += format_str(L"%s ", LogLevelNames[(int)lvl]);
+			prefix += format_str(L"%s ", to_str(lvl));
 		}
 		if (m_prefix & Prefix::Module) {
 			prefix += format_str(L"%11s ", m_name.c_str());

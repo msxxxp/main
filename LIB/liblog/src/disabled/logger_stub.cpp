@@ -3,7 +3,7 @@
 #include <extra/pattern.hpp>
 
 namespace logger {
-	///================================================================================= Module_impl
+
 	struct Module_impl: public Module_i, private pattern::Uncopyable {
 		void destroy() const override {}
 
@@ -58,7 +58,7 @@ namespace logger {
 		}
 	};
 
-	namespace Default {
+	namespace defaults {
 		Level get_level()
 		{
 			return Level::Atten;
@@ -93,13 +93,11 @@ namespace logger {
 		{
 			return &Module_impl::inst();
 		}
-	} // namespace Default
+	} // namespace defaults
 
-	Module_i * get_module(const wchar_t * name, const Target_t & target, Level lvl)
+	Module_i * get_module(const wchar_t * name)
 	{
 		UNUSED(name);
-		UNUSED(target);
-		UNUSED(lvl);
 		return &Module_impl::inst();
 	}
 

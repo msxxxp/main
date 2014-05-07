@@ -1,4 +1,5 @@
 ﻿#include <system/url.hpp>
+#include <system/memory.hpp>
 #include <system/linkage.hpp>
 
 namespace {
@@ -23,7 +24,7 @@ namespace {
 	};
 
 	struct wininet_dll: private linkage::DynamicLibrary {
-		typedef BOOL (*FInternetCrackUrlW)(const wchar_t *, DWORD dwUrlLength, DWORD dwFlags, LPURL_COMPONENTS lpUrlComponents);
+		typedef BOOL (*FInternetCrackUrlW)(const wchar_t *, DWORD, DWORD, LPURL_COMPONENTS);
 
 		DEFINE_FUNC(InternetCrackUrlW);
 
@@ -52,7 +53,7 @@ namespace Url {
 
 	bool crack(const wchar_t * url, URL_COMPONENTSW * info)
 	{
-		::ZeroMemory(info, sizeof(*info));
+		memory::zero(*info);
 		info->dwStructSize = sizeof(*info);
 
 		// Set required component lengths to non-zero so that they are cracked.

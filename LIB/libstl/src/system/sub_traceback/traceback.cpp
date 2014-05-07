@@ -149,13 +149,7 @@ void find(bfd_ctx * b, size_t offset, const char *& file, const char *& func, si
 
 namespace traceback {
 
-	namespace {
-		logger::Module_i * get_logger_module()
-		{
-			auto static module = logger::get_module(L"traceback");
-			return module;
-		}
-	}
+	LogRegisterLocal(L"traceback");
 
 	struct Frame: public Frame_i, private pattern::Uncopyable {
 		~Frame();

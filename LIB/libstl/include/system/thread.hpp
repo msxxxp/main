@@ -3,6 +3,12 @@
 
 #include <system/configure.hpp>
 
+#include <liblog/logger.hpp>
+
+namespace thread {
+	LogDeclare();
+}
+
 #include <system/sub_thread/base.hpp>
 #include <system/sub_thread/totext.hpp>
 #include <system/sub_thread/Routine.hpp>

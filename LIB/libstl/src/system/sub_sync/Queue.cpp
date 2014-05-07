@@ -6,17 +6,11 @@
 #include <simstd/vector>
 
 namespace sync {
-	namespace {
-		logger::Module_i * get_logger_module()
-		{
-			auto static module = logger::get_module(L"message");
-			return module;
-		}
-	}
+	LogRegisterLocal(L"sync");
 
 	struct Queue::Queue_impl: private CriticalSection, private Semaphore, private simstd::vector<Message>
 	{ // deque would bring exceptions dependence
-		void put_message(value_type const& message);
+		void put_message(const value_type & message);
 
 		WaitResult_t get_message(value_type & message, size_t timeout_msec);
 	};

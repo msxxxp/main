@@ -3,17 +3,7 @@
 #include <simstd/algorithm>
 #include <simstd/string>
 
-#include <liblog/logger.hpp>
-
 namespace thread {
-
-	namespace {
-		logger::Module_i * get_logger_module()
-		{
-			auto static module = logger::get_module(L"threads");
-			return module;
-		}
-	}
 
 	Unit::~Unit() noexcept
 	{
@@ -24,14 +14,17 @@ namespace thread {
 	}
 
 	Unit::Unit(Routine * routine, bool suspended, size_t stack_size) :
-		m_routine(routine), m_handle(::CreateThread(nullptr, stack_size, Routine::run_thread, routine, suspended ? CREATE_SUSPENDED : 0, &m_id)), m_id()
+		m_routine(routine),
+		m_handle(::CreateThread(nullptr, stack_size, Routine::run_thread, routine, suspended ? CREATE_SUSPENDED : 0, &m_id))
 	{
 		LogDebugIf(is_valid(), L"id: %u\n", m_id);
 		LogFatalIf(!is_valid(), L"can't create thread (%p, %Iu) -> %s\n", routine, stack_size, totext::api_error().c_str());
 	}
 
 	Unit::Unit(Unit && right) :
-		m_routine(nullptr), m_handle(nullptr), m_id(0)
+		m_routine(nullptr),
+		m_handle(nullptr),
+		m_id()
 	{
 		swap(right);
 	}

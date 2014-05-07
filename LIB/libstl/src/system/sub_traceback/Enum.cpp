@@ -14,13 +14,7 @@
 
 namespace traceback {
 
-	namespace {
-		logger::Module_i * get_logger_module()
-		{
-			auto static module = logger::get_module(L"traceback");
-			return module;
-		}
-	}
+	LogRegisterLocal(L"traceback");
 
 	struct DebugSymbols {
 		static DebugSymbols & inst(const wchar_t * path = nullptr)

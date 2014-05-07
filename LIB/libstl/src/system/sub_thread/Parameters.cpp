@@ -2,8 +2,6 @@
 #include <system/totext.hpp>
 #include <simstd/string>
 
-#include <liblog/logger.hpp>
-
 namespace thread {
 
 	struct Parameters {
@@ -41,8 +39,7 @@ namespace thread {
 
 	Unit::Unit(Routine * routine, void * data, bool suspended, size_t stack_size) :
 		m_routine(routine),
-		m_handle(::CreateThread(nullptr, stack_size, Parameters::run_thread_with_param, new Parameters(m_routine, data), suspended ? CREATE_SUSPENDED : 0, &m_id)),
-		m_id()
+		m_handle(::CreateThread(nullptr, stack_size, Parameters::run_thread_with_param, new Parameters(m_routine, data), suspended ? CREATE_SUSPENDED : 0, &m_id))
 	{
 		LogDebugIf(is_valid(), L"id: %u\n", m_id);
 		LogFatalIf(!is_valid(), L"can't create thread (%p, %Iu) -> %s\n", routine, stack_size, totext::api_error().c_str());

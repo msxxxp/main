@@ -1,16 +1,6 @@
 #include <system/thread.hpp>
 
-#include <liblog/logger.hpp>
-
 namespace thread {
-
-	namespace {
-		logger::Module_i * get_logger_module()
-		{
-			auto static module = logger::get_module(L"threads");
-			return module;
-		}
-	}
 
 	DWORD WINAPI Routine::run_thread(void * routine)
 	{

@@ -2,17 +2,7 @@
 #include <system/totext.hpp>
 #include <simstd/string>
 
-#include <liblog/logger.hpp>
-
 namespace thread {
-
-	namespace {
-		logger::Module_i * get_logger_module()
-		{
-			auto static module = logger::get_module(L"threads");
-			return module;
-		}
-	}
 
 	Pool::Pool()
 	{

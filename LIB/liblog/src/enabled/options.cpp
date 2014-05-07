@@ -12,10 +12,10 @@ namespace logger {
 
 	ustring get_substr_in(ustring str, const wchar_t * delim)
 	{
-		ustring::size_type first = str.find_first_of(delim);
+		auto first = str.find_first_of(delim);
 		if (first != ustring::npos) {
 			first += 1;
-			ustring ret = str.substr(first, str.find_first_of(delim, first) - first);
+			auto ret = str.substr(first, str.find_first_of(delim, first) - first);
 			console::printf(L"%S '%s' -> '%s'\n", __PRETTY_FUNCTION__, str.c_str(), ret.c_str());
 //			TraceFunc(L"'%s' -> '%s'", str.c_str(), ret.c_str());
 			return ret;
@@ -122,7 +122,7 @@ namespace logger {
 
 		void execute() {
 			if (!m_name.empty()) {
-				Module_i * module = logger::get_module(m_name.c_str());
+				auto module = logger::get_module(m_name.c_str());
 				auto lock(module->lock_scope());
 				if (set_level)
 					module->set_level(m_level);
@@ -154,7 +154,7 @@ namespace logger {
 
 	bool get_value(const wchar_t * name, const wchar_t * parameter, const wchar_t *& value)
 	{
-		size_t len = cstr::length(name);
+		auto len = cstr::length(name);
 
 		if (len && cstr::compare_ci(name, parameter, len) == 0) {
 			value = parameter + len;
@@ -166,7 +166,7 @@ namespace logger {
 
 	ustring get_parameter(ustring & str)
 	{
-		ustring::size_type first = str.find_last_of(L"?;");
+		auto first = str.find_last_of(L"?;");
 		if (first != ustring::npos) {
 			ustring ret = str.substr(first + 1);
 			str.erase(first);
@@ -179,7 +179,7 @@ namespace logger {
 	{
 		console::printf(L"%S:%d '%s'\n", __PRETTY_FUNCTION__, __LINE__, options.c_str());
 		while (!options.empty()) {
-			ustring prm = get_parameter(options);
+			auto prm = get_parameter(options);
 			console::printf(L"%S:%d '%s'\n", __PRETTY_FUNCTION__, __LINE__, prm.c_str());
 			const wchar_t * value = nullptr;
 			if (get_value(L"level=", prm.c_str(), value)) {
@@ -201,7 +201,7 @@ namespace logger {
 		console::printf(L"%S:%d '%s'\n", __PRETTY_FUNCTION__, __LINE__, options.c_str());
 		ModuleOptionsSetter mos;
 		while (!options.empty()) {
-			ustring prm = get_parameter(options);
+			auto prm = get_parameter(options);
 			console::printf(L"%S:%d '%s'\n", __PRETTY_FUNCTION__, __LINE__, prm.c_str());
 			const wchar_t * value = nullptr;
 			if (get_value(L"name=", prm.c_str(), value)) {

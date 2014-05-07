@@ -53,6 +53,23 @@
 #   define LogForce(format, ...)              get_logger_module()->out(THIS_PLACE, logger::Level::Force, format, ##__VA_ARGS__)
 #   define LogForceIf(condition, format, ...) if (condition) get_logger_module()->out(THIS_PLACE, logger::Level::Force, format, ##__VA_ARGS__)
 //#   endif
+
+#	define LogDeclare() \
+logger::Module_i * get_logger_module();
+#	define LogRegister(name) \
+logger::Module_i * get_logger_module() \
+{ \
+	auto static module = logger::get_module(name); \
+	return module; \
+}
+#	define LogRegisterLocal(name) \
+namespace { \
+	logger::Module_i * get_logger_module() \
+	{ \
+		auto static module = logger::get_module(name); \
+		return module; \
+	} \
+}
 #else
 #   define LogSetOptions(url)
 #   define LogTrace()
@@ -80,6 +97,9 @@
 #   define LogEmergIf(condition, format, ...)          (void)(condition)
 #   define LogForce(format, ...)                       console::printf(format, ##__VA_ARGS__)
 #   define LogForceIf(condition, format, ...)          if (condition) console::printf(format, ##__VA_ARGS__)
+#	define LogDeclare()
+#	define LogRegister(name)
+#	define LogRegisterLocal(name)
 #endif
 
 namespace logger {

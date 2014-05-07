@@ -128,13 +128,7 @@ namespace sync {
 }
 
 namespace sync {
-	namespace {
-		logger::Module_i * get_logger_module()
-		{
-			auto static module = logger::get_module(L"message");
-			return module;
-		}
-	}
+	LogRegisterLocal(L"message");
 
 	namespace Delivery {
 

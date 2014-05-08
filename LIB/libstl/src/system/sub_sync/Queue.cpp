@@ -1,7 +1,6 @@
 #include <system/configure.hpp>
 #include <system/sync.hpp>
-
-#include <liblog/logger.hpp>
+#include <system/logger.hpp>
 
 #include <simstd/vector>
 

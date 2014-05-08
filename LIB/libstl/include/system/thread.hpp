@@ -3,7 +3,7 @@
 
 #include <system/configure.hpp>
 
-#include <liblog/logger.hpp>
+#include <system/logger.hpp>
 
 namespace thread {
 	LogDeclare();

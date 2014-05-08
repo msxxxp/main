@@ -1,15 +1,9 @@
 ﻿#include <system/crt.hpp>
 #include <system/console.hpp>
+#include <system/logger.hpp>
 #include <system/sync.hpp>
 #include <system/thread.hpp>
 #include <system/traceback.hpp>
-//#include <libbase/messaging.hpp>
-//#include <libbase/thread.hpp>
-//#include <libbase/ThreadPool.hpp>
-//#include <libbase/atexit.hpp>
-//#include <libbase/wstr.hpp>
-#include <liblog/logger.hpp>
-//#include <libbase/err.hpp>
 
 //#include <stdio.h>
 //#include <functional>

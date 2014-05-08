@@ -25,14 +25,13 @@
 									<listOptionValue builtIn="false" value="_UNICODE"/>
 									<listOptionValue builtIn="false" value="DEBUG"/>
 									<listOptionValue builtIn="false" value="_DEBUG"/>
-									<listOptionValue builtIn="false" value="ENABLE_LOGGER"/>
 								</option>
 								<option id="gnu.cpp.compiler.option.warnings.extrawarn.588923214" name="Extra warnings (-Wextra)" superClass="gnu.cpp.compiler.option.warnings.extrawarn" useByScannerDiscovery="false" value="true" valueType="boolean"/>
 								<option id="gnu.cpp.compiler.option.include.paths.674526942" name="Include paths (-I)" superClass="gnu.cpp.compiler.option.include.paths" useByScannerDiscovery="false" valueType="includePath">
-									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/liblog/include}&quot;"/>
 									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/libstl/include}&quot;"/>
 								</option>
 								<option id="gnu.cpp.compiler.option.warnings.toerrors.1741656888" name="Warnings as errors (-Werror)" superClass="gnu.cpp.compiler.option.warnings.toerrors" useByScannerDiscovery="false" value="true" valueType="boolean"/>
+								<option id="gnu.cpp.compiler.option.dialect.std.1028064120" name="Language standard" superClass="gnu.cpp.compiler.option.dialect.std" value="gnu.cpp.compiler.dialect.default" valueType="enumerated"/>
 								<inputType id="cdt.managedbuild.tool.gnu.cpp.compiler.input.295024162" superClass="cdt.managedbuild.tool.gnu.cpp.compiler.input"/>
 							</tool>
 							<tool id="cdt.managedbuild.tool.gnu.archiver.mingw.base.51140361" name="GCC Archiver" superClass="cdt.managedbuild.tool.gnu.archiver.mingw.base"/>
@@ -43,7 +42,6 @@
 								<option id="gnu.cpp.link.option.nodeflibs.639799735" name="Do not use default libraries (-nodefaultlibs)" superClass="gnu.cpp.link.option.nodeflibs" value="false" valueType="boolean"/>
 								<option id="gnu.cpp.link.option.nostart.529209574" name="Do not use standard start files (-nostartfiles)" superClass="gnu.cpp.link.option.nostart" value="false" valueType="boolean"/>
 								<option id="gnu.cpp.link.option.libs.1997558578" name="Libraries (-l)" superClass="gnu.cpp.link.option.libs" valueType="libs">
-									<listOptionValue builtIn="false" value="liblog"/>
 									<listOptionValue builtIn="false" value="libstl"/>
 									<listOptionValue builtIn="false" value="msvcrt"/>
 									<listOptionValue builtIn="false" value="ntdll"/>
@@ -51,7 +49,6 @@
 								<option id="gnu.cpp.link.option.flags.1762000261" name="Linker flags" superClass="gnu.cpp.link.option.flags" value="-Wl,-Map=test-threads.map" valueType="string"/>
 								<option id="gnu.cpp.link.option.shared.96677685" name="Shared (-shared)" superClass="gnu.cpp.link.option.shared" value="false" valueType="boolean"/>
 								<option id="gnu.cpp.link.option.paths.1836412637" name="Library search path (-L)" superClass="gnu.cpp.link.option.paths" valueType="libPaths">
-									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/liblog/x64-Release}&quot;"/>
 									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/libstl/x64-Debug}&quot;"/>
 								</option>
 								<inputType id="cdt.managedbuild.tool.gnu.cpp.linker.input.53560117" superClass="cdt.managedbuild.tool.gnu.cpp.linker.input">
@@ -95,7 +92,6 @@
 								</option>
 								<option id="gnu.cpp.compiler.option.warnings.extrawarn.1282404295" name="Extra warnings (-Wextra)" superClass="gnu.cpp.compiler.option.warnings.extrawarn" useByScannerDiscovery="false" value="true" valueType="boolean"/>
 								<option id="gnu.cpp.compiler.option.include.paths.799274873" name="Include paths (-I)" superClass="gnu.cpp.compiler.option.include.paths" useByScannerDiscovery="false" valueType="includePath">
-									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/liblog/include}&quot;"/>
 									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/libstl/include}&quot;"/>
 								</option>
 								<option id="gnu.cpp.compiler.option.warnings.toerrors.426520889" name="Warnings as errors (-Werror)" superClass="gnu.cpp.compiler.option.warnings.toerrors" useByScannerDiscovery="false" value="true" valueType="boolean"/>
@@ -110,7 +106,6 @@
 								<option id="gnu.cpp.link.option.nodeflibs.397000843" name="Do not use default libraries (-nodefaultlibs)" superClass="gnu.cpp.link.option.nodeflibs" value="true" valueType="boolean"/>
 								<option id="gnu.cpp.link.option.nostart.1376535697" name="Do not use standard start files (-nostartfiles)" superClass="gnu.cpp.link.option.nostart" value="true" valueType="boolean"/>
 								<option id="gnu.cpp.link.option.libs.1645731155" name="Libraries (-l)" superClass="gnu.cpp.link.option.libs" valueType="libs">
-									<listOptionValue builtIn="false" value="liblog"/>
 									<listOptionValue builtIn="false" value="libstl"/>
 									<listOptionValue builtIn="false" value="ntdll"/>
 									<listOptionValue builtIn="false" value="kernel32"/>
@@ -121,8 +116,7 @@
 								<option id="gnu.cpp.link.option.flags.1600855296" name="Linker flags" superClass="gnu.cpp.link.option.flags" value="-Wl,-Map=test-threads.map" valueType="string"/>
 								<option id="gnu.cpp.link.option.shared.383464480" name="Shared (-shared)" superClass="gnu.cpp.link.option.shared" value="false" valueType="boolean"/>
 								<option id="gnu.cpp.link.option.paths.1378513621" name="Library search path (-L)" superClass="gnu.cpp.link.option.paths" valueType="libPaths">
-									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/liblog/x64-Release}&quot;"/>
-									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/libstl/x64-Debug}&quot;"/>
+									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/libstl/x64-Release}&quot;"/>
 								</option>
 								<inputType id="cdt.managedbuild.tool.gnu.cpp.linker.input.2046306666" superClass="cdt.managedbuild.tool.gnu.cpp.linker.input">
 									<additionalInput kind="additionalinputdependency" paths="$(USER_OBJS)"/>

@@ -1,7 +1,6 @@
 #include <system/traceback.hpp>
 #include <system/totext.hpp>
-
-#include <liblog/logger.hpp>
+#include <system/logger.hpp>
 
 #include <simstd/algorithm>
 #include <simstd/string>

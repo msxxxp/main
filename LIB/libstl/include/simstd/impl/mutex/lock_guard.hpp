@@ -14,22 +14,29 @@ namespace simstd {
 
 		~lock_guard()
 		{
-			m_sync.unlock();
+			if (m_sync)
+				m_sync->unlock();
 		}
 
 		explicit lock_guard(mutex_type & m) :
-			m_sync(m)
+			m_sync(&m)
 		{
-			m_sync.lock();
+			m_sync->lock();
 		}
 
 		lock_guard(mutex_type & m, adopt_lock_t) :
-			m_sync(m)
+			m_sync(&m)
 		{
 		}
 
+		lock_guard(lock_guard && other) :
+			m_sync(other.m_sync)
+		{
+			other.m_sync = nullptr;
+		}
+
 	private:
-		mutex_type & m_sync;
+		mutex_type * m_sync;
 	};
 
 	template<typename Mutex>

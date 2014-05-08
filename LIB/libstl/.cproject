@@ -45,7 +45,7 @@
 									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/${ProjName}/include}&quot;"/>
 								</option>
 								<option id="gnu.cpp.compiler.option.dialect.std.209571133" name="Language standard" superClass="gnu.cpp.compiler.option.dialect.std" useByScannerDiscovery="true" value="gnu.cpp.compiler.dialect.default" valueType="enumerated"/>
-								<option id="gnu.cpp.compiler.option.dialect.flags.618617962" superClass="gnu.cpp.compiler.option.dialect.flags" value="-std=c++11 -m64" valueType="string"/>
+								<option id="gnu.cpp.compiler.option.dialect.flags.618617962" name="Other dialect flags" superClass="gnu.cpp.compiler.option.dialect.flags" useByScannerDiscovery="true" value="-std=c++11 -m64" valueType="string"/>
 								<inputType id="cdt.managedbuild.tool.gnu.cpp.compiler.input.1065574124" superClass="cdt.managedbuild.tool.gnu.cpp.compiler.input"/>
 							</tool>
 							<tool id="cdt.managedbuild.tool.gnu.cpp.linker.mingw.base.1243950948" name="MinGW C++ Linker" superClass="cdt.managedbuild.tool.gnu.cpp.linker.mingw.base"/>
@@ -105,8 +105,8 @@
 									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/liblog/include}&quot;"/>
 									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/${ProjName}/include}&quot;"/>
 								</option>
-								<option id="gnu.cpp.compiler.option.dialect.std.1024674044" superClass="gnu.cpp.compiler.option.dialect.std" value="gnu.cpp.compiler.dialect.default" valueType="enumerated"/>
-								<option id="gnu.cpp.compiler.option.dialect.flags.478880729" superClass="gnu.cpp.compiler.option.dialect.flags" value="-std=c++11 -m32" valueType="string"/>
+								<option id="gnu.cpp.compiler.option.dialect.std.1024674044" name="Language standard" superClass="gnu.cpp.compiler.option.dialect.std" useByScannerDiscovery="true" value="gnu.cpp.compiler.dialect.default" valueType="enumerated"/>
+								<option id="gnu.cpp.compiler.option.dialect.flags.478880729" name="Other dialect flags" superClass="gnu.cpp.compiler.option.dialect.flags" useByScannerDiscovery="true" value="-std=c++11 -m32" valueType="string"/>
 								<inputType id="cdt.managedbuild.tool.gnu.cpp.compiler.input.1152573104" superClass="cdt.managedbuild.tool.gnu.cpp.compiler.input"/>
 							</tool>
 							<tool id="cdt.managedbuild.tool.gnu.c.linker.mingw.base.162952941" name="MinGW C Linker" superClass="cdt.managedbuild.tool.gnu.c.linker.mingw.base"/>
@@ -156,7 +156,6 @@
 									<listOptionValue builtIn="false" value="_UNICODE"/>
 									<listOptionValue builtIn="false" value="DEBUG"/>
 									<listOptionValue builtIn="false" value="_DEBUG"/>
-									<listOptionValue builtIn="false" value="ENABLE_LOGGER"/>
 								</option>
 								<option id="gnu.cpp.compiler.option.warnings.extrawarn.1999378564" name="Extra warnings (-Wextra)" superClass="gnu.cpp.compiler.option.warnings.extrawarn" useByScannerDiscovery="false" value="true" valueType="boolean"/>
 								<option id="gnu.cpp.compiler.option.warnings.toerrors.1870929831" name="Warnings as errors (-Werror)" superClass="gnu.cpp.compiler.option.warnings.toerrors" useByScannerDiscovery="false" value="true" valueType="boolean"/>
@@ -167,7 +166,7 @@
 									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/${ProjName}/include}&quot;"/>
 								</option>
 								<option id="gnu.cpp.compiler.option.dialect.std.1468228320" name="Language standard" superClass="gnu.cpp.compiler.option.dialect.std" useByScannerDiscovery="true" value="gnu.cpp.compiler.dialect.default" valueType="enumerated"/>
-								<option id="gnu.cpp.compiler.option.dialect.flags.1641874067" superClass="gnu.cpp.compiler.option.dialect.flags" value="-std=c++11 -m64" valueType="string"/>
+								<option id="gnu.cpp.compiler.option.dialect.flags.1641874067" name="Other dialect flags" superClass="gnu.cpp.compiler.option.dialect.flags" useByScannerDiscovery="true" value="-std=c++11 -m64" valueType="string"/>
 								<inputType id="cdt.managedbuild.tool.gnu.cpp.compiler.input.1875572443" superClass="cdt.managedbuild.tool.gnu.cpp.compiler.input"/>
 							</tool>
 							<tool id="cdt.managedbuild.tool.gnu.cpp.linker.mingw.base.418926254" name="MinGW C++ Linker" superClass="cdt.managedbuild.tool.gnu.cpp.linker.mingw.base"/>
@@ -218,7 +217,6 @@
 									<listOptionValue builtIn="false" value="_UNICODE"/>
 									<listOptionValue builtIn="false" value="DEBUG"/>
 									<listOptionValue builtIn="false" value="_DEBUG"/>
-									<listOptionValue builtIn="false" value="ENABLE_LOGGER"/>
 								</option>
 								<option id="gnu.cpp.compiler.option.warnings.extrawarn.899701249" name="Extra warnings (-Wextra)" superClass="gnu.cpp.compiler.option.warnings.extrawarn" useByScannerDiscovery="false" value="true" valueType="boolean"/>
 								<option id="gnu.cpp.compiler.option.warnings.toerrors.1882970389" name="Warnings as errors (-Werror)" superClass="gnu.cpp.compiler.option.warnings.toerrors" useByScannerDiscovery="false" value="true" valueType="boolean"/>

@@ -4,7 +4,6 @@
 #include <simstd/impl/mutex/types.hpp>
 #include <simstd/impl/mutex/unique_lock.hpp>
 
-//#include <atomic>
 #include <tuple>
 
 namespace simstd {
@@ -65,13 +64,12 @@ namespace simstd {
 			unique_lock<Mutex1> first(l1);
 			auto locks = std::tie(l2, l3...);
 			if (pvt::try_lock_impl<0, sizeof...(Mutex3)>::do_try_lock(locks) == -1) {
-			first.release();
-			return;
+				first.release();
+				return;
+			}
 		}
 	}
-}
 
-}
-    // namespace simstd
+} // namespace simstd
 
 #endif

@@ -3,7 +3,7 @@
 #include <system/logger.hpp>
 #include <system/sync.hpp>
 #include <system/thread.hpp>
-#include <system/traceback.hpp>
+//#include <system/traceback.hpp>
 
 //#include <stdio.h>
 //#include <functional>
@@ -77,7 +77,6 @@ namespace {
 	void setup_logger()
 	{
 		LogSetOptions(L"logger:///default?level=tr;prefix=fu;target=co");
-//		LogSetOptions(L"logger:///default?level=tr;prefix=fu;target=fo(test-threads.log)");
 
 		LogTrace();
 		LogDebug(L"\n");

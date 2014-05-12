@@ -18,18 +18,19 @@ namespace memory {
 	public:
 		~auto_array()
 		{
-			memory::free(m_ptr);
+			if (m_ptr)
+				memory::free(m_ptr);
 		}
 
-		explicit auto_array(size_type count, const_pointer data = nullptr) :
-			m_ptr(memory::calloc<pointer>(count)), m_count(count)
+		explicit auto_array(size_type count) :
+			m_ptr(memory::calloc<pointer>(count)),
+			m_count(count)
 		{
-			if (data)
-				simstd::uninitialized_copy(data, data + m_count, m_ptr);
 		}
 
 		auto_array(this_type && rhs) :
-			m_ptr(nullptr), m_count(0)
+			m_ptr(nullptr),
+			m_count(0)
 		{
 			swap(rhs);
 		}

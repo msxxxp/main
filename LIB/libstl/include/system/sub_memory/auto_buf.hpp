@@ -36,14 +36,14 @@ namespace memory {
 		this_type & operator =(this_type && rhs)
 		{
 			if (this != &rhs)
-				this_type(rhs).swap(*this);
+				this_type(simstd::move(rhs)).swap(*this);
 			return *this;
 		}
 
-		void reserve(size_type nsize)
+		void reserve(size_type new_size)
 		{
-			if (size() < nsize) {
-				memory::realloc(m_ptr, nsize);
+			if (size() < new_size) {
+				memory::realloc(m_ptr, new_size);
 			}
 		}
 

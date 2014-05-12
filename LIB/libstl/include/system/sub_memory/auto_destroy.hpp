@@ -9,7 +9,8 @@ namespace memory {
 	struct auto_destroy: private pattern::Uncopyable {
 		~auto_destroy()
 		{
-			m_ptr->destroy();
+			if (m_ptr)
+				m_ptr->destroy();
 		}
 
 		auto_destroy(Pointer ptr) :

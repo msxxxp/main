@@ -42,7 +42,7 @@
 								<option id="gnu.cpp.link.option.paths.503738985" name="Library search path (-L)" superClass="gnu.cpp.link.option.paths" valueType="libPaths">
 									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/libstl/x64-Debug}&quot;"/>
 								</option>
-								<option id="gnu.cpp.link.option.flags.1628748905" name="Linker flags" superClass="gnu.cpp.link.option.flags" value="-Wl,-Map=test-atomic.exe.map -m64 -static -municode -v" valueType="string"/>
+								<option id="gnu.cpp.link.option.flags.1628748905" name="Linker flags" superClass="gnu.cpp.link.option.flags" value="-Wl,-Map=test-atomic.exe.map -m64 -static -municode" valueType="string"/>
 								<option id="gnu.cpp.link.option.libs.707404774" name="Libraries (-l)" superClass="gnu.cpp.link.option.libs" valueType="libs">
 									<listOptionValue builtIn="false" value="libstl"/>
 								</option>

@@ -8,13 +8,13 @@
 #include <simstd/mutex>
 
 #include <atomic>
-#include <chrono>
 
-#include <iostream>
-#include <cmath>
-#include <thread>
-#include <future>
-#include <functional>
+//#include <iostream>
+//#include <chrono>
+//#include <cmath>
+//#include <thread>
+//#include <future>
+//#include <functional>
 
 namespace {
 	void setup_logger()
@@ -100,59 +100,59 @@ int test_chrono()
 	using std::chrono::steady_clock;
 
 	for (uint64_t size = 1; size < 100000000; size *= 5) {
-		auto start1= std::chrono::steady_clock::now();
-		auto start2 = std::chrono::system_clock::now();
+//		auto start1= std::chrono::steady_clock::now();
+//		auto start2 = std::chrono::system_clock::now();
 		auto start3 = simstd::chrono::perfomance_clock::now();
 		simstd::vector<int> v(size, 42);
-		auto end1 = std::chrono::steady_clock::now();
-		auto end2 = std::chrono::system_clock::now();
+//		auto end1 = std::chrono::steady_clock::now();
+//		auto end2 = std::chrono::system_clock::now();
 		auto end3 = simstd::chrono::perfomance_clock::now();
 
-		auto elapsed1 = end1 - start1;
-		auto elapsed2 = end2 - start2;
+//		auto elapsed1 = end1 - start1;
+//		auto elapsed2 = end2 - start2;
 		auto elapsed3 = end3 - start3;
-		LogDebug(L"size1: %I64u, count1: %I64u, count1: %I64u\n", size, (uint64_t)duration_cast<nanoseconds>(elapsed1).count(), (uint64_t)duration_cast<milliseconds>(elapsed1).count());
-		LogDebug(L"size2: %I64u, count2: %I64u, count2: %I64u\n", size, (uint64_t)duration_cast<nanoseconds>(elapsed2).count(), (uint64_t)duration_cast<milliseconds>(elapsed2).count());
+//		LogDebug(L"size1: %I64u, count1: %I64u, count1: %I64u\n", size, (uint64_t)duration_cast<nanoseconds>(elapsed1).count(), (uint64_t)duration_cast<milliseconds>(elapsed1).count());
+//		LogDebug(L"size2: %I64u, count2: %I64u, count2: %I64u\n", size, (uint64_t)duration_cast<nanoseconds>(elapsed2).count(), (uint64_t)duration_cast<milliseconds>(elapsed2).count());
 		LogDebug(L"size3: %I64u, count3: %I64u, count3: %I64u\n", size, (uint64_t)duration_cast<nanoseconds>(elapsed3).count(), (uint64_t)duration_cast<milliseconds>(elapsed3).count());
 	}
 	return 0;
 }
 
-// unique function to avoid disambiguating the std::pow overload set
-int f(int x, int y) { return std::pow(x,y); }
-
-void task_lambda()
-{
-    std::packaged_task<int(int,int)> task([](int a, int b) {
-        return std::pow(a, b);
-    });
-    std::future<int> result = task.get_future();
-
-    task(2, 9);
-
-    std::cout << "task_lambda:\t" << result.get() << '\n';
-}
-
-void task_bind()
-{
-    std::packaged_task<int()> task(std::bind(f, 2, 11));
-    std::future<int> result = task.get_future();
-
-    task();
-
-    std::cout << "task_bind:\t" << result.get() << '\n';
-}
-
-void task_thread()
-{
-    std::packaged_task<int(int,int)> task(f);
-    std::future<int> result = task.get_future();
-
-    std::thread task_td(std::move(task), 2, 10);
-    task_td.join();
-
-    std::cout << "task_thread:\t" << result.get() << '\n';
-}
+//// unique function to avoid disambiguating the std::pow overload set
+//int f(int x, int y) { return std::pow(x,y); }
+//
+//void task_lambda()
+//{
+//    std::packaged_task<int(int,int)> task([](int a, int b) {
+//        return std::pow(a, b);
+//    });
+//    std::future<int> result = task.get_future();
+//
+//    task(2, 9);
+//
+//    std::cout << "task_lambda:\t" << result.get() << '\n';
+//}
+//
+//void task_bind()
+//{
+//    std::packaged_task<int()> task(std::bind(f, 2, 11));
+//    std::future<int> result = task.get_future();
+//
+//    task();
+//
+//    std::cout << "task_bind:\t" << result.get() << '\n';
+//}
+//
+//void task_thread()
+//{
+//    std::packaged_task<int(int,int)> task(f);
+//    std::future<int> result = task.get_future();
+//
+//    std::thread task_td(std::move(task), 2, 10);
+//    task_td.join();
+//
+//    std::cout << "task_thread:\t" << result.get() << '\n';
+//}
 
 int WINAPI wWinMain(HINSTANCE /*hInstance*/, HINSTANCE /*hPrevInstance*/, LPWSTR /*lpCmdLine*/, int /*nShowCmd*/)
 {
@@ -177,9 +177,9 @@ extern "C" int wmain(int argc, wchar_t * argv[])
 	setup_logger();
 
 	LogTrace();
-	task_lambda();
-	task_bind();
-	task_thread();
+//	task_lambda();
+//	task_bind();
+//	task_thread();
 
 	test_atomic();
 
@@ -251,5 +251,9 @@ extern "C" {
 		crt::cxa_pure_virtual();
 	}
 
+	void _pei386_runtime_relocator()
+	{
+		console::printf(L"%S:%d\n", __PRETTY_FUNCTION__, __LINE__);
+	}
 }
 #endif

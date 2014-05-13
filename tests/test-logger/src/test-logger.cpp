@@ -1,7 +1,7 @@
 #include <system/console.hpp>
 #include <system/crt.hpp>
 #include <system/logger.hpp>
-#include <system/string.hpp>
+#include <system/sstr.hpp>
 
 #include <simstd/algorithm>
 #include <simstd/vector>

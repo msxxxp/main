@@ -1,6 +1,6 @@
 ﻿#include <system/fsys.hpp>
 #include <system/cstr.hpp>
-#include <system/string.hpp>
+#include <system/sstr.hpp>
 #include <system/win64.hpp>
 
 namespace fsys {
@@ -18,16 +18,16 @@ namespace fsys {
 	ustring Secure(const wchar_t * path)
 	{
 		ustring Result(path);
-		String::replace_all(Result, L"..", L"");
-		String::replace_all(Result, L"%", L"");
+		sstr::replace_all(Result, L"..", L"");
+		sstr::replace_all(Result, L"%", L"");
 		return Validate(Result);
 	}
 
 	ustring Validate(const wchar_t * path)
 	{
 		ustring Result(Path::canonicalize(Path::expand(path)));
-		String::replace_all(Result, L"...", L"");
-		String::replace_all(Result, L"\\\\", L"\\");
+		sstr::replace_all(Result, L"...", L"");
+		sstr::replace_all(Result, L"\\\\", L"\\");
 		if (Result == L"\\")
 			Result.clear();
 		return Result;

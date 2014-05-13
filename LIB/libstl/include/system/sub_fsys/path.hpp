@@ -19,7 +19,7 @@ namespace fsys {
 	}
 
 	namespace Path {
-		namespace Inplace {
+		namespace inplace {
 			ustring & remove_prefix(ustring & path, const ustring & pref = ustring(PATH_PREFIX_NT));
 
 			ustring & ensure_prefix(ustring & path, const ustring & pref = ustring(PATH_PREFIX_NT));
@@ -33,25 +33,25 @@ namespace fsys {
 		inline ustring remove_prefix(const ustring & path, const ustring & pref = ustring(PATH_PREFIX_NT))
 		{
 			ustring tmp(path);
-			return Inplace::remove_prefix(tmp, pref);
+			return inplace::remove_prefix(tmp, pref);
 		}
 
 		inline ustring ensure_prefix(const ustring & path, const ustring & pref = ustring(PATH_PREFIX_NT))
 		{
 			ustring tmp(path);
-			return Inplace::ensure_prefix(tmp, pref);
+			return inplace::ensure_prefix(tmp, pref);
 		}
 
 		inline ustring ensure_end_separator(const ustring & path, wchar_t sep = PATH_SEPARATOR_C)
 		{
 			ustring tmp(path);
-			return Inplace::ensure_end_separator(tmp, sep);
+			return inplace::ensure_end_separator(tmp, sep);
 		}
 
 		inline ustring ensure_no_end_separator(const ustring & path)
 		{
 			ustring tmp(path);
-			return Inplace::ensure_no_end_separator(tmp);
+			return inplace::ensure_no_end_separator(tmp);
 		}
 
 		ustring get_root(const wchar_t * path);

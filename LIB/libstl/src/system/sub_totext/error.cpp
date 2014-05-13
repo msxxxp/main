@@ -1,5 +1,5 @@
 ﻿#include <system/totext.hpp>
-#include <system/string.hpp>
+#include <system/sstr.hpp>
 
 #include <simstd/string>
 
@@ -24,11 +24,11 @@ namespace totext {
 			if (lib) {
 				return api_error(err);
 			} else {
-				return String::format(L"[0x%x (%u)] Unknown error", err, err);
+				return sstr::format(L"[0x%x (%u)] Unknown error", err, err);
 			}
 		}
 
-		simstd::wstring ret = String::format(L"[0x%x (%u)] %s", err, err, buf);
+		simstd::wstring ret = sstr::format(L"[0x%x (%u)] %s", err, err, buf);
 		ret[ret.size() - 2] = L'\0'; // delete return char
 		::LocalFree(buf);
 

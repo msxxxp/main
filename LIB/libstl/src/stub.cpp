@@ -6,7 +6,7 @@
 #include <system/linkage.hpp>
 #include <system/memory.hpp>
 #include <system/process.hpp>
-#include <system/string.hpp>
+#include <system/sstr.hpp>
 #include <system/sync.hpp>
 #include <system/thread.hpp>
 #include <system/totext.hpp>

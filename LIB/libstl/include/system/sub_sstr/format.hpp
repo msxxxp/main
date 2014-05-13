@@ -1,9 +1,9 @@
-﻿#ifndef LIBSTL_SYSTEM_STRING_FORMAT_HPP_
-#define LIBSTL_SYSTEM_STRING_FORMAT_HPP_
+﻿#ifndef LIBSTL_SYSTEM_SSTR_FORMAT_HPP_
+#define LIBSTL_SYSTEM_SSTR_FORMAT_HPP_
 
-#include <system/string.hpp>
+#include <system/sstr.hpp>
 
-namespace String {
+namespace sstr {
 
 	ustring format(const wchar_t * format, ...);
 

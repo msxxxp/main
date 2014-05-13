@@ -1,13 +1,13 @@
 #include <system/fsys.hpp>
 #include <system/cstr.hpp>
-#include <system/string.hpp>
+#include <system/sstr.hpp>
 
 #include <simstd/string>
 
 namespace fsys {
 	namespace Path {
 
-		namespace Inplace {
+		namespace inplace {
 			ustring & remove_prefix(ustring & path, const ustring & pref)
 			{
 				if (path.length() >= pref.length() && path.compare(0, pref.length(), pref) == 0)

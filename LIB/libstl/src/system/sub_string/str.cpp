@@ -1,9 +1,9 @@
 ﻿#include <system/cstr.hpp>
-#include <system/string.hpp>
+#include <system/sstr.hpp>
 
 #include <simstd/string>
 
-namespace String {
+namespace sstr {
 
 	astring get_empty_astring()
 	{
@@ -25,7 +25,7 @@ namespace String {
 		return ustring(L" \t\r\n");
 	}
 
-	namespace Inplace {
+	namespace inplace {
 
 		astring & trim_left(astring & str, const astring & chrs)
 		{
@@ -127,31 +127,31 @@ namespace String {
 	astring trim(const astring & str, const astring & chrs)
 	{
 		astring tmp(str);
-		return Inplace::trim(tmp, chrs);
+		return inplace::trim(tmp, chrs);
 	}
 
 	ustring trim(const ustring & str, const ustring & chrs)
 	{
 		ustring tmp(str);
-		return Inplace::trim(tmp, chrs);
+		return inplace::trim(tmp, chrs);
 	}
 
 	ustring replace_all(const ustring & str, const ustring & from, const ustring & to)
 	{
 		ustring ret(str);
-		return Inplace::replace_all(ret, from, to);
+		return inplace::replace_all(ret, from, to);
 	}
 
 	ustring to_lower(const ustring & str)
 	{
 		ustring ret(str);
-		return Inplace::to_lower(ret);
+		return inplace::to_lower(ret);
 	}
 
 	ustring to_upper(const ustring & str)
 	{
 		ustring ret(str);
-		return Inplace::to_upper(ret);
+		return inplace::to_upper(ret);
 	}
 
 	ustring GetWord(const ustring &str, wchar_t d)
@@ -171,7 +171,7 @@ namespace String {
 			++pos;
 		}
 		inout.erase(0, pos);
-		return Inplace::trim(Result, get_trim_default_uchars());
+		return inplace::trim(Result, get_trim_default_uchars());
 	}
 
 	ustring CutWordEx(ustring &inout, const ustring &delim, bool delDelim)
@@ -181,7 +181,7 @@ namespace String {
 		if (delDelim && pos != ustring::npos)
 			pos += delim.size();
 		inout.erase(0, pos);
-		return Inplace::trim(Result, get_trim_default_uchars());
+		return inplace::trim(Result, get_trim_default_uchars());
 	}
 
 //	UINT CheckUnicode(const PVOID buf, size_t size)
@@ -334,42 +334,42 @@ namespace String {
 
 	astring oem(const wchar_t * in)
 	{
-		return String::w2cp(in, CP_OEMCP);
+		return sstr::w2cp(in, CP_OEMCP);
 	}
 
 	astring oem(const ustring &in)
 	{
-		return String::w2cp(in.c_str(), CP_OEMCP);
+		return sstr::w2cp(in.c_str(), CP_OEMCP);
 	}
 
 	astring ansi(const wchar_t * in)
 	{
-		return String::w2cp(in, CP_ACP);
+		return sstr::w2cp(in, CP_ACP);
 	}
 
 	astring ansi(const ustring &in)
 	{
-		return String::w2cp(in.c_str(), CP_ACP);
+		return sstr::w2cp(in.c_str(), CP_ACP);
 	}
 
 	astring utf8(const wchar_t * in)
 	{
-		return String::w2cp(in, CP_UTF8);
+		return sstr::w2cp(in, CP_UTF8);
 	}
 
 	astring utf8(const ustring &in)
 	{
-		return String::w2cp(in.c_str(), CP_UTF8);
+		return sstr::w2cp(in.c_str(), CP_UTF8);
 	}
 
 	ustring utf16(const char * in, UINT cp)
 	{
-		return String::cp2w(in, cp);
+		return sstr::cp2w(in, cp);
 	}
 
 	ustring utf16(const astring &in, UINT cp)
 	{
-		return String::cp2w(in.c_str(), cp);
+		return sstr::cp2w(in.c_str(), cp);
 	}
 
 	ustring & Add(ustring & str, const wchar_t add)

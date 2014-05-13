@@ -1,8 +1,8 @@
-﻿#include <system/string.hpp>
+﻿#include <system/sstr.hpp>
 
 #include <simstd/string>
 
-namespace String {
+namespace sstr {
 
 	namespace {
 		const size_t default_buffer_size = 4 * 1024;

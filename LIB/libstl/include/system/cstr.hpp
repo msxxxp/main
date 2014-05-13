@@ -2,6 +2,7 @@
 #define LIBSTL_SYSTEM_CSTR_HPP_
 
 #include <system/configure.hpp>
+
 #include <system/sub_cstr/char_traits.hpp>
 #include <system/sub_cstr/char.hpp>
 #include <system/sub_cstr/cstr.hpp>

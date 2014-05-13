@@ -7,7 +7,7 @@
 
 namespace cstr {
 
-	namespace Inplace {
+	namespace inplace {
 		template<typename CharType>
 		CharType & to_upper(CharType & chr)
 		{
@@ -43,6 +43,38 @@ namespace cstr {
 		{
 			return cstr::char_traits<CharType>::to_lower(str, cstr::char_traits<CharType>::length(str));
 		}
+	}
+
+	template<typename CharType>
+	CharType to_upper(CharType chr)
+	{
+		return cstr::char_traits<CharType>::to_upper(chr);
+	}
+
+	template<typename CharType>
+	CharType to_lower(CharType chr)
+	{
+		return cstr::char_traits<CharType>::to_lower(chr);
+	}
+
+	inline size_t convert(const char * from, UINT cp)
+	{
+		return ::MultiByteToWideChar(cp, 0, from, -1, nullptr, 0);
+	}
+
+	inline size_t convert(wchar_t * to, size_t size, const char * from, UINT cp)
+	{
+		return ::MultiByteToWideChar(cp, 0, from, -1, to, (int)size);
+	}
+
+	inline size_t convert(const wchar_t * from, UINT cp)
+	{
+		return ::WideCharToMultiByte(cp, 0, from, -1, nullptr, 0, nullptr, nullptr);
+	}
+
+	inline size_t convert(char * to, size_t size, const wchar_t * from, UINT cp)
+	{
+		return ::WideCharToMultiByte(cp, 0, from, -1, to, (int)size, nullptr, nullptr);
 	}
 
 	template<typename CharType>
@@ -103,6 +135,12 @@ namespace cstr {
 	int compare_ci(const CharType * str1, const CharType * str2, size_t count)
 	{
 		return cstr::char_traits<CharType>::compare_ci(str1, str2, count);
+	}
+
+	template<typename CharType>
+	CharType * fill(CharType * str, size_t count, CharType chr)
+	{
+		return cstr::char_traits<CharType>::assign(str, count, chr);
 	}
 
 	template<typename CharType>
@@ -193,45 +231,6 @@ namespace cstr {
 	inline wchar_t * reverse(wchar_t * in)
 	{
 		return ::_wcsrev(in);
-	}
-
-	///=============================================================================================
-	template<typename CharType>
-	CharType to_upper(CharType chr)
-	{
-		return cstr::char_traits<CharType>::to_upper(chr);
-	}
-
-	template<typename CharType>
-	CharType to_lower(CharType chr)
-	{
-		return cstr::char_traits<CharType>::to_lower(chr);
-	}
-
-	template<typename CharType>
-	CharType * fill(CharType * str, size_t count, CharType chr)
-	{
-		return cstr::char_traits<CharType>::assign(str, count, chr);
-	}
-
-	inline size_t convert(const char * from, UINT cp)
-	{
-		return ::MultiByteToWideChar(cp, 0, from, -1, nullptr, 0);
-	}
-
-	inline size_t convert(wchar_t * to, size_t size, const char * from, UINT cp)
-	{
-		return ::MultiByteToWideChar(cp, 0, from, -1, to, (int)size);
-	}
-
-	inline size_t convert(const wchar_t * from, UINT cp)
-	{
-		return ::WideCharToMultiByte(cp, 0, from, -1, nullptr, 0, nullptr, nullptr);
-	}
-
-	inline size_t convert(char * to, size_t size, const wchar_t * from, UINT cp)
-	{
-		return ::WideCharToMultiByte(cp, 0, from, -1, to, (int)size, nullptr, nullptr);
 	}
 
 }

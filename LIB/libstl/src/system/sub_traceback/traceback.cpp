@@ -1,6 +1,6 @@
 #include <system/traceback.hpp>
 #include <system/logger.hpp>
-#include <system/string.hpp>
+#include <system/sstr.hpp>
 #include <system/totext.hpp>
 #include <extra/pattern.hpp>
 
@@ -56,7 +56,7 @@ int init_bfd_ctx(bfd_ctx * bc, const wchar_t * image)
 	bc->handle = NULL;
 	bc->symbol = NULL;
 
-	bfd *b = bfd_openr(String::w2cp(image, CP_OEMCP).c_str(), 0);
+	bfd *b = bfd_openr(sstr::w2cp(image, CP_OEMCP).c_str(), 0);
 	if (!b) {
 		LogFatal(L"Failed to open bfd from (%s)\n", image);
 		return 1;
@@ -319,13 +319,13 @@ namespace traceback {
 			LogNoise(L"offs: %Id\n", m_offset);
 
 			if (file)
-				m_file = String::cp2w(filename_only(file, '/'), CP_OEMCP);
+				m_file = sstr::cp2w(filename_only(file, '/'), CP_OEMCP);
 			if (func) {
 				char buf[MAX_PATH];
 				size_t size = sizeof(buf);
 				int st = 0;
 				abi::__cxa_demangle(func, buf, &size, &st);
-				m_function = String::cp2w(st ? func : buf, CP_OEMCP);
+				m_function = sstr::cp2w(st ? func : buf, CP_OEMCP);
 			}
 			ret = file || func;
 		}

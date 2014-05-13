@@ -1,6 +1,6 @@
 ﻿#include <system/fsys.hpp>
 #include <system/memory.hpp>
-#include <system/string.hpp>
+#include <system/sstr.hpp>
 
 #include <simstd/string>
 

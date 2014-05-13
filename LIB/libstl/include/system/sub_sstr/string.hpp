@@ -1,13 +1,12 @@
-﻿#ifndef LIBBASE_STRING_HPP_
-#define LIBBASE_STRING_HPP_
+﻿#ifndef LIBSTL_SYSTEM_SSTR_STRING_HPP_
+#define LIBSTL_SYSTEM_SSTR_STRING_HPP_
 
-//#include <system/cstr.hpp>
-#include <system/string.hpp>
+#include <system/sstr.hpp>
 #include <system/memory.hpp>
 
 ssize_t ustring_test();
 
-namespace String {
+namespace sstr {
 
 	astring get_empty_astring();
 	ustring get_empty_ustring();
@@ -15,7 +14,7 @@ namespace String {
 	astring get_trim_default_achars();
 	ustring get_trim_default_uchars();
 
-	namespace Inplace {
+	namespace inplace {
 		astring & trim_left(astring & str, const astring & chrs);
 		ustring & trim_left(ustring & str, const ustring & chrs);
 

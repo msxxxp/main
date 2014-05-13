@@ -2,7 +2,7 @@
 #define LIBBASE_BIT_STR_HPP_
 
 #include <extra/bits.hpp>
-#include <system/string.hpp>
+#include <system/sstr.hpp>
 
 #include <simstd/string>
 
@@ -17,7 +17,7 @@ namespace bits {
 			intmax_t bit = 0;
 			ustring tmp(in);
 			lim = bits::Bits::Limit<Type>(lim);
-			while (String::Cut(tmp, bit)) {
+			while (sstr::Cut(tmp, bit)) {
 				if (bits::Bits::GOOD_BIT<Type>(--bit))
 					bits::Bits::set(Result, bit);
 			}
@@ -31,7 +31,7 @@ namespace bits {
 			intmax_t bit = 0;
 			ustring tmp(in);
 			lim = bits::Bits::Limit < Type > (lim);
-			while (String::Cut(tmp, bit)) {
+			while (sstr::Cut(tmp, bit)) {
 				if (bits::Bits::GOOD_BIT< Type > (bit))
 					bits::Bits::set(Result, bit);
 			}
@@ -45,7 +45,7 @@ namespace bits {
 			lim = bits::Bits::Limit < Type > (lim);
 			for (size_t bit = 0; bit < lim; ++bit) {
 				if (bits::Bits::check(in, bit)) {
-					String::Inplace::add_word(Result, to_str(bit + 1), L",");
+					sstr::inplace::add_word(Result, to_str(bit + 1), L",");
 				}
 			}
 			return Result;
@@ -58,7 +58,7 @@ namespace bits {
 			lim = bits::Bits::Limit < Type > (lim);
 			for (size_t bit = 0; bit < lim; ++bit) {
 				if (bits::Bits::check(in, bit)) {
-					String::Inplace::add_word(Result, to_str(bit), L",");
+					sstr::inplace::add_word(Result, to_str(bit), L",");
 				}
 			}
 			return Result;
@@ -83,7 +83,7 @@ namespace bits {
 				if (bits::Flags::check(in, (Type)flag)) {
 					wchar_t buf[64];
 					cstr::convert_num(buf, flag);
-					String::Inplace::add_word(Result, buf, L",");
+					sstr::inplace::add_word(Result, buf, L",");
 				}
 				flag >>= 1;
 			}

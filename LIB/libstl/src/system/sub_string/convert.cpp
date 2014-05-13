@@ -1,9 +1,9 @@
 ﻿#include <system/cstr.hpp>
-#include <system/string.hpp>
+#include <system/sstr.hpp>
 
 #include <simstd/string>
 
-namespace String {
+namespace sstr {
 
 	astring w2cp(const wchar_t * in, UINT cp)
 	{

@@ -62,6 +62,10 @@ namespace logger {
 				ret = Prefix::Medium;
 			} else if (cstr::compare_ci_1st_length(L"f", str) == 0) {
 				ret = Prefix::Full;
+			} else {
+				uint64_t numPrefix = cstr::to_uint64(str);
+				if (numPrefix)
+					ret = static_cast<Prefix::flags>(numPrefix);
 			}
 			console::printf(L"%S '%s' -> 0x%IX(%s)\n", __PRETTY_FUNCTION__, str, ret, to_str(ret));
 			return ret;
@@ -235,7 +239,7 @@ namespace logger {
 				set_defaults(ustring(info.lpszExtraInfo, info.dwExtraInfoLength));
 			else if (cstr::compare_ci(L"/global", info.lpszUrlPath, info.dwUrlPathLength) == 0)
 				set_globals(ustring(info.lpszExtraInfo, info.dwExtraInfoLength));
-			else
+			else if (cstr::compare_ci(L"/module", info.lpszUrlPath, info.dwUrlPathLength) == 0)
 				set_module(ustring(info.lpszExtraInfo, info.dwExtraInfoLength));
 		}
 	}

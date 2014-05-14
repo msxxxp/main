@@ -1,5 +1,5 @@
 ﻿/**
- © 2013 Andrew Grechkin
+ © 2014 Andrew Grechkin
  Source code: <http://code.google.com/p/andrew-grechkin>
 
  This program is free software: you can redistribute it and/or modify
@@ -18,15 +18,14 @@
 
 #include <libfar3/dialog_builder.hpp>
 
-#include <libbase/std.hpp>
-#include <libbase/cstr.hpp>
-#include <liblog/logger.hpp>
+#include <system/cstr.hpp>
+#include <system/logger.hpp>
 
 namespace Far {
 
 	ssize_t inline TextWidth(const FarDialogItem_t * Item)
 	{
-		return Cstr::length(Item->Data);
+		return cstr::length(Item->Data);
 	}
 
 	FarDialogItem_t::~FarDialogItem_t()
@@ -37,7 +36,7 @@ namespace Far {
 	FarDialogItem_t::FarDialogItem_t(FARDIALOGITEMTYPES Type_, PCWSTR Text_, FARDIALOGITEMFLAGS flags_)
 	{
 		LogNoise(L"'%s' %d, 0x%I64X\n", Text_, Type_, flags_);
-		Memory::zero(*this);
+		memory::zero(*this);
 		Type = Type_;
 		Data = Text_;
 		Flags = flags_;
@@ -46,7 +45,7 @@ namespace Far {
 	FarDialogItem_t::FarDialogItem_t(DialogItemBinding_i * binding, FARDIALOGITEMTYPES Type_, PCWSTR Text_, FARDIALOGITEMFLAGS flags_)
 	{
 		LogNoise(L"'%s' %d, 0x%I64X, %p\n", Text_, Type_, flags_, binding);
-		Memory::zero(*this);
+		memory::zero(*this);
 		Type = Type_;
 		Data = Text_;
 		Flags = flags_;

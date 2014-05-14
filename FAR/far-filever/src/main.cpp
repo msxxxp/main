@@ -24,16 +24,14 @@
 
 #include <libfar3/helper.hpp>
 #include <libfar3/plugin_i.hpp>
-#include <libbase/atexit.hpp>
-#include <liblog/logger.hpp>
+
+#include <system/crt.hpp>
+#include <system/logger.hpp>
 
 namespace {
 	void setup_logger()
 	{
-		using namespace Logger;
-		set_default_level(Level::Trace);
-		set_default_prefix(Prefix::Medium | Prefix::Place);
-		set_default_target(get_TargetToFile(L"D:/projects/~test/filever.log"));
+		LogSetOptions(L"logger:///default?level=tr;prefix=fu;target=fo(filever.log)");
 	}
 }
 
@@ -86,24 +84,24 @@ void WINAPI ExitFARW(const ExitInfo *Info)
 /// ========================================================================== Startup (entry point)
 #ifdef NDEBUG
 extern "C" {
-	int atexit(Base::FunctionAtExit pf)
+	int atexit(crt::Function pf)
 	{
-		return Base::atexit(pf);
+		return crt::atexit(pf);
 	}
 
 	void __cxa_pure_virtual(void)
 	{
-		Base::cxa_pure_virtual();
+		crt::cxa_pure_virtual();
 	}
 
 	BOOL WINAPI	DllMainCRTStartup(HANDLE, DWORD dwReason, PVOID) {
 		switch (dwReason) {
 			case DLL_PROCESS_ATTACH:
-				Base::init_atexit();
+				crt::init_atexit();
 				break;
 
 			case DLL_PROCESS_DETACH:
-				Base::invoke_atexit();
+				crt::invoke_atexit();
 				break;
 		}
 		return true;

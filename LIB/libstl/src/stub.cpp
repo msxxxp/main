@@ -35,6 +35,5 @@ int stub()
 {
 	cstr::length("qwerty");
 
-//	std::tuple
 	return 0;
 }

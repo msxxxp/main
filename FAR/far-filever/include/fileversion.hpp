@@ -22,12 +22,11 @@
 #ifndef FAR_FILEVERSION_HPP
 #define FAR_FILEVERSION_HPP
 
-#include <libbase/std.hpp>
-#include <libbase/dll.hpp>
+#include <system/linkage.hpp>
 
 #include "lang.hpp"
 
-struct version_dll: private Base::DynamicLibrary {
+struct version_dll: private linkage::DynamicLibrary {
 	typedef DWORD WINAPI   (*FGetFileVersionInfoSizeW)(LPCWSTR, LPDWORD);
 	typedef DWORD WINAPI   (*FVerLanguageNameW)(DWORD, LPWSTR, DWORD);
 	typedef WINBOOL WINAPI (*FGetFileVersionInfoW)(LPCWSTR, DWORD, DWORD, LPVOID);

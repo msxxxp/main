@@ -1,5 +1,5 @@
 ﻿/**
- © 2012 Andrew Grechkin
+ © 2014 Andrew Grechkin
  Source code: <http://code.google.com/p/andrew-grechkin>
 
  This program is free software: you can redistribute it and/or modify
@@ -19,7 +19,7 @@
 #include <libfar3/settings.hpp>
 #include <libfar3/helper.hpp>
 
-#include <liblog/logger.hpp>
+#include <system/logger.hpp>
 
 namespace Far {
 
@@ -65,7 +65,7 @@ namespace Far {
 	{
 		LogTrace();
 		FarSettingsItem item;
-		Memory::zero(item);
+		memory::zero(item);
 		item.StructSize = sizeof(item);
 		item.Root = root;
 		item.Name = name;
@@ -86,7 +86,7 @@ namespace Far {
 	{
 		LogTrace();
 		FarSettingsItem item;
-		Memory::zero(item);
+		memory::zero(item);
 		item.StructSize = sizeof(item);
 		item.Root = root;
 		item.Name = name;
@@ -98,7 +98,7 @@ namespace Far {
 	{
 		LogTrace();
 		FarSettingsItem item;
-		Memory::zero(item);
+		memory::zero(item);
 		item.StructSize = sizeof(item);
 		item.Root = root;
 		item.Name = name;
@@ -122,7 +122,7 @@ namespace Far {
 	{
 		LogTrace();
 		FarSettingsItem item;
-		Memory::zero(item);
+		memory::zero(item);
 		item.StructSize = sizeof(item);
 		item.Root = root;
 		item.Name = name;
@@ -136,7 +136,7 @@ namespace Far {
 	{
 		LogTrace();
 		FarSettingsItem item;
-		Memory::zero(item);
+		memory::zero(item);
 		item.StructSize = sizeof(item);
 		item.Root = root;
 		item.Name = name;
@@ -149,7 +149,7 @@ namespace Far {
 	{
 		LogTrace();
 		FarSettingsItem item;
-		Memory::zero(item);
+		memory::zero(item);
 		item.StructSize = sizeof(item);
 		item.Root = root;
 		item.Name = name;
@@ -162,7 +162,7 @@ namespace Far {
 	{
 		LogTrace();
 		FarSettingsItem item;
-		Memory::zero(item);
+		memory::zero(item);
 		item.StructSize = sizeof(item);
 		item.Root = root;
 		item.Name = name;

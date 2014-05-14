@@ -1,5 +1,5 @@
 ﻿/**
- © 2012 Andrew Grechkin
+ © 2014 Andrew Grechkin
  Source code: <http://code.google.com/p/andrew-grechkin>
 
  This program is free software: you can redistribute it and/or modify
@@ -25,7 +25,7 @@ namespace Far {
 		PCWSTR Msg[] = {
 		    tit,
 		    text};
-		psi().Message(get_plugin_guid(), nullptr, FMSG_MB_OK, nullptr, Msg, Base::lengthof(Msg), 1);
+		psi().Message(get_plugin_guid(), nullptr, FMSG_MB_OK, nullptr, Msg, lengthof(Msg), 1);
 	}
 
 	void mbox(PCWSTR text, PCWSTR tit)
@@ -33,7 +33,7 @@ namespace Far {
 		PCWSTR Msg[] = {
 		    tit,
 		    text};
-		psi().Message(get_plugin_guid(), nullptr, FMSG_MB_OK, nullptr, Msg, Base::lengthof(Msg), 1);
+		psi().Message(get_plugin_guid(), nullptr, FMSG_MB_OK, nullptr, Msg, lengthof(Msg), 1);
 	}
 
 	void ebox(PCWSTR text, PCWSTR tit)
@@ -41,7 +41,7 @@ namespace Far {
 		PCWSTR Msg[] = {
 		    tit,
 		    text};
-		psi().Message(get_plugin_guid(), nullptr, FMSG_WARNING | FMSG_MB_OK, nullptr, Msg, Base::lengthof(Msg), 1);
+		psi().Message(get_plugin_guid(), nullptr, FMSG_WARNING | FMSG_MB_OK, nullptr, Msg, lengthof(Msg), 1);
 	}
 
 	void ebox(PCWSTR msgs[], size_t size, PCWSTR help)
@@ -49,7 +49,7 @@ namespace Far {
 		psi().Message(get_plugin_guid(), nullptr, FMSG_WARNING | FMSG_MB_OK, help, msgs, size, 1);
 	}
 
-	void ebox(const Base::mstring & msg, PCWSTR title)
+	void ebox(const cstr::mstring & msg, PCWSTR title)
 	{
 		size_t len = msg.size() + 1;
 		PCWSTR tmp[len];
@@ -74,7 +74,7 @@ namespace Far {
 		PCWSTR Msg[] = {
 		    tit,
 		    text};
-		return psi().Message(get_plugin_guid(), nullptr, FMSG_WARNING | FMSG_MB_OKCANCEL, nullptr, Msg, Base::lengthof(Msg), 2) == 0;
+		return psi().Message(get_plugin_guid(), nullptr, FMSG_WARNING | FMSG_MB_OKCANCEL, nullptr, Msg, lengthof(Msg), 2) == 0;
 	}
 
 }

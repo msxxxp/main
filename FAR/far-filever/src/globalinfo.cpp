@@ -26,15 +26,15 @@
 
 #include <libfar3/helper.hpp>
 
-#include <libbase/cstr.hpp>
-#include <liblog/logger.hpp>
+#include <system/cstr.hpp>
+#include <system/logger.hpp>
 
 #include <version.h>
 
 FarGlobalInfo::FarGlobalInfo()
 {
 	LogTrace();
-	Cstr::copy(prefix, L"fver");
+	cstr::copy(prefix, L"fver");
 }
 
 FarGlobalInfo::~FarGlobalInfo()

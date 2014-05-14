@@ -1,5 +1,5 @@
 ﻿/**
- © 2012 Andrew Grechkin
+ © 2014 Andrew Grechkin
  Source code: <http://code.google.com/p/andrew-grechkin>
 
  This program is free software: you can redistribute it and/or modify
@@ -20,7 +20,8 @@
 #define _LIBFAR_OBSOLETE_HPP_
 
 #include <libfar3/helper.hpp>
-#include <libbase/memory.hpp>
+
+#include <system/memory.hpp>
 
 namespace Far {
 
@@ -35,7 +36,7 @@ namespace Far {
 	inline void InitDialogItemsF(const InitDialogItemF * Init, FarDialogItem * Item, int ItemsNumber)
 	{
 		for (int i = 0; i < ItemsNumber; ++i) {
-			Memory::zero(Item[i]);
+			memory::zero(Item[i]);
 			Item[i].Type = Init[i].Type;
 			Item[i].X1 = Init[i].X1;
 			Item[i].Y1 = Init[i].Y1;

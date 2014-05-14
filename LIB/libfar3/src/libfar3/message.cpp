@@ -1,5 +1,5 @@
 ﻿/**
- © 2012 Andrew Grechkin
+ © 2014 Andrew Grechkin
  Source code: <http://code.google.com/p/andrew-grechkin>
 
  This program is free software: you can redistribute it and/or modify
@@ -23,7 +23,7 @@ namespace Far {
 	///=============================================================================================
 	PCWSTR get_msg(ssize_t MsgId)
 	{
-		return (MsgId == -1) ? Base::EMPTY_STR : psi().GetMsg(get_plugin_guid(), MsgId);
+		return (MsgId == -1) ? EMPTY_STR : psi().GetMsg(get_plugin_guid(), MsgId);
 	}
 
 }

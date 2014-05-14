@@ -1,5 +1,5 @@
 ﻿/**
- © 2012 Andrew Grechkin
+ © 2014 Andrew Grechkin
  Source code: <http://code.google.com/p/andrew-grechkin>
 
  This program is free software: you can redistribute it and/or modify
@@ -18,7 +18,7 @@
 
 #include <libfar3/dialog_builder.hpp>
 
-#include <liblog/logger.hpp>
+#include <system/logger.hpp>
 
 namespace Far {
 

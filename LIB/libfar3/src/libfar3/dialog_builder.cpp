@@ -1,5 +1,5 @@
 ﻿/**
- © 2012 Andrew Grechkin
+ © 2014 Andrew Grechkin
  Source code: <http://code.google.com/p/andrew-grechkin>
 
  This program is free software: you can redistribute it and/or modify
@@ -18,9 +18,10 @@
 
 #include <libfar3/dialog_builder.hpp>
 
-#include <libbase/std.hpp>
-#include <libbase/cstr.hpp>
-#include <liblog/logger.hpp>
+#include <system/cstr.hpp>
+#include <system/logger.hpp>
+
+#include <memory>
 
 #include "DlgBuilder_pvt.hpp"
 
@@ -63,14 +64,14 @@ namespace Far {
 	{
 		psi().DialogFree(DialogHandle);
 
-//		std::for_each(DialogItems.begin(), DialogItems.end(), std::bind(&FarDialogItem_t::destroy, std::placeholders::_1));
+//		simstd::for_each(DialogItems.begin(), DialogItems.end(), std::bind(&FarDialogItem_t::destroy, std::placeholders::_1));
 		LogTrace();
 	}
 
 	FarDialogItem_t * SimpleDialogBuilder_impl::add_item_(FarDialogItem_t * item)
 	{
 		LogTrace();
-		DialogItems.emplace_back(std::move(*item));
+		DialogItems.emplace_back(simstd::move(*item));
 		delete item;
 
 		FarDialogItem_t * Item = &DialogItems.back();
@@ -137,12 +138,12 @@ namespace Far {
 		OKButton->Y1 = OKButton->Y2 = NextY++;
 		OKButtonId = DialogItems.size() - 1;
 
-		if (!Cstr::is_empty(CancelLabel)) {
+		if (!cstr::is_empty(CancelLabel)) {
 			FarDialogItem_t * CancelButton = add_dialog_item(DI_BUTTON, CancelLabel, DIF_CENTERGROUP);
 			CancelButton->Y1 = CancelButton->Y2 = OKButton->Y1;
 		}
 
-		if (!Cstr::is_empty(ExtraLabel)) {
+		if (!cstr::is_empty(ExtraLabel)) {
 			FarDialogItem_t * ExtraButton = add_dialog_item(DI_BUTTON, ExtraLabel, DIF_CENTERGROUP);
 			ExtraButton->Y1 = ExtraButton->Y2 = OKButton->Y1;
 		}
@@ -164,7 +165,7 @@ namespace Far {
 	{
 //		ssize_t colWidth = 0;
 //		for (int i = ColumnStartIndex; i < ColumnBreakIndex; ++i) {
-//			colWidth = std::max(colWidth, ItemWidth(&DialogItems[i]));
+//			colWidth = simstd::max(colWidth, ItemWidth(&DialogItems[i]));
 //		}
 //		for (size_t i = ColumnBreakIndex; i < DialogItemsCount; ++i) {
 //			DialogItems[i].X1 += (1 + colWidth);
@@ -234,7 +235,7 @@ namespace Far {
 	FarDialogItem_t * SimpleDialogBuilder_impl::add_dialog_item(FarDialogItem_t * item)
 	{
 		LogTrace();
-		DialogItems.emplace_back(std::move(*item));
+		DialogItems.emplace_back(simstd::move(*item));
 		delete item;
 
 		FarDialogItem_t * ret = &DialogItems.back();
@@ -247,7 +248,7 @@ namespace Far {
 	ssize_t SimpleDialogBuilder_impl::GetMaxItemX2() const
 	{
 		LogTrace();
-		auto it = std::max_element(++DialogItems.begin(), DialogItems.end(), &CompareWidth_less);
+		auto it = simstd::max_element(++DialogItems.begin(), DialogItems.end(), &CompareWidth_less);
 		ssize_t ret = it->X1 + it->get_width() - 1 - ZERO_X;
 		LogNoise(L"-> %Id\n", ret);
 		return ret;
@@ -256,7 +257,7 @@ namespace Far {
 	void SimpleDialogBuilder_impl::save()
 	{
 		LogTrace();
-		std::for_each(DialogItems.begin(), DialogItems.end(), std::bind(&FarDialogItem_t::save, std::placeholders::_1));
+		simstd::for_each(DialogItems.begin(), DialogItems.end(), std::bind(&FarDialogItem_t::save, std::placeholders::_1));
 	}
 
 	void SimpleDialogBuilder_impl::set_next_y(FarDialogItem_t * Item)
@@ -295,10 +296,10 @@ namespace Far {
 	}
 
 	///=============================================================================================
-	std::shared_ptr<DialogBuilder_i> create_dialog_builder(const GUID & aId, PCWSTR TitleLabel, PCWSTR aHelpTopic, FARWINDOWPROC aDlgProc, void * aUserParam)
+	simstd::shared_ptr<DialogBuilder_i> create_dialog_builder(const GUID & aId, PCWSTR TitleLabel, PCWSTR aHelpTopic, FARWINDOWPROC aDlgProc, void * aUserParam)
 	{
 		LogTrace();
-		return std::make_shared<SimpleDialogBuilder_impl>(aId, TitleLabel, aHelpTopic, aDlgProc, aUserParam);
+		return simstd::shared_ptr<DialogBuilder_i>(new SimpleDialogBuilder_impl(aId, TitleLabel, aHelpTopic, aDlgProc, aUserParam));
 	}
 
 }

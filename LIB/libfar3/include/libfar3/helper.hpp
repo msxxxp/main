@@ -1,5 +1,5 @@
 ﻿/**
- © 2012 Andrew Grechkin
+ © 2014 Andrew Grechkin
  Source code: <http://code.google.com/p/andrew-grechkin>
 
  This program is free software: you can redistribute it and/or modify
@@ -23,9 +23,8 @@
 #include <libfar3/globalinfo_i.hpp>
 #include <libfar3/plugin_i.hpp>
 
-#include <libbase/std.hpp>
-#include <libbase/wstr.hpp>
-#include <libbase/memory.hpp>
+#include <system/cstr.hpp>
+#include <system/memory.hpp>
 
 namespace Far {
 
@@ -117,7 +116,7 @@ namespace Far {
 
 	void ebox(PCWSTR msgs[], size_t size, PCWSTR help = nullptr);
 
-	void ebox(const Base::mstring & msg, PCWSTR title = Base::EMPTY_STR);
+	void ebox(const cstr::mstring & msg, PCWSTR title = EMPTY_STR);
 
 	void ebox(DWORD err);
 

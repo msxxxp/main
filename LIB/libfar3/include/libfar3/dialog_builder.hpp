@@ -22,9 +22,10 @@
 #include <libfar3/plugin.hpp>
 #include <libfar3/helper.hpp>
 
-#include <libbase/std.hpp>
+#include <system/configure.hpp>
+#include <extra/pattern.hpp>
 
-#include <memory>
+#include <simstd/memory>
 
 namespace Far {
 
@@ -69,7 +70,7 @@ namespace Far {
 		ssize_t m_index;
 	};
 
-	struct FarDialogItem_t: public FarDialogItem, private Base::Uncopyable {
+	struct FarDialogItem_t: public FarDialogItem, private pattern::Uncopyable {
 		~FarDialogItem_t();
 
 		FarDialogItem_t(FARDIALOGITEMTYPES Type_, PCWSTR Text_, FARDIALOGITEMFLAGS flags_ = DIF_NONE);
@@ -172,7 +173,7 @@ namespace Far {
 			end_column_();
 		}
 
-		void start_singlebox(ssize_t Width, PCWSTR Label = Base::EMPTY_STR, bool LeftAlign = false)
+		void start_singlebox(ssize_t Width, PCWSTR Label = EMPTY_STR, bool LeftAlign = false)
 		{
 			start_singlebox_(Width, Label, LeftAlign);
 		}
@@ -219,7 +220,7 @@ namespace Far {
 	};
 
 	///=============================================================================================
-	std::shared_ptr<DialogBuilder_i> create_dialog_builder(const GUID & aId, PCWSTR TitleLabel, PCWSTR aHelpTopic = nullptr, FARWINDOWPROC aDlgProc = nullptr, void * aUserParam = nullptr);
+	simstd::shared_ptr<DialogBuilder_i> create_dialog_builder(const GUID & aId, PCWSTR TitleLabel, PCWSTR aHelpTopic = nullptr, FARWINDOWPROC aDlgProc = nullptr, void * aUserParam = nullptr);
 
 }
 

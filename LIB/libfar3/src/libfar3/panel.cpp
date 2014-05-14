@@ -1,5 +1,5 @@
 ﻿/**
- © 2012 Andrew Grechkin
+ © 2014 Andrew Grechkin
  Source code: <http://code.google.com/p/andrew-grechkin>
 
  This program is free software: you can redistribute it and/or modify
@@ -19,15 +19,15 @@
 #include <libfar3/panel.hpp>
 #include <libfar3/helper.hpp>
 
-#include <libbase/memory.hpp>
+#include <system/memory.hpp>
 
 namespace Far {
 
 	///======================================================================================= Panel
 	Panel::~Panel()
 	{
-		Memory::free(m_dir);
-		Memory::free(m_ppi);
+		memory::free(m_dir);
+		memory::free(m_ppi);
 	}
 
 	Panel::Panel(const HANDLE aPlugin, FILE_CONTROL_COMMANDS cmd) :
@@ -77,7 +77,7 @@ namespace Far {
 	PCWSTR Panel::get_current_directory() const
 	{
 		size_t size = psi().PanelControl(m_hndl, FCTL_GETPANELDIRECTORY, 0, nullptr);
-		Memory::realloc(m_dir, size);
+		memory::realloc(m_dir, size);
 		m_dir->StructSize = sizeof(*m_dir);
 		if (psi().PanelControl(m_hndl, FCTL_GETPANELDIRECTORY, size, m_dir)) {
 			return m_dir->Name;
@@ -88,7 +88,7 @@ namespace Far {
 	const PluginPanelItem * Panel::operator [](size_t index) const
 	{
 		size_t m_ppiSize = psi().PanelControl(m_hndl, FCTL_GETPANELITEM, index, nullptr);
-		Memory::realloc(m_ppi, m_ppiSize);
+		memory::realloc(m_ppi, m_ppiSize);
 		FarGetPluginPanelItem gpi = {sizeof(gpi), m_ppiSize, m_ppi};
 		psi().PanelControl(m_hndl, FCTL_GETPANELITEM, index, &gpi);
 		return m_ppi;
@@ -97,7 +97,7 @@ namespace Far {
 	const PluginPanelItem * Panel::get_selected(size_t index) const
 	{
 		size_t m_ppiSize = psi().PanelControl(m_hndl, FCTL_GETSELECTEDPANELITEM, index, nullptr);
-		Memory::realloc(m_ppi, m_ppiSize);
+		memory::realloc(m_ppi, m_ppiSize);
 		FarGetPluginPanelItem gpi = {sizeof(gpi), m_ppiSize, m_ppi};
 		psi().PanelControl(m_hndl, FCTL_GETSELECTEDPANELITEM, index, &gpi);
 		return m_ppi;

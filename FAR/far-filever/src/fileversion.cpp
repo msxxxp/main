@@ -21,9 +21,9 @@
 
 #include "fileversion.hpp"
 
-#include <libbase/filesystem.hpp>
-#include <libbase/memory.hpp>
-#include <libbase/cstr.hpp>
+#include <system/cstr.hpp>
+#include <system/memory.hpp>
+#include <system/fsys.hpp>
 
 #include <stdio.h>
 
@@ -51,15 +51,15 @@ version_dll::version_dll() :
 
 FileVersion::~FileVersion()
 {
-	Memory::free(m_data);
+	memory::free(m_data);
 }
 
 FileVersion::FileVersion(PCWSTR path) :
 	m_data(nullptr)
 {
-	Memory::zero(this, sizeof(*this));
+	memory::zero(this, sizeof(*this));
 
-	Fsys::file_map_t fmap(path, sizeof(IMAGE_DOS_HEADER));
+	fsys::File::Map_nt fmap(path, sizeof(IMAGE_DOS_HEADER));
 	if (fmap.is_ok() && (fmap.size() == sizeof(IMAGE_DOS_HEADER))) {
 		PIMAGE_DOS_HEADER dosHeader = (PIMAGE_DOS_HEADER)fmap.data();
 		if (dosHeader->e_magic != IMAGE_DOS_SIGNATURE) {
@@ -77,7 +77,7 @@ FileVersion::FileVersion(PCWSTR path) :
 
 	DWORD hndl;
 	DWORD size = version_dll::inst().GetFileVersionInfoSizeW(path, &hndl);
-	if (size && Memory::realloc(m_data, size) && version_dll::inst().GetFileVersionInfoW(path, hndl, size, m_data)) {
+	if (size && memory::realloc(m_data, size) && version_dll::inst().GetFileVersionInfoW(path, hndl, size, m_data)) {
 		UINT buf_len;
 		VS_FIXEDFILEINFO * ffi;
 		if (version_dll::inst().VerQueryValueW(m_data, (PWSTR)L"\\", (PCWSTR*)&ffi, &buf_len)) {
@@ -85,20 +85,20 @@ FileVersion::FileVersion(PCWSTR path) :
 			m_MinorVersion = LOWORD(ffi->dwFileVersionMS);
 			m_BuildNumber = HIWORD(ffi->dwFileVersionLS);
 			m_RevisionNumber = LOWORD(ffi->dwFileVersionLS);
-			_snwprintf(m_ver, Base::lengthof(m_ver), L"%d.%d.%d.%d", m_MajorVersion, m_MinorVersion, m_BuildNumber, m_RevisionNumber);
+			_snwprintf(m_ver, lengthof(m_ver), L"%d.%d.%d.%d", m_MajorVersion, m_MinorVersion, m_BuildNumber, m_RevisionNumber);
 		}
 		struct LANGANDCODEPAGE {
 			WORD wLanguage;
 			WORD wCodePage;
 		}* translate;
 		if (version_dll::inst().VerQueryValueW(m_data, (PWSTR)L"\\VarFileInfo\\Translation", (PCWSTR*)&translate, &buf_len)) {
-			version_dll::inst().VerLanguageNameW(translate->wLanguage, m_lng, Base::lengthof(m_lng));
-			_snwprintf(m_lngId, Base::lengthof(m_lngId), L"%04x%04x", translate->wLanguage, translate->wCodePage);
+			version_dll::inst().VerLanguageNameW(translate->wLanguage, m_lng, lengthof(m_lng));
+			_snwprintf(m_lngId, lengthof(m_lngId), L"%04x%04x", translate->wLanguage, translate->wCodePage);
 			WCHAR tmp[4] = {0};
 			DWORD err = 0;
-			_snwprintf(tmp, Base::lengthof(tmp), L"%04x", translate->wCodePage);
-			err = Cstr::to_uint32(tmp);
-			_snwprintf(m_lngIderr, Base::lengthof(m_lngIderr), L"%04x%04x", translate->wLanguage, err);
+			_snwprintf(tmp, lengthof(tmp), L"%04x", translate->wCodePage);
+			err = cstr::to_uint32(tmp);
+			_snwprintf(m_lngIderr, lengthof(m_lngIderr), L"%04x%04x", translate->wLanguage, err);
 		}
 	} else {
 		return;
@@ -122,15 +122,15 @@ FVI::FVI(const FileVersion & in)
 		{L"", L"SpecialBuild", MtxtFileSpecial},
 	};
 	this->m_data = tmp;
-	this->m_size = Base::lengthof(tmp);
+	this->m_size = lengthof(tmp);
 
 	if (in.is_version_loaded()) {
 		WCHAR QueryString[128] = {0};
 		UINT bufLen;
 		for (size_t i = 0; i < m_size; ++i) {
-			_snwprintf(QueryString, Base::lengthof(QueryString), L"\\StringFileInfo\\%s\\%s", in.lngID(), m_data[i].SubBlock);
+			_snwprintf(QueryString, lengthof(QueryString), L"\\StringFileInfo\\%s\\%s", in.lngID(), m_data[i].SubBlock);
 			if (!version_dll::inst().VerQueryValueW(in.GetData(), QueryString, &m_data[i].data, &bufLen)) {
-				_snwprintf(QueryString, Base::lengthof(QueryString), L"\\StringFileInfo\\%s\\%s", in.lngIDerr(), m_data[i].SubBlock);
+				_snwprintf(QueryString, lengthof(QueryString), L"\\StringFileInfo\\%s\\%s", in.lngIDerr(), m_data[i].SubBlock);
 				if (!version_dll::inst().VerQueryValueW(in.GetData(), QueryString, &m_data[i].data, &bufLen))
 					m_data[i].data = L"";
 			}

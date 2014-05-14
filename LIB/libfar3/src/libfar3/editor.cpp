@@ -1,5 +1,5 @@
 ﻿/**
- © 2012 Andrew Grechkin
+ © 2014 Andrew Grechkin
  Source code: <http://code.google.com/p/andrew-grechkin>
 
  This program is free software: you can redistribute it and/or modify
@@ -33,7 +33,7 @@ namespace Far {
 		ssize_t get_string(ssize_t y, PCWSTR & str)
 		{
 			EditorGetString egs;
-			Memory::zero(egs);
+			memory::zero(egs);
 			egs.StructSize = sizeof(egs);
 			egs.StringNumber = y;
 			psi().EditorControl(-1, ECTL_GETSTRING, 0, &egs);
@@ -70,7 +70,7 @@ namespace Far {
 		intptr_t unselect_block()
 		{
 			EditorSelect tmp;
-			Memory::zero(tmp);
+			memory::zero(tmp);
 			tmp.StructSize = sizeof(tmp);
 			tmp.BlockType = BTYPE_NONE;
 			return psi().EditorControl(-1, ECTL_SELECT, 0, &tmp);
@@ -79,7 +79,7 @@ namespace Far {
 		intptr_t start_undo()
 		{
 			EditorUndoRedo eur;
-			Memory::zero(eur);
+			memory::zero(eur);
 			eur.StructSize = sizeof(eur);
 			eur.Command = EUR_BEGIN;
 			return psi().EditorControl(-1, ECTL_UNDOREDO, 0, &eur);
@@ -88,7 +88,7 @@ namespace Far {
 		intptr_t stop_undo()
 		{
 			EditorUndoRedo eur;
-			Memory::zero(eur);
+			memory::zero(eur);
 			eur.StructSize = sizeof(eur);
 			eur.Command = EUR_END;
 			return psi().EditorControl(-1, ECTL_UNDOREDO, 0, &eur);

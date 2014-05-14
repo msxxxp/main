@@ -19,8 +19,7 @@
 #include <libfar3/dialog_builder.hpp>
 #include <libfar3/helper.hpp>
 
-#include <libbase/std.hpp>
-#include <liblog/logger.hpp>
+#include <system/logger.hpp>
 
 namespace Far {
 

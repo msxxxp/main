@@ -25,10 +25,10 @@
 #include <libfar3/panel.hpp>
 #include <libfar3/viewer.hpp>
 #include <libfar3/obsolete.hpp>
-#include <liblog/logger.hpp>
-#include <libbase/memory.hpp>
-#include <libbase/cstr.hpp>
-#include <libbase/path.hpp>
+#include <system/cstr.hpp>
+#include <system/fsys.hpp>
+#include <system/memory.hpp>
+#include <system/logger.hpp>
 
 #include <globalinfo.hpp>
 #include <guid.hpp>
@@ -37,7 +37,7 @@
 
 //#include <time.h>
 
-Cstr::NamedValues<WORD> Machines[] = {
+cstr::NamedValues<WORD> Machines[] = {
 	{ L"UNKNOWN", IMAGE_FILE_MACHINE_UNKNOWN },
 	{ L"I386", IMAGE_FILE_MACHINE_I386 },
 	{ L"R4000", IMAGE_FILE_MACHINE_R4000 },
@@ -93,7 +93,7 @@ void FarPlugin::GetPluginInfo(PluginInfo * Info)
 
 	Info->PluginMenu.Guids = PluginMenuGuids;
 	Info->PluginMenu.Strings = PluginMenuStrings;
-	Info->PluginMenu.Count = Base::lengthof(PluginMenuStrings);
+	Info->PluginMenu.Count = lengthof(PluginMenuStrings);
 
 	Info->CommandPrefix = get_global_info()->prefix;
 }
@@ -106,48 +106,48 @@ Far::PanelController_i * FarPlugin::Open(const OpenInfo * Info)
 		return (Far::PanelController_i * )INVALID_HANDLE_VALUE;
 	}
 
-	WCHAR buf1[Base::MAX_PATH_LEN] = {0};
-	WCHAR buf2[Base::MAX_PATH_LEN] = {0};
+	WCHAR buf1[MAX_PATH_LEN] = {0};
+	WCHAR buf2[MAX_PATH_LEN] = {0};
 	if (Info->OpenFrom == OPEN_PLUGINSMENU || Info->OpenFrom == OPEN_FROMMACRO) {
 		Far::Panel pi(PANEL_ACTIVE);
 		if (pi.is_ok()) {
 			const PluginPanelItem * ppi = pi.get_current();
 			PCWSTR fileName = ppi->FileName;
 			LogNoise(L"ppi->FileName: '%s'\n", ppi->FileName);
-			if (Cstr::find(fileName, Base::PATH_SEPARATORS)) {
-				Cstr::copy(buf2, fileName, Base::lengthof(buf2));
+			if (cstr::find(fileName, PATH_SEPARATORS)) {
+				cstr::copy(buf2, fileName, lengthof(buf2));
 			} else {
-				Cstr::copy(buf2, pi.get_current_directory(), Base::lengthof(buf2));
-				if (!Cstr::is_empty(buf2)) {
+				cstr::copy(buf2, pi.get_current_directory(), lengthof(buf2));
+				if (!cstr::is_empty(buf2)) {
 					Far::fsf().AddEndSlash(buf2);
 				}
-				Cstr::cat(buf2, fileName, Base::lengthof(buf2));
+				cstr::cat(buf2, fileName, lengthof(buf2));
 			}
 		}
 	} else if (Info->OpenFrom == OPEN_COMMANDLINE) {
 		OpenCommandLineInfo * info = (OpenCommandLineInfo*)Info->Data;
 		LogNoise(L"comline: %s\n", info->CommandLine);
-		Cstr::copy(buf2, info->CommandLine, Base::lengthof(buf2));
+		cstr::copy(buf2, info->CommandLine, lengthof(buf2));
 		Far::fsf().Trim(buf2);
 		Far::fsf().Unquote(buf2);
 		Far::fsf().Trim(buf2);
 
-		Base::Path::expand(buf1, Base::lengthof(buf1), buf2);
+		fsys::Path::expand(buf1, lengthof(buf1), buf2);
 		LogNoise(L"buf: '%s'\n", buf1);
 
-		if (Base::Path::is_relative(buf1)) {
+		if (fsys::Path::is_relative(buf1)) {
 			LogNoise(L"is relative\n");
-			fsf().GetCurrentDirectoryW(Base::lengthof(buf2), buf2);
-			if (!Cstr::is_empty(buf2)) {
+			fsf().GetCurrentDirectoryW(lengthof(buf2), buf2);
+			if (!cstr::is_empty(buf2)) {
 				Far::fsf().AddEndSlash(buf2);
 			}
-			Cstr::cat(buf2, buf1, Base::lengthof(buf2));
+			cstr::cat(buf2, buf1, lengthof(buf2));
 		} else {
 			LogNoise(L"is absolute\n");
-			Cstr::copy(buf2, buf1, Base::lengthof(buf2));
+			cstr::copy(buf2, buf1, lengthof(buf2));
 		}
 	} else if (Info->OpenFrom == OPEN_VIEWER) {
-		Far::Viewer::get_filename(buf2, Base::lengthof(buf2));
+		Far::Viewer::get_filename(buf2, lengthof(buf2));
 	}
 
 	LogNoise(L"buf: '%s'\n", buf2);
@@ -156,13 +156,13 @@ Far::PanelController_i * FarPlugin::Open(const OpenInfo * Info)
 	Far::fsf().Trim(buf2);
 
 	LogNoise(L"buf: '%s'\n", buf2);
-	Base::Path::canonicalize(buf1, buf2);
+	fsys::Path::canonicalize(buf1, buf2);
 	LogNoise(L"buf: '%s'\n", buf1);
 	FileVersion fv(buf1);
 	if (fv.is_version_loaded() || fv.is_arch_loaded()) {
 		FVI fvi(fv);
 //		wchar_t timeBuf[32] = {0};
-//		_vsnwprintf(timeBuf, Base::lengthof(timeBuf), L"%S", ctime(&fv.created()));
+//		_vsnwprintf(timeBuf, lengthof(timeBuf), L"%S", ctime(&fv.created()));
 		int i = 0, x = 70, y = 2;
 		Far::InitDialogItemF Items[] = {
 			{DI_TEXT, 5, y, 26, 0,          0,            (PCWSTR)MtxtFileFullVer},
@@ -174,7 +174,7 @@ Far::PanelController_i * FarPlugin::Open(const OpenInfo * Info)
 			{DI_TEXT, 5, y, 26, 0,          0,            (PCWSTR)fvi[i].msgTxt},
 			{DI_EDIT, 28, y++, x - 2, 0,    DIF_READONLY, fvi[i++].data},
 			{DI_TEXT, 5, y, 26, 0,          0,            (PCWSTR)MtxtMachine},
-			{DI_EDIT, 28, y++, x - 2, 0,    DIF_READONLY, Cstr::NamedValues<WORD>::GetName(Machines, Base::lengthof(Machines), fv.machine())},
+			{DI_EDIT, 28, y++, x - 2, 0,    DIF_READONLY, cstr::NamedValues<WORD>::GetName(Machines, lengthof(Machines), fv.machine())},
 //			{DI_TEXT, 5, y, 26, 0,          0,            (PCWSTR)MtxtCreated},
 //			{DI_EDIT, 28, y++, x - 2, 0,    DIF_READONLY, timeBuf},
 			{DI_TEXT, 5, y++, 0, 0,         DIF_SEPARATOR, L""},
@@ -203,7 +203,7 @@ Far::PanelController_i * FarPlugin::Open(const OpenInfo * Info)
 			{DI_DOUBLEBOX, 3, 1, x, y,      0,               (PCWSTR)Far::DlgTitle},
 		};
 
-		size_t size = Base::lengthof(Items);
+		size_t size = lengthof(Items);
 		FarDialogItem FarItems[size];
 		InitDialogItemsF(Items, FarItems, size);
 		HANDLE hndl = Far::psi().DialogInit(Far::get_plugin_guid(), &DialogGuid, -1, -1, x + 4, y + 2, L"Contents", FarItems, size, 0, 0, nullptr, 0);

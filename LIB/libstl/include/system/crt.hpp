@@ -4,5 +4,6 @@
 #include <system/configure.hpp>
 #include <system/sub_crt/assert.hpp>
 #include <system/sub_crt/atexit.hpp>
+#include <system/sub_crt/seh.hpp>
 
 #endif

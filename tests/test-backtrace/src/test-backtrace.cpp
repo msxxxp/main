@@ -13,31 +13,19 @@ namespace {
 		init_print_trace();
 	}
 
-	LONG WINAPI unhandledExceptionFilter(PEXCEPTION_POINTERS ep)
-	{
-		LogReport(L"code:    0x%X\n", ep->ExceptionRecord->ExceptionCode);
-		LogReport(L"flags:   0x%X\n", ep->ExceptionRecord->ExceptionFlags);
-		LogReport(L"record:  0x%p\n", ep->ExceptionRecord->ExceptionRecord);
-		LogReport(L"address: 0x%p\n", ep->ExceptionRecord->ExceptionAddress);
-		LogReport(L"params:  %u\n", ep->ExceptionRecord->NumberParameters);
-		for (DWORD i = 0; i < ep->ExceptionRecord->NumberParameters; ++i) {
-			LogReport(L"param[%u]:    0x%I64X\n", i, ep->ExceptionRecord->ExceptionInformation[i]);
-		}
-
-		LogFatal(L"terminating process %s\n", totext::nt_status(ep->ExceptionRecord->ExceptionCode).c_str());
-		traceback::LazyFrame frame(reinterpret_cast<void*>(ep->ExceptionRecord->ExceptionAddress));
-		LogFatal(L"exception at %s\n", frame.to_str().c_str());
-
-//		print_trace(ep->ContextRecord, reinterpret_cast<void*>(ep->ExceptionRecord->ExceptionAddress));
-
-		return EXCEPTION_EXECUTE_HANDLER; // should terminate process.
-	}
-
 	void do_acces_violation()
 	{
 		LogWarn(L"accessing null pointer\n");
 		volatile int* p = nullptr;
 		*p = 0;
+	}
+
+	void do_zero_division()
+	{
+		LogWarn(L"division by zero\n");
+		int zero = 0;
+		int p = 42 / zero;
+		UNUSED(p);
 	}
 }
 
@@ -54,17 +42,24 @@ void test_access_violation()
 	LogTrace();
 }
 
+void test_zero_division()
+{
+	LogTrace();
+	do_zero_division();
+	LogTrace();
+}
+
 int main()
 {
-	::SetUnhandledExceptionFilter(unhandledExceptionFilter);
+	crt::set_unhandled_exception_filter();
 
 	setup_logger();
 
 //	test_backtrace();
 
-	test_access_violation();
+	test_zero_division();
 
-	LogTrace();
+	test_access_violation();
 
 	return 0;
 }

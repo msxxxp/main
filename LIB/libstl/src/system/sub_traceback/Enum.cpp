@@ -101,6 +101,8 @@ namespace traceback {
 		sf.AddrStack.Offset = context->Esp;
 		sf.AddrStack.Mode = AddrModeFlat;
 		machine = IMAGE_FILE_MACHINE_I386;
+		if (address)
+			emplace_back(address);
 #endif
 
 		while (depth-- > 0) {
@@ -113,7 +115,7 @@ namespace traceback {
 #else
 			if (!res || sf.AddrPC.Offset == 0)
 				break;
-			emplace_back((size_t)sf.AddrPC.Offset);
+			emplace_back(reinterpret_cast<void*>(sf.AddrPC.Offset));
 #endif
 		}
 

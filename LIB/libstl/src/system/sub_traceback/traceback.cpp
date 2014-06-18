@@ -202,13 +202,13 @@ namespace traceback {
 		modInfo.SizeOfStruct = sizeof(modInfo) - 8;
 
 		bool res = ::SymGetModuleInfoW64(::GetCurrentProcess(), reinterpret_cast<DWORD64>(address), &modInfo);
-		LogErrorIf(!res, L"%s\n", totext::api_error().c_str());
+		LogErrorIf(!res, L"%s %p\n", totext::api_error().c_str(), address);
 
 		if (res) {
 			m_module = modInfo.ModuleName;
 			m_module_base = modInfo.BaseOfImage;
 			m_image = modInfo.ImageName;
-			LogNoise(L"BaseOfImage:     %I64u\n", modInfo.BaseOfImage);
+			LogNoise(L"BaseOfImage:     0x%I64X\n", modInfo.BaseOfImage);
 			LogNoise(L"ImageSize:       %u\n", modInfo.ImageSize);
 			LogNoise(L"TimeDateStamp:   %u\n", modInfo.TimeDateStamp);
 			LogNoise(L"CheckSum:        %u\n", modInfo.CheckSum);

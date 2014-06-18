@@ -9,6 +9,8 @@
 
 namespace traceback {
 
+	void init(const wchar_t * path = nullptr);
+
 	struct Frame_i
 	{
 		virtual ~Frame_i();
@@ -66,7 +68,9 @@ namespace traceback {
 	struct Enum: private simstd::vector<LazyFrame> {
 		typedef simstd::vector<LazyFrame> base_type;
 
-		Enum(const wchar_t * path = nullptr, size_t depth = get_max_depth());
+		Enum(size_t depth = get_max_depth());
+
+		Enum(PCONTEXT context, void* address = nullptr, size_t depth = get_max_depth());
 
 		static size_t get_max_depth();
 

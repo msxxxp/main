@@ -8,7 +8,9 @@ namespace local {
 
 	void init_print_trace()
 	{
-		LogSetOptions(L"logger:///module?name=print_trace;prefix=48");
+		LogSetOptions(L"logger:///module?name=print_trace;prefix=48;level=in");
+		LogSetOptions(L"logger:///module?name=traceback;prefix=48;level=in");
+		traceback::init();
 	}
 
 	void print_trace()
@@ -22,6 +24,14 @@ namespace local {
 			LogForce(L"[%02Iu] %s\n", tb.size() - (i + 1), tb[i].to_str().c_str());
 	}
 
+	void print_trace(PCONTEXT context, void* address)
+	{
+		traceback::Enum tb(context, address);
+
+		LogForce(L"Backtrace: [%Iu]\n", tb.size());
+		for (size_t i = 0; i < tb.size(); ++i)
+			LogForce(L"[%02Iu] %s\n", tb.size() - (i + 1), tb[i].to_str().c_str());
+	}
 }
 
 void init_print_trace()
@@ -32,4 +42,9 @@ void init_print_trace()
 void print_trace()
 {
 	local::print_trace();
+}
+
+void print_trace(PCONTEXT context, void* address)
+{
+	local::print_trace(context, address);
 }

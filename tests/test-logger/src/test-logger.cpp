@@ -2,6 +2,7 @@
 #include <system/crt.hpp>
 #include <system/logger.hpp>
 #include <system/sstr.hpp>
+#include <system/totext.hpp>
 
 #include <simstd/algorithm>
 #include <simstd/vector>
@@ -13,22 +14,44 @@ namespace {
 		LogSetOptions(L"logger:///default?level=tr;prefix=fu;target=co");
 //		LogSetOptions(L"logger:///default?level=tr;prefix=fu;target=fo(test-threads.log)");
 	}
+
+	LONG WINAPI unhandledExecptionFilter(PEXCEPTION_POINTERS ep)
+	{
+		LogFatal(L"terminating process %s\n", totext::nt_status(ep->ExceptionRecord->ExceptionCode).c_str());
+
+		return EXCEPTION_EXECUTE_HANDLER; // should terminate process.
+	}
+
+	void do_acces_violation()
+	{
+		LogWarn(L"accessing null pointer\n");
+		volatile int* p = nullptr;
+		*p = 0;
+	}
 }
 
 int WINAPI wWinMain(HINSTANCE /*hInstance*/, HINSTANCE /*hPrevInstance*/, LPWSTR /*lpCmdLine*/, int /*nShowCmd*/)
 {
 	console::printf(L"%S:%d\n", __PRETTY_FUNCTION__, __LINE__);
 
+	::SetUnhandledExceptionFilter(unhandledExecptionFilter);
+
 	setup_logger();
 
 	LogTrace();
 
+	do_acces_violation();
+
+	LogTrace();
 	return 0;
 }
 
 extern "C" int wmain(int argc, wchar_t * argv[])
 {
 	console::printf(L"%S:%d\n", __PRETTY_FUNCTION__, __LINE__);
+
+	::SetUnhandledExceptionFilter(unhandledExecptionFilter);
+
 	setup_logger();
 
 	LogTrace();
@@ -36,8 +59,12 @@ extern "C" int wmain(int argc, wchar_t * argv[])
 	for (int i = 0; i < argc; ++i)
 		LogDebug(L"%s\n", argv[i]);
 
+	do_acces_violation();
+
+	LogTrace();
 	return 0;
 }
+
 
 /// ========================================================================== Startup (entry point)
 #ifdef NDEBUG

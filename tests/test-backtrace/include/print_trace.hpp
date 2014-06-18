@@ -5,5 +5,6 @@ void init_print_trace();
 
 void print_trace();
 
+void print_trace(PCONTEXT context, void* address);
 
 #endif

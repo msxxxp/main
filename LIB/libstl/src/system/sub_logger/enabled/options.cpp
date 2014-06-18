@@ -6,7 +6,7 @@
 
 #include <simstd/string>
 
-//#define TraceFunc(format, ...) console::printf(L"%S " ## format ## L"/n", __PRETTY_FUNCTION__, ##__VA_ARGS__);
+//#define TraceFunc(format, ...) //console::printf(L"%S " ## format ## L"/n", __PRETTY_FUNCTION__, ##__VA_ARGS__);
 
 namespace logger {
 
@@ -18,7 +18,7 @@ namespace logger {
 			if (first != ustring::npos) {
 				first += 1;
 				auto ret = str.substr(first, str.find_first_of(delim, first) - first);
-				console::printf(L"%S '%s' -> '%s'\n", __PRETTY_FUNCTION__, str.c_str(), ret.c_str());
+				//console::printf(L"%S '%s' -> '%s'\n", __PRETTY_FUNCTION__, str.c_str(), ret.c_str());
 				//			TraceFunc(L"'%s' -> '%s'", str.c_str(), ret.c_str());
 				return ret;
 			}
@@ -49,7 +49,7 @@ namespace logger {
 			} else if (cstr::compare_ci_1st_length(L"em", str) == 0 || cstr::compare(L"9", str) == 0) {
 				ret = Level::Emerg;
 			}
-			console::printf(L"%S '%s' -> %d(%s)\n", __PRETTY_FUNCTION__, str, ret, to_str(ret));
+			//console::printf(L"%S '%s' -> %d(%s)\n", __PRETTY_FUNCTION__, str, ret, to_str(ret));
 			return ret;
 		}
 
@@ -67,7 +67,7 @@ namespace logger {
 				if (numPrefix)
 					ret = static_cast<Prefix::flags>(numPrefix);
 			}
-			console::printf(L"%S '%s' -> 0x%IX(%s)\n", __PRETTY_FUNCTION__, str, ret, to_str(ret));
+			//console::printf(L"%S '%s' -> 0x%IX(%s)\n", __PRETTY_FUNCTION__, str, ret, to_str(ret));
 			return ret;
 		}
 
@@ -76,19 +76,19 @@ namespace logger {
 			Target_t ret = defaults::get_target();
 			if (cstr::compare_ci_1st_length(L"n", str) == 0) {
 				ret = get_TargetToNull();
-				console::printf(L"%S '%s' -> null\n", __PRETTY_FUNCTION__, str);
+				//console::printf(L"%S '%s' -> null\n", __PRETTY_FUNCTION__, str);
 			} else if (cstr::compare_ci_1st_length(L"c", str) == 0) {
 				ret = get_TargetToConsole();
-				console::printf(L"%S '%s' -> console\n", __PRETTY_FUNCTION__, str);
+				//console::printf(L"%S '%s' -> console\n", __PRETTY_FUNCTION__, str);
 			} else if (cstr::compare_ci_1st_length(L"f", str) == 0) {
 				bool overwrite = cstr::compare_ci_1st_length(L"fo", str) == 0 || cstr::compare_ci_1st_length(L"fileo", str) == 0;
 				ret = get_TargetToFile(get_substr_in(str, L"()").c_str(), overwrite);
-				console::printf(L"%S '%s' -> file, ow: %d\n", __PRETTY_FUNCTION__, str, overwrite);
+				//console::printf(L"%S '%s' -> file, ow: %d\n", __PRETTY_FUNCTION__, str, overwrite);
 				//		} else if (cstr::compare_ci_1st_length(L"s", str) == 0) {
 				//			ret = get_TargetToSys(str); // TODO
-				//			console::printf(L"%S '%s' -> sys\n", __PRETTY_FUNCTION__, str);
+				//			//console::printf(L"%S '%s' -> sys\n", __PRETTY_FUNCTION__, str);
 			} else {
-				console::printf(L"%S '%s' -> not found\n", __PRETTY_FUNCTION__, str);
+				//console::printf(L"%S '%s' -> not found\n", __PRETTY_FUNCTION__, str);
 			}
 			return ret;
 		}
@@ -99,7 +99,7 @@ namespace logger {
 			if (cstr::compare_ci_1st_length(L"f", str) == 0 || cstr::compare(L"0", str) == 0) {
 				ret = 0;
 			}
-			console::printf(L"%S '%s' -> %Iu\n", __PRETTY_FUNCTION__, str, ret);
+			//console::printf(L"%S '%s' -> %Iu\n", __PRETTY_FUNCTION__, str, ret);
 			return ret;
 		}
 
@@ -183,10 +183,10 @@ namespace logger {
 
 		void set_defaults(ustring options)
 		{
-			console::printf(L"%S:%d '%s'\n", __PRETTY_FUNCTION__, __LINE__, options.c_str());
+			//console::printf(L"%S:%d '%s'\n", __PRETTY_FUNCTION__, __LINE__, options.c_str());
 			while (!options.empty()) {
 				auto prm = get_parameter(options);
-				console::printf(L"%S:%d '%s'\n", __PRETTY_FUNCTION__, __LINE__, prm.c_str());
+				//console::printf(L"%S:%d '%s'\n", __PRETTY_FUNCTION__, __LINE__, prm.c_str());
 				const wchar_t * value = nullptr;
 				if (get_value(L"level=", prm.c_str(), value)) {
 					defaults::set_level(convert_to_level(value));
@@ -204,11 +204,11 @@ namespace logger {
 
 		void set_module(ustring options)
 		{
-			console::printf(L"%S:%d '%s'\n", __PRETTY_FUNCTION__, __LINE__, options.c_str());
+			//console::printf(L"%S:%d '%s'\n", __PRETTY_FUNCTION__, __LINE__, options.c_str());
 			ModuleOptionsSetter mos;
 			while (!options.empty()) {
 				auto prm = get_parameter(options);
-				console::printf(L"%S:%d '%s'\n", __PRETTY_FUNCTION__, __LINE__, prm.c_str());
+				//console::printf(L"%S:%d '%s'\n", __PRETTY_FUNCTION__, __LINE__, prm.c_str());
 				const wchar_t * value = nullptr;
 				if (get_value(L"name=", prm.c_str(), value)) {
 					mos.name(value);

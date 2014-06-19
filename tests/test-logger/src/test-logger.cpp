@@ -1,12 +1,12 @@
-#include <system/console.hpp>
-#include <system/crt.hpp>
-#include <system/logger.hpp>
-#include <system/sstr.hpp>
-#include <system/totext.hpp>
+#include <basis/sys/console.hpp>
+#include <basis/sys/crt.hpp>
+#include <basis/sys/logger.hpp>
+#include <basis/sys/sstr.hpp>
+#include <basis/sys/totext.hpp>
 
-#include <simstd/algorithm>
-#include <simstd/vector>
-#include <simstd/string>
+#include <basis/std/algorithm>
+#include <basis/std/vector>
+#include <basis/std/string>
 
 namespace {
 	void setup_logger()

@@ -1,4 +1,4 @@
-#include <basis/sys/configure.hpp>
+#include <basis/configure.hpp>
 #include <basis/sys/memory.hpp>
 
 #ifndef _MSC_VER

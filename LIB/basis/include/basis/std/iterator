@@ -1,7 +1,7 @@
 ﻿#ifndef BASIS_ITERATOR_
 #define BASIS_ITERATOR_
 
-#include <basis/sys/configure.hpp>
+#include <basis/configure.hpp>
 #include <basis/std/impl/iterator/base.hpp>
 #include <basis/std/impl/iterator/back_insert_iterator.hpp>
 #include <basis/std/impl/iterator/front_insert_iterator.hpp>

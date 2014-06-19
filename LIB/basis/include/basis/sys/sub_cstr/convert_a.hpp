@@ -1,7 +1,7 @@
 ﻿#ifndef BASIS_CSTR_CONVERT_A_HPP_
 #define BASIS_CSTR_CONVERT_A_HPP_
 
-#include <basis/sys/base_types.hpp>
+#include <basis/types.hpp>
 
 namespace cstr {
 

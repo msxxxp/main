@@ -1,7 +1,7 @@
 ﻿#ifndef BASIS_VECTOR_
 #define BASIS_VECTOR_
 
-#include <basis/sys/configure.hpp>
+#include <basis/configure.hpp>
 #include <basis/std/imp_vector/vector_base.hpp>
 #include <basis/std/imp_vector/interface.hpp>
 #include <basis/std/imp_vector/movable_vector.hpp>

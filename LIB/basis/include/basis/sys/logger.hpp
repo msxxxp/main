@@ -1,7 +1,7 @@
 ﻿#ifndef BASIS_SYS_LOGGER_HPP_
 #define BASIS_SYS_LOGGER_HPP_
 
-#include <basis/sys/configure.hpp>
+#include <basis/configure.hpp>
 #include <basis/sys/console.hpp>
 
 #if (defined(DEBUG) || defined(ENABLE_LOGGER)) && !defined(DISABLE_LOGGER)

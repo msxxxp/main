@@ -1,7 +1,7 @@
 ﻿#ifndef BASIS_NEW_HPP_
 #define BASIS_NEW_HPP_
 
-#include <basis/sys/base_types.hpp>
+#include <basis/types.hpp>
 
 namespace simstd {
 	struct nothrow_t

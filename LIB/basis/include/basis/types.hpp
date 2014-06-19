@@ -1,5 +1,5 @@
-﻿#ifndef BASIS_SYS_BASE_TYPES_
-#define BASIS_SYS_BASE_TYPES_
+﻿#ifndef BASIS_TYPES_HPP_
+#define BASIS_TYPES_HPP_
 
 #include <stdint.h>
 

@@ -1,7 +1,7 @@
 ﻿#ifndef BASIS_MUTEX_
 #define BASIS_MUTEX_
 
-#include <basis/sys/configure.hpp>
+#include <basis/configure.hpp>
 #include <basis/std/impl/mutex/types.hpp>
 #include <basis/std/impl/mutex/functional.hpp>
 #include <basis/std/impl/mutex/lock_guard.hpp>

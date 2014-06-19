@@ -1,7 +1,7 @@
 ﻿#ifndef BASIS_SYS_PROCESS_ENVIRONMENT_HPP_
 #define BASIS_SYS_PROCESS_ENVIRONMENT_HPP_
 
-#include <basis/sys/configure.hpp>
+#include <basis/configure.hpp>
 
 #include <basis/std/iosfwd>
 

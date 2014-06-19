@@ -1,7 +1,7 @@
 #ifndef BASIS_SYS_TRACEBACK_HPP_
 #define BASIS_SYS_TRACEBACK_HPP_
 
-#include <basis/sys/configure.hpp>
+#include <basis/configure.hpp>
 #include <basis/ext/pattern.hpp>
 
 #include <basis/std/iosfwd>

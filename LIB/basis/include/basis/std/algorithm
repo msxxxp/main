@@ -1,7 +1,7 @@
 ﻿#ifndef BASIS_ALGORITHM_
 #define BASIS_ALGORITHM_
 
-#include <basis/sys/configure.hpp>
+#include <basis/configure.hpp>
 #include <basis/std/impl/algorithm/base.hpp>
 #include <basis/std/impl/algorithm/extra.hpp>
 #include <basis/std/impl/algorithm/heap.hpp>

@@ -1,7 +1,7 @@
 ﻿#ifndef BASIS_ITERATOR_BASE_HPP_
 #define BASIS_ITERATOR_BASE_HPP_
 
-#include <basis/sys/base_types.hpp>
+#include <basis/types.hpp>
 
 namespace simstd
 {

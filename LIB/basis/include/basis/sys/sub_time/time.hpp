@@ -1,7 +1,7 @@
 ﻿#ifndef LIBBASE_TIME_HPP_
 #define LIBBASE_TIME_HPP_
 
-#include <basis/sys/configure.hpp>
+#include <basis/configure.hpp>
 #include <basis/sys/memory.hpp>
 
 namespace Base {

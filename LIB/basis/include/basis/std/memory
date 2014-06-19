@@ -1,7 +1,7 @@
 ﻿#ifndef BASIS_MEMORY_
 #define BASIS_MEMORY_
 
-#include <basis/sys/configure.hpp>
+#include <basis/configure.hpp>
 #include <basis/std/impl/memory/allocator.hpp>
 #include <basis/std/impl/memory/allocator_traits.hpp>
 #include <basis/std/impl/memory/base.hpp>

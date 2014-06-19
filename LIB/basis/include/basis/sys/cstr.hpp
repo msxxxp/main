@@ -1,7 +1,7 @@
 ﻿#ifndef BASIS_SYS_CSTR_HPP_
 #define BASIS_SYS_CSTR_HPP_
 
-#include <basis/sys/configure.hpp>
+#include <basis/configure.hpp>
 
 #include <basis/sys/sub_cstr/char_traits.hpp>
 #include <basis/sys/sub_cstr/char.hpp>

@@ -1,7 +1,7 @@
 ﻿#ifndef BASIS_SYS_LINKAGE_
 #define BASIS_SYS_LINKAGE_
 
-#include <basis/sys/configure.hpp>
+#include <basis/configure.hpp>
 #include <basis/ext/pattern.hpp>
 
 #define DEFINE_FUNC(name)     F##name name

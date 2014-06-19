@@ -1,7 +1,7 @@
 ﻿#ifndef BASIS_TYPE_TRAITS_
 #define BASIS_TYPE_TRAITS_
 
-#include <basis/sys/configure.hpp>
+#include <basis/configure.hpp>
 #include <basis/std/imp_type_traits/integral_constant.hpp>
 #include <basis/std/imp_type_traits/remove_cv.hpp>
 #include <basis/std/imp_type_traits/conditional.hpp>

@@ -1,7 +1,7 @@
 ﻿#ifndef BASIS_ITERATOR_CONST_VALUE_ITERATOR_HPP_
 #define BASIS_ITERATOR_CONST_VALUE_ITERATOR_HPP_
 
-#include <basis/sys/base_types.hpp>
+#include <basis/types.hpp>
 #include <basis/std/impl/iterator/base.hpp>
 #include <basis/std/impl/utility/rel_ops.hpp>
 

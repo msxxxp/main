@@ -1,7 +1,7 @@
 ﻿#ifndef BASIS_RATIO_
 #define BASIS_RATIO_
 
-#include <basis/sys/configure.hpp>
+#include <basis/configure.hpp>
 
 #include <basis/std/type_traits>
 //#include <cstdint>

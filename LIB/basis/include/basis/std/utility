@@ -1,7 +1,7 @@
 ﻿#ifndef BASIS_UTILITY_
 #define BASIS_UTILITY_
 
-#include <basis/sys/configure.hpp>
+#include <basis/configure.hpp>
 #include <basis/std/impl/utility/pair.hpp>
 #include <basis/std/impl/utility/rel_ops.hpp>
 

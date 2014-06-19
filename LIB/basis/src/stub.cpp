@@ -1,4 +1,4 @@
-﻿#include <basis/sys/configure.hpp>
+﻿#include <basis/configure.hpp>
 #include <basis/sys/console.hpp>
 #include <basis/sys/crt.hpp>
 #include <basis/sys/cstr.hpp>

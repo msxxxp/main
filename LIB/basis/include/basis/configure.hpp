@@ -1,5 +1,5 @@
-﻿#ifndef BASIS_SYS_CONFIGURE_
-#define BASIS_SYS_CONFIGURE_
+﻿#ifndef BASIS_CONFIGURE_HPP_
+#define BASIS_CONFIGURE_HPP_
 
 #ifdef _MSC_VER
 #	define _CRT_SECURE_NO_WARNINGS
@@ -14,7 +14,7 @@
 #else
 #endif
 
-#include <basis/sys/base_types.hpp>
+#include <basis/types.hpp>
 
 #include <basis/sys/sub_configure/os/windows.hpp>
 

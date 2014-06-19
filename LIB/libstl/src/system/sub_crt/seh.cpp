@@ -24,8 +24,8 @@ namespace crt {
 
 //		print_trace(ep->ContextRecord, reinterpret_cast<void*>(ep->ExceptionRecord->ExceptionAddress));
 
-		return EXCEPTION_CONTINUE_EXECUTION; // should terminate process.
-//		return EXCEPTION_EXECUTE_HANDLER; // should terminate process.
+//		return EXCEPTION_CONTINUE_EXECUTION; // should terminate process.
+		return EXCEPTION_EXECUTE_HANDLER; // should terminate process.
 	}
 
 	void set_unhandled_exception_filter()

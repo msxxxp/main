@@ -33,14 +33,14 @@
 									<listOptionValue builtIn="false" value="_DEBUG"/>
 								</option>
 								<option id="gnu.cpp.compiler.option.include.paths.470669688" name="Include paths (-I)" superClass="gnu.cpp.compiler.option.include.paths" valueType="includePath">
-									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/libstl/include}&quot;"/>
 									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/${ProjName}/include}&quot;"/>
+									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/basis/include}&quot;"/>
 								</option>
 								<option id="gnu.cpp.compiler.option.warnings.extrawarn.605431242" name="Extra warnings (-Wextra)" superClass="gnu.cpp.compiler.option.warnings.extrawarn" value="true" valueType="boolean"/>
 								<option id="gnu.cpp.compiler.option.warnings.toerrors.1104224302" name="Warnings as errors (-Werror)" superClass="gnu.cpp.compiler.option.warnings.toerrors" value="true" valueType="boolean"/>
 								<option id="gnu.cpp.compiler.option.other.other.435235028" name="Other flags" superClass="gnu.cpp.compiler.option.other.other" value="-c -fmessage-length=0 -fno-exceptions -fno-rtti -fno-threadsafe-statics" valueType="string"/>
-								<option id="gnu.cpp.compiler.option.dialect.std.203293460" superClass="gnu.cpp.compiler.option.dialect.std" value="gnu.cpp.compiler.dialect.default" valueType="enumerated"/>
-								<option id="gnu.cpp.compiler.option.dialect.flags.1101014785" superClass="gnu.cpp.compiler.option.dialect.flags" value="-std=c++11 -m64" valueType="string"/>
+								<option id="gnu.cpp.compiler.option.dialect.std.203293460" name="Language standard" superClass="gnu.cpp.compiler.option.dialect.std" value="gnu.cpp.compiler.dialect.default" valueType="enumerated"/>
+								<option id="gnu.cpp.compiler.option.dialect.flags.1101014785" name="Other dialect flags" superClass="gnu.cpp.compiler.option.dialect.flags" value="-std=c++11 -m64" valueType="string"/>
 								<inputType id="cdt.managedbuild.tool.gnu.cpp.compiler.input.1937278906" superClass="cdt.managedbuild.tool.gnu.cpp.compiler.input"/>
 							</tool>
 							<tool command="ar" commandLinePattern="${COMMAND} ${FLAGS} ${OUTPUT_FLAG} ${OUTPUT_PREFIX}${OUTPUT} ${INPUTS}" errorParsers="" id="cdt.managedbuild.tool.gnu.archiver.mingw.lib.debug.1424120708" name="GCC Archiver" superClass="cdt.managedbuild.tool.gnu.archiver.mingw.lib.debug"/>
@@ -74,22 +74,22 @@
 							<builder buildPath="${workspace_loc:/libfar3/Release}" errorParsers="" id="cdt.managedbuild.tool.gnu.builder.mingw.base.521107563" keepEnvironmentInBuildfile="false" managedBuildOn="true" name="CDT Internal Builder" parallelBuildOn="true" parallelizationNumber="optimal" superClass="cdt.managedbuild.tool.gnu.builder.mingw.base"/>
 							<tool id="cdt.managedbuild.tool.gnu.cpp.linker.mingw.base.1496281357" name="MinGW C++ Linker" superClass="cdt.managedbuild.tool.gnu.cpp.linker.mingw.base"/>
 							<tool command="g++" commandLinePattern="${COMMAND} ${FLAGS} ${OUTPUT_FLAG} ${OUTPUT_PREFIX}${OUTPUT} ${INPUTS}" errorParsers="org.eclipse.cdt.core.GCCErrorParser" id="cdt.managedbuild.tool.gnu.cpp.compiler.mingw.lib.release.1764435067" name="GCC C++ Compiler" superClass="cdt.managedbuild.tool.gnu.cpp.compiler.mingw.lib.release">
-								<option id="gnu.cpp.compiler.mingw.lib.release.option.optimization.level.1870525591" name="Optimization Level" superClass="gnu.cpp.compiler.mingw.lib.release.option.optimization.level" value="gnu.cpp.compiler.optimization.level.most" valueType="enumerated"/>
-								<option id="gnu.cpp.compiler.mingw.lib.release.option.debugging.level.121315904" name="Debug Level" superClass="gnu.cpp.compiler.mingw.lib.release.option.debugging.level" value="gnu.cpp.compiler.debugging.level.none" valueType="enumerated"/>
-								<option id="gnu.cpp.compiler.option.preprocessor.def.1861809106" name="Defined symbols (-D)" superClass="gnu.cpp.compiler.option.preprocessor.def" valueType="definedSymbols">
+								<option id="gnu.cpp.compiler.mingw.lib.release.option.optimization.level.1870525591" name="Optimization Level" superClass="gnu.cpp.compiler.mingw.lib.release.option.optimization.level" useByScannerDiscovery="false" value="gnu.cpp.compiler.optimization.level.most" valueType="enumerated"/>
+								<option id="gnu.cpp.compiler.mingw.lib.release.option.debugging.level.121315904" name="Debug Level" superClass="gnu.cpp.compiler.mingw.lib.release.option.debugging.level" useByScannerDiscovery="false" value="gnu.cpp.compiler.debugging.level.none" valueType="enumerated"/>
+								<option id="gnu.cpp.compiler.option.preprocessor.def.1861809106" name="Defined symbols (-D)" superClass="gnu.cpp.compiler.option.preprocessor.def" useByScannerDiscovery="false" valueType="definedSymbols">
 									<listOptionValue builtIn="false" value="UNICODE"/>
 									<listOptionValue builtIn="false" value="_UNICODE"/>
 									<listOptionValue builtIn="false" value="NDEBUG"/>
 								</option>
-								<option id="gnu.cpp.compiler.option.include.paths.1206299181" name="Include paths (-I)" superClass="gnu.cpp.compiler.option.include.paths" valueType="includePath">
-									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/libstl/include}&quot;"/>
+								<option id="gnu.cpp.compiler.option.include.paths.1206299181" name="Include paths (-I)" superClass="gnu.cpp.compiler.option.include.paths" useByScannerDiscovery="false" valueType="includePath">
 									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/${ProjName}/include}&quot;"/>
+									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/basis/include}&quot;"/>
 								</option>
-								<option id="gnu.cpp.compiler.option.warnings.extrawarn.814561158" name="Extra warnings (-Wextra)" superClass="gnu.cpp.compiler.option.warnings.extrawarn" value="true" valueType="boolean"/>
-								<option id="gnu.cpp.compiler.option.warnings.toerrors.1069796520" name="Warnings as errors (-Werror)" superClass="gnu.cpp.compiler.option.warnings.toerrors" value="true" valueType="boolean"/>
-								<option id="gnu.cpp.compiler.option.other.other.1656657228" name="Other flags" superClass="gnu.cpp.compiler.option.other.other" value="-c -fmessage-length=0 -fno-exceptions -fno-rtti -fno-threadsafe-statics" valueType="string"/>
-								<option id="gnu.cpp.compiler.option.dialect.std.1018636269" superClass="gnu.cpp.compiler.option.dialect.std" value="gnu.cpp.compiler.dialect.default" valueType="enumerated"/>
-								<option id="gnu.cpp.compiler.option.dialect.flags.342601602" superClass="gnu.cpp.compiler.option.dialect.flags" value="-std=c++11 -m64" valueType="string"/>
+								<option id="gnu.cpp.compiler.option.warnings.extrawarn.814561158" name="Extra warnings (-Wextra)" superClass="gnu.cpp.compiler.option.warnings.extrawarn" useByScannerDiscovery="false" value="true" valueType="boolean"/>
+								<option id="gnu.cpp.compiler.option.warnings.toerrors.1069796520" name="Warnings as errors (-Werror)" superClass="gnu.cpp.compiler.option.warnings.toerrors" useByScannerDiscovery="false" value="true" valueType="boolean"/>
+								<option id="gnu.cpp.compiler.option.other.other.1656657228" name="Other flags" superClass="gnu.cpp.compiler.option.other.other" useByScannerDiscovery="false" value="-c -fmessage-length=0 -fno-exceptions -fno-rtti -fno-threadsafe-statics" valueType="string"/>
+								<option id="gnu.cpp.compiler.option.dialect.std.1018636269" name="Language standard" superClass="gnu.cpp.compiler.option.dialect.std" useByScannerDiscovery="true" value="gnu.cpp.compiler.dialect.default" valueType="enumerated"/>
+								<option id="gnu.cpp.compiler.option.dialect.flags.342601602" name="Other dialect flags" superClass="gnu.cpp.compiler.option.dialect.flags" useByScannerDiscovery="true" value="-std=c++11 -m64" valueType="string"/>
 								<inputType id="cdt.managedbuild.tool.gnu.cpp.compiler.input.343336349" superClass="cdt.managedbuild.tool.gnu.cpp.compiler.input"/>
 							</tool>
 							<tool command="ar" commandLinePattern="${COMMAND} ${FLAGS} ${OUTPUT_FLAG} ${OUTPUT_PREFIX}${OUTPUT} ${INPUTS}" errorParsers="" id="cdt.managedbuild.tool.gnu.archiver.mingw.lib.release.2001093643" name="GCC Archiver" superClass="cdt.managedbuild.tool.gnu.archiver.mingw.lib.release"/>
@@ -131,14 +131,14 @@
 									<listOptionValue builtIn="false" value="NDEBUG"/>
 								</option>
 								<option id="gnu.cpp.compiler.option.include.paths.1169914282" name="Include paths (-I)" superClass="gnu.cpp.compiler.option.include.paths" valueType="includePath">
-									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/libstl/include}&quot;"/>
 									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/${ProjName}/include}&quot;"/>
+									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/basis/include}&quot;"/>
 								</option>
 								<option id="gnu.cpp.compiler.option.warnings.extrawarn.816386080" name="Extra warnings (-Wextra)" superClass="gnu.cpp.compiler.option.warnings.extrawarn" value="true" valueType="boolean"/>
 								<option id="gnu.cpp.compiler.option.warnings.toerrors.1077439493" name="Warnings as errors (-Werror)" superClass="gnu.cpp.compiler.option.warnings.toerrors" value="true" valueType="boolean"/>
 								<option id="gnu.cpp.compiler.option.other.other.1176990168" name="Other flags" superClass="gnu.cpp.compiler.option.other.other" value="-c -fmessage-length=0 -fno-exceptions -fno-rtti -fno-threadsafe-statics" valueType="string"/>
-								<option id="gnu.cpp.compiler.option.dialect.std.2025892688" superClass="gnu.cpp.compiler.option.dialect.std" value="gnu.cpp.compiler.dialect.default" valueType="enumerated"/>
-								<option id="gnu.cpp.compiler.option.dialect.flags.1479361715" superClass="gnu.cpp.compiler.option.dialect.flags" value="-std=c++11 -m32" valueType="string"/>
+								<option id="gnu.cpp.compiler.option.dialect.std.2025892688" name="Language standard" superClass="gnu.cpp.compiler.option.dialect.std" value="gnu.cpp.compiler.dialect.default" valueType="enumerated"/>
+								<option id="gnu.cpp.compiler.option.dialect.flags.1479361715" name="Other dialect flags" superClass="gnu.cpp.compiler.option.dialect.flags" value="-std=c++11 -m32" valueType="string"/>
 								<inputType id="cdt.managedbuild.tool.gnu.cpp.compiler.input.1169267155" superClass="cdt.managedbuild.tool.gnu.cpp.compiler.input"/>
 							</tool>
 							<tool command="ar" commandLinePattern="${COMMAND} ${FLAGS} ${OUTPUT_FLAG} ${OUTPUT_PREFIX}${OUTPUT} ${INPUTS}" errorParsers="" id="cdt.managedbuild.tool.gnu.archiver.mingw.lib.release.488056872" name="GCC Archiver" superClass="cdt.managedbuild.tool.gnu.archiver.mingw.lib.release"/>
@@ -180,14 +180,14 @@
 									<listOptionValue builtIn="false" value="_DEBUG"/>
 								</option>
 								<option id="gnu.cpp.compiler.option.include.paths.550643312" name="Include paths (-I)" superClass="gnu.cpp.compiler.option.include.paths" valueType="includePath">
-									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/libstl/include}&quot;"/>
 									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/${ProjName}/include}&quot;"/>
+									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/basis/include}&quot;"/>
 								</option>
 								<option id="gnu.cpp.compiler.option.warnings.extrawarn.2131916406" name="Extra warnings (-Wextra)" superClass="gnu.cpp.compiler.option.warnings.extrawarn" value="true" valueType="boolean"/>
 								<option id="gnu.cpp.compiler.option.warnings.toerrors.1650392441" name="Warnings as errors (-Werror)" superClass="gnu.cpp.compiler.option.warnings.toerrors" value="true" valueType="boolean"/>
 								<option id="gnu.cpp.compiler.option.other.other.1708314779" name="Other flags" superClass="gnu.cpp.compiler.option.other.other" value="-c -fmessage-length=0 -fno-exceptions -fno-rtti -fno-threadsafe-statics" valueType="string"/>
-								<option id="gnu.cpp.compiler.option.dialect.std.772634146" superClass="gnu.cpp.compiler.option.dialect.std" value="gnu.cpp.compiler.dialect.default" valueType="enumerated"/>
-								<option id="gnu.cpp.compiler.option.dialect.flags.635258148" superClass="gnu.cpp.compiler.option.dialect.flags" value="-std=c++11 -m32" valueType="string"/>
+								<option id="gnu.cpp.compiler.option.dialect.std.772634146" name="Language standard" superClass="gnu.cpp.compiler.option.dialect.std" value="gnu.cpp.compiler.dialect.default" valueType="enumerated"/>
+								<option id="gnu.cpp.compiler.option.dialect.flags.635258148" name="Other dialect flags" superClass="gnu.cpp.compiler.option.dialect.flags" value="-std=c++11 -m32" valueType="string"/>
 								<inputType id="cdt.managedbuild.tool.gnu.cpp.compiler.input.1867366749" superClass="cdt.managedbuild.tool.gnu.cpp.compiler.input"/>
 							</tool>
 							<tool command="ar" commandLinePattern="${COMMAND} ${FLAGS} ${OUTPUT_FLAG} ${OUTPUT_PREFIX}${OUTPUT} ${INPUTS}" errorParsers="" id="cdt.managedbuild.tool.gnu.archiver.mingw.lib.debug.670867937" name="GCC Archiver" superClass="cdt.managedbuild.tool.gnu.archiver.mingw.lib.debug"/>

@@ -19,7 +19,7 @@
 #include <libfar3/panel.hpp>
 #include <libfar3/helper.hpp>
 
-#include <system/memory.hpp>
+#include <basis/sys/memory.hpp>
 
 namespace Far {
 

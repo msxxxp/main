@@ -1,9 +1,9 @@
-﻿#include <system/crt.hpp>
-#include <system/console.hpp>
-#include <system/logger.hpp>
-#include <system/sync.hpp>
-#include <system/thread.hpp>
-//#include <system/traceback.hpp>
+﻿#include <basis/sys/crt.hpp>
+#include <basis/sys/console.hpp>
+#include <basis/sys/logger.hpp>
+#include <basis/sys/sync.hpp>
+#include <basis/sys/thread.hpp>
+//#include <basis/sys/traceback.hpp>
 
 //#include <stdio.h>
 //#include <functional>
@@ -77,18 +77,6 @@ namespace {
 	void setup_logger()
 	{
 		LogSetOptions(L"logger:///default?level=tr;prefix=fu;target=co");
-
-		LogTrace();
-		LogDebug(L"\n");
-		LogInfo(L"\n");
-		LogReport(L"\n");
-		LogAtten(L"\n");
-		LogWarn(L"\n");
-		LogError(L"\n");
-		LogFatal(L"\n");
-		LogAlert(L"\n");
-		LogEmerg(L"\n");
-		LogForce(L"\n");
 	}
 }
 
@@ -156,13 +144,11 @@ int test_threads()
 	return 0;
 }
 
-
-#ifdef NDEBUG
-int wWmain()
-#else
-int main()
-#endif
+extern "C" int wmain(int argc, wchar_t * argv[])
 {
+	UNUSED(argc);
+	UNUSED(argv);
+
 	console::printf(L"%S:%d\n", __PRETTY_FUNCTION__, __LINE__);
 
 	setup_logger();
@@ -181,6 +167,30 @@ int main()
 /// ========================================================================== Startup (entry point)
 #ifdef NDEBUG
 extern "C" {
+	int	mainCRTStartup() {
+//	int	WinMainCRTStartup() {
+		crt::init_atexit();
+//		Base::Console::printf(L"%S:%d\n", __PRETTY_FUNCTION__, __LINE__);
+		int ret = 0;
+//		STARTUPINFO StartupInfo = {sizeof(STARTUPINFO), 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0};
+//		::GetStartupInfo(&StartupInfo);
+//
+//		Result = wWinMain(::GetModuleHandle(nullptr), nullptr, ::GetCommandLine(),
+//						  StartupInfo.dwFlags & STARTF_USESHOWWINDOW ? StartupInfo.wShowWindow : SW_SHOWDEFAULT);
+
+		int argc = 0;
+		wchar_t ** argv = ::CommandLineToArgvW(::GetCommandLineW(), &argc);
+
+		ret = wmain(argc, argv);
+
+		::LocalFree(argv);
+
+		crt::invoke_atexit();
+
+		::ExitProcess(ret);
+		return ret;
+	}
+
 	int atexit(crt::Function pf)
 	{
 		return crt::atexit(pf);
@@ -190,34 +200,5 @@ extern "C" {
 	{
 		crt::cxa_pure_virtual();
 	}
-
-	int	mainCRTStartup() {
-//	int	WinMainCRTStartup() {
-		crt::init_atexit();
-//		Base::Console::printf(L"%S:%d\n", __PRETTY_FUNCTION__, __LINE__);
-		int Result = 0;
-//		STARTUPINFO StartupInfo = {sizeof(STARTUPINFO), 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0};
-//		::GetStartupInfo(&StartupInfo);
-//
-//		Result = wWinMain(::GetModuleHandle(nullptr), nullptr, ::GetCommandLine(),
-//						  StartupInfo.dwFlags & STARTF_USESHOWWINDOW ? StartupInfo.wShowWindow : SW_SHOWDEFAULT);
-		Result = wWmain();
-		crt::invoke_atexit();
-		::ExitProcess(Result);
-		return Result;
-	}
-
-//	BOOL WINAPI	DllMainCRTStartup(HANDLE, DWORD dwReason, PVOID) {
-//		switch (dwReason) {
-//			case DLL_PROCESS_ATTACH:
-//				init_atexit();
-//				break;
-//
-//			case DLL_PROCESS_DETACH:
-//				invoke_atexit();
-//				break;
-//		}
-//		return true;
-//	}
 }
 #endif

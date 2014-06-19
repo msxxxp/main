@@ -22,10 +22,9 @@
 #include <libfar3/plugin.hpp>
 #include <libfar3/helper.hpp>
 
-#include <system/configure.hpp>
-#include <extra/pattern.hpp>
+#include <basis/ext/pattern.hpp>
 
-#include <simstd/memory>
+#include <basis/std/memory>
 
 namespace Far {
 

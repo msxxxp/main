@@ -18,8 +18,8 @@
 
 #include <libfar3/dialog_builder.hpp>
 
-#include <system/cstr.hpp>
-#include <system/logger.hpp>
+#include <basis/sys/cstr.hpp>
+#include <basis/sys/logger.hpp>
 
 namespace Far {
 

@@ -13,6 +13,18 @@ namespace {
 	{
 		LogSetOptions(L"logger:///default?level=tr;prefix=fu;target=co");
 //		LogSetOptions(L"logger:///default?level=tr;prefix=fu;target=fo(test-threads.log)");
+
+		LogTrace();
+		LogDebug(L"\n");
+		LogInfo(L"\n");
+		LogReport(L"\n");
+		LogAtten(L"\n");
+		LogWarn(L"\n");
+		LogError(L"\n");
+		LogFatal(L"\n");
+		LogAlert(L"\n");
+		LogEmerg(L"\n");
+		LogForce(L"\n");
 	}
 
 	LONG WINAPI unhandledExecptionFilter(PEXCEPTION_POINTERS ep)

@@ -23,8 +23,8 @@
 #include <libfar3/globalinfo_i.hpp>
 #include <libfar3/plugin_i.hpp>
 
-#include <system/cstr.hpp>
-#include <system/memory.hpp>
+#include <basis/sys/cstr.hpp>
+#include <basis/sys/memory.hpp>
 
 namespace Far {
 

@@ -106,18 +106,5 @@ extern "C" {
 		::ExitProcess(Result);
 		return Result;
 	}
-
-//	BOOL WINAPI	DllMainCRTStartup(HANDLE, DWORD dwReason, PVOID) {
-//		switch (dwReason) {
-//			case DLL_PROCESS_ATTACH:
-//				init_atexit();
-//				break;
-//
-//			case DLL_PROCESS_DETACH:
-//				invoke_atexit();
-//				break;
-//		}
-//		return true;
-//	}
 }
 #endif

@@ -19,7 +19,7 @@
 #include <libfar3/globalinfo_i.hpp>
 #include <libfar3/plugin_i.hpp>
 
-#include <system/logger.hpp>
+#include <basis/sys/logger.hpp>
 
 namespace Far {
 

@@ -20,7 +20,7 @@
 #define _LIBFAR_SETTINGS_HPP_
 
 #include <libfar3/plugin.hpp>
-#include <extra/pattern.hpp>
+#include <basis/ext/pattern.hpp>
 
 namespace Far {
 

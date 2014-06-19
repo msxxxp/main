@@ -1,11 +1,11 @@
 ﻿#ifndef WIN_NET_SD_HPP
 #define WIN_NET_SD_HPP
 
-#include <system/configure.hpp>
-#include <system/string.hpp>
-#include <extra/pattern.hpp>
-#include <simstd/string>
-#include <liblog/logger.hpp>
+#include <basis/sys/sstr.hpp>
+#include <basis/sys/logger.hpp>
+#include <basis/ext/pattern.hpp>
+#include <basis/std/string>
+
 #include <libext/sid.hpp>
 #include <libext/trustee.hpp>
 

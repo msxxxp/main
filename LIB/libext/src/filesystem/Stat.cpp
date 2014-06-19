@@ -1,6 +1,5 @@
-﻿#include <system/configure.hpp>
-#include <system/memory.hpp>
-#include <liblog/logger.hpp>
+﻿#include <basis/sys/memory.hpp>
+#include <basis/sys/logger.hpp>
 #include <libext/filesystem.hpp>
 #include <libext/exception.hpp>
 

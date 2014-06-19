@@ -2,6 +2,7 @@
 #define LIBBASE_BIT_STR_HPP_
 
 #include <basis/ext/bits.hpp>
+#include <basis/sys/cstr.hpp>
 #include <basis/sys/sstr.hpp>
 
 #include <basis/std/string>

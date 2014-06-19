@@ -9,10 +9,10 @@
 #ifndef WIN_REG_HPP
 #define WIN_REG_HPP
 
-#include <system/configure.hpp>
-#include <system/memory.hpp>
+#include <basis/configure.hpp>
+#include <basis/sys/memory.hpp>
 
-#include <simstd/iosfwd>
+#include <basis/std/iosfwd>
 
 namespace Ext {
 

@@ -1,10 +1,10 @@
 ﻿#include <libext/filesystem.hpp>
 #include <libext/exception.hpp>
 //#include <libext/priv.hpp>
-#include <system/memory.hpp>
-#include <system/cstr.hpp>
+#include <basis/sys/memory.hpp>
+#include <basis/sys/cstr.hpp>
 
-#include <simstd/string>
+#include <basis/std/string>
 
 namespace fsys {
 

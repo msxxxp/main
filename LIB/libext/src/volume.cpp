@@ -1,6 +1,6 @@
+#include <basis/sys/sstr.hpp>
 #include <libext/exception.hpp>
 #include <libext/volume.hpp>
-#include <system/string.hpp>
 
 namespace Ext {
 

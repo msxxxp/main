@@ -1,5 +1,5 @@
+#include <basis/sys/logger.hpp>
 #include <libext/filesystem.hpp>
-#include <liblog/logger.hpp>
 
 namespace fsys {
 	logger::Module_i * get_logger_module()

@@ -12,12 +12,12 @@
 
 #include <libext/rcfwd.hpp>
 
-#include <system/configure.hpp>
-#include <system/memory.hpp>
-#include <system/cstr.hpp>
-#include <extra/pattern.hpp>
+#include <basis/configure.hpp>
+#include <basis/sys/memory.hpp>
+#include <basis/sys/cstr.hpp>
+#include <basis/ext/pattern.hpp>
 
-#include <simstd/string>
+#include <basis/std/string>
 
 namespace Ext {
 

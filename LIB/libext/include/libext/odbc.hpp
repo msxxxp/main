@@ -6,15 +6,14 @@
 #ifndef WIN_ODBC_HPP
 #define WIN_ODBC_HPP
 
-#include <system/configure.hpp>
-#include <system/memory.hpp>
-#include <system/string.hpp>
+#include <basis/sys/memory.hpp>
+#include <basis/sys/sstr.hpp>
 
 #include <sql.h>
 #include <sqlext.h>
 
-#include <simstd/string>
-#include <simstd/vector>
+#include <basis/std/string>
+#include <basis/std/vector>
 
 namespace Ext {
 
@@ -60,7 +59,7 @@ struct OdbcError {
 
 	OdbcError(DWORD code, SQLSMALLINT type, SQLHANDLE hndl): m_code(code) {
 		memory::zero(m_state, sizeof(m_state));
-		m_msg = String::copy_after_last(ODBC_base::GetState(type, hndl, 1, m_state), L"]");
+		m_msg = sstr::copy_after_last(ODBC_base::GetState(type, hndl, 1, m_state), L"]");
 	}
 
 	ustring	msg(PCWSTR msg) {

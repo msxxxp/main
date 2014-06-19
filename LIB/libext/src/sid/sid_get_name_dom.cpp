@@ -1,8 +1,8 @@
 ﻿#include <libext/sid.hpp>
 #include <libext/exception.hpp>
-#include <system/memory.hpp>
+#include <basis/sys/memory.hpp>
 
-#include <simstd/string>
+#include <basis/std/string>
 
 namespace Ext {
 

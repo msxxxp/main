@@ -1,6 +1,6 @@
 ﻿#include <libext/exception.hpp>
-#include <system/console.hpp>
-#include <system/totext.hpp>
+#include <basis/sys/console.hpp>
+#include <basis/sys/totext.hpp>
 
 namespace Ext {
 

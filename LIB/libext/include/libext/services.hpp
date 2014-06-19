@@ -1,13 +1,13 @@
 #ifndef _LIBEXT_SERVICES_HPP_
 #define _LIBEXT_SERVICES_HPP_
 
-#include <system/configure.hpp>
-#include <system/sync.hpp>
+#include <basis/configure.hpp>
+#include <basis/sys/sync.hpp>
 #include <libext/service.hpp>
 
-#include <simstd/iosfwd>
-#include <simstd/memory>
-#include <simstd/vector>
+#include <basis/std/iosfwd>
+#include <basis/std/memory>
+#include <basis/std/vector>
 
 namespace Ext {
 

@@ -1,6 +1,6 @@
 ﻿#include <libext/sid.hpp>
 #include <libext/exception.hpp>
-#include <system/memory.hpp>
+#include <basis/sys/memory.hpp>
 
 extern "C" {
 	WINADVAPI BOOL WINAPI ConvertSidToStringSidW(PSID Sid, PWSTR * StringSid);

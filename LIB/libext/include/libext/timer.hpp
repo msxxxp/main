@@ -1,8 +1,8 @@
 ﻿#ifndef WIN_NET_TIMER_HPP
 #define WIN_NET_TIMER_HPP
 
-#include <system/configure.hpp>
-#include <simstd/iosfwd>
+#include <basis/configure.hpp>
+#include <basis/std/iosfwd>
 
 namespace Ext {
 

@@ -1,14 +1,13 @@
 ﻿#ifndef _LIBEXT_FILESYSTEM_HPP
 #define _LIBEXT_FILESYSTEM_HPP
 
-#include <system/configure.hpp>
-#include <system/fsys.hpp>
-#include <system/memory.hpp>
-#include <extra/pattern.hpp>
-#include <liblog/logger.hpp>
+#include <basis/sys/fsys.hpp>
+#include <basis/sys/logger.hpp>
+#include <basis/sys/memory.hpp>
+#include <basis/ext/pattern.hpp>
 
-#include <simstd/memory>
-#include <simstd/string>
+#include <basis/std/memory>
+#include <basis/std/string>
 
 namespace fsys {
 	logger::Module_i * get_logger_module();

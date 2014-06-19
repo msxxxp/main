@@ -1,9 +1,9 @@
 ﻿#ifndef WIN_NET_SID_HPP
 #define WIN_NET_SID_HPP
 
-#include <system/configure.hpp>
+#include <basis/configure.hpp>
 
-#include <simstd/iosfwd>
+#include <basis/std/iosfwd>
 
 #ifndef PSIDFromPACE
 #define PSIDFromPACE(pACE) ((PSID)(&((pACE)->SidStart)))

@@ -6,9 +6,9 @@
 	@link (advapi32)
  **/
 
+#include <basis/sys/sstr.hpp>
 #include <libext/auth.hpp>
 #include <libext/exception.hpp>
-#include <system/string.hpp>
 
 #include <ntsecapi.h>
 

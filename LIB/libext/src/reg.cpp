@@ -1,10 +1,11 @@
-﻿#include <libext/reg.hpp>
+﻿//#include <libbase/bit.hpp>
+#include <basis/sys/cstr.hpp>
+#include <basis/sys/sstr.hpp>
+#include <basis/sys/logger.hpp>
+#include <libext/reg.hpp>
 #include <libext/exception.hpp>
-#include <liblog/logger.hpp>
-#include <system/cstr.hpp>
-//#include <libbase/bit.hpp>
 
-#include <simstd/string>
+#include <basis/std/string>
 
 namespace Ext {
 
@@ -181,7 +182,8 @@ namespace Ext {
 
 	ustring Register::get(PCWSTR name, PCWSTR def) const {
 //		LogDebug(L"name: '%s', def: '%s'\n", name, def);
-		memory::auto_array<wchar_t> buf(cstr::length(def) + 1, def);
+		memory::auto_array<wchar_t> buf(cstr::length(def) + 1);
+		memory::copy(buf.data(), def, cstr::length(def) + 1);
 		DWORD l_size = buf.size_in_bytes();
 		if (::RegQueryValueExW(m_hndl, name, nullptr, nullptr, (PBYTE)buf.data(), &l_size) == ERROR_MORE_DATA) {
 			buf.reserve(l_size / sizeof(wchar_t));

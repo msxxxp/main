@@ -10,8 +10,8 @@
 
 #include <lm.h>
 
-#include <simstd/algorithm>
-#include <simstd/string>
+#include <basis/std/algorithm>
+#include <basis/std/string>
 
 namespace Ext {
 

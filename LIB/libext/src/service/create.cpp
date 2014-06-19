@@ -1,6 +1,6 @@
 #include <libext/service.hpp>
-#include <system/cstr.hpp>
-#include <simstd/string>
+#include <basis/sys/cstr.hpp>
+#include <basis/std/string>
 
 namespace Ext {
 

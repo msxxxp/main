@@ -1,7 +1,7 @@
 #ifndef _WIN_NET_VOLUME_H_
 #define _WIN_NET_VOLUME_H_
 
-#include <system/configure.hpp>
+#include <basis/configure.hpp>
 
 namespace Ext {
 

@@ -1,10 +1,10 @@
 #ifndef _WIN_DEF_PRIV_H_
 #define _WIN_DEF_PRIV_H_
 
-#include <system/configure.hpp>
-#include <system/memory.hpp>
-#include <simstd/iosfwd>
-#include <extra/pattern.hpp>
+#include <basis/configure.hpp>
+#include <basis/sys/memory.hpp>
+#include <basis/std/iosfwd>
+#include <basis/ext/pattern.hpp>
 
 namespace Ext {
 

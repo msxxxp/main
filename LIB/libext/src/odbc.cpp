@@ -3,8 +3,11 @@
 	@author GrAnD, 2009
 	@link (odbc32)
 **/
+
+#include <basis/sys/sstr.hpp>
+#include <basis/std/string>
+
 #include <libext/odbc.hpp>
-#include <simstd/string>
 
 namespace Ext {
 
@@ -61,7 +64,7 @@ ustring ODBC_base::GetState(SQLSMALLINT type, SQLHANDLE handle, SQLSMALLINT RecN
 }
 
 ustring ODBC_base::MakeConnStr(const ustring & drv, const ustring &host, const ustring &port, const ustring &schm, const ustring &name, const ustring &pass, const ustring &add) {
-	using namespace String::Inplace;
+	using namespace sstr::inplace;
 	ustring Result(L"Driver");
 	add_word(Result, drv, L"={");
 	add_word(Result, L"}");
@@ -92,7 +95,7 @@ ustring ODBC_base::MakeConnStr(const ustring & drv, const ustring &host, const u
 
 ustring ODBC_base::MakeConnStr(DBServer srv, const ustring &host, const ustring &schm, const ustring &name, const ustring &pass, bool tc) {
 	ustring tp(host);
-	ustring th = String::CutWord(tp, L":");
+	ustring th = sstr::CutWord(tp, L":");
 
 	ustring Result;
 	switch (srv) {

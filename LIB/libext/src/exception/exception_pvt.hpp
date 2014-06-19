@@ -1,8 +1,8 @@
 ﻿#ifndef _LIBEXT_EXCEPTION_PVT_HPP_
 #define _LIBEXT_EXCEPTION_PVT_HPP_
 
-#include <system/configure.hpp>
-#include <system/cstr.hpp>
+#include <basis/configure.hpp>
+#include <basis/sys/cstr.hpp>
 #include <libext/exception.hpp>
 
 namespace Ext {

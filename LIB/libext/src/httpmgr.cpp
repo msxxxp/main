@@ -8,10 +8,12 @@
 **/
 
 #include <libext/httpmgr.hpp>
+
+#include <basis/sys/sstr.hpp>
+
 #include <libext/exception.hpp>
 
-#include <system/string.hpp>
-#include <simstd/string>
+#include <basis/std/string>
 
 namespace Ext {
 
@@ -25,7 +27,7 @@ namespace Http {
 	HttpBindIP::HttpBindIP(const ustring & ipport) {
 		pIpPort = new (sockaddr);
 		ustring	port = ipport;
-		ustring	ip = String::CutWord(port, L":");
+		ustring	ip = sstr::CutWord(port, L":");
 		Assign(ip, port);
 	}
 
@@ -59,7 +61,7 @@ namespace Http {
 
 	ustring HttpBindIP::get_ip() const {
 		sockaddr_in * tmp = (sockaddr_in*)pIpPort;
-		return String::cp2w(inet_ntoa(tmp->sin_addr), CP_UTF8);
+		return sstr::cp2w(inet_ntoa(tmp->sin_addr), CP_UTF8);
 	}
 
 	ustring HttpBindIP::get_port() const {
@@ -84,7 +86,7 @@ namespace Http {
 
 	bool HttpBindIP::is_valid(const ustring & ip) {
 		in_addr	addr;
-		addr.s_addr = inet_addr(String::utf8(ip).c_str());
+		addr.s_addr = inet_addr(sstr::utf8(ip).c_str());
 		return addr.s_addr != INADDR_NONE;
 	}
 
@@ -93,7 +95,7 @@ namespace Http {
 		if (is_valid(ip) && prt) {
 			sockaddr_in *tmp = (sockaddr_in*)pIpPort;
 			tmp->sin_port		= prt;
-			tmp->sin_addr.s_addr = inet_addr(String::utf8(ip).c_str());
+			tmp->sin_addr.s_addr = inet_addr(sstr::utf8(ip).c_str());
 			tmp->sin_family		= AF_INET;
 			return true;
 		}

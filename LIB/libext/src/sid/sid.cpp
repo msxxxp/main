@@ -6,7 +6,7 @@
 	@link ()
  **/
 
-#include <system/memory.hpp>
+#include <basis/sys/memory.hpp>
 //#include <libbase/str.hpp>
 #include <libext/sid.hpp>
 #include <libext/exception.hpp>

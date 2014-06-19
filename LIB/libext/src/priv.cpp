@@ -1,7 +1,7 @@
 ﻿#include <libext/priv.hpp>
 #include <libext/exception.hpp>
 
-#include <simstd/string>
+#include <basis/std/string>
 
 namespace Ext {
 

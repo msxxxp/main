@@ -9,10 +9,10 @@
 #ifndef WIN_TS_HPP
 #define WIN_TS_HPP
 
-#include <system/configure.hpp>
+#include <basis/configure.hpp>
 
-#include <simstd/string>
-#include <simstd/vector>
+#include <basis/std/string>
+#include <basis/std/vector>
 
 namespace Ext {
 

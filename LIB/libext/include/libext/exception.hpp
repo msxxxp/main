@@ -1,11 +1,11 @@
 ﻿#ifndef _LIBEXT_EXCEPTION_HPP_
 #define _LIBEXT_EXCEPTION_HPP_
 
-#include <system/configure.hpp>
-#include <system/cstr.hpp>
-#include <simstd/iosfwd>
+#include <basis/configure.hpp>
+#include <basis/sys/cstr.hpp>
+#include <basis/std/iosfwd>
 
-#include <simstd/memory>
+#include <basis/std/memory>
 
 //#include <libbase/wstr.hpp>
 //#include <libbase/backtrace.hpp>

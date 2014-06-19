@@ -1,7 +1,7 @@
 ﻿#ifndef WIN_NET_DACL_HPP
 #define WIN_NET_DACL_HPP
 
-#include <system/configure.hpp>
+#include <basis/configure.hpp>
 #include <libext/sid.hpp>
 #include <libext/trustee.hpp>
 

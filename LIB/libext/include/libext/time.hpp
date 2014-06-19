@@ -1,7 +1,7 @@
 #ifndef _WIN_TIME_H_
 #define _WIN_TIME_H_
 
-#include <system/configure.hpp>
+#include <basis/configure.hpp>
 
 namespace Ext {
 

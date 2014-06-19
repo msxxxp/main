@@ -7,7 +7,7 @@
 #include <libext/user.hpp>
 #include <libext/exception.hpp>
 #include <libext/sid.hpp>
-#include <extra/bits.hpp>
+#include <basis/ext/bits.hpp>
 
 #include <lm.h>
 

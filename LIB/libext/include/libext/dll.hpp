@@ -1,10 +1,10 @@
 ﻿#ifndef _LIBEXT_DLL_HPP_
 #define _LIBEXT_DLL_HPP_
 
-#include <system/configure.hpp>
-#include <system/linkage.hpp>
+#include <basis/configure.hpp>
+#include <basis/sys/linkage.hpp>
 
-#include <simstd/iosfwd>
+#include <basis/std/iosfwd>
 
 namespace Ext {
 

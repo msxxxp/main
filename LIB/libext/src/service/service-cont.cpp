@@ -1,8 +1,8 @@
-﻿#include <liblog/logger.hpp>
+﻿#include <basis/sys/logger.hpp>
 #include <libext/service.hpp>
 #include <libext/exception.hpp>
 
-#include <system/console.hpp>
+#include <basis/sys/console.hpp>
 
 namespace Ext {
 

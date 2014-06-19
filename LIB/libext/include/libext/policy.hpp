@@ -1,8 +1,7 @@
 ﻿#ifndef WIN_NET_POLICY_HPP
 #define WIN_NET_POLICY_HPP
 
-#include <system/configure.hpp>
-#include <system/string.hpp>
+#include <basis/sys/sstr.hpp>
 
 #include <ntsecapi.h>
 

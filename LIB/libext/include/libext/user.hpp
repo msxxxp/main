@@ -1,11 +1,11 @@
 ﻿#ifndef WIN_USER_HPP
 #define WIN_USER_HPP
 
-#include <system/configure.hpp>
-#include <system/memory.hpp>
-#include <extra/pattern.hpp>
-#include <simstd/string>
-#include <simstd/vector>
+#include <basis/configure.hpp>
+#include <basis/sys/memory.hpp>
+#include <basis/ext/pattern.hpp>
+#include <basis/std/string>
+#include <basis/std/vector>
 
 namespace Ext {
 	class Sid;

@@ -1,0 +1,6 @@
+﻿#ifndef BASIS_SYS_CONFIGURE_OBLIGATORY_TYPES_HPP_
+#define BASIS_SYS_CONFIGURE_OBLIGATORY_TYPES_HPP_
+
+typedef const void * PCVOID;
+
+#endif

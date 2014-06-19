@@ -1,0 +1,1748 @@
+﻿#ifndef BASIS_LIMITS_
+#define BASIS_LIMITS_
+
+//#include <bits/c++config.h>
+
+#ifndef __glibcxx_integral_traps
+#	define __glibcxx_integral_traps true
+#endif
+
+#ifndef __glibcxx_float_has_denorm_loss
+#	define __glibcxx_float_has_denorm_loss false
+#endif
+#ifndef __glibcxx_float_traps
+#	define __glibcxx_float_traps false
+#endif
+#ifndef __glibcxx_float_tinyness_before
+#	define __glibcxx_float_tinyness_before false
+#endif
+
+#ifndef __glibcxx_double_has_denorm_loss
+#	define __glibcxx_double_has_denorm_loss false
+#endif
+#ifndef __glibcxx_double_traps
+#	define __glibcxx_double_traps false
+#endif
+#ifndef __glibcxx_double_tinyness_before
+#	define __glibcxx_double_tinyness_before false
+#endif
+
+#ifndef __glibcxx_long_double_has_denorm_loss
+#	define __glibcxx_long_double_has_denorm_loss false
+#endif
+#ifndef __glibcxx_long_double_traps
+#	define __glibcxx_long_double_traps false
+#endif
+#ifndef __glibcxx_long_double_tinyness_before
+#	define __glibcxx_long_double_tinyness_before false
+#endif
+
+#define LIMITS_IS_SIGNED(T)	((T)(-1) < 0)
+
+#define LIMITS_MIN_VALUE(T) (LIMITS_IS_SIGNED (T) ? -LIMITS_MAX_VALUE(T) - 1 : (T)0)
+
+#define LIMITS_MAX_VALUE(T) (LIMITS_IS_SIGNED (T) ? (((((T)1 << (LIMITS_GET_DIGITS(T) - 1)) - 1) << 1) + 1) : ~(T)0)
+
+#define LIMITS_GET_DIGITS(T) (sizeof(T) * __CHAR_BIT__ - LIMITS_IS_SIGNED(T))
+
+#define LIMITS_GET_DIGITS10(T) (LIMITS_GET_DIGITS(T) * 643L / 2136)
+
+#define LIMITS_GET_MAX_DIGITS10(T) (2 + (T) * 643L / 2136)
+
+namespace simstd {
+
+	enum float_round_style
+	{
+		round_indeterminate = -1,
+		round_toward_zero = 0,
+		round_to_nearest = 1,
+		round_toward_infinity = 2,
+		round_toward_neg_infinity = 3
+	};
+
+	enum float_denorm_style
+	{
+		denorm_indeterminate = -1,
+		denorm_absent = 0,
+		denorm_present = 1
+	};
+
+	namespace pvt {
+		struct numeric_limits_base
+		{
+			static constexpr bool is_specialized = false;
+			static constexpr int digits = 0;
+			static constexpr int digits10 = 0;
+			static constexpr int max_digits10 = 0;
+			static constexpr bool is_signed = false;
+			static constexpr bool is_integer = false;
+			static constexpr bool is_exact = false;
+			static constexpr int radix = 0;
+			static constexpr int min_exponent = 0;
+			static constexpr int min_exponent10 = 0;
+			static constexpr int max_exponent = 0;
+			static constexpr int max_exponent10 = 0;
+			static constexpr bool has_infinity = false;
+			static constexpr bool has_quiet_NaN = false;
+			static constexpr bool has_signaling_NaN = false;
+			static constexpr float_denorm_style has_denorm = denorm_absent;
+			static constexpr bool has_denorm_loss = false;
+			static constexpr bool is_iec559 = false;
+			static constexpr bool is_bounded = false;
+			static constexpr bool is_modulo = false;
+			static constexpr bool traps = false;
+			static constexpr bool tinyness_before = false;
+			static constexpr float_round_style round_style = round_toward_zero;
+		};
+	}
+
+	template<typename Type>
+	struct numeric_limits: public pvt::numeric_limits_base
+	{
+		static constexpr Type min() noexcept
+		{
+			return Type();
+		}
+
+		static constexpr Type max() noexcept
+		{
+			return Type();
+		}
+
+		static constexpr Type lowest() noexcept
+		{
+			return Type();
+		}
+
+		static constexpr Type epsilon() noexcept
+		{
+			return Type();
+		}
+
+		static constexpr Type round_error() noexcept
+		{
+			return Type();
+		}
+
+		static constexpr Type infinity() noexcept
+		{
+			return Type();
+		}
+
+		static constexpr Type quiet_NaN() noexcept
+		{
+			return Type();
+		}
+
+		static constexpr Type signaling_NaN() noexcept
+		{
+			return Type();
+		}
+
+		static constexpr Type denorm_min() noexcept
+		{
+			return Type();
+		}
+	};
+
+	template<typename Type>
+	struct numeric_limits<const Type> : public numeric_limits<Type>
+	{
+	};
+
+	template<typename Type>
+	struct numeric_limits<volatile Type> : public numeric_limits<Type>
+	{
+	};
+
+	template<typename Type>
+	struct numeric_limits<const volatile Type> : public numeric_limits<Type>
+	{
+	};
+
+	template<>
+	struct numeric_limits<bool>
+	{
+		static constexpr bool is_specialized = true;
+
+		static constexpr bool min() noexcept
+		{
+			return false;
+		}
+
+		static constexpr bool max() noexcept
+		{
+			return true;
+		}
+
+		static constexpr bool lowest() noexcept
+		{
+			return min();
+		}
+
+		static constexpr int digits = 1;
+		static constexpr int digits10 = 0;
+		static constexpr int max_digits10 = 0;
+		static constexpr bool is_signed = false;
+		static constexpr bool is_integer = true;
+		static constexpr bool is_exact = true;
+		static constexpr int radix = 2;
+
+		static constexpr bool epsilon() noexcept
+		{
+			return false;
+		}
+
+		static constexpr bool round_error() noexcept
+		{
+			return false;
+		}
+
+		static constexpr int min_exponent = 0;
+		static constexpr int min_exponent10 = 0;
+		static constexpr int max_exponent = 0;
+		static constexpr int max_exponent10 = 0;
+
+		static constexpr bool has_infinity = false;
+		static constexpr bool has_quiet_NaN = false;
+		static constexpr bool has_signaling_NaN = false;
+		static constexpr float_denorm_style has_denorm = denorm_absent;
+		static constexpr bool has_denorm_loss = false;
+
+		static constexpr bool infinity() noexcept
+		{
+			return false;
+		}
+
+		static constexpr bool quiet_NaN() noexcept
+		{
+			return false;
+		}
+
+		static constexpr bool signaling_NaN() noexcept
+		{
+			return false;
+		}
+
+		static constexpr bool denorm_min() noexcept
+		{
+			return false;
+		}
+
+		static constexpr bool is_iec559 = false;
+		static constexpr bool is_bounded = true;
+		static constexpr bool is_modulo = false;
+
+		static constexpr bool traps = __glibcxx_integral_traps;
+		static constexpr bool tinyness_before = false;
+		static constexpr float_round_style round_style = round_toward_zero;
+	};
+
+	template<>
+	struct numeric_limits<char>
+	{
+		static constexpr bool is_specialized = true;
+
+		static constexpr char min() noexcept
+		{
+			return LIMITS_MIN_VALUE(char);
+		}
+
+		static constexpr char max() noexcept
+		{
+			return LIMITS_MAX_VALUE(char);
+		}
+
+		static constexpr char lowest() noexcept
+		{
+			return min();
+		}
+
+		static constexpr int digits = LIMITS_GET_DIGITS(char);
+		static constexpr int digits10 = LIMITS_GET_DIGITS10(char);
+		static constexpr int max_digits10 = 0;
+		static constexpr bool is_signed = LIMITS_IS_SIGNED(char);
+		static constexpr bool is_integer = true;
+		static constexpr bool is_exact = true;
+		static constexpr int radix = 2;
+
+		static constexpr char epsilon() noexcept
+		{
+			return 0;
+		}
+
+		static constexpr char round_error() noexcept
+		{
+			return 0;
+		}
+
+		static constexpr int min_exponent = 0;
+		static constexpr int min_exponent10 = 0;
+		static constexpr int max_exponent = 0;
+		static constexpr int max_exponent10 = 0;
+
+		static constexpr bool has_infinity = false;
+		static constexpr bool has_quiet_NaN = false;
+		static constexpr bool has_signaling_NaN = false;
+		static constexpr float_denorm_style has_denorm = denorm_absent;
+		static constexpr bool has_denorm_loss = false;
+
+		static constexpr
+		char infinity() noexcept
+		{
+			return char();
+		}
+
+		static constexpr char quiet_NaN() noexcept
+		{
+			return char();
+		}
+
+		static constexpr char signaling_NaN() noexcept
+		{
+			return char();
+		}
+
+		static constexpr char denorm_min() noexcept
+		{
+			return static_cast<char>(0);
+		}
+
+		static constexpr bool is_iec559 = false;
+		static constexpr bool is_bounded = true;
+		static constexpr bool is_modulo = !is_signed;
+
+		static constexpr bool traps = __glibcxx_integral_traps;
+		static constexpr bool tinyness_before = false;
+		static constexpr float_round_style round_style = round_toward_zero;
+	};
+
+	template<>
+	struct numeric_limits<signed char>
+	{
+		static constexpr bool is_specialized = true;
+
+		static constexpr signed char min() noexcept
+		{
+			return -__SCHAR_MAX__ - 1;
+		}
+
+		static constexpr signed char max() noexcept
+		{
+			return __SCHAR_MAX__;
+		}
+
+		static constexpr signed char lowest() noexcept
+		{
+			return min();
+		}
+
+		static constexpr int digits = LIMITS_GET_DIGITS(signed char);
+		static constexpr int digits10 = LIMITS_GET_DIGITS10(signed char);
+		static constexpr int max_digits10 = 0;
+		static constexpr bool is_signed = true;
+		static constexpr bool is_integer = true;
+		static constexpr bool is_exact = true;
+		static constexpr int radix = 2;
+
+		static constexpr signed char epsilon() noexcept
+		{
+			return 0;
+		}
+
+		static constexpr signed char round_error() noexcept
+		{
+			return 0;
+		}
+
+		static constexpr int min_exponent = 0;
+		static constexpr int min_exponent10 = 0;
+		static constexpr int max_exponent = 0;
+		static constexpr int max_exponent10 = 0;
+
+		static constexpr bool has_infinity = false;
+		static constexpr bool has_quiet_NaN = false;
+		static constexpr bool has_signaling_NaN = false;
+		static constexpr float_denorm_style has_denorm = denorm_absent;
+		static constexpr bool has_denorm_loss = false;
+
+		static constexpr signed char infinity() noexcept
+		{
+			return static_cast<signed char>(0);
+		}
+
+		static constexpr signed char quiet_NaN() noexcept
+		{
+			return static_cast<signed char>(0);
+		}
+
+		static constexpr signed char signaling_NaN() noexcept
+		{
+			return static_cast<signed char>(0);
+		}
+
+		static constexpr signed char denorm_min() noexcept
+		{
+			return static_cast<signed char>(0);
+		}
+
+		static constexpr bool is_iec559 = false;
+		static constexpr bool is_bounded = true;
+		static constexpr bool is_modulo = false;
+
+		static constexpr bool traps = __glibcxx_integral_traps;
+		static constexpr bool tinyness_before = false;
+		static constexpr float_round_style round_style = round_toward_zero;
+	};
+
+	template<>
+	struct numeric_limits<unsigned char>
+	{
+		static constexpr bool is_specialized = true;
+
+		static constexpr unsigned char min() noexcept
+		{
+			return 0;
+		}
+
+		static constexpr unsigned char max() noexcept
+		{
+			return __SCHAR_MAX__ * 2U + 1;
+		}
+
+		static constexpr unsigned char lowest() noexcept
+		{
+			return min();
+		}
+
+		static constexpr int digits = LIMITS_GET_DIGITS(unsigned char);
+		static constexpr int digits10 = LIMITS_GET_DIGITS10(unsigned char);
+		static constexpr int max_digits10 = 0;
+		static constexpr bool is_signed = false;
+		static constexpr bool is_integer = true;
+		static constexpr bool is_exact = true;
+		static constexpr int radix = 2;
+
+		static constexpr unsigned char epsilon() noexcept
+		{
+			return 0;
+		}
+
+		static constexpr unsigned char round_error() noexcept
+		{
+			return 0;
+		}
+
+		static constexpr int min_exponent = 0;
+		static constexpr int min_exponent10 = 0;
+		static constexpr int max_exponent = 0;
+		static constexpr int max_exponent10 = 0;
+
+		static constexpr bool has_infinity = false;
+		static constexpr bool has_quiet_NaN = false;
+		static constexpr bool has_signaling_NaN = false;
+		static constexpr float_denorm_style has_denorm = denorm_absent;
+		static constexpr bool has_denorm_loss = false;
+
+		static constexpr unsigned char infinity() noexcept
+		{
+			return static_cast<unsigned char>(0);
+		}
+
+		static constexpr unsigned char quiet_NaN() noexcept
+		{
+			return static_cast<unsigned char>(0);
+		}
+
+		static constexpr unsigned char signaling_NaN() noexcept
+		{
+			return static_cast<unsigned char>(0);
+		}
+
+		static constexpr unsigned char denorm_min() noexcept
+		{
+			return static_cast<unsigned char>(0);
+		}
+
+		static constexpr bool is_iec559 = false;
+		static constexpr bool is_bounded = true;
+		static constexpr bool is_modulo = true;
+
+		static constexpr bool traps = __glibcxx_integral_traps;
+		static constexpr bool tinyness_before = false;
+		static constexpr float_round_style round_style = round_toward_zero;
+	};
+
+	template<>
+	struct numeric_limits<wchar_t>
+	{
+		static constexpr bool is_specialized = true;
+
+		static constexpr wchar_t min() noexcept
+		{
+			return LIMITS_MIN_VALUE(wchar_t);
+		}
+
+		static constexpr wchar_t max() noexcept
+		{
+			return LIMITS_MAX_VALUE(wchar_t);
+		}
+
+		static constexpr wchar_t lowest() noexcept
+		{
+			return min();
+		}
+
+		static constexpr int digits = LIMITS_GET_DIGITS(wchar_t);
+		static constexpr int digits10 = LIMITS_GET_DIGITS10(wchar_t);
+		static constexpr int max_digits10 = 0;
+		static constexpr bool is_signed = LIMITS_IS_SIGNED(wchar_t);
+		static constexpr bool is_integer = true;
+		static constexpr bool is_exact = true;
+		static constexpr int radix = 2;
+
+		static constexpr wchar_t epsilon() noexcept
+		{
+			return 0;
+		}
+
+		static constexpr wchar_t round_error() noexcept
+		{
+			return 0;
+		}
+
+		static constexpr int min_exponent = 0;
+		static constexpr int min_exponent10 = 0;
+		static constexpr int max_exponent = 0;
+		static constexpr int max_exponent10 = 0;
+
+		static constexpr bool has_infinity = false;
+		static constexpr bool has_quiet_NaN = false;
+		static constexpr bool has_signaling_NaN = false;
+		static constexpr float_denorm_style has_denorm = denorm_absent;
+		static constexpr bool has_denorm_loss = false;
+
+		static constexpr wchar_t infinity() noexcept
+		{
+			return wchar_t();
+		}
+
+		static constexpr wchar_t quiet_NaN() noexcept
+		{
+			return wchar_t();
+		}
+
+		static constexpr wchar_t signaling_NaN() noexcept
+		{
+			return wchar_t();
+		}
+
+		static constexpr wchar_t denorm_min() noexcept
+		{
+			return wchar_t();
+		}
+
+		static constexpr bool is_iec559 = false;
+		static constexpr bool is_bounded = true;
+		static constexpr bool is_modulo = !is_signed;
+
+		static constexpr bool traps = __glibcxx_integral_traps;
+		static constexpr bool tinyness_before = false;
+		static constexpr float_round_style round_style = round_toward_zero;
+	};
+
+	template<>
+	struct numeric_limits<char16_t>
+	{
+		static constexpr bool is_specialized = true;
+
+		static constexpr char16_t min() noexcept
+		{
+			return LIMITS_MIN_VALUE(char16_t);
+		}
+
+		static constexpr char16_t max() noexcept
+		{
+			return LIMITS_MAX_VALUE(char16_t);
+		}
+
+		static constexpr char16_t lowest() noexcept
+		{
+			return min();
+		}
+
+		static constexpr int digits = LIMITS_GET_DIGITS(char16_t);
+		static constexpr int digits10 = LIMITS_GET_DIGITS10(char16_t);
+		static constexpr int max_digits10 = 0;
+		static constexpr bool is_signed = LIMITS_IS_SIGNED(char16_t);
+		static constexpr bool is_integer = true;
+		static constexpr bool is_exact = true;
+		static constexpr int radix = 2;
+
+		static constexpr char16_t epsilon() noexcept
+		{
+			return 0;
+		}
+
+		static constexpr char16_t round_error() noexcept
+		{
+			return 0;
+		}
+
+		static constexpr int min_exponent = 0;
+		static constexpr int min_exponent10 = 0;
+		static constexpr int max_exponent = 0;
+		static constexpr int max_exponent10 = 0;
+
+		static constexpr bool has_infinity = false;
+		static constexpr bool has_quiet_NaN = false;
+		static constexpr bool has_signaling_NaN = false;
+		static constexpr float_denorm_style has_denorm = denorm_absent;
+		static constexpr bool has_denorm_loss = false;
+
+		static constexpr char16_t infinity() noexcept
+		{
+			return char16_t();
+		}
+
+		static constexpr char16_t quiet_NaN() noexcept
+		{
+			return char16_t();
+		}
+
+		static constexpr char16_t signaling_NaN() noexcept
+		{
+			return char16_t();
+		}
+
+		static constexpr char16_t denorm_min() noexcept
+		{
+			return char16_t();
+		}
+
+		static constexpr bool is_iec559 = false;
+		static constexpr bool is_bounded = true;
+		static constexpr bool is_modulo = !is_signed;
+
+		static constexpr bool traps = __glibcxx_integral_traps;
+		static constexpr bool tinyness_before = false;
+		static constexpr float_round_style round_style = round_toward_zero;
+	};
+
+	template<>
+	struct numeric_limits<char32_t>
+	{
+		static constexpr bool is_specialized = true;
+
+		static constexpr char32_t min() noexcept
+		{
+			return LIMITS_MIN_VALUE(char32_t);
+		}
+
+		static constexpr char32_t max() noexcept
+		{
+			return LIMITS_MAX_VALUE(char32_t);
+		}
+
+		static constexpr char32_t lowest() noexcept
+		{
+			return min();
+		}
+
+		static constexpr int digits = LIMITS_GET_DIGITS(char32_t);
+		static constexpr int digits10 = LIMITS_GET_DIGITS10(char32_t);
+		static constexpr int max_digits10 = 0;
+		static constexpr bool is_signed = LIMITS_IS_SIGNED(char32_t);
+		static constexpr bool is_integer = true;
+		static constexpr bool is_exact = true;
+		static constexpr int radix = 2;
+
+		static constexpr char32_t epsilon() noexcept
+		{
+			return 0;
+		}
+
+		static constexpr char32_t round_error() noexcept
+		{
+			return 0;
+		}
+
+		static constexpr int min_exponent = 0;
+		static constexpr int min_exponent10 = 0;
+		static constexpr int max_exponent = 0;
+		static constexpr int max_exponent10 = 0;
+
+		static constexpr bool has_infinity = false;
+		static constexpr bool has_quiet_NaN = false;
+		static constexpr bool has_signaling_NaN = false;
+		static constexpr float_denorm_style has_denorm = denorm_absent;
+		static constexpr bool has_denorm_loss = false;
+
+		static constexpr char32_t infinity() noexcept
+		{
+			return char32_t();
+		}
+
+		static constexpr char32_t quiet_NaN() noexcept
+		{
+			return char32_t();
+		}
+
+		static constexpr char32_t signaling_NaN() noexcept
+		{
+			return char32_t();
+		}
+
+		static constexpr char32_t denorm_min() noexcept
+		{
+			return char32_t();
+		}
+
+		static constexpr bool is_iec559 = false;
+		static constexpr bool is_bounded = true;
+		static constexpr bool is_modulo = !is_signed;
+
+		static constexpr bool traps = __glibcxx_integral_traps;
+		static constexpr bool tinyness_before = false;
+		static constexpr float_round_style round_style = round_toward_zero;
+	};
+
+	template<>
+	struct numeric_limits<short>
+	{
+		static constexpr bool is_specialized = true;
+
+		static constexpr short min() noexcept
+		{
+			return -__SHRT_MAX__ - 1;
+		}
+
+		static constexpr short max() noexcept
+		{
+			return __SHRT_MAX__;
+		}
+
+		static constexpr short lowest() noexcept
+		{
+			return min();
+		}
+
+		static constexpr int digits = LIMITS_GET_DIGITS(short);
+		static constexpr int digits10 = LIMITS_GET_DIGITS10(short);
+		static constexpr int max_digits10 = 0;
+		static constexpr bool is_signed = true;
+		static constexpr bool is_integer = true;
+		static constexpr bool is_exact = true;
+		static constexpr int radix = 2;
+
+		static constexpr short epsilon() noexcept
+		{
+			return 0;
+		}
+
+		static constexpr short round_error() noexcept
+		{
+			return 0;
+		}
+
+		static constexpr int min_exponent = 0;
+		static constexpr int min_exponent10 = 0;
+		static constexpr int max_exponent = 0;
+		static constexpr int max_exponent10 = 0;
+
+		static constexpr bool has_infinity = false;
+		static constexpr bool has_quiet_NaN = false;
+		static constexpr bool has_signaling_NaN = false;
+		static constexpr float_denorm_style has_denorm = denorm_absent;
+		static constexpr bool has_denorm_loss = false;
+
+		static constexpr short infinity() noexcept
+		{
+			return short();
+		}
+
+		static constexpr short quiet_NaN() noexcept
+		{
+			return short();
+		}
+
+		static constexpr short signaling_NaN() noexcept
+		{
+			return short();
+		}
+
+		static constexpr short denorm_min() noexcept
+		{
+			return short();
+		}
+
+		static constexpr bool is_iec559 = false;
+		static constexpr bool is_bounded = true;
+		static constexpr bool is_modulo = false;
+
+		static constexpr bool traps = __glibcxx_integral_traps;
+		static constexpr bool tinyness_before = false;
+		static constexpr float_round_style round_style = round_toward_zero;
+	};
+
+	template<>
+	struct numeric_limits<unsigned short>
+	{
+		static constexpr bool is_specialized = true;
+
+		static constexpr unsigned short min() noexcept
+		{
+			return 0;
+		}
+
+		static constexpr unsigned short max() noexcept
+		{
+			return __SHRT_MAX__ * 2U + 1;
+		}
+
+		static constexpr unsigned short lowest() noexcept
+		{
+			return min();
+		}
+
+		static constexpr int digits = LIMITS_GET_DIGITS(unsigned short);
+		static constexpr int digits10 = LIMITS_GET_DIGITS10(unsigned short);
+		static constexpr int max_digits10 = 0;
+		static constexpr bool is_signed = false;
+		static constexpr bool is_integer = true;
+		static constexpr bool is_exact = true;
+		static constexpr int radix = 2;
+
+		static constexpr unsigned short epsilon() noexcept
+		{
+			return 0;
+		}
+
+		static constexpr unsigned short round_error() noexcept
+		{
+			return 0;
+		}
+
+		static constexpr int min_exponent = 0;
+		static constexpr int min_exponent10 = 0;
+		static constexpr int max_exponent = 0;
+		static constexpr int max_exponent10 = 0;
+
+		static constexpr bool has_infinity = false;
+		static constexpr bool has_quiet_NaN = false;
+		static constexpr bool has_signaling_NaN = false;
+		static constexpr float_denorm_style has_denorm = denorm_absent;
+		static constexpr bool has_denorm_loss = false;
+
+		static constexpr unsigned short infinity() noexcept
+		{
+			return static_cast<unsigned short>(0);
+		}
+
+		static constexpr unsigned short quiet_NaN() noexcept
+		{
+			return static_cast<unsigned short>(0);
+		}
+
+		static constexpr unsigned short signaling_NaN() noexcept
+		{
+			return static_cast<unsigned short>(0);
+		}
+
+		static constexpr unsigned short denorm_min() noexcept
+		{
+			return static_cast<unsigned short>(0);
+		}
+
+		static constexpr bool is_iec559 = false;
+		static constexpr bool is_bounded = true;
+		static constexpr bool is_modulo = true;
+
+		static constexpr bool traps = __glibcxx_integral_traps;
+		static constexpr bool tinyness_before = false;
+		static constexpr float_round_style round_style = round_toward_zero;
+	};
+
+	template<>
+	struct numeric_limits<int>
+	{
+		static constexpr bool is_specialized = true;
+
+		static constexpr int min() noexcept
+		{
+			return -__INT_MAX__ - 1;
+		}
+
+		static constexpr int max() noexcept
+		{
+			return __INT_MAX__;
+		}
+
+		static constexpr int lowest() noexcept
+		{
+			return min();
+		}
+
+		static constexpr int digits = LIMITS_GET_DIGITS(int);
+		static constexpr int digits10 = LIMITS_GET_DIGITS10(int);
+		static constexpr int max_digits10 = 0;
+		static constexpr bool is_signed = true;
+		static constexpr bool is_integer = true;
+		static constexpr bool is_exact = true;
+		static constexpr int radix = 2;
+
+		static constexpr int epsilon() noexcept
+		{
+			return 0;
+		}
+
+		static constexpr int round_error() noexcept
+		{
+			return 0;
+		}
+
+		static constexpr int min_exponent = 0;
+		static constexpr int min_exponent10 = 0;
+		static constexpr int max_exponent = 0;
+		static constexpr int max_exponent10 = 0;
+
+		static constexpr bool has_infinity = false;
+		static constexpr bool has_quiet_NaN = false;
+		static constexpr bool has_signaling_NaN = false;
+		static constexpr float_denorm_style has_denorm = denorm_absent;
+		static constexpr bool has_denorm_loss = false;
+
+		static constexpr int infinity() noexcept
+		{
+			return static_cast<int>(0);
+		}
+
+		static constexpr int quiet_NaN() noexcept
+		{
+			return static_cast<int>(0);
+		}
+
+		static constexpr int signaling_NaN() noexcept
+		{
+			return static_cast<int>(0);
+		}
+
+		static constexpr int denorm_min() noexcept
+		{
+			return static_cast<int>(0);
+		}
+
+		static constexpr bool is_iec559 = false;
+		static constexpr bool is_bounded = true;
+		static constexpr bool is_modulo = false;
+
+		static constexpr bool traps = __glibcxx_integral_traps;
+		static constexpr bool tinyness_before = false;
+		static constexpr float_round_style round_style = round_toward_zero;
+	};
+
+	template<>
+	struct numeric_limits<unsigned int>
+	{
+		static constexpr bool is_specialized = true;
+
+		static constexpr unsigned int min() noexcept
+		{
+			return 0;
+		}
+
+		static constexpr unsigned int max() noexcept
+		{
+			return __INT_MAX__ * 2U + 1;
+		}
+
+		static constexpr unsigned int lowest() noexcept
+		{
+			return min();
+		}
+
+		static constexpr int digits = LIMITS_GET_DIGITS(unsigned int);
+		static constexpr int digits10 = LIMITS_GET_DIGITS10(unsigned int);
+		static constexpr int max_digits10 = 0;
+		static constexpr bool is_signed = false;
+		static constexpr bool is_integer = true;
+		static constexpr bool is_exact = true;
+		static constexpr int radix = 2;
+
+		static constexpr unsigned int epsilon() noexcept
+		{
+			return 0;
+		}
+
+		static constexpr unsigned int round_error() noexcept
+		{
+			return 0;
+		}
+
+		static constexpr int min_exponent = 0;
+		static constexpr int min_exponent10 = 0;
+		static constexpr int max_exponent = 0;
+		static constexpr int max_exponent10 = 0;
+
+		static constexpr bool has_infinity = false;
+		static constexpr bool has_quiet_NaN = false;
+		static constexpr bool has_signaling_NaN = false;
+		static constexpr float_denorm_style has_denorm = denorm_absent;
+		static constexpr bool has_denorm_loss = false;
+
+		static constexpr unsigned int infinity() noexcept
+		{
+			return static_cast<unsigned int>(0);
+		}
+
+		static constexpr unsigned int quiet_NaN() noexcept
+		{
+			return static_cast<unsigned int>(0);
+		}
+
+		static constexpr unsigned int signaling_NaN() noexcept
+		{
+			return static_cast<unsigned int>(0);
+		}
+
+		static constexpr unsigned int denorm_min() noexcept
+		{
+			return static_cast<unsigned int>(0);
+		}
+
+		static constexpr bool is_iec559 = false;
+		static constexpr bool is_bounded = true;
+		static constexpr bool is_modulo = true;
+
+		static constexpr bool traps = __glibcxx_integral_traps;
+		static constexpr bool tinyness_before = false;
+		static constexpr float_round_style round_style = round_toward_zero;
+	};
+
+	template<>
+	struct numeric_limits<long>
+	{
+		static constexpr bool is_specialized = true;
+
+		static constexpr long min() noexcept
+		{
+			return -__LONG_MAX__ - 1;
+		}
+
+		static constexpr long max() noexcept
+		{
+			return __LONG_MAX__;
+		}
+
+		static constexpr long lowest() noexcept
+		{
+			return min();
+		}
+
+		static constexpr int digits = LIMITS_GET_DIGITS(long);
+		static constexpr int digits10 = LIMITS_GET_DIGITS10(long);
+		static constexpr int max_digits10 = 0;
+		static constexpr bool is_signed = true;
+		static constexpr bool is_integer = true;
+		static constexpr bool is_exact = true;
+		static constexpr int radix = 2;
+
+		static constexpr long epsilon() noexcept
+		{
+			return 0;
+		}
+
+		static constexpr long round_error() noexcept
+		{
+			return 0;
+		}
+
+		static constexpr int min_exponent = 0;
+		static constexpr int min_exponent10 = 0;
+		static constexpr int max_exponent = 0;
+		static constexpr int max_exponent10 = 0;
+
+		static constexpr bool has_infinity = false;
+		static constexpr bool has_quiet_NaN = false;
+		static constexpr bool has_signaling_NaN = false;
+		static constexpr float_denorm_style has_denorm = denorm_absent;
+		static constexpr bool has_denorm_loss = false;
+
+		static constexpr long infinity() noexcept
+		{
+			return static_cast<long>(0);
+		}
+
+		static constexpr long quiet_NaN() noexcept
+		{
+			return static_cast<long>(0);
+		}
+
+		static constexpr long signaling_NaN() noexcept
+		{
+			return static_cast<long>(0);
+		}
+
+		static constexpr long denorm_min() noexcept
+		{
+			return static_cast<long>(0);
+		}
+
+		static constexpr bool is_iec559 = false;
+		static constexpr bool is_bounded = true;
+		static constexpr bool is_modulo = false;
+
+		static constexpr bool traps = __glibcxx_integral_traps;
+		static constexpr bool tinyness_before = false;
+		static constexpr float_round_style round_style = round_toward_zero;
+	};
+
+	template<>
+	struct numeric_limits<unsigned long>
+	{
+		static constexpr bool is_specialized = true;
+
+		static constexpr unsigned long min() noexcept
+		{
+			return 0;
+		}
+
+		static constexpr unsigned long max() noexcept
+		{
+			return __LONG_MAX__ * 2UL + 1;
+		}
+
+		static constexpr unsigned long lowest() noexcept
+		{
+			return min();
+		}
+
+		static constexpr int digits = LIMITS_GET_DIGITS(unsigned long);
+		static constexpr int digits10 = LIMITS_GET_DIGITS10(unsigned long);
+		static constexpr int max_digits10 = 0;
+		static constexpr bool is_signed = false;
+		static constexpr bool is_integer = true;
+		static constexpr bool is_exact = true;
+		static constexpr int radix = 2;
+
+		static constexpr unsigned long epsilon() noexcept
+		{
+			return 0;
+		}
+
+		static constexpr unsigned long round_error() noexcept
+		{
+			return 0;
+		}
+
+		static constexpr int min_exponent = 0;
+		static constexpr int min_exponent10 = 0;
+		static constexpr int max_exponent = 0;
+		static constexpr int max_exponent10 = 0;
+
+		static constexpr bool has_infinity = false;
+		static constexpr bool has_quiet_NaN = false;
+		static constexpr bool has_signaling_NaN = false;
+		static constexpr float_denorm_style has_denorm = denorm_absent;
+		static constexpr bool has_denorm_loss = false;
+
+		static constexpr unsigned long infinity() noexcept
+		{
+			return static_cast<unsigned long>(0);
+		}
+
+		static constexpr unsigned long quiet_NaN() noexcept
+		{
+			return static_cast<unsigned long>(0);
+		}
+
+		static constexpr unsigned long signaling_NaN() noexcept
+		{
+			return static_cast<unsigned long>(0);
+		}
+
+		static constexpr unsigned long denorm_min() noexcept
+		{
+			return static_cast<unsigned long>(0);
+		}
+
+		static constexpr bool is_iec559 = false;
+		static constexpr bool is_bounded = true;
+		static constexpr bool is_modulo = true;
+
+		static constexpr bool traps = __glibcxx_integral_traps;
+		static constexpr bool tinyness_before = false;
+		static constexpr float_round_style round_style = round_toward_zero;
+	};
+
+	template<>
+	struct numeric_limits<long long>
+	{
+		static constexpr bool is_specialized = true;
+
+		static constexpr long long min() noexcept
+		{
+			return -__LONG_LONG_MAX__ - 1;
+		}
+
+		static constexpr long long max() noexcept
+		{
+			return __LONG_LONG_MAX__;
+		}
+
+		static constexpr long long lowest() noexcept
+		{
+			return min();
+		}
+
+		static constexpr int digits = LIMITS_GET_DIGITS(long long);
+		static constexpr int digits10 = LIMITS_GET_DIGITS10(long long);
+		static constexpr int max_digits10 = 0;
+		static constexpr bool is_signed = true;
+		static constexpr bool is_integer = true;
+		static constexpr bool is_exact = true;
+		static constexpr int radix = 2;
+
+		static constexpr long long epsilon() noexcept
+		{
+			return 0;
+		}
+
+		static constexpr long long round_error() noexcept
+		{
+			return 0;
+		}
+
+		static constexpr int min_exponent = 0;
+		static constexpr int min_exponent10 = 0;
+		static constexpr int max_exponent = 0;
+		static constexpr int max_exponent10 = 0;
+
+		static constexpr bool has_infinity = false;
+		static constexpr bool has_quiet_NaN = false;
+		static constexpr bool has_signaling_NaN = false;
+		static constexpr float_denorm_style has_denorm = denorm_absent;
+		static constexpr bool has_denorm_loss = false;
+
+		static constexpr long long infinity() noexcept
+		{
+			return static_cast<long long>(0);
+		}
+
+		static constexpr long long quiet_NaN() noexcept
+		{
+			return static_cast<long long>(0);
+		}
+
+		static constexpr long long signaling_NaN() noexcept
+		{
+			return static_cast<long long>(0);
+		}
+
+		static constexpr long long denorm_min() noexcept
+		{
+			return static_cast<long long>(0);
+		}
+
+		static constexpr bool is_iec559 = false;
+		static constexpr bool is_bounded = true;
+		static constexpr bool is_modulo = false;
+
+		static constexpr bool traps = __glibcxx_integral_traps;
+		static constexpr bool tinyness_before = false;
+		static constexpr float_round_style round_style = round_toward_zero;
+	};
+
+	template<>
+	struct numeric_limits<unsigned long long>
+	{
+		static constexpr bool is_specialized = true;
+
+		static constexpr unsigned long long min() noexcept
+		{
+			return 0;
+		}
+
+		static constexpr unsigned long long max() noexcept
+		{
+			return __LONG_LONG_MAX__ * 2ULL + 1;
+		}
+
+		static constexpr unsigned long long lowest() noexcept
+		{
+			return min();
+		}
+
+		static constexpr int digits = LIMITS_GET_DIGITS(unsigned long long);
+		static constexpr int digits10 = LIMITS_GET_DIGITS10(unsigned long long);
+		static constexpr int max_digits10 = 0;
+		static constexpr bool is_signed = false;
+		static constexpr bool is_integer = true;
+		static constexpr bool is_exact = true;
+		static constexpr int radix = 2;
+
+		static constexpr unsigned long long epsilon() noexcept
+		{
+			return 0;
+		}
+
+		static constexpr unsigned long long round_error() noexcept
+		{
+			return 0;
+		}
+
+		static constexpr int min_exponent = 0;
+		static constexpr int min_exponent10 = 0;
+		static constexpr int max_exponent = 0;
+		static constexpr int max_exponent10 = 0;
+
+		static constexpr bool has_infinity = false;
+		static constexpr bool has_quiet_NaN = false;
+		static constexpr bool has_signaling_NaN = false;
+		static constexpr float_denorm_style has_denorm = denorm_absent;
+		static constexpr bool has_denorm_loss = false;
+
+		static constexpr unsigned long long infinity() noexcept
+		{
+			return static_cast<unsigned long long>(0);
+		}
+
+		static constexpr unsigned long long quiet_NaN() noexcept
+		{
+			return static_cast<unsigned long long>(0);
+		}
+
+		static constexpr unsigned long long signaling_NaN() noexcept
+		{
+			return static_cast<unsigned long long>(0);
+		}
+
+		static constexpr unsigned long long denorm_min() noexcept
+		{
+			return static_cast<unsigned long long>(0);
+		}
+
+		static constexpr bool is_iec559 = false;
+		static constexpr bool is_bounded = true;
+		static constexpr bool is_modulo = true;
+
+		static constexpr bool traps = __glibcxx_integral_traps;
+		static constexpr bool tinyness_before = false;
+		static constexpr float_round_style round_style = round_toward_zero;
+	};
+
+	template<>
+	struct numeric_limits<float>
+	{
+		static constexpr bool is_specialized = true;
+
+		static constexpr float min() noexcept
+		{
+			return __FLT_MIN__;
+		}
+
+		static constexpr float max() noexcept
+		{
+			return __FLT_MAX__;
+		}
+
+		static constexpr float lowest() noexcept
+		{
+			return -__FLT_MAX__;
+		}
+
+		static constexpr int digits = __FLT_MANT_DIG__;
+		static constexpr int digits10 = __FLT_DIG__;
+		static constexpr int max_digits10 = LIMITS_GET_MAX_DIGITS10(__FLT_MANT_DIG__);
+		static constexpr bool is_signed = true;
+		static constexpr bool is_integer = false;
+		static constexpr bool is_exact = false;
+		static constexpr int radix = __FLT_RADIX__;
+
+		static constexpr float epsilon() noexcept
+		{
+			return __FLT_EPSILON__;
+		}
+
+		static constexpr float round_error() noexcept
+		{
+			return 0.5F;
+		}
+
+		static constexpr int min_exponent = __FLT_MIN_EXP__;
+		static constexpr int min_exponent10 = __FLT_MIN_10_EXP__;
+		static constexpr int max_exponent = __FLT_MAX_EXP__;
+		static constexpr int max_exponent10 = __FLT_MAX_10_EXP__;
+
+		static constexpr bool has_infinity = __FLT_HAS_INFINITY__;
+		static constexpr bool has_quiet_NaN = __FLT_HAS_QUIET_NAN__;
+		static constexpr bool has_signaling_NaN = has_quiet_NaN;
+		static constexpr float_denorm_style has_denorm = bool(__FLT_HAS_DENORM__) ? denorm_present : denorm_absent;
+		static constexpr bool has_denorm_loss = __glibcxx_float_has_denorm_loss;
+
+		static constexpr float infinity() noexcept
+		{
+			return __builtin_huge_valf();
+		}
+
+		static constexpr float quiet_NaN() noexcept
+		{
+			return __builtin_nanf("");
+		}
+
+		static constexpr float signaling_NaN() noexcept
+		{
+			return __builtin_nansf("");
+		}
+
+		static constexpr float denorm_min() noexcept
+		{
+			return __FLT_DENORM_MIN__;
+		}
+
+		static constexpr bool is_iec559 = has_infinity && has_quiet_NaN && has_denorm == denorm_present;
+		static constexpr bool is_bounded = true;
+		static constexpr bool is_modulo = false;
+
+		static constexpr bool traps = __glibcxx_float_traps;
+		static constexpr bool tinyness_before = __glibcxx_float_tinyness_before;
+		static constexpr float_round_style round_style = round_to_nearest;
+	};
+
+#undef __glibcxx_float_has_denorm_loss
+#undef __glibcxx_float_traps
+#undef __glibcxx_float_tinyness_before
+
+	template<>
+	struct numeric_limits<double>
+	{
+		static constexpr bool is_specialized = true;
+
+		static constexpr double min() noexcept
+		{
+			return __DBL_MIN__;
+		}
+
+		static constexpr double max() noexcept
+		{
+			return __DBL_MAX__;
+		}
+
+		static constexpr double lowest() noexcept
+		{
+			return -__DBL_MAX__;
+		}
+
+		static constexpr int digits = __DBL_MANT_DIG__;
+		static constexpr int digits10 = __DBL_DIG__;
+		static constexpr int max_digits10 = LIMITS_GET_MAX_DIGITS10(__DBL_MANT_DIG__);
+		static constexpr bool is_signed = true;
+		static constexpr bool is_integer = false;
+		static constexpr bool is_exact = false;
+		static constexpr int radix = __FLT_RADIX__;
+
+		static constexpr double epsilon() noexcept
+		{
+			return __DBL_EPSILON__;
+		}
+
+		static constexpr double round_error() noexcept
+		{
+			return 0.5;
+		}
+
+		static constexpr int min_exponent = __DBL_MIN_EXP__;
+		static constexpr int min_exponent10 = __DBL_MIN_10_EXP__;
+		static constexpr int max_exponent = __DBL_MAX_EXP__;
+		static constexpr int max_exponent10 = __DBL_MAX_10_EXP__;
+
+		static constexpr bool has_infinity = __DBL_HAS_INFINITY__;
+		static constexpr bool has_quiet_NaN = __DBL_HAS_QUIET_NAN__;
+		static constexpr bool has_signaling_NaN = has_quiet_NaN;
+		static constexpr float_denorm_style has_denorm = bool(__DBL_HAS_DENORM__) ? denorm_present : denorm_absent;
+		static constexpr bool has_denorm_loss = __glibcxx_double_has_denorm_loss;
+
+		static constexpr double infinity() noexcept
+		{
+			return __builtin_huge_val();
+		}
+
+		static constexpr double quiet_NaN() noexcept
+		{
+			return __builtin_nan("");
+		}
+
+		static constexpr double signaling_NaN() noexcept
+		{
+			return __builtin_nans("");
+		}
+
+		static constexpr double denorm_min() noexcept
+		{
+			return __DBL_DENORM_MIN__;
+		}
+
+		static constexpr bool is_iec559 = has_infinity && has_quiet_NaN && has_denorm == denorm_present;
+		static constexpr bool is_bounded = true;
+		static constexpr bool is_modulo = false;
+
+		static constexpr bool traps = __glibcxx_double_traps;
+		static constexpr bool tinyness_before = __glibcxx_double_tinyness_before;
+		static constexpr float_round_style round_style = round_to_nearest;
+	};
+
+#undef __glibcxx_double_has_denorm_loss
+#undef __glibcxx_double_traps
+#undef __glibcxx_double_tinyness_before
+
+	template<>
+	struct numeric_limits<long double>
+	{
+		static constexpr bool is_specialized = true;
+
+		static constexpr long double min() noexcept
+		{
+			return __LDBL_MIN__;
+		}
+
+		static constexpr long double max() noexcept
+		{
+			return __LDBL_MAX__;
+		}
+
+		static constexpr long double lowest() noexcept
+		{
+			return -__LDBL_MAX__;
+		}
+
+		static constexpr int digits = __LDBL_MANT_DIG__;
+		static constexpr int digits10 = __LDBL_DIG__;
+		static constexpr int max_digits10 = LIMITS_GET_MAX_DIGITS10(__LDBL_MANT_DIG__);
+		static constexpr bool is_signed = true;
+		static constexpr bool is_integer = false;
+		static constexpr bool is_exact = false;
+		static constexpr int radix = __FLT_RADIX__;
+
+		static constexpr long double epsilon() noexcept
+		{
+			return __LDBL_EPSILON__;
+		}
+
+		static constexpr long double round_error() noexcept
+		{
+			return 0.5L;
+		}
+
+		static constexpr int min_exponent = __LDBL_MIN_EXP__;
+		static constexpr int min_exponent10 = __LDBL_MIN_10_EXP__;
+		static constexpr int max_exponent = __LDBL_MAX_EXP__;
+		static constexpr int max_exponent10 = __LDBL_MAX_10_EXP__;
+
+		static constexpr bool has_infinity = __LDBL_HAS_INFINITY__;
+		static constexpr bool has_quiet_NaN = __LDBL_HAS_QUIET_NAN__;
+		static constexpr bool has_signaling_NaN = has_quiet_NaN;
+		static constexpr float_denorm_style has_denorm = bool(__LDBL_HAS_DENORM__) ? denorm_present : denorm_absent;
+		static constexpr bool has_denorm_loss = __glibcxx_long_double_has_denorm_loss;
+
+		static constexpr long double infinity() noexcept
+		{
+			return __builtin_huge_vall();
+		}
+
+		static constexpr long double quiet_NaN() noexcept
+		{
+			return __builtin_nanl("");
+		}
+
+		static constexpr long double signaling_NaN() noexcept
+		{
+			return __builtin_nansl("");
+		}
+
+		static constexpr long double denorm_min() noexcept
+		{
+			return __LDBL_DENORM_MIN__;
+		}
+
+		static constexpr bool is_iec559 = has_infinity && has_quiet_NaN && has_denorm == denorm_present;
+		static constexpr bool is_bounded = true;
+		static constexpr bool is_modulo = false;
+
+		static constexpr bool traps = __glibcxx_long_double_traps;
+		static constexpr bool tinyness_before = __glibcxx_long_double_tinyness_before;
+		static constexpr float_round_style round_style = round_to_nearest;
+	};
+
+#undef __glibcxx_long_double_has_denorm_loss
+#undef __glibcxx_long_double_traps
+#undef __glibcxx_long_double_tinyness_before
+
+//	typedef __int128 int128_t;
+//	typedef unsigned __int128 uint128_t;
+//
+//	template<>
+//	struct numeric_limits<int128_t>
+//	{
+//		static constexpr bool is_specialized = true;
+//
+//		static constexpr int128_t min() noexcept
+//		{
+//			return LIMITS_MIN_VALUE(int128_t);
+//		}
+//
+//		static constexpr int128_t max() noexcept
+//		{
+//			return LIMITS_MAX_VALUE(int128_t);
+//		}
+//
+//		static constexpr int128_t lowest() noexcept
+//		{
+//			return min();
+//		}
+//
+//		static constexpr int digits = LIMITS_GET_DIGITS(int128_t);
+//		static constexpr int digits10 = LIMITS_GET_DIGITS10(int128_t);
+//		static constexpr int max_digits10 = 0;
+//		static constexpr bool is_signed = true;
+//		static constexpr bool is_integer = true;
+//		static constexpr bool is_exact = true;
+//		static constexpr int radix = 2;
+//
+//		static constexpr int128_t epsilon() noexcept
+//		{
+//			return 0;
+//		}
+//
+//		static constexpr int128_t round_error() noexcept
+//		{
+//			return 0;
+//		}
+//
+//		static constexpr int min_exponent = 0;
+//		static constexpr int min_exponent10 = 0;
+//		static constexpr int max_exponent = 0;
+//		static constexpr int max_exponent10 = 0;
+//
+//		static constexpr bool has_infinity = false;
+//		static constexpr bool has_quiet_NaN = false;
+//		static constexpr bool has_signaling_NaN = false;
+//		static constexpr float_denorm_style has_denorm = denorm_absent;
+//		static constexpr bool has_denorm_loss = false;
+//
+//		static constexpr int128_t infinity() noexcept
+//		{
+//			return static_cast<int128_t>(0);
+//		}
+//
+//		static constexpr int128_t quiet_NaN() noexcept
+//		{
+//			return static_cast<int128_t>(0);
+//		}
+//
+//		static constexpr int128_t signaling_NaN() noexcept
+//		{
+//			return static_cast<int128_t>(0);
+//		}
+//
+//		static constexpr int128_t denorm_min() noexcept
+//		{
+//			return static_cast<int128_t>(0);
+//		}
+//
+//		static constexpr bool is_iec559 = false;
+//		static constexpr bool is_bounded = true;
+//		static constexpr bool is_modulo = false;
+//
+//		static constexpr bool traps = __glibcxx_integral_traps;
+//		static constexpr bool tinyness_before = false;
+//		static constexpr float_round_style round_style = round_toward_zero;
+//	};
+//
+//	template<>
+//	struct numeric_limits<uint128_t>
+//	{
+//		static constexpr bool is_specialized = true;
+//
+//		static constexpr uint128_t min() noexcept
+//		{
+//			return 0;
+//		}
+//
+//		static constexpr uint128_t max() noexcept
+//		{
+//			return LIMITS_MAX_VALUE(uint128_t);
+//		}
+//
+//		static constexpr uint128_t lowest() noexcept
+//		{
+//			return min();
+//		}
+//
+//		static constexpr int digits = LIMITS_GET_DIGITS(uint128_t);
+//		static constexpr int digits10 = LIMITS_GET_DIGITS10(uint128_t);
+//		static constexpr int max_digits10 = 0;
+//		static constexpr bool is_signed = false;
+//		static constexpr bool is_integer = true;
+//		static constexpr bool is_exact = true;
+//		static constexpr int radix = 2;
+//
+//		static constexpr uint128_t epsilon() noexcept
+//		{
+//			return 0;
+//		}
+//
+//		static constexpr uint128_t round_error() noexcept
+//		{
+//			return 0;
+//		}
+//
+//		static constexpr int min_exponent = 0;
+//		static constexpr int min_exponent10 = 0;
+//		static constexpr int max_exponent = 0;
+//		static constexpr int max_exponent10 = 0;
+//
+//		static constexpr bool has_infinity = false;
+//		static constexpr bool has_quiet_NaN = false;
+//		static constexpr bool has_signaling_NaN = false;
+//		static constexpr float_denorm_style has_denorm = denorm_absent;
+//		static constexpr bool has_denorm_loss = false;
+//
+//		static constexpr uint128_t infinity() noexcept
+//		{
+//			return static_cast<uint128_t>(0);
+//		}
+//
+//		static constexpr uint128_t quiet_NaN() noexcept
+//		{
+//			return static_cast<uint128_t>(0);
+//		}
+//
+//		static constexpr uint128_t signaling_NaN() noexcept
+//		{
+//			return static_cast<uint128_t>(0);
+//		}
+//
+//		static constexpr uint128_t denorm_min() noexcept
+//		{
+//			return static_cast<uint128_t>(0);
+//		}
+//
+//		static constexpr bool is_iec559 = false;
+//		static constexpr bool is_bounded = true;
+//		static constexpr bool is_modulo = true;
+//
+//		static constexpr bool traps = __glibcxx_integral_traps;
+//		static constexpr bool tinyness_before = false;
+//		static constexpr float_round_style round_style = round_toward_zero;
+//	};
+
+}
+
+#undef LIMITS_IS_SIGNED
+#undef LIMITS_MIN_VALUE
+#undef LIMITS_MAX_VALUE
+#undef LIMITS_GET_DIGITS
+#undef LIMITS_GET_DIGITS10
+#undef LIMITS_GET_MAX_DIGITS10
+
+#endif

@@ -1,13 +1,13 @@
-#include <system/configure.hpp>
-#include <system/console.hpp>
-#include <system/logger.hpp>
-#include <system/totext.hpp>
+#include <basis/sys/configure.hpp>
+#include <basis/sys/console.hpp>
+#include <basis/sys/logger.hpp>
+#include <basis/sys/totext.hpp>
 
 #ifdef DEBUG
-#	include <system/traceback.hpp>
+#	include <basis/sys/traceback.hpp>
 #endif
 
-#include <simstd/string>
+#include <basis/std/string>
 
 class SehException {
 public:

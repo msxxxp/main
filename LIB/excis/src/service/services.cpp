@@ -1,8 +1,8 @@
 #include <basis/sys/logger.hpp>
 
+#include <excis/connection.hpp>
 #include <excis/services.hpp>
 #include <excis/exception.hpp>
-#include <excis/rc.hpp>
 
 #include <basis/std/algorithm>
 #include <basis/std/string>
@@ -10,39 +10,38 @@
 namespace Ext {
 
 	struct Services::Filter {
+		~Filter();
 		Filter(const ustring & host = ustring(), PCWSTR user = nullptr, PCWSTR pass = nullptr, Service::EnumerateType_t = Service::EnumerateType_t::SERVICES);
 
-		const RemoteConnection & get_connection() const;
-
+		const connection::Remote & get_connection() const;
 		const Service::Manager & get_read_manager() const;
-
 		const Service::Manager & get_write_manager() const;
 
-		Service::EnumerateType_t get_type() const;
-
-		void set_type(Service::EnumerateType_t type);
-
 		ustring get_host() const;
-
 		void set_host(const ustring & host = ustring(), PCWSTR user = nullptr, PCWSTR pass = nullptr);
 
 	private:
-		simstd::shared_ptr<Ext::RemoteConnection> m_conn;
-		mutable simstd::shared_ptr<Ext::Service::Manager> m_scm;
-		Service::EnumerateType_t m_type;
-		mutable bool m_writable;
+		size_t                                    mutable m_writable:1;
+		simstd::shared_ptr<connection::Remote>            m_conn;
+		simstd::shared_ptr<Ext::Service::Manager> mutable m_scm;
 	};
 
-	Services::Filter::Filter(const ustring & host, PCWSTR user, PCWSTR pass, Service::EnumerateType_t type) :
-		m_conn(new RemoteConnection(host, user, pass)),
-		m_scm(new Service::Manager(m_conn.get(), SC_MANAGER_CONNECT | SC_MANAGER_ENUMERATE_SERVICE)),
-		m_type(type),
-		m_writable(false)
+	Services::Filter::~Filter()
 	{
-		LogNoise(L"host: '%s', user: '%s', type: %Id\n", host.c_str(), user, (ssize_t)type);
+		LogTraceObjBegin();
+		LogTraceObjEnd();
 	}
 
-	const RemoteConnection & Services::Filter::get_connection() const
+	Services::Filter::Filter(const ustring & host, PCWSTR user, PCWSTR pass, Service::EnumerateType_t type) :
+		m_writable(0)
+	{
+		LogTraceObjBegin();
+		LogNoise(L"host: '%s', user: '%s', type: %Id\n", host.c_str(), user, (ssize_t)type);
+		set_host(host, user, pass);
+		LogTraceObjEnd();
+	}
+
+	const connection::Remote & Services::Filter::get_connection() const
 	{
 		return *m_conn.get();
 	}
@@ -55,22 +54,11 @@ namespace Ext {
 	const Service::Manager & Services::Filter::get_write_manager() const
 	{
 		if (!m_writable) {
-			Service::Manager * tmp_manager = new Service::Manager(m_conn.get(), SC_MANAGER_CONNECT | SC_MANAGER_CREATE_SERVICE | SC_MANAGER_ENUMERATE_SERVICE);
+			Service::Manager * tmp_manager = new Service::Manager(m_conn.get(), SC_MANAGER_CONNECT | SC_MANAGER_ENUMERATE_SERVICE | SC_MANAGER_CREATE_SERVICE);
 			m_scm.reset(tmp_manager);
-			m_writable = true;
+			m_writable = 1;
 		}
 		return *m_scm.get();
-	}
-
-	Service::EnumerateType_t Services::Filter::get_type() const
-	{
-		return m_type;
-	}
-
-	void Services::Filter::set_type(Service::EnumerateType_t type)
-	{
-		LogNoise(L"type: %Id\n", (ssize_t)type);
-		m_type = type;
 	}
 
 	ustring Services::Filter::get_host() const
@@ -81,9 +69,9 @@ namespace Ext {
 	void Services::Filter::set_host(const ustring & host, PCWSTR user, PCWSTR pass)
 	{
 		LogNoise(L"host: '%s', user: '%s'\n", host.c_str(), user);
-		simstd::shared_ptr<Ext::RemoteConnection> tmp_conn(new Ext::RemoteConnection(host, user, pass));
+		simstd::shared_ptr<connection::Remote> tmp_conn(connection::Remote::create(host, user, pass));
 		simstd::shared_ptr<Ext::Service::Manager> tmp_scm(new Ext::Service::Manager(tmp_conn.get(), SC_MANAGER_CONNECT | SC_MANAGER_ENUMERATE_SERVICE));
-		m_writable = false;
+		m_writable = 0;
 
 		using simstd::swap;
 		swap(m_scm, tmp_scm);
@@ -91,23 +79,33 @@ namespace Ext {
 	}
 
 	///==================================================================================== Services
+	Services::~Services()
+	{
+		LogTraceObjBegin();
+		LogTraceObjEnd();
+	}
+
 	Services::Services(const ustring & host, PCWSTR user, PCWSTR pass) :
 		m_filter(new Services::Filter(host, user, pass)),
+		m_type(Service::EnumerateType_t::SERVICES),
 		m_wait_timout(10 * 1000),
 		m_wait_state(false),
 		m_batch_started(false)
 	{
+		LogTraceObjBegin();
 		LogNoise(L"hast: '%s', user: '%s'\n", host.c_str(), user);
+		LogTraceObjEnd();
 	}
 
 	Service::EnumerateType_t Services::get_type() const
 	{
-		return m_filter->get_type();
+		return m_type;
 	}
 
 	void Services::set_type(Service::EnumerateType_t type)
 	{
-		m_filter->set_type(type);
+		LogNoise(L"type: 0x%X\n", (uint32_t)type);
+		m_type = type;
 		update();
 		notify_changed();
 	}
@@ -127,13 +125,13 @@ namespace Ext {
 	void Services::update()
 	{
 		// filter is changed
-		LogNoise(L"type: 0x%x\n", (uint32_t)get_type());
+		LogNoise(L"type: 0x%X\n", (uint32_t)get_type());
 		DWORD dwBufNeed = 0, dwNumberOfService = 0;
-		::EnumServicesStatusExW(m_filter->get_read_manager(), SC_ENUM_PROCESS_INFO, (DWORD)m_filter->get_type(), SERVICE_STATE_ALL, nullptr, 0, &dwBufNeed, &dwNumberOfService, nullptr, nullptr);
+		::EnumServicesStatusExW(m_filter->get_read_manager(), SC_ENUM_PROCESS_INFO, (DWORD)get_type(), SERVICE_STATE_ALL, nullptr, 0, &dwBufNeed, &dwNumberOfService, nullptr, nullptr);
 		CheckApi(::GetLastError() == ERROR_MORE_DATA);
 
 		memory::auto_buf<LPENUM_SERVICE_STATUS_PROCESSW> enum_svc(dwBufNeed);
-		CheckApi(::EnumServicesStatusExW(m_filter->get_read_manager(), SC_ENUM_PROCESS_INFO, (DWORD)m_filter->get_type(), SERVICE_STATE_ALL, (PBYTE)enum_svc.data(), enum_svc.size(), &dwBufNeed, &dwNumberOfService, nullptr, nullptr));
+		CheckApi(::EnumServicesStatusExW(m_filter->get_read_manager(), SC_ENUM_PROCESS_INFO, (DWORD)get_type(), SERVICE_STATE_ALL, (PBYTE)enum_svc.data(), enum_svc.size(), &dwBufNeed, &dwNumberOfService, nullptr, nullptr));
 		clear();
 		for (ULONG i = 0; i < dwNumberOfService; ++i) {
 			emplace_back(m_filter->get_read_manager(), enum_svc.data()[i]);

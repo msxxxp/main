@@ -15,7 +15,6 @@
 #include <excis/dacl.hpp>
 #include <excis/sd.hpp>
 
-#include <excis/rc.hpp>
 #include <excis/service.hpp>
 #include <excis/services.hpp>
 
@@ -66,7 +65,7 @@ void test_service() {
 //	LogDebug(L"svc: %d\n", scm.is_exist(L"FARBCopy"));
 
 	LogTrace();
-	Ext::Services svcs(L"awdqwd");
+	Ext::Services svcs(L"localhost");
 
 	LogTrace();
 	ServicesView obs(&svcs);

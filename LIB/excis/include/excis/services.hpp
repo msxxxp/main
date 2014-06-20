@@ -27,6 +27,7 @@ namespace Ext {
 		using base_type::size;
 		using base_type::empty;
 
+		~Services();
 		Services(const ustring & host = ustring(), PCWSTR user = nullptr, PCWSTR pass = nullptr);
 
 		Service::EnumerateType_t get_type() const;
@@ -63,10 +64,11 @@ namespace Ext {
 		size_t get_wait_timeout() const;
 
 	private:
-		Filter * m_filter;
-		size_t m_wait_timout;
-		size_t m_wait_state :1;
-		size_t m_batch_started :1;
+		simstd::shared_ptr<Filter> m_filter;
+		Service::EnumerateType_t   m_type;
+		size_t                     m_wait_timout;
+		size_t                     m_wait_state :1;
+		size_t                     m_batch_started :1;
 	};
 
 }

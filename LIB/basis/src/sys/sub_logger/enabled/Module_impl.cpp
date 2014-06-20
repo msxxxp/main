@@ -157,7 +157,7 @@ namespace logger {
 			prefix += format_str(L"%14.14S:%5d ", file, line);
 		}
 		if (m_prefix & Prefix::Function) {
-			prefix += format_str(L"%S ", func);
+			prefix += format_str(L"%S() ", func);
 		}
 		return prefix;
 	}

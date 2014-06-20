@@ -1,16 +1,5 @@
-﻿/**
-	win_svc
-
-	@classes	()
-	@author		© 2012 Andrew Grechkin
-	@link		()
- **/
-
-#ifndef WIN_SVC_HPP
-#define WIN_SVC_HPP
-
-
-#include <excis/rcfwd.hpp>
+﻿#ifndef EXCIS_SERVICE_HPP_
+#define EXCIS_SERVICE_HPP_
 
 #include <basis/configure.hpp>
 #include <basis/sys/memory.hpp>
@@ -18,6 +7,8 @@
 #include <basis/ext/pattern.hpp>
 
 #include <basis/std/string>
+
+#include <excis/connection.hpp>
 
 namespace Ext {
 
@@ -69,23 +60,14 @@ namespace Ext {
 
 		struct Create_t {
 			Create_t(const ustring & _name, const ustring & _binaryPathName);
-
 			void set_type(Type_t n);
-
 			void set_start(Start_t n);
-
 			void set_error_control(Error_t n);
-
 			void set_group(PCWSTR n);
-
 			void set_tag(DWORD & n);
-
 			void set_dependencies(PCWSTR n);
-
 			void set_display_name(PCWSTR n);
-
 			void set_delayed_start(DWORD n);
-
 			PCWSTR get_name() const;
 
 		private:
@@ -103,28 +85,17 @@ namespace Ext {
 			friend struct Service::Manager;
 		};
 
-
 		struct Config_t {
 			Config_t();
-
 			void set_type(Type_t n, Type_t o);
-
 			void set_start(Start_t n, Start_t o);
-
 			void set_error_control(Error_t n, Error_t o);
-
 			void set_path(PCWSTR n, PCWSTR o);
-
 			void set_group(PCWSTR n, PCWSTR o);
-
 			void set_tag(DWORD & n, DWORD o);
-
 			void set_dependencies(PCWSTR n, PCWSTR o);
-
 			void set_display_name(PCWSTR n, PCWSTR o);
-
 			void set_delayed_start(DWORD n, DWORD o);
-
 			void log() const;
 
 		private:
@@ -144,7 +115,6 @@ namespace Ext {
 
 		struct Logon_t: public Config_t {
 			Logon_t();
-
 			Logon_t(PCWSTR user, PCWSTR pass = nullptr);
 
 		private:
@@ -174,11 +144,8 @@ namespace Ext {
 			SERVICE_STATUS_PROCESS status;
 
 			Info_t(SC_HANDLE scm, const ENUM_SERVICE_STATUS_PROCESSW & st);
-
 			Info_t(PCWSTR _name, const Service & svc);
-
 			bool operator < (const Info_t & rhs) const;
-
 			bool operator == (const ustring & nm) const;
 
 			Type_t get_type() const {
@@ -203,7 +170,7 @@ namespace Ext {
 		struct Manager: pattern::Uncopyable {
 			~Manager();
 
-			Manager(RemoteConnection * conn = nullptr, ACCESS_MASK acc = SC_MANAGER_CONNECT);
+			Manager(connection::Remote * conn = nullptr, ACCESS_MASK acc = SC_MANAGER_CONNECT);
 
 			Manager(Manager && right);
 
@@ -213,19 +180,18 @@ namespace Ext {
 				return m_hndl;
 			}
 
-			void reconnect(RemoteConnection * conn = nullptr, ACCESS_MASK acc = SC_MANAGER_CONNECT);
+			void reconnect(connection::Remote * conn = nullptr, ACCESS_MASK acc = SC_MANAGER_CONNECT);
 
 			Service create_service(const Service::Create_t & info) const;
 
 			bool is_exist(PCWSTR name) const;
 
 		private:
-			static SC_HANDLE open(RemoteConnection * conn, ACCESS_MASK acc);
+			static SC_HANDLE open(connection::Remote * conn, ACCESS_MASK acc);
 			static void close(SC_HANDLE scm);
 
 			SC_HANDLE m_hndl;
 		};
-
 
 		///================================================================================= Service
 		~Service();

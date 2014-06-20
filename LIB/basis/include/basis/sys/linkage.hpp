@@ -4,9 +4,9 @@
 #include <basis/configure.hpp>
 #include <basis/ext/pattern.hpp>
 
-#define DEFINE_FUNC(name)     F##name name
-#define GET_DLL_FUNC(name)    name = (F##name)get_function(#name)
-#define GET_DLL_FUNC_NT(name) name = (F##name)get_function_nt(#name)
+#define DEFINE_FUNC(name)     F##name name;
+#define GET_DLL_FUNC(name)    name = (F##name)get_function(#name);
+#define GET_DLL_FUNC_NT(name) name = (F##name)get_function_nt(#name);
 
 #include <basis/sys/sub_linkage/dll.hpp>
 

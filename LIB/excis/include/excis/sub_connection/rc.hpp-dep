@@ -1,7 +1,8 @@
-﻿#ifndef _LIBEXT_RC_HPP_
-#define _LIBEXT_RC_HPP_
+﻿#ifndef EXCIS_RC_HPP_
+#define EXCIS_RC_HPP_
 
 #include <basis/sys/sstr.hpp>
+
 #include <basis/std/string>
 
 namespace Ext {

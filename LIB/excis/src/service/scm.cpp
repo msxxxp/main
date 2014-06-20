@@ -1,21 +1,24 @@
 #include <basis/sys/logger.hpp>
+
 #include <excis/service.hpp>
 #include <excis/exception.hpp>
-#include <excis/rc.hpp>
+#include <excis/connection.hpp>
 
 namespace Ext {
 
 	///===================================================================================== Manager
 	Service::Manager::~Manager()
 	{
+		LogTraceObjBegin();
 		close(m_hndl);
-		LogTrace();
+		LogTraceObjEnd();
 	}
 
-	Service::Manager::Manager(RemoteConnection * conn, ACCESS_MASK acc) :
+	Service::Manager::Manager(connection::Remote * conn, ACCESS_MASK acc) :
 		m_hndl(open(conn, acc))
 	{
-		LogTrace();
+		LogTraceObjBegin();
+		LogTraceObjEnd();
 	}
 
 	Service::Manager::Manager(Manager && right):
@@ -31,7 +34,7 @@ namespace Ext {
 		return *this;
 	}
 
-	void Service::Manager::reconnect(RemoteConnection * conn, ACCESS_MASK acc)
+	void Service::Manager::reconnect(connection::Remote * conn, ACCESS_MASK acc)
 	{
 		LogTrace();
 		SC_HANDLE l_hndl = open(conn, acc);
@@ -67,11 +70,11 @@ namespace Ext {
 		LogTrace();
 		SC_HANDLE hndl = ::OpenServiceW(m_hndl, name, SERVICE_QUERY_STATUS);
 		if (hndl)
-		::CloseServiceHandle(hndl);
+			::CloseServiceHandle(hndl);
 		return hndl;
 	}
 
-	SC_HANDLE Service::Manager::open(RemoteConnection * conn, ACCESS_MASK acc)
+	SC_HANDLE Service::Manager::open(connection::Remote * conn, ACCESS_MASK acc)
 	{
 		LogTrace();
 		return CheckHandleErr(::OpenSCManagerW(conn->get_host().c_str(), nullptr, acc));
@@ -81,7 +84,7 @@ namespace Ext {
 	{
 		LogTrace();
 		if (scm)
-		::CloseServiceHandle(scm);
+			::CloseServiceHandle(scm);
 	}
 
 }

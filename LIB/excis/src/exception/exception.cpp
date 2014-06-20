@@ -50,7 +50,8 @@ namespace Ext {
 #ifndef NDEBUG
 		return m_where.c_str();
 #else
-		return L"Programm compiled with NDEBUG define";
+//		return L"Programm compiled with NDEBUG define";
+		return L"";
 #endif
 	}
 

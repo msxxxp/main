@@ -23,9 +23,12 @@ namespace Ext {
 		typedef base_type::const_iterator const_iterator;
 
 		using base_type::begin;
+		using base_type::cbegin;
 		using base_type::end;
+		using base_type::cend;
 		using base_type::size;
 		using base_type::empty;
+		using base_type::operator[];
 
 		~Services();
 		Services(const ustring & host = ustring(), PCWSTR user = nullptr, PCWSTR pass = nullptr);

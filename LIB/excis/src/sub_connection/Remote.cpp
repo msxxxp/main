@@ -76,7 +76,7 @@ namespace connection {
 	{
 		if (m_connected) {
 			ustring ipc = make_IPC_string(m_host);
-			LogDebug(L"'%s'\n", ipc.c_str());
+			LogDebug(L"'%s'\n", m_host.c_str());
 			CheckApiError(Mpr_dll::inst().WNetCancelConnection2W(ipc.c_str(), 0, FALSE));
 			m_connected = false;
 		}
@@ -95,7 +95,7 @@ namespace connection {
 			NETRESOURCE NetRes;
 			memory::zero(NetRes);
 			ustring ipc = make_IPC_string(host);
-			LogDebug(L"'%s'\n", ipc.c_str());
+			LogDebug(L"'%s:%s@%s' \n", user, pass, host.c_str());
 			NetRes.dwType = RESOURCETYPE_ANY;
 			NetRes.lpRemoteName = (PWSTR)ipc.c_str();
 			if (cstr::is_empty(user)) {

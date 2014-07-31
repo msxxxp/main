@@ -1,18 +1,12 @@
-/**
-	win_net_auth
-	Auth utilites
-	@classes ()
-	@author © 2012 Andrew Grechkin
-	@link (advapi32)
- **/
-
 #include <basis/sys/sstr.hpp>
+
 #include <excis/auth.hpp>
 #include <excis/exception.hpp>
 
+#include <wincred.h>
 #include <ntsecapi.h>
 
-namespace Ext {
+namespace auth {
 
 	//typedef enum _CRED_PROTECTION_TYPE {
 	//	CredUnprotected         = 0,
@@ -21,79 +15,170 @@ namespace Ext {
 	//} CRED_PROTECTION_TYPE, *PCRED_PROTECTION_TYPE;
 	//
 	//extern "C" {
-	//	BOOL WINAPI CredProtectW(BOOL fAsSelf, PCWSTR pszCredentials, DWORD cchCredentials, PWSTR pszProtectedCredentials, DWORD *pcchMaxChars, CRED_PROTECTION_TYPE *ProtectionType);
-	//	BOOL WINAPI CredUnprotectW(BOOL fAsSelf, PCWSTR pszProtectedCredentials, DWORD cchCredentials, PWSTR pszCredentials, DWORD *pcchMaxChars);
+	//	BOOL WINAPI CredProtectW(BOOL fAsSelf, const wchar_t * pszCredentials, DWORD cchCredentials, PWSTR pszProtectedCredentials, DWORD *pcchMaxChars, CRED_PROTECTION_TYPE *ProtectionType);
+	//	BOOL WINAPI CredUnprotectW(BOOL fAsSelf, const wchar_t * pszProtectedCredentials, DWORD cchCredentials, PWSTR pszCredentials, DWORD *pcchMaxChars);
 	//}
 
-	///========================================================================================== Base64
-	Credential_t::~Credential_t() {
-		//	::SecureZeroMemory(m_cred->CredentialBlob, m_cred->CredentialBlobSize);
-		::CredFree(m_cred);
+	Credential::~Credential()
+	{
+		if (m_delete) {
+//			::SecureZeroMemory(m_cred->CredentialBlob, m_cred->CredentialBlobSize);
+			::CredFree(reinterpret_cast<PCREDENTIALW>(m_cred));
+		}
 	}
 
-	Credential_t::Credential_t(PCWSTR name, DWORD type) {
-		CheckApi(::CredReadW(name, type, 0, &m_cred));
+	Credential::Credential(native_handle_type handle):
+		m_cred(reinterpret_cast<native_handle_type>(handle)),
+		m_delete(false)
+	{
 	}
 
-	const CREDENTIALW * Credential_t::operator ->() const {
-		return m_cred;
+	Credential::Credential(const wchar_t * name):
+		m_delete(true)
+	{
+		CheckApi(::CredReadW(name, CRED_TYPE_GENERIC, 0, reinterpret_cast<CREDENTIALW**>(&m_cred)));
 	}
 
-	void Credential_t::set(PCWSTR name, PCWSTR pass, PCWSTR target) {
+	Credential::Credential(Credential && right):
+		m_cred(nullptr),
+		m_delete(false)
+	{
+		swap(right);
+	}
+
+	Credential & Credential::operator = (Credential && right)
+	{
+		if (this != &right)
+			Credential(simstd::move(right)).swap(*this);
+		return *this;
+	}
+
+	void Credential::swap(Credential & right)
+	{
+		using simstd::swap;
+		swap(m_cred, right.m_cred);
+		swap(m_delete, right.m_delete);
+	}
+
+	ustring Credential::marshal() const
+	{
+		return ustring(reinterpret_cast<CREDENTIALW*>(m_cred)->Comment);
+	}
+
+	ustring Credential::comment() const
+	{
+		return ustring(reinterpret_cast<CREDENTIALW*>(m_cred)->Comment);
+	}
+
+	ustring Credential::name() const
+	{
+		return ustring(reinterpret_cast<CREDENTIALW*>(m_cred)->TargetName);
+	}
+
+	ustring Credential::alias() const
+	{
+		return ustring(reinterpret_cast<CREDENTIALW*>(m_cred)->TargetAlias);
+	}
+
+	ustring Credential::user() const
+	{
+		return ustring(reinterpret_cast<CREDENTIALW*>(m_cred)->UserName);
+	}
+
+	ustring Credential::pass() const
+	{
+		return ustring();
+	}
+
+	size_t Credential::pass_size() const
+	{
+		return reinterpret_cast<CREDENTIALW*>(m_cred)->CredentialBlobSize;
+	}
+
+	size_t Credential::flags() const
+	{
+		return reinterpret_cast<CREDENTIALW*>(m_cred)->Flags;
+	}
+
+	size_t Credential::type() const
+	{
+		return reinterpret_cast<CREDENTIALW*>(m_cred)->Type;
+	}
+
+	size_t Credential::persist() const
+	{
+		return reinterpret_cast<CREDENTIALW*>(m_cred)->Persist;
+	}
+
+	void Credential::add(const wchar_t * name, const wchar_t * pass, const wchar_t * target)
+	{
 		CREDENTIALW cred;
 		memory::zero(cred);
+		cred.Flags |= target ? 0 : CRED_FLAGS_USERNAME_TARGET;
 		cred.Type = CRED_TYPE_GENERIC;
 		cred.Persist = CRED_PERSIST_LOCAL_MACHINE;
-		cred.TargetName = target ? (PWSTR)target : (PWSTR)name;
-		cred.UserName = (PWSTR)name;
-		cred.CredentialBlob = (PBYTE)pass;
+		cred.TargetName = const_cast<wchar_t*>(target);
+		cred.UserName = const_cast<wchar_t*>(name);
+		cred.CredentialBlob = reinterpret_cast<PBYTE>(const_cast<wchar_t*>(pass));
 		cred.CredentialBlobSize = sizeof(*pass) * (cstr::length(pass) + 1);
 		CheckApi(::CredWriteW(&cred, 0));
 	}
 
-	void Credential_t::del(PCWSTR name, DWORD type) {
-		CheckApi(::CredDeleteW(name, type, 0));
+	void Credential::del(const wchar_t * name)
+	{
+		CheckApi(::CredDeleteW(name, CRED_TYPE_GENERIC, 0));
 	}
 
-
-	Credentials_t::~Credentials_t() {
+	Credentials::~Credentials()
+	{
 		::CredFree(m_creds);
 	}
 
-	Credentials_t::Credentials_t() {
-		CheckApi(::CredEnumerateW(nullptr, 0, &m_size, &m_creds));
-		//	CREDENTIAL_TARGET_INFORMATION TargetInfo = {(PWSTR)L"PC"};
-		//	CheckApi(::CredReadDomainCredentials(&TargetInfo, 0, &m_size, &m_creds));
+	Credentials::Credentials()
+	{
+		const DWORD CRED_ENUMERATE_ALL_CREDENTIALS = 0x1;
+
+		DWORD size = 0;
+		CheckApi(::CredEnumerateW(nullptr, CRED_ENUMERATE_ALL_CREDENTIALS, &size, reinterpret_cast<CREDENTIALW***>(&m_creds)));
+		m_size = size;
+//		CredentialARGET_INFORMATION TargetInfo = {(PWSTR)L"PC"};
+//		CheckApi(::CredReadDomainCredentials(&TargetInfo, 0, &m_size, &m_creds));
 	}
 
-	bool Credentials_t::empty() const {
+	bool Credentials::empty() const
+	{
 		return m_size == 0;
 	}
 
-	size_t Credentials_t::size() const {
+	size_t Credentials::size() const
+	{
 		return m_size;
 	}
 
-	Credentials_t::value_type Credentials_t::at(size_t ind) const {
+	Credential Credentials::at(size_t ind) const
+	{
 		CheckApiThrowError(ind < m_size, ERROR_INVALID_INDEX);
-		return m_creds[ind];
+		return Credential(reinterpret_cast<Credential::native_handle_type>(reinterpret_cast<CREDENTIALW**>(m_creds)[ind]));
 	}
 
-	void parse_username(PCWSTR fullname, ustring & dom, ustring name) {
+	void parse_username(const wchar_t * fullname, ustring & dom, ustring & name)
+	{
 		wchar_t d[MAX_PATH];
 		wchar_t n[MAX_PATH];
-		CheckApiError(CredUIParseUserName(fullname, d, lengthof(d), n, lengthof(n)));
+		CheckApiError(::CredUIParseUserNameW(fullname, d, lengthof(d), n, lengthof(n)));
 		dom = d;
 		name = n;
 	}
 
-	void PassProtect(PCWSTR pass, PWSTR prot, DWORD size) {
+	void PassProtect(const wchar_t * pass, PWSTR prot, DWORD size)
+	{
 		CRED_PROTECTION_TYPE type;
-		CheckApi(CredProtectW(true, (PWSTR)pass, cstr::length(pass) + 1, prot, &size, &type));
+		CheckApi(CredProtectW(true, (PWSTR )pass, cstr::length(pass) + 1, prot, &size, &type));
 	}
 
-	void PassUnProtect(PCWSTR prot, DWORD ps, PWSTR pass, DWORD size) {
-		CheckApi(::CredUnprotectW(true, (PWSTR)prot, ps, pass, &size));
+	void PassUnProtect(const wchar_t * prot, DWORD ps, PWSTR pass, DWORD size)
+	{
+		CheckApi(::CredUnprotectW(true, (PWSTR )prot, ps, pass, &size));
 	}
 
 }

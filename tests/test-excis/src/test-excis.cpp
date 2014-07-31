@@ -15,6 +15,7 @@
 #include <excis/dacl.hpp>
 #include <excis/sd.hpp>
 
+#include <excis/auth.hpp>
 #include <excis/service.hpp>
 #include <excis/services.hpp>
 
@@ -44,26 +45,18 @@ struct ServicesView: public sync::Observer
 	void notify(const sync::Message & event) {
 		UNUSED(event);
 		LogReport(L"Services changed. size: %Iu\n", m_svcs->size());
+
+		for (Ext::Services::size_type i = 0; i < m_svcs->size(); ++i) {
+			LogReport(L"svc[%Iu] name: '%s'\n", i, (*m_svcs)[i].name.c_str());
+		}
 	}
 
 private:
 	Ext::Services * m_svcs;
 };
 
-void test_service() {
-	LogTrace();
-
-//	Ext::RemoteConnection rc(L"localhost");
-//	Ext::RemoteConnection * prc = nullptr;
-//
-//	LogDebug(L"host1: '%s'\n", rc.get_host().c_str());
-//	LogDebug(L"host2: '%s'\n", prc->get_host().c_str());
-//
-//	LogTrace();
-//	Ext::Service::Manager scm(&rc);
-//
-//	LogDebug(L"svc: %d\n", scm.is_exist(L"FARBCopy"));
-
+void test_service()
+{
 	LogTrace();
 	Ext::Services svcs(L"localhost");
 
@@ -78,8 +71,37 @@ void test_service() {
 	LogTrace();
 	svcs.set_type(Ext::Service::EnumerateType_t::DRIVERS);
 
+	LogTrace();
+	svcs.set_host(L"127.0.0.1");
+
 //	svcs.stop_batch();
 
+	LogTrace();
+}
+
+void test_auth()
+{
+	LogTrace();
+
+	auth::Credentials creds;
+
+	LogReport(L"count: %Iu\n", creds.size());
+	for (size_t i = 0; i < creds.size(); ++i) {
+		auth::Credential cred = creds.at(i);
+		LogReport(L"cred[%Iu]: name: '%s'\n", i, cred.name().c_str());
+		LogInfo(L"cred[%Iu]: alia: '%s'\n", i, cred.alias().c_str());
+		LogInfo(L"cred[%Iu]: comm: '%s'\n", i, cred.comment().c_str());
+		LogInfo(L"cred[%Iu]: user: '%s'\n", i, cred.user().c_str());
+		LogInfo(L"cred[%Iu]: pass: '%s'\n", i, cred.pass().c_str());
+		LogInfo(L"cred[%Iu]: size: 0x%IX\n", i, cred.pass_size());
+		LogInfo(L"cred[%Iu]: flag: 0x%IX\n", i, cred.flags());
+		LogInfo(L"cred[%Iu]: type: 0x%IX\n", i, cred.type());
+		LogInfo(L"cred[%Iu]: pers: 0x%IX\n", i, cred.persist());
+	}
+}
+
+void add_auth()
+{
 	LogTrace();
 }
 
@@ -92,7 +114,9 @@ extern "C" int wmain(int argc, wchar_t * argv[])
 
 	try {
 		LogTrace();
-		test_service();
+//		test_service();
+		test_auth();
+//		add_auth();
 	} catch (Ext::AbstractError & e) {
 		LogError(L"exception cought: %s, %s\n", e.what().c_str(), e.where());
 		return e.code();

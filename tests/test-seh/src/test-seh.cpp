@@ -1,3 +1,5 @@
+#include <stdio.h>
+
 #include <basis/sys/console.hpp>
 #include <basis/sys/logger.hpp>
 #include <basis/sys/totext.hpp>
@@ -7,6 +9,8 @@
 #endif
 
 #include <basis/std/string>
+
+/// WARNING for x64 Optimization must be -O0 or it will crash
 
 class SehException {
 public:
@@ -100,6 +104,16 @@ namespace {
 		volatile int* p = nullptr;
 		*p = 0;
 	}
+
+	void do_division_by_zero()
+	{
+		LogWarn(L"divide by zero\n");
+		volatile int n = 1;
+		volatile int d = 0;
+		volatile int r = n / d;
+
+		UNUSED(r);
+	}
 }
 
 extern "C" int wmain(int argc, wchar_t * argv[])
@@ -115,17 +129,26 @@ extern "C" int wmain(int argc, wchar_t * argv[])
 	try {
 		do_cpp_exception();
 	} catch (SehException & e) {
-		LogTrace();
+		LogDebug(L"SEH exception cought\n");
 	} catch (...) {
-		LogTrace();
+		LogDebug(L"cpp exception cought\n");
 	}
 
 	try {
 		do_av_exception();
 	} catch (SehException & e) {
-		LogTrace();
+		LogDebug(L"SEH exception cought\n");
 	} catch (...) {
-		LogTrace();
+		LogDebug(L"cpp exception cought\n");
 	}
+
+	try {
+		do_division_by_zero();
+	} catch (SehException & e) {
+		LogDebug(L"SEH exception cought\n");
+	} catch (...) {
+		LogDebug(L"cpp exception cought\n");
+	}
+
 	return 0;
 }

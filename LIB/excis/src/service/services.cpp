@@ -93,7 +93,7 @@ namespace Ext {
 		m_batch_started(false)
 	{
 		LogTraceObjBegin();
-		LogNoise(L"hast: '%s', user: '%s'\n", host.c_str(), user);
+		LogNoise(L"host: '%s', user: '%s'\n", host.c_str(), user);
 		LogTraceObjEnd();
 	}
 

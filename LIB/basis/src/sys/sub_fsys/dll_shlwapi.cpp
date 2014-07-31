@@ -5,12 +5,12 @@ namespace fsys {
 
 	namespace {
 		struct shlwapi_dll: private linkage::DynamicLibrary {
-			typedef HRESULT (*FPathMatchSpecExW)(const wchar_t *, const wchar_t *, DWORD);
-			typedef WINBOOL (*FPathCanonicalizeW)(wchar_t *, const wchar_t *);
-			typedef WINBOOL (*FPathCompactPathExW)(wchar_t *, const wchar_t *, UINT, DWORD);
-			typedef WINBOOL (*FPathIsDirectoryEmptyW)(const wchar_t *);
-			typedef WINBOOL (*FPathUnExpandEnvStringsW)(const wchar_t *, wchar_t *, UINT);
-			typedef WINBOOL (*FPathIsRelativeW)(const wchar_t *);
+			typedef HRESULT WINAPI (*FPathMatchSpecExW)(const wchar_t *, const wchar_t *, DWORD);
+			typedef WINBOOL WINAPI (*FPathCanonicalizeW)(wchar_t *, const wchar_t *);
+			typedef WINBOOL WINAPI (*FPathCompactPathExW)(wchar_t *, const wchar_t *, UINT, DWORD);
+			typedef WINBOOL WINAPI (*FPathIsDirectoryEmptyW)(const wchar_t *);
+			typedef WINBOOL WINAPI (*FPathUnExpandEnvStringsW)(const wchar_t *, wchar_t *, UINT);
+			typedef WINBOOL WINAPI (*FPathIsRelativeW)(const wchar_t *);
 
 			DEFINE_FUNC(PathMatchSpecExW);
 			DEFINE_FUNC(PathCanonicalizeW);

@@ -5,7 +5,7 @@
 namespace {
 
 	struct shlwapi_dll: private linkage::DynamicLibrary {
-		typedef HRESULT (*FParseURLW)(const wchar_t *, PARSEDURL *);
+		typedef HRESULT WINAPI (*FParseURLW)(const wchar_t *, PARSEDURL *);
 
 		DEFINE_FUNC(ParseURLW);
 
@@ -24,7 +24,7 @@ namespace {
 	};
 
 	struct wininet_dll: private linkage::DynamicLibrary {
-		typedef BOOL (*FInternetCrackUrlW)(const wchar_t *, DWORD, DWORD, LPURL_COMPONENTS);
+		typedef BOOL WINAPI (*FInternetCrackUrlW)(const wchar_t *, DWORD, DWORD, LPURL_COMPONENTS);
 
 		DEFINE_FUNC(InternetCrackUrlW);
 

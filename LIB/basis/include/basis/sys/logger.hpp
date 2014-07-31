@@ -8,7 +8,7 @@
 #   define LogSetOptions(url)                 logger::set_options(url)
 #   define LogTrace()                         get_logger_module()->out(THIS_PLACE_SHORT, logger::Level::Trace, L"\n")
 #   define LogTraceIf(condition)              if (condition) get_logger_module()->out(THIS_PLACE_SHORT, logger::Level::Trace, L"\n")
-#   define LogTraceObj()                      get_logger_module()->out(THIS_PLACE_SHORT, logger::Level::Trace, L"[%p, %I64u]\n", this, sizeof(*this))
+#   define LogTraceObj()                      get_logger_module()->out(THIS_PLACE, logger::Level::Trace, L"[%p, %I64u]\n", this, sizeof(*this))
 #   define LogTraceObjBegin()                 get_logger_module()->out(THIS_PLACE_SHORT, logger::Level::Trace, L"[%p, %I64u] begin\n", this, sizeof(*this))
 #   define LogTraceObjEnd()                   get_logger_module()->out(THIS_PLACE_SHORT, logger::Level::Trace, L"[%p, %I64u] end\n", this, sizeof(*this))
 //#   ifdef _MSC_VER

@@ -2,49 +2,81 @@
 #define WIN_NET_AUTH_HPP
 
 #include <basis/configure.hpp>
-
 #include <basis/std/iosfwd>
 
-#include <wincred.h>
+namespace auth {
 
-namespace Ext {
-
-	///▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒ net_auth
-	struct Credential_t {
-		~Credential_t();
-
-		Credential_t(PCWSTR name, DWORD type = CRED_TYPE_GENERIC);
-
-		const CREDENTIALW * operator ->() const;
+	class Credential {
+		struct native_imp_type;
 
 	public:
-		static void set(PCWSTR name, PCWSTR pass, PCWSTR target = nullptr);
+		typedef native_imp_type * native_handle_type;
 
-		static void del(PCWSTR name, DWORD type = CRED_TYPE_GENERIC);
+		~Credential();
+
+		Credential(const wchar_t * name);
+
+		Credential(Credential && right);
+
+		Credential & operator = (Credential && right);
+
+		void swap(Credential & right);
+
+		ustring marshal() const;
+
+		ustring comment() const;
+
+		ustring name() const;
+
+		ustring alias() const;
+
+		ustring user() const;
+
+		ustring pass() const;
+
+		size_t pass_size() const;
+
+		size_t flags() const;
+
+		size_t type() const;
+
+		size_t persist() const;
+
+		static void add(const wchar_t * name, const wchar_t * pass, const wchar_t * target = nullptr);
+
+		static void del(const wchar_t * name);
 
 	private:
-		PCREDENTIALW m_cred;
+		native_handle_type m_cred;
+		bool               m_delete;
+
+		Credential(native_handle_type handle);
+
+		friend struct Credentials;
 	};
 
-	struct Credentials_t {
-		typedef PCREDENTIALW value_type;
+	struct Credentials {
+		struct native_imp_type;
 
-		~Credentials_t();
+	public:
+		typedef native_imp_type * native_handle_type;
 
-		Credentials_t();
+		~Credentials();
+
+		Credentials();
 
 		bool empty() const;
 
 		size_t size() const;
 
-		value_type at(size_t ind) const;
+		Credential at(size_t ind) const;
 
 	private:
-		PCREDENTIALW * m_creds;
-		DWORD m_size;
+		native_handle_type m_creds;
+		size_t             m_size;
 	};
 
-	void parse_username(PCWSTR fullname, ustring & dom, ustring name);
+	void parse_username(const wchar_t * fullname, ustring & dom, ustring & name);
 
 }
 

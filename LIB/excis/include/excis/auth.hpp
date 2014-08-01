@@ -1,5 +1,5 @@
-﻿#ifndef WIN_NET_AUTH_HPP
-#define WIN_NET_AUTH_HPP
+﻿#ifndef EXCIS_AUTH_HPP_
+#define EXCIS_AUTH_HPP_
 
 #include <basis/configure.hpp>
 #include <basis/std/iosfwd>

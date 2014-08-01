@@ -1,5 +1,3 @@
-#include <stdio.h>
-
 #include <basis/sys/console.hpp>
 #include <basis/sys/logger.hpp>
 #include <basis/sys/totext.hpp>

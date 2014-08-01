@@ -4,10 +4,21 @@
 
 #include "exception_pvt.hpp"
 
-namespace Ext {
+namespace exception {
 
-	///==================================================================================== WinError
-#ifndef NDEBUG
+#ifdef NDEBUG
+	WinError::WinError() :
+		m_code(::GetLastError())
+	{
+		LogNoise(L"%s\n", what().c_str());
+	}
+
+	WinError::WinError(DWORD code) :
+		m_code(code)
+	{
+		LogNoise(L"%s\n", what().c_str());
+	}
+#else
 	WinError::WinError(PCSTR file, size_t line, PCSTR func) :
 		AbstractError(file, line, func),
 		m_code(::GetLastError())
@@ -17,18 +28,6 @@ namespace Ext {
 
 	WinError::WinError(DWORD code, PCSTR file, size_t line, PCSTR func) :
 		AbstractError(file, line, func),
-		m_code(code)
-	{
-		LogNoise(L"%s\n", what().c_str());
-	}
-#else
-	WinError::WinError() :
-		m_code(::GetLastError())
-	{
-		LogNoise(L"%s\n", what().c_str());
-	}
-
-	WinError::WinError(DWORD code) :
 		m_code(code)
 	{
 		LogNoise(L"%s\n", what().c_str());
@@ -62,15 +61,81 @@ namespace Ext {
 		safe_snprintf(buf, lengthof(buf), L"Error: %s", what().c_str());
 		out.push_back(buf);
 #ifndef NDEBUG
-		_snwprintf(buf, lengthof(buf), L"Exception: %s", type().c_str());
+		safe_snprintf(buf, lengthof(buf), L"Exception: %s", type().c_str());
 		out.push_back(buf);
-		_snwprintf(buf, lengthof(buf), L"Where: %s", where());
+		safe_snprintf(buf, lengthof(buf), L"Where: %s", where());
 		out.push_back(buf);
 #endif
 	}
 
-	///=============================================================================================
-#ifndef NDEBUG
+#ifdef NDEBUG
+	bool HiddenFunctions::CheckApiFunc(bool r)
+	{
+		if (!r) {
+			DWORD err = ::GetLastError();
+			throw WinError(err);
+		}
+		return r;
+	}
+
+	bool HiddenFunctions::CheckApiThrowErrorFunc(bool r, DWORD err)
+	{
+		if (!r) {
+			throw WinError(err);
+		}
+		return r;
+	}
+
+	DWORD HiddenFunctions::CheckApiErrorFunc(DWORD err)
+	{
+		if (err != ERROR_SUCCESS) {
+			throw WinError(err);
+		}
+		return err;
+	}
+
+	HRESULT HiddenFunctions::CheckComFunc(HRESULT res)
+	{
+		if (FAILED(res))
+			throw WinError(res);
+		return res;
+	}
+
+	HANDLE HiddenFunctions::CheckHandleFuncHan(HANDLE hnd)
+	{
+		if (!hnd || hnd == INVALID_HANDLE_VALUE) {
+			throw WinError(ERROR_INVALID_HANDLE);
+		}
+		return hnd;
+	}
+
+	HANDLE HiddenFunctions::CheckHandleErrFuncHan(HANDLE hnd)
+	{
+		if (!hnd || hnd == INVALID_HANDLE_VALUE) {
+			DWORD err = ::GetLastError();
+			throw WinError(err);
+		}
+		return hnd;
+	}
+
+	PVOID HiddenFunctions::CheckPointerFuncVoid(PVOID ptr)
+	{
+		if (!ptr) {
+			throw WinError(E_POINTER);
+		}
+		return ptr;
+	}
+
+	PVOID HiddenFunctions::CheckPointerErrFuncVoid(PVOID ptr)
+	{
+		if (!ptr) {
+			DWORD err = ::GetLastError();
+			throw WinError(err);
+		}
+		return ptr;
+	}
+
+#else
 	bool HiddenFunctions::CheckApiFunc(bool r, PCSTR file, size_t line, PCSTR func)
 	{
 		if (!r) {
@@ -137,65 +202,6 @@ namespace Ext {
 		}
 		return ptr;
 	}
-
-#else
-bool HiddenFunctions::CheckApiFunc(bool r) {
-	if (!r) {
-		DWORD err = ::GetLastError();
-		throw WinError(err);
-	}
-	return r;
-}
-
-bool HiddenFunctions::CheckApiThrowErrorFunc(bool r, DWORD err) {
-	if (!r) {
-		throw WinError(err);
-	}
-	return r;
-}
-
-DWORD HiddenFunctions::CheckApiErrorFunc(DWORD err) {
-	if (err != ERROR_SUCCESS) {
-		throw WinError(err);
-	}
-	return err;
-}
-
-HRESULT HiddenFunctions::CheckComFunc(HRESULT res) {
-	if (FAILED(res))
-	throw WinError(res);
-	return res;
-}
-
-HANDLE HiddenFunctions::CheckHandleFuncHan(HANDLE hnd) {
-	if (!hnd || hnd == INVALID_HANDLE_VALUE) {
-		throw WinError(ERROR_INVALID_HANDLE);
-	}
-	return hnd;
-}
-
-HANDLE HiddenFunctions::CheckHandleErrFuncHan(HANDLE hnd) {
-	if (!hnd || hnd == INVALID_HANDLE_VALUE) {
-		DWORD err = ::GetLastError();
-		throw WinError(err);
-	}
-	return hnd;
-}
-
-PVOID HiddenFunctions::CheckPointerFuncVoid(PVOID ptr) {
-	if (!ptr) {
-		throw WinError(E_POINTER);
-	}
-	return ptr;
-}
-
-PVOID HiddenFunctions::CheckPointerErrFuncVoid(PVOID ptr) {
-	if (!ptr) {
-		DWORD err = ::GetLastError();
-		throw WinError(err);
-	}
-	return ptr;
-}
 #endif
 
 }

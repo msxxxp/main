@@ -1,11 +1,11 @@
 ﻿#include "exception_pvt.hpp"
+
 #include <basis/sys/logger.hpp>
 
 #include <basis/std/string>
 
-namespace Ext {
+namespace exception {
 
-	///================================================================================ RuntimeError
 	struct RuntimeError: public AbstractError {
 		virtual RuntimeError * clone() const;
 
@@ -18,12 +18,12 @@ namespace Ext {
 		virtual void format_error(cstr::mstring & out) const;
 
 	protected:
-#ifndef NDEBUG
-		RuntimeError(const ustring & wh, PCSTR file, size_t line, PCSTR func, size_t code = 0);
-		RuntimeError(const AbstractError & prev, const ustring & wh, PCSTR file, size_t line, PCSTR func, size_t code = 0);
-#else
+#ifdef NDEBUG
 		RuntimeError(const ustring & wh, size_t code = 0);
 		RuntimeError(const AbstractError & prev, const ustring & wh, size_t code = 0);
+#else
+		RuntimeError(const ustring & wh, PCSTR file, size_t line, PCSTR func, size_t code = 0);
+		RuntimeError(const AbstractError & prev, const ustring & wh, PCSTR file, size_t line, PCSTR func, size_t code = 0);
 #endif
 
 	private:
@@ -34,7 +34,22 @@ namespace Ext {
 	};
 
 	///================================================================================ RuntimeError
-#ifndef NDEBUG
+#ifdef NDEBUG
+	RuntimeError::RuntimeError(const ustring & wh, size_t code) :
+		m_code(code),
+		m_what(wh)
+	{
+		LogNoise(L"%s\n", what().c_str());
+	}
+
+	RuntimeError::RuntimeError(const AbstractError & prev, const ustring & wh, size_t code) :
+		AbstractError(prev),
+		m_code(code),
+		m_what(wh)
+	{
+		LogNoise(L"%s\n", what().c_str());
+	}
+#else
 	RuntimeError::RuntimeError(const ustring & wh, PCSTR file, size_t line, PCSTR func, size_t code) :
 		AbstractError(file, line, func),
 		m_code(code),
@@ -45,21 +60,6 @@ namespace Ext {
 
 	RuntimeError::RuntimeError(const AbstractError & prev, const ustring & wh, PCSTR file, size_t line, PCSTR func, size_t code) :
 		AbstractError(prev, file, line, func),
-		m_code(code),
-		m_what(wh)
-	{
-		LogNoise(L"%s\n", what().c_str());
-	}
-#else
-	RuntimeError::RuntimeError(const ustring & wh, size_t code) :
-		m_code(code),
-		m_what(wh)
-	{
-		LogNoise(L"%s\n", what().c_str());
-	}
-
-	RuntimeError::RuntimeError(const AbstractError & prev, const ustring & wh, size_t code) :
-		AbstractError(prev),
 		m_code(code),
 		m_what(wh)
 	{
@@ -95,14 +95,15 @@ namespace Ext {
 		}
 	}
 
-#ifndef NDEBUG
+#ifdef NDEBUG
+	void HiddenFunctions::RethrowExceptionFunc(const AbstractError & prev, const ustring & what)
+	{
+		throw RuntimeError(prev, what, prev.code());
+	}
+#else
 	void HiddenFunctions::RethrowExceptionFunc(const AbstractError & prev, const ustring & what, PCSTR file, size_t line, PCSTR func)
 	{
 		throw RuntimeError(prev, what, file, line, func, prev.code());
-	}
-#else
-	void HiddenFunctions::RethrowExceptionFunc(const AbstractError & prev, const ustring & what) {
-		throw RuntimeError(prev, what, prev.code());
 	}
 #endif
 }

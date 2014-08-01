@@ -186,7 +186,7 @@ namespace Ext {
 			memory::auto_buf<PBYTE> conf(QueryConfig2(SERVICE_CONFIG_DELAYED_AUTO_START_INFO));
 			LPSERVICE_DELAYED_AUTO_START_INFO lpsd = (LPSERVICE_DELAYED_AUTO_START_INFO)conf.data();
 			ret = lpsd->fDelayedAutostart;
-		} catch (Ext::AbstractError & e) {
+		} catch (exception::AbstractError & e) {
 		}
 		return ret;
 	}

@@ -25,7 +25,7 @@ namespace Ext {
 			tagId = conf->dwTagId;
 			description = svc.get_description();
 		} catch (exception::AbstractError & e) {
-			LogWarn(L"exception cought: %s, %s\n", e.what().c_str(), e.where());
+			LogWarn(L"exception cought: %s, %s\n", e.what().c_str(), e.where().c_str());
 			LogWarn(L"service: %s unavalible\n", name.c_str());
 			// skip query info
 		}
@@ -52,7 +52,7 @@ namespace Ext {
 			tagId = conf->dwTagId;
 			description = svc.get_description();
 		} catch (exception::AbstractError & e) {
-			LogWarn(L"exception cought: %s, %s\n", e.what().c_str(), e.where());
+			LogWarn(L"exception cought: %s, %s\n", e.what().c_str(), e.where().c_str());
 			LogWarn(L"service: %s unavalible handle: %p\n", name.c_str(), (SC_HANDLE)svc);
 			// skip query info
 		}

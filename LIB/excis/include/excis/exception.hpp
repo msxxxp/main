@@ -7,7 +7,8 @@
 #include <basis/std/iosfwd>
 #include <basis/std/memory>
 
-#include <excis/sub_exception/exception_common.hpp>
+#include <excis/sub_exception/AbstractError.hpp>
+#include <excis/sub_exception/SEH.hpp>
 
 #ifdef NDEBUG
 #include <excis/sub_exception/exception_ndebug.hpp>

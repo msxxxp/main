@@ -266,7 +266,7 @@ namespace traceback {
 		{
 			size_t size = sizeof(SYMBOL_INFOW) + MAX_SYM_NAME * sizeof(wchar_t);
 			SYMBOL_INFOW * symInfo = static_cast<SYMBOL_INFOW*>(malloc(size));
-			memory::zero(*symInfo);
+			memory::zero(symInfo, sizeof(*symInfo));
 			symInfo->SizeOfStruct = sizeof(*symInfo);
 			symInfo->MaxNameLen = MAX_SYM_NAME;
 
@@ -305,7 +305,7 @@ namespace traceback {
 		m_address = address;
 #if defined(__GNUC__)
 		bfd_set * set = static_cast<bfd_set*>(malloc(sizeof(*set)));
-		memory::zero(*set);
+		memory::zero(set, sizeof(*set));
 
 		bfd_ctx * bc = get_bc(set, m_image.c_str());
 		if (bc) {

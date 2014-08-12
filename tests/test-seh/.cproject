@@ -18,10 +18,12 @@
 							<builder buildPath="${workspace_loc:/test-seh}/Debug" id="cdt.managedbuild.tool.gnu.builder.mingw.base.455191363" keepEnvironmentInBuildfile="false" managedBuildOn="true" name="CDT Internal Builder" superClass="cdt.managedbuild.tool.gnu.builder.mingw.base"/>
 							<tool id="cdt.managedbuild.tool.gnu.cpp.linker.mingw.exe.debug.1100846690" name="MinGW C++ Linker" superClass="cdt.managedbuild.tool.gnu.cpp.linker.mingw.exe.debug">
 								<option id="gnu.cpp.link.option.paths.353160233" name="Library search path (-L)" superClass="gnu.cpp.link.option.paths" valueType="libPaths">
+									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/excis/x64-Debug}&quot;"/>
 									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/basis/x64-Debug}&quot;"/>
 								</option>
 								<option id="gnu.cpp.link.option.flags.1133320598" name="Linker flags" superClass="gnu.cpp.link.option.flags" value="-Wl,-Map=test-seh.map -m64 -static -municode" valueType="string"/>
 								<option id="gnu.cpp.link.option.libs.1075722709" name="Libraries (-l)" superClass="gnu.cpp.link.option.libs" valueType="libs">
+									<listOptionValue builtIn="false" value="excis"/>
 									<listOptionValue builtIn="false" value="basis"/>
 									<listOptionValue builtIn="false" value="dbghelp"/>
 									<listOptionValue builtIn="false" value="bfd"/>
@@ -48,6 +50,7 @@
 								<option id="gnu.cpp.compiler.option.include.paths.1382223578" name="Include paths (-I)" superClass="gnu.cpp.compiler.option.include.paths" useByScannerDiscovery="false" valueType="includePath">
 									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/${ProjName}/include}&quot;"/>
 									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/basis/include}&quot;"/>
+									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/excis/include}&quot;"/>
 								</option>
 								<option id="gnu.cpp.compiler.option.warnings.extrawarn.1738169430" name="Extra warnings (-Wextra)" superClass="gnu.cpp.compiler.option.warnings.extrawarn" useByScannerDiscovery="false" value="true" valueType="boolean"/>
 								<inputType id="cdt.managedbuild.tool.gnu.cpp.compiler.input.1520376639" superClass="cdt.managedbuild.tool.gnu.cpp.compiler.input"/>
@@ -80,10 +83,12 @@
 							<builder buildPath="${workspace_loc:/test-seh}/Debug" id="cdt.managedbuild.tool.gnu.builder.mingw.base.1722844625" keepEnvironmentInBuildfile="false" managedBuildOn="true" name="CDT Internal Builder" superClass="cdt.managedbuild.tool.gnu.builder.mingw.base"/>
 							<tool id="cdt.managedbuild.tool.gnu.cpp.linker.mingw.exe.debug.1119741124" name="MinGW C++ Linker" superClass="cdt.managedbuild.tool.gnu.cpp.linker.mingw.exe.debug">
 								<option id="gnu.cpp.link.option.paths.1448497605" name="Library search path (-L)" superClass="gnu.cpp.link.option.paths" valueType="libPaths">
+									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/excis/x64-Release}&quot;"/>
 									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/basis/x64-Release}&quot;"/>
 								</option>
 								<option id="gnu.cpp.link.option.flags.1151891013" name="Linker flags" superClass="gnu.cpp.link.option.flags" value="-Wl,-Map=test-seh.map -m64 -static -municode" valueType="string"/>
 								<option id="gnu.cpp.link.option.libs.703566051" name="Libraries (-l)" superClass="gnu.cpp.link.option.libs" valueType="libs">
+									<listOptionValue builtIn="false" value="excis"/>
 									<listOptionValue builtIn="false" value="basis"/>
 									<listOptionValue builtIn="false" value="dbghelp"/>
 								</option>
@@ -96,20 +101,21 @@
 							<tool id="cdt.managedbuild.tool.gnu.cpp.compiler.mingw.exe.debug.1041430224" name="GCC C++ Compiler" superClass="cdt.managedbuild.tool.gnu.cpp.compiler.mingw.exe.debug">
 								<option id="gnu.cpp.compiler.mingw.exe.debug.option.optimization.level.147203394" name="Optimization Level" superClass="gnu.cpp.compiler.mingw.exe.debug.option.optimization.level" useByScannerDiscovery="false" value="gnu.cpp.compiler.optimization.level.most" valueType="enumerated"/>
 								<option id="gnu.cpp.compiler.mingw.exe.debug.option.debugging.level.1394683819" name="Debug Level" superClass="gnu.cpp.compiler.mingw.exe.debug.option.debugging.level" useByScannerDiscovery="false" value="gnu.cpp.compiler.debugging.level.none" valueType="enumerated"/>
-								<option id="gnu.cpp.compiler.option.dialect.std.1785467326" name="Language standard" superClass="gnu.cpp.compiler.option.dialect.std" value="gnu.cpp.compiler.dialect.c++11" valueType="enumerated"/>
-								<option id="gnu.cpp.compiler.option.dialect.flags.1410340311" name="Other dialect flags" superClass="gnu.cpp.compiler.option.dialect.flags" value="-m64" valueType="string"/>
-								<option id="gnu.cpp.compiler.option.preprocessor.def.814373824" name="Defined symbols (-D)" superClass="gnu.cpp.compiler.option.preprocessor.def" valueType="definedSymbols">
+								<option id="gnu.cpp.compiler.option.dialect.std.1785467326" name="Language standard" superClass="gnu.cpp.compiler.option.dialect.std" useByScannerDiscovery="true" value="gnu.cpp.compiler.dialect.c++11" valueType="enumerated"/>
+								<option id="gnu.cpp.compiler.option.dialect.flags.1410340311" name="Other dialect flags" superClass="gnu.cpp.compiler.option.dialect.flags" useByScannerDiscovery="true" value="-m64" valueType="string"/>
+								<option id="gnu.cpp.compiler.option.preprocessor.def.814373824" name="Defined symbols (-D)" superClass="gnu.cpp.compiler.option.preprocessor.def" useByScannerDiscovery="false" valueType="definedSymbols">
 									<listOptionValue builtIn="false" value="UNICODE"/>
 									<listOptionValue builtIn="false" value="_UNICODE"/>
 									<listOptionValue builtIn="false" value="NDEBUG"/>
 									<listOptionValue builtIn="false" value="ENABLE_LOGGER"/>
 								</option>
-								<option id="gnu.cpp.compiler.option.include.paths.261446954" name="Include paths (-I)" superClass="gnu.cpp.compiler.option.include.paths" valueType="includePath">
+								<option id="gnu.cpp.compiler.option.include.paths.261446954" name="Include paths (-I)" superClass="gnu.cpp.compiler.option.include.paths" useByScannerDiscovery="false" valueType="includePath">
 									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/${ProjName}/include}&quot;"/>
 									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/basis/include}&quot;"/>
+									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/excis/include}&quot;"/>
 								</option>
-								<option id="gnu.cpp.compiler.option.warnings.extrawarn.942301234" name="Extra warnings (-Wextra)" superClass="gnu.cpp.compiler.option.warnings.extrawarn" value="true" valueType="boolean"/>
-								<option id="gnu.cpp.compiler.option.warnings.toerrors.444365760" name="Warnings as errors (-Werror)" superClass="gnu.cpp.compiler.option.warnings.toerrors" value="true" valueType="boolean"/>
+								<option id="gnu.cpp.compiler.option.warnings.extrawarn.942301234" name="Extra warnings (-Wextra)" superClass="gnu.cpp.compiler.option.warnings.extrawarn" useByScannerDiscovery="false" value="true" valueType="boolean"/>
+								<option id="gnu.cpp.compiler.option.warnings.toerrors.444365760" name="Warnings as errors (-Werror)" superClass="gnu.cpp.compiler.option.warnings.toerrors" useByScannerDiscovery="false" value="true" valueType="boolean"/>
 								<inputType id="cdt.managedbuild.tool.gnu.cpp.compiler.input.198661486" superClass="cdt.managedbuild.tool.gnu.cpp.compiler.input"/>
 							</tool>
 							<tool id="cdt.managedbuild.tool.gnu.archiver.mingw.base.327559968" name="GCC Archiver" superClass="cdt.managedbuild.tool.gnu.archiver.mingw.base"/>
@@ -169,6 +175,7 @@
 								<option id="gnu.cpp.compiler.option.include.paths.1537758560" name="Include paths (-I)" superClass="gnu.cpp.compiler.option.include.paths" useByScannerDiscovery="false" valueType="includePath">
 									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/${ProjName}/include}&quot;"/>
 									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/basis/include}&quot;"/>
+									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/excis/include}&quot;"/>
 								</option>
 								<option id="gnu.cpp.compiler.option.warnings.extrawarn.2104455723" name="Extra warnings (-Wextra)" superClass="gnu.cpp.compiler.option.warnings.extrawarn" useByScannerDiscovery="false" value="true" valueType="boolean"/>
 								<inputType id="cdt.managedbuild.tool.gnu.cpp.compiler.input.1414344284" superClass="cdt.managedbuild.tool.gnu.cpp.compiler.input"/>
@@ -228,6 +235,7 @@
 								<option id="gnu.cpp.compiler.option.include.paths.1139721834" name="Include paths (-I)" superClass="gnu.cpp.compiler.option.include.paths" useByScannerDiscovery="false" valueType="includePath">
 									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/${ProjName}/include}&quot;"/>
 									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/basis/include}&quot;"/>
+									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/excis/include}&quot;"/>
 								</option>
 								<option id="gnu.cpp.compiler.option.warnings.extrawarn.1829591635" name="Extra warnings (-Wextra)" superClass="gnu.cpp.compiler.option.warnings.extrawarn" useByScannerDiscovery="false" value="true" valueType="boolean"/>
 								<option id="gnu.cpp.compiler.option.warnings.toerrors.214804727" name="Warnings as errors (-Werror)" superClass="gnu.cpp.compiler.option.warnings.toerrors" useByScannerDiscovery="false" value="true" valueType="boolean"/>

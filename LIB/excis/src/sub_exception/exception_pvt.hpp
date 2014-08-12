@@ -33,6 +33,27 @@ namespace exception {
 	};
 
 
+	///========================================================================================= Seh
+	struct SehError: public AbstractError {
+		SehError(PEXCEPTION_POINTERS ep);
+
+		virtual SehError * clone() const override;
+
+		virtual ustring type() const override;
+
+		virtual ustring	 what() const override;
+
+		virtual DWORD code() const override;
+
+		virtual void format_error(cstr::mstring & out) const override;
+
+	private:
+		DWORD  m_code;
+		void * m_address;
+
+		friend struct HiddenFunctions;
+	};
+
 	///==================================================================================== WmiError
 	struct WmiError: public WinError {
 		virtual WmiError * clone() const override;

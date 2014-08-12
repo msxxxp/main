@@ -63,7 +63,7 @@ namespace exception {
 #ifndef NDEBUG
 		safe_snprintf(buf, lengthof(buf), L"Exception: %s", type().c_str());
 		out.push_back(buf);
-		safe_snprintf(buf, lengthof(buf), L"Where: %s", where());
+		safe_snprintf(buf, lengthof(buf), L"Where: %s", where().c_str());
 		out.push_back(buf);
 #endif
 	}

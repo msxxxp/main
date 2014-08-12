@@ -28,8 +28,19 @@ namespace totext {
 			}
 		}
 
+		{ // remove new line from message
+			wchar_t *  cr = wcschr(buf, L'\n');
+			if (cr)
+			{
+				if (cr > buf && *(cr - 1) == L'\r')
+					*(cr - 1) = L' ';
+				*cr = L' ';
+			}
+		}
 		simstd::wstring ret = sstr::format(L"[0x%x (%u)] %s", err, err, buf);
-		ret[ret.size() - 2] = L'\0'; // delete return char
+		{ // delete return char
+			ret[ret.size() - 2] = L'\0';
+		}
 		::LocalFree(buf);
 
 		return simstd::move(ret);

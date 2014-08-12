@@ -5,8 +5,6 @@
 
 namespace exception {
 
-#ifdef NDEBUG
-#else
 	PCWSTR const THROW_PLACE_FORMAT = L"%S: %d [%S]";
 
 	ustring ThrowPlaceString(PCSTR file, int line, PCSTR func)
@@ -15,13 +13,11 @@ namespace exception {
 		safe_snprintf(buf, lengthof(buf), THROW_PLACE_FORMAT, file, line, func);
 		return ustring(buf);
 	}
-#endif
 
 	AbstractError::~AbstractError()
 	{
 	}
 
-#ifdef NDEBUG
 	AbstractError::AbstractError():
 		m_prev_exc(nullptr)
 	{
@@ -31,28 +27,28 @@ namespace exception {
 		m_prev_exc(prev.clone())
 	{
 	}
-#else
+
 	AbstractError::AbstractError(PCSTR file, size_t line, PCSTR func) :
 		m_prev_exc(nullptr),
 		m_where(THROW_PLACE_STR)
 	{
+		UNUSED(file);
+		UNUSED(line);
+		UNUSED(func);
 	}
 
 	AbstractError::AbstractError(const AbstractError & prev, PCSTR file, size_t line, PCSTR func) :
 		m_prev_exc(prev.clone()),
 		m_where(THROW_PLACE_STR)
 	{
+		UNUSED(file);
+		UNUSED(line);
+		UNUSED(func);
 	}
-#endif
 
-	PCWSTR AbstractError::where() const
+	ustring AbstractError::where() const
 	{
-#ifdef NDEBUG
-//		return L"Programm compiled with NDEBUG define";
-		return EMPTY_STR;
-#else
-		return m_where.c_str();
-#endif
+		return m_where;
 	}
 
 	AbstractError * AbstractError::get_prev() const

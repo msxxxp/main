@@ -2,34 +2,15 @@
 #include <basis/sys/logger.hpp>
 #include <basis/sys/totext.hpp>
 
+#include <excis/exception.hpp>
+
 #ifdef DEBUG
 #	include <basis/sys/traceback.hpp>
 #endif
 
 #include <basis/std/string>
 
-/// WARNING for x64 Optimization must be -O0 or it will crash
-
-class SehException {
-public:
-	SehException(PEXCEPTION_POINTERS ep)
-	{
-		LogDebug(L"ep: %p\n", ep);
-		LogReport(L"code:    0x%X\n", ep->ExceptionRecord->ExceptionCode);
-		LogReport(L"flags:   0x%X\n", ep->ExceptionRecord->ExceptionFlags);
-		LogReport(L"record:  0x%p\n", ep->ExceptionRecord->ExceptionRecord);
-		LogReport(L"address: 0x%p\n", ep->ExceptionRecord->ExceptionAddress);
-		LogReport(L"params:  %u\n", ep->ExceptionRecord->NumberParameters);
-		for (DWORD i = 0; i < ep->ExceptionRecord->NumberParameters; ++i) {
-			LogReport(L"param[%u]:    0x%I64X\n", i, ep->ExceptionRecord->ExceptionInformation[i]);
-		}
-
-#ifdef DEBUG
-		traceback::LazyFrame frame(reinterpret_cast<void*>(ep->ExceptionRecord->ExceptionAddress));
-		LogFatal(L"exception at %s\n", frame.to_str().c_str());
-#endif
-	}
-};
+/// WARNING for x64 Optimization must be -O0 or it will crash (tdm compiler)
 
 namespace {
 	void setup_logger()
@@ -39,55 +20,6 @@ namespace {
 #ifdef DEBUG
 		traceback::init();
 #endif
-	}
-
-	LONG WINAPI unhandled_exception_filter(PEXCEPTION_POINTERS ep)
-	{
-		LogReport(L"code:    0x%X\n", ep->ExceptionRecord->ExceptionCode);
-		LogReport(L"flags:   0x%X\n", ep->ExceptionRecord->ExceptionFlags);
-		LogReport(L"record:  0x%p\n", ep->ExceptionRecord->ExceptionRecord);
-		LogReport(L"address: 0x%p\n", ep->ExceptionRecord->ExceptionAddress);
-		LogReport(L"params:  %u\n", ep->ExceptionRecord->NumberParameters);
-		for (DWORD i = 0; i < ep->ExceptionRecord->NumberParameters; ++i) {
-			LogReport(L"param[%u]:    0x%I64X\n", i, ep->ExceptionRecord->ExceptionInformation[i]);
-		}
-
-		LogFatal(L"terminating process %s\n", totext::nt_status(ep->ExceptionRecord->ExceptionCode).c_str());
-//		traceback::LazyFrame frame(reinterpret_cast<void*>(ep->ExceptionRecord->ExceptionAddress));
-//		LogFatal(L"exception at %s\n", frame.to_str().c_str());
-
-//		print_trace(ep->ContextRecord, reinterpret_cast<void*>(ep->ExceptionRecord->ExceptionAddress));
-
-//		return EXCEPTION_CONTINUE_EXECUTION;
-		return EXCEPTION_EXECUTE_HANDLER; // should terminate process.
-	}
-
-	void set_unhandled_exception_filter()
-	{
-		::SetUnhandledExceptionFilter(unhandled_exception_filter);
-	}
-
-	LONG WINAPI vectored_exception_handler(::PEXCEPTION_POINTERS ep)
-	{
-		if (ep->ExceptionRecord->ExceptionCode != 0x20474343) {
-			LogReport(L"entering vectorized ex. handler 0x%lx:\n", ep->ExceptionRecord->ExceptionCode);
-			LogReport(L"code:    0x%X\n", ep->ExceptionRecord->ExceptionCode);
-			LogReport(L"flags:   0x%X\n", ep->ExceptionRecord->ExceptionFlags);
-			LogReport(L"record:  0x%p\n", ep->ExceptionRecord->ExceptionRecord);
-			LogReport(L"address: 0x%p\n", ep->ExceptionRecord->ExceptionAddress);
-			LogReport(L"params:  %u\n", ep->ExceptionRecord->NumberParameters);
-			for (DWORD i = 0; i < ep->ExceptionRecord->NumberParameters; ++i) {
-				LogReport(L"param[%u]:    0x%I64X\n", i, ep->ExceptionRecord->ExceptionInformation[i]);
-			}
-
-			throw SehException(ep);
-		}
-		return EXCEPTION_CONTINUE_SEARCH;
-	}
-
-	void set_vectored_exception_filter()
-	{
-		::AddVectoredExceptionHandler(1, vectored_exception_handler);
 	}
 
 	void do_cpp_exception()
@@ -121,31 +53,31 @@ extern "C" int wmain(int argc, wchar_t * argv[])
 
 	setup_logger();
 
-	set_vectored_exception_filter();
-	set_unhandled_exception_filter();
+	exception::set_vectored_exception_filter();
+	exception::set_unhandled_exception_filter();
 
 	try {
 		do_cpp_exception();
-	} catch (SehException & e) {
-		LogDebug(L"SEH exception cought\n");
+	} catch (exception::AbstractError & e) {
+		LogError(L"SEH exception cought: %s\n", e.what().c_str());
 	} catch (...) {
-		LogDebug(L"cpp exception cought\n");
+		LogError(L"cpp exception cought\n");
 	}
 
 	try {
 		do_av_exception();
-	} catch (SehException & e) {
-		LogDebug(L"SEH exception cought\n");
+	} catch (exception::AbstractError & e) {
+		LogError(L"SEH exception cought: %s\n", e.what().c_str());
 	} catch (...) {
 		LogDebug(L"cpp exception cought\n");
 	}
 
 	try {
 		do_division_by_zero();
-	} catch (SehException & e) {
-		LogDebug(L"SEH exception cought\n");
+	} catch (exception::AbstractError & e) {
+		LogError(L"SEH exception cought: %s\n", e.what().c_str());
 	} catch (...) {
-		LogDebug(L"cpp exception cought\n");
+		LogError(L"cpp exception cought\n");
 	}
 
 	return 0;

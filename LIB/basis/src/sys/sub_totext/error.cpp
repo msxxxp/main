@@ -24,7 +24,7 @@ namespace totext {
 			if (lib) {
 				return api_error(err);
 			} else {
-				return sstr::format(L"[0x%x (%u)] Unknown error", err, err);
+				return sstr::format(L"[0x%X (%u)] Unknown error", err, err);
 			}
 		}
 
@@ -37,7 +37,7 @@ namespace totext {
 				*cr = L' ';
 			}
 		}
-		simstd::wstring ret = sstr::format(L"[0x%x (%u)] %s", err, err, buf);
+		simstd::wstring ret = sstr::format(L"[0x%X (%u)] %s", err, err, buf);
 		{ // delete return char
 			ret[ret.size() - 2] = L'\0';
 		}

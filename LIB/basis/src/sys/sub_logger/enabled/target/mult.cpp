@@ -13,6 +13,8 @@ namespace logger {
 
 			void out(const Module_i * lgr, Level lvl, const wchar_t * str, size_t size) const override;
 
+			void out(const Module_i * lgr, WORD color, Level lvl, const wchar_t * str, size_t size) const override;
+
 			void out(const wchar_t * str, size_t size) const override;
 
 			sync::ScopeGuard lock_scope() const override;
@@ -36,6 +38,12 @@ namespace logger {
 		{
 			m_first->out(lgr, lvl, str, size);
 			m_second->out(lgr, lvl, str, size);
+		}
+
+		void LogToMult::out(const Module_i * lgr, WORD color, Level lvl, const wchar_t * str, size_t size) const
+		{
+			m_first->out(lgr, color, lvl, str, size);
+			m_second->out(lgr, color, lvl, str, size);
 		}
 
 		void LogToMult::out(const wchar_t * str, size_t size) const

@@ -4,7 +4,7 @@
 #include <basis/sys/fsys.hpp>
 
 namespace fsys {
-	namespace File {
+	namespace file {
 
 		bool del_nt(const wchar_t * path);
 

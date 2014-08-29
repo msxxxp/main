@@ -9,7 +9,7 @@ namespace fsys {
 			if (is_dir(attr)) {
 				return Directory::del_nt(path);
 			} else {
-				return File::del_nt(path);
+				return file::del_nt(path);
 			}
 		}
 		return false;

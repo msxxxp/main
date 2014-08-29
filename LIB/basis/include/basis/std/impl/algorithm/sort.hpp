@@ -5,8 +5,8 @@
 #include <basis/std/impl/functional.hpp>
 #include <basis/std/impl/iterator/base.hpp>
 #include <basis/std/impl/utility/pair.hpp>
-#include <basis/std/impl/memory/base.hpp>
-#include <basis/std/impl/memory/functional.hpp>
+#include <basis/std/sub_memory/base.hpp>
+#include <basis/std/sub_memory/functional.hpp>
 
 namespace simstd {
 	template<typename ForwardIt, typename T>

@@ -2,13 +2,15 @@
 #define BASIS_MEMORY_
 
 #include <basis/configure.hpp>
-#include <basis/std/impl/memory/allocator.hpp>
-#include <basis/std/impl/memory/allocator_traits.hpp>
-#include <basis/std/impl/memory/base.hpp>
-#include <basis/std/impl/memory/auto_ptr.hpp>
-#include <basis/std/impl/memory/functional.hpp>
-#include <basis/std/impl/memory/movable_allocator.hpp>
-#include <basis/std/impl/memory/raw_storage_iterator.hpp>
-#include <basis/std/impl/memory/shared_ptr.hpp>
+#include <basis/std/sub_memory/allocator.hpp>
+#include <basis/std/sub_memory/allocator_traits.hpp>
+#include <basis/std/sub_memory/base.hpp>
+#include <basis/std/sub_memory/auto_ptr.hpp>
+#include <basis/std/sub_memory/functional.hpp>
+#include <basis/std/sub_memory/movable_allocator.hpp>
+#include <basis/std/sub_memory/raw_storage_iterator.hpp>
+#include <basis/std/sub_memory/default_deleters.hpp>
+#include <basis/std/sub_memory/shared_ptr.hpp>
+#include <basis/std/sub_memory/unique_ptr.hpp>
 
 #endif

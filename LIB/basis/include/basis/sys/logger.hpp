@@ -32,7 +32,7 @@
 #   define LogInfo(format, ...)               get_logger_module()->out(THIS_PLACE_SHORT, logger::Level::Info, format, ##__VA_ARGS__)
 #   define LogInfoIf(condition, format, ...)  if (condition) get_logger_module()->out(THIS_PLACE_SHORT, logger::Level::Info, format, ##__VA_ARGS__)
 #   define LogReport(format, ...)             get_logger_module()->out(THIS_PLACE_SHORT, logger::Level::Report, format, ##__VA_ARGS__)
-#   define LogReportIf(condition,format, ...) if (condition) get_logger_module()->out(THIS_PLACE_SHORT, logger::Level::Report, format, ##__VA_ARGS__)
+#   define LogReportIf(condition, format, ...) if (condition) get_logger_module()->out(THIS_PLACE_SHORT, logger::Level::Report, format, ##__VA_ARGS__)
 #   define LogAtten(format, ...)              get_logger_module()->out(THIS_PLACE_SHORT, logger::Level::Atten, format, ##__VA_ARGS__)
 #   define LogAttenIf(condition, format, ...) if (condition) get_logger_module()->out(THIS_PLACE_SHORT, logger::Level::Atten, format, ##__VA_ARGS__)
 #   define LogWarn(format, ...)               get_logger_module()->out(THIS_PLACE_SHORT, logger::Level::Warn, format, ##__VA_ARGS__)
@@ -52,6 +52,12 @@
 logger::Module_i * get_logger_module();
 #	define LogRegister(name) \
 logger::Module_i * get_logger_module() \
+{ \
+	auto static module = logger::get_module(name); \
+	return module; \
+}
+#	define LogRegisterClass(className, name) \
+logger::Module_i * className::get_logger_module() \
 { \
 	auto static module = logger::get_module(name); \
 	return module; \
@@ -96,6 +102,29 @@ namespace { \
 #	define LogRegisterLocal(name)
 #endif
 
+#define LogConsoleNoise(color, format, ...)                              get_console_logger_module()->out((WORD)color, logger::Level::Trace, format, ##__VA_ARGS__)
+#define LogConsoleNoiseIf(condition, color, format, ...)  if (condition) get_console_logger_module()->out((WORD)color, logger::Level::Trace, format, ##__VA_ARGS__)
+#define LogConsoleDebug(color, format, ...)                              get_console_logger_module()->out((WORD)color, logger::Level::Debug, format, ##__VA_ARGS__)
+#define LogConsoleDebugIf(condition, color, format, ...)  if (condition) get_console_logger_module()->out((WORD)color, logger::Level::Debug, format, ##__VA_ARGS__)
+#define LogConsoleInfo(color, format, ...)                               get_console_logger_module()->out((WORD)color, logger::Level::Info, format, ##__VA_ARGS__)
+#define LogConsoleInfoIf(condition, color, format, ...)   if (condition) get_console_logger_module()->out((WORD)color, logger::Level::Info, format, ##__VA_ARGS__)
+#define LogConsoleReport(color, format, ...)                             get_console_logger_module()->out((WORD)color, logger::Level::Report, format, ##__VA_ARGS__)
+#define LogConsoleReportIf(condition, color, format, ...) if (condition) get_console_logger_module()->out((WORD)color, logger::Level::Report, format, ##__VA_ARGS__)
+#define LogConsoleAtten(color, format, ...)                              get_console_logger_module()->out((WORD)color, logger::Level::Atten, format, ##__VA_ARGS__)
+#define LogConsoleAttenIf(condition, color, format, ...)  if (condition) get_console_logger_module()->out((WORD)color, logger::Level::Atten, format, ##__VA_ARGS__)
+#define LogConsoleWarn(color, format, ...)                               get_console_logger_module()->out((WORD)color, logger::Level::Warn, format, ##__VA_ARGS__)
+#define LogConsoleWarnIf(condition, color, format, ...)   if (condition) get_console_logger_module()->out((WORD)color, logger::Level::Warn, format, ##__VA_ARGS__)
+#define LogConsoleError(color, format, ...)                              get_console_logger_module()->out((WORD)color, logger::Level::Error, format, ##__VA_ARGS__)
+#define LogConsoleErrorIf(condition, color, format, ...)  if (condition) get_console_logger_module()->out((WORD)color, logger::Level::Error, format, ##__VA_ARGS__)
+#define LogConsoleFatal(color, format, ...)                              get_console_logger_module()->out((WORD)color, logger::Level::Fatal, format, ##__VA_ARGS__)
+#define LogConsoleFatalIf(condition, color, format, ...)  if (condition) get_console_logger_module()->out((WORD)color, logger::Level::Fatal, format, ##__VA_ARGS__)
+#define LogConsoleAlert(color, format, ...)                              get_console_logger_module()->out((WORD)color, logger::Level::Alert, format, ##__VA_ARGS__)
+#define LogConsoleAlertIf(condition, color, format, ...)  if (condition) get_console_logger_module()->out((WORD)color, logger::Level::Alert, format, ##__VA_ARGS__)
+#define LogConsoleEmerg(color, format, ...)                              get_console_logger_module()->out((WORD)color, logger::Level::Emerg, format, ##__VA_ARGS__)
+#define LogConsoleEmergIf(condition, color, format, ...)  if (condition) get_console_logger_module()->out((WORD)color, logger::Level::Emerg, format, ##__VA_ARGS__)
+#define LogConsoleForce(color, format, ...)                              get_console_logger_module()->out((WORD)color, logger::Level::Force, format, ##__VA_ARGS__)
+#define LogConsoleForceIf(condition, color, format, ...)  if (condition) get_console_logger_module()->out((WORD)color, logger::Level::Force, format, ##__VA_ARGS__)
+
 namespace logger {
 
 	enum class Level : ssize_t {
@@ -125,6 +154,8 @@ namespace logger {
 		virtual void out(const char * file, int line, const char * func, Level lvl, const wchar_t * format, ...) const = 0;
 
 		virtual void out(Level lvl, const wchar_t * format, ...) const = 0;
+
+		virtual void out(WORD color, Level lvl, const wchar_t * format, ...) const = 0;
 	};
 
 	Module_i * get_module(const wchar_t * name);
@@ -140,6 +171,12 @@ namespace logger {
 inline logger::Module_i * get_logger_module()
 {
 	return logger::defaults::get_module();
+}
+
+inline logger::Module_i * get_console_logger_module()
+{
+	auto static module = logger::get_module(L"user_console");
+	return module;
 }
 
 #endif

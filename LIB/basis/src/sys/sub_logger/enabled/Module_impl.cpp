@@ -121,6 +121,15 @@ namespace logger {
 		}
 	}
 
+	void Module_impl::out(WORD color, Level lvl, const wchar_t * format, ...) const
+	{
+		if (m_enabled && lvl >= m_lvl) {
+			Va_list args;
+			va_start(args, format);
+			out_args(color, lvl, format, args);
+		}
+	}
+
 	sync::ScopeGuard Module_impl::lock_scope() const
 	{
 		return m_target->lock_scope();
@@ -168,6 +177,13 @@ namespace logger {
 		tmp += format_str(frmat, args);
 		auto scopeLock(lock_scope());
 		m_target->out(this, lvl, tmp.c_str(), tmp.size());
+	}
+
+	void Module_impl::out_args(WORD color, Level lvl, const wchar_t * frmat, va_list args) const
+	{
+		ustring tmp = format_str(frmat, args);
+		auto scopeLock(lock_scope());
+		m_target->out(this, color, lvl, tmp.c_str(), tmp.size());
 	}
 
 	///=============================================================================================

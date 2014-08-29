@@ -15,6 +15,8 @@ namespace logger {
 
 			void out(const Module_i * lgr, Level lvl, const wchar_t * str, size_t size) const override;
 
+			void out(const Module_i * lgr, WORD color, Level lvl, const wchar_t * str, size_t size) const override;
+
 			void out(const wchar_t * str, size_t size) const override;
 
 			sync::ScopeGuard lock_scope() const override;
@@ -38,6 +40,11 @@ namespace logger {
 		}
 
 		void LogToFile::out(const Module_i * /*lgr*/, Level /*lvl*/, const wchar_t * str, size_t size) const
+		{
+			out(str, size);
+		}
+
+		void LogToFile::out(const Module_i * /*lgr*/, WORD /*color*/, Level /*lvl*/, const wchar_t * str, size_t size) const
 		{
 			out(str, size);
 		}

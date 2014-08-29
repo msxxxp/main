@@ -43,6 +43,8 @@ namespace logger {
 
 			void out(const Module_i * lgr, Level lvl, const wchar_t * str, size_t size) const override;
 
+			void out(const Module_i * lgr, WORD color, Level lvl, const wchar_t * str, size_t size) const override;
+
 			void out(const wchar_t * str, size_t size) const override;
 
 			sync::ScopeGuard lock_scope() const override;
@@ -65,9 +67,24 @@ namespace logger {
 		void LogToConsole::out(const Module_i * lgr, Level lvl, const wchar_t * str, size_t size) const
 		{
 			auto lockScope(m_sync->lock_scope());
-			//		console::printf(L"%S():%d\n", __FUNCTION__, __LINE__);
+//			console::printf(L"%S():%d\n", __FUNCTION__, __LINE__);
 			if (lgr->is_color_mode()) {
 				console::Color color(LogLevelColors[static_cast<ssize_t>(lvl)]);
+				console::puts(str, size);
+			} else {
+				console::puts(str, size);
+			}
+		}
+
+		void LogToConsole::out(const Module_i * lgr, WORD color, Level lvl, const wchar_t * str, size_t size) const
+		{
+			auto lockScope(m_sync->lock_scope());
+//			console::printf(L"%S():%d\n", __FUNCTION__, __LINE__);
+
+			if (lgr->is_color_mode() && color < 16) {
+				if (color == 0)
+					color = LogLevelColors[static_cast<ssize_t>(lvl)];
+				console::Color clr(color);
 				console::puts(str, size);
 			} else {
 				console::puts(str, size);

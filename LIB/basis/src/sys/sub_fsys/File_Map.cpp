@@ -3,7 +3,7 @@
 #include <basis/std/algorithm>
 
 namespace fsys {
-	namespace File {
+	namespace file {
 
 		Map_nt::~Map_nt()
 		{

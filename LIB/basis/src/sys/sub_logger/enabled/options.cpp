@@ -56,7 +56,9 @@ namespace logger {
 		Prefix::flags convert_to_prefix(const wchar_t * str)
 		{
 			Prefix::flags ret = defaults::get_prefix();
-			if (cstr::compare_ci_1st_length(L"l", str) == 0) {
+			if (cstr::compare_ci_1st_length(L"0", str) == 0) {
+				ret = 0;
+			} else if (cstr::compare_ci_1st_length(L"l", str) == 0) {
 				ret = Prefix::Lite;
 			} else if (cstr::compare_ci_1st_length(L"m", str) == 0) {
 				ret = Prefix::Medium;

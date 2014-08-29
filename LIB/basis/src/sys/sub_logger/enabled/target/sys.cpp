@@ -29,6 +29,8 @@ namespace logger {
 
 			void out(const Module_i * lgr, Level lvl, const wchar_t * str, size_t size) const override;
 
+			void out(const Module_i * lgr, WORD color, Level lvl, const wchar_t * str, size_t size) const override;
+
 			void out(const wchar_t * str, size_t size) const override;
 
 			sync::ScopeGuard lock_scope() const override;
@@ -65,6 +67,11 @@ namespace logger {
 			//			}
 			::ReportEventW(m_hndl, LogLevelTypes[(int)lvl], 0, EV_MSG_STRING, nullptr, 1, 0, &str, nullptr);
 			//			free(token_user);
+		}
+
+		void LogToSys::out(const Module_i * /*lgr*/, WORD /*color*/, Level lvl, const wchar_t * str, size_t /*size*/) const
+		{
+			::ReportEventW(m_hndl, LogLevelTypes[(int)lvl], 0, EV_MSG_STRING, nullptr, 1, 0, &str, nullptr);
 		}
 
 		void LogToSys::out(const wchar_t * str, size_t /*size*/) const

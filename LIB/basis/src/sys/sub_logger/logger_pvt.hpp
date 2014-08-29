@@ -33,6 +33,8 @@ namespace logger {
 
 		virtual void out(const Module_i * module, Level lvl, const wchar_t * str, size_t size) const = 0;
 
+		virtual void out(const Module_i * module, WORD color, Level lvl, const wchar_t * str, size_t size) const = 0;
+
 		virtual void out(const wchar_t * str, size_t size) const = 0;
 
 		virtual sync::ScopeGuard lock_scope() const = 0;
@@ -82,12 +84,16 @@ namespace logger {
 
 		void out(Level lvl, const wchar_t * format, ...) const override;
 
+		void out(WORD color, Level lvl, const wchar_t * format, ...) const override;
+
 	private:
 		ustring create_prefix(Level lvl) const;
 
 		ustring & add_place(ustring & prefix, const char * file, int line, const char * func) const;
 
 		void out_args(Level lvl, const ustring & prefix, const wchar_t * frmat, va_list args) const;
+
+		void out_args(WORD color, Level lvl, const wchar_t * frmat, va_list args) const;
 
 		ustring       m_name;
 		Target_t      m_target;

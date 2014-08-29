@@ -4,6 +4,7 @@
 #include <basis/sys/memory.hpp>
 
 #include <fsys.hpp>
+#include "Stat.hpp"
 
 namespace {
 
@@ -81,7 +82,7 @@ namespace {
 
 	uint64_t Stat_impl::inode() const
 	{
-		return make_uint64(m_info.nFileIndexHigh, m_info.nFileIndexLow) & 0x0000FFFFFFFFFFFFULL;
+		return make_uint64(m_info.nFileIndexHigh, m_info.nFileIndexLow);// & 0x0000FFFFFFFFFFFFULL;
 	}
 
 	uint64_t Stat_impl::ctime() const
@@ -118,7 +119,7 @@ namespace {
 
 namespace fsys {
 
-	Stat get_stat(HANDLE hndl)
+	Stat stat(HANDLE hndl)
 	{
 		if (hndl != INVALID_HANDLE_VALUE) {
 			simstd::unique_ptr<Stat_impl> tmp(new Stat_impl(hndl));
@@ -137,7 +138,7 @@ namespace fsys {
 
 	Stat stat(const wchar_t * path)
 	{
-		return get_stat(Stat_impl::open(path));
+		return stat(Stat_impl::open(path));
 	}
 
 }

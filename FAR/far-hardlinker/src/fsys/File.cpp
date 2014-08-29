@@ -90,23 +90,25 @@ namespace fsys {
 
 	bool File::count_hash(std::vector<char> & out, simstd::wstring path, uint64_t first, uint64_t last)
 	{
-		fsys::file::Facade file(path.c_str());
-//		file.set_position(first);
-//
-//		uint64_t size = last - first;
-//		crypt::Hash hasher(*global::vars().cryptProvider, CALG_SHA1);
-//		while (size) {
-//			const size_t BUF_SIZE = 1024 * 1024;
-//			char buf[BUF_SIZE];
-//			size_t bytes_to_read = std::min(BUF_SIZE, size);
-//			size_t bytes_read = file.read(buf, bytes_to_read);
-//			hasher.process(buf, bytes_read);
-//			size -= bytes_read;
-//		}
-//
-//		out.resize(hasher.get_size());
-//		hasher.get_hash(&out[0], out.size());
-		return true;
+		fsys::file::Facade file(fsys::file::open(path));
+		if (file && file->set_position(static_cast<int64_t>(first), fsys::file::Seek::FromBeginOfFile)) {
+			uint64_t size = last - first;
+			crypt::Hash hasher(*global::vars().cryptProvider);
+			while (size) {
+				const size_t BUF_SIZE = 1024 * 1024;
+				char buf[BUF_SIZE];
+				size_t bytes_to_read = std::min(BUF_SIZE, size);
+				size_t bytes_read = 0;
+				file->read(buf, bytes_to_read, bytes_read);
+				hasher.process(buf, bytes_read);
+				size -= bytes_read;
+			}
+
+			out.resize(hasher.get_size());
+			hasher.get_hash(&out[0], out.size());
+		}
+
+		return false;
 	}
 
 	bool compare_head_hash(const File & file1, const File & file2)

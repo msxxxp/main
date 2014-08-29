@@ -6,6 +6,8 @@
 #include <basis/sys/logger.hpp>
 #include <basis/std/string>
 
+#include "../Stat.hpp"
+
 namespace {
 
 	struct Facade_impl: public fsys::file::Facade_i, private pattern::Uncopyable {
@@ -47,6 +49,8 @@ namespace {
 
 		static HANDLE Open(const ustring & path, const fsys::file::OpenOptions & options);
 
+		static HANDLE Open(const ustring & path, ACCESS_MASK access, DWORD share, PSECURITY_ATTRIBUTES sa, DWORD creat, DWORD flags);
+
 	private:
 		ustring m_path;
 		HANDLE  m_hndl;
@@ -72,6 +76,11 @@ namespace {
 	ustring Facade_impl::path() const
 	{
 		return m_path;
+	}
+
+	fsys::Stat Facade_impl::stat() const
+	{
+		return fsys::stat(m_hndl);
 	}
 
 	bool Facade_impl::size(uint64_t & size) const
@@ -162,24 +171,37 @@ namespace {
 
 	HANDLE Facade_impl::Open(const ustring & path, const fsys::file::OpenOptions & options)
 	{
-		ACCESS_MASK access = (write) ? GENERIC_READ | GENERIC_WRITE : GENERIC_READ;
-		DWORD share = (write) ? 0 : FILE_SHARE_DELETE | FILE_SHARE_READ;
-		DWORD creat = (write) ? OPEN_ALWAYS : OPEN_EXISTING;
-		DWORD flags = (write) ? FILE_ATTRIBUTE_NORMAL : FILE_FLAG_OPEN_REPARSE_POINT | FILE_FLAG_BACKUP_SEMANTICS;
-//		return Open(path, access, share, nullptr, creat, flags);
+
+		ACCESS_MASK access = (options.write) ? GENERIC_READ | GENERIC_WRITE : GENERIC_READ;
+		DWORD share = (options.write) ? 0 : FILE_SHARE_DELETE | FILE_SHARE_READ;
+		DWORD creat = (options.write) ? OPEN_ALWAYS : OPEN_EXISTING;
+		DWORD flags = (options.write) ? FILE_ATTRIBUTE_NORMAL : FILE_FLAG_OPEN_REPARSE_POINT | FILE_FLAG_BACKUP_SEMANTICS;
+		return Open(path, access, share, nullptr, creat, flags);
 	}
 
-//	HANDLE Facade_impl::Open(const ustring & path, ACCESS_MASK access, DWORD share, PSECURITY_ATTRIBUTES sa, DWORD creat, DWORD flags)
-//	{
-////			LogNoise(L"'%s', 0x%08X, 0x%08X, %p\n", path.c_str(), access, share, sa);
-//		return CheckHandleErr(::CreateFileW(path.c_str(), access, share, sa, creat, flags, nullptr));
-//	}
+	HANDLE Facade_impl::Open(const ustring & path, ACCESS_MASK access, DWORD share, PSECURITY_ATTRIBUTES sa, DWORD creat, DWORD flags)
+	{
+//		LogNoise(L"'%s', 0x%08X, 0x%08X, %p\n", path.c_str(), access, share, sa);
+		return ::CreateFileW(path.c_str(), access, share, sa, creat, flags, nullptr);
+	}
+
 }
 
 namespace fsys {
 
 	namespace file {
 
+		OpenOptions::OpenOptions():
+			write(false)
+		{
+		}
+
+		///=============================================================================================================
+		Facade open(const ustring & path, const OpenOptions & options)
+		{
+			simstd::unique_ptr<Facade_impl> tmp(new Facade_impl(path, options));
+			return tmp->is_valid() ? Facade(simstd::move(tmp)) : Facade();
+		}
 
 	}
 }

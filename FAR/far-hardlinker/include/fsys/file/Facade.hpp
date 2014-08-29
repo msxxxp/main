@@ -14,6 +14,9 @@ namespace fsys {
 		};
 
 		struct OpenOptions {
+			bool write;
+
+			OpenOptions();
 		};
 
 		struct Facade_i {
@@ -46,9 +49,9 @@ namespace fsys {
 
 		typedef simstd::unique_ptr<Facade_i> Facade;
 
-		Facade open(const astring * path);
+//		Facade open(const astring & path, const OpenOptions & options = OpenOptions());
 
-		Facade open(const ustring * path);
+		Facade open(const ustring & path, const OpenOptions & options = OpenOptions());
 	}
 
 }

@@ -24,33 +24,33 @@
 namespace Far {
 
 	///=============================================================================================
-	void GlobalInfo_i::GetGlobalInfoW(GlobalInfo * Info) const
+	void GlobalInfo_i::GetGlobalInfoW(GlobalInfo * info) const
 	{
 		LogTrace();
-		Info->StructSize = sizeof(*Info);
-		Info->MinFarVersion = get_min_version();
-		Info->Version = get_version();
-		Info->Author = get_author();
-		Info->Description = get_description();
-		Info->Guid = *get_guid();
-		Info->Title = get_title();
+		info->StructSize = sizeof(*info);
+		info->MinFarVersion = get_min_version();
+		info->Version = get_version();
+		info->Author = get_author();
+		info->Description = get_description();
+		info->Guid = *get_guid();
+		info->Title = get_title();
 	}
 
-	intptr_t GlobalInfo_i::ConfigureW(const ConfigureInfo * Info)
+	intptr_t GlobalInfo_i::ConfigureW(const ConfigureInfo * info)
 	{
 		LogTrace();
-		if (Info->StructSize < sizeof(*Info))
+		if (info->StructSize < sizeof(*info))
 			return 0;
-		return Configure(Info);
+		return Configure(info);
 	}
 
-	void GlobalInfo_i::SetStartupInfoW(const PluginStartupInfo * Info)
+	void GlobalInfo_i::SetStartupInfoW(const PluginStartupInfo * info)
 	{
 		LogTrace();
-		if (Info->StructSize < sizeof(*Info))
+		if (info->StructSize < sizeof(*info))
 			return;
 		if (!m_plugin)
-			m_plugin = CreatePlugin(Info);
+			m_plugin = CreatePlugin(info);
 	}
 
 	Plugin_i * GlobalInfo_i::get_plugin() const
@@ -76,7 +76,7 @@ namespace Far {
 		return FARMANAGERVERSION;
 	}
 
-	intptr_t GlobalInfo_i::Configure(const ConfigureInfo * /*Info*/)
+	intptr_t GlobalInfo_i::Configure(const ConfigureInfo * /*info*/)
 	{
 		LogTrace();
 		return 0;

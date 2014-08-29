@@ -24,8 +24,9 @@ namespace Far {
 
 	FarDialogItem_t * create_separator(PCWSTR text, FARDIALOGITEMFLAGS flags)
 	{
+		flags |= DIF_SEPARATOR;
 		LogNoise(L"'%s' 0x%I64X\n", text, flags);
-		return new FarDialogItem_t(DI_TEXT, text, flags | DIF_SEPARATOR);
+		return new FarDialogItem_t(DI_TEXT, text, flags);
 	}
 
 }

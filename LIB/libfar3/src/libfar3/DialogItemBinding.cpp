@@ -20,10 +20,6 @@
 
 namespace Far {
 
-	DialogItemBinding_i::~DialogItemBinding_i()
-	{
-	}
-
 	HANDLE DialogItemBinding_i::get_dlg() const
 	{
 		return (this) ? *m_dlg : nullptr;

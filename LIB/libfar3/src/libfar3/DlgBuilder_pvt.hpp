@@ -57,8 +57,6 @@ namespace Far {
 		int show_() override;
 
 	protected:
-		void create_border(PCWSTR Text);
-
 		FarDialogItem_t * add_dialog_item(FARDIALOGITEMTYPES Type, PCWSTR Text, FARDIALOGITEMFLAGS flags = DIF_NONE);
 
 		FarDialogItem_t * add_dialog_item(FarDialogItem_t * item);
@@ -67,7 +65,7 @@ namespace Far {
 
 		void save();
 
-		void set_next_y(FarDialogItem_t * Item);
+		void set_next_y(FarDialogItem_t * item);
 
 		int show_dialog_();
 

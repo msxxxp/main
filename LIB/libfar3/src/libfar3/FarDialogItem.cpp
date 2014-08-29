@@ -21,11 +21,13 @@
 #include <basis/sys/cstr.hpp>
 #include <basis/sys/logger.hpp>
 
+#include <basis/std/algorithm>
+
 namespace Far {
 
 	ssize_t inline TextWidth(const FarDialogItem_t * Item)
 	{
-		return cstr::length(Item->Data);
+		return Item->Data ? cstr::length(Item->Data) : 0;
 	}
 
 	FarDialogItem_t::~FarDialogItem_t()
@@ -76,11 +78,15 @@ namespace Far {
 
 	ssize_t FarDialogItem_t::get_width() const
 	{
+		LogTrace();
 		ssize_t ret = 0;
 		switch (Type) {
 			case DI_TEXT:
-			case DI_DOUBLEBOX:
 				ret = TextWidth(this);
+				break;
+
+			case DI_DOUBLEBOX:
+				ret = simstd::max(TextWidth(this), static_cast<ssize_t>(22));
 				break;
 
 			case DI_CHECKBOX:
@@ -119,6 +125,15 @@ namespace Far {
 	void FarDialogItem_t::set_index(ssize_t ind)
 	{
 		reinterpret_cast<DialogItemBinding_i*>(UserData)->set_index(ind);
+	}
+
+	void FarDialogItem_t::set_dimension(ssize_t x, ssize_t y, ssize_t width, ssize_t height)
+	{
+		X1 = x;
+		Y1 = y;
+		X2 = simstd::max(x + width - 1, static_cast<ssize_t>(0));
+		Y2 = simstd::max(y + height - 1, static_cast<ssize_t>(0));
+		LogNoise(L"(%Id, %Id, %Id, %Id)\n", X1, Y1, X2, Y2);
 	}
 
 	void FarDialogItem_t::save() const

@@ -1,5 +1,5 @@
 ﻿/**
- © 2013 Andrew Grechkin
+ © 2014 Andrew Grechkin
  Source code: <http://code.google.com/p/andrew-grechkin>
 
  This program is free software: you can redistribute it and/or modify
@@ -20,49 +20,45 @@
 #include <libfar3/helper.hpp>
 
 #include <basis/sys/logger.hpp>
+#include <basis/std/string>
 
 namespace Far {
 
 	struct PluginEditFieldBinding: public DialogItemBinding_i {
-		PluginEditFieldBinding(PWSTR value, ssize_t max_size);
+		PluginEditFieldBinding(simstd::wstring * value);
 
 		void save_() const override;
 
 		ssize_t get_width_() const override;
 
 	private:
-		PWSTR Value;
-		ssize_t MaxSize;
+		simstd::wstring * m_value;
 	};
 
-	PluginEditFieldBinding::PluginEditFieldBinding(PWSTR value, ssize_t max_size) :
-		Value(value),
-		MaxSize(max_size - 1)
+	PluginEditFieldBinding::PluginEditFieldBinding(simstd::wstring * value) :
+		m_value(value)
 	{
 		LogTrace();
 	}
 
 	void PluginEditFieldBinding::save_() const
 	{
-		PCWSTR DataPtr = (PCWSTR)psi().SendDlgMessage(get_dlg(), DM_GETCONSTTEXTPTR, get_index(), nullptr);
-		lstrcpynW(Value, DataPtr, MaxSize);
-		LogDebug(L"value: %s\n", Value);
+		auto DataPtr = (const wchar_t *)psi().SendDlgMessage(get_dlg(), DM_GETCONSTTEXTPTR, get_index(), nullptr);
+		*m_value = (DataPtr) ? DataPtr : EMPTY_STR;
+		LogDebug(L"value: '%s'\n", m_value->c_str());
 	}
 
 	ssize_t PluginEditFieldBinding::get_width_() const
 	{
-		LogTrace();
-		return 0;
+		return static_cast<ssize_t>(m_value->size());
 	}
 
-	FarDialogItem_t * create_edit(PWSTR value, ssize_t max_size, ssize_t width, PCWSTR history_id, bool use_last_history, FARDIALOGITEMFLAGS flags)
+	FarDialogItem_t * create_edit(simstd::wstring * value, ssize_t width, PCWSTR history_id, bool use_last_history, FARDIALOGITEMFLAGS flags)
 	{
-		LogTrace();
-
-		LogNoise(L"'%s' %Id, 0x%I64X\n", value, max_size, flags);
-		auto ret = new FarDialogItem_t(new PluginEditFieldBinding(value, max_size), DI_EDIT, value, flags);
-		if (width == -1 || width >= max_size)
-			width = max_size - 1;
+		LogNoise(L"'%s', flags: 0x%I64X\n", value->c_str(), flags);
+		auto ret = new FarDialogItem_t(new PluginEditFieldBinding(value), DI_EDIT, value->c_str(), flags);
+		if (width == -1)
+			width = 10;
 
 		ret->X2 = ret->X1 + width - 1;
 
@@ -76,12 +72,12 @@ namespace Far {
 		return ret;
 	}
 
-	FarDialogItem_t * create_password(PWSTR value, ssize_t max_size, ssize_t width, FARDIALOGITEMFLAGS flags)
+	FarDialogItem_t * create_password(simstd::wstring * value, ssize_t width, FARDIALOGITEMFLAGS flags)
 	{
-		LogNoise(L"%Id, 0x%I64X\n", max_size, flags);
-		auto ret = new FarDialogItem_t(new PluginEditFieldBinding(value, max_size), DI_PSWEDIT, value, flags);
-		if (width == -1 || width >= max_size)
-			width = max_size - 1;
+		LogNoise(L"%flags: 0x%I64X\n", flags);
+		auto ret = new FarDialogItem_t(new PluginEditFieldBinding(value), DI_PSWEDIT, value->c_str(), flags);
+		if (width == -1)
+			width = 10;
 
 		ret->X2 = ret->X1 + width - 1;
 

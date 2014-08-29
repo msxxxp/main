@@ -19,17 +19,19 @@
 #ifndef _LIBFAR_PLUGIN_I_HPP_
 #define _LIBFAR_PLUGIN_I_HPP_
 
+#include <basis/ext/pattern.hpp>
+
 #include <libfar3/plugin.hpp>
 #include <libfar3/fwd.hpp>
 
 namespace Far {
 
 	///==================================================================================== Plugin_i
-	struct Plugin_i {
+	class Plugin_i:public pattern::Destroyable {
 	public:
-		Plugin_i(const PluginStartupInfo * Info);
+		virtual ~Plugin_i() = default;
 
-		virtual ~Plugin_i();
+		Plugin_i(const PluginStartupInfo * Info);
 
 	public: // nvi
 		void GetPluginInfoW(PluginInfo * Info);

@@ -34,16 +34,19 @@ namespace Far {
 
 	bool CompareWidth_less(const FarDialogItem_t & a, const FarDialogItem_t & b)
 	{
+		LogNoise(L"(%d, %s) cmp (%d, %s)\n", a.Type, a.Data, b.Type, b.Data);
 		return (a.X1 + a.get_width()) < (b.X1 + b.get_width());
 	}
 
 	///=============================================================================================
-	DialogBuilder_i::~DialogBuilder_i()
+	SimpleDialogBuilder_impl::~SimpleDialogBuilder_impl()
 	{
+		psi().DialogFree(DialogHandle);
+
+//		simstd::for_each(DialogItems.begin(), DialogItems.end(), std::bind(&FarDialogItem_t::destroy, std::placeholders::_1));
 		LogTrace();
 	}
 
-	///=============================================================================================
 	SimpleDialogBuilder_impl::SimpleDialogBuilder_impl(const GUID & guid, PCWSTR label, PCWSTR aHelpTopic, FARWINDOWPROC aDlgProc, void * aUserParam) :
 		m_guid(guid),
 		DlgProc(aDlgProc),
@@ -57,28 +60,20 @@ namespace Far {
 		SingleBoxIndex(0)
 	{
 		LogNoise(L"'%s'\n", label);
-		create_border(label);
-	}
 
-	SimpleDialogBuilder_impl::~SimpleDialogBuilder_impl()
-	{
-		psi().DialogFree(DialogHandle);
-
-//		simstd::for_each(DialogItems.begin(), DialogItems.end(), std::bind(&FarDialogItem_t::destroy, std::placeholders::_1));
-		LogTrace();
+		// create border
+		auto item = add_dialog_item(DI_DOUBLEBOX, label);
+		item->set_dimension(DEFAULT_BORDER_INDENT_X, DEFAULT_BORDER_INDENT_Y, item->get_width() + 4, 4);
+		LogNoise(L"NextY: %Id, size: %Iu\n", NextY, DialogItems.size());
 	}
 
 	FarDialogItem_t * SimpleDialogBuilder_impl::add_item_(FarDialogItem_t * item)
 	{
 		LogTrace();
-		DialogItems.emplace_back(simstd::move(*item));
-		delete item;
+		FarDialogItem_t * ret = add_dialog_item(item);
+		set_next_y(ret);
 
-		FarDialogItem_t * Item = &DialogItems.back();
-		Item->set_dlg(&DialogHandle);
-		Item->set_index(DialogItems.size() - 1);
-		set_next_y(Item);
-		return Item;
+		return ret;
 	}
 
 	FarDialogItem_t * SimpleDialogBuilder_impl::add_item_before_(FarDialogItem_t * item)
@@ -200,6 +195,7 @@ namespace Far {
 	{
 		LogTrace();
 		UpdateBorderSize();
+		LogTrace();
 		int Result = show_dialog_();
 		if (Result == OKButtonId) {
 			save();
@@ -212,23 +208,15 @@ namespace Far {
 
 
 	///---------------------------------------------------------------------------------------------
-	void SimpleDialogBuilder_impl::create_border(PCWSTR Text)
-	{
-		LogTrace();
-		FarDialogItem_t * item = add_dialog_item(DI_DOUBLEBOX, Text);
-		item->X1 = DEFAULT_BORDER_INDENT_X;
-		item->X2 = item->X1 + item->get_width() + 2 + 2 - 1; // 2 for border and 2 for spaces in title
-		item->Y1 = DEFAULT_BORDER_INDENT_Y;
-		item->Y2 = item->Y1 + 2 - 1;
-	}
-
 	FarDialogItem_t * SimpleDialogBuilder_impl::add_dialog_item(FARDIALOGITEMTYPES Type, PCWSTR Text, FARDIALOGITEMFLAGS flags)
 	{
 		LogTrace();
 		DialogItems.emplace_back(Type, Text, flags);
-		FarDialogItem_t * ret = &DialogItems.back();
+		auto ret = &DialogItems.back();
 		ret->set_dlg(&DialogHandle);
 		ret->set_index(DialogItems.size() - 1);
+
+		LogNoise(L"DialogItems.size(): %Iu\n", DialogItems.size());
 		return ret;
 	}
 
@@ -260,14 +248,17 @@ namespace Far {
 		simstd::for_each(DialogItems.begin(), DialogItems.end(), std::bind(&FarDialogItem_t::save, std::placeholders::_1));
 	}
 
-	void SimpleDialogBuilder_impl::set_next_y(FarDialogItem_t * Item)
+	void SimpleDialogBuilder_impl::set_next_y(FarDialogItem_t * item)
 	{
 		LogTrace();
-		Item->X1 = ZERO_X + DEFAULT_PADDING + Indent;
-		if (Item->X2)
-			Item->X2 += Item->X1;
-		Item->Y1 = NextY++;
-		Item->Y2 = Item->Y1;
+		item->set_dimension(ZERO_X + DEFAULT_PADDING + Indent, NextY++, (item->X2) ? item->X2 : item->get_width());
+		LogNoise(L"NextY: %Id\n", NextY);
+
+//		Item->X1 = ZERO_X + DEFAULT_PADDING + Indent;
+//		if (Item->X2)
+//			Item->X2 += Item->X1;
+//		Item->Y1 = NextY++;
+//		Item->Y2 = Item->Y1;
 //		Item->Y2 = Item->Y1 + Item->get_height() - 1;
 //		NextY = Item->Y2 + 1;
 	}
@@ -287,9 +278,12 @@ namespace Far {
 		if (DialogItems.size() > 1) {
 			FarDialogItem_t & border = DialogItems[0];
 			auto borderX2 = GetMaxItemX2() + DEFAULT_PADDING + 1;
+			LogTrace();
 			borderX2 -= (border.X2 - border.X1);
+			LogTrace();
 			if (borderX2 > 0)
 				border.X2 += borderX2;
+			LogTrace();
 			border.Y2 = DialogItems.back().Y2 + 1;
 		}
 		LogTrace();

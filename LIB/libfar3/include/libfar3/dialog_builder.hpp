@@ -1,5 +1,5 @@
 ﻿/**
- © 2013 Andrew Grechkin
+ © 2014 Andrew Grechkin
  Source code: <http://code.google.com/p/andrew-grechkin>
 
  This program is free software: you can redistribute it and/or modify
@@ -29,7 +29,7 @@
 namespace Far {
 
 	struct DialogItemBinding_i {
-		virtual ~DialogItemBinding_i();
+		virtual ~DialogItemBinding_i() = default;
 
 		HANDLE get_dlg() const;
 
@@ -88,6 +88,8 @@ namespace Far {
 
 		void set_index(ssize_t ind);
 
+		void set_dimension(ssize_t x, ssize_t y, ssize_t width, ssize_t height = 1);
+
 		void save() const;
 	};
 
@@ -114,9 +116,9 @@ namespace Far {
 
 	FarDialogItem_t * create_combobox(ssize_t * value, FarListItem items[], size_t count, FARDIALOGITEMFLAGS flags = DIF_NONE);
 
-	FarDialogItem_t * create_edit(PWSTR value, ssize_t max_size, ssize_t width = -1, PCWSTR history_id = nullptr, bool use_last_history = false, FARDIALOGITEMFLAGS flags = DIF_NONE);
+	FarDialogItem_t * create_edit(simstd::wstring * value, ssize_t width = -1, PCWSTR history_id = nullptr, bool use_last_history = false, FARDIALOGITEMFLAGS flags = DIF_NONE);
 
-	FarDialogItem_t * create_password(PWSTR value, ssize_t max_size, ssize_t width = -1, FARDIALOGITEMFLAGS flags = DIF_NONE);
+	FarDialogItem_t * create_password(simstd::wstring * value, ssize_t width = -1, FARDIALOGITEMFLAGS flags = DIF_NONE);
 
 	struct AddRadioButton_t {
 		ssize_t id;
@@ -125,72 +127,35 @@ namespace Far {
 
 	///=============================================================================================
 	struct DialogBuilder_i {
-		virtual ~DialogBuilder_i();
+		virtual ~DialogBuilder_i() = default;
 
-		FarDialogItem_t * add_item(FarDialogItem_t * item)
-		{
-			return add_item_(item);
-		}
+		DialogBuilder_i() = default;
 
-		FarDialogItem_t * add_item_before(FarDialogItem_t * item)
-		{
-			return add_item_before_(item);
-		}
+		FarDialogItem_t * add_item(FarDialogItem_t * item);
 
-		FarDialogItem_t * add_item_after(FarDialogItem_t * item)
-		{
-			return add_item_after_(item);
-		}
+		FarDialogItem_t * add_item_before(FarDialogItem_t * item);
 
-		void add_empty_line()
-		{
-			add_empty_line_();
-		}
+		FarDialogItem_t * add_item_after(FarDialogItem_t * item);
 
-		void add_OKCancel(PCWSTR OKLabel, PCWSTR CancelLabel, PCWSTR ExtraLabel = nullptr)
-		{
-			add_OKCancel_(OKLabel, CancelLabel, ExtraLabel);
-		}
+		void add_empty_line();
 
-		void add_radiobuttons(ssize_t * Value, ssize_t OptionCount, const AddRadioButton_t list[], bool FocusOnSelected = false)
-		{
-			add_radiobuttons_(Value, OptionCount, list, FocusOnSelected);
-		}
+		void add_OKCancel(PCWSTR OKLabel, PCWSTR CancelLabel, PCWSTR ExtraLabel = nullptr);
 
-		void start_column()
-		{
-			start_column_();
-		}
+		void add_radiobuttons(ssize_t * Value, ssize_t OptionCount, const AddRadioButton_t list[], bool FocusOnSelected = false);
 
-		void break_column()
-		{
-			break_column_();
-		}
+		void start_column();
 
-		void end_column()
-		{
-			end_column_();
-		}
+		void break_column();
 
-		void start_singlebox(ssize_t Width, PCWSTR Label = EMPTY_STR, bool LeftAlign = false)
-		{
-			start_singlebox_(Width, Label, LeftAlign);
-		}
+		void end_column();
 
-		void end_singlebox()
-		{
-			end_singlebox_();
-		}
+		void start_singlebox(ssize_t Width, PCWSTR Label = EMPTY_STR, bool LeftAlign = false);
 
-		int show_ex()
-		{
-			return show_();
-		}
+		void end_singlebox();
 
-		bool show()
-		{
-			return show_() == 0;
-		}
+		int show_ex();
+
+		bool show();
 
 	private:
 		virtual FarDialogItem_t * add_item_(FarDialogItem_t * item) = 0;
@@ -217,6 +182,71 @@ namespace Far {
 
 		virtual int show_() = 0;
 	};
+
+	inline FarDialogItem_t * DialogBuilder_i::add_item(FarDialogItem_t * item)
+	{
+		return add_item_(item);
+	}
+
+	inline FarDialogItem_t * DialogBuilder_i::add_item_before(FarDialogItem_t * item)
+	{
+		return add_item_before_(item);
+	}
+
+	inline FarDialogItem_t * DialogBuilder_i::add_item_after(FarDialogItem_t * item)
+	{
+		return add_item_after_(item);
+	}
+
+	inline void DialogBuilder_i::add_empty_line()
+	{
+		add_empty_line_();
+	}
+
+	inline void DialogBuilder_i::add_OKCancel(PCWSTR OKLabel, PCWSTR CancelLabel, PCWSTR ExtraLabel)
+	{
+		add_OKCancel_(OKLabel, CancelLabel, ExtraLabel);
+	}
+
+	inline void DialogBuilder_i::add_radiobuttons(ssize_t * Value, ssize_t OptionCount, const AddRadioButton_t list[], bool FocusOnSelected)
+	{
+		add_radiobuttons_(Value, OptionCount, list, FocusOnSelected);
+	}
+
+	inline void DialogBuilder_i::start_column()
+	{
+		start_column_();
+	}
+
+	inline void DialogBuilder_i::break_column()
+	{
+		break_column_();
+	}
+
+	inline void DialogBuilder_i::end_column()
+	{
+		end_column_();
+	}
+
+	inline void DialogBuilder_i::start_singlebox(ssize_t Width, PCWSTR Label, bool LeftAlign)
+	{
+		start_singlebox_(Width, Label, LeftAlign);
+	}
+
+	inline void DialogBuilder_i::end_singlebox()
+	{
+		end_singlebox_();
+	}
+
+	inline int DialogBuilder_i::show_ex()
+	{
+		return show_();
+	}
+
+	inline bool DialogBuilder_i::show()
+	{
+		return show_() == 0;
+	}
 
 	///=============================================================================================
 	simstd::shared_ptr<DialogBuilder_i> create_dialog_builder(const GUID & aId, PCWSTR TitleLabel, PCWSTR aHelpTopic = nullptr, FARWINDOWPROC aDlgProc = nullptr, void * aUserParam = nullptr);

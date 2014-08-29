@@ -24,52 +24,48 @@
 namespace Far {
 
 	///========================================================================================= nvi
-	void Plugin_i::GetPluginInfoW(PluginInfo * Info)
+	void Plugin_i::GetPluginInfoW(PluginInfo * info)
 	{
-		Info->StructSize = sizeof(*Info);
-		GetPluginInfo(Info);
+		info->StructSize = sizeof(*info);
+		GetPluginInfo(info);
 	}
 
-	PanelController_i * Plugin_i::OpenW(const OpenInfo * Info)
+	PanelController_i * Plugin_i::OpenW(const OpenInfo * info)
 	{
 		LogTrace();
-		if (Info->StructSize < sizeof(*Info))
+		if (info->StructSize < sizeof(*info))
 			return nullptr;
-		return Open(Info);
+		return Open(info);
 	}
 
-	void Plugin_i::ExitFARW(const ExitInfo * Info)
+	void Plugin_i::ExitFARW(const ExitInfo * info)
 	{
 		LogTrace();
-		if (Info->StructSize < sizeof(*Info))
+		if (info->StructSize < sizeof(*info))
 			return;
-		return ExitFAR(Info);
+		return ExitFAR(info);
 	}
 
 	///=============================================================================================
-	Plugin_i::Plugin_i(const PluginStartupInfo * Info)
+	Plugin_i::Plugin_i(const PluginStartupInfo * info)
 	{
-		LogTrace();
-		m_psi = *Info;
-		m_fsf = *Info->FSF;
+		m_psi = *info;
+		m_fsf = *info->FSF;
 		m_psi.FSF = &m_fsf;
 	}
 
-	Plugin_i::~Plugin_i()
-	{
-		LogTrace();
-	}
-
 	///=============================================================================================
-	PanelController_i * Plugin_i::Open(const OpenInfo * /*Info*/)
+	PanelController_i * Plugin_i::Open(const OpenInfo * info)
 	{
 		LogTrace();
+		UNUSED(info);
 		return nullptr;
 	}
 
-	void Plugin_i::ExitFAR(const ExitInfo * /*Info*/)
+	void Plugin_i::ExitFAR(const ExitInfo * info)
 	{
 		LogTrace();
+		UNUSED(info);
 	}
 
 }

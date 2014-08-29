@@ -107,6 +107,17 @@ namespace fsys {
 			return np.QuadPart;
 		}
 
+		uint64_t Facade::get_inode() const
+		{
+			return make_uint64(nFileIndexHigh, nFileIndexLow);
+		}
+
+		size_t Facade::get_volume_sn() const
+		{
+			return dwVolumeSerialNumber;
+		}
+
+
 		void Facade::set_position(int64_t dist, DWORD method)
 		{
 			CheckApi(set_position_nt(dist, method));

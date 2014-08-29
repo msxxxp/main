@@ -268,6 +268,11 @@ namespace fsys {
 				return m_stat.ftLastWriteTime;
 			}
 
+			uint64_t mtime() const
+			{
+				return make_uint64(m_stat.ftLastWriteTime.dwHighDateTime, m_stat.ftLastWriteTime.dwLowDateTime);
+			}
+
 			bool is_file() const
 			{
 				return !fsys::is_dir(m_stat.dwFileAttributes);
@@ -482,6 +487,10 @@ namespace fsys {
 			bool set_attr_nt(DWORD at);
 
 			uint64_t get_position() const;
+
+			uint64_t get_inode() const;
+
+			size_t get_volume_sn() const;
 
 			void set_position(int64_t dist, DWORD method = FILE_BEGIN);
 

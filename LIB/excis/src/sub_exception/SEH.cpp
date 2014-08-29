@@ -88,6 +88,7 @@ namespace exception {
 
 	void set_unhandled_exception_filter()
 	{
+		LogTrace();
 		::SetUnhandledExceptionFilter(unhandled_exception_filter);
 	}
 
@@ -111,6 +112,7 @@ namespace exception {
 
 	void set_vectored_exception_filter()
 	{
+		LogTrace();
 		::AddVectoredExceptionHandler(1, vectored_exception_handler);
 	}
 

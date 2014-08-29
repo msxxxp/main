@@ -1,0 +1,28 @@
+﻿.Language=Russian,Russian (Русский)
+
+"hardlinker"
+"hardlinker"
+"hardlinker"
+
+"&o Да"
+"&c Отмена"
+
+"cbMask"
+"cbDoHardlink"
+"cbDoRecursive"
+"cbAskConfirmation"
+"cbEuristic"
+"txDirFilters"
+"txFileFilters"
+"txFileRestrictions"
+"cbRestrictionFileTime"
+"cbRestrictionFileAttributes"
+"cbFilterFileSize"
+"cbFilterFileReadOnly"
+"cbFilterFileHidden"
+"cbFilterFileSystem"
+"cbFilterFileLink"
+"cbFilterDirReadOnly"
+"cbFilterDirHidden"
+"cbFilterDirSystem"
+"cbFilterDirLink"

@@ -90,7 +90,7 @@ namespace fsys {
 
 	bool File::count_hash(std::vector<char> & out, simstd::wstring path, uint64_t first, uint64_t last)
 	{
-		fsys::file::Facade file(fsys::file::open(path));
+		auto file(fsys::file::open(path));
 		if (file && file->set_position(static_cast<int64_t>(first), fsys::file::Seek::FromBeginOfFile)) {
 			uint64_t size = last - first;
 			crypt::Hash hasher(*global::vars().cryptProvider);

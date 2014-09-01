@@ -5,31 +5,24 @@
 
 namespace crypt {
 
-	struct Hash: private pattern::Uncopyable {
-		typedef uintptr_t native_handle_type;
+	class Hash_i {
+		struct native_impl_t;
 
-		~Hash();
+	public:
+		typedef native_impl_t * native_handle_t;
 
-		Hash(const Provider & provider);
+		virtual ~Hash_i() = default;
 
-		bool is_valid() const;
+		virtual bool process(const void * buf, size_t size) = 0;
 
-		bool process(const void * buf, size_t size);
+		virtual size_t get_size() const = 0;
 
-		size_t get_size() const;
-
-		void get_hash(void * buf, size_t size) const;
-
-		operator native_handle_type() const;
-
-	private:
-		native_handle_type m_handle;
+		virtual void get_hash(void * buf, size_t size) const = 0;
 	};
 
-	inline Hash::operator Hash::native_handle_type() const
-	{
-		return m_handle;
-	}
+	typedef simstd::unique_ptr<Hash_i> Hash;
+
+	Hash hash(const Provider & provider);
 
 }
 

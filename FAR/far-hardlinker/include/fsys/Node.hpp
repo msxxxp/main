@@ -3,6 +3,7 @@
 
 #include <fsys.hpp>
 
+#include <basis/std/vector>
 #include <vector>
 
 namespace fsys {
@@ -42,7 +43,7 @@ namespace fsys {
 
 	class File: public Node {
 	public:
-		typedef std::vector<char> HashVal;
+		typedef simstd::vector<char> HashVal;
 
 		~File();
 
@@ -69,7 +70,7 @@ namespace fsys {
 	private:
 		void refresh_handle_info() const;
 
-		static bool count_hash(std::vector<char> & out, simstd::wstring path, uint64_t first, uint64_t last);
+		static bool count_hash(simstd::vector<char> & out, simstd::wstring path, uint64_t first, uint64_t last);
 
 		uint64_t             m_size;
 		uint64_t             m_mtime;

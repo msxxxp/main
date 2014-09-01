@@ -75,6 +75,8 @@ namespace { \
 #   define LogTrace()
 #   define LogTraceIf(condition)                       (void)(condition)
 #   define LogTraceObj()
+#   define LogTraceObjBegin()
+#   define LogTraceObjEnd()
 #   define LogNoise(format, ...)
 #   define LogNoiseIf(condition, format, ...)          (void)(condition)
 #   define LogDebug(format, ...)

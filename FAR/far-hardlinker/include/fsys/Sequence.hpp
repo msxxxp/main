@@ -33,7 +33,7 @@ namespace fsys {
 			fileSkipHidden     = 0x04000,
 			fileSkipSystem     = 0x08000,
 			fileSkipLink       = 0x10000,
-			fileSkipZeroSize = 0x20000,
+			fileSkipZeroSize   = 0x20000,
 		};
 
 		typedef FindStat value_type;
@@ -195,9 +195,9 @@ namespace fsys {
 
 		ci_iterator(const Sequence & seq);
 
-		bool is_filtered_folder(const FindStat & stat, const SearchOptions & options, SearchStatistics & statistics);
+		bool is_filtered_folder(const FindStat & stat);
 
-		bool is_filtered_file(const FindStat & stat, const SearchOptions & options, SearchStatistics & statistics);
+		bool is_filtered_file(const FindStat & stat);
 
 		struct impl;
 		simstd::shared_ptr<impl> m_impl;

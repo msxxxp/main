@@ -13,7 +13,7 @@ namespace crypt {
 
 		virtual ~Provider_i() = default;
 
-		native_handle_t get_native_handle() const;
+		virtual native_handle_t get_native_handle() const = 0;
 	};
 
 	typedef simstd::unique_ptr<Provider_i> Provider;

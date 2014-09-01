@@ -88,24 +88,26 @@ namespace fsys {
 		LogDebug(L"0x%08X 0x%016X '%s'\n", m_volume_sn, m_inode, m_name.c_str());
 	}
 
-	bool File::count_hash(std::vector<char> & out, simstd::wstring path, uint64_t first, uint64_t last)
+	bool File::count_hash(simstd::vector<char> & out, simstd::wstring path, uint64_t first, uint64_t last)
 	{
 		auto file(fsys::file::open(path));
 		if (file && file->set_position(static_cast<int64_t>(first), fsys::file::Seek::FromBeginOfFile)) {
-			uint64_t size = last - first;
-			crypt::Hash hasher(*global::vars().cryptProvider);
-			while (size) {
-				const size_t BUF_SIZE = 1024 * 1024;
-				char buf[BUF_SIZE];
-				size_t bytes_to_read = std::min(BUF_SIZE, size);
-				size_t bytes_read = 0;
-				file->read(buf, bytes_to_read, bytes_read);
-				hasher.process(buf, bytes_read);
-				size -= bytes_read;
-			}
+			crypt::Hash hasher(crypt::hash(global::vars().cryptProvider));
+			if (hasher) {
+				uint64_t size = last - first;
+				while (size) {
+					const size_t BUF_SIZE = 1024 * 1024;
+					char buf[BUF_SIZE];
+					size_t bytes_to_read = std::min(BUF_SIZE, size);
+					size_t bytes_read = 0;
+					file->read(buf, bytes_to_read, bytes_read);
+					hasher->process(buf, bytes_read);
+					size -= bytes_read;
+				}
 
-			out.resize(hasher.get_size());
-			hasher.get_hash(&out[0], out.size());
+				out.resize(hasher->get_size());
+				hasher->get_hash(&out[0], out.size());
+			}
 		}
 
 		return false;

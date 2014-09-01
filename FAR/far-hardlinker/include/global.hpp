@@ -84,7 +84,7 @@ namespace global {
 	};
 
 	struct Vars {
-		simstd::unique_ptr<crypt::Provider> cryptProvider;
+		crypt::Provider cryptProvider;
 		fsys::Folders_t folders;
 		fsys::Files_t files;
 	};

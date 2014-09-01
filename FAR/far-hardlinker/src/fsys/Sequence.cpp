@@ -69,10 +69,10 @@ namespace fsys {
 			}
 
 			if (st.is_dir()) {
-				if (is_filtered_folder(st, m_impl->m_sequence->m_options, m_impl->m_sequence->m_statistics))
+				if (is_filtered_folder(st))
 					break;
 			} else {
-				if (is_filtered_file(st, m_impl->m_sequence->m_options, m_impl->m_sequence->m_statistics))
+				if (is_filtered_file(st))
 					break;
 			}
 
@@ -118,9 +118,12 @@ namespace fsys {
 		operator++();
 	}
 
-	bool Sequence::ci_iterator::is_filtered_folder(const FindStat & stat, const SearchOptions & options, SearchStatistics & statistics)
+	bool Sequence::ci_iterator::is_filtered_folder(const FindStat & stat)
 	{
 		bool ret = false;
+
+		const SearchOptions & options = m_impl->m_sequence->m_options;
+		SearchStatistics & statistics = m_impl->m_sequence->m_statistics;
 
 		if (stat.is_link()) {
 			++statistics.foldersLinksFound;
@@ -148,9 +151,12 @@ namespace fsys {
 		return ret;
 	}
 
-	bool Sequence::ci_iterator::is_filtered_file(const FindStat & stat, const SearchOptions & options, SearchStatistics & statistics)
+	bool Sequence::ci_iterator::is_filtered_file(const FindStat & stat)
 	{
 		bool ret = false;
+
+		const SearchOptions & options = m_impl->m_sequence->m_options;
+		SearchStatistics & statistics = m_impl->m_sequence->m_statistics;
 
 		if (stat.is_link()) {
 			++statistics.filesLinksFound;

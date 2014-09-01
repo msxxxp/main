@@ -56,6 +56,8 @@ FarPlugin::FarPlugin(const PluginStartupInfo * info):
 	Far::Plugin_i(info)
 {
 	LogTraceObj();
+
+	global::vars().cryptProvider = crypt::provider();
 }
 
 void FarPlugin::destroy() const

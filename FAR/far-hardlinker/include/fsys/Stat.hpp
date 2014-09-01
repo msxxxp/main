@@ -5,7 +5,7 @@
 
 namespace fsys {
 
-	class Stat_i: private pattern::Uncopyable {
+	class Stat_i {
 	public:
 		virtual ~Stat_i() = default;
 

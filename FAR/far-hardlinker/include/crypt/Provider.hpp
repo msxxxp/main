@@ -1,56 +1,24 @@
-﻿#ifndef _CRYPT_HPP_
-#define _CRYPT_HPP_
+﻿#ifndef _CRYPT_PROVIDER_HPP_
+#define _CRYPT_PROVIDER_HPP_
 
-#include <basis/ext/pattern.hpp>
-#include <basis/std/memory>
+#include <crypt.hpp>
 
 namespace crypt {
 
-	struct Provider: private pattern::Uncopyable {
-		typedef uintptr_t native_handle_type;
+	class Provider_i {
+		struct native_impl_t;
 
-		~Provider();
+	public:
+		typedef native_impl_t * native_handle_t;
 
-		Provider();
+		virtual ~Provider_i() = default;
 
-		bool is_valid() const;
-
-		operator native_handle_type() const;
-
-	private:
-		native_handle_type m_handle;
+		native_handle_t get_native_handle() const;
 	};
 
-	inline Provider::operator Provider::native_handle_type() const
-	{
-		return m_handle;
-	}
+	typedef simstd::unique_ptr<Provider_i> Provider;
 
-	struct Hash: private pattern::Uncopyable {
-		typedef uintptr_t native_handle_type;
-
-		~Hash();
-
-		Hash(const Provider & provider);
-
-		bool is_valid() const;
-
-		bool process(const void * buf, size_t size);
-
-		size_t get_size() const;
-
-		void get_hash(void * buf, size_t size) const;
-
-		operator native_handle_type() const;
-
-	private:
-		native_handle_type m_handle;
-	};
-
-	inline Hash::operator Hash::native_handle_type() const
-	{
-		return m_handle;
-	}
+	Provider provider();
 
 }
 

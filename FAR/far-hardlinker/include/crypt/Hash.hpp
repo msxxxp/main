@@ -1,30 +1,9 @@
-﻿#ifndef _CRYPT_HPP_
-#define _CRYPT_HPP_
+﻿#ifndef _CRYPT_HASH_HPP_
+#define _CRYPT_HASH_HPP_
 
-#include <basis/ext/pattern.hpp>
-#include <basis/std/memory>
+#include <crypt.hpp>
 
 namespace crypt {
-
-	struct Provider: private pattern::Uncopyable {
-		typedef uintptr_t native_handle_type;
-
-		~Provider();
-
-		Provider();
-
-		bool is_valid() const;
-
-		operator native_handle_type() const;
-
-	private:
-		native_handle_type m_handle;
-	};
-
-	inline Provider::operator Provider::native_handle_type() const
-	{
-		return m_handle;
-	}
 
 	struct Hash: private pattern::Uncopyable {
 		typedef uintptr_t native_handle_type;

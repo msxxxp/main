@@ -5,6 +5,18 @@
 #include <wincrypt.h>
 
 namespace crypt {
+	struct Provider: public Provider_i {
+		~Provider();
+
+		Provider();
+
+		bool is_valid() const;
+
+		Provider_i::native_handle_t get_native_handle() const;
+
+	private:
+		HCRYPTPROV m_handle;
+	};
 
 	Provider::~Provider()
 	{
@@ -23,7 +35,15 @@ namespace crypt {
 
 	bool Provider::is_valid() const
 	{
-		return m_handle != native_handle_type();
+		return m_handle != HCRYPTPROV();
 	}
 
+	Provider_i::native_handle_t Provider::get_native_handle() const
+	{
+		return reinterpret_cast<HCRYPTPROV>(m_handle);
+	}
+
+	Provider provider()
+	{
+	}
 }

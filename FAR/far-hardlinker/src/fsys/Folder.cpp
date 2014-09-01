@@ -12,14 +12,14 @@ namespace fsys {
 		LogDebug(L"'%s'\n", m_name.c_str());
 	}
 
-	Folder::Folder(const simstd::wstring & name) :
+	Folder::Folder(const ustring & name) :
 		Node(name, Node_t(nullptr))
 	{
 		LogDebug(L"'%s'\n", m_name.c_str());
 		++global::statistics().folderObjectsCreated;
 	}
 
-	Folder::Folder(const simstd::wstring & name, Node_t parent) :
+	Folder::Folder(const ustring & name, Node_t parent) :
 		Node(name, parent)
 	{
 		LogDebug(L"'%s'\n", m_name.c_str());

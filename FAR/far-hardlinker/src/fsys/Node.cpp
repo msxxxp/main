@@ -15,10 +15,10 @@ namespace fsys {
 		return true;
 	}
 
-	simstd::wstring Node::get_full_path() const
+	ustring Node::get_full_path() const
 	{
 		if (m_parent) {
-			simstd::wstring path = m_parent->get_full_path();
+			ustring path = m_parent->get_full_path();
 			path += PATH_SEPARATOR;
 			path += m_name;
 			return path;

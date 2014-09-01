@@ -32,8 +32,8 @@ bool CompareAndLink(fsys::Files_t::iterator it1, fsys::Files_t::iterator it2)
 {
 	auto file1 = *it1;
 	auto file2 = *it2;
-	simstd::wstring path1(file1->get_full_path());
-	simstd::wstring path2(file2->get_full_path());
+	ustring path1(file1->get_full_path());
+	ustring path2(file2->get_full_path());
 
 	LogConsoleDebug(FOREGROUND_INTENSITY | FOREGROUND_BLUE | FOREGROUND_GREEN, L"Comparing files [size = %I64u]:\n", file2->size());
 	LogConsoleDebug(-1, L"  %s\n", path1.c_str());

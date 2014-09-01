@@ -67,7 +67,7 @@ struct FarGlobalInfo: public Far::GlobalInfo_i, private pattern::Uncopyable {
 	int64_t m_cbFilterDirHidden;
 	int64_t m_cbFilterDirSystem;
 	int64_t m_cbFilterDirLink;
-	simstd::wstring m_edMask;
+	ustring m_edMask;
 };
 
 FarGlobalInfo * get_global_info();

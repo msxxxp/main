@@ -42,7 +42,7 @@ namespace fsys {
 		typedef ci_iterator iterator;
 		typedef ci_iterator const_iterator;
 
-		Sequence(const simstd::wstring & path, const SearchOptions & options, SearchStatistics & statistics);
+		Sequence(const ustring & path, const SearchOptions & options, SearchStatistics & statistics);
 
 		const_iterator begin() const;
 
@@ -50,19 +50,19 @@ namespace fsys {
 
 		bool empty() const;
 
-		simstd::wstring path() const;
+		ustring path() const;
 
 		const SearchOptions & options() const;
 
 		const SearchStatistics & statistics() const;
 
 	private:
-		simstd::wstring       m_path;
+		ustring       m_path;
 		const SearchOptions & m_options;
 		SearchStatistics    & m_statistics;
 	};
 
-	inline simstd::wstring Sequence::path() const
+	inline ustring Sequence::path() const
 	{
 		return m_path;
 	}
@@ -144,10 +144,10 @@ namespace fsys {
 
 	///=================================================================================================================
 	struct Sequence::SearchOptions {
-		uint64_t        fileMinSize;
-		uint64_t        fileMaxSize;
-		simstd::wstring mask;
-		flags_type      flags;
+		uint64_t   fileMinSize;
+		uint64_t   fileMaxSize;
+		ustring    mask;
+		flags_type flags;
 
 		SearchOptions();
 	};

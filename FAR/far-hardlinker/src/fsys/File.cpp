@@ -24,7 +24,7 @@ namespace fsys {
 		++global::statistics().fileObjectsCreated;
 	}
 
-	simstd::wstring File::get_full_path() const
+	ustring File::get_full_path() const
 	{
 		if (m_full_path.empty())
 			m_full_path = Node::get_full_path();
@@ -88,7 +88,7 @@ namespace fsys {
 		LogDebug(L"0x%08X 0x%016X '%s'\n", m_volume_sn, m_inode, m_name.c_str());
 	}
 
-	bool File::count_hash(simstd::vector<char> & out, simstd::wstring path, uint64_t first, uint64_t last)
+	bool File::count_hash(simstd::vector<char> & out, ustring path, uint64_t first, uint64_t last)
 	{
 		auto file(fsys::file::open(path));
 		if (file && file->set_position(static_cast<int64_t>(first), fsys::file::Seek::FromBeginOfFile)) {

@@ -7,7 +7,7 @@
 
 namespace fsys {
 
-	Sequence::Sequence(const simstd::wstring & path, const SearchOptions & options, SearchStatistics & statistics) :
+	Sequence::Sequence(const ustring & path, const SearchOptions & options, SearchStatistics & statistics) :
 		m_path(path),
 		m_options(options),
 		m_statistics(statistics)
@@ -55,7 +55,7 @@ namespace fsys {
 		while (true) {
 			FindStat & st = m_impl->m_fstat;
 			if (m_impl->m_find_handle == INVALID_HANDLE_VALUE) {
-				simstd::wstring pattern = fsys::MakePath(m_impl->m_sequence->path(), opt.mask);
+				ustring pattern = fsys::MakePath(m_impl->m_sequence->path(), opt.mask);
 				m_impl->m_find_handle = ::FindFirstFileW(pattern.c_str(), &st.m_stat);
 				if (m_impl->m_find_handle == INVALID_HANDLE_VALUE) {
 					m_impl.reset(new impl);

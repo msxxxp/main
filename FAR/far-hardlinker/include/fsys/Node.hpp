@@ -17,18 +17,18 @@ namespace fsys {
 	public:
 		virtual ~Node() = default;
 
-		Node(const simstd::wstring & name);
+		Node(const ustring & name);
 
-		Node(const simstd::wstring & name, Node_t parent);
+		Node(const ustring & name, Node_t parent);
 
 		bool is_equal_path(Node * other) const;
 
-		simstd::wstring get_name() const;
+		ustring get_name() const;
 
-		virtual simstd::wstring get_full_path() const;
+		virtual ustring get_full_path() const;
 
 	protected:
-		simstd::wstring  m_name;
+		ustring  m_name;
 		Node_t      m_parent;
 	};
 
@@ -36,9 +36,9 @@ namespace fsys {
 	public:
 		~Folder();
 
-		Folder(const simstd::wstring & name);
+		Folder(const ustring & name);
 
-		Folder(const simstd::wstring & name, Node_t parent);
+		Folder(const ustring & name, Node_t parent);
 	};
 
 	class File: public Node {
@@ -49,7 +49,7 @@ namespace fsys {
 
 		File(const fsys::Sequence::FindStat & info, Node_t parent);
 
-		simstd::wstring get_full_path() const;
+		ustring get_full_path() const;
 
 		size_t attr() const;
 
@@ -70,7 +70,7 @@ namespace fsys {
 	private:
 		void refresh_handle_info() const;
 
-		static bool count_hash(simstd::vector<char> & out, simstd::wstring path, uint64_t first, uint64_t last);
+		static bool count_hash(simstd::vector<char> & out, ustring path, uint64_t first, uint64_t last);
 
 		uint64_t             m_size;
 		uint64_t             m_mtime;
@@ -80,7 +80,7 @@ namespace fsys {
 		mutable HashVal      m_wholeHash;
 		mutable size_t       m_volume_sn;
 		mutable uint64_t     m_inode;
-		mutable simstd::wstring m_full_path;
+		mutable ustring m_full_path;
 
 		friend bool compare_head_hash(const File & file1, const File & file2);
 		friend bool compare_tail_hash(const File & file1, const File & file2);
@@ -93,20 +93,20 @@ namespace fsys {
 	typedef simstd::shared_ptr<File> File_t;
 	typedef std::vector<File_t> Files_t;
 
-	inline Node::Node(const simstd::wstring & name) :
+	inline Node::Node(const ustring & name) :
 		m_name(name),
 		m_parent(nullptr)
 	{
 
 	}
 
-	inline Node::Node(const simstd::wstring & name, Node_t parent) :
+	inline Node::Node(const ustring & name, Node_t parent) :
 		m_name(name),
 		m_parent(parent)
 	{
 	}
 
-	inline simstd::wstring Node::get_name() const
+	inline ustring Node::get_name() const
 	{
 		return m_name;
 	}

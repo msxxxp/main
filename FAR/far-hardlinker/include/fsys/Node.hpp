@@ -4,14 +4,14 @@
 #include <fsys.hpp>
 
 #include <basis/std/vector>
-#include <vector>
 
 namespace fsys {
 
 	class Node;
 
 	typedef simstd::shared_ptr<Node> Node_t;
-	typedef std::vector<Node_t> Folders_t;
+	typedef simstd::vector<Node_t>   Nodes_t;
+	typedef simstd::vector<Node_t>   Folders_t;
 
 	class Node {
 	public:
@@ -70,7 +70,7 @@ namespace fsys {
 	private:
 		void refresh_handle_info() const;
 
-		static bool count_hash(simstd::vector<char> & out, ustring path, uint64_t first, uint64_t last);
+		static bool count_hash(HashVal & out, ustring path, uint64_t first, uint64_t last);
 
 		uint64_t             m_size;
 		uint64_t             m_mtime;
@@ -91,7 +91,7 @@ namespace fsys {
 	bool compare_hash(const File & file1, const File & file2);
 
 	typedef simstd::shared_ptr<File> File_t;
-	typedef std::vector<File_t> Files_t;
+	typedef simstd::vector<File_t>   Files_t;
 
 	inline Node::Node(const ustring & name) :
 		m_name(name),

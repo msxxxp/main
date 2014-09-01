@@ -5,7 +5,7 @@
 #include <fsys.hpp>
 
 #include <basis/std/algorithm>
-#include <algorithm>
+//#include <algorithm>
 
 
 bool CompareBySizeLess(const fsys::File_t & file1, const fsys::File_t & file2)
@@ -162,18 +162,18 @@ ssize_t FileProcessor::execute()
 	}
 
 	using namespace global;
-	std::sort(vars().files.begin(), vars().files.end(), CompareBySizeAndTimeLess);
+	simstd::sort(vars().files.begin(), vars().files.end(), CompareBySizeAndTimeLess);
 
 	while (!vars().files.empty()) {
 //		logCounter(L"Files left:\t%8llu", std::distance(srch, data.end()));
-		auto bounds = std::equal_range(vars().files.begin(), vars().files.end(), vars().files.front(), CompareBySizeLess);
-		if (std::distance(bounds.first, bounds.second) == 1) {
+		auto bounds = simstd::equal_range(vars().files.begin(), vars().files.end(), vars().files.front(), CompareBySizeLess);
+		if (simstd::distance(bounds.first, bounds.second) == 1) {
 			++statistics().filesFoundUnique;
 			LogDebug(L"unique [%I64u] '%s'\n", bounds.first->get()->size(), bounds.first->get()->get_name().c_str());
 		} else {
-//			file_system::Files_t files(bounds.first, bounds.second);
-			fsys::Files_t files;
-			std::copy(bounds.first, bounds.second, std::back_inserter(files));
+			fsys::Files_t files(bounds.first, bounds.second);
+//			fsys::Files_t files;
+//			simstd::copy(bounds.first, bounds.second, simstd::back_inserter(files));
 			process_equal_sized_files(files);
 		}
 		vars().files.erase(bounds.first, bounds.second);

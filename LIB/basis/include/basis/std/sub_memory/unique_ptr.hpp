@@ -67,7 +67,7 @@ namespace simstd {
 		{
 		}
 
-		unique_ptr(unique_ptr&& other) noexcept :
+		unique_ptr(unique_ptr && other) noexcept :
 			m_ptr(other.release()),
 			m_dltr(simstd::forward<deleter_type>(other.get_deleter()))
 		{
@@ -75,13 +75,13 @@ namespace simstd {
 
 //		template<typename _Up, typename _Ep, typename = std::_Require<std::is_convertible<typename unique_ptr<_Up, _Ep>::pointer, pointer>,std::__not_<std::is_array<_Up>>, typename std::conditional<std::is_reference<Deleter>::value, std::is_same<_Ep, Deleter>, std::is_convertible<_Ep, Deleter>>::type>>
 		template<typename OType, typename ODeleter>
-		unique_ptr(unique_ptr<OType, ODeleter>&& other) noexcept :
+		unique_ptr(unique_ptr<OType, ODeleter> && other) noexcept :
 			m_ptr(other.release()),
 			m_dltr(simstd::forward<ODeleter>(other.get_deleter()))
 		{
 		}
 
-		unique_ptr& operator =(unique_ptr&& other) noexcept
+		unique_ptr& operator =(unique_ptr && other) noexcept
 		{
 			reset(other.release());
 			get_deleter() = simstd::forward<deleter_type>(other.get_deleter());
@@ -96,6 +96,13 @@ namespace simstd {
 //			get_deleter() = std::forward<_Ep>(other.get_deleter());
 //			return *this;
 //		}
+		template<typename OType, typename ODeleter>
+		unique_ptr & operator = (unique_ptr<OType, ODeleter> && other) noexcept
+		{
+			reset(other.release());
+			get_deleter() = simstd::forward<ODeleter>(other.get_deleter());
+			return *this;
+		}
 
 		unique_ptr & operator = (nullptr_t) noexcept
 		{

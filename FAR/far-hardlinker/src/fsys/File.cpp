@@ -88,7 +88,7 @@ namespace fsys {
 		LogDebug(L"0x%08X 0x%016X '%s'\n", m_volume_sn, m_inode, m_name.c_str());
 	}
 
-	bool File::count_hash(simstd::vector<char> & out, ustring path, uint64_t first, uint64_t last)
+	bool File::count_hash(HashVal & out, ustring path, uint64_t first, uint64_t last)
 	{
 		auto file(fsys::file::open(path));
 		if (file && file->set_position(static_cast<int64_t>(first), fsys::file::Seek::FromBeginOfFile)) {
@@ -98,7 +98,7 @@ namespace fsys {
 				while (size) {
 					const size_t BUF_SIZE = 1024 * 1024;
 					char buf[BUF_SIZE];
-					size_t bytes_to_read = std::min(BUF_SIZE, size);
+					size_t bytes_to_read = simstd::min(BUF_SIZE, size);
 					size_t bytes_read = 0;
 					file->read(buf, bytes_to_read, bytes_read);
 					hasher->process(buf, bytes_read);

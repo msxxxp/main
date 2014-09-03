@@ -6,6 +6,5 @@
 #include <basis/sys/sub_fsys/Direcrory.hpp>
 #include <basis/sys/sub_fsys/File.hpp>
 #include <basis/sys/sub_fsys/fsys.hpp>
-#include <basis/sys/sub_fsys/path.hpp>
 
 #endif

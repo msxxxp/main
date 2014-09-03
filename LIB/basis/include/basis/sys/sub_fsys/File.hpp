@@ -4,6 +4,7 @@
 #include <basis/sys/fsys.hpp>
 
 namespace fsys {
+
 	namespace file {
 
 		bool del_nt(const wchar_t * path);
@@ -36,7 +37,9 @@ namespace fsys {
 			size_type m_size;
 			bool m_write;
 		};
+
 	}
+
 }
 
 #endif

@@ -4,6 +4,7 @@
 #include <fsys.hpp>
 
 #include <basis/sys/fsys.hpp>
+#include <basis/std/string>
 
 #include <atomic>
 

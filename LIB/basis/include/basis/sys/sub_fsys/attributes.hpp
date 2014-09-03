@@ -5,7 +5,21 @@
 
 namespace fsys {
 
-	typedef DWORD Attributes;
+	typedef uint32_t Attributes;
+
+	Attributes get_attr_nt(const wchar_t * path);
+
+	bool is_file(Attributes attr);
+	bool is_dir(Attributes attr);
+	bool is_link(Attributes attr);
+
+	bool is_file_nt(const wchar_t * path);
+	bool is_dir_nt(const wchar_t * path);
+	bool is_link_nt(const wchar_t * path);
+
+}
+
+namespace fsys {
 
 	inline bool is_file(Attributes attr)
 	{
@@ -22,14 +36,5 @@ namespace fsys {
 		return attr & FILE_ATTRIBUTE_REPARSE_POINT;
 	}
 
-	Attributes get_attr_nt(const wchar_t * path);
-
-	bool is_file_nt(const wchar_t * path);
-
-	bool is_dir_nt(const wchar_t * path);
-
-	bool is_link_nt(const wchar_t * path);
-
 }
-
 #endif

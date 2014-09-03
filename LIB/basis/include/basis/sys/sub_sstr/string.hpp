@@ -38,14 +38,39 @@ namespace sstr {
 		ustring & add_word(ustring & inout, const ustring & add, const ustring & delim);
 	}
 
-	astring trim(const astring & str, const astring & chrs);
-	ustring trim(const ustring & str, const ustring & chrs);
+	template <typename StrType>
+	size_t length(const StrType &str)
+	{
+		return str.size();
+	}
 
-	ustring replace_all(const ustring & str, const ustring & from, const ustring & to);
+	template <typename StrType1, typename StrType2>
+	StrType1 trim(const StrType1 & str, const StrType2 & chrs)
+	{
+		StrType1 tmp(str);
+		return inplace::trim(tmp, chrs);
+	}
 
-	ustring to_lower(const ustring & str);
+	template <typename StrType>
+	StrType replace_all(const StrType & str, const StrType & from, const StrType & to)
+	{
+		StrType ret(str);
+		return inplace::replace_all(ret, from, to);
+	}
 
-	ustring to_upper(const ustring & str);
+	template <typename StrType>
+	StrType to_lower(const StrType & str)
+	{
+		StrType ret(str);
+		return inplace::to_lower(ret);
+	}
+
+	template <typename StrType>
+	StrType to_upper(const StrType & str)
+	{
+		StrType ret(str);
+		return inplace::to_upper(ret);
+	}
 
 	ustring GetWord(const ustring &str, wchar_t d = PATH_SEPARATOR_C);
 

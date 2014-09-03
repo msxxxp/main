@@ -1,14 +1,9 @@
-﻿#include <basis/sys/fsys.hpp>
+﻿#include <basis/sys/path.hpp>
 #include <basis/sys/cstr.hpp>
 #include <basis/sys/sstr.hpp>
 #include <basis/sys/win64.hpp>
 
 namespace fsys {
-
-	ustring MakePath(const wchar_t * path, const wchar_t * name)
-	{
-		return Path::ensure_end_separator(path) + name;
-	}
 
 	ustring PathNice(const wchar_t * path)
 	{
@@ -18,16 +13,16 @@ namespace fsys {
 	ustring Secure(const wchar_t * path)
 	{
 		ustring Result(path);
-		sstr::replace_all(Result, L"..", L"");
-		sstr::replace_all(Result, L"%", L"");
+		sstr::replace_all(Result, ustring(L".."), ustring(L""));
+		sstr::replace_all(Result, ustring(L"%"), ustring(L""));
 		return Validate(Result);
 	}
 
 	ustring Validate(const wchar_t * path)
 	{
 		ustring Result(Path::canonicalize(Path::expand(path)));
-		sstr::replace_all(Result, L"...", L"");
-		sstr::replace_all(Result, L"\\\\", L"\\");
+		sstr::replace_all(Result, ustring(L"..."), ustring(L""));
+		sstr::replace_all(Result, ustring(L"\\\\"), ustring(L"\\"));
 		if (Result == L"\\")
 			Result.clear();
 		return Result;

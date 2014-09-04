@@ -7,7 +7,7 @@ namespace fsys {
 		DWORD attr = get_attr_nt(path);
 		if (attr != INVALID_FILE_ATTRIBUTES) {
 			if (is_dir(attr)) {
-				return Directory::del_nt(path);
+				return directory::del_nt(path);
 			} else {
 				return file::del_nt(path);
 			}

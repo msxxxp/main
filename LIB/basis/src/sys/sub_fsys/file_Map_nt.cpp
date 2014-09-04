@@ -3,6 +3,7 @@
 #include <basis/std/algorithm>
 
 namespace fsys {
+
 	namespace file {
 
 		Map_nt::~Map_nt()
@@ -45,7 +46,7 @@ namespace fsys {
 			return m_write;
 		}
 
-		bool Map_nt::is_ok() const
+		bool Map_nt::is_valid() const
 		{
 			return m_data;
 		}

@@ -7,11 +7,11 @@
 
 namespace totext {
 
-	simstd::wstring api_error(DWORD err = ::GetLastError(), const wchar_t * lib = nullptr);
+	ustring api_error(DWORD err = ::GetLastError(), const wchar_t * lib = nullptr);
 
-	simstd::wstring nt_status(ULONG status);
+	ustring nt_status(ULONG status);
 
-	simstd::wstring wmi_error(HRESULT err);
+	ustring wmi_error(HRESULT err);
 
 }
 

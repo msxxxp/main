@@ -3,7 +3,7 @@
 
 namespace fsys {
 
-	namespace Directory {
+	namespace directory {
 
 		bool is_empty(const wchar_t * path)
 		{

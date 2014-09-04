@@ -5,7 +5,7 @@
 
 namespace totext {
 
-	simstd::wstring api_error(DWORD err, const wchar_t * lib)
+	ustring api_error(DWORD err, const wchar_t * lib)
 	{
 		HMODULE mod = nullptr;
 		if (err && lib) {
@@ -37,23 +37,14 @@ namespace totext {
 				*cr = L' ';
 			}
 		}
-		simstd::wstring ret = sstr::format(L"[0x%X (%u)] %s", err, err, buf);
+
+		ustring ret = sstr::format(L"[0x%X (%u)] %s", err, err, buf);
 		{ // delete return char
 			ret[ret.size() - 2] = L'\0';
 		}
 		::LocalFree(buf);
 
 		return simstd::move(ret);
-	}
-
-	simstd::wstring nt_status(ULONG status)
-	{
-		return api_error(status, L"NTDLL.DLL");
-	}
-
-	simstd::wstring wmi_error(HRESULT err)
-	{
-		return api_error(err, L"WMIUTILS.DLL");
 	}
 
 }

@@ -1,14 +1,8 @@
 ﻿#include <basis/sys/url.hpp>
 #include <basis/sys/memory.hpp>
-#include <basis/os/shlwapi.hpp>
 #include <basis/os/wininet.hpp>
 
-namespace Url {
-
-	HRESULT parse(const wchar_t * url, PARSEDURL * parsedUrl)
-	{
-		return os::shlwapi_dll::inst().ParseURLW(url, parsedUrl);
-	}
+namespace url {
 
 	bool crack(const wchar_t * url, URL_COMPONENTSW * info)
 	{

@@ -1,6 +1,7 @@
 #include <basis/sys/fsys.hpp>
 
 namespace fsys {
+
 	namespace file {
 
 		inline bool del_simple_nt(const wchar_t * path)

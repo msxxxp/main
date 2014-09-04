@@ -5,7 +5,7 @@
 
 namespace fsys {
 
-	namespace Directory {
+	namespace directory {
 
 		bool del_nt(const wchar_t * path);
 

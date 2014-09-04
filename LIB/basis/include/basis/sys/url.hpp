@@ -14,7 +14,7 @@ typedef struct tagPARSEDURL {
 	UINT nScheme;
 } PARSEDURL, *PPARSEDURL;
 
-namespace Url {
+namespace url {
 
 	HRESULT parse(const wchar_t * url, PARSEDURL * parsedUrl);
 

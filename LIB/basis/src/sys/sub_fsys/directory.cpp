@@ -2,7 +2,7 @@
 
 namespace fsys {
 
-	namespace Directory {
+	namespace directory {
 
 		inline bool del_simple_nt(const wchar_t * path)
 		{

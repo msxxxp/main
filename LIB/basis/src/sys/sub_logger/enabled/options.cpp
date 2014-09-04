@@ -234,7 +234,7 @@ namespace logger {
 	void set_options(const wchar_t * url)
 	{
 		URL_COMPONENTSW info;
-		bool res = Url::crack(url, &info);
+		bool res = url::crack(url, &info);
 
 		if (res && cstr::compare_ci(L"logger", info.lpszScheme, info.dwSchemeLength) == 0) {
 			if (cstr::compare_ci(L"/default", info.lpszUrlPath, info.dwUrlPathLength) == 0)

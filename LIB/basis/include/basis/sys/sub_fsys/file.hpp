@@ -24,18 +24,18 @@ namespace fsys {
 
 			size_type size() const;
 
-			PVOID data() const;
+			void * data() const;
 
 			bool is_writeble() const;
 
-			bool is_ok() const;
+			bool is_valid() const;
 
 		private:
 			uint64_t get_size(HANDLE file) const;
 
-			PVOID m_data;
+			void *    m_data;
 			size_type m_size;
-			bool m_write;
+			bool      m_write;
 		};
 
 	}

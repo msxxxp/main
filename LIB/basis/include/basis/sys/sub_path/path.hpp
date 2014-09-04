@@ -49,6 +49,20 @@ namespace path {
 	ustring get_fullpath(const wchar_t * path);
 	ustring get_fullpath(const ustring &path);
 
+	ustring nice(const wchar_t * path);
+	ustring nice(const ustring &path);
+
+	ustring secure(const wchar_t * path);
+	ustring secure(const ustring &path);
+
+	ustring validate(const wchar_t * path);
+	ustring validate(const ustring &path);
+
+	ustring temp_dir();
+
+	ustring temp_file(const wchar_t * path);
+	ustring temp_file(const ustring & path);
+
 }
 
 #endif

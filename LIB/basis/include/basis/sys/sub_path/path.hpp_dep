@@ -7,32 +7,6 @@
 
 namespace fsys {
 
-	ustring PathNice(const wchar_t * path);
-	inline ustring PathNice(const ustring &path)
-	{
-		return PathNice(path.c_str());
-	}
-
-	ustring Secure(const wchar_t * path);
-	inline ustring Secure(const ustring &path)
-	{
-		return Secure(path.c_str());
-	}
-
-	ustring Validate(const wchar_t * path);
-	inline ustring Validate(const ustring &path)
-	{
-		return Validate(path.c_str());
-	}
-
-	ustring TempDir();
-
-	ustring TempFile(const wchar_t * path);
-	inline ustring TempFile(const ustring & path)
-	{
-		return TempFile(path.c_str());
-	}
-
 	bool substr_match(const ustring& str, size_t pos, const wchar_t * mstr);
 
 	void locate_path_root(const ustring& path, size_t& path_root_len, bool& is_unc_path);

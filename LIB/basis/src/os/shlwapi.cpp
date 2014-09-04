@@ -17,6 +17,7 @@ namespace os {
 		GET_DLL_FUNC(PathIsDirectoryEmptyW);
 		GET_DLL_FUNC(PathUnExpandEnvStringsW);
 		GET_DLL_FUNC(PathIsRelativeW);
+		GET_DLL_FUNC(ParseURLW);
 	}
 
 }

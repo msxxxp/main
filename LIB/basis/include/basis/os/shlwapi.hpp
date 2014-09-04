@@ -12,6 +12,7 @@ namespace os {
 		typedef WINBOOL WINAPI (*FPathIsDirectoryEmptyW)(const wchar_t *);
 		typedef WINBOOL WINAPI (*FPathUnExpandEnvStringsW)(const wchar_t *, wchar_t *, UINT);
 		typedef WINBOOL WINAPI (*FPathIsRelativeW)(const wchar_t *);
+		typedef HRESULT WINAPI (*FParseURLW)(const wchar_t *, void *);
 
 		DEFINE_FUNC(PathMatchSpecExW);
 		DEFINE_FUNC(PathCanonicalizeW);
@@ -19,6 +20,7 @@ namespace os {
 		DEFINE_FUNC(PathIsDirectoryEmptyW);
 		DEFINE_FUNC(PathUnExpandEnvStringsW);
 		DEFINE_FUNC(PathIsRelativeW);
+		DEFINE_FUNC(ParseURLW);
 
 		static shlwapi_dll & inst();
 

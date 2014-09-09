@@ -1,0 +1,13 @@
+﻿#ifndef BASIS_LIST_
+#define BASIS_LIST_
+
+#include <basis/configure.hpp>
+//#include <basis/types.hpp>
+//#include <basis/std/iterator>
+//#include <basis/std/memory>
+#include <basis/std/sub_list/node.hpp>
+#include <basis/std/sub_list/iterator.hpp>
+#include <basis/std/sub_list/base.hpp>
+#include <basis/std/sub_list/interface.hpp>
+
+#endif

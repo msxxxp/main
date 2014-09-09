@@ -5,6 +5,7 @@
 #include <fsys.hpp>
 
 #include <basis/std/algorithm>
+#include <list>
 //#include <algorithm>
 
 
@@ -144,6 +145,7 @@ void scan_single_folder(fsys::Node_t folder)
 
 ssize_t FileProcessor::execute()
 {
+	std::list<int>
 	LogTrace();
 	LogConsoleInfo(-1, L"Folders to process: %I64u\n", global::vars().folders.size());
 

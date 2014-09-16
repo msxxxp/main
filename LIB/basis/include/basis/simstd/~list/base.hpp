@@ -1,7 +1,7 @@
 ﻿#ifndef BASIS_LIST_BASE_HPP_
 #define BASIS_LIST_BASE_HPP_
 
-#include <basis/std/list>
+#include <basis/simstd/list>
 
 namespace simstd {
 
@@ -83,7 +83,7 @@ namespace simstd {
 
 		template<typename Type, typename Allocator>
 		List_base<Type, Allocator>::List_base(List_base&& __x) :
-			m_impl(std::move(__x._M_get_Node_allocator()))
+			m_impl(simstd::move(__x._M_get_Node_allocator()))
 		{
 			List_node_base::swap(m_impl._M_node, __x.m_impl._M_node);
 		}

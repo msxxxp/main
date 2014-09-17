@@ -7,6 +7,8 @@
 #include <basis/std/iterator>
 #include <basis/std/memory>
 
+#include <basis/sys/logger.hpp>
+
 #include <basis/simstd/~list/node.hpp>
 #include <basis/simstd/~list/iterator.hpp>
 #include <basis/simstd/~list/base.hpp>

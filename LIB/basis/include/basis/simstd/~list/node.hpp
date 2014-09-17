@@ -18,7 +18,7 @@ namespace simstd {
 
 			void reverse() noexcept;
 
-			void hook(this_type * const position) noexcept;
+			void hook(const this_type * position) noexcept;
 
 			void unhook() noexcept;
 

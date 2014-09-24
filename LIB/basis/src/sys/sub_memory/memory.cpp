@@ -1,20 +1,6 @@
 ﻿#include <basis/configure.hpp>
 #include <basis/sys/memory.hpp>
 
-#ifdef MEMORY_DEBUG
-namespace memory {
-	namespace Watchdog
-	{
-		size_t allocations = 0;
-		size_t deletions = 0;
-		uint64_t allocations_size = 0;
-		uint64_t deletions_size = 0;
-
-		pfunc on_delete = nullptr;
-	};
-}
-#endif
-
 namespace memory {
 
 	auto_close<HANDLE>::auto_close(const this_type & rhs) :

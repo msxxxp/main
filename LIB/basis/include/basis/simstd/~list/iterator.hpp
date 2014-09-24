@@ -61,7 +61,7 @@ namespace simstd {
 
 			List_const_iterator(const iterator& it) noexcept : m_node(it.m_node) {}
 
-			iterator _M_const_cast() const noexcept {return iterator(const_cast<List_node_base*>(m_node));}
+			iterator iterator_cast() const noexcept {return iterator(const_cast<List_node_base*>(m_node));}
 
 			reference operator*() const noexcept {return static_cast<node_type*>(m_node)->m_data;}
 

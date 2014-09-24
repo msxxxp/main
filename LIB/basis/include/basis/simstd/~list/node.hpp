@@ -2,6 +2,7 @@
 #define BASIS_LIST_NODE_HPP_
 
 #include <basis/simstd/list>
+//#include <basis/sys/logger.hpp>
 
 namespace simstd {
 
@@ -12,13 +13,11 @@ namespace simstd {
 
 			List_node_base() noexcept;
 
-			List_node_base(this_type * prev, this_type * next) noexcept;
-
 			void transfer(this_type * const first, this_type * const last) noexcept;
 
 			void reverse() noexcept;
 
-			void hook(const this_type * position) noexcept;
+			void hook(const this_type * pos) noexcept;
 
 			void unhook() noexcept;
 
@@ -39,11 +38,13 @@ namespace simstd {
 			Type m_data;
 		};
 
+
 		template<typename Type>
 		template<typename ... Args>
 		List_node<Type>::List_node(Args &&... args) :
 			m_data(simstd::forward<Args>(args)...)
 		{
+//			LogTraceObj();
 		}
 
 	}

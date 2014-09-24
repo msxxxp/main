@@ -42,7 +42,7 @@ namespace simstd {
 	template<typename Mutex>
 	lock_guard<Mutex> auto_lock(Mutex & mutex)
 	{
-		return lock_guard<Mutex>(mutex);
+		return simstd::move(lock_guard<Mutex>(mutex));
 	}
 
 }    // namespace simstd

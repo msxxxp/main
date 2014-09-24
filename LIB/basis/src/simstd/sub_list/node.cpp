@@ -5,14 +5,8 @@ namespace simstd {
 	namespace pvt {
 
 		List_node_base::List_node_base() noexcept:
-			m_next(),
-			m_prev()
-		{
-		}
-
-		List_node_base::List_node_base(this_type * prev, this_type * next) noexcept:
-			m_next(next),
-			m_prev(prev)
+			m_next(this),
+			m_prev(this)
 		{
 		}
 
@@ -26,14 +20,56 @@ namespace simstd {
 
 		void List_node_base::hook(const this_type * pos) noexcept
 		{
-			this->m_next = const_cast<this_type*>(pos);
-			this->m_prev = pos->m_prev;
-			this->m_prev->m_next = this;
-			this->m_next->m_prev = this;
+//			LogTraceObj();
+			this_type * prev = pos->m_prev;
+			this_type * next = const_cast<this_type*>(pos);
+//			LogDebug(L"prev: %p\n", prev);
+//			LogDebug(L"this: %p\n", this);
+//			LogDebug(L"next: %p\n", next);
+//			LogDebug(L"prev->m_next: %p\n", prev->m_next);
+//			LogDebug(L"prev->m_prev: %p\n", prev->m_prev);
+//			LogDebug(L"this->m_next: %p\n", m_next);
+//			LogDebug(L"this->m_prev: %p\n", m_prev);
+//			LogDebug(L"pos->m_next: %p\n", next->m_next);
+//			LogDebug(L"pos->m_prev: %p\n", next->m_prev);
+
+			m_next = const_cast<this_type*>(next);
+			m_prev = prev;
+			prev->m_next = this;
+			next->m_prev = this;
+
+//			LogDebug(L"prev->m_next: %p\n", prev->m_next);
+//			LogDebug(L"prev->m_prev: %p\n", prev->m_prev);
+//			LogDebug(L"this->m_next: %p\n", m_next);
+//			LogDebug(L"this->m_prev: %p\n", m_prev);
+//			LogDebug(L"pos->m_next: %p\n", next->m_next);
+//			LogDebug(L"pos->m_prev: %p\n", next->m_prev);
 		}
 
 		void List_node_base::unhook() noexcept
 		{
+//			LogTraceObj();
+			this_type * prev = m_prev;
+			this_type * next = m_next;
+//			LogDebug(L"prev: %p\n", prev);
+//			LogDebug(L"this: %p\n", this);
+//			LogDebug(L"next: %p\n", next);
+//			LogDebug(L"prev->m_next: %p\n", prev->m_next);
+//			LogDebug(L"prev->m_prev: %p\n", prev->m_prev);
+//			LogDebug(L"this->m_next: %p\n", m_next);
+//			LogDebug(L"this->m_prev: %p\n", m_prev);
+//			LogDebug(L"next->m_next: %p\n", next->m_next);
+//			LogDebug(L"next->m_prev: %p\n", next->m_prev);
+
+			prev->m_next = next;
+			next->m_prev = prev;
+
+//			LogDebug(L"prev->m_next: %p\n", prev->m_next);
+//			LogDebug(L"prev->m_prev: %p\n", prev->m_prev);
+//			LogDebug(L"this->m_next: %p\n", m_next);
+//			LogDebug(L"this->m_prev: %p\n", m_prev);
+//			LogDebug(L"next->m_next: %p\n", next->m_next);
+//			LogDebug(L"next->m_prev: %p\n", next->m_prev);
 		}
 
 		void List_node_base::swap(this_type & a, this_type & b) noexcept

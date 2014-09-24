@@ -48,19 +48,26 @@ namespace memory {
 }
 
 namespace memory {
-#ifdef MEMORY_DEBUG
-	namespace Watchdog
+	namespace watchdog
 	{
 		typedef void (*pfunc)();
-		extern size_t allocations;
-		extern size_t deletions;
-		extern uint64_t allocations_size;
-		extern uint64_t deletions_size;
 
-		extern pfunc on_delete;
+		void start();
+
+		void stop();
+
+		void add_allocation(uint64_t size);
+
+		void remove_allocation(uint64_t size);
+
+		size_t get_allocations();
+
+		uint64_t get_allocations_size();
+
+		size_t get_deletions();
+
+		uint64_t get_deletions_size();
 	};
-
-#endif
 
 	typedef HANDLE Heap_t;
 
@@ -80,10 +87,7 @@ namespace memory {
 	inline Pointer malloc(size_t size, DWORD flags = 0/*HEAP_ZERO_MEMORY*/)
 	{
 		static_assert(std::is_pointer<Pointer>::value, "Pointer type is required");
-#ifdef MEMORY_DEBUG
-		Watchdog::allocations++;
-		Watchdog::allocations_size += size;
-#endif
+		watchdog::add_allocation(size);
 		return static_cast<Pointer>(::HeapAlloc(get_heap(), flags, size));
 	}
 
@@ -92,10 +96,7 @@ namespace memory {
 	{
 		static_assert(std::is_pointer<Pointer>::value, "Pointer type is required");
 		Pointer tmp_ptr = nullptr;
-#ifdef MEMORY_DEBUG
-		Watchdog::allocations++;
-		Watchdog::allocations_size += sizeof(*tmp_ptr) * count;
-#endif
+		watchdog::add_allocation(sizeof(*tmp_ptr) * count);
 		return static_cast<Pointer>(::HeapAlloc(get_heap(), flags | HEAP_ZERO_MEMORY, sizeof(*tmp_ptr) * count));
 	}
 
@@ -104,10 +105,7 @@ namespace memory {
 	{
 		static_assert(std::is_pointer<Pointer>::value, "Pointer type is required");
 		Pointer tmp_ptr = nullptr;
-#ifdef MEMORY_DEBUG
-		Watchdog::allocations++;
-		Watchdog::allocations_size += sizeof(*tmp_ptr);
-#endif
+		watchdog::add_allocation(sizeof(*tmp_ptr));
 		return static_cast<Pointer>(::HeapAlloc(get_heap(), flags | HEAP_ZERO_MEMORY, sizeof(*tmp_ptr)));
 	}
 
@@ -115,12 +113,7 @@ namespace memory {
 	inline void free(Pointer & in)
 	{
 		static_assert(std::is_pointer<Pointer>::value, "Pointer type is required");
-#ifdef MEMORY_DEBUG
-		Watchdog::deletions++;
-		Watchdog::deletions_size += memory::size(in);
-		if (Watchdog::deletions_size == Watchdog::allocations_size && Watchdog::deletions == Watchdog::allocations)
-			printf("There is no leaks\n");
-#endif
+		watchdog::remove_allocation(memory::size(in));
 		::HeapFree(get_heap(), 0, *(void**)(&in));
 		*(void**)(&in) = nullptr;
 	}
@@ -128,14 +121,10 @@ namespace memory {
 	template<typename Pointer>
 	inline bool realloc(Pointer & in, size_t size, DWORD flags = HEAP_ZERO_MEMORY)
 	{
-#ifdef MEMORY_DEBUG
 		if (in) {
-			Watchdog::deletions++;
-			Watchdog::deletions_size += memory::size(in);
+			watchdog::remove_allocation(memory::size(in));
 		}
-		Watchdog::allocations++;
-		Watchdog::allocations_size += size;
-#endif
+		watchdog::add_allocation(size);
 		static_assert(std::is_pointer<Pointer>::value, "Pointer type is required");
 		return (in = static_cast<Pointer>((in) ? ::HeapReAlloc(get_heap(), flags, (void*)in, size) : ::HeapAlloc(get_heap(), flags, size)));
 	}

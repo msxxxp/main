@@ -132,7 +132,6 @@ extern "C" int wmain(int /*argc*/, wchar_t * /*argv*/[])
 		for (auto it = list1.begin(); it != list1.end(); ++it)
 			LogInfo(L"%d\n", it->val());
 
-
 		simstd::list<A> list2(5, a);
 		LogInfo(L"2:size(): %Iu\n", list2.size());
 		LogInfo(L"2:empty(): %d\n", list2.empty());

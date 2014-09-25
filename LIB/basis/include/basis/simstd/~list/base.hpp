@@ -16,11 +16,9 @@ namespace simstd {
 		public:
 			typedef Allocator allocator_type;
 
-			~List_base();
-
 			List_base();
 
-			List_base(const Node_alloc_type& __a) ;
+			List_base(const Node_alloc_type& allocator) ;
 
 			List_base(List_base && other);
 
@@ -34,13 +32,9 @@ namespace simstd {
 //			allocator_type get_allocator() const;
 
 			template<typename ... Args>
-			List_node<Type>* create_node(Args &&... args);
+			List_node<Type>* new_node(Args &&... args);
 
 			void delete_node(const List_node_base * ptr);
-
-			List_node<Type>* alloc_node();
-
-			void free_node(List_node<Type>* ptr);
 
 			void clear();
 
@@ -52,33 +46,31 @@ namespace simstd {
 			};
 
 			List_impl m_impl;
+		private:
+			List_node<Type>* alloc_node();
+
+			void free_node(List_node<Type>* ptr);
 		};
 
 		template<typename Type, typename Allocator>
 		List_base<Type, Allocator>::List_impl::List_impl() :
 			Node_alloc_type()
 		{
-			LogTraceObj();
+//			LogTraceObj();
 		}
 
 		template<typename Type, typename Allocator>
 		List_base<Type, Allocator>::List_impl::List_impl(const Node_alloc_type& other) :
 			Node_alloc_type(other)
 		{
-			LogTraceObj();
+//			LogTraceObj();
 		}
 
 		template<typename Type, typename Allocator>
 		List_base<Type, Allocator>::List_impl::List_impl(Node_alloc_type&& other) :
 			Node_alloc_type(simstd::move(other))
 		{
-			LogTraceObj();
-		}
-
-		template<typename Type, typename Allocator>
-		List_base<Type, Allocator>::~List_base()
-		{
-			clear();
+//			LogTraceObj();
 		}
 
 		template<typename Type, typename Allocator>
@@ -97,10 +89,10 @@ namespace simstd {
 		List_base<Type, Allocator>::List_base(List_base && other) :
 			m_impl(simstd::move(other.get_node_allocator()))
 		{
-			LogTraceObj();
-			LogDebug(L"&m_impl: %p\n", &m_impl.m_end);
-			LogDebug(L"&m_prev: %p\n", m_impl.m_end.m_next);
-			LogDebug(L"&m_next: %p\n", m_impl.m_end.m_prev);
+//			LogTraceObj();
+//			LogDebug(L"&m_impl: %p\n", &m_impl.m_end);
+//			LogDebug(L"&m_prev: %p\n", m_impl.m_end.m_next);
+//			LogDebug(L"&m_next: %p\n", m_impl.m_end.m_prev);
 			List_node_base::swap(m_impl.m_end, other.m_impl.m_end);
 		}
 
@@ -130,9 +122,9 @@ namespace simstd {
 
 		template<typename Type, typename Allocator>
 		template<typename ... Args>
-		List_node<Type>* List_base<Type, Allocator>::create_node(Args &&... args)
+		List_node<Type>* List_base<Type, Allocator>::new_node(Args &&... args)
 		{
-			List_node<Type>* ptr = alloc_node();
+			auto ptr = alloc_node();
 			get_node_allocator().construct(ptr, simstd::forward<Args>(args)...);
 			return ptr;
 		}
@@ -140,7 +132,7 @@ namespace simstd {
 		template<typename Type, typename Allocator>
 		void List_base<Type, Allocator>::delete_node(const List_node_base * ptr)
 		{
-			List_node<Type>* node = static_cast<List_node<Type>*>(const_cast<List_node_base*>(ptr));
+			auto node = static_cast<List_node<Type>*>(const_cast<List_node_base*>(ptr));
 			get_node_allocator().destroy(node);
 			free_node(node);
 		}
@@ -157,13 +149,7 @@ namespace simstd {
 			m_impl.Node_alloc_type::deallocate(p, 1);
 		}
 
-		template<typename Type, typename Allocator>
-		void List_base<Type, Allocator>::clear()
-		{
-		}
-
 	}
-
 }
 
 #endif

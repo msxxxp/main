@@ -13,7 +13,7 @@ namespace simstd {
 
 			List_node_base() noexcept;
 
-			void transfer(this_type * const first, this_type * const last) noexcept;
+			void transfer(const this_type * first, const this_type * last) noexcept;
 
 			void reverse() noexcept;
 

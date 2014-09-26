@@ -5,7 +5,7 @@
 #include <basis/sys/sync.hpp>
 #include <basis/ext/pattern.hpp>
 
-#include <basis/std/vector>
+#include <basis/simstd/vector>
 
 namespace thread {
 

@@ -2,7 +2,7 @@
 #define BASIS_EXTRA_BITS_
 
 #include <basis/configure.hpp>
-#include <basis/ext/sub_bits/bits.hpp>
-#include <basis/ext/sub_bits/bit_str.hpp>
+#include <basis/ext/~bits/bits.hpp>
+#include <basis/ext/~bits/bit_str.hpp>
 
 #endif

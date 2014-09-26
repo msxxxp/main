@@ -3,7 +3,7 @@
 
 #include <basis/sys/process.hpp>
 
-#include <basis/std/iosfwd>
+#include <basis/simstd/iosfwd>
 
 namespace process {
 

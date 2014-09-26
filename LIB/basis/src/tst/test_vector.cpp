@@ -1,7 +1,7 @@
 ﻿#include <basis/sys/console.hpp>
-#include <basis/std/algorithm>
-#include <basis/std/vector>
-#include <basis/std/iterator>
+#include <basis/simstd/algorithm>
+#include <basis/simstd/vector>
+#include <basis/simstd/iterator>
 
 #include <ctime>
 #include <cassert>

@@ -1,0 +1,9 @@
+﻿#ifndef BASIS_VECTOR_
+#define BASIS_VECTOR_
+
+#include <basis/configure.hpp>
+#include <basis/simstd/~vector/vector_base.hpp>
+#include <basis/simstd/~vector/interface.hpp>
+#include <basis/simstd/~vector/movable_vector.hpp>
+
+#endif

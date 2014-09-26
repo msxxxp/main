@@ -10,7 +10,7 @@ namespace simstd {
 	class list: private pvt::List_base<Type, Allocator> {
 		typedef list                                   this_type;
 		typedef pvt::List_base<Type, Allocator>        base_type;
-		typedef typename base_type::Type_alloc_type    Type_alloc_type;
+//		typedef typename base_type::Type_alloc_type    Type_alloc_type;
 		typedef typename base_type::Node_alloc_type    Node_alloc_type;
 
 	public:

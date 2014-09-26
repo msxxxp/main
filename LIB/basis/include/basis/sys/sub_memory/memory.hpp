@@ -54,7 +54,7 @@ namespace memory {
 
 		void start();
 
-		void stop();
+		bool stop();
 
 		void add_allocation(uint64_t size);
 

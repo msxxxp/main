@@ -1,0 +1,17 @@
+﻿#ifndef BASIS_MEMORY_
+#define BASIS_MEMORY_
+
+#include <basis/configure.hpp>
+#include <basis/simstd/~memory/allocator.hpp>
+#include <basis/simstd/~memory/allocator_eq.hpp>
+#include <basis/simstd/~memory/allocator_traits.hpp>
+#include <basis/simstd/~memory/base.hpp>
+#include <basis/simstd/~memory/auto_ptr.hpp>
+#include <basis/simstd/~memory/functional.hpp>
+#include <basis/simstd/~memory/movable_allocator.hpp>
+#include <basis/simstd/~memory/raw_storage_iterator.hpp>
+#include <basis/simstd/~memory/default_deleters.hpp>
+#include <basis/simstd/~memory/shared_ptr.hpp>
+#include <basis/simstd/~memory/unique_ptr.hpp>
+
+#endif

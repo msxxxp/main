@@ -1,0 +1,18 @@
+﻿#ifndef BASIS_ALGORITHM_
+#define BASIS_ALGORITHM_
+
+#include <basis/configure.hpp>
+#include <basis/simstd/~algorithm/base.hpp>
+#include <basis/simstd/~algorithm/extra.hpp>
+#include <basis/simstd/~algorithm/heap.hpp>
+#include <basis/simstd/~algorithm/sort.hpp>
+
+namespace simstd {
+
+	namespace Test {
+		ssize_t _algorithm(wPrintFunc);
+	}
+
+}
+
+#endif

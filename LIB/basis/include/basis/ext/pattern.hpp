@@ -2,10 +2,10 @@
 #define BASIS_EXTRA_PATTERN_
 
 #include <basis/configure.hpp>
-#include <basis/ext/sub_pattern/Command.hpp>
-#include <basis/ext/sub_pattern/Destroyable.hpp>
-#include <basis/ext/sub_pattern/RefCounter.hpp>
-#include <basis/ext/sub_pattern/Singleton.hpp>
-#include <basis/ext/sub_pattern/Uncopyable.hpp>
+#include <basis/ext/~pattern/Command.hpp>
+#include <basis/ext/~pattern/Destroyable.hpp>
+#include <basis/ext/~pattern/RefCounter.hpp>
+#include <basis/ext/~pattern/Singleton.hpp>
+#include <basis/ext/~pattern/Uncopyable.hpp>
 
 #endif

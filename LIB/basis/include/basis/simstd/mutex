@@ -1,0 +1,13 @@
+﻿#ifndef BASIS_MUTEX_
+#define BASIS_MUTEX_
+
+#include <basis/configure.hpp>
+#include <basis/simstd/~mutex/types.hpp>
+#include <basis/simstd/~mutex/functional.hpp>
+#include <basis/simstd/~mutex/lock_guard.hpp>
+#include <basis/simstd/~mutex/once.hpp>
+#include <basis/simstd/~mutex/recursive_mutex.hpp>
+#include <basis/simstd/~mutex/recursive_timed_mutex.hpp>
+#include <basis/simstd/~mutex/unique_lock.hpp>
+
+#endif

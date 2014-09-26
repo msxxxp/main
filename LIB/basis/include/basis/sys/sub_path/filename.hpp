@@ -3,7 +3,7 @@
 
 #include <basis/sys/path.hpp>
 
-#include <basis/std/iosfwd>
+#include <basis/simstd/iosfwd>
 
 namespace path {
 

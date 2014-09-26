@@ -13,20 +13,20 @@
 #include <basis/sys/traceback.hpp>
 #include <basis/sys/win64.hpp>
 
-#include <basis/std/iosfwd>
-#include <basis/std/algorithm>
-//#include <basis/std/chrono>
-#include <basis/std/functional>
-#include <basis/std/iterator>
-#include <basis/std/memory>
-#include <basis/std/mutex>
-#include <basis/std/new>
-#include <basis/std/numeric>
-#include <basis/std/string>
-#include <basis/std/utility>
-//#include <basis/std/ratio>
-#include <basis/std/vector>
-//#include <basis/std/type_traits>
+#include <basis/simstd/iosfwd>
+#include <basis/simstd/algorithm>
+//#include <basis/simstd/chrono>
+#include <basis/simstd/functional>
+#include <basis/simstd/iterator>
+#include <basis/simstd/memory>
+#include <basis/simstd/mutex>
+#include <basis/simstd/new>
+#include <basis/simstd/numeric>
+#include <basis/simstd/string>
+#include <basis/simstd/utility>
+//#include <basis/simstd/ratio>
+#include <basis/simstd/vector>
+//#include <basis/simstd/type_traits>
 
 #include <basis/ext/bits.hpp>
 #include <basis/ext/pattern.hpp>

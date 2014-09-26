@@ -1,0 +1,7 @@
+﻿#ifndef BASIS_NEW_
+#define BASIS_NEW_
+
+#include <basis/configure.hpp>
+#include <basis/simstd/~memory/new.hpp>
+
+#endif

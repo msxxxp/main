@@ -1,0 +1,15 @@
+﻿#ifndef BASIS_ITERATOR_
+#define BASIS_ITERATOR_
+
+#include <basis/configure.hpp>
+#include <basis/simstd/~iterator/base.hpp>
+#include <basis/simstd/~iterator/back_insert_iterator.hpp>
+#include <basis/simstd/~iterator/front_insert_iterator.hpp>
+#include <basis/simstd/~iterator/functional.hpp>
+#include <basis/simstd/~iterator/insert_iterator.hpp>
+#include <basis/simstd/~iterator/pvt_const_value_iterator.hpp>
+#include <basis/simstd/~iterator/pvt_normal_iterator.hpp>
+#include <basis/simstd/~iterator/move_iterator.hpp>
+#include <basis/simstd/~iterator/reverse_iterator.hpp>
+
+#endif

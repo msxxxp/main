@@ -3,7 +3,7 @@
 
 #include <basis/configure.hpp>
 
-#include <basis/std/iosfwd>
+#include <basis/simstd/iosfwd>
 
 #include <basis/sys/sub_sstr/convert.hpp>
 #include <basis/sys/sub_sstr/format.hpp>

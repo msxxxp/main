@@ -11,7 +11,7 @@ namespace simstd {
 		class List_base {
 		protected:
 			typedef typename Allocator::template rebind<List_node<Type>>::other Node_alloc_type;
-			typedef typename Allocator::template rebind<Type>::other            Type_alloc_type;
+//			typedef typename Allocator::template rebind<Type>::other            Type_alloc_type;
 
 		public:
 			typedef Allocator allocator_type;
@@ -27,7 +27,7 @@ namespace simstd {
 
 			const Node_alloc_type& get_node_allocator() const;
 
-			Type_alloc_type get_type_allocator() const;
+//			Type_alloc_type get_type_allocator() const;
 
 //			allocator_type get_allocator() const;
 
@@ -35,8 +35,6 @@ namespace simstd {
 			List_node<Type>* new_node(Args &&... args);
 
 			void delete_node(const List_node_base * ptr);
-
-			void clear();
 
 			struct List_impl: public Node_alloc_type {
 				List_impl();
@@ -108,11 +106,11 @@ namespace simstd {
 			return *static_cast<const Node_alloc_type*>(&m_impl);
 		}
 
-		template<typename Type, typename Allocator>
-		typename List_base<Type, Allocator>::Type_alloc_type List_base<Type, Allocator>::get_type_allocator() const
-		{
-			return Type_alloc_type(get_node_allocator());
-		}
+//		template<typename Type, typename Allocator>
+//		typename List_base<Type, Allocator>::Type_alloc_type List_base<Type, Allocator>::get_type_allocator() const
+//		{
+//			return Type_alloc_type(get_node_allocator());
+//		}
 
 //		template<typename Type, typename Allocator>
 //		typename List_base<Type, Allocator>::allocator_type List_base<Type, Allocator>::get_allocator() const

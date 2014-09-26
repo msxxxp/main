@@ -1,0 +1,7 @@
+﻿#ifndef BASIS_NUMERIC_
+#define BASIS_NUMERIC_
+
+#include <basis/configure.hpp>
+#include <basis/simstd/~numeric/numeric.hpp>
+
+#endif

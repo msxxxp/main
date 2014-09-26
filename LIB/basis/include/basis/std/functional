@@ -1,7 +1,0 @@
-﻿#ifndef BASIS_FUNCTIONAL_
-#define BASIS_FUNCTIONAL_
-
-#include <basis/configure.hpp>
-#include <basis/std/impl/functional.hpp>
-
-#endif

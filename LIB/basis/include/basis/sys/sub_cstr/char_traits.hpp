@@ -2,7 +2,7 @@
 #define LIBBASE_CSTR_CHAR_TRAITS_HPP_
 
 #include <basis/sys/cstr.hpp>
-#include <basis/std/string>
+#include <basis/simstd/string>
 #include <string.h>
 #include <wchar.h>
 

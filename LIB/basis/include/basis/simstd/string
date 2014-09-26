@@ -1,0 +1,10 @@
+﻿#ifndef BASIS_STRING_
+#define BASIS_STRING_
+
+#include <basis/configure.hpp>
+#include <basis/simstd/~string/char_traits.hpp>
+#include <basis/simstd/~string/basic_string.hpp>
+#include <basis/simstd/~string/convert_a.hpp>
+#include <basis/simstd/~string/convert_w.hpp>
+
+#endif

@@ -2,7 +2,7 @@
 #define BASIS_SYS_PATH_HPP_
 
 #include <basis/configure.hpp>
-#include <basis/std/iosfwd>
+#include <basis/simstd/iosfwd>
 
 #include <basis/sys/sub_path/defaults.hpp>
 #include <basis/sys/sub_path/inplace.hpp>

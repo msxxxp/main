@@ -2,7 +2,6 @@
 #define BASIS_LIST_NODE_HPP_
 
 #include <basis/simstd/list>
-//#include <basis/sys/logger.hpp>
 
 namespace simstd {
 
@@ -28,6 +27,7 @@ namespace simstd {
 			this_type * m_prev;
 		};
 
+		/// ============================================================================================================
 		template<typename Type>
 		struct List_node: public List_node_base {
 
@@ -38,13 +38,11 @@ namespace simstd {
 			Type m_data;
 		};
 
-
 		template<typename Type>
 		template<typename ... Args>
 		List_node<Type>::List_node(Args &&... args) :
 			m_data(simstd::forward<Args>(args)...)
 		{
-//			LogTraceObj();
 		}
 
 	}

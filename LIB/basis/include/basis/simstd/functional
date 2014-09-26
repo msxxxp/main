@@ -1,0 +1,7 @@
+﻿#ifndef BASIS_FUNCTIONAL_
+#define BASIS_FUNCTIONAL_
+
+#include <basis/configure.hpp>
+#include <basis/simstd/~functional/functional.hpp>
+
+#endif

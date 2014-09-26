@@ -98,16 +98,16 @@ extern "C" int wmain(int /*argc*/, wchar_t * /*argv*/[])
 	setup_logger();
 
 	LogTrace();
+	memory::watchdog::start();
 
 	A ma[7];
 
 	LogTrace();
 
 	{
-		memory::watchdog::start();
 		LogTrace();
 		A a;
-		simstd::list<A> list1;
+		simstd::list<A, simstd::AllocatorEq<A>> list1;
 		LogInfo(L"1:size(): %Iu\n", list1.size());
 		LogInfo(L"1:empty(): %d\n", list1.empty());
 
@@ -158,20 +158,20 @@ extern "C" int wmain(int /*argc*/, wchar_t * /*argv*/[])
 		LogInfo(L"3:size(): %Iu\n", list3.size());
 		LogInfo(L"3:empty(): %d\n", list3.empty());
 
-		list1.emplace_back(a);
-
-		list1.push_back(a);
-
-		list1.push_back(a + a);
-
-		list1.push_back(simstd::move(a));
+//		list1.emplace_back(a);
+//
+//		list1.push_back(a);
+//
+//		list1.push_back(a + a);
+//
+//		list1.push_back(simstd::move(a));
 	}
 	{
 		memory::watchdog::stop();
 		using namespace memory::watchdog;
-		LogInfo(L"wd alloc: %Iu \n", get_allocations());
-		LogInfo(L"wd free : %Iu \n", get_deletions());
-		LogInfo(L"wd diff : %I64d \n", get_allocations_size() - get_deletions_size());
+		console::printf(L"wd alloc: %Iu \n", get_allocations());
+		console::printf(L"wd free : %Iu \n", get_deletions());
+		console::printf(L"wd diff : %I64d \n", get_allocations_size() - get_deletions_size());
 	}
 
 	return 0;

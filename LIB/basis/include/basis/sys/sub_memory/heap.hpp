@@ -8,13 +8,28 @@ namespace memory {
 	struct Heap {
 		~Heap();
 
-		Heap();
+		Heap(size_t size);
 
 		void* alloc(size_t size);
 
-		void free(void* ptr);
+		void free(const void* ptr);
 
 		size_t size() const;
+
+		size_t size(const void* ptr) const;
+
+	private:
+		HANDLE m_heap;
+	};
+
+	struct HeapWatch: public Heap {
+		HeapWatch(size_t size);
+
+		void* alloc(size_t size);
+
+		void free(const void* ptr);
+
+		using Heap::size;
 
 	private:
 		HANDLE m_heap;
@@ -22,15 +37,17 @@ namespace memory {
 
 	struct HeapSpecial1
 	{
-		static void init();
+		static void init(size_t size);
 
 		static void destroy();
 
 		static void* alloc(size_t size);
 
-		static void free(void* ptr);
+		static void free(const void* ptr);
 
 		static size_t size();
+
+		static size_t size(const void* ptr);
 
 	private:
 		static HANDLE m_heap;

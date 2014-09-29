@@ -4,7 +4,7 @@
 //#include <algorithm>
 //#include <vector>
 #include <basis/simstd/list>
-#include <basis/std/algorithm>
+#include <basis/simstd/algorithm>
 
 namespace {
 	void setup_logger()

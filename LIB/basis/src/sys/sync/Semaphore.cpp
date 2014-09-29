@@ -1,5 +1,5 @@
 #include <basis/configure.hpp>
-#include <basis/sys/sub_sync/Semaphore.hpp>
+#include <basis/sys/~sync/Semaphore.hpp>
 
 namespace sync {
 

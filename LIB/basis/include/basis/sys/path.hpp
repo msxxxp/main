@@ -4,9 +4,9 @@
 #include <basis/configure.hpp>
 #include <basis/simstd/iosfwd>
 
-#include <basis/sys/sub_path/defaults.hpp>
-#include <basis/sys/sub_path/inplace.hpp>
-#include <basis/sys/sub_path/filename.hpp>
-#include <basis/sys/sub_path/path.hpp>
+#include <basis/sys/~path/defaults.hpp>
+#include <basis/sys/~path/inplace.hpp>
+#include <basis/sys/~path/filename.hpp>
+#include <basis/sys/~path/path.hpp>
 
 #endif

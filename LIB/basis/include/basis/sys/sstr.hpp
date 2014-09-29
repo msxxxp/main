@@ -5,8 +5,8 @@
 
 #include <basis/simstd/iosfwd>
 
-#include <basis/sys/sub_sstr/convert.hpp>
-#include <basis/sys/sub_sstr/format.hpp>
-#include <basis/sys/sub_sstr/string.hpp>
+#include <basis/sys/~sstr/convert.hpp>
+#include <basis/sys/~sstr/format.hpp>
+#include <basis/sys/~sstr/string.hpp>
 
 #endif

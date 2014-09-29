@@ -1,5 +1,5 @@
 #include <basis/configure.hpp>
-#include <basis/sys/sub_sync/Mutex.hpp>
+#include <basis/sys/~sync/Mutex.hpp>
 
 namespace sync {
 

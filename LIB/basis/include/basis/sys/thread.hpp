@@ -9,10 +9,10 @@ namespace thread {
 	LogDeclare();
 }
 
-#include <basis/sys/sub_thread/base.hpp>
-#include <basis/sys/sub_thread/totext.hpp>
-#include <basis/sys/sub_thread/Routine.hpp>
-#include <basis/sys/sub_thread/Unit.hpp>
-#include <basis/sys/sub_thread/Pool.hpp>
+#include <basis/sys/~thread/base.hpp>
+#include <basis/sys/~thread/totext.hpp>
+#include <basis/sys/~thread/Routine.hpp>
+#include <basis/sys/~thread/Unit.hpp>
+#include <basis/sys/~thread/Pool.hpp>
 
 #endif

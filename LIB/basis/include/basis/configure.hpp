@@ -16,21 +16,21 @@
 
 #include <basis/types.hpp>
 
-#include <basis/sys/sub_configure/os/windows.hpp>
+#include <basis/sys/~configure/os/windows.hpp>
 
 #ifdef _MSC_VER
-#	include <basis/sys/sub_configure/compiler/vc.hpp>
+#	include <basis/sys/~configure/compiler/vc.hpp>
 #else
-#	include <basis/sys/sub_configure/compiler/gcc.hpp>
+#	include <basis/sys/~configure/compiler/gcc.hpp>
 #endif
 
-#include <basis/sys/sub_configure/obligatory/array.hpp>
-#include <basis/sys/sub_configure/obligatory/constants.hpp>
-#include <basis/sys/sub_configure/obligatory/definitions.hpp>
-#include <basis/sys/sub_configure/obligatory/make_ll.hpp>
-#include <basis/sys/sub_configure/obligatory/safe.hpp>
-#include <basis/sys/sub_configure/obligatory/this_file.hpp>
-#include <basis/sys/sub_configure/obligatory/types.hpp>
-#include <basis/sys/sub_configure/obligatory/Va_list.hpp>
+#include <basis/sys/~configure/obligatory/array.hpp>
+#include <basis/sys/~configure/obligatory/constants.hpp>
+#include <basis/sys/~configure/obligatory/definitions.hpp>
+#include <basis/sys/~configure/obligatory/make_ll.hpp>
+#include <basis/sys/~configure/obligatory/safe.hpp>
+#include <basis/sys/~configure/obligatory/this_file.hpp>
+#include <basis/sys/~configure/obligatory/types.hpp>
+#include <basis/sys/~configure/obligatory/Va_list.hpp>
 
 #endif

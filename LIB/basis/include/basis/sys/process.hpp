@@ -3,7 +3,7 @@
 
 #include <basis/configure.hpp>
 
-#include <basis/sys/sub_process/environment.hpp>
-#include <basis/sys/sub_process/process.hpp>
+#include <basis/sys/~process/environment.hpp>
+#include <basis/sys/~process/process.hpp>
 
 #endif

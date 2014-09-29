@@ -1,5 +1,5 @@
-﻿#ifndef BASIS_SYS_LOGGER_SUB_LOGGER_HPP_
-#define BASIS_SYS_LOGGER_SUB_LOGGER_HPP_
+﻿#ifndef BASIS_SYS_LOGGER_LOGGER_PVT_HPP_
+#define BASIS_SYS_LOGGER_LOGGER_PVT_HPP_
 
 #include <basis/sys/logger.hpp>
 #include <basis/sys/sync.hpp>

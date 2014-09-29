@@ -1,7 +1,7 @@
 #ifndef BASIS_MUTEX_RECURSIVE_TIMED_MUTEX_HPP_
 #define BASIS_MUTEX_RECURSIVE_TIMED_MUTEX_HPP_
 
-#include <basis/sys/sub_sync/Mutex.hpp>
+#include <basis/sys/~sync/Mutex.hpp>
 
 #include <chrono>
 

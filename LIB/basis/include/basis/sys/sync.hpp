@@ -20,9 +20,9 @@ namespace sync {
 
 }
 
-#include <basis/sys/sub_sync/CriticalSection.hpp>
-#include <basis/sys/sub_sync/Mutex.hpp>
-#include <basis/sys/sub_sync/Semaphore.hpp>
+#include <basis/sys/~sync/CriticalSection.hpp>
+#include <basis/sys/~sync/Mutex.hpp>
+#include <basis/sys/~sync/Semaphore.hpp>
 
 namespace sync {
 	struct ScopeGuard;

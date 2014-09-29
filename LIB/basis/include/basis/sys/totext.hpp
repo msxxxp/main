@@ -3,6 +3,6 @@
 
 #include <basis/configure.hpp>
 
-#include <basis/sys/sub_totext/error.hpp>
+#include <basis/sys/~totext/error.hpp>
 
 #endif

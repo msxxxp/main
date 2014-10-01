@@ -1,5 +1,7 @@
 #include "../logger_pvt.hpp"
 
+#define ENUM_TO_STR(enumVar) #enumVar
+
 namespace logger {
 
 	const wchar_t * const LogLevelNames[(int)Level::Force + 1] = {

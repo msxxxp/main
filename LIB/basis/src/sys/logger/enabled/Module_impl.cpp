@@ -1,14 +1,8 @@
 #include "../logger_pvt.hpp"
 
 #include <basis/sys/cstr.hpp>
-#include <basis/sys/sync.hpp>
-
-#include <basis/simstd/memory>
-#include <basis/simstd/string>
 
 namespace logger {
-	typedef simstd::wstring ustring;
-
 	namespace {
 		const size_t default_buffer_size = 4 * 1024;
 
@@ -30,10 +24,6 @@ namespace logger {
 	const size_t default_buffer_size = 4 * 1024;
 
 	///================================================================================= Module_impl
-	Module_impl::~Module_impl()
-	{
-	}
-
 	Module_impl::Module_impl(const wchar_t * name, const Target_t & tgt, Level lvl) :
 		m_name(name),
 		m_target(tgt),
@@ -100,7 +90,7 @@ namespace logger {
 		m_enabled = enabled;
 	}
 
-	void Module_impl::out(const char * file, int line, const char * func, Level lvl, const wchar_t * format, ...) const
+	void Module_impl::out_debug(const char * file, int line, const char * func, Level lvl, const wchar_t * format, ...) const
 	{
 		if (m_enabled && m_lvl <= lvl) {
 			ustring prefix = create_prefix(lvl);
@@ -121,7 +111,7 @@ namespace logger {
 		}
 	}
 
-	void Module_impl::out(WORD color, Level lvl, const wchar_t * format, ...) const
+	void Module_impl::out_console(WORD color, Level lvl, const wchar_t * format, ...) const
 	{
 		if (m_enabled && lvl >= m_lvl) {
 			Va_list args;

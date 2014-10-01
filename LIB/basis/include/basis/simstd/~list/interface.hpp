@@ -10,8 +10,7 @@ namespace simstd {
 	class list: private pvt::List_base<Type, Allocator> {
 		typedef list                                   this_type;
 		typedef pvt::List_base<Type, Allocator>        base_type;
-//		typedef typename base_type::Type_alloc_type    Type_alloc_type;
-		typedef typename base_type::Node_alloc_type    Node_alloc_type;
+		typedef typename base_type::NodeAllocator      NodeAllocator;
 
 	public:
 		typedef Allocator allocator_type;
@@ -201,21 +200,21 @@ namespace simstd {
 
 	template<typename Type, typename Allocator>
 	list<Type, Allocator>::list():
-		list(Allocator())
+		base_type(NodeAllocator())
 	{
 		LogTraceObj();
 	}
 
 	template<typename Type, typename Allocator>
 	list<Type, Allocator>::list(const allocator_type & allocator):
-		base_type(Node_alloc_type(allocator))
+		base_type(NodeAllocator(allocator))
 	{
 		LogTraceObj();
 	}
 
 	template<typename Type, typename Allocator>
 	list<Type, Allocator>::list(size_type count, const value_type& value, const allocator_type& allocator):
-		base_type(Node_alloc_type(allocator))
+		base_type(NodeAllocator(allocator))
 	{
 		LogTraceObj();
 		for (; count; --count)
@@ -224,7 +223,7 @@ namespace simstd {
 
 	template<typename Type, typename Allocator>
 	list<Type, Allocator>::list(size_type count, const allocator_type& allocator):
-		base_type(Node_alloc_type(allocator))
+		base_type(NodeAllocator(allocator))
 	{
 		LogTraceObj();
 		_default_append(count);
@@ -233,7 +232,7 @@ namespace simstd {
 	template<typename Type, typename Allocator>
 	template<class InputIterator>
 	list<Type, Allocator>::list(InputIterator first, InputIterator last, const allocator_type& allocator):
-		base_type(Node_alloc_type(allocator))
+		base_type(NodeAllocator(allocator))
 	{
 		LogTraceObj();
 		_initialize(first, last);
@@ -249,7 +248,7 @@ namespace simstd {
 
 	template<typename Type, typename Allocator>
 	list<Type, Allocator>::list(const this_type & other, const allocator_type & allocator):
-		base_type(Node_alloc_type(allocator))
+		base_type(NodeAllocator(allocator))
 	{
 		LogTraceObj();
 		_initialize(other.begin(), other.end());
@@ -264,7 +263,7 @@ namespace simstd {
 
 	template<typename Type, typename Allocator>
 	list<Type, Allocator>::list(this_type && other, const allocator_type & allocator):
-		base_type(Node_alloc_type(allocator))
+		base_type(NodeAllocator(allocator))
 	{
 		LogTraceObj();
 	}

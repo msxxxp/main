@@ -5,6 +5,7 @@
 //#include <vector>
 #include <basis/simstd/list>
 #include <basis/simstd/algorithm>
+#include <basis/simstd/memory>
 
 namespace {
 	void setup_logger()
@@ -93,6 +94,8 @@ int A::val() const
 	return m_a;
 }
 
+typedef typename simstd::AllocatorLogged<A, memory::HeapDefaultLogged> EqAlloc;
+
 extern "C" int wmain(int /*argc*/, wchar_t * /*argv*/[])
 {
 	setup_logger();
@@ -105,9 +108,12 @@ extern "C" int wmain(int /*argc*/, wchar_t * /*argv*/[])
 	LogTrace();
 
 	{
-		LogTrace();
-		A a;
-		simstd::list<A, simstd::AllocatorEq<A>> list1;
+		memory::HeapDefaultLogged::init();
+
+
+//		LogTrace();
+//		A a;
+		simstd::list<A, EqAlloc> list1;
 		LogInfo(L"1:size(): %Iu\n", list1.size());
 		LogInfo(L"1:empty(): %d\n", list1.empty());
 
@@ -124,39 +130,39 @@ extern "C" int wmain(int /*argc*/, wchar_t * /*argv*/[])
 		LogInfo(L"1:empty(): %d\n", list1.empty());
 
 		list1.reverse();
-
-		list1.pop_back();
-		LogInfo(L"1:size(): %Iu\n", list1.size());
-		LogInfo(L"1:empty(): %d\n", list1.empty());
-
-		for (auto it = list1.begin(); it != list1.end(); ++it)
-			LogInfo(L"%d\n", it->val());
-
-		simstd::list<A> list2(5, a);
-		LogInfo(L"2:size(): %Iu\n", list2.size());
-		LogInfo(L"2:empty(): %d\n", list2.empty());
-
-		simstd::list<A> list3(10);
-		LogInfo(L"3:size(): %Iu\n", list3.size());
-		LogInfo(L"3:empty(): %d\n", list3.empty());
-
-		simstd::list<A> list4(simstd::begin(ma), simstd::end(ma));
-		LogInfo(L"4:size(): %Iu\n", list4.size());
-		LogInfo(L"4:empty(): %d\n", list4.empty());
-
-		simstd::list<A> list4a(list4.begin(), list4.end());
-		LogInfo(L"4a:size(): %Iu\n", list4a.size());
-		LogInfo(L"4a:empty(): %d\n", list4a.empty());
-
-		simstd::list<A> list5(list2);
-		LogInfo(L"5:size(): %Iu\n", list5.size());
-		LogInfo(L"5:empty(): %d\n", list5.empty());
-
-		simstd::list<A> list6(simstd::move(list3));
-		LogInfo(L"6:size(): %Iu\n", list6.size());
-		LogInfo(L"6:empty(): %d\n", list6.empty());
-		LogInfo(L"3:size(): %Iu\n", list3.size());
-		LogInfo(L"3:empty(): %d\n", list3.empty());
+//
+//		list1.pop_back();
+//		LogInfo(L"1:size(): %Iu\n", list1.size());
+//		LogInfo(L"1:empty(): %d\n", list1.empty());
+//
+//		for (auto it = list1.begin(); it != list1.end(); ++it)
+//			LogInfo(L"%d\n", it->val());
+//
+//		simstd::list<A> list2(5, a);
+//		LogInfo(L"2:size(): %Iu\n", list2.size());
+//		LogInfo(L"2:empty(): %d\n", list2.empty());
+//
+//		simstd::list<A> list3(10);
+//		LogInfo(L"3:size(): %Iu\n", list3.size());
+//		LogInfo(L"3:empty(): %d\n", list3.empty());
+//
+//		simstd::list<A> list4(simstd::begin(ma), simstd::end(ma));
+//		LogInfo(L"4:size(): %Iu\n", list4.size());
+//		LogInfo(L"4:empty(): %d\n", list4.empty());
+//
+//		simstd::list<A> list4a(list4.begin(), list4.end());
+//		LogInfo(L"4a:size(): %Iu\n", list4a.size());
+//		LogInfo(L"4a:empty(): %d\n", list4a.empty());
+//
+//		simstd::list<A> list5(list2);
+//		LogInfo(L"5:size(): %Iu\n", list5.size());
+//		LogInfo(L"5:empty(): %d\n", list5.empty());
+//
+//		simstd::list<A> list6(simstd::move(list3));
+//		LogInfo(L"6:size(): %Iu\n", list6.size());
+//		LogInfo(L"6:empty(): %d\n", list6.empty());
+//		LogInfo(L"3:size(): %Iu\n", list3.size());
+//		LogInfo(L"3:empty(): %d\n", list3.empty());
 
 //		list1.emplace_back(a);
 //
@@ -172,6 +178,12 @@ extern "C" int wmain(int /*argc*/, wchar_t * /*argv*/[])
 		console::printf(L"wd alloc: %Iu \n", get_allocations());
 		console::printf(L"wd free : %Iu \n", get_deletions());
 		console::printf(L"wd diff : %I64d \n", get_allocations_size() - get_deletions_size());
+	}
+	{
+		const memory::HeapStat& stat = memory::HeapDefaultLogged::get_stat();
+		console::printf(L"stat alloc: %I64u, %I64u \n", stat.allocations, stat.allocSize);
+		console::printf(L"stat free : %I64u, %I64u \n", stat.frees, stat.freeSize);
+		console::printf(L"stat diff : %I64d \n", stat.allocSize - stat.freeSize);
 	}
 
 	return 0;

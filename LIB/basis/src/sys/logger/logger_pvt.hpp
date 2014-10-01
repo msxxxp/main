@@ -2,6 +2,7 @@
 #define BASIS_SYS_LOGGER_LOGGER_PVT_HPP_
 
 #include <basis/sys/logger.hpp>
+#include <basis/sys/memory.hpp>
 #include <basis/sys/sync.hpp>
 #include <basis/ext/pattern.hpp>
 
@@ -9,6 +10,11 @@
 #include <basis/simstd/string>
 
 namespace logger {
+
+	typedef Module_i TypeTag;
+	typedef typename simstd::AllocatorHeap<wchar_t, memory::HeapSpecial<TypeTag>> Allocator;
+	typedef typename simstd::basic_string<wchar_t, simstd::char_traits<wchar_t>, Allocator> ustring;
+
 
 	namespace Prefix {
 		typedef size_t flags;
@@ -54,19 +60,23 @@ namespace logger {
 
 	///==================================================================================== Module_impl
 	struct Module_impl: public Module_i, public pattern::Destroyable, private pattern::Uncopyable {
-		~Module_impl();
-
 		Module_impl(const wchar_t * name, const Target_t & tgt, Level lvl);
 
 		void destroy() const override;
 
 		const wchar_t * get_name() const;
 
+		bool is_color_mode() const override;
+
+		void out(Level lvl, const wchar_t * format, ...) const override;
+
+		void out_console(WORD color, Level lvl, const wchar_t * format, ...) const override;
+
+		void out_debug(const char * file, int line, const char * func, Level lvl, const wchar_t * format, ...) const override;
+
 		Level get_level() const;
 
 		size_t get_prefix() const;
-
-		bool is_color_mode() const override;
 
 		void set_level(Level lvl);
 
@@ -79,12 +89,6 @@ namespace logger {
 		void set_enabled(bool enabled);
 
 		sync::ScopeGuard lock_scope() const;
-
-		void out(const char * file, int line, const char * func, Level lvl, const wchar_t * format, ...) const override;
-
-		void out(Level lvl, const wchar_t * format, ...) const override;
-
-		void out(WORD color, Level lvl, const wchar_t * format, ...) const override;
 
 	private:
 		ustring create_prefix(Level lvl) const;

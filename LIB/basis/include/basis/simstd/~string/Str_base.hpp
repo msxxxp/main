@@ -2,6 +2,8 @@
 #define BASIS_STRING_STR_BASE_HPP_
 
 #include <basis/simstd/string>
+#include <basis/simstd/~algorithm/base.hpp>
+
 #include <basis/sys/logger.hpp>
 
 namespace simstd {
@@ -15,7 +17,9 @@ namespace simstd {
 		public:
 			~Str_base();
 
-			Str_base(const Allocator& allocator);
+			Str_base(const Allocator& alloc);
+
+			Str_base(const Allocator& alloc, size_t capa);
 
 			Str_base(Str_base && other);
 
@@ -47,6 +51,13 @@ namespace simstd {
 		template<typename T, typename A>
 		Str_base<T, A>::Str_base(const A& alloc) :
 			m_impl(new_impl(alloc, MIN_CAPACITY))
+		{
+			LogTraceObj();
+		}
+
+		template<typename T, typename A>
+		Str_base<T, A>::Str_base(const A& alloc, size_t capa) :
+			m_impl(new_impl(alloc, simstd::max(MIN_CAPACITY, capa)))
 		{
 			LogTraceObj();
 		}

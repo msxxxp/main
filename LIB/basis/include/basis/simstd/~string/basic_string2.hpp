@@ -102,9 +102,12 @@ namespace simstd {
 
 		this_type & append(size_type count, value_type ch);
 		this_type & append(const this_type & str);
-		this_type & append(const this_type & str, size_type pos, size_type count);
+		this_type & append(const this_type & str, size_type pos, size_type count = npos);
 		this_type & append(const_pointer str, size_type count);
 		this_type & append(const_pointer str);
+
+		template<typename InputIt>
+		this_type & append(InputIt first, InputIt last);
 
 		this_type & assign(size_type count, value_type ch);
 		this_type & assign(const this_type & str);
@@ -157,6 +160,9 @@ namespace simstd {
 		size_type find_last_not_of(const this_type & str, size_type pos = npos) const;
 
 	private:
+		void fill(size_type count, value_type ch);
+		void fill(const_pointer str, size_type count);
+
 		basic_string2(const_pointer str, size_type count, size_type capacity);
 
 		pointer _str() const;
@@ -217,26 +223,30 @@ namespace simstd {
 
 	template<typename C, typename T, typename A>
 	basic_string2<C, T, A>::basic_string2(size_type count, value_type ch, const allocator_type& alloc):
-		base_type(alloc)
+		base_type(alloc, count)
 	{
+		fill(count, ch);
 	}
 
 	template<typename C, typename T, typename A>
 	basic_string2<C, T, A>::basic_string2(const this_type& other, size_type pos, size_type count, const allocator_type& alloc):
-		base_type(alloc)
+		base_type(alloc, (count == npos) ? other.size() - pos : count)
 	{
+		fill(other.c_str() + pos, capacity());
 	}
 
 	template<typename C, typename T, typename A>
 	basic_string2<C, T, A>::basic_string2(const_pointer str, size_type count, const allocator_type& alloc):
-		base_type(alloc)
+		base_type(alloc, count)
 	{
+		fill(str, count);
 	}
 
 	template<typename C, typename T, typename A>
 	basic_string2<C, T, A>::basic_string2(const_pointer str, const allocator_type& alloc):
-		base_type(alloc)
+		base_type(alloc, traits_type::length(str))
 	{
+		fill(str, capacity());
 	}
 
 	template<typename C, typename T, typename A>
@@ -244,11 +254,12 @@ namespace simstd {
 	basic_string2<C, T, A>::basic_string2(InputIt first, InputIt last, const allocator_type& alloc):
 		base_type(alloc)
 	{
+		// TODO
 	}
 
 	template<typename C, typename T, typename A>
 	basic_string2<C, T, A>::basic_string2(const this_type & other):
-		base_type(other.get_allocator())
+		base_type(other)
 	{
 	}
 
@@ -256,18 +267,21 @@ namespace simstd {
 	basic_string2<C, T, A>::basic_string2(const this_type& other, const allocator_type& alloc):
 		base_type(alloc)
 	{
+		// TODO
 	}
 
 	template<typename C, typename T, typename A>
 	basic_string2<C, T, A>::basic_string2(this_type && other):
 		base_type(simstd::move(other))
 	{
+		// TODO
 	}
 
 	template<typename C, typename T, typename A>
 	basic_string2<C, T, A>::basic_string2(this_type&& other, const allocator_type& alloc):
 		base_type(alloc)
 	{
+		// TODO
 	}
 
 //	template<typename C, typename T, typename A>
@@ -303,36 +317,36 @@ namespace simstd {
 //		return assign(1, ch);
 //	}
 //
-//	template<typename C, typename T, typename A>
-//	bool basic_string2<C, T, A>::empty() const
-//	{
-//		return m_data->get_size() == 0;
-//	}
-//
-//	template<typename C, typename T, typename A>
-//	typename basic_string2<C, T, A>::size_type basic_string2<C, T, A>::capacity() const
-//	{
-//		return m_data->get_capacity();
-//	}
-//
-//	template<typename C, typename T, typename A>
-//	typename basic_string2<C, T, A>::size_type basic_string2<C, T, A>::size() const
-//	{
-//		return m_data->get_size();
-//	}
-//
-//	template<typename C, typename T, typename A>
-//	typename basic_string2<C, T, A>::size_type basic_string2<C, T, A>::length() const
-//	{
-//		return m_data->get_size();
-//	}
-//
-//	template<typename C, typename T, typename A>
-//	typename basic_string2<C, T, A>::const_pointer basic_string2<C, T, A>::c_str() const
-//	{
-//		return (const_pointer)m_data->get_str_data();
-//	}
-//
+	template<typename C, typename T, typename A>
+	bool basic_string2<C, T, A>::empty() const
+	{
+		return base_type::m_impl->get_size() == 0;
+	}
+
+	template<typename C, typename T, typename A>
+	typename basic_string2<C, T, A>::size_type basic_string2<C, T, A>::capacity() const
+	{
+		return base_type::m_impl->get_capa();
+	}
+
+	template<typename C, typename T, typename A>
+	typename basic_string2<C, T, A>::size_type basic_string2<C, T, A>::size() const
+	{
+		return base_type::m_impl->get_size();
+	}
+
+	template<typename C, typename T, typename A>
+	typename basic_string2<C, T, A>::size_type basic_string2<C, T, A>::length() const
+	{
+		return base_type::m_impl->get_size();
+	}
+
+	template<typename C, typename T, typename A>
+	typename basic_string2<C, T, A>::const_pointer basic_string2<C, T, A>::c_str() const
+	{
+		return base_type::m_impl->get_data();
+	}
+
 //	template<typename C, typename T, typename A>
 //	void basic_string2<C, T, A>::swap(this_type & in)
 //	{
@@ -340,36 +354,36 @@ namespace simstd {
 //		swap(m_data, in.m_data);
 //	}
 //
-//	template<typename C, typename T, typename A>
-//	typename basic_string2<C, T, A>::const_iterator basic_string2<C, T, A>::cbegin() const
-//	{
-//		return const_iterator(c_str());
-//	}
-//
-//	template<typename C, typename T, typename A>
-//	typename basic_string2<C, T, A>::const_iterator basic_string2<C, T, A>::begin() const
-//	{
-//		return cbegin();
-//	}
-//
+	template<typename C, typename T, typename A>
+	typename basic_string2<C, T, A>::const_iterator basic_string2<C, T, A>::cbegin() const
+	{
+		return const_iterator(c_str());
+	}
+
+	template<typename C, typename T, typename A>
+	typename basic_string2<C, T, A>::const_iterator basic_string2<C, T, A>::begin() const
+	{
+		return cbegin();
+	}
+
 //	template<typename C, typename T, typename A>
 //	typename basic_string2<C, T, A>::iterator basic_string2<C, T, A>::begin()
 //	{
 //		return iterator(_str());
 //	}
 //
-//	template<typename C, typename T, typename A>
-//	typename basic_string2<C, T, A>::const_iterator basic_string2<C, T, A>::cend() const
-//	{
-//		return cbegin() + size();
-//	}
-//
-//	template<typename C, typename T, typename A>
-//	typename basic_string2<C, T, A>::const_iterator basic_string2<C, T, A>::end() const
-//	{
-//		return cbegin() + size();
-//	}
-//
+	template<typename C, typename T, typename A>
+	typename basic_string2<C, T, A>::const_iterator basic_string2<C, T, A>::cend() const
+	{
+		return cbegin() + size();
+	}
+
+	template<typename C, typename T, typename A>
+	typename basic_string2<C, T, A>::const_iterator basic_string2<C, T, A>::end() const
+	{
+		return cbegin() + size();
+	}
+
 //	template<typename C, typename T, typename A>
 //	typename basic_string2<C, T, A>::iterator basic_string2<C, T, A>::end()
 //	{
@@ -429,13 +443,13 @@ namespace simstd {
 //		return append(this_type(count, ch));
 //	}
 //
-//	template<typename C, typename T, typename A>
-//	typename basic_string2<C, T, A>::this_type & basic_string2<C, T, A>::append(const this_type & str)
-//	{
-//		append(str.c_str(), str.size());
-//		return *this;
-//	}
-//
+	template<typename C, typename T, typename A>
+	typename basic_string2<C, T, A>::this_type & basic_string2<C, T, A>::append(const this_type & str)
+	{
+		append(str.c_str(), str.size());
+		return *this;
+	}
+
 //	template<typename C, typename T, typename A>
 //	typename basic_string2<C, T, A>::this_type & basic_string2<C, T, A>::append(const this_type & str, size_type pos, size_type count)
 //	{
@@ -458,12 +472,19 @@ namespace simstd {
 //		return *this;
 //	}
 //
-//	template<typename C, typename T, typename A>
-//	typename basic_string2<C, T, A>::this_type & basic_string2<C, T, A>::append(const_pointer str)
-//	{
-//		return append(str, traits_type::length(str));
-//	}
-//
+	template<typename C, typename T, typename A>
+	typename basic_string2<C, T, A>::this_type & basic_string2<C, T, A>::append(const_pointer str)
+	{
+		return append(str, traits_type::length(str));
+	}
+
+	template<typename C, typename T, typename A>
+	template<typename InputIt>
+	typename basic_string2<C, T, A>::this_type & basic_string2<C, T, A>::append(InputIt first, InputIt last)
+	{
+		// TODO
+	}
+
 //	template<typename C, typename T, typename A>
 //	typename basic_string2<C, T, A>::this_type & basic_string2<C, T, A>::assign(size_type count, value_type ch)
 //	{
@@ -778,6 +799,22 @@ namespace simstd {
 //		return npos;
 //	}
 //
+
+	template<typename C, typename T, typename A>
+	void basic_string2<C, T, A>::fill(size_type count, value_type ch)
+	{
+		traits_type::assign(base_type::m_impl->get_data(), count, ch);
+		base_type::m_impl->set_size(count);
+	}
+
+	template<typename C, typename T, typename A>
+	void basic_string2<C, T, A>::fill(const_pointer str, size_type count)
+	{
+		traits_type::move(base_type::m_impl->get_data(), str, count);
+		base_type::m_impl->set_size(count);
+	}
+
+
 //	template<typename C, typename T, typename A>
 //	basic_string2<C, T, A>::basic_string2(const_pointer str, size_type count, size_type capacity) :
 //		m_data(string_impl::allocate(get_new_capacity(capacity)))

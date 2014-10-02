@@ -39,6 +39,7 @@ namespace simstd {
 			};
 
 			List_impl m_impl;
+
 		private:
 			List_node<Type>* alloc_node();
 
@@ -124,6 +125,7 @@ namespace simstd {
 		}
 
 	}
+
 }
 
 #endif

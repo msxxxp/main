@@ -96,12 +96,15 @@ int A::val() const
 
 typedef typename simstd::AllocatorLogged<A, memory::HeapDefaultLogged> EqAlloc;
 
+#include <string>
+
 extern "C" int wmain(int /*argc*/, wchar_t * /*argv*/[])
 {
 	setup_logger();
 
 	LogTrace();
 	memory::watchdog::start();
+	std::string a;
 
 	A ma[7];
 

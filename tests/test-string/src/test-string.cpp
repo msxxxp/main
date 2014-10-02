@@ -31,6 +31,19 @@ int main()
 
 		tstring str3(str2, 2);
 		LogInfo(L"str3: size: %Iu, capa: %Iu '%S'\n", str3.size(), str3.capacity(), str3.c_str());
+
+		char str[] = "01234567890123456789";
+
+		tstring str4(str, 5);
+		LogInfo(L"str4: size: %Iu, capa: %Iu '%S'\n", str4.size(), str4.capacity(), str4.c_str());
+
+		tstring str5(str);
+		LogInfo(L"str5: size: %Iu, capa: %Iu '%S'\n", str5.size(), str5.capacity(), str5.c_str());
+
+		tstring str6(simstd::begin(str), simstd::end(str));
+		LogInfo(L"str6: size: %Iu, capa: %Iu '%S'\n", str6.size(), str6.capacity(), str6.c_str());
+
+
 	}
 	{
 		const memory::HeapStat& stat = Heap::get_stat();

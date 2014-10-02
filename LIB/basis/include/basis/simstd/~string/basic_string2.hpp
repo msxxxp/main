@@ -230,9 +230,9 @@ namespace simstd {
 
 	template<typename C, typename T, typename A>
 	basic_string2<C, T, A>::basic_string2(const this_type& other, size_type pos, size_type count, const allocator_type& alloc):
-		base_type(alloc, (count == npos) ? other.size() - pos : count)
+		base_type(alloc, (count == npos) ? count = other.size() - pos : count)
 	{
-		fill(other.c_str() + pos, capacity());
+		fill(other.c_str() + pos, count);
 	}
 
 	template<typename C, typename T, typename A>
@@ -244,9 +244,8 @@ namespace simstd {
 
 	template<typename C, typename T, typename A>
 	basic_string2<C, T, A>::basic_string2(const_pointer str, const allocator_type& alloc):
-		base_type(alloc, traits_type::length(str))
+		this_type(str, traits_type::length(str), alloc)
 	{
-		fill(str, capacity());
 	}
 
 	template<typename C, typename T, typename A>

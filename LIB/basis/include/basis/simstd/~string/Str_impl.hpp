@@ -69,6 +69,8 @@ namespace simstd {
 
 			Type* get_data() const;
 
+			Type* get_end() const;
+
 			void set_size(size_t size);
 
 		private:
@@ -91,6 +93,12 @@ namespace simstd {
 		T* StrImpl<T, A>::get_data() const
 		{
 			return const_cast<T*>(m_data);
+		}
+
+		template<typename T, typename A>
+		T* StrImpl<T, A>::get_end() const
+		{
+			return const_cast<T*>(m_data) + m_size;
 		}
 
 		template<typename T, typename A>

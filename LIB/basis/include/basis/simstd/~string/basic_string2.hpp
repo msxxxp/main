@@ -26,8 +26,8 @@ namespace simstd {
 		typename Traits = simstd::char_traits<CharType>,
 		typename Allocator = simstd::allocator<CharType> >
 	class basic_string2: private pvt::StrBase<CharType, Allocator> {
-		typedef basic_string2                                this_type;
-		typedef pvt::StrBase<CharType, Allocator>          base_type;
+		typedef basic_string2                               this_type;
+		typedef pvt::StrBase<CharType, Allocator>           base_type;
 
 	public:
 		typedef Traits                                      traits_type;
@@ -70,42 +70,6 @@ namespace simstd {
 		this_type & operator =(const_pointer right);
 		this_type & operator =(value_type ch);
 
-		bool empty() const;
-
-		size_type capacity() const;
-		size_type size() const;
-		size_type length() const;
-
-		const_pointer c_str() const;
-
-		void swap(this_type & other);
-
-		const_iterator cbegin() const;
-		const_iterator begin() const;
-		iterator begin();
-
-		const_iterator cend() const;
-		const_iterator end() const;
-		iterator end();
-
-		void clear();
-
-		void reserve(size_type capa);
-
-		int compare(const_pointer str) const;
-		int compare(const this_type & str) const;
-		int compare(size_type pos, size_type count, const this_type & str) const;
-		int compare(size_type pos, size_type count, const_pointer str) const;
-		int compare(size_type pos1, size_type count1, const_pointer str, size_type count2) const;
-
-		this_type & append(size_type count, value_type ch);
-		this_type & append(const this_type & str);
-		this_type & append(const this_type & str, size_type pos, size_type count = npos);
-		this_type & append(const_pointer str, size_type count);
-		this_type & append(const_pointer str);
-		template<typename Iterator>
-		this_type & append(Iterator first, Iterator last);
-
 		this_type & assign(size_type count, value_type ch);
 		this_type & assign(const this_type & other);
 		this_type & assign(const this_type & other, size_type pos, size_type count = npos);
@@ -115,23 +79,92 @@ namespace simstd {
 		template<typename Iterator>
 		this_type & assign(Iterator first, Iterator last);
 
-		iterator insert(const_iterator pos, value_type ch);
-		iterator insert(iterator pos, size_type count, value_type ch);
+		allocator_type get_allocator() const;
+
+		// Element access
+		const_reference at(size_type in) const;
+		reference       at(size_type in);
+
+		const_reference operator [](size_type in) const;
+		reference       operator [](size_type in);
+
+		const_reference front() const;
+		reference       front();
+
+		const_reference back() const;
+		reference       back();
+
+		const_pointer   data() const;
+
+		const_pointer   c_str() const;
+
+		// Iterators
+		const_iterator cbegin() const;
+		const_iterator begin() const;
+		iterator begin();
+
+		const_iterator cend() const;
+		const_iterator end() const;
+		iterator end();
+
+		const_iterator rcbegin() const;
+		const_iterator rbegin() const;
+		iterator rbegin();
+
+		const_iterator rcend() const;
+		const_iterator rend() const;
+		iterator rend();
+
+		// Capacity
+		bool empty() const;
+
+		size_type size() const;
+		size_type length() const;
+
+		size_type max_size() const;
+
+		void reserve(size_type capa);
+
+		size_type capacity() const;
+
+		void shrink_to_fit();
+
+		// Operations
+		void clear();
+
+		iterator    insert(const_iterator pos, value_type ch);
+		iterator    insert(iterator pos, size_type count, value_type ch);
 		this_type & insert(size_type index, size_type count, value_type ch);
 		this_type & insert(size_type index, const_pointer str);
 		this_type & insert(size_type index, const_pointer str, size_type count);
 		this_type & insert(size_type index, const this_type & str);
 		this_type & insert(size_type index, const this_type & str, size_type index_str, size_type count);
 
+		this_type & erase(size_type pos = 0, size_type count = npos);
+		iterator    erase(const_iterator position);
+		iterator    erase(const_iterator first, const_iterator last);
+
+		void push_back(value_type ch);
+
+		void pop_back();
+
+		this_type & append(size_type count, value_type ch);
+		this_type & append(const this_type & str);
+		this_type & append(const this_type & str, size_type pos, size_type count = npos);
+		this_type & append(const_pointer str, size_type count);
+		this_type & append(const_pointer str);
+		template<typename Iterator>
+		this_type & append(Iterator first, Iterator last);
+
 		this_type & operator +=(const this_type & str);
 		this_type & operator +=(const_pointer str);
 		this_type & operator +=(value_type ch);
 
-		const_reference operator [](size_type in) const;
-		reference operator [](size_type in);
-
-		const_reference at(size_type in) const;
-		reference at(size_type in);
+		int compare(const_pointer str) const;
+		int compare(const this_type & str) const;
+		int compare(size_type pos, size_type count, const this_type & str) const;
+		int compare(size_type pos, size_type count, const_pointer str) const;
+		int compare(size_type pos1, size_type count1, const_pointer str, size_type count2) const;
 
 		this_type & replace(size_type pos, size_type len, const this_type & other);
 		this_type & replace(const_iterator first, const_iterator last, const this_type & other);
@@ -147,10 +180,14 @@ namespace simstd {
 
 		this_type substr(size_type pos = 0, size_type n = npos) const;
 
-		this_type & erase(size_type pos = 0, size_type count = npos);
-		iterator erase(const_iterator position);
-		iterator erase(const_iterator first, const_iterator last);
+		size_type copy(pointer dest, size_type count, size_type pos = 0) const;
 
+		void resize(size_type count);
+		void resize(size_type count, value_type ch);
+
+		void swap(this_type & other);
+
+		// Search
 		size_type find(const this_type & str, size_type pos = 0) const;
 		size_type find(const_pointer str, size_type pos = 0) const;
 		size_type find(value_type ch, size_type pos = 0) const;
@@ -161,8 +198,8 @@ namespace simstd {
 		size_type rfind(value_type ch, size_type pos = npos) const;
 
 		size_type find_first_of(const this_type & str, size_type pos = 0) const;
-		size_type find_last_of(const this_type & str, size_type pos = npos) const;
 		size_type find_first_not_of(const this_type & str, size_type pos = 0) const;
+		size_type find_last_of(const this_type & str, size_type pos = npos) const;
 		size_type find_last_not_of(const this_type & str, size_type pos = npos) const;
 
 	private:
@@ -311,198 +348,29 @@ namespace simstd {
 //		m_data->append(ilist.begin(), ilist.end());
 //	}
 
-//	template<typename C, typename T, typename A>
-//	typename basic_string2<C, T, A>::this_type & basic_string2<C, T, A>::operator =(const this_type & right)
-//	{
-//		return assign(right);
-//	}
-//
-//	template<typename C, typename T, typename A>
-//	typename basic_string2<C, T, A>::this_type & basic_string2<C, T, A>::operator =(this_type && right)
-//	{
-//		clear();
-//		swap(right);
-//		return *this;
-//	}
-//
-//	template<typename C, typename T, typename A>
-//	typename basic_string2<C, T, A>::this_type & basic_string2<C, T, A>::operator =(const_pointer right)
-//	{
-//		return assign(right);
-//	}
-//
-//	template<typename C, typename T, typename A>
-//	typename basic_string2<C, T, A>::this_type & basic_string2<C, T, A>::operator =(value_type ch)
-//	{
-//		return assign(1, ch);
-//	}
-//
 	template<typename C, typename T, typename A>
-	bool basic_string2<C, T, A>::empty() const
+	typename basic_string2<C, T, A>::this_type & basic_string2<C, T, A>::operator =(const this_type & right)
 	{
-		return base_type::m_impl->get_size() == 0;
+		return assign(right);
 	}
 
 	template<typename C, typename T, typename A>
-	typename basic_string2<C, T, A>::size_type basic_string2<C, T, A>::capacity() const
+	typename basic_string2<C, T, A>::this_type & basic_string2<C, T, A>::operator =(this_type && right)
 	{
-		return base_type::m_impl->get_capa();
-	}
-
-	template<typename C, typename T, typename A>
-	typename basic_string2<C, T, A>::size_type basic_string2<C, T, A>::size() const
-	{
-		return base_type::m_impl->get_size();
-	}
-
-	template<typename C, typename T, typename A>
-	typename basic_string2<C, T, A>::size_type basic_string2<C, T, A>::length() const
-	{
-		return base_type::m_impl->get_size();
-	}
-
-	template<typename C, typename T, typename A>
-	typename basic_string2<C, T, A>::const_pointer basic_string2<C, T, A>::c_str() const
-	{
-		return base_type::m_impl->get_data();
-	}
-
-	template<typename C, typename T, typename A>
-	void basic_string2<C, T, A>::swap(this_type & other)
-	{
-		using simstd::swap;
-		swap(base_type::m_impl, other.m_impl);
-	}
-
-	template<typename C, typename T, typename A>
-	typename basic_string2<C, T, A>::const_iterator basic_string2<C, T, A>::cbegin() const
-	{
-		return const_iterator(c_str());
-	}
-
-	template<typename C, typename T, typename A>
-	typename basic_string2<C, T, A>::const_iterator basic_string2<C, T, A>::begin() const
-	{
-		return cbegin();
-	}
-
-//	template<typename C, typename T, typename A>
-//	typename basic_string2<C, T, A>::iterator basic_string2<C, T, A>::begin()
-//	{
-//		return iterator(_str());
-//	}
-//
-	template<typename C, typename T, typename A>
-	typename basic_string2<C, T, A>::const_iterator basic_string2<C, T, A>::cend() const
-	{
-		return cbegin() + size();
-	}
-
-	template<typename C, typename T, typename A>
-	typename basic_string2<C, T, A>::const_iterator basic_string2<C, T, A>::end() const
-	{
-		return cbegin() + size();
-	}
-
-//	template<typename C, typename T, typename A>
-//	typename basic_string2<C, T, A>::iterator basic_string2<C, T, A>::end()
-//	{
-//		return begin() + size();
-//	}
-//
-	template<typename C, typename T, typename A>
-	void basic_string2<C, T, A>::clear()
-	{
-		if (!empty())
-			split_and_clear(capacity());
-	}
-
-//	template<typename C, typename T, typename A>
-//	void basic_string2<C, T, A>::reserve(size_type capa)
-//	{
-//		if (capacity() < capa) {
-//			this_type(c_str(), size(), capa).swap(*this);
-//		}
-//	}
-//
-//	template<typename C, typename T, typename A>
-//	int basic_string2<C, T, A>::compare(const_pointer str) const
-//	{
-//		return compare(c_str(), length(), str, traits_type::length(str));
-//	}
-//
-//	template<typename C, typename T, typename A>
-//	int basic_string2<C, T, A>::compare(const this_type & str) const
-//	{
-//		return compare(c_str(), length(), str.c_str(), str.length());
-//	}
-//
-//	template<typename C, typename T, typename A>
-//	int basic_string2<C, T, A>::compare(size_type pos, size_type count, const this_type & str) const
-//	{
-//		return compare(c_str() + pos, count, str.c_str(), str.length());
-//	}
-//
-//	template<typename C, typename T, typename A>
-//	int basic_string2<C, T, A>::compare(size_type pos, size_type count, const_pointer str) const
-//	{
-//		return compare(c_str() + pos, count, str, traits_type::length(str));
-//	}
-//
-//	template<typename C, typename T, typename A>
-//	int basic_string2<C, T, A>::compare(size_type pos, size_type count, const_pointer str, size_type len) const
-//	{
-//		return compare(c_str() + pos, count, str, len);
-//	}
-//
-	template<typename C, typename T, typename A>
-	typename basic_string2<C, T, A>::this_type & basic_string2<C, T, A>::append(size_type count, value_type ch)
-	{
-		split_and_copy(get_necessary_capacity(count));
-		raw_append(count, ch);
+		swap(right);
 		return *this;
 	}
 
 	template<typename C, typename T, typename A>
-	typename basic_string2<C, T, A>::this_type & basic_string2<C, T, A>::append(const this_type & other)
+	typename basic_string2<C, T, A>::this_type & basic_string2<C, T, A>::operator =(const_pointer right)
 	{
-		return append(other.c_str(), other.size());
+		return assign(right);
 	}
 
 	template<typename C, typename T, typename A>
-	typename basic_string2<C, T, A>::this_type & basic_string2<C, T, A>::append(const this_type & other, size_type pos, size_type count)
+	typename basic_string2<C, T, A>::this_type & basic_string2<C, T, A>::operator =(value_type ch)
 	{
-		return append(other.c_str() + pos, count == npos ? other.size() - pos : count);
-	}
-
-	template<typename C, typename T, typename A>
-	typename basic_string2<C, T, A>::this_type & basic_string2<C, T, A>::append(const_pointer str, size_type count)
-	{
-		assert(str);
-		if (count) {
-			if (is_same_str(str)) {
-				this_type tmp(c_str(), size(), get_necessary_capacity(count));
-				tmp.append(str, count);
-				tmp.swap(*this);
-			} else {
-				split_and_copy(get_necessary_capacity(count));
-				raw_append(str, count);
-			}
-		}
-		return *this;
-	}
-
-	template<typename C, typename T, typename A>
-	typename basic_string2<C, T, A>::this_type & basic_string2<C, T, A>::append(const_pointer str)
-	{
-		return append(str, traits_type::length(str));
-	}
-
-	template<typename C, typename T, typename A>
-	template<typename InputIt>
-	typename basic_string2<C, T, A>::this_type & basic_string2<C, T, A>::append(InputIt first, InputIt last)
-	{
-		return _append(first, last, simstd::pvt::iterator_category(first));
+		return assign(1, ch);
 	}
 
 	template<typename C, typename T, typename A>
@@ -554,6 +422,198 @@ namespace simstd {
 	}
 
 	template<typename C, typename T, typename A>
+	typename basic_string2<C, T, A>::allocator_type basic_string2<C, T, A>::get_allocator() const
+	{
+		// TODO
+	}
+
+	template<typename C, typename T, typename A>
+	typename basic_string2<C, T, A>::const_reference basic_string2<C, T, A>::at(size_type in) const
+	{
+		return *(c_str() + in);
+	}
+
+	template<typename C, typename T, typename A>
+	typename basic_string2<C, T, A>::reference basic_string2<C, T, A>::at(size_type in)
+	{
+		split(capacity());
+		return *(base_type::m_impl->get_data() + in);
+	}
+
+	template<typename C, typename T, typename A>
+	typename basic_string2<C, T, A>::const_reference basic_string2<C, T, A>::operator [](size_type in) const
+	{
+		return *(c_str() + in);
+	}
+
+	template<typename C, typename T, typename A>
+	typename basic_string2<C, T, A>::reference basic_string2<C, T, A>::operator [](size_type in)
+	{
+		split(capacity());
+		return *(base_type::m_impl->get_data() + in);
+	}
+
+	template<typename C, typename T, typename A>
+	typename basic_string2<C, T, A>::const_reference basic_string2<C, T, A>::front() const
+	{
+		// TODO
+	}
+
+	template<typename C, typename T, typename A>
+	typename basic_string2<C, T, A>::reference basic_string2<C, T, A>::front()
+	{
+		// TODO
+	}
+
+	template<typename C, typename T, typename A>
+	typename basic_string2<C, T, A>::const_reference basic_string2<C, T, A>::back() const
+	{
+		// TODO
+	}
+
+	template<typename C, typename T, typename A>
+	typename basic_string2<C, T, A>::reference basic_string2<C, T, A>::back()
+	{
+		// TODO
+	}
+
+	template<typename C, typename T, typename A>
+	typename basic_string2<C, T, A>::const_pointer basic_string2<C, T, A>::data() const
+	{
+		return base_type::m_impl->get_data();
+	}
+
+	template<typename C, typename T, typename A>
+	typename basic_string2<C, T, A>::const_pointer basic_string2<C, T, A>::c_str() const
+	{
+		return base_type::m_impl->get_data();
+	}
+
+	template<typename C, typename T, typename A>
+	typename basic_string2<C, T, A>::const_iterator basic_string2<C, T, A>::cbegin() const
+	{
+		return const_iterator(c_str());
+	}
+
+	template<typename C, typename T, typename A>
+	typename basic_string2<C, T, A>::const_iterator basic_string2<C, T, A>::begin() const
+	{
+		return cbegin();
+	}
+
+	template<typename C, typename T, typename A>
+	typename basic_string2<C, T, A>::iterator basic_string2<C, T, A>::begin()
+	{
+		// TODO
+		return iterator(_str());
+	}
+
+	template<typename C, typename T, typename A>
+	typename basic_string2<C, T, A>::const_iterator basic_string2<C, T, A>::cend() const
+	{
+		return cbegin() + size();
+	}
+
+	template<typename C, typename T, typename A>
+	typename basic_string2<C, T, A>::const_iterator basic_string2<C, T, A>::end() const
+	{
+		return cbegin() + size();
+	}
+
+	template<typename C, typename T, typename A>
+	typename basic_string2<C, T, A>::iterator basic_string2<C, T, A>::end()
+	{
+		return begin() + size();
+	}
+
+	template<typename C, typename T, typename A>
+	typename basic_string2<C, T, A>::const_iterator basic_string2<C, T, A>::rcbegin() const
+	{
+		// TODO
+	}
+
+	template<typename C, typename T, typename A>
+	typename basic_string2<C, T, A>::const_iterator basic_string2<C, T, A>::rbegin() const
+	{
+		// TODO
+	}
+
+	template<typename C, typename T, typename A>
+	typename basic_string2<C, T, A>::iterator basic_string2<C, T, A>::rbegin()
+	{
+		// TODO
+	}
+
+	template<typename C, typename T, typename A>
+	typename basic_string2<C, T, A>::const_iterator basic_string2<C, T, A>::rcend() const
+	{
+		// TODO
+	}
+
+	template<typename C, typename T, typename A>
+	typename basic_string2<C, T, A>::const_iterator basic_string2<C, T, A>::rend() const
+	{
+		// TODO
+	}
+
+	template<typename C, typename T, typename A>
+	typename basic_string2<C, T, A>::iterator basic_string2<C, T, A>::rend()
+	{
+		// TODO
+	}
+
+	template<typename C, typename T, typename A>
+	bool basic_string2<C, T, A>::empty() const
+	{
+		return base_type::m_impl->get_size() == 0;
+	}
+
+	template<typename C, typename T, typename A>
+	typename basic_string2<C, T, A>::size_type basic_string2<C, T, A>::size() const
+	{
+		return base_type::m_impl->get_size();
+	}
+
+	template<typename C, typename T, typename A>
+	typename basic_string2<C, T, A>::size_type basic_string2<C, T, A>::length() const
+	{
+		return base_type::m_impl->get_size();
+	}
+
+//	template<typename C, typename T, typename A>
+//	typename basic_string2<C, T, A>::size_type basic_string2<C, T, A>::max_size() const
+//	{
+//		// TODO
+//	}
+
+	template<typename C, typename T, typename A>
+	void basic_string2<C, T, A>::reserve(size_type capa)
+	{
+		if (capacity() < capa) {
+			this_type(c_str(), size(), capa).swap(*this);
+		}
+	}
+
+	template<typename C, typename T, typename A>
+	typename basic_string2<C, T, A>::size_type basic_string2<C, T, A>::capacity() const
+	{
+		return base_type::m_impl->get_capa();
+	}
+
+	template<typename C, typename T, typename A>
+	void basic_string2<C, T, A>::shrink_to_fit()
+	{
+		// TODO
+	}
+
+	template<typename C, typename T, typename A>
+	void basic_string2<C, T, A>::clear()
+	{
+		if (!empty())
+			split_and_clear(capacity());
+	}
+
+	template<typename C, typename T, typename A>
 	typename basic_string2<C, T, A>::iterator basic_string2<C, T, A>::insert(const_iterator pos, value_type ch)
 	{
 		typename simstd::iterator_traits<const_iterator>::difference_type posFirst = simstd::distance(cbegin(), pos);
@@ -599,6 +659,99 @@ namespace simstd {
 //		return replace(index, 0, str.c_str(), count);
 //	}
 //
+//	template<typename C, typename T, typename A>
+//	typename basic_string2<C, T, A>::this_type & basic_string2<C, T, A>::erase(size_type pos, size_type count)
+//	{
+//		size_type posLast = (count == npos) ? size() : simstd::min(size(), pos + count);
+//		erase(simstd::next(cbegin(), pos), simstd::next(cbegin(), posLast));
+//		return *this;
+//	}
+//
+//	template<typename C, typename T, typename A>
+//	typename basic_string2<C, T, A>::iterator basic_string2<C, T, A>::erase(const_iterator position)
+//	{
+//		return erase(position, simstd::next(position, 1));
+//	}
+//
+//	template<typename C, typename T, typename A>
+//	typename basic_string2<C, T, A>::iterator basic_string2<C, T, A>::erase(const_iterator first, const_iterator last)
+//	{
+//		typename simstd::iterator_traits<const_iterator>::difference_type posFirst = simstd::distance(cbegin(), first);
+//		typename simstd::iterator_traits<const_iterator>::difference_type posLast = simstd::distance(cbegin(), simstd::min(last, cend()));
+//		if (is_shared()) {
+//			this_type tmp(c_str(), posFirst, capacity());
+//			tmp.append(c_str() + posLast, size() - posLast);
+//			tmp.swap(*this);
+//		} else {
+//			traits_type::move(_str() + posFirst, _str() + posLast, size() - posLast + 1);
+//			m_data->set_size(size() - (posLast - posFirst));
+//		}
+//		return iterator(_str() + posFirst);
+//	}
+//
+
+	template<typename C, typename T, typename A>
+	void basic_string2<C, T, A>::push_back(value_type ch)
+	{
+		// TODO
+	}
+
+	template<typename C, typename T, typename A>
+	void basic_string2<C, T, A>::pop_back()
+	{
+		// TODO
+	}
+
+	template<typename C, typename T, typename A>
+	typename basic_string2<C, T, A>::this_type & basic_string2<C, T, A>::append(size_type count, value_type ch)
+	{
+		split_and_copy(get_necessary_capacity(count));
+		raw_append(count, ch);
+		return *this;
+	}
+
+	template<typename C, typename T, typename A>
+	typename basic_string2<C, T, A>::this_type & basic_string2<C, T, A>::append(const this_type & other)
+	{
+		return append(other.c_str(), other.size());
+	}
+
+	template<typename C, typename T, typename A>
+	typename basic_string2<C, T, A>::this_type & basic_string2<C, T, A>::append(const this_type & other, size_type pos, size_type count)
+	{
+		return append(other.c_str() + pos, count == npos ? other.size() - pos : count);
+	}
+
+	template<typename C, typename T, typename A>
+	typename basic_string2<C, T, A>::this_type & basic_string2<C, T, A>::append(const_pointer str, size_type count)
+	{
+		assert(str);
+		if (count) {
+			if (is_same_str(str)) {
+				this_type tmp(c_str(), size(), get_necessary_capacity(count));
+				tmp.append(str, count);
+				tmp.swap(*this);
+			} else {
+				split_and_copy(get_necessary_capacity(count));
+				raw_append(str, count);
+			}
+		}
+		return *this;
+	}
+
+	template<typename C, typename T, typename A>
+	typename basic_string2<C, T, A>::this_type & basic_string2<C, T, A>::append(const_pointer str)
+	{
+		return append(str, traits_type::length(str));
+	}
+
+	template<typename C, typename T, typename A>
+	template<typename InputIt>
+	typename basic_string2<C, T, A>::this_type & basic_string2<C, T, A>::append(InputIt first, InputIt last)
+	{
+		return _append(first, last, simstd::pvt::iterator_category(first));
+	}
+
 	template<typename C, typename T, typename A>
 	typename basic_string2<C, T, A>::this_type & basic_string2<C, T, A>::operator +=(const this_type & other)
 	{
@@ -617,31 +770,35 @@ namespace simstd {
 		return append(1, ch);
 	}
 
-	template<typename C, typename T, typename A>
-	typename basic_string2<C, T, A>::const_reference basic_string2<C, T, A>::operator [](size_type in) const
-	{
-		return *(c_str() + in);
-	}
-
-	template<typename C, typename T, typename A>
-	typename basic_string2<C, T, A>::reference basic_string2<C, T, A>::operator [](size_type in)
-	{
-		split(capacity());
-		return *(base_type::m_impl->get_data() + in);
-	}
-
-	template<typename C, typename T, typename A>
-	typename basic_string2<C, T, A>::const_reference basic_string2<C, T, A>::at(size_type in) const
-	{
-		return *(c_str() + in);
-	}
-
-	template<typename C, typename T, typename A>
-	typename basic_string2<C, T, A>::reference basic_string2<C, T, A>::at(size_type in)
-	{
-		split(capacity());
-		return *(base_type::m_impl->get_data() + in);
-	}
+//	template<typename C, typename T, typename A>
+//	int basic_string2<C, T, A>::compare(const_pointer str) const
+//	{
+//		return compare(c_str(), length(), str, traits_type::length(str));
+//	}
+//
+//	template<typename C, typename T, typename A>
+//	int basic_string2<C, T, A>::compare(const this_type & str) const
+//	{
+//		return compare(c_str(), length(), str.c_str(), str.length());
+//	}
+//
+//	template<typename C, typename T, typename A>
+//	int basic_string2<C, T, A>::compare(size_type pos, size_type count, const this_type & str) const
+//	{
+//		return compare(c_str() + pos, count, str.c_str(), str.length());
+//	}
+//
+//	template<typename C, typename T, typename A>
+//	int basic_string2<C, T, A>::compare(size_type pos, size_type count, const_pointer str) const
+//	{
+//		return compare(c_str() + pos, count, str, traits_type::length(str));
+//	}
+//
+//	template<typename C, typename T, typename A>
+//	int basic_string2<C, T, A>::compare(size_type pos, size_type count, const_pointer str, size_type len) const
+//	{
+//		return compare(c_str() + pos, count, str, len);
+//	}
 
 	template<typename C, typename T, typename A>
 	typename basic_string2<C, T, A>::this_type & basic_string2<C, T, A>::replace(size_type pos, size_type len, const this_type & other)
@@ -735,128 +892,124 @@ namespace simstd {
 		return this_type(c_str() + pos, n, base_type::get_allocator());
 	}
 
-//	template<typename C, typename T, typename A>
-//	typename basic_string2<C, T, A>::this_type & basic_string2<C, T, A>::erase(size_type pos, size_type count)
-//	{
-//		size_type posLast = (count == npos) ? size() : simstd::min(size(), pos + count);
-//		erase(simstd::next(cbegin(), pos), simstd::next(cbegin(), posLast));
-//		return *this;
-//	}
-//
-//	template<typename C, typename T, typename A>
-//	typename basic_string2<C, T, A>::iterator basic_string2<C, T, A>::erase(const_iterator position)
-//	{
-//		return erase(position, simstd::next(position, 1));
-//	}
-//
-//	template<typename C, typename T, typename A>
-//	typename basic_string2<C, T, A>::iterator basic_string2<C, T, A>::erase(const_iterator first, const_iterator last)
-//	{
-//		typename simstd::iterator_traits<const_iterator>::difference_type posFirst = simstd::distance(cbegin(), first);
-//		typename simstd::iterator_traits<const_iterator>::difference_type posLast = simstd::distance(cbegin(), simstd::min(last, cend()));
-//		if (is_shared()) {
-//			this_type tmp(c_str(), posFirst, capacity());
-//			tmp.append(c_str() + posLast, size() - posLast);
-//			tmp.swap(*this);
-//		} else {
-//			traits_type::move(_str() + posFirst, _str() + posLast, size() - posLast + 1);
-//			m_data->set_size(size() - (posLast - posFirst));
-//		}
-//		return iterator(_str() + posFirst);
-//	}
-//
-//	template<typename C, typename T, typename A>
-//	typename basic_string2<C, T, A>::size_type basic_string2<C, T, A>::find(const this_type & str, size_type pos) const
-//	{
-//		return find(str.c_str(), pos, str.length());
-//	}
-//
-//	template<typename C, typename T, typename A>
-//	typename basic_string2<C, T, A>::size_type basic_string2<C, T, A>::find(const_pointer str, size_type pos) const
-//	{
-//		return find(str, pos, traits_type::length(str));
-//	}
-//
-//	template<typename C, typename T, typename A>
-//	typename basic_string2<C, T, A>::size_type basic_string2<C, T, A>::find(value_type ch, size_type pos) const
-//	{
-//		const_pointer find = traits_type::find(c_str() + pos, size(), ch);
-//		return (find) ? find - c_str() : npos;
-//	}
-//
-//	template<typename C, typename T, typename A>
-//	typename basic_string2<C, T, A>::size_type basic_string2<C, T, A>::rfind(const this_type & str, size_type pos) const
-//	{
-//		return rfind(str.c_str(), pos, str.length());
-//	}
-//
-//	template<typename C, typename T, typename A>
-//	typename basic_string2<C, T, A>::size_type basic_string2<C, T, A>::rfind(const_pointer str, size_type pos, size_type count) const
-//	{
-//		pos = simstd::min(pos, size());
-//		if (count != 0 && count <= pos) {
-//			pos -= (count - 1);
-//			while (pos > 0)
-//				if (find(str, pos, count) != npos)
-//					return pos;
-//		}
-//		return npos;
-//	}
-//
-//	template<typename C, typename T, typename A>
-//	typename basic_string2<C, T, A>::size_type basic_string2<C, T, A>::rfind(const_pointer str, size_type pos) const
-//	{
-//		return rfind(str, pos, traits_type::length(str));
-//	}
-//
-//	template<typename C, typename T, typename A>
-//	typename basic_string2<C, T, A>::size_type basic_string2<C, T, A>::rfind(value_type ch, size_type pos) const
-//	{
-//		pos = simstd::min(pos, size());
-//		while (pos > 0)
-//			if (traits_type::eq(at(--pos), ch))
-//				return pos;
-//		return npos;
-//	}
-//
-//	template<typename C, typename T, typename A>
-//	typename basic_string2<C, T, A>::size_type basic_string2<C, T, A>::find_first_of(const this_type & str, size_type pos) const
-//	{
-//		for (; pos < size(); ++pos)
-//			if (traits_type::find(str.c_str(), str.size(), at(pos)))
-//				return pos;
-//		return npos;
-//	}
-//
-//	template<typename C, typename T, typename A>
-//	typename basic_string2<C, T, A>::size_type basic_string2<C, T, A>::find_last_of(const this_type & str, size_type pos) const
-//	{
-//		pos = simstd::min(pos, size());
-//		while (pos > 0)
-//			if (traits_type::find(str.c_str(), str.size(), at(--pos)))
-//				return pos;
-//		return npos;
-//	}
-//
-//	template<typename C, typename T, typename A>
-//	typename basic_string2<C, T, A>::size_type basic_string2<C, T, A>::find_first_not_of(const this_type & str, size_type pos) const
-//	{
-//		for (; pos < size(); ++pos)
-//			if (traits_type::find(str.c_str(), str.size(), at(pos)) == nullptr)
-//				return pos;
-//		return npos;
-//	}
-//
-//	template<typename C, typename T, typename A>
-//	typename basic_string2<C, T, A>::size_type basic_string2<C, T, A>::find_last_not_of(const this_type & str, size_type pos) const
-//	{
-//		pos = simstd::min(pos, size());
-//		while (pos > 0)
-//			if (traits_type::find(str.c_str(), str.size(), at(--pos)) == nullptr)
-//				return pos;
-//		return npos;
-//	}
-//
+	template<typename C, typename T, typename A>
+	typename basic_string2<C, T, A>::size_type basic_string2<C, T, A>::copy(pointer dest, size_type count, size_type pos) const
+	{
+		count = (count == npos) ? size() - pos : count;
+		traits_type::move(dest, c_str() + pos, count);
+		return count;
+	}
+
+	template<typename C, typename T, typename A>
+	void basic_string2<C, T, A>::resize(size_type count)
+	{
+		// TODO
+	}
+
+	template<typename C, typename T, typename A>
+	void basic_string2<C, T, A>::resize(size_type count, value_type ch)
+	{
+		// TODO
+	}
+
+	template<typename C, typename T, typename A>
+	void basic_string2<C, T, A>::swap(this_type & other)
+	{
+		using simstd::swap;
+		swap(base_type::m_impl, other.m_impl);
+	}
+
+	template<typename C, typename T, typename A>
+	typename basic_string2<C, T, A>::size_type basic_string2<C, T, A>::find(const this_type & str, size_type pos) const
+	{
+		return find(str.c_str(), pos, str.length());
+	}
+
+	template<typename C, typename T, typename A>
+	typename basic_string2<C, T, A>::size_type basic_string2<C, T, A>::find(const_pointer str, size_type pos) const
+	{
+		return find(str, pos, traits_type::length(str));
+	}
+
+	template<typename C, typename T, typename A>
+	typename basic_string2<C, T, A>::size_type basic_string2<C, T, A>::find(value_type ch, size_type pos) const
+	{
+		const_pointer find = traits_type::find(c_str() + pos, size(), ch);
+		return (find) ? find - c_str() : npos;
+	}
+
+	template<typename C, typename T, typename A>
+	typename basic_string2<C, T, A>::size_type basic_string2<C, T, A>::rfind(const this_type & str, size_type pos) const
+	{
+		return rfind(str.c_str(), pos, str.length());
+	}
+
+	template<typename C, typename T, typename A>
+	typename basic_string2<C, T, A>::size_type basic_string2<C, T, A>::rfind(const_pointer str, size_type pos, size_type count) const
+	{
+		pos = simstd::min(pos, size());
+		if (count != 0 && count <= pos) {
+			pos -= (count - 1);
+			while (pos > 0)
+				if (find(str, pos, count) != npos)
+					return pos;
+		}
+		return npos;
+	}
+
+	template<typename C, typename T, typename A>
+	typename basic_string2<C, T, A>::size_type basic_string2<C, T, A>::rfind(const_pointer str, size_type pos) const
+	{
+		return rfind(str, pos, traits_type::length(str));
+	}
+
+	template<typename C, typename T, typename A>
+	typename basic_string2<C, T, A>::size_type basic_string2<C, T, A>::rfind(value_type ch, size_type pos) const
+	{
+		pos = simstd::min(pos, size());
+		while (pos > 0)
+			if (traits_type::eq(at(--pos), ch))
+				return pos;
+		return npos;
+	}
+
+	template<typename C, typename T, typename A>
+	typename basic_string2<C, T, A>::size_type basic_string2<C, T, A>::find_first_of(const this_type & str, size_type pos) const
+	{
+		for (; pos < size(); ++pos)
+			if (traits_type::find(str.c_str(), str.size(), at(pos)))
+				return pos;
+		return npos;
+	}
+
+	template<typename C, typename T, typename A>
+	typename basic_string2<C, T, A>::size_type basic_string2<C, T, A>::find_first_not_of(const this_type & str, size_type pos) const
+	{
+		for (; pos < size(); ++pos)
+			if (traits_type::find(str.c_str(), str.size(), at(pos)) == nullptr)
+				return pos;
+		return npos;
+	}
+
+	template<typename C, typename T, typename A>
+	typename basic_string2<C, T, A>::size_type basic_string2<C, T, A>::find_last_of(const this_type & str, size_type pos) const
+	{
+		pos = simstd::min(pos, size());
+		while (pos > 0)
+			if (traits_type::find(str.c_str(), str.size(), at(--pos)))
+				return pos;
+		return npos;
+	}
+
+	template<typename C, typename T, typename A>
+	typename basic_string2<C, T, A>::size_type basic_string2<C, T, A>::find_last_not_of(const this_type & str, size_type pos) const
+	{
+		pos = simstd::min(pos, size());
+		while (pos > 0)
+			if (traits_type::find(str.c_str(), str.size(), at(--pos)) == nullptr)
+				return pos;
+		return npos;
+	}
 
 	template<typename C, typename T, typename A>
 	basic_string2<C, T, A>::basic_string2(const A & alloc, const_pointer str, size_type count, size_type capacity) :
@@ -885,7 +1038,7 @@ namespace simstd {
 	template<typename C, typename T, typename A>
 	void basic_string2<C, T, A>::raw_append(size_type count, value_type ch)
 	{
-		auto ptr = base_type::m_impl->get_data() + size();
+		auto ptr = base_type::m_impl->get_end();
 		traits_type::assign(ptr, count, ch);
 		base_type::m_impl->set_size(size() + count);
 	}
@@ -893,7 +1046,7 @@ namespace simstd {
 	template<typename C, typename T, typename A>
 	void basic_string2<C, T, A>::raw_append(const_pointer str, size_type count)
 	{
-		auto ptr = base_type::m_impl->get_data() + size();
+		auto ptr = base_type::m_impl->get_end();
 		traits_type::move(ptr, str, count);
 		base_type::m_impl->set_size(size() + count);
 	}
@@ -902,7 +1055,7 @@ namespace simstd {
 	template<typename InputIt>
 	void basic_string2<C, T, A>::raw_append(InputIt first, InputIt last)
 	{
-		auto ptr = base_type::m_impl->get_data() + size();
+		auto ptr = base_type::m_impl->get_end();
 		auto endIt = simstd::copy(first, last, ptr);
 		base_type::m_impl->set_size(size() + simstd::distance(ptr, endIt));
 	}
@@ -1012,169 +1165,163 @@ namespace simstd {
 		return c_str() <= str && str < (c_str() + size()); // append to itself
 	}
 
-//	template<typename C, typename T, typename A>
-//	bool basic_string2<C, T, A>::is_shared() const
-//	{
-//		return m_data->count_ref() > 1;
-//	}
-//
-//	///=============================================================================================
-//	template<typename C, typename T, typename A>
-//	basic_string2<C, T, A> operator +(const basic_string2<C, T, A> & left, const basic_string2<C, T, A> & right)
-//	{
-//		return basic_string2<C, T, A>(left.c_str(), left.size(), left.size() + right.size()) += right;
-//	}
-//
-//	template<typename C, typename T, typename A>
-//	basic_string2<C, T, A> operator +(const C * left, const basic_string2<C, T, A> & right)
-//	{
-//		typedef typename basic_string2<C, T, A>::traits_type traits_type;
-//		typename basic_string2<C, T, A>::size_type length = traits_type::length(left);
-//		return basic_string2<C, T, A>(left, length, length + right.size()) += right;
-//	}
-//
-//	template<typename C, typename T, typename A>
-//	basic_string2<C, T, A> operator +(C left, const basic_string2<C, T, A> & right)
-//	{
-//		return basic_string2<C, T, A>(&left, 1, 1 + right.size()) += right;
-//	}
-//
-//	template<typename C, typename T, typename A>
-//	basic_string2<C, T, A> operator +(const basic_string2<C, T, A> & left, const C * right)
-//	{
-//		typedef typename basic_string2<C, T, A>::traits_type traits_type;
-//		return basic_string2<C, T, A>(left.c_str(), left.size(), left.size() + traits_type::length(right)) += right;
-//	}
-//
-//	template<typename C, typename T, typename A>
-//	basic_string2<C, T, A> operator +(const basic_string2<C, T, A> & left, C right)
-//	{
-//		return basic_string2<C, T, A>(left.c_str(), left.size(), left.size() + 1) += right;
-//	}
-//
-//	template<typename C, typename T, typename A>
-//	bool operator ==(const basic_string2<C, T, A> & left, const basic_string2<C, T, A> & right)
-//	{
-//		return basic_string2<C, T, A>::compare(left.c_str(), left.size(), right.c_str(), right.size()) == 0;
-//	}
-//
-//	template<typename C, typename T, typename A>
-//	bool operator ==(const C * left, const basic_string2<C, T, A> & right)
-//	{
-//		typedef typename basic_string2<C, T, A>::traits_type traits_type;
-//		return basic_string2<C, T, A>::compare(left, traits_type::length(left), right.c_str(), right.size()) == 0;
-//	}
-//
-//	template<typename C, typename T, typename A>
-//	bool operator ==(const basic_string2<C, T, A> & left, const C * right)
-//	{
-//		typedef typename basic_string2<C, T, A>::traits_type traits_type;
-//		return basic_string2<C, T, A>::compare(left.c_str(), left.size(), right, traits_type::length(right)) == 0;
-//	}
-//
-//	template<typename C, typename T, typename A>
-//	bool operator !=(const basic_string2<C, T, A> & left, const basic_string2<C, T, A> & right)
-//	{
-//		return !operator ==(left, right);
-//	}
-//
-//	template<typename C, typename T, typename A>
-//	bool operator !=(const C * left, const basic_string2<C, T, A> & right)
-//	{
-//		return !operator ==(left, right);
-//	}
-//
-//	template<typename C, typename T, typename A>
-//	bool operator !=(const basic_string2<C, T, A> & left, const C * right)
-//	{
-//		return !operator ==(left, right);
-//	}
-//
-//	template<typename C, typename T, typename A>
-//	bool operator <(const basic_string2<C, T, A> & left, const basic_string2<C, T, A> & right)
-//	{
-//		return basic_string2<C, T, A>::compare(left.c_str(), left.size(), right.c_str(), right.size()) < 0;
-//	}
-//
-//	template<typename C, typename T, typename A>
-//	bool operator <(const C * left, const basic_string2<C, T, A> & right)
-//	{
-//		typedef typename basic_string2<C, T, A>::traits_type traits_type;
-//		return basic_string2<C, T, A>::compare(left, traits_type::length(left), right.c_str(), right.size()) < 0;
-//	}
-//
-//	template<typename C, typename T, typename A>
-//	bool operator <(const basic_string2<C, T, A> & left, const C * right)
-//	{
-//		typedef typename basic_string2<C, T, A>::traits_type traits_type;
-//		return basic_string2<C, T, A>::compare(left.c_str(), left.size(), right, traits_type::length(right)) < 0;
-//	}
-//
-//	template<typename C, typename T, typename A>
-//	bool operator <=(const basic_string2<C, T, A> & left, const basic_string2<C, T, A> & right)
-//	{
-//		return basic_string2<C, T, A>::compare(left.c_str(), left.size(), right.c_str(), right.size()) <= 0;
-//	}
-//
-//	template<typename C, typename T, typename A>
-//	bool operator <=(const C * left, const basic_string2<C, T, A> & right)
-//	{
-//		typedef typename basic_string2<C, T, A>::traits_type traits_type;
-//		return basic_string2<C, T, A>::compare(left, traits_type::length(left), right.c_str(), right.size()) <= 0;
-//	}
-//
-//	template<typename C, typename T, typename A>
-//	bool operator <=(const basic_string2<C, T, A> & left, const C * right)
-//	{
-//		typedef typename basic_string2<C, T, A>::traits_type traits_type;
-//		return basic_string2<C, T, A>::compare(left.c_str(), left.size(), right, traits_type::length(right)) <= 0;
-//	}
-//
-//	template<typename C, typename T, typename A>
-//	bool operator >(const basic_string2<C, T, A> & left, const basic_string2<C, T, A> & right)
-//	{
-//		return basic_string2<C, T, A>::compare(left.c_str(), left.size(), right.c_str(), right.size()) > 0;
-//	}
-//
-//	template<typename C, typename T, typename A>
-//	bool operator >(const C * left, const basic_string2<C, T, A> & right)
-//	{
-//		typedef typename basic_string2<C, T, A>::traits_type traits_type;
-//		return basic_string2<C, T, A>::compare(left, traits_type::length(left), right.c_str(), right.size()) > 0;
-//	}
-//
-//	template<typename C, typename T, typename A>
-//	bool operator >(const basic_string2<C, T, A> & left, const C * right)
-//	{
-//		typedef typename basic_string2<C, T, A>::traits_type traits_type;
-//		return basic_string2<C, T, A>::compare(left.c_str(), left.size(), right, traits_type::length(right)) > 0;
-//	}
-//
-//	template<typename C, typename T, typename A>
-//	bool operator >=(const basic_string2<C, T, A> & left, const basic_string2<C, T, A> & right)
-//	{
-//		return basic_string2<C, T, A>::compare(left.c_str(), left.size(), right.c_str(), right.size()) >= 0;
-//	}
-//
-//	template<typename C, typename T, typename A>
-//	bool operator >=(const C * left, const basic_string2<C, T, A> & right)
-//	{
-//		typedef typename basic_string2<C, T, A>::traits_type traits_type;
-//		return basic_string2<C, T, A>::compare(left, traits_type::length(left), right.c_str(), right.size()) >= 0;
-//	}
-//
-//	template<typename C, typename T, typename A>
-//	bool operator >=(const basic_string2<C, T, A> & left, const C * right)
-//	{
-//		typedef typename basic_string2<C, T, A>::traits_type traits_type;
-//		return basic_string2<C, T, A>::compare(left.c_str(), left.size(), right, traits_type::length(right)) >= 0;
-//	}
-//
-//	template<typename C, typename T, typename A>
-//	void swap(basic_string2<C, T, A> & left, basic_string2<C, T, A> & right)
-//	{
-//		left.swap(right);
-//	}
+	///=============================================================================================
+	template<typename C, typename T, typename A>
+	basic_string2<C, T, A> operator +(const basic_string2<C, T, A> & left, const basic_string2<C, T, A> & right)
+	{
+		return basic_string2<C, T, A>(left.c_str(), left.size(), left.size() + right.size()) += right;
+	}
+
+	template<typename C, typename T, typename A>
+	basic_string2<C, T, A> operator +(const C * left, const basic_string2<C, T, A> & right)
+	{
+		typedef typename basic_string2<C, T, A>::traits_type traits_type;
+		typename basic_string2<C, T, A>::size_type length = traits_type::length(left);
+		return basic_string2<C, T, A>(left, length, length + right.size()) += right;
+	}
+
+	template<typename C, typename T, typename A>
+	basic_string2<C, T, A> operator +(C left, const basic_string2<C, T, A> & right)
+	{
+		return basic_string2<C, T, A>(&left, 1, 1 + right.size()) += right;
+	}
+
+	template<typename C, typename T, typename A>
+	basic_string2<C, T, A> operator +(const basic_string2<C, T, A> & left, const C * right)
+	{
+		typedef typename basic_string2<C, T, A>::traits_type traits_type;
+		return basic_string2<C, T, A>(left.c_str(), left.size(), left.size() + traits_type::length(right)) += right;
+	}
+
+	template<typename C, typename T, typename A>
+	basic_string2<C, T, A> operator +(const basic_string2<C, T, A> & left, C right)
+	{
+		return basic_string2<C, T, A>(left.c_str(), left.size(), left.size() + 1) += right;
+	}
+
+	template<typename C, typename T, typename A>
+	bool operator ==(const basic_string2<C, T, A> & left, const basic_string2<C, T, A> & right)
+	{
+		return basic_string2<C, T, A>::compare(left.c_str(), left.size(), right.c_str(), right.size()) == 0;
+	}
+
+	template<typename C, typename T, typename A>
+	bool operator ==(const C * left, const basic_string2<C, T, A> & right)
+	{
+		typedef typename basic_string2<C, T, A>::traits_type traits_type;
+		return basic_string2<C, T, A>::compare(left, traits_type::length(left), right.c_str(), right.size()) == 0;
+	}
+
+	template<typename C, typename T, typename A>
+	bool operator ==(const basic_string2<C, T, A> & left, const C * right)
+	{
+		typedef typename basic_string2<C, T, A>::traits_type traits_type;
+		return basic_string2<C, T, A>::compare(left.c_str(), left.size(), right, traits_type::length(right)) == 0;
+	}
+
+	template<typename C, typename T, typename A>
+	bool operator !=(const basic_string2<C, T, A> & left, const basic_string2<C, T, A> & right)
+	{
+		return !operator ==(left, right);
+	}
+
+	template<typename C, typename T, typename A>
+	bool operator !=(const C * left, const basic_string2<C, T, A> & right)
+	{
+		return !operator ==(left, right);
+	}
+
+	template<typename C, typename T, typename A>
+	bool operator !=(const basic_string2<C, T, A> & left, const C * right)
+	{
+		return !operator ==(left, right);
+	}
+
+	template<typename C, typename T, typename A>
+	bool operator <(const basic_string2<C, T, A> & left, const basic_string2<C, T, A> & right)
+	{
+		return basic_string2<C, T, A>::compare(left.c_str(), left.size(), right.c_str(), right.size()) < 0;
+	}
+
+	template<typename C, typename T, typename A>
+	bool operator <(const C * left, const basic_string2<C, T, A> & right)
+	{
+		typedef typename basic_string2<C, T, A>::traits_type traits_type;
+		return basic_string2<C, T, A>::compare(left, traits_type::length(left), right.c_str(), right.size()) < 0;
+	}
+
+	template<typename C, typename T, typename A>
+	bool operator <(const basic_string2<C, T, A> & left, const C * right)
+	{
+		typedef typename basic_string2<C, T, A>::traits_type traits_type;
+		return basic_string2<C, T, A>::compare(left.c_str(), left.size(), right, traits_type::length(right)) < 0;
+	}
+
+	template<typename C, typename T, typename A>
+	bool operator <=(const basic_string2<C, T, A> & left, const basic_string2<C, T, A> & right)
+	{
+		return basic_string2<C, T, A>::compare(left.c_str(), left.size(), right.c_str(), right.size()) <= 0;
+	}
+
+	template<typename C, typename T, typename A>
+	bool operator <=(const C * left, const basic_string2<C, T, A> & right)
+	{
+		typedef typename basic_string2<C, T, A>::traits_type traits_type;
+		return basic_string2<C, T, A>::compare(left, traits_type::length(left), right.c_str(), right.size()) <= 0;
+	}
+
+	template<typename C, typename T, typename A>
+	bool operator <=(const basic_string2<C, T, A> & left, const C * right)
+	{
+		typedef typename basic_string2<C, T, A>::traits_type traits_type;
+		return basic_string2<C, T, A>::compare(left.c_str(), left.size(), right, traits_type::length(right)) <= 0;
+	}
+
+	template<typename C, typename T, typename A>
+	bool operator >(const basic_string2<C, T, A> & left, const basic_string2<C, T, A> & right)
+	{
+		return basic_string2<C, T, A>::compare(left.c_str(), left.size(), right.c_str(), right.size()) > 0;
+	}
+
+	template<typename C, typename T, typename A>
+	bool operator >(const C * left, const basic_string2<C, T, A> & right)
+	{
+		typedef typename basic_string2<C, T, A>::traits_type traits_type;
+		return basic_string2<C, T, A>::compare(left, traits_type::length(left), right.c_str(), right.size()) > 0;
+	}
+
+	template<typename C, typename T, typename A>
+	bool operator >(const basic_string2<C, T, A> & left, const C * right)
+	{
+		typedef typename basic_string2<C, T, A>::traits_type traits_type;
+		return basic_string2<C, T, A>::compare(left.c_str(), left.size(), right, traits_type::length(right)) > 0;
+	}
+
+	template<typename C, typename T, typename A>
+	bool operator >=(const basic_string2<C, T, A> & left, const basic_string2<C, T, A> & right)
+	{
+		return basic_string2<C, T, A>::compare(left.c_str(), left.size(), right.c_str(), right.size()) >= 0;
+	}
+
+	template<typename C, typename T, typename A>
+	bool operator >=(const C * left, const basic_string2<C, T, A> & right)
+	{
+		typedef typename basic_string2<C, T, A>::traits_type traits_type;
+		return basic_string2<C, T, A>::compare(left, traits_type::length(left), right.c_str(), right.size()) >= 0;
+	}
+
+	template<typename C, typename T, typename A>
+	bool operator >=(const basic_string2<C, T, A> & left, const C * right)
+	{
+		typedef typename basic_string2<C, T, A>::traits_type traits_type;
+		return basic_string2<C, T, A>::compare(left.c_str(), left.size(), right, traits_type::length(right)) >= 0;
+	}
+
+	template<typename C, typename T, typename A>
+	void swap(basic_string2<C, T, A> & left, basic_string2<C, T, A> & right)
+	{
+		left.swap(right);
+	}
 
 	///=============================================================================================
 //	typedef basic_string<char>    string;

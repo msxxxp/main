@@ -2,6 +2,7 @@
 #define BASIS_ITERATOR_BASE_HPP_
 
 #include <basis/types.hpp>
+#include <basis/sys/console.hpp>
 
 namespace simstd
 {

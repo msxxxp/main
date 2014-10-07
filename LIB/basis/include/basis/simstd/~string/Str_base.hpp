@@ -11,90 +11,119 @@ namespace simstd {
 	namespace pvt {
 
 		template<typename Type, typename Allocator>
-		class Str_base {
-			const size_t MIN_CAPACITY = 16;
-
+		class StrBase {
 		public:
-			~Str_base();
+			~StrBase();
 
-			Str_base(const Allocator& alloc);
+			StrBase(const Allocator& alloc, size_t capa = 0);
 
-			Str_base(const Allocator& alloc, size_t capa);
+			StrBase(const StrBase & other);
 
-			Str_base(Str_base && other);
+			StrBase(const StrBase & other, const Allocator& alloc);
+
+			StrBase(StrBase && other);
+
+			StrBase(StrBase && other, const Allocator& alloc);
 
 			const Allocator& get_allocator() const;
 
 		protected:
-			typedef Str_impl<Type, Allocator> impl_type;
-			typedef typename Allocator::template rebind<impl_type>::other ImplAllocator;
-			typedef typename Allocator::template rebind<char>::other RawAllocator;
+			typedef StrImpl<Type, Allocator> impl_type;
+			typedef typename Allocator::template rebind<impl_type>::other ImpAllocator;
+			typedef typename Allocator::template rebind<char>::other      RawAllocator;
 
 			impl_type* m_impl;
 
 		private:
-			template<typename ... Args>
-			static impl_type* new_impl(const Allocator& alloc, size_t capa, Args &&... args);
+			static impl_type* new_impl(size_t capa, const Allocator& alloc);
+			static void       del_impl(const impl_type* ptr);
 
-			static void delete_impl(const impl_type* ptr);
+			const size_t MIN_CAPACITY = 4;
 		};
 
 		template<typename T, typename A>
-		Str_base<T, A>::~Str_base()
+		StrBase<T, A>::~StrBase()
 		{
 			LogTraceObj();
-			if (m_impl->decrease_ref())
-				delete_impl(m_impl);
+			if (m_impl && m_impl->decrease_ref())
+				del_impl(m_impl);
 			m_impl = nullptr;
 		}
 
 		template<typename T, typename A>
-		Str_base<T, A>::Str_base(const A& alloc) :
-			m_impl(new_impl(alloc, MIN_CAPACITY))
+		StrBase<T, A>::StrBase(const A& alloc, size_t capa) :
+			m_impl(nullptr)
 		{
 			LogTraceObj();
+			m_impl = new_impl(simstd::max(MIN_CAPACITY, capa), alloc);
 		}
 
 		template<typename T, typename A>
-		Str_base<T, A>::Str_base(const A& alloc, size_t capa) :
-			m_impl(new_impl(alloc, simstd::max(MIN_CAPACITY, capa)))
+		StrBase<T, A>::StrBase(const StrBase & other) :
+			m_impl(other.m_impl)
 		{
 			LogTraceObj();
+			m_impl->increase_ref();
 		}
 
 		template<typename T, typename A>
-		Str_base<T, A>::Str_base(Str_base && other) :
-			m_impl(new_impl(A(), MIN_CAPACITY))
+		StrBase<T, A>::StrBase(const StrBase & other, const A& alloc) :
+			m_impl(other.m_impl)
 		{
 			LogTraceObj();
+			if (alloc == other.get_allocator()) {
+				m_impl->increase_ref();
+			} else {
+				m_impl = new_impl(other.m_impl->get_capa(), alloc);
+			}
 		}
 
 		template<typename T, typename A>
-		const A& Str_base<T, A>::get_allocator() const
+		StrBase<T, A>::StrBase(StrBase && other) :
+			m_impl(nullptr)
+		{
+			LogTraceObj();
+			using simstd::swap;
+			swap(m_impl, other.m_impl);
+		}
+
+
+		template<typename T, typename A>
+		StrBase<T, A>::StrBase(StrBase && other, const A& alloc) :
+			m_impl(nullptr)
+		{
+			LogTraceObj();
+			if (alloc == other.get_allocator()) {
+				using simstd::swap;
+				swap(m_impl, other.m_impl);
+			} else {
+				m_impl = new_impl(other.m_impl->get_capa(), alloc);
+			}
+		}
+
+		template<typename T, typename A>
+		const A& StrBase<T, A>::get_allocator() const
 		{
 			return m_impl->get_allocator();
 		}
 
 		template<typename T, typename A>
-		template<typename ... Args>
-		typename Str_base<T, A>::impl_type* Str_base<T, A>::new_impl(const A& alloc, size_t capa, Args &&... args)
+		typename StrBase<T, A>::impl_type* StrBase<T, A>::new_impl(size_t capa, const A& alloc)
 		{
-			LogTrace();
 			RawAllocator rawAlloc(alloc);
 			size_t size = capa * sizeof(T) + sizeof(impl_type);
-			auto ret = reinterpret_cast<Str_base<T, A>::impl_type*>(rawAlloc.allocate(size));
+			auto ret = reinterpret_cast<StrBase<T, A>::impl_type*>(rawAlloc.allocate(size));
 
-			ImplAllocator implAlloc(alloc);
-			implAlloc.construct(ret, alloc, capa, simstd::forward<Args>(args)...);
+			ImpAllocator implAlloc(alloc);
+			implAlloc.construct(ret, capa, alloc);
 			return ret;
 		}
 
 		template<typename T, typename A>
-		void Str_base<T, A>::delete_impl(const impl_type* ptr)
+		void StrBase<T, A>::del_impl(const impl_type* ptr)
 		{
-			LogTrace();
 			auto impl = const_cast<impl_type*>(ptr);
-			ImplAllocator alloc = impl->get_allocator();
+			ImpAllocator alloc = impl->get_allocator();
 			alloc.destroy(impl);
 			alloc.deallocate(impl, 1);
 		}

@@ -4,7 +4,7 @@
 #include <basis/configure.hpp>
 #include <basis/simstd/~memory/allocator.hpp>
 #include <basis/simstd/~memory/AllocatorHeap.hpp>
-#include <basis/simstd/~memory/AllocatorLogged.hpp>
+#include <basis/simstd/~memory/AllocatorHeapLogged.hpp>
 #include <basis/simstd/~memory/allocator_traits.hpp>
 #include <basis/simstd/~memory/base.hpp>
 #include <basis/simstd/~memory/auto_ptr.hpp>

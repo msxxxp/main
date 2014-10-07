@@ -160,7 +160,7 @@ namespace memory {
 
 		static void free(const void* ptr)
 		{
-			console::printf(L"<%5u> %S() [%p]\n", GetCurrentThreadId(), __PRETTY_FUNCTION__, ptr);
+			console::printf(L"<%5u> %S() [%p, %Iu]\n", GetCurrentThreadId(), __PRETTY_FUNCTION__, ptr, HeapSize(m_heap, 0, ptr));
 			if (ptr) {
 				++m_stat.frees;
 				m_stat.freeSize += HeapSize(m_heap, 0, ptr);

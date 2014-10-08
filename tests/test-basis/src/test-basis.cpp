@@ -183,7 +183,7 @@ extern "C" int wmain(int /*argc*/, wchar_t * /*argv*/[])
 		console::printf(L"wd diff : %I64d \n", get_allocations_size() - get_deletions_size());
 	}
 	{
-		const memory::HeapStat& stat = memory::HeapDefaultLogged::get_stat();
+		const memory::Stat& stat = memory::HeapDefaultLogged::get_stat();
 		console::printf(L"stat alloc: %I64u, %I64u \n", stat.allocations, stat.allocSize);
 		console::printf(L"stat free : %I64u, %I64u \n", stat.frees, stat.freeSize);
 		console::printf(L"stat diff : %I64d \n", stat.allocSize - stat.freeSize);

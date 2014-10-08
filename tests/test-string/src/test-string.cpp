@@ -15,7 +15,7 @@ int main()
 	typedef int TypeTag;
 	typedef typename memory::HeapSpecialLogged<TypeTag> Heap;
 	typedef typename simstd::AllocatorHeap<char, Heap> Allocator;
-	typedef typename simstd::basic_string2<char, simstd::char_traits<char>, Allocator> tstring;
+	typedef typename simstd::basic_string<char, simstd::char_traits<char>, Allocator> tstring;
 
 	setup_logger();
 
@@ -56,7 +56,7 @@ int main()
 		LogInfo(L"str6: size: %Iu, capa: %Iu '%S'\n", str6.size(), str6.capacity(), str6.c_str());
 	}
 	{
-		const memory::HeapStat& stat = Heap::get_stat();
+		const memory::Stat& stat = Heap::get_stat();
 		console::printf(L"stat alloc: %I64u, %I64u \n", stat.allocations, stat.allocSize);
 		console::printf(L"stat free : %I64u, %I64u \n", stat.frees, stat.freeSize);
 		console::printf(L"stat diff : %I64d \n", stat.allocSize - stat.freeSize);

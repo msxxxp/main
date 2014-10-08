@@ -4,8 +4,6 @@
 #include <basis/simstd/string>
 #include <basis/simstd/~algorithm/base.hpp>
 
-#include <basis/sys/logger.hpp>
-
 namespace simstd {
 
 	namespace pvt {
@@ -44,7 +42,7 @@ namespace simstd {
 		template<typename T, typename A>
 		StrBase<T, A>::~StrBase()
 		{
-			LogTraceObj();
+//			LogTraceObj();
 			if (m_impl && m_impl->decrease_ref())
 				del_impl(m_impl);
 			m_impl = nullptr;
@@ -54,7 +52,8 @@ namespace simstd {
 		StrBase<T, A>::StrBase(const A& alloc, size_t capa) :
 			m_impl(nullptr)
 		{
-			LogTraceObj();
+//			LogTraceObj();
+//			console::printf(L"%S:%d\n", __PRETTY_FUNCTION__, __LINE__);
 			m_impl = new_impl(simstd::max(MIN_CAPACITY, capa), alloc);
 		}
 
@@ -62,7 +61,7 @@ namespace simstd {
 		StrBase<T, A>::StrBase(const StrBase & other) :
 			m_impl(other.m_impl)
 		{
-			LogTraceObj();
+//			LogTraceObj();
 			m_impl->increase_ref();
 		}
 
@@ -70,7 +69,7 @@ namespace simstd {
 		StrBase<T, A>::StrBase(const StrBase & other, const A& alloc) :
 			m_impl(other.m_impl)
 		{
-			LogTraceObj();
+//			LogTraceObj();
 			if (alloc == other.get_allocator()) {
 				m_impl->increase_ref();
 			} else {
@@ -82,7 +81,7 @@ namespace simstd {
 		StrBase<T, A>::StrBase(StrBase && other) :
 			m_impl(nullptr)
 		{
-			LogTraceObj();
+//			LogTraceObj();
 			using simstd::swap;
 			swap(m_impl, other.m_impl);
 		}
@@ -92,7 +91,7 @@ namespace simstd {
 		StrBase<T, A>::StrBase(StrBase && other, const A& alloc) :
 			m_impl(nullptr)
 		{
-			LogTraceObj();
+//			LogTraceObj();
 			if (alloc == other.get_allocator()) {
 				using simstd::swap;
 				swap(m_impl, other.m_impl);
@@ -110,12 +109,14 @@ namespace simstd {
 		template<typename T, typename A>
 		typename StrBase<T, A>::impl_type* StrBase<T, A>::new_impl(size_t capa, const A& alloc)
 		{
+//			console::printf(L"%S:%d\n", __PRETTY_FUNCTION__, __LINE__);
 			RawAllocator rawAlloc(alloc);
 			size_t size = capa * sizeof(T) + sizeof(impl_type);
 			auto ret = reinterpret_cast<StrBase<T, A>::impl_type*>(rawAlloc.allocate(size));
 
 			ImpAllocator implAlloc(alloc);
 			implAlloc.construct(ret, capa, alloc);
+//			console::printf(L"%S:%d\n", __PRETTY_FUNCTION__, __LINE__);
 			return ret;
 		}
 

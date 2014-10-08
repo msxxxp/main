@@ -237,12 +237,13 @@ namespace logger {
 		bool res = url::crack(url, &info);
 
 		if (res && cstr::compare_ci(L"logger", info.lpszScheme, info.dwSchemeLength) == 0) {
-			if (cstr::compare_ci(L"/default", info.lpszUrlPath, info.dwUrlPathLength) == 0)
+			if (cstr::compare_ci(L"/default", info.lpszUrlPath, info.dwUrlPathLength) == 0) {
 				set_defaults(ustring(info.lpszExtraInfo, info.dwExtraInfoLength));
-			else if (cstr::compare_ci(L"/global", info.lpszUrlPath, info.dwUrlPathLength) == 0)
+			} else if (cstr::compare_ci(L"/global", info.lpszUrlPath, info.dwUrlPathLength) == 0) {
 				set_globals(ustring(info.lpszExtraInfo, info.dwExtraInfoLength));
-			else if (cstr::compare_ci(L"/module", info.lpszUrlPath, info.dwUrlPathLength) == 0)
+			} else if (cstr::compare_ci(L"/module", info.lpszUrlPath, info.dwUrlPathLength) == 0) {
 				set_module(ustring(info.lpszExtraInfo, info.dwExtraInfoLength));
+			}
 		}
 	}
 

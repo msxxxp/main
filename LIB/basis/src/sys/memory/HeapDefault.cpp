@@ -2,43 +2,43 @@
 #include <basis/sys/memory.hpp>
 
 namespace memory {
+	namespace heap {
 
-	void HeapDefault::init(size_t /*size*/)
-	{
-		m_heap = GetProcessHeap();
+		void Default::init(size_t size)
+		{
+			UNUSED(size);
+		}
+
+		void Default::destroy()
+		{
+		}
+
+		void* Default::alloc(size_t size)
+		{
+			return HeapAlloc(GetProcessHeap(), 0, size);
+		}
+
+		void Default::free(const void* ptr)
+		{
+			HeapFree(GetProcessHeap(), 0, const_cast<void*>(ptr));
+		}
+
+		size_t Default::size()
+		{
+			return static_cast<size_t>(-1);
+		}
+
+		size_t Default::size(const void* ptr)
+		{
+			return HeapSize(GetProcessHeap(), 0, ptr);
+		}
+
+		Stat Default::get_stat()
+		{
+			Stat tmp;
+			zero(tmp);
+			return tmp;
+		}
+
 	}
-
-	void HeapDefault::destroy()
-	{
-	}
-
-	void* HeapDefault::alloc(size_t size)
-	{
-		return HeapAlloc(m_heap, 0, size);
-	}
-
-	void HeapDefault::free(const void* ptr)
-	{
-		HeapFree(m_heap, 0, const_cast<void*>(ptr));
-	}
-
-	size_t HeapDefault::size()
-	{
-		return static_cast<size_t>(-1);
-	}
-
-	size_t HeapDefault::size(const void* ptr)
-	{
-		return HeapSize(m_heap, 0, ptr);
-	}
-
-	HeapStat HeapDefault::get_stat()
-	{
-		HeapStat tmp;
-		zero(tmp);
-		return tmp;
-	}
-
-	HANDLE HeapDefault::m_heap;
-
 }

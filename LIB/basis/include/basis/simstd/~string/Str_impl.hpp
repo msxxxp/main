@@ -5,10 +5,7 @@
 
 #include <basis/ext/pattern.hpp>
 
-#include <basis/sys/logger.hpp>
-
 namespace simstd {
-
 	namespace pvt {
 
 		struct StrImplBase {
@@ -84,8 +81,6 @@ namespace simstd {
 			StrImplBase(capa),
 			A(alloc)
 		{
-			LogTraceObj();
-			LogDebug(L"capa: %Iu\n", capa);
 			*m_data = m_terminal_char;
 		}
 
@@ -109,7 +104,6 @@ namespace simstd {
 		}
 
 	}
-
 }
 
 #endif

@@ -2,6 +2,7 @@
 
 #include <basis/sys/cstr.hpp>
 
+#include <basis/simstd/algorithm>
 #include <basis/simstd/mutex>
 #include <basis/simstd/vector>
 

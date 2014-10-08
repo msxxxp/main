@@ -12,7 +12,9 @@
 namespace logger {
 
 	typedef Module_i TypeTag;
-	typedef typename simstd::AllocatorHeap<wchar_t, memory::HeapSpecial<TypeTag>> Allocator;
+//	typedef memory::heap::Special<TypeTag> heap_type;
+	typedef memory::heap::Default heap_type;
+	typedef typename simstd::AllocatorHeap<wchar_t, heap_type> Allocator;
 	typedef typename simstd::basic_string<wchar_t, simstd::char_traits<wchar_t>, Allocator> ustring;
 
 

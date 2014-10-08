@@ -6,7 +6,7 @@
 
 #include <aclapi.h>
 
-#include <basis/std/iosfwd>
+#include <basis/simstd/iosfwd>
 
 namespace Ext {
 

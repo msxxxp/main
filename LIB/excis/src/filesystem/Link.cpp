@@ -3,8 +3,9 @@
 //#include <excis/priv.hpp>
 #include <basis/sys/memory.hpp>
 #include <basis/sys/cstr.hpp>
+#include <basis/sys/path.hpp>
 
-#include <basis/std/string>
+#include <basis/simstd/string>
 
 namespace fsys {
 
@@ -186,13 +187,13 @@ namespace fsys {
 		return REPARSE_BUF(path).is_junction();
 	}
 
-	namespace Link {
+	namespace link {
 		void copy(PCWSTR from, PCWSTR to)
 		{
 			Stat stat(from);
 			REPARSE_BUF rdb(from);
 			if (!(stat.attr() & FILE_ATTRIBUTE_DIRECTORY)) {
-				File::create(to);
+				file::create(to);
 			}
 			rdb.set_to(to);
 			fsys::set_attr(to, stat.attr());
@@ -201,12 +202,12 @@ namespace fsys {
 		void create_sym(PCWSTR path, PCWSTR new_path)
 		{
 			if (fsys::is_dir(path))
-				Directory::create(new_path);
+				directory::create(new_path);
 			else
-				File::create(new_path);
+				file::create(new_path);
 
 			memory::auto_close<HANDLE> hLink(CheckHandle(OpenLinkHandle(new_path, GENERIC_WRITE)));
-			ustring SubstituteName(ustring(REPARSE_PREFIX) + fsys::Path::remove_prefix(path));
+			ustring SubstituteName(ustring(REPARSE_PREFIX) + path::remove_prefix(path));
 			REPARSE_BUF rdb(IO_REPARSE_TAG_SYMLINK, path, cstr::length(path), SubstituteName.c_str(), SubstituteName.size());
 			try {
 				rdb.set_to(new_path);
@@ -218,14 +219,14 @@ namespace fsys {
 
 		void create_junc(PCWSTR path, PCWSTR new_path)
 		{
-			Directory::create(new_path);
+			directory::create(new_path);
 			memory::auto_close<HANDLE> hLink(CheckHandle(OpenLinkHandle(new_path, GENERIC_WRITE)));
-			ustring SubstituteName(ustring(REPARSE_PREFIX) + fsys::Path::remove_prefix(path));
+			ustring SubstituteName(ustring(REPARSE_PREFIX) + path::remove_prefix(path));
 			REPARSE_BUF rdb(IO_REPARSE_TAG_MOUNT_POINT, path, cstr::length(path), SubstituteName.c_str(), SubstituteName.size());
 			try {
 				rdb.set_to(new_path);
 			} catch (...) {
-				Directory::del_nt(new_path);
+				directory::del_nt(new_path);
 				throw;
 			}
 		}

@@ -2,7 +2,7 @@
 #include <excis/exception.hpp>
 #include <basis/sys/memory.hpp>
 
-#include <basis/std/string>
+#include <basis/simstd/string>
 
 namespace Ext {
 

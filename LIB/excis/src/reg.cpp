@@ -5,7 +5,7 @@
 #include <excis/reg.hpp>
 #include <excis/exception.hpp>
 
-#include <basis/std/string>
+#include <basis/simstd/string>
 
 namespace Ext {
 
@@ -156,13 +156,13 @@ namespace Ext {
 		m_hndl(simstd::move(right.m_hndl)),
 		m_access(simstd::move(right.m_access))
 	{
-		assert(right.m_hndl == nullptr);
+		CRT_ASSERT(right.m_hndl == nullptr);
 	}
 
 	Register & Register::operator = (Register & right) {
 		m_hndl = simstd::move(right.m_hndl);
 		m_access = simstd::move(right.m_access);
-		assert(right.m_hndl == nullptr);
+		CRT_ASSERT(right.m_hndl == nullptr);
 		return *this;
 	}
 

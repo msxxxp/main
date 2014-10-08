@@ -4,8 +4,8 @@
 #include <basis/configure.hpp>
 #include <basis/sys/memory.hpp>
 #include <basis/ext/pattern.hpp>
-#include <basis/std/string>
-#include <basis/std/vector>
+#include <basis/simstd/string>
+#include <basis/simstd/vector>
 
 namespace Ext {
 	class Sid;

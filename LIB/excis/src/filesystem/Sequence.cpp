@@ -1,6 +1,7 @@
 #include <basis/sys/cstr.hpp>
 #include <basis/sys/logger.hpp>
 #include <basis/sys/memory.hpp>
+#include <basis/sys/path.hpp>
 #include <excis/dll.hpp>
 #include <excis/filesystem.hpp>
 #include <excis/exception.hpp>
@@ -9,7 +10,7 @@ namespace fsys {
 
 	ustring Sequence::FindStat::full_path() const
 	{
-		return fsys::MakePath(m_path, name());
+		return path::make(m_path, name());
 	}
 
 	Sequence::Sequence(const ustring & path, flags_type flags) :
@@ -49,7 +50,7 @@ namespace fsys {
 			FindStat & st = m_impl->m_stat;
 			if (m_impl->m_find_handle == INVALID_HANDLE_VALUE) {
 				st.m_path = m_impl->m_seq->path();
-				ustring pattern = fsys::MakePath(m_impl->m_seq->path(), m_impl->m_seq->mask());
+				ustring pattern = path::make(m_impl->m_seq->path(), m_impl->m_seq->mask());
 				m_impl->m_find_handle = ::FindFirstFileW(pattern.c_str(), &st.m_stat);
 				if (m_impl->m_find_handle == INVALID_HANDLE_VALUE) {
 					m_impl.reset(new impl);

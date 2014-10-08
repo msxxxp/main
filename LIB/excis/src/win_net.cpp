@@ -4,7 +4,7 @@
 #include <excis/timer.hpp>
 #include <excis/exception.hpp>
 
-#include <basis/std/string>
+#include <basis/simstd/string>
 
 namespace Ext {
 

@@ -3,7 +3,7 @@
 
 #include <basis/configure.hpp>
 
-#include <basis/std/string>
+#include <basis/simstd/string>
 
 namespace Ext {
 

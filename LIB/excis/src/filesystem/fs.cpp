@@ -5,6 +5,7 @@
 #include <excis/sd.hpp>
 
 #include <basis/sys/fsys.hpp>
+#include <basis/sys/path.hpp>
 
 #include <winioctl.h>
 
@@ -19,19 +20,19 @@ namespace fsys {
 		HANDLE hFind = ::FindFirstFileW(mask, &wfd);
 		if (hFind != INVALID_HANDLE_VALUE) {
 			Result = true;
-			ustring fullpath = fsys::Path::extract_from_mask(mask);
+			ustring fullpath = path::extract_from_mask(mask);
 			do {
-				if (!fsys::Filename::is_valid(wfd.cFileName))
+				if (!path::filename::is_valid(wfd.cFileName))
 					continue;
-				ustring path = fsys::MakePath(fullpath, wfd.cFileName);
+				ustring path = path::make(fullpath, wfd.cFileName);
 				if (wfd.dwFileAttributes & FILE_ATTRIBUTE_REPARSE_POINT) {
-					fsys::Link::del(path);
+					fsys::link::del(path);
 				}
 				if (wfd.dwFileAttributes & FILE_ATTRIBUTE_DIRECTORY) {
-					fsys::del_by_mask(fsys::MakePath(path, L"*"));
-					Result = fsys::Directory::del_nt(path.c_str());
+					fsys::del_by_mask(path::make(path, L"*"));
+					Result = fsys::directory::del_nt(path.c_str());
 				} else {
-					Result = fsys::File::del_nt(path.c_str());
+					Result = fsys::file::del_nt(path.c_str());
 				}
 			} while (::FindNextFileW(hFind, &wfd));
 			::FindClose(hFind);
@@ -62,36 +63,36 @@ namespace fsys {
 		set_security(dest, sd, SE_FILE_OBJECT);
 	}
 
-	namespace File {
+	namespace file {
 		void replace(PCWSTR from, PCWSTR to, PCWSTR backup) {
 			CheckApi(::ReplaceFileW(from, to, backup, 0, nullptr, nullptr));
 		}
 	}
 
-	namespace Directory {
+	namespace directory {
 		bool remove_dir(PCWSTR path, bool follow_links) {
 			bool Result = false;
-			if (fsys::Path::is_mask(path)) {
+			if (path::is_mask(path)) {
 				Result = fsys::del_by_mask(path);
 			} else {
 				if (!fsys::is_exist(path))
 					return true;
 				if (fsys::is_dir(path)) {
 					if (!follow_links && fsys::is_link(path)) {
-						fsys::Link::del(path);
+						fsys::link::del(path);
 					} else {
-						fsys::del_by_mask(fsys::MakePath(path, L"*"));
-						Result = fsys::Directory::del_nt(path);
+						fsys::del_by_mask(path::make(path, L"*"));
+						Result = fsys::directory::del_nt(path);
 					}
 				} else {
-					Result = fsys::File::del_nt(path);
+					Result = fsys::file::del_nt(path);
 				}
 			}
 			return Result;
 		}
 
 		bool ensure_dir_exist(PCWSTR path, LPSECURITY_ATTRIBUTES lpsa) {
-			if (Directory::is_exist(path))
+			if (directory::is_exist(path))
 				return true;
 			CheckApiError(::SHCreateDirectoryExW(nullptr, path, lpsa));
 			return true;

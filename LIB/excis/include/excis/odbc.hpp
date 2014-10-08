@@ -12,8 +12,8 @@
 #include <sql.h>
 #include <sqlext.h>
 
-#include <basis/std/string>
-#include <basis/std/vector>
+#include <basis/simstd/string>
+#include <basis/simstd/vector>
 
 namespace Ext {
 

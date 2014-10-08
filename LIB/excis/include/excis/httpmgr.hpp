@@ -15,7 +15,7 @@
 #include <basis/sys/memory.hpp>
 #include <basis/ext/pattern.hpp>
 
-#include <basis/std/iosfwd>
+#include <basis/simstd/iosfwd>
 
 namespace Ext {
 

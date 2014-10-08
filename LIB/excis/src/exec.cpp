@@ -1,5 +1,6 @@
 ﻿#include <basis/sys/memory.hpp>
 #include <basis/sys/fsys.hpp>
+#include <basis/sys/path.hpp>
 #include <excis/exception.hpp>
 #include <excis/exec.hpp>
 
@@ -17,7 +18,7 @@ namespace Ext {
 		si.wShowWindow = SW_HIDE;
 		si.dwFlags = STARTF_USESHOWWINDOW;
 
-		ustring app = fsys::Validate(cmd);
+		ustring app = path::validate(cmd);
 		CheckApi(::CreateProcessW(nullptr, (PWSTR)app.c_str(), nullptr, nullptr, false,
 		                          CREATE_DEFAULT_ERROR_MODE, nullptr, nullptr, &si, &pi));
 		::CloseHandle(pi.hThread);
@@ -45,7 +46,7 @@ namespace Ext {
 		si.wShowWindow = SW_HIDE;
 		si.dwFlags = STARTF_USESHOWWINDOW | STARTF_USESTDHANDLES;
 
-		ustring app = fsys::Validate(cmd);
+		ustring app = path::validate(cmd);
 		CheckApi(::CreateProcessW(nullptr, (PWSTR)app.c_str(), nullptr, nullptr, true,
 		                          CREATE_DEFAULT_ERROR_MODE, nullptr, nullptr, &si, &pi));
 		hPipeOutWrite.close();
@@ -107,7 +108,7 @@ namespace Ext {
 		si.wShowWindow = SW_HIDE;
 		si.dwFlags = STARTF_USESHOWWINDOW | STARTF_USESTDHANDLES;
 
-		ustring app = fsys::Validate(cmd);
+		ustring app = path::validate(cmd);
 		CheckApi(::CreateProcessW(nullptr, (PWSTR)app.c_str(), nullptr, nullptr, true,
 		                          CREATE_DEFAULT_ERROR_MODE, nullptr, nullptr, &si, &pi));
 		hPipeInRead.close();
@@ -156,7 +157,7 @@ namespace Ext {
 		si.wShowWindow = SW_HIDE;
 		si.dwFlags = STARTF_USESHOWWINDOW;
 
-		ustring app = fsys::Validate(cmd);
+		ustring app = path::validate(cmd);
 		CheckApi(::CreateProcessW(nullptr, (PWSTR)app.c_str(), nullptr, nullptr, true,
 		                          CREATE_DEFAULT_ERROR_MODE, nullptr, nullptr, &si, &pi));
 		::CloseHandle(pi.hThread);
@@ -170,7 +171,7 @@ namespace Ext {
 	}
 
 	void Exec::RunAsUser(const ustring &cmd, HANDLE hToken) {
-		ustring app = fsys::Validate(cmd);
+		ustring app = path::validate(cmd);
 
 		PROCESS_INFORMATION pi;
 		memory::zero(pi);
@@ -184,7 +185,7 @@ namespace Ext {
 	}
 
 	void Exec::RunAsUser(const ustring &cmd, const ustring &user, const ustring &pass) {
-		ustring app = fsys::Validate(cmd);
+		ustring app = path::validate(cmd);
 
 		PROCESS_INFORMATION pi;
 		memory::zero(pi);
@@ -239,7 +240,7 @@ namespace Ext {
 		//	PROFILEINFOW pinfo;
 		//	::CreateEnvironmentBlock(&lpEnvironment, hToken, false);
 		//	::LoadUserProfileW(hToken, &pinfo);
-		ustring app = fsys::Validate(cmd);
+		ustring app = path::validate(cmd);
 		CheckApi(::CreateProcessAsUserW(hToken, nullptr, (PWSTR)app.c_str(), nullptr, nullptr, true, CREATE_DEFAULT_ERROR_MODE, nullptr, nullptr, &si, &pi));
 		hPipeInRead.close();
 		hPipeInWrite.close();
@@ -725,7 +726,7 @@ int Execute(const wchar_t *CmdStr, // Ком.строка для исполне�
 	}
 
 	void WinJob::RunAsUser(const ustring &cmd, HANDLE hToken) {
-		ustring app = fsys::Validate(cmd);
+		ustring app = path::validate(cmd);
 
 		PROCESS_INFORMATION pi;
 		memory::zero(pi);
@@ -768,7 +769,7 @@ int Execute(const wchar_t *CmdStr, // Ком.строка для исполне�
 		si.wShowWindow = SW_HIDE;
 		si.dwFlags = STARTF_USESHOWWINDOW | STARTF_USESTDHANDLES;
 
-		ustring app = fsys::Validate(cmd);
+		ustring app = path::validate(cmd);
 		CheckApi(::CreateProcessAsUserW(hToken, nullptr, (PWSTR)app.c_str(), nullptr, nullptr, true, CREATE_SUSPENDED | CREATE_DEFAULT_ERROR_MODE, nullptr, nullptr, &si, &pi));
 		hPipeInRead.close();
 		hPipeInWrite.close();

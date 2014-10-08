@@ -12,7 +12,7 @@
 #include <basis/configure.hpp>
 #include <basis/sys/memory.hpp>
 
-#include <basis/std/iosfwd>
+#include <basis/simstd/iosfwd>
 
 namespace Ext {
 

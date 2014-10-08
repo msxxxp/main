@@ -6,13 +6,13 @@
 #include <basis/sys/memory.hpp>
 #include <basis/ext/pattern.hpp>
 
-#include <basis/std/memory>
-#include <basis/std/string>
+#include <basis/simstd/memory>
+#include <basis/simstd/string>
 
 namespace fsys {
 	logger::Module_i * get_logger_module();
 
-	namespace File {
+	namespace file {
 		struct Facade;
 	}
 
@@ -222,7 +222,7 @@ namespace fsys {
 //		FILE_STANDARD_INFO m_standard_info;
 //		FILE_ID_INFO       m_id_info;
 
-		friend struct File::Facade;
+		friend struct file::Facade;
 	};
 
 	inline bool operator ==(const Stat & f1, const Stat & f2) {
@@ -377,7 +377,7 @@ namespace fsys {
 		friend class Sequence;
 	};
 
-	namespace File {
+	namespace file {
 		bool is_exist(PCWSTR path);
 		inline bool is_exist(const ustring & path) {
 			return is_exist(path.c_str());
@@ -442,7 +442,7 @@ namespace fsys {
 				m_dest(dest) {
 			}
 			bool Execute() const {
-				return fsys::File::copy(m_path.c_str(), m_dest.c_str());
+				return fsys::file::copy(m_path.c_str(), m_dest.c_str());
 			}
 		private:
 			ustring m_path, m_dest;
@@ -454,7 +454,7 @@ namespace fsys {
 				m_dest(dest) {
 			}
 			bool Execute() const {
-				return fsys::File::move(m_path.c_str(), m_dest.c_str());
+				return fsys::file::move(m_path.c_str(), m_dest.c_str());
 			}
 		private:
 			ustring m_path, m_dest;
@@ -628,7 +628,7 @@ namespace fsys {
 	}
 
 	///=================================================================================== Directory
-	namespace Directory {
+	namespace directory {
 		bool is_exist(PCWSTR path);
 		inline bool is_exist(const ustring & path) {
 			return is_exist(path.c_str());
@@ -669,7 +669,7 @@ namespace fsys {
 	}
 
 	///======================================================================================== Link
-	namespace Link {
+	namespace link {
 		void copy(PCWSTR from, PCWSTR to);
 		inline void copy(const ustring & from, const ustring & to) {
 			copy(from.c_str(), to.c_str());

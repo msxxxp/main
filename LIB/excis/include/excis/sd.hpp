@@ -4,7 +4,7 @@
 #include <basis/sys/sstr.hpp>
 #include <basis/sys/logger.hpp>
 #include <basis/ext/pattern.hpp>
-#include <basis/std/string>
+#include <basis/simstd/string>
 
 #include <excis/sid.hpp>
 #include <excis/trustee.hpp>

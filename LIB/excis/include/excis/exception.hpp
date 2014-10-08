@@ -4,8 +4,8 @@
 #include <basis/configure.hpp>
 #include <basis/sys/cstr.hpp>
 
-#include <basis/std/iosfwd>
-#include <basis/std/memory>
+#include <basis/simstd/iosfwd>
+#include <basis/simstd/memory>
 
 #include <excis/sub_exception/AbstractError.hpp>
 #include <excis/sub_exception/SEH.hpp>

@@ -1,5 +1,5 @@
 ﻿#include <basis/sys/logger.hpp>
-#include <basis/std/string>
+#include <basis/simstd/string>
 
 #include <excis/connection.hpp>
 #include <excis/dll.hpp>
@@ -135,4 +135,3 @@ namespace connection {
 		return new RemoteImpl(host, user, pass);
 	}
 }
-

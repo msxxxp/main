@@ -1,7 +1,7 @@
 ﻿#ifndef EXCIS_CONNECTION_REMOTE_HPP_
 #define EXCIS_CONNECTION_REMOTE_HPP_
 
-#include <basis/std/iosfwd>
+#include <basis/simstd/iosfwd>
 
 namespace connection {
 

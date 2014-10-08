@@ -4,7 +4,7 @@
 #include <basis/configure.hpp>
 #include <basis/sys/linkage.hpp>
 
-#include <basis/std/iosfwd>
+#include <basis/simstd/iosfwd>
 
 namespace Ext {
 

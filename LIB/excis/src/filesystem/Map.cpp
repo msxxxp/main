@@ -8,7 +8,7 @@
 
 namespace fsys {
 
-	namespace File {
+	namespace file {
 
 		struct Map::file_map_iterator::impl {
 			~impl()

@@ -5,9 +5,9 @@
 #include <basis/sys/sync.hpp>
 #include <excis/service.hpp>
 
-#include <basis/std/iosfwd>
-#include <basis/std/memory>
-#include <basis/std/vector>
+#include <basis/simstd/iosfwd>
+#include <basis/simstd/memory>
+#include <basis/simstd/vector>
 
 namespace Ext {
 

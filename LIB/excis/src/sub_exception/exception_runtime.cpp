@@ -2,7 +2,7 @@
 
 #include <basis/sys/logger.hpp>
 
-#include <basis/std/string>
+#include <basis/simstd/string>
 
 namespace exception {
 

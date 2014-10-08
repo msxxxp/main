@@ -2,7 +2,7 @@
 #define EXCIS_AUTH_HPP_
 
 #include <basis/configure.hpp>
-#include <basis/std/iosfwd>
+#include <basis/simstd/iosfwd>
 
 namespace auth {
 

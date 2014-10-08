@@ -1,4 +1,5 @@
 #include <basis/sys/fsys.hpp>
+#include <basis/sys/path.hpp>
 #include <basis/sys/memory.hpp>
 #include <basis/sys/cstr.hpp>
 #include <excis/dll.hpp>
@@ -11,7 +12,7 @@ extern "C" {
 
 namespace fsys {
 
-	namespace Directory {
+	namespace directory {
 		bool is_exist(PCWSTR path) {
 			return fsys::is_exist(path) && fsys::is_dir(path);
 		}
@@ -22,11 +23,11 @@ namespace fsys {
 
 		bool create_full_nt(const ustring & p, LPSECURITY_ATTRIBUTES sa) throw() {
 			try {
-				ustring path(fsys::Path::get_fullpath(p));
-				path = fsys::PathNice(path);
-				path = fsys::Path::ensure_prefix(fsys::Path::ensure_end_separator(path));
+				ustring path(path::get_fullpath(p));
+				path = path::nice(path);
+				path = path::ensure_prefix(path::ensure_end_separator(path));
 
-				if (fsys::Path::get_root(path) == path)
+				if (path::get_root(path) == path)
 					return false;
 
 				if (create_nt(path.c_str(), sa)) {

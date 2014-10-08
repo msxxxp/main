@@ -1,7 +1,7 @@
 ﻿#include <basis/ext/bits.hpp>
 //#include <libbase/bit_str.hpp>
 #include <basis/sys/logger.hpp>
-#include <basis/std/string>
+#include <basis/simstd/string>
 
 #include <excis/sd.hpp>
 #include <excis/exception.hpp>

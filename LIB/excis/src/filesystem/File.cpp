@@ -10,7 +10,7 @@
 
 namespace fsys {
 
-	namespace File {
+	namespace file {
 		bool is_exist(PCWSTR path)
 		{
 			bool ret = fsys::is_exist(path) && fsys::is_file(path);

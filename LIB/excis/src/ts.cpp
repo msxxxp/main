@@ -3,6 +3,8 @@
 #include <excis/ts.hpp>
 #include <excis/exception.hpp>
 
+#include <basis/simstd/algorithm>
+
 #include <wtsapi32.h>
 
 namespace Ext {

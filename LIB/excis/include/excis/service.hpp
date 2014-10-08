@@ -6,7 +6,7 @@
 #include <basis/sys/cstr.hpp>
 #include <basis/ext/pattern.hpp>
 
-#include <basis/std/string>
+#include <basis/simstd/string>
 
 #include <excis/connection.hpp>
 

@@ -2,7 +2,7 @@
 #define WIN_NET_TIMER_HPP
 
 #include <basis/configure.hpp>
-#include <basis/std/iosfwd>
+#include <basis/simstd/iosfwd>
 
 namespace Ext {
 

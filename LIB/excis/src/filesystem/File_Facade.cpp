@@ -8,13 +8,13 @@
 
 namespace fsys {
 
-	namespace File {
+	namespace file {
 
 		Facade::~Facade()
 		{
 			::CloseHandle(m_hndl);
 			if (m_delOnClose) {
-				bool ret = fsys::File::del_nt(m_path.c_str());
+				bool ret = fsys::file::del_nt(m_path.c_str());
 				LogAtten(L"Auto delete on close: '%s' -> %d\n", m_path.c_str(), ret);
 				UNUSED(ret);
 			}

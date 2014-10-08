@@ -2,7 +2,7 @@
 #include <excis/exception.hpp>
 
 #include <basis/sys/logger.hpp>
-#include <basis/std/algorithm>
+#include <basis/simstd/algorithm>
 
 namespace crypt {
 

@@ -3,7 +3,7 @@
 
 #include <basis/configure.hpp>
 
-#include <basis/std/iosfwd>
+#include <basis/simstd/iosfwd>
 
 #ifndef PSIDFromPACE
 #define PSIDFromPACE(pACE) ((PSID)(&((pACE)->SidStart)))

@@ -5,7 +5,7 @@
 **/
 
 #include <basis/sys/sstr.hpp>
-#include <basis/std/string>
+#include <basis/simstd/string>
 
 #include <excis/odbc.hpp>
 

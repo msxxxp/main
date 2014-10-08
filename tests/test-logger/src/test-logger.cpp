@@ -4,9 +4,9 @@
 #include <basis/sys/sstr.hpp>
 #include <basis/sys/totext.hpp>
 
-#include <basis/std/algorithm>
-#include <basis/std/vector>
-#include <basis/std/string>
+#include <basis/simstd/algorithm>
+#include <basis/simstd/vector>
+#include <basis/simstd/string>
 
 namespace {
 	void setup_logger()

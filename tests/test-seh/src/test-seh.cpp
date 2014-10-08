@@ -8,7 +8,7 @@
 #	include <basis/sys/traceback.hpp>
 #endif
 
-#include <basis/std/string>
+#include <basis/simstd/string>
 
 /// WARNING for x64 Optimization must be -O0 or it will crash (tdm compiler)
 

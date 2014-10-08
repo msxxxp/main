@@ -18,8 +18,8 @@ namespace logger {
 			if (first != ustring::npos) {
 				first += 1;
 				auto ret = str.substr(first, str.find_first_of(delim, first) - first);
-				//console::printf(L"%S '%s' -> '%s'\n", __PRETTY_FUNCTION__, str.c_str(), ret.c_str());
-				//			TraceFunc(L"'%s' -> '%s'", str.c_str(), ret.c_str());
+//				console::printf(L"%S '%s' -> '%s'\n", __PRETTY_FUNCTION__, str.c_str(), ret.c_str());
+//				TraceFunc(L"'%s' -> '%s'", str.c_str(), ret.c_str());
 				return ret;
 			}
 			return ustring();

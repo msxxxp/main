@@ -83,6 +83,12 @@ namespace logger {
 			m_modules.back()->destroy();
 			m_modules.pop_back();
 		}
+		{
+			auto stat = heap_type::get_stat();
+			console::printf(L"%S() alloc: %I64u, %I64u \n", __FUNCTION__, stat.allocations, stat.allocSize);
+			console::printf(L"%S() free : %I64u, %I64u \n", __FUNCTION__, stat.frees, stat.freeSize);
+			console::printf(L"%S() diff : %I64d \n", __FUNCTION__, stat.allocSize - stat.freeSize);
+		}
 	}
 
 	Module_impl * Logger_impl::get_module(const wchar_t * name)

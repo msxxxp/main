@@ -3,7 +3,7 @@
 
 #include <basis/ext/pattern.hpp>
 #include <basis/sys/crt.hpp>
-#include <basis/sys/console.hpp>
+//#include <basis/sys/console.hpp>
 #include <basis/simstd/string>
 #include <basis/simstd/iterator>
 #include <basis/simstd/~memory/allocator.hpp>
@@ -1113,7 +1113,6 @@ namespace simstd {
 	template<typename C, typename T, typename A>
 	void basic_string<C, T, A>::split_and_clear(size_type minCapacity)
 	{
-//		LogDebug(L"minCapacity: %Iu\n", minCapacity);
 		if (capacity() < minCapacity)
 			this_type(base_type::get_allocator(), nullptr, 0, minCapacity).swap(*this);
 		else if (base_type::m_impl->is_shared())
@@ -1125,7 +1124,6 @@ namespace simstd {
 	template<typename C, typename T, typename A>
 	void basic_string<C, T, A>::split_and_copy(size_type minCapacity)
 	{
-//		LogDebug(L"minCapacity: %Iu\n", minCapacity);
 		if (capacity() < minCapacity)
 			this_type(base_type::get_allocator(), c_str(), size(), minCapacity).swap(*this);
 		else if (base_type::m_impl->is_shared())

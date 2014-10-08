@@ -12,8 +12,7 @@
 namespace logger {
 
 	typedef Module_i TypeTag;
-//	typedef memory::heap::Special<TypeTag> heap_type;
-	typedef memory::heap::Default heap_type;
+	typedef memory::heap::DefaultStatTag<TypeTag> heap_type;
 	typedef typename simstd::AllocatorHeap<wchar_t, heap_type> Allocator;
 	typedef typename simstd::basic_string<wchar_t, simstd::char_traits<wchar_t>, Allocator> ustring;
 
@@ -60,7 +59,7 @@ namespace logger {
 
 	Target_t get_TargetToMult(const Target_t & first, const Target_t & second);
 
-	///==================================================================================== Module_impl
+	///================================================================================= Module_impl
 	struct Module_impl: public Module_i, public pattern::Destroyable, private pattern::Uncopyable {
 		Module_impl(const wchar_t * name, const Target_t & tgt, Level lvl);
 
@@ -93,11 +92,11 @@ namespace logger {
 		sync::ScopeGuard lock_scope() const;
 
 	private:
-		ustring create_prefix(Level lvl) const;
+		wchar_t * create_prefix(Level lvl, wchar_t * buff, size_t size) const;
 
-		ustring & add_place(ustring & prefix, const char * file, int line, const char * func) const;
+		wchar_t * add_place(wchar_t * buff, size_t size, const char * file, int line, const char * func) const;
 
-		void out_args(Level lvl, const ustring & prefix, const wchar_t * frmat, va_list args) const;
+		void out_args(Level lvl, wchar_t * buff, wchar_t * pend, size_t size, const wchar_t * frmat, va_list args) const;
 
 		void out_args(WORD color, Level lvl, const wchar_t * frmat, va_list args) const;
 

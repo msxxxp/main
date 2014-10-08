@@ -10,7 +10,7 @@
 namespace {
 	void setup_logger()
 	{
-		LogSetOptions(L"logger:///default?level=tr;prefix=m;target=co");
+		LogSetOptions(L"logger:///default?level=tr;prefix=f;target=co");
 	}
 }
 
@@ -94,7 +94,8 @@ int A::val() const
 	return m_a;
 }
 
-typedef typename simstd::AllocatorLogged<A, memory::HeapDefaultLogged> EqAlloc;
+typedef typename memory::heap::DefaultStatTag<A> heap_type;
+typedef typename simstd::AllocatorHeap<A, heap_type> EqAlloc;
 
 #include <string>
 
@@ -111,7 +112,7 @@ extern "C" int wmain(int /*argc*/, wchar_t * /*argv*/[])
 	LogTrace();
 
 	{
-		memory::HeapDefaultLogged::init();
+		heap_type::init();
 
 
 //		LogTrace();
@@ -183,7 +184,7 @@ extern "C" int wmain(int /*argc*/, wchar_t * /*argv*/[])
 		console::printf(L"wd diff : %I64d \n", get_allocations_size() - get_deletions_size());
 	}
 	{
-		const memory::Stat& stat = memory::HeapDefaultLogged::get_stat();
+		const memory::heap::Stat& stat = heap_type::get_stat();
 		console::printf(L"stat alloc: %I64u, %I64u \n", stat.allocations, stat.allocSize);
 		console::printf(L"stat free : %I64u, %I64u \n", stat.frees, stat.freeSize);
 		console::printf(L"stat diff : %I64d \n", stat.allocSize - stat.freeSize);

@@ -3,23 +3,6 @@
 #include <basis/sys/cstr.hpp>
 
 namespace logger {
-	namespace {
-		const size_t default_buffer_size = 4 * 1024;
-
-		ustring format_str(PCWSTR fmt, va_list args)
-		{
-			wchar_t buf[default_buffer_size];
-			safe_vsnprintf(buf, lengthof(buf), fmt, args);
-			return ustring(buf);
-		}
-
-		ustring format_str(PCWSTR fmt, ...)
-		{
-			Va_list args;
-			va_start(args, fmt);
-			return format_str(fmt, args);
-		}
-	}
 
 	const size_t default_buffer_size = 4 * 1024;
 
@@ -93,11 +76,12 @@ namespace logger {
 	void Module_impl::out_debug(const char * file, int line, const char * func, Level lvl, const wchar_t * format, ...) const
 	{
 		if (m_enabled && m_lvl <= lvl) {
-			ustring prefix = create_prefix(lvl);
-			add_place(prefix, file, line, func);
+			wchar_t buff[default_buffer_size];
+			auto pend = create_prefix(lvl, buff, lengthof(buff));
+			pend = add_place(pend, lengthof(buff) - (pend - buff), file, line, func);
 			va_list args;
 			va_start(args, format);
-			out_args(lvl, prefix, format, args);
+			out_args(lvl, buff, pend, lengthof(buff) - (pend - buff), format, args);
 			va_end(args);
 		}
 	}
@@ -105,9 +89,11 @@ namespace logger {
 	void Module_impl::out(Level lvl, const wchar_t * format, ...) const
 	{
 		if (m_enabled && lvl >= m_lvl) {
+			wchar_t buff[default_buffer_size];
+			auto pend = create_prefix(lvl, buff, lengthof(buff));
 			Va_list args;
 			va_start(args, format);
-			out_args(lvl, create_prefix(lvl), format, args);
+			out_args(lvl, buff, pend, lengthof(buff) - (pend - buff), format, args);
 		}
 	}
 
@@ -125,55 +111,56 @@ namespace logger {
 		return m_target->lock_scope();
 	}
 
-	ustring Module_impl::create_prefix(Level lvl) const
+	wchar_t * Module_impl::create_prefix(Level lvl, wchar_t * buff, size_t size) const
 	{
-		ustring prefix;
+		size_t written = 0;
 		if (m_prefix & (Prefix::Date | Prefix::Time)) {
 			SYSTEMTIME time;
 			::GetLocalTime(&time);
 			if (m_prefix & Prefix::Date) {
-				prefix += format_str(L"%04u-%02u-%02u ", time.wYear, time.wMonth, time.wDay);
+				written += safe_snprintf(buff + written, size - written, L"%04u-%02u-%02u ", time.wYear, time.wMonth, time.wDay);
 			}
 			if (m_prefix & Prefix::Time) {
-				prefix += format_str(L"%02u:%02u:%02u.%03u ", time.wHour, time.wMinute, time.wSecond, time.wMilliseconds);
+				written += safe_snprintf(buff + written, size - written, L"%02u:%02u:%02u.%03u ", time.wHour, time.wMinute, time.wSecond, time.wMilliseconds);
 			}
 		}
 		if (m_prefix & Prefix::Level) {
-			prefix += format_str(L"%s ", to_str(lvl));
+			written += safe_snprintf(buff + written, size - written, L"%s ", to_str(lvl));
 		}
 		if (m_prefix & Prefix::Module) {
-			prefix += format_str(L"%11s ", m_name.c_str());
+			written += safe_snprintf(buff + written, size - written, L"%11s ", m_name.c_str());
 		}
 		if (m_prefix & Prefix::Thread) {
-			prefix += format_str(L"%5u ", ::GetCurrentThreadId());
+			written += safe_snprintf(buff + written, size - written, L"%5u ", ::GetCurrentThreadId());
 		}
-		return prefix;
+		return buff + written;
 	}
 
-	ustring & Module_impl::add_place(ustring & prefix, const char * file, int line, const char * func) const
+	wchar_t * Module_impl::add_place(wchar_t * buff, size_t size, const char * file, int line, const char * func) const
 	{
+		size_t written = 0;
 		if (m_prefix & Prefix::Place) {
-			prefix += format_str(L"%14.14S:%5d ", file, line);
+			written += safe_snprintf(buff + written, size - written, L"%14.14S:%5d ", file, line);
 		}
 		if (m_prefix & Prefix::Function) {
-			prefix += format_str(L"%S() ", func);
+			written += safe_snprintf(buff + written, size - written, L"%S() ", func);
 		}
-		return prefix;
+		return buff + written;
 	}
 
-	void Module_impl::out_args(Level lvl, const ustring & prefix, const wchar_t * frmat, va_list args) const
+	void Module_impl::out_args(Level lvl, wchar_t * buff, wchar_t * pend, size_t size, const wchar_t * frmat, va_list args) const
 	{
-		ustring tmp(prefix);
-		tmp += format_str(frmat, args);
+		size_t written = safe_snprintf(pend, size, frmat, args);
 		auto scopeLock(lock_scope());
-		m_target->out(this, lvl, tmp.c_str(), tmp.size());
+		m_target->out(this, lvl, buff, pend - buff + written);
 	}
 
 	void Module_impl::out_args(WORD color, Level lvl, const wchar_t * frmat, va_list args) const
 	{
-		ustring tmp = format_str(frmat, args);
+		wchar_t buff[4096];
+		size_t written = safe_snprintf(buff, lengthof(buff), frmat, args);
 		auto scopeLock(lock_scope());
-		m_target->out(this, color, lvl, tmp.c_str(), tmp.size());
+		m_target->out(this, color, lvl, buff, written);
 	}
 
 	///=============================================================================================

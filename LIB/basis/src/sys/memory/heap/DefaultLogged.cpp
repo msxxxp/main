@@ -13,12 +13,26 @@ namespace memory {
 		{
 		}
 
-		void* DefaultLogged::alloc(size_t size)
+		void* DefaultLogged::alloc(size_t size, size_t flags)
 		{
-			void* ret = HeapAlloc(GetProcessHeap(), 0, size);
+			void* ret = HeapAlloc(GetProcessHeap(), flags, size);
 			console::printf(L"<%5u> %S() [%Iu] -> %p\n", GetCurrentThreadId(), __PRETTY_FUNCTION__, size, ret);
 			if (ret) {
 				++m_stat.allocations;
+				m_stat.allocSize += size;
+			}
+			return ret;
+		}
+
+		void* DefaultLogged::realloc(void* ptr, size_t size, size_t flags)
+		{
+			size_t freeSize = HeapSize(GetProcessHeap(), 0, ptr);
+			void* ret = HeapReAlloc(GetProcessHeap(), flags, ptr, size);
+			if (ret) {
+				console::printf(L"<%5u> %S() [%Iu] -> %p\n", GetCurrentThreadId(), __PRETTY_FUNCTION__, size, ret);
+				++m_stat.frees;
+				++m_stat.allocations;
+				m_stat.freeSize += freeSize;
 				m_stat.allocSize += size;
 			}
 			return ret;

@@ -13,10 +13,11 @@ namespace memory {
 		{
 			static void init(size_t size = 0);
 			static void destroy();
-			static void* alloc(size_t size);
+			static void*  alloc(size_t size, size_t flags = 0);
+			static void*  realloc(void* ptr, size_t size, size_t flags = 0);
 			static void free(const void* ptr);
-			static size_t size();
 			static size_t size(const void* ptr);
+			static size_t size();
 			static const Stat& get_stat();
 
 		private:
@@ -52,13 +53,28 @@ namespace memory {
 		}
 
 		template<typename Type>
-		void* SpecialLogged<Type>::alloc(size_t size)
+		void* SpecialLogged<Type>::alloc(size_t size, size_t flags)
 		{
 			CRT_ASSERT(m_heap);
-			void* ret = HeapAlloc(m_heap, 0, size);
+			void* ret = HeapAlloc(m_heap, flags, size);
 			console::printf(L"<%5u> %S() [%Iu] -> %p\n", GetCurrentThreadId(), __PRETTY_FUNCTION__, size, ret);
 			if (ret) {
 				++m_stat.allocations;
+				m_stat.allocSize += size;
+			}
+			return ret;
+		}
+
+		template<typename Type>
+		void* SpecialLogged<Type>::realloc(void* ptr, size_t size, size_t flags)
+		{
+			size_t freeSize = HeapSize(m_heap, 0, ptr);
+			void* ret = HeapReAlloc(m_heap, flags, ptr, size);
+			if (ret) {
+				console::printf(L"<%5u> %S() [%Iu] -> %p\n", GetCurrentThreadId(), __PRETTY_FUNCTION__, size, ret);
+				++m_stat.frees;
+				++m_stat.allocations;
+				m_stat.freeSize += freeSize;
 				m_stat.allocSize += size;
 			}
 			return ret;

@@ -8,13 +8,13 @@ namespace logger {
 
 	///================================================================================= Module_impl
 	Module_impl::Module_impl(const wchar_t * name, const Target_t & tgt, Level lvl) :
-		m_name(name),
 		m_target(tgt),
 		m_lvl(lvl),
 		m_prefix(defaults::get_prefix()),
 		m_color(1),
 		m_enabled(1)
 	{
+		cstr::copy(m_name, name, lengthof(m_name));
 //		out(Level::Logger, L"Logger module has been created\n");
 	}
 
@@ -25,7 +25,7 @@ namespace logger {
 
 	const wchar_t * Module_impl::get_name() const
 	{
-		return m_name.c_str();
+		return m_name;
 	}
 
 	Level Module_impl::get_level() const
@@ -128,7 +128,7 @@ namespace logger {
 			written += safe_snprintf(buff + written, size - written, L"%s ", to_str(lvl));
 		}
 		if (m_prefix & Prefix::Module) {
-			written += safe_snprintf(buff + written, size - written, L"%11s ", m_name.c_str());
+			written += safe_snprintf(buff + written, size - written, L"%11s ", m_name);
 		}
 		if (m_prefix & Prefix::Thread) {
 			written += safe_snprintf(buff + written, size - written, L"%5u ", ::GetCurrentThreadId());

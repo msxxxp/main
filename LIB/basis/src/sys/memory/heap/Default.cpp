@@ -13,9 +13,14 @@ namespace memory {
 		{
 		}
 
-		void* Default::alloc(size_t size)
+		void* Default::alloc(size_t size, size_t flags)
 		{
-			return HeapAlloc(GetProcessHeap(), 0, size);
+			return HeapAlloc(GetProcessHeap(), flags, size);
+		}
+
+		void* DefaultStat::realloc(void* ptr, size_t size, size_t flags)
+		{
+			return HeapReAlloc(GetProcessHeap(), flags, ptr, size);
 		}
 
 		void Default::free(const void* ptr)
@@ -33,12 +38,12 @@ namespace memory {
 			return HeapSize(GetProcessHeap(), 0, ptr);
 		}
 
-		Stat Default::get_stat()
+		const Stat & Default::get_stat()
 		{
-			Stat tmp;
-			zero(tmp);
-			return tmp;
+			return m_stat;
 		}
+
+		Stat Default::m_stat;
 
 	}
 }

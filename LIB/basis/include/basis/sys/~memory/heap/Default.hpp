@@ -1,7 +1,7 @@
 #ifndef BASIS_SYS_MEMORY_HEAP_DEFAULT_HPP_
 #define BASIS_SYS_MEMORY_HEAP_DEFAULT_HPP_
 
-#include <basis/sys/memory.hpp>
+#include <basis/sys/~memory/heap/Stat.hpp>
 
 namespace memory {
 	namespace heap {
@@ -10,11 +10,15 @@ namespace memory {
 		{
 			static void   init(size_t size = 0);
 			static void   destroy();
-			static void*  alloc(size_t size);
+			static void*  alloc(size_t size, size_t flags = 0);
+			static void*  realloc(void* ptr, size_t size, size_t flags = 0);
 			static void   free(const void* ptr);
 			static size_t size(const void* ptr);
 			static size_t size();
-			static Stat   get_stat();
+			static const Stat& get_stat();
+
+		private:
+			static Stat m_stat;
 		};
 
 	}

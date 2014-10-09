@@ -1,7 +1,7 @@
 #ifndef BASIS_SYS_MEMORY_HEAP_STAT_HPP_
 #define BASIS_SYS_MEMORY_HEAP_STAT_HPP_
 
-#include <basis/sys/memory.hpp>
+#include <basis/types.hpp>
 
 namespace memory {
 	namespace heap {

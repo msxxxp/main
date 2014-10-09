@@ -11,6 +11,7 @@ namespace {
 	void setup_logger()
 	{
 		LogSetOptions(L"logger:///default?level=tr;prefix=f;target=co");
+//		LogSetOptions(L"logger:///default?level=tr;prefix=f;target=fo(c:\\qwe.log)");
 	}
 }
 
@@ -104,7 +105,6 @@ extern "C" int wmain(int /*argc*/, wchar_t * /*argv*/[])
 	setup_logger();
 
 	LogTrace();
-	memory::watchdog::start();
 	std::string a;
 
 	A ma[7];
@@ -175,13 +175,6 @@ extern "C" int wmain(int /*argc*/, wchar_t * /*argv*/[])
 //		list1.push_back(a + a);
 //
 //		list1.push_back(simstd::move(a));
-	}
-	{
-		memory::watchdog::stop();
-		using namespace memory::watchdog;
-		console::printf(L"wd alloc: %Iu \n", get_allocations());
-		console::printf(L"wd free : %Iu \n", get_deletions());
-		console::printf(L"wd diff : %I64d \n", get_allocations_size() - get_deletions_size());
 	}
 	{
 		const memory::heap::Stat& stat = heap_type::get_stat();

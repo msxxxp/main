@@ -2,9 +2,7 @@
 #define LIBBASE_CSTR_CHAR_TRAITS_HPP_
 
 #include <basis/sys/cstr.hpp>
-#include <basis/simstd/string>
-#include <string.h>
-#include <wchar.h>
+#include <basis/simstd/~string/char_traits.hpp>
 
 //	template<typename CharType>
 //	struct Char_types
@@ -84,7 +82,7 @@ namespace cstr {
 
 		static const char_type * find(const char_type * where, char_type what) {return ::strchr(where, what);}
 
-		static char_type * ncopy(char_type * dest, const char_type * src, size_t bufsize) {return ::strncpy(dest, src, bufsize);}
+		static char_type * ncopy(char_type * dest, const char_type * src, size_t bufsize) {return dest[--bufsize] = static_cast<char_type>(0), ::strncpy(dest, src, bufsize);}
 
 		static char_type * copy(char_type * dest, const char_type * src) {return ::strcpy(dest, src);}
 
@@ -159,7 +157,7 @@ namespace cstr {
 
 		static const char_type * find(const char_type * where, char_type what) {return ::wcschr(where, what);}
 
-		static char_type * ncopy(char_type * dest, const char_type * src, size_t bufsize) {return ::wcsncpy(dest, src, bufsize);}
+		static char_type * ncopy(char_type * dest, const char_type * src, size_t bufsize) {return dest[--bufsize] = static_cast<char_type>(0), ::wcsncpy(dest, src, bufsize);}
 
 		static char_type * copy(char_type * dest, const char_type * src) {return ::wcscpy(dest, src);}
 

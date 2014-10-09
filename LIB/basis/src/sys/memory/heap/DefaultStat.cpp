@@ -13,11 +13,24 @@ namespace memory {
 		{
 		}
 
-		void* DefaultStat::alloc(size_t size)
+		void* DefaultStat::alloc(size_t size, size_t flags)
 		{
-			void* ret = HeapAlloc(GetProcessHeap(), 0, size);
+			void* ret = HeapAlloc(GetProcessHeap(), flags, size);
 			if (ret) {
 				++m_stat.allocations;
+				m_stat.allocSize += size;
+			}
+			return ret;
+		}
+
+		void* DefaultStat::realloc(void* ptr, size_t size, size_t flags)
+		{
+			size_t freeSize = HeapSize(GetProcessHeap(), 0, ptr);
+			void* ret = HeapReAlloc(GetProcessHeap(), flags, ptr, size);
+			if (ret) {
+				++m_stat.frees;
+				++m_stat.allocations;
+				m_stat.freeSize += freeSize;
 				m_stat.allocSize += size;
 			}
 			return ret;

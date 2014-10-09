@@ -2,6 +2,7 @@
 #define BASIS_NEW_HPP_
 
 #include <basis/types.hpp>
+#include <basis/sys/~memory/heap/DefaultStat.hpp>
 
 namespace simstd {
 	struct nothrow_t
@@ -15,39 +16,25 @@ namespace simstd {
 #endif
 }
 
-extern "C" {
-	void * _system_malloc(size_t size);
-
-	void _system_free(void * ptr);
-
-	void * _system_movable_malloc(size_t size);
-
-	void _system_movable_free(void * handle);
-
-	void * _system_movable_lock(void * handle);
-
-	void _system_movable_unlock(void * handle);
-}
-
 ///=========================================================================== no exception versions
 inline void* operator new(size_t size, const simstd::nothrow_t&) throw()
 {
-	return _system_malloc(size);
+	return memory::heap::DefaultStat::alloc(size);
 }
 
 inline void* operator new[](size_t size, const simstd::nothrow_t&) throw()
 {
-	return _system_malloc(size);
+	return memory::heap::DefaultStat::alloc(size);
 }
 
 inline void operator delete(void* ptr, const simstd::nothrow_t&) throw()
 {
-	_system_free(ptr);
+	memory::heap::DefaultStat::free(ptr);
 }
 
 inline void operator delete[](void * ptr, const simstd::nothrow_t&) throw()
 {
-	_system_free(ptr);
+	memory::heap::DefaultStat::free(ptr);
 }
 
 ///===================================================================== Default no exception global

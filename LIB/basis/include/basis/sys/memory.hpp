@@ -9,6 +9,7 @@
 #include <basis/sys/~memory/constraints.hpp>
 #include <basis/sys/~memory/heap/Stat.hpp>
 #include <basis/sys/~memory/heap/Default.hpp>
+#include <basis/sys/~memory/heap/DefaultMovable.hpp>
 #include <basis/sys/~memory/heap/DefaultLogged.hpp>
 #include <basis/sys/~memory/heap/DefaultStat.hpp>
 #include <basis/sys/~memory/heap/DefaultStatTag.hpp>

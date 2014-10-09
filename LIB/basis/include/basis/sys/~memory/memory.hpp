@@ -1,6 +1,7 @@
 #ifndef BASIS_SYS_MEMORY_MEMORY_HPP_
 #define BASIS_SYS_MEMORY_MEMORY_HPP_
 
+#include <basis/sys/~memory/heap/DefaultStat.hpp>
 #include <basis/sys/memory.hpp>
 
 #include <type_traits>
@@ -48,47 +49,21 @@ namespace memory {
 }
 
 namespace memory {
-	namespace watchdog
-	{
-		typedef void (*pfunc)();
-
-		void start();
-
-		bool stop();
-
-		void add_allocation(uint64_t size);
-
-		void remove_allocation(uint64_t size);
-
-		size_t get_allocations();
-
-		uint64_t get_allocations_size();
-
-		size_t get_deletions();
-
-		uint64_t get_deletions_size();
-	};
 
 	typedef HANDLE Heap_t;
 
-	inline memory::Heap_t get_heap()
-	{
-		return ::GetProcessHeap();
-	}
-
 	template<typename Pointer>
-	inline size_t size(Pointer in)
+	inline size_t size(Pointer ptr)
 	{
 		static_assert(std::is_pointer<Pointer>::value, "Pointer type is required");
-		return (in) ? ::HeapSize(get_heap(), 0, (void*)in) : 0;
+		return (ptr) ? memory::heap::DefaultStat::size(ptr) : 0;
 	}
 
 	template<typename Pointer>
 	inline Pointer malloc(size_t size, DWORD flags = 0/*HEAP_ZERO_MEMORY*/)
 	{
 		static_assert(std::is_pointer<Pointer>::value, "Pointer type is required");
-		watchdog::add_allocation(size);
-		return static_cast<Pointer>(::HeapAlloc(get_heap(), flags, size));
+		return static_cast<Pointer>(heap::DefaultStat::alloc(size, flags));
 	}
 
 	template<typename Pointer>
@@ -96,8 +71,7 @@ namespace memory {
 	{
 		static_assert(std::is_pointer<Pointer>::value, "Pointer type is required");
 		Pointer tmp_ptr = nullptr;
-		watchdog::add_allocation(sizeof(*tmp_ptr) * count);
-		return static_cast<Pointer>(::HeapAlloc(get_heap(), flags | HEAP_ZERO_MEMORY, sizeof(*tmp_ptr) * count));
+		return static_cast<Pointer>(heap::DefaultStat::alloc(sizeof(*tmp_ptr) * count, flags | HEAP_ZERO_MEMORY));
 	}
 
 	template<typename Pointer>
@@ -105,28 +79,22 @@ namespace memory {
 	{
 		static_assert(std::is_pointer<Pointer>::value, "Pointer type is required");
 		Pointer tmp_ptr = nullptr;
-		watchdog::add_allocation(sizeof(*tmp_ptr));
-		return static_cast<Pointer>(::HeapAlloc(get_heap(), flags | HEAP_ZERO_MEMORY, sizeof(*tmp_ptr)));
+		return static_cast<Pointer>(heap::DefaultStat::alloc(sizeof(*tmp_ptr), flags | HEAP_ZERO_MEMORY));
 	}
 
 	template<typename Pointer>
 	inline void free(Pointer & in)
 	{
 		static_assert(std::is_pointer<Pointer>::value, "Pointer type is required");
-		watchdog::remove_allocation(memory::size(in));
-		::HeapFree(get_heap(), 0, *(void**)(&in));
+		heap::DefaultStat::free(*(void**)(&in));
 		*(void**)(&in) = nullptr;
 	}
 
 	template<typename Pointer>
 	inline bool realloc(Pointer & in, size_t size, DWORD flags = HEAP_ZERO_MEMORY)
 	{
-		if (in) {
-			watchdog::remove_allocation(memory::size(in));
-		}
-		watchdog::add_allocation(size);
 		static_assert(std::is_pointer<Pointer>::value, "Pointer type is required");
-		return (in = static_cast<Pointer>((in) ? ::HeapReAlloc(get_heap(), flags, (void*)in, size) : ::HeapAlloc(get_heap(), flags, size)));
+		return (in = static_cast<Pointer>((in) ? heap::DefaultStat::realloc((void*)in, size, flags) : heap::DefaultStat::alloc(size, flags)));
 	}
 
 	template<typename Pointer1, typename Pointer2>
@@ -189,28 +157,7 @@ namespace memory {
 		static_assert(!std::is_pointer<NonPointer>::value, "Nonpointer type is required");
 		::memset((void*)&in, 0, sizeof(in));
 	}
-}
 
-//#if defined(NoStdNew) || defined(NO_STD_NEW)
-//inline void * operator new(size_t size) noexcept
-//{
-//	return memory::malloc<void*>(size, HEAP_ZERO_MEMORY);
-//}
-//
-//inline void * operator new [](size_t size) noexcept
-//{
-//	return ::operator new(size);
-//}
-//
-//inline void operator delete(void * in) noexcept
-//{
-//	memory::free(in);
-//}
-//
-//inline void operator delete [](void * ptr) noexcept
-//{
-//	::operator delete(ptr);
-//}
-//#endif
+}
 
 #endif

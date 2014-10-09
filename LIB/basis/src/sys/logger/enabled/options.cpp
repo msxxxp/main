@@ -1,10 +1,10 @@
 #include "../logger_pvt.hpp"
 
-#include <basis/sys/console.hpp>
+//#include <basis/sys/console.hpp>
 #include <basis/sys/cstr.hpp>
 #include <basis/sys/url.hpp>
 
-#include <basis/simstd/string>
+#include <basis/simstd/algorithm>
 
 //#define TraceFunc(format, ...) //console::printf(L"%S " ## format ## L"/n", __PRETTY_FUNCTION__, ##__VA_ARGS__);
 
@@ -12,17 +12,40 @@ namespace logger {
 
 	namespace {
 
-		ustring get_substr_in(ustring str, const wchar_t * delim)
+		struct CompareWithDelim
 		{
-			auto first = str.find_first_of(delim);
-			if (first != ustring::npos) {
-				first += 1;
-				auto ret = str.substr(first, str.find_first_of(delim, first) - first);
-//				console::printf(L"%S '%s' -> '%s'\n", __PRETTY_FUNCTION__, str.c_str(), ret.c_str());
-//				TraceFunc(L"'%s' -> '%s'", str.c_str(), ret.c_str());
-				return ret;
+			CompareWithDelim(const wchar_t * delim): m_delim(delim)
+			{
 			}
-			return ustring();
+			bool operator ()(const wchar_t & ch) const
+			{
+				return cstr::find(m_delim, ch);
+			}
+		private:
+			const wchar_t * m_delim;
+		};
+
+		const wchar_t * find_first_of(const wchar_t * first, const wchar_t * last, const wchar_t * delim)
+		{
+			const wchar_t * found = simstd::find_if(first, last, CompareWithDelim(delim));
+			return found == last ? nullptr : found;
+		}
+
+		void get_substr_in(wchar_t * dest, size_t size, const wchar_t * str, const wchar_t * delim)
+		{
+			const wchar_t * found1 = find_first_of(str, str + cstr::length(str), delim);
+
+			if (found1) {
+				++found1;
+//				console::printf(L"%S '%s' -> found1: '%s'\n", __PRETTY_FUNCTION__, str, found1);
+				const wchar_t * found2 = find_first_of(found1, found1 + cstr::length(found1), delim);
+				if (found2) {
+//					console::printf(L"%S '%s' -> found2: '%s'\n", __PRETTY_FUNCTION__, str, found2);
+					cstr::copy(dest, found1, simstd::min(size, (size_t)(found2 - found1) + 1));
+//					console::printf(L"%S '%s' -> '%s'\n", __PRETTY_FUNCTION__, str.c_str(), ret.c_str());
+//					TraceFunc(L"'%s' -> '%s'", str.c_str(), ret.c_str());
+				}
+			}
 		}
 
 		Level convert_to_level(const wchar_t * str)
@@ -49,7 +72,7 @@ namespace logger {
 			} else if (cstr::compare_ci_1st_length(L"em", str) == 0 || cstr::compare(L"9", str) == 0) {
 				ret = Level::Emerg;
 			}
-			//console::printf(L"%S '%s' -> %d(%s)\n", __PRETTY_FUNCTION__, str, ret, to_str(ret));
+//			console::printf(L"%S '%s' -> %d(%s)\n", __PRETTY_FUNCTION__, str, ret, to_str(ret));
 			return ret;
 		}
 
@@ -69,7 +92,7 @@ namespace logger {
 				if (numPrefix)
 					ret = static_cast<Prefix::flags>(numPrefix);
 			}
-			//console::printf(L"%S '%s' -> 0x%IX(%s)\n", __PRETTY_FUNCTION__, str, ret, to_str(ret));
+//			console::printf(L"%S '%s' -> 0x%IX(%s)\n", __PRETTY_FUNCTION__, str, ret, to_str(ret));
 			return ret;
 		}
 
@@ -78,19 +101,22 @@ namespace logger {
 			Target_t ret = defaults::get_target();
 			if (cstr::compare_ci_1st_length(L"n", str) == 0) {
 				ret = get_TargetToNull();
-				//console::printf(L"%S '%s' -> null\n", __PRETTY_FUNCTION__, str);
+//				console::printf(L"%S '%s' -> null\n", __PRETTY_FUNCTION__, str);
 			} else if (cstr::compare_ci_1st_length(L"c", str) == 0) {
 				ret = get_TargetToConsole();
-				//console::printf(L"%S '%s' -> console\n", __PRETTY_FUNCTION__, str);
+//				console::printf(L"%S '%s' -> console\n", __PRETTY_FUNCTION__, str);
 			} else if (cstr::compare_ci_1st_length(L"f", str) == 0) {
 				bool overwrite = cstr::compare_ci_1st_length(L"fo", str) == 0 || cstr::compare_ci_1st_length(L"fileo", str) == 0;
-				ret = get_TargetToFile(get_substr_in(str, L"()").c_str(), overwrite);
-				//console::printf(L"%S '%s' -> file, ow: %d\n", __PRETTY_FUNCTION__, str, overwrite);
-				//		} else if (cstr::compare_ci_1st_length(L"s", str) == 0) {
-				//			ret = get_TargetToSys(str); // TODO
-				//			//console::printf(L"%S '%s' -> sys\n", __PRETTY_FUNCTION__, str);
+				wchar_t path[4096];
+				get_substr_in(path, lengthof(path), str, L"()");
+//				console::printf(L"%S '%s' -> file(%s), ow: %d\n", __PRETTY_FUNCTION__, str, path, overwrite);
+				ret = get_TargetToFile(path, overwrite);
+			} else if (cstr::compare_ci_1st_length(L"s", str) == 0) {
+				CRT_ASSERT(false); // not implemented
+//				ret = get_TargetToSys(str); // TODO
+//				console::printf(L"%S '%s' -> sys\n", __PRETTY_FUNCTION__, str);
 			} else {
-				//console::printf(L"%S '%s' -> not found\n", __PRETTY_FUNCTION__, str);
+//				console::printf(L"%S '%s' -> not found\n", __PRETTY_FUNCTION__, str);
 			}
 			return ret;
 		}
@@ -101,7 +127,7 @@ namespace logger {
 			if (cstr::compare_ci_1st_length(L"f", str) == 0 || cstr::compare(L"0", str) == 0) {
 				ret = 0;
 			}
-			//console::printf(L"%S '%s' -> %Iu\n", __PRETTY_FUNCTION__, str, ret);
+//			console::printf(L"%S '%s' -> %Iu\n", __PRETTY_FUNCTION__, str, ret);
 			return ret;
 		}
 
@@ -116,7 +142,7 @@ namespace logger {
 				set_level = set_prefix = set_target = set_color = set_enabled = 0;
 			}
 
-			void name(const wchar_t * str) {m_name = str;}
+			void name(const wchar_t * str) {cstr::copy(m_name1, str, lengthof(m_name1));}
 
 			void level(const wchar_t * str) {m_level = convert_to_level(str); set_level = 1;}
 
@@ -129,8 +155,8 @@ namespace logger {
 			void enabled(const wchar_t * str) {m_enabled = convert_to_bit(str); set_enabled = 1;}
 
 			void execute() {
-				if (!m_name.empty()) {
-					auto module = logger::get_module_impl(m_name.c_str());
+				if (!cstr::is_empty(m_name1)) {
+					auto module = logger::get_module_impl(m_name1);
 					auto lock(module->lock_scope());
 					if (set_level)
 						module->set_level(m_level);
@@ -147,7 +173,7 @@ namespace logger {
 
 
 		private:
-			ustring       m_name;
+			wchar_t       m_name1[16];
 			Level         m_level;
 			Prefix::flags m_prefix;
 			Target_t      m_target;
@@ -172,57 +198,65 @@ namespace logger {
 			return false;
 		}
 
-		ustring get_parameter(ustring & str)
+		const wchar_t * get_parameter(wchar_t * str)
 		{
-			auto first = str.find_last_of(L"?;");
-			if (first != ustring::npos) {
-				ustring ret = str.substr(first + 1);
-				str.erase(first);
-				return ret;
+			wchar_t * found = nullptr;
+			wchar_t * end = str + cstr::length(str);
+			while (end > str)
+				if (cstr::find(L"?;", *(--end))) {
+					found = end;
+					break;
+				}
+			if (found) {
+				*found = static_cast<wchar_t>(0);
+				++found;
+				return found;
 			}
-			return ustring();
+			return L"";
 		}
 
-		void set_defaults(ustring options)
+		void set_defaults(wchar_t * options, size_t size)
 		{
-			//console::printf(L"%S:%d '%s'\n", __PRETTY_FUNCTION__, __LINE__, options.c_str());
-			while (!options.empty()) {
+			options[size] = static_cast<wchar_t>(0);
+			while (!cstr::is_empty(options)) {
+//				console::printf(L"%S:%d '%s'\n", __PRETTY_FUNCTION__, __LINE__, options);
 				auto prm = get_parameter(options);
-				//console::printf(L"%S:%d '%s'\n", __PRETTY_FUNCTION__, __LINE__, prm.c_str());
+//				console::printf(L"%S:%d '%s'\n", __PRETTY_FUNCTION__, __LINE__, prm);
 				const wchar_t * value = nullptr;
-				if (get_value(L"level=", prm.c_str(), value)) {
+				if (get_value(L"level=", prm, value)) {
 					defaults::set_level(convert_to_level(value));
-				} else if (get_value(L"prefix=", prm.c_str(), value)) {
+				} else if (get_value(L"prefix=", prm, value)) {
 					defaults::set_prefix(convert_to_prefix(value));
-				} else if (get_value(L"target=", prm.c_str(), value)) {
+				} else if (get_value(L"target=", prm, value)) {
 					defaults::set_target(convert_to_target(value));
 				}
 			}
 		}
 
-		void set_globals(ustring /*options*/)
+		void set_globals(wchar_t * /*options*/, size_t /*size*/)
 		{
 		}
 
-		void set_module(ustring options)
+		void set_module(wchar_t * options, size_t size)
 		{
-			//console::printf(L"%S:%d '%s'\n", __PRETTY_FUNCTION__, __LINE__, options.c_str());
+			options[size] = static_cast<wchar_t>(0);
 			ModuleOptionsSetter mos;
-			while (!options.empty()) {
+			while (!cstr::is_empty(options)) {
+//				console::printf(L"%S:%d '%s'\n", __PRETTY_FUNCTION__, __LINE__, options);
 				auto prm = get_parameter(options);
-				//console::printf(L"%S:%d '%s'\n", __PRETTY_FUNCTION__, __LINE__, prm.c_str());
+//				console::printf(L"%S:%d '%s'\n", __PRETTY_FUNCTION__, __LINE__, prm);
 				const wchar_t * value = nullptr;
-				if (get_value(L"name=", prm.c_str(), value)) {
+				if (get_value(L"name=", prm, value)) {
 					mos.name(value);
-				} else if (get_value(L"level=", prm.c_str(), value)) {
+				} else if (get_value(L"level=", prm, value)) {
 					mos.level(value);
-				} else if (get_value(L"prefix=", prm.c_str(), value)) {
+				} else if (get_value(L"prefix=", prm, value)) {
 					mos.prefix(value);
-				} else if (get_value(L"target=", prm.c_str(), value)) {
+				} else if (get_value(L"target=", prm, value)) {
 					mos.target(value);
-				} else if (get_value(L"color=", prm.c_str(), value)) {
+				} else if (get_value(L"color=", prm, value)) {
 					mos.color(value);
-				} else if (get_value(L"enable=", prm.c_str(), value)) {
+				} else if (get_value(L"enable=", prm, value)) {
 					mos.enabled(value);
 				}
 			}
@@ -233,18 +267,21 @@ namespace logger {
 
 	void set_options(const wchar_t * url)
 	{
-		URL_COMPONENTSW info;
-		bool res = url::crack(url, &info);
+		auto urlCopy = cstr::dup(url);
 
+		URL_COMPONENTSW info;
+		bool res = url::crack(urlCopy, &info);
 		if (res && cstr::compare_ci(L"logger", info.lpszScheme, info.dwSchemeLength) == 0) {
 			if (cstr::compare_ci(L"/default", info.lpszUrlPath, info.dwUrlPathLength) == 0) {
-				set_defaults(ustring(info.lpszExtraInfo, info.dwExtraInfoLength));
+				set_defaults(info.lpszExtraInfo, info.dwExtraInfoLength);
 			} else if (cstr::compare_ci(L"/global", info.lpszUrlPath, info.dwUrlPathLength) == 0) {
-				set_globals(ustring(info.lpszExtraInfo, info.dwExtraInfoLength));
+				set_globals(info.lpszExtraInfo, info.dwExtraInfoLength);
 			} else if (cstr::compare_ci(L"/module", info.lpszUrlPath, info.dwUrlPathLength) == 0) {
-				set_module(ustring(info.lpszExtraInfo, info.dwExtraInfoLength));
+				set_module(info.lpszExtraInfo, info.dwExtraInfoLength);
 			}
 		}
+
+		memory::free(urlCopy);
 	}
 
 }

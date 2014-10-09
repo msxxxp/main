@@ -2,7 +2,7 @@
 #define BASIS_MEMORY_MOVABLE_ALLOCATOR_HPP_
 
 #include <basis/types.hpp>
-#include <basis/simstd/~memory/new.hpp>
+#include <basis/sys/~memory/heap/DefaultMovable.hpp>
 
 namespace simstd {
 
@@ -44,25 +44,25 @@ namespace simstd {
 		template<typename Type>
 		typename movable_allocator<Type>::movable_handle movable_allocator<Type>::allocate(size_type cnt)
 		{
-			return (movable_handle)_system_movable_malloc(sizeof(Type) * cnt);
+			return (movable_handle)memory::heap::DefaultMovable::alloc(sizeof(Type) * cnt);
 		}
 
 		template<typename Type>
 		void movable_allocator<Type>::deallocate(movable_handle hnd)
 		{
-			_system_movable_free(hnd);
+			memory::heap::DefaultMovable::free(hnd);
 		}
 
 		template<typename Type>
 		typename movable_allocator<Type>::pointer movable_allocator<Type>::lock(movable_handle hnd) const
 		{
-			return (pointer)_system_movable_lock(hnd);
+			return (pointer)memory::heap::DefaultMovable::lock(hnd);
 		}
 
 		template<typename Type>
 		void movable_allocator<Type>::unlock(movable_handle hnd) const
 		{
-			_system_movable_unlock(hnd);
+			memory::heap::DefaultMovable::unlock(hnd);
 		}
 
 		template<typename Type>

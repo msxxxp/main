@@ -7,15 +7,8 @@
 #include <basis/ext/pattern.hpp>
 
 #include <basis/simstd/memory>
-#include <basis/simstd/string>
 
 namespace logger {
-
-	typedef Module_i TypeTag;
-	typedef memory::heap::DefaultStatTag<TypeTag> heap_type;
-	typedef typename simstd::AllocatorHeap<wchar_t, heap_type> Allocator;
-	typedef typename simstd::basic_string<wchar_t, simstd::char_traits<wchar_t>, Allocator> ustring;
-
 
 	namespace Prefix {
 		typedef size_t flags;
@@ -36,7 +29,7 @@ namespace logger {
 
 	///==================================================================================== Target_i
 	struct Target_i {
-		virtual ~Target_i();
+		virtual ~Target_i() = default;
 
 		virtual void out(const Module_i * module, Level lvl, const wchar_t * str, size_t size) const = 0;
 
@@ -100,7 +93,7 @@ namespace logger {
 
 		void out_args(WORD color, Level lvl, const wchar_t * frmat, va_list args) const;
 
-		ustring       m_name;
+		wchar_t       m_name[16];
 		Target_t      m_target;
 		Level         m_lvl;
 		Prefix::flags m_prefix;

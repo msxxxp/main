@@ -168,6 +168,7 @@ namespace fsys {
 		std::atomic<uint64_t> filesIgnoredMaxSize;
 		std::atomic<uint64_t> foldersFound;
 		std::atomic<uint64_t> foldersLinksFound;
+		std::atomic<uint64_t> foldersIgnored;
 		std::atomic<uint64_t> foldersIgnoredReadOnly;
 		std::atomic<uint64_t> foldersIgnoredHidden;
 		std::atomic<uint64_t> foldersIgnoredSystem;

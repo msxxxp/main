@@ -134,7 +134,10 @@ namespace fsys {
 			++statistics.foldersFound;
 		}
 
-		if ((options.flags & folderSkipLink) && stat.is_link()) {
+		if (options.flags & folderSkipAll) {
+			++statistics.foldersIgnored;
+			LogConsoleDebug(FOREGROUND_INTENSITY | FOREGROUND_RED | FOREGROUND_GREEN, L"Dir  ignored [not recursive]: ");
+		} else if ((options.flags & folderSkipLink) && stat.is_link()) {
 			++statistics.foldersIgnoredLink;
 			LogConsoleDebug(FOREGROUND_INTENSITY | FOREGROUND_RED | FOREGROUND_GREEN, L"Dir  ignored [link]: ");
 		} else if ((options.flags & folderSkipReadOnly) && (stat.attr() & FILE_ATTRIBUTE_READONLY)) {

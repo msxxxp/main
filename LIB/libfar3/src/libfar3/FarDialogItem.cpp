@@ -21,7 +21,7 @@
 #include <basis/sys/cstr.hpp>
 #include <basis/sys/logger.hpp>
 
-#include <basis/std/algorithm>
+#include <basis/simstd/algorithm>
 
 namespace Far {
 

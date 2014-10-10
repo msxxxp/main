@@ -20,7 +20,7 @@
 #include <libfar3/helper.hpp>
 
 #include <basis/sys/logger.hpp>
-#include <basis/std/string>
+#include <basis/simstd/string>
 
 namespace Far {
 

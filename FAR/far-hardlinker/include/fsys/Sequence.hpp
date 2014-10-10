@@ -4,7 +4,7 @@
 #include <fsys.hpp>
 
 #include <basis/sys/fsys.hpp>
-#include <basis/std/string>
+#include <basis/simstd/string>
 
 #include <atomic>
 
@@ -37,9 +37,9 @@ namespace fsys {
 			fileSkipZeroSize   = 0x20000,
 		};
 
-		typedef FindStat value_type;
-		typedef size_t size_type;
-		typedef size_t flags_type;
+		typedef FindStat    value_type;
+		typedef size_t      size_type;
+		typedef size_t      flags_type;
 		typedef ci_iterator iterator;
 		typedef ci_iterator const_iterator;
 
@@ -58,7 +58,7 @@ namespace fsys {
 		const SearchStatistics & statistics() const;
 
 	private:
-		ustring       m_path;
+		ustring               m_path;
 		const SearchOptions & m_options;
 		SearchStatistics    & m_statistics;
 	};

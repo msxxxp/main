@@ -3,7 +3,7 @@
 
 #include <fsys.hpp>
 
-#include <basis/std/vector>
+#include <basis/simstd/vector>
 
 namespace fsys {
 
@@ -29,7 +29,7 @@ namespace fsys {
 
 	protected:
 		ustring  m_name;
-		Node_t      m_parent;
+		Node_t   m_parent;
 	};
 
 	class Folder: public Node {

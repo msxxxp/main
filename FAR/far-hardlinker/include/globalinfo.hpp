@@ -24,7 +24,7 @@
 #include <libfar3/globalinfo_i.hpp>
 
 #include <basis/ext/pattern.hpp>
-#include <basis/std/string>
+#include <basis/simstd/string>
 
 struct FarGlobalInfo: public Far::GlobalInfo_i, private pattern::Uncopyable {
 	~FarGlobalInfo();

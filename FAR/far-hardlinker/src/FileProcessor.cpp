@@ -4,8 +4,8 @@
 #include <global.hpp>
 #include <fsys.hpp>
 
-#include <basis/std/algorithm>
-#include <list>
+#include <basis/simstd/algorithm>
+//#include <list>
 //#include <algorithm>
 
 
@@ -127,16 +127,17 @@ void process_equal_sized_files(fsys::Files_t & files)
 
 void scan_single_folder(fsys::Node_t folder)
 {
-	LogConsoleDebug(-1, L"processing: '%s'\n", folder->get_full_path().c_str());
+	auto fullPath = folder->get_full_path();
+	LogConsoleDebug(-1, L"processing: '%s'\n", fullPath.c_str());
+
 	fsys::Sequence::SearchOptions opt;
-	fsys::Sequence dir(folder->get_full_path().c_str(), opt, global::statistics());
+	opt.flags |= global::options().doRecursive ? 0 : fsys::Sequence::SearchFlags::folderSkipAll;
+
+	fsys::Sequence dir(fullPath, opt, global::statistics());
 	for (auto it = dir.begin(); it != dir.end(); ++it) {
 //		LogDebug(L"%s\n", it->name());
 		if (it->is_dir()) {
-			if (global::options().doRecursive) {
-//				scan_single_folder(fsys::Node_t(new fsys::Folder(it->name(), folder)));
-				global::vars().folders.emplace_back(fsys::Node_t(new fsys::Folder(it->name(), folder)));
-			}
+			global::vars().folders.emplace_back(fsys::Node_t(new fsys::Folder(it->name(), folder)));
 		} else {
 			global::vars().files.emplace_back(fsys::File_t(new fsys::File(*it, folder)));
 		}
@@ -145,14 +146,13 @@ void scan_single_folder(fsys::Node_t folder)
 
 ssize_t FileProcessor::execute()
 {
-	std::list<int>
 	LogTrace();
 	LogConsoleInfo(-1, L"Folders to process: %I64u\n", global::vars().folders.size());
 
 	while (!global::vars().folders.empty())
 	{
 		auto folder = global::vars().folders.back();
-		global::vars().folders.erase(global::vars().folders.end() - 1);
+		global::vars().folders.pop_back();
 		scan_single_folder(folder);
 	}
 

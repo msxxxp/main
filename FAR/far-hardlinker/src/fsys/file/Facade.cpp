@@ -4,7 +4,7 @@
 #include <basis/sys/fsys.hpp>
 #include <basis/sys/memory.hpp>
 #include <basis/sys/logger.hpp>
-#include <basis/std/string>
+#include <basis/simstd/string>
 
 #include "../Stat.hpp"
 

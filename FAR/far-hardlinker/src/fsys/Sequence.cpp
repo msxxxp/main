@@ -123,8 +123,10 @@ namespace fsys {
 	{
 		bool ret = false;
 
-		const SearchOptions & options = m_impl->m_sequence->m_options;
-		SearchStatistics & statistics = m_impl->m_sequence->m_statistics;
+		auto & options = m_impl->m_sequence->m_options;
+//		const SearchOptions & options = m_impl->m_sequence->m_options;
+		auto & statistics = m_impl->m_sequence->m_statistics;
+//		SearchStatistics & statistics = m_impl->m_sequence->m_statistics;
 
 		if (stat.is_link()) {
 			++statistics.foldersLinksFound;

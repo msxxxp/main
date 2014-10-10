@@ -2,7 +2,7 @@
 #define _GLOBAL_HPP_
 
 #include <basis/configure.hpp>
-#include <basis/std/memory>
+#include <basis/simstd/memory>
 
 #include <crypt.hpp>
 #include <fsys.hpp>

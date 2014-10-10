@@ -2,6 +2,9 @@
 
 #include <basis/sys/cstr.hpp>
 
+//#define TraceFunc() console::printf(L"%S:%d\n", __PRETTY_FUNCTION__, __LINE__);
+#define TraceFunc()
+
 namespace logger {
 
 	const size_t default_buffer_size = 4 * 1024;
@@ -14,8 +17,10 @@ namespace logger {
 		m_color(1),
 		m_enabled(1)
 	{
+		TraceFunc();
 		cstr::copy(m_name, name, lengthof(m_name));
 //		out(Level::Logger, L"Logger module has been created\n");
+		TraceFunc();
 	}
 
 	void Module_impl::destroy() const
@@ -75,6 +80,7 @@ namespace logger {
 
 	void Module_impl::out_debug(const char * file, int line, const char * func, Level lvl, const wchar_t * format, ...) const
 	{
+		TraceFunc();
 		if (m_enabled && m_lvl <= lvl) {
 			wchar_t buff[default_buffer_size];
 			auto pend = create_prefix(lvl, buff, lengthof(buff));
@@ -84,10 +90,12 @@ namespace logger {
 			out_args(lvl, buff, pend, lengthof(buff) - (pend - buff), format, args);
 			va_end(args);
 		}
+		TraceFunc();
 	}
 
 	void Module_impl::out(Level lvl, const wchar_t * format, ...) const
 	{
+		TraceFunc();
 		if (m_enabled && lvl >= m_lvl) {
 			wchar_t buff[default_buffer_size];
 			auto pend = create_prefix(lvl, buff, lengthof(buff));
@@ -95,24 +103,28 @@ namespace logger {
 			va_start(args, format);
 			out_args(lvl, buff, pend, lengthof(buff) - (pend - buff), format, args);
 		}
+		TraceFunc();
 	}
 
 	void Module_impl::out_console(WORD color, Level lvl, const wchar_t * format, ...) const
 	{
+		TraceFunc();
 		if (m_enabled && lvl >= m_lvl) {
 			Va_list args;
 			va_start(args, format);
 			out_args(color, lvl, format, args);
 		}
+		TraceFunc();
 	}
 
-	sync::ScopeGuard Module_impl::lock_scope() const
+	lock_type Module_impl::lock_scope() const
 	{
 		return m_target->lock_scope();
 	}
 
 	wchar_t * Module_impl::create_prefix(Level lvl, wchar_t * buff, size_t size) const
 	{
+		TraceFunc();
 		size_t written = 0;
 		if (m_prefix & (Prefix::Date | Prefix::Time)) {
 			SYSTEMTIME time;
@@ -133,11 +145,13 @@ namespace logger {
 		if (m_prefix & Prefix::Thread) {
 			written += safe_snprintf(buff + written, size - written, L"%5u ", ::GetCurrentThreadId());
 		}
+		TraceFunc();
 		return buff + written;
 	}
 
 	wchar_t * Module_impl::add_place(wchar_t * buff, size_t size, const char * file, int line, const char * func) const
 	{
+		TraceFunc();
 		size_t written = 0;
 		if (m_prefix & Prefix::Place) {
 			written += safe_snprintf(buff + written, size - written, L"%14.14S:%5d ", file, line);
@@ -145,22 +159,29 @@ namespace logger {
 		if (m_prefix & Prefix::Function) {
 			written += safe_snprintf(buff + written, size - written, L"%S() ", func);
 		}
+		TraceFunc();
 		return buff + written;
 	}
 
 	void Module_impl::out_args(Level lvl, wchar_t * buff, wchar_t * pend, size_t size, const wchar_t * frmat, va_list args) const
 	{
+		TraceFunc();
 		size_t written = safe_snprintf(pend, size, frmat, args);
-		auto scopeLock(lock_scope());
+		TraceFunc();
+		auto scopeLock(m_target->lock_scope());
+		TraceFunc();
 		m_target->out(this, lvl, buff, pend - buff + written);
+		TraceFunc();
 	}
 
 	void Module_impl::out_args(WORD color, Level lvl, const wchar_t * frmat, va_list args) const
 	{
+		TraceFunc();
 		wchar_t buff[4096];
 		size_t written = safe_snprintf(buff, lengthof(buff), frmat, args);
-		auto scopeLock(lock_scope());
+		auto scopeLock(m_target->lock_scope());
 		m_target->out(this, color, lvl, buff, written);
+		TraceFunc();
 	}
 
 	///=============================================================================================

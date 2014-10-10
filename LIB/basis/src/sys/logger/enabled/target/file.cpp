@@ -9,7 +9,7 @@ namespace logger {
 
 	namespace {
 		struct LogToFile: public Target_i {
-			~LogToFile();
+			~LogToFile() = default;
 
 			LogToFile(const wchar_t * path, bool overwrite);
 
@@ -19,20 +19,19 @@ namespace logger {
 
 			void out(const wchar_t * str, size_t size) const override;
 
-			sync::ScopeGuard lock_scope() const override;
+			lock_type lock_scope() const override;
 
 		private:
-			memory::auto_destroy<sync::SyncUnit_i*> m_sync;
+			mutable sync_type m_sync;
 			memory::auto_close<HANDLE> m_file;
 		};
 
-		LogToFile::~LogToFile()
-		{
-		}
+//		LogToFile::~LogToFile()
+//		{
+//		}
 
 		LogToFile::LogToFile(const wchar_t * path, bool overwrite) :
-			m_sync(sync::get_CritSection()),
-			m_file(::CreateFileW(path, GENERIC_WRITE, FILE_SHARE_READ, nullptr, overwrite ? CREATE_ALWAYS : OPEN_ALWAYS, FILE_ATTRIBUTE_NORMAL, nullptr))
+			m_file(::CreateFileW(path, GENERIC_WRITE, FILE_SHARE_READ | FILE_SHARE_DELETE, nullptr, overwrite ? CREATE_ALWAYS : OPEN_ALWAYS, FILE_ATTRIBUTE_NORMAL, nullptr))
 		{
 			if (m_file.is_valid()) {
 				::SetFilePointer(m_file, 0, nullptr, FILE_END);
@@ -53,14 +52,14 @@ namespace logger {
 		{
 			if (m_file.is_valid()) {
 				DWORD written = 0;
-				auto lockScope(m_sync->lock_scope());
+				auto lockScope(lock_scope());
 				::WriteFile(m_file, str, size * sizeof(wchar_t), &written, nullptr);
 			}
 		}
 
-		sync::ScopeGuard LogToFile::lock_scope() const
+		lock_type LogToFile::lock_scope() const
 		{
-			return m_sync->lock_scope();
+			return simstd::auto_lock(m_sync);
 		}
 
 	}

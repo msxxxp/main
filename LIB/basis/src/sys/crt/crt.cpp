@@ -1,6 +1,7 @@
-﻿#include <basis/sys/crt.hpp>
-#include <basis/sys/console.hpp>
-#include <basis/sys/memory.hpp>
+﻿
+#include <basis/sys/crt.hpp>
+//#include <basis/sys/console.hpp>
+//#include <basis/sys/memory.hpp>
 
 #include <atomic>
 
@@ -39,7 +40,7 @@ namespace crt {
 
 	void invoke_dtors()
 	{
-		console::printf(L"%S:%d, __DTOR_LIST__: %p\n", __PRETTY_FUNCTION__, __LINE__, __DTOR_LIST__);
+//		console::printf(L"%S:%d, __DTOR_LIST__: %p\n", __PRETTY_FUNCTION__, __LINE__, __DTOR_LIST__);
 		invoke_crt_functions(__DTOR_LIST__, 1);
 
 //		using namespace memory::watchdog;

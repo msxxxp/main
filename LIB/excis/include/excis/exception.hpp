@@ -6,6 +6,7 @@
 
 #include <basis/simstd/iosfwd>
 #include <basis/simstd/memory>
+#include <basis/simstd/string>
 
 #include <excis/sub_exception/AbstractError.hpp>
 #include <excis/sub_exception/SEH.hpp>

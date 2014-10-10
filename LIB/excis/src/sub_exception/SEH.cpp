@@ -3,9 +3,9 @@
 #include <basis/sys/logger.hpp>
 #include <basis/sys/totext.hpp>
 
-#ifdef DEBUG
+//#ifdef DEBUG
 #	include <basis/sys/traceback.hpp>
-#endif
+//#endif
 
 #include "exception_pvt.hpp"
 
@@ -25,10 +25,10 @@ namespace exception {
 			LogReport(L"param[%u]:    0x%I64X\n", i, ep->ExceptionRecord->ExceptionInformation[i]);
 		}
 
-#ifdef DEBUG
+//#ifdef DEBUG
 		traceback::LazyFrame frame(reinterpret_cast<void*>(ep->ExceptionRecord->ExceptionAddress));
 		LogFatal(L"exception at %s\n", frame.to_str().c_str());
-#endif
+//#endif
 	}
 
 	SehError * SehError::clone() const
@@ -57,12 +57,12 @@ namespace exception {
 
 		safe_snprintf(buf, lengthof(buf), L"Error: %s", what().c_str());
 		out.push_back(buf);
-#ifndef NDEBUG
+//#ifndef NDEBUG
 		safe_snprintf(buf, lengthof(buf), L"Exception: %s", type().c_str());
 		out.push_back(buf);
 		safe_snprintf(buf, lengthof(buf), L"Where: %s", where().c_str());
 		out.push_back(buf);
-#endif
+//#endif
 	}
 
 	LONG WINAPI unhandled_exception_filter(PEXCEPTION_POINTERS ep)

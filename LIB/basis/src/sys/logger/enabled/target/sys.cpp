@@ -33,12 +33,12 @@ namespace logger {
 
 			void out(const wchar_t * str, size_t size) const override;
 
-			sync::ScopeGuard lock_scope() const override;
+			lock_type lock_scope() const override;
 
 		private:
 			static void app_register(const wchar_t * name, const wchar_t * path);
 
-			memory::auto_destroy<sync::SyncUnit_i*> m_sync;
+			mutable sync_type m_sync;
 			HANDLE m_hndl;
 		};
 
@@ -47,8 +47,7 @@ namespace logger {
 			::DeregisterEventSource(m_hndl);
 		}
 
-		LogToSys::LogToSys(const wchar_t * name, const wchar_t * path) :
-			m_sync(sync::get_CritSection())
+		LogToSys::LogToSys(const wchar_t * name, const wchar_t * path)
 		{
 			app_register(name, path);
 			m_hndl = ::RegisterEventSourceW(nullptr, name);
@@ -79,9 +78,9 @@ namespace logger {
 			::ReportEventW(m_hndl, LogLevelTypes[(int)defaults::get_level()], 0, EV_MSG_STRING, nullptr, 1, 0, &str, nullptr);
 		}
 
-		sync::ScopeGuard LogToSys::lock_scope() const
+		lock_type LogToSys::lock_scope() const
 		{
-			return m_sync->lock_scope();
+			return simstd::auto_lock(m_sync);
 		}
 
 		void LogToSys::app_register(const wchar_t * name, const wchar_t * path)

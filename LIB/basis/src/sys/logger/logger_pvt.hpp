@@ -7,6 +7,7 @@
 #include <basis/ext/pattern.hpp>
 
 #include <basis/simstd/memory>
+#include <basis/simstd/mutex>
 
 namespace logger {
 
@@ -27,6 +28,10 @@ namespace logger {
 
 	const wchar_t * to_str(Prefix::flags fl);
 
+	typedef sync::CriticalSection sync_type;
+
+	typedef simstd::lock_guard<sync_type> lock_type;
+
 	///==================================================================================== Target_i
 	struct Target_i {
 		virtual ~Target_i() = default;
@@ -37,7 +42,7 @@ namespace logger {
 
 		virtual void out(const wchar_t * str, size_t size) const = 0;
 
-		virtual sync::ScopeGuard lock_scope() const = 0;
+		virtual lock_type lock_scope() const = 0;
 	};
 
 	typedef simstd::shared_ptr<Target_i> Target_t;
@@ -82,7 +87,7 @@ namespace logger {
 
 		void set_enabled(bool enabled);
 
-		sync::ScopeGuard lock_scope() const;
+		lock_type lock_scope() const;
 
 	private:
 		wchar_t * create_prefix(Level lvl, wchar_t * buff, size_t size) const;

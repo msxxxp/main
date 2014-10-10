@@ -2,13 +2,15 @@
 
 #include <basis/sys/sync.hpp>
 
+#include <basis/simstd/mutex>
+
 namespace logger {
 
 	namespace {
 		struct LogToNull: public Target_i {
-			~LogToNull();
+			~LogToNull() = default;
 
-			LogToNull();
+			LogToNull() = default;
 
 			void out(const Module_i * lgr, Level lvl, const wchar_t * str, size_t size) const override;
 
@@ -16,18 +18,18 @@ namespace logger {
 
 			void out(const wchar_t * str, size_t size) const override;
 
-			sync::ScopeGuard lock_scope() const override;
+			lock_type lock_scope() const override;
 		};
 
-		LogToNull::~LogToNull()
-		{
-			//		console::printf(L"%S:%d\n", __PRETTY_FUNCTION__, __LINE__);
-		}
+//		LogToNull::~LogToNull()
+//		{
+//			console::printf(L"%S:%d\n", __PRETTY_FUNCTION__, __LINE__);
+//		}
 
-		LogToNull::LogToNull()
-		{
-			//		console::printf(L"%S:%d\n", __PRETTY_FUNCTION__, __LINE__);
-		}
+//		LogToNull::LogToNull()
+//		{
+//			console::printf(L"%S:%d\n", __PRETTY_FUNCTION__, __LINE__);
+//		}
 
 		void LogToNull::out(const Module_i * /*lgr*/, Level /*lvl*/, const wchar_t * /*str*/, size_t /*size*/) const
 		{
@@ -41,9 +43,9 @@ namespace logger {
 		{
 		}
 
-		sync::ScopeGuard LogToNull::lock_scope() const
+		lock_type LogToNull::lock_scope() const
 		{
-			return sync::ScopeGuard();
+			return simstd::move(lock_type(simstd::defer_lock));
 		}
 	}
 

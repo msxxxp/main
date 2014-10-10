@@ -37,9 +37,9 @@ namespace logger {
 		};
 
 		struct LogToConsole: public Target_i, private pattern::Uncopyable {
-			~LogToConsole();
+			~LogToConsole() = default;
 
-			LogToConsole();
+			LogToConsole() = default;
 
 			void out(const Module_i * lgr, Level lvl, const wchar_t * str, size_t size) const override;
 
@@ -47,27 +47,26 @@ namespace logger {
 
 			void out(const wchar_t * str, size_t size) const override;
 
-			sync::ScopeGuard lock_scope() const override;
+			lock_type lock_scope() const override;
 
 		private:
-			memory::auto_destroy<sync::SyncUnit_i*> m_sync;
+			mutable sync_type m_sync;
 		};
 
-		LogToConsole::~LogToConsole()
-		{
-			//		console::printf(L"%S():%d\n", __FUNCTION__, __LINE__);
-		}
+//		LogToConsole::~LogToConsole()
+//		{
+//			console::printf(L"%S():%d\n", __FUNCTION__, __LINE__);
+//		}
 
-		LogToConsole::LogToConsole() :
-			m_sync(sync::get_CritSection())
-		{
-			//		console::printf(L"%S():%d\n", __FUNCTION__, __LINE__);
-		}
+//		LogToConsole::LogToConsole()
+//		{
+//			console::printf(L"%S():%d\n", __FUNCTION__, __LINE__);
+//		}
 
 		void LogToConsole::out(const Module_i * lgr, Level lvl, const wchar_t * str, size_t size) const
 		{
-			auto lockScope(m_sync->lock_scope());
 //			console::printf(L"%S():%d\n", __FUNCTION__, __LINE__);
+			auto lockScope(lock_scope());
 			if (lgr->is_color_mode()) {
 				console::Color color(LogLevelColors[static_cast<ssize_t>(lvl)]);
 				console::puts(str, size);
@@ -78,8 +77,8 @@ namespace logger {
 
 		void LogToConsole::out(const Module_i * lgr, WORD color, Level lvl, const wchar_t * str, size_t size) const
 		{
-			auto lockScope(m_sync->lock_scope());
 //			console::printf(L"%S():%d\n", __FUNCTION__, __LINE__);
+			auto lockScope(lock_scope());
 
 			if (lgr->is_color_mode() && color < 16) {
 				if (color == 0)
@@ -93,15 +92,15 @@ namespace logger {
 
 		void LogToConsole::out(const wchar_t * str, size_t size) const
 		{
-			auto lockScope(m_sync->lock_scope());
-			//		console::printf(L"%S():%d\n", __FUNCTION__, __LINE__);
+//			console::printf(L"%S():%d\n", __FUNCTION__, __LINE__);
+			auto lockScope(lock_scope());
 			console::puts(str, size);
 		}
 
-		sync::ScopeGuard LogToConsole::lock_scope() const
+		lock_type LogToConsole::lock_scope() const
 		{
-			//		console::printf(L"%S():%d\n", __FUNCTION__, __LINE__);
-			return m_sync->lock_scope();
+//			console::printf(L"%S():%d\n", __FUNCTION__, __LINE__);
+			return simstd::auto_lock(m_sync);
 		}
 
 	}

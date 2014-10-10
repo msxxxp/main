@@ -17,7 +17,7 @@ namespace logger {
 
 			void out(const wchar_t * str, size_t size) const override;
 
-			sync::ScopeGuard lock_scope() const override;
+			lock_type lock_scope() const override;
 
 		private:
 			Target_t m_first;
@@ -52,7 +52,7 @@ namespace logger {
 			m_second->out(str, size);
 		}
 
-		sync::ScopeGuard LogToMult::lock_scope() const
+		lock_type LogToMult::lock_scope() const
 		{
 			return m_first->lock_scope();
 			//		m_second->lock();

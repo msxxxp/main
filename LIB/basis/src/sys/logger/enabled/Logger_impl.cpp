@@ -6,23 +6,26 @@
 #include <basis/simstd/mutex>
 #include <basis/simstd/vector>
 
+//#define TraceFunc() console::printf(L"%S:%d\n", __PRETTY_FUNCTION__, __LINE__);
+#define TraceFunc()
+
 namespace logger {
 
 	///=============================================================================================
-	struct pModule_less {
-		bool operator ()(const Module_impl * lhs, const Module_impl * rhs) const
-		{
-			return cstr::compare_ci(lhs->get_name(), rhs->get_name()) < 0;
-		}
-	};
+//	struct pModule_less {
+//		bool operator ()(const Module_impl * lhs, const Module_impl * rhs) const
+//		{
+//			return cstr::compare_ci(lhs->get_name(), rhs->get_name()) < 0;
+//		}
+//	};
 
-	struct pModule_PCWSTR_less {
-		bool operator ()(Module_impl * lhs, const wchar_t * rhs) const
+	struct pModule_less {
+		bool operator ()(const Module_impl * lhs, const wchar_t * rhs) const
 		{
 			return cstr::compare_ci(lhs->get_name(), rhs) < 0;
 		}
 
-		bool operator ()(const wchar_t * left, Module_impl * right) const
+		bool operator ()(const wchar_t * left, const Module_impl * right) const
 		{
 			return cstr::compare_ci(left, right->get_name()) < 0;
 		}
@@ -49,11 +52,9 @@ namespace logger {
 		Module_impl * register_module(const wchar_t * name, const Target_t & target, Level lvl);
 
 		typedef simstd::vector<Module_impl*> ModulesArray;
-		typedef sync::CriticalSection SyncUnit;
 
-
+		sync_type    m_sync;
 		ModulesArray m_modules;
-		SyncUnit     m_sync;
 
 	public:
 		static Level                 defaultLevel;
@@ -65,7 +66,7 @@ namespace logger {
 
 	Level                 Logger_impl::defaultLevel      = Level::Atten;
 	size_t                Logger_impl::defaultPrefix     = Prefix::Medium;
-	Target_t              Logger_impl::defaultTarget     = get_TargetToConsole();
+	Target_t              Logger_impl::defaultTarget;
 	Module_impl *         Logger_impl::defaultModule     = nullptr;
 	const wchar_t * const Logger_impl::defaultModuleName = L"default";
 
@@ -77,18 +78,23 @@ namespace logger {
 
 	Logger_impl::~Logger_impl()
 	{
-		auto lockScope(simstd::auto_lock(m_sync));
+//		TraceFunc();
+//		auto lockScope(simstd::auto_lock(m_sync));
+		TraceFunc();
 		defaultModule->out(Level::Force, L"Logger is being destroyed\n");
 		while (!m_modules.empty()) {
 			m_modules.back()->destroy();
 			m_modules.pop_back();
 		}
+		TraceFunc();
 	}
 
 	Module_impl * Logger_impl::get_module(const wchar_t * name)
 	{
+		TraceFunc();
 		auto lockScope(simstd::auto_lock(m_sync));
-		auto range = simstd::equal_range(m_modules.begin(), m_modules.end(), name, pModule_PCWSTR_less());
+		TraceFunc();
+		auto range = simstd::equal_range(m_modules.begin(), m_modules.end(), name, pModule_less());
 		if (range.first != range.second)
 			return *range.first;
 		return register_module(name, defaults::get_target(), defaults::get_level());
@@ -96,7 +102,9 @@ namespace logger {
 
 	void Logger_impl::free_module(Module_impl * module)
 	{
+		TraceFunc();
 		auto lockScope(simstd::auto_lock(m_sync));
+		TraceFunc();
 		auto range = simstd::equal_range(m_modules.begin(), m_modules.end(), module, pModule_less());
 		simstd::for_each(range.first, range.second, [](Module_impl * found_module) {
 			found_module->destroy();
@@ -106,20 +114,34 @@ namespace logger {
 
 	Logger_impl::Logger_impl()
 	{
+		TraceFunc();
 		auto lockScope(simstd::auto_lock(m_sync));
+		TraceFunc();
+		if (!defaultTarget) {
+			TraceFunc();
+			defaultTarget = get_TargetToConsole();
+		}
+
+		TraceFunc();
 		defaultModule = register_module(defaultModuleName, defaultTarget, defaultLevel);
+		TraceFunc();
 		defaultModule->out(Level::Force, L"Logger has been created\n");
+		TraceFunc();
 	}
 
 	Module_impl * Logger_impl::register_module(const wchar_t * name, const Target_t & target, Level lvl)
 	{
+		TraceFunc();
 		auto lockScope(simstd::auto_lock(m_sync));
-		auto range = simstd::equal_range(m_modules.begin(), m_modules.end(), name, pModule_PCWSTR_less());
+		TraceFunc();
+		auto range = simstd::equal_range(m_modules.begin(), m_modules.end(), name, pModule_less());
 		if (range.first != range.second) {
 			return *range.first;
 		}
+		TraceFunc();
 		auto module = create_Module_impl(name, target, lvl);
 		m_modules.insert(range.second, module);
+		TraceFunc();
 		return module;
 	}
 

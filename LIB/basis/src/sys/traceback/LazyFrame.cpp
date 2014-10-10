@@ -81,7 +81,7 @@ namespace traceback {
 			safe_snprintf(buf, lengthof(buf), L"[%s] (%p) %s:0x%Ix", module().c_str(), address(), function().c_str(), offset());
 		else
 			safe_snprintf(buf, lengthof(buf), L"[%s] (%p) %s:0x%Ix {%s:%Iu}", module().c_str(), address(), function().c_str(), offset(), file().c_str(), line());
-		return ustring(buf);
+		return simstd::move(ustring(buf));
 	}
 
 	void LazyFrame::init_data() const

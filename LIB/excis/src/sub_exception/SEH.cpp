@@ -27,7 +27,8 @@ namespace exception {
 
 //#ifdef DEBUG
 		traceback::LazyFrame frame(reinterpret_cast<void*>(ep->ExceptionRecord->ExceptionAddress));
-		LogFatal(L"exception at %s\n", frame.to_str().c_str());
+		m_where = frame.to_str();
+		LogFatal(L"exception at %s\n", m_where.c_str());
 //#endif
 	}
 
@@ -92,10 +93,9 @@ namespace exception {
 		::SetUnhandledExceptionFilter(unhandled_exception_filter);
 	}
 
-	LONG WINAPI vectored_exception_handler(::PEXCEPTION_POINTERS ep)
+	LONG WINAPI vectored_exception_handler(PEXCEPTION_POINTERS ep)
 	{
 		if (ep->ExceptionRecord->ExceptionCode != 0x20474343) {
-			LogReport(L"entering vectorized ex. handler 0x%lx:\n", ep->ExceptionRecord->ExceptionCode);
 			LogReport(L"code:    0x%X\n", ep->ExceptionRecord->ExceptionCode);
 			LogReport(L"flags:   0x%X\n", ep->ExceptionRecord->ExceptionFlags);
 			LogReport(L"record:  0x%p\n", ep->ExceptionRecord->ExceptionRecord);

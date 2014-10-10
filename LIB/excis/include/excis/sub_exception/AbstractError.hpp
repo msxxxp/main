@@ -29,10 +29,12 @@ namespace exception {
 		AbstractError(PCSTR file, size_t line, PCSTR func);
 		AbstractError(const AbstractError & prev, PCSTR file, size_t line, PCSTR func);
 
+	protected:
+		ustring	                          m_where;
+
 	private:
 		simstd::shared_ptr<AbstractError> m_prev_exc;
 //		simstd::Backtrace                 m_backtrace;
-		ustring	                          m_where;
 	};
 
 }

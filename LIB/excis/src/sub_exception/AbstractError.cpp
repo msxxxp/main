@@ -29,8 +29,8 @@ namespace exception {
 	}
 
 	AbstractError::AbstractError(PCSTR file, size_t line, PCSTR func) :
-		m_prev_exc(nullptr),
-		m_where(THROW_PLACE_STR)
+		m_where(THROW_PLACE_STR),
+		m_prev_exc(nullptr)
 	{
 		UNUSED(file);
 		UNUSED(line);
@@ -38,8 +38,8 @@ namespace exception {
 	}
 
 	AbstractError::AbstractError(const AbstractError & prev, PCSTR file, size_t line, PCSTR func) :
-		m_prev_exc(prev.clone()),
-		m_where(THROW_PLACE_STR)
+		m_where(THROW_PLACE_STR),
+		m_prev_exc(prev.clone())
 	{
 		UNUSED(file);
 		UNUSED(line);

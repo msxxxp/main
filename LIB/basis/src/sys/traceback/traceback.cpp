@@ -201,6 +201,7 @@ namespace traceback {
 		memory::zero(modInfo);
 		modInfo.SizeOfStruct = sizeof(modInfo) - 8;
 
+		LogNoise(L"[%p]\n", address);
 		bool res = ::SymGetModuleInfoW64(::GetCurrentProcess(), reinterpret_cast<DWORD64>(address), &modInfo);
 		LogErrorIf(!res, L"%s %p\n", totext::api_error().c_str(), address);
 

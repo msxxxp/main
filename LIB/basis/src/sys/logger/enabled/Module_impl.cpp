@@ -83,12 +83,11 @@ namespace logger {
 		TraceFunc();
 		if (m_enabled && m_lvl <= lvl) {
 			wchar_t buff[default_buffer_size];
-			auto pend = create_prefix(lvl, buff, lengthof(buff));
+			auto pend = add_prefix(lvl, buff, lengthof(buff));
 			pend = add_place(pend, lengthof(buff) - (pend - buff), file, line, func);
-			va_list args;
+			Va_list args;
 			va_start(args, format);
 			out_args(lvl, buff, pend, lengthof(buff) - (pend - buff), format, args);
-			va_end(args);
 		}
 		TraceFunc();
 	}
@@ -98,7 +97,7 @@ namespace logger {
 		TraceFunc();
 		if (m_enabled && lvl >= m_lvl) {
 			wchar_t buff[default_buffer_size];
-			auto pend = create_prefix(lvl, buff, lengthof(buff));
+			auto pend = add_prefix(lvl, buff, lengthof(buff));
 			Va_list args;
 			va_start(args, format);
 			out_args(lvl, buff, pend, lengthof(buff) - (pend - buff), format, args);
@@ -122,7 +121,7 @@ namespace logger {
 		return m_target->lock_scope();
 	}
 
-	wchar_t * Module_impl::create_prefix(Level lvl, wchar_t * buff, size_t size) const
+	wchar_t * Module_impl::add_prefix(Level lvl, wchar_t * buff, size_t size) const
 	{
 		TraceFunc();
 		size_t written = 0;
@@ -163,13 +162,11 @@ namespace logger {
 		return buff + written;
 	}
 
-	void Module_impl::out_args(Level lvl, wchar_t * buff, wchar_t * pend, size_t size, const wchar_t * frmat, va_list args) const
+	void Module_impl::out_args(Level lvl, wchar_t * buff, wchar_t * pend, size_t size, const wchar_t * frmat, va_list & args) const
 	{
 		TraceFunc();
-		size_t written = safe_snprintf(pend, size, frmat, args);
-		TraceFunc();
+		size_t written = safe_vsnprintf(pend, size, frmat, args);
 		auto scopeLock(m_target->lock_scope());
-		TraceFunc();
 		m_target->out(this, lvl, buff, pend - buff + written);
 		TraceFunc();
 	}
@@ -178,7 +175,7 @@ namespace logger {
 	{
 		TraceFunc();
 		wchar_t buff[4096];
-		size_t written = safe_snprintf(buff, lengthof(buff), frmat, args);
+		size_t written = safe_vsnprintf(buff, lengthof(buff), frmat, args);
 		auto scopeLock(m_target->lock_scope());
 		m_target->out(this, color, lvl, buff, written);
 		TraceFunc();

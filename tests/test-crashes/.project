@@ -3,8 +3,6 @@
 	<name>test-crashes</name>
 	<comment></comment>
 	<projects>
-		<project>basis</project>
-		<project>excis</project>
 	</projects>
 	<buildSpec>
 		<buildCommand>

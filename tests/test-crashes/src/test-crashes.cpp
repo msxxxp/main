@@ -42,9 +42,14 @@ extern "C" int wmain(int argc, wchar_t * argv[])
 		do_av_exception();
 
 	} catch (exception::AbstractError & e) {
-		console::printf(L"SEH exception cought: %s\n", e.what().c_str());
+		LogFatal(L"SEH exception cought: %s\n", e.what().c_str());
+		LogFatal(L"SEH exception cought: %s\n", e.where().c_str());
+
+		auto mstr = e.format_error();
+		for (size_t i = 0; i < mstr.size(); ++i)
+			LogFatal(L"\t%s\n", mstr[i]);
 	} catch (...) {
-		console::printf(L"cpp exception cought\n");
+		LogFatal(L"cpp exception cought\n");
 	}
 
 	return 0;

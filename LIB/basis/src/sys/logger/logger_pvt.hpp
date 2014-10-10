@@ -90,11 +90,11 @@ namespace logger {
 		lock_type lock_scope() const;
 
 	private:
-		wchar_t * create_prefix(Level lvl, wchar_t * buff, size_t size) const;
+		wchar_t * add_prefix(Level lvl, wchar_t * buff, size_t size) const;
 
 		wchar_t * add_place(wchar_t * buff, size_t size, const char * file, int line, const char * func) const;
 
-		void out_args(Level lvl, wchar_t * buff, wchar_t * pend, size_t size, const wchar_t * frmat, va_list args) const;
+		void out_args(Level lvl, wchar_t * buff, wchar_t * pend, size_t size, const wchar_t * frmat, va_list & args) const;
 
 		void out_args(WORD color, Level lvl, const wchar_t * frmat, va_list args) const;
 

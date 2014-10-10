@@ -1,4 +1,5 @@
-﻿/// ========================================================================== Startup (entry point)
+﻿
+/// ========================================================================== Startup (entry point)
 #ifdef NDEBUG
 #include <basis/sys/console.hpp>
 #include <basis/sys/crt.hpp>

@@ -35,8 +35,8 @@ namespace traceback {
 		{
 			::SymSetOptions(::SymGetOptions() | /*SYMOPT_DEFERRED_LOADS | */SYMOPT_FAIL_CRITICAL_ERRORS | SYMOPT_LOAD_LINES);
 			bool ret = ::SymInitializeW(::GetCurrentProcess(), path, TRUE);
-			LogTraceIf(ret);
-			LogErrorIf(!ret, L"%s\n", totext::api_error().c_str());
+			LogNoiseIf(ret, L"['%s']\n", path);
+			LogErrorIf(!ret, L"['%s'] -> %s\n", path, totext::api_error().c_str());
 			UNUSED(ret);
 
 #if defined(__GNUC__)

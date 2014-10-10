@@ -10,7 +10,7 @@
 namespace {
 	void setup_logger()
 	{
-		LogSetOptions(L"logger:///default?level=tr;prefix=fu;target=co");
+		LogSetOptions(L"logger:///default?level=re;prefix=fu;target=co");
 
 		traceback::init();
 	}

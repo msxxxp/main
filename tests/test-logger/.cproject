@@ -113,7 +113,7 @@
 								<option id="gnu.cpp.link.option.libs.1306593140" name="Libraries (-l)" superClass="gnu.cpp.link.option.libs" valueType="libs">
 									<listOptionValue builtIn="false" value="basis"/>
 								</option>
-								<option id="gnu.cpp.link.option.flags.1629829890" name="Linker flags" superClass="gnu.cpp.link.option.flags" value="-Wl,-Map=test-logger.map -m64 -static -municode -mwindows" valueType="string"/>
+								<option id="gnu.cpp.link.option.flags.1629829890" name="Linker flags" superClass="gnu.cpp.link.option.flags" value="-Wl,-Map=test-logger.map -m64 -static -municode" valueType="string"/>
 								<option id="gnu.cpp.link.option.nostart.2087640900" name="Do not use standard start files (-nostartfiles)" superClass="gnu.cpp.link.option.nostart" value="false" valueType="boolean"/>
 								<option id="gnu.cpp.link.option.nodeflibs.559540945" name="Do not use default libraries (-nodefaultlibs)" superClass="gnu.cpp.link.option.nodeflibs" value="false" valueType="boolean"/>
 								<option id="gnu.cpp.link.option.nostdlibs.1702871441" name="No startup or default libs (-nostdlib)" superClass="gnu.cpp.link.option.nostdlibs" value="false" valueType="boolean"/>

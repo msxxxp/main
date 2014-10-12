@@ -91,8 +91,12 @@
 									<listOptionValue builtIn="false" value="excis"/>
 									<listOptionValue builtIn="false" value="basis"/>
 									<listOptionValue builtIn="false" value="dbghelp"/>
+									<listOptionValue builtIn="false" value="bfd"/>
+									<listOptionValue builtIn="false" value="iberty"/>
+									<listOptionValue builtIn="false" value="z"/>
 								</option>
 								<option id="gnu.cpp.link.option.strip.386304021" name="Omit all symbol information (-s)" superClass="gnu.cpp.link.option.strip" value="true" valueType="boolean"/>
+								<option id="gnu.cpp.link.option.nostart.386236382" superClass="gnu.cpp.link.option.nostart" value="true" valueType="boolean"/>
 								<inputType id="cdt.managedbuild.tool.gnu.cpp.linker.input.236575945" superClass="cdt.managedbuild.tool.gnu.cpp.linker.input">
 									<additionalInput kind="additionalinputdependency" paths="$(USER_OBJS)"/>
 									<additionalInput kind="additionalinput" paths="$(LIBS)"/>
@@ -147,9 +151,11 @@
 							<tool id="cdt.managedbuild.tool.gnu.cpp.linker.mingw.exe.debug.549910175" name="MinGW C++ Linker" superClass="cdt.managedbuild.tool.gnu.cpp.linker.mingw.exe.debug">
 								<option id="gnu.cpp.link.option.paths.2084049672" name="Library search path (-L)" superClass="gnu.cpp.link.option.paths" valueType="libPaths">
 									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/basis/x32-Debug}&quot;"/>
+									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/excis/x32-Debug}&quot;"/>
 								</option>
 								<option id="gnu.cpp.link.option.flags.458332193" name="Linker flags" superClass="gnu.cpp.link.option.flags" value="-Wl,-Map=test-seh.map -m32 -static -municode" valueType="string"/>
 								<option id="gnu.cpp.link.option.libs.1639414220" name="Libraries (-l)" superClass="gnu.cpp.link.option.libs" valueType="libs">
+									<listOptionValue builtIn="false" value="excis"/>
 									<listOptionValue builtIn="false" value="basis"/>
 									<listOptionValue builtIn="false" value="dbghelp"/>
 									<listOptionValue builtIn="false" value="bfd"/>
@@ -209,13 +215,19 @@
 							<tool id="cdt.managedbuild.tool.gnu.cpp.linker.mingw.exe.debug.1770675679" name="MinGW C++ Linker" superClass="cdt.managedbuild.tool.gnu.cpp.linker.mingw.exe.debug">
 								<option id="gnu.cpp.link.option.paths.1971727713" name="Library search path (-L)" superClass="gnu.cpp.link.option.paths" valueType="libPaths">
 									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/basis/x32-Release}&quot;"/>
+									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/excis/x32-Release}&quot;"/>
 								</option>
 								<option id="gnu.cpp.link.option.flags.62550752" name="Linker flags" superClass="gnu.cpp.link.option.flags" value="-Wl,-Map=test-seh.map -m32 -static -municode" valueType="string"/>
 								<option id="gnu.cpp.link.option.libs.77690552" name="Libraries (-l)" superClass="gnu.cpp.link.option.libs" valueType="libs">
+									<listOptionValue builtIn="false" value="excis"/>
 									<listOptionValue builtIn="false" value="basis"/>
 									<listOptionValue builtIn="false" value="dbghelp"/>
+									<listOptionValue builtIn="false" value="bfd"/>
+									<listOptionValue builtIn="false" value="iberty"/>
+									<listOptionValue builtIn="false" value="z"/>
 								</option>
 								<option id="gnu.cpp.link.option.strip.1235818021" name="Omit all symbol information (-s)" superClass="gnu.cpp.link.option.strip" value="true" valueType="boolean"/>
+								<option id="gnu.cpp.link.option.nostart.2101331634" superClass="gnu.cpp.link.option.nostart" value="true" valueType="boolean"/>
 								<inputType id="cdt.managedbuild.tool.gnu.cpp.linker.input.1939402292" superClass="cdt.managedbuild.tool.gnu.cpp.linker.input">
 									<additionalInput kind="additionalinputdependency" paths="$(USER_OBJS)"/>
 									<additionalInput kind="additionalinput" paths="$(LIBS)"/>

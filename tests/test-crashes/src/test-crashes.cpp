@@ -15,12 +15,6 @@ namespace {
 		traceback::init();
 	}
 
-	void do_av_exception()
-	{
-		LogWarn(L"accessing null pointer\n");
-		volatile int* p = nullptr;
-		*p = 0;
-	}
 }
 
 extern "C" int wmain(int argc, wchar_t * argv[])
@@ -38,8 +32,6 @@ extern "C" int wmain(int argc, wchar_t * argv[])
 	try {
 
 		LogTrace();
-
-		do_av_exception();
 
 	} catch (exception::AbstractError & e) {
 		LogFatal(L"SEH exception cought: %s\n", e.what().c_str());

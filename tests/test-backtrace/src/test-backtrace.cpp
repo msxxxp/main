@@ -1,7 +1,7 @@
 #include <basis/sys/traceback.hpp>
 #include <basis/sys/logger.hpp>
 #include <basis/sys/totext.hpp>
-#include <basis/std/string>
+#include <basis/simstd/string>
 
 #include <print_trace.hpp>
 
@@ -55,7 +55,7 @@ int main()
 
 	setup_logger();
 
-//	test_backtrace();
+	test_backtrace();
 
 	test_zero_division();
 

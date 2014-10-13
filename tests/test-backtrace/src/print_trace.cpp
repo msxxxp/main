@@ -1,6 +1,6 @@
 #include <basis/sys/traceback.hpp>
 #include <basis/sys/logger.hpp>
-#include <basis/std/string>
+#include <basis/simstd/string>
 
 namespace local {
 
@@ -8,8 +8,8 @@ namespace local {
 
 	void init_print_trace()
 	{
-		LogSetOptions(L"logger:///module?name=print_trace;prefix=48;level=in");
-		LogSetOptions(L"logger:///module?name=traceback;prefix=48;level=in");
+		LogSetOptions(L"logger:///module?name=print_trace;prefix=fu;level=in");
+		LogSetOptions(L"logger:///module?name=traceback;prefix=fu;level=tr");
 		traceback::init();
 	}
 

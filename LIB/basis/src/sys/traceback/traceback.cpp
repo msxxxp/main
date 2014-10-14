@@ -202,7 +202,6 @@ namespace traceback {
 
 		LogNoise(L"[%p]\n", address);
 		bool res = os::Dbghelp_dll::inst().SymGetModuleInfoW64(::GetCurrentProcess(), reinterpret_cast<DWORD64>(address), &modInfo);
-		LogErrorIf(!res, L"%s %p\n", totext::api_error().c_str(), address);
 
 		if (res) {
 			m_module = modInfo.ModuleName;
@@ -218,6 +217,8 @@ namespace traceback {
 			LogNoise(L"ImageName:       '%s'\n", modInfo.ImageName);
 			LogNoise(L"LoadedImageName: '%s'\n", modInfo.LoadedImageName);
 			LogNoise(L"LoadedPdbName:   '%s'\n", modInfo.LoadedPdbName);
+		} else {
+			LogError(L"%s %p\n", totext::api_error().c_str(), address);
 		}
 
 		(modInfo.SymType && LoadFromPDB(address)) || LoadFromSymbols(address) || LoadFromMap(address);

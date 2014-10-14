@@ -21,6 +21,8 @@
 #include <basis/sys/cstr.hpp>
 #include <basis/sys/logger.hpp>
 
+#include <basis/simstd/algorithm>
+#include <basis/simstd/memory>
 #include <memory>
 
 #include "DlgBuilder_pvt.hpp"

@@ -6,12 +6,12 @@
 
 namespace fsys {
 
-	bool Node::is_equal_path(Node * other) const
+	bool Node::is_equal_path(Node_t other) const
 	{
-		if (other == nullptr || cstr::compare_ci(m_name.c_str(), other->m_name.c_str()) != 0)
+		if (!other || cstr::compare_ci(m_name.c_str(), other->m_name.c_str()) != 0)
 			return false;
 		if (m_parent)
-			return m_parent->is_equal_path(other->m_parent.get());
+			return m_parent->is_equal_path(other->m_parent);
 		return true;
 	}
 

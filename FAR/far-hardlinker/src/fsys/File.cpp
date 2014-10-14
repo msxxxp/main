@@ -45,7 +45,7 @@ namespace fsys {
 		return m_inode;
 	}
 
-	const File::HashVal & File::get_head_hash() const
+	const File::hash_type & File::get_head_hash() const
 	{
 		if (m_headHash.empty()) {
 			if (count_hash(m_headHash, get_full_path(), 0, global::options().firstBlockHash))
@@ -56,7 +56,7 @@ namespace fsys {
 		return m_headHash;
 	}
 
-	const File::HashVal & File::get_tail_hash() const
+	const File::hash_type & File::get_tail_hash() const
 	{
 		if (m_tailHash.empty()) {
 			if (count_hash(m_tailHash, get_full_path(), size() - global::options().firstBlockHash, size()))
@@ -67,7 +67,7 @@ namespace fsys {
 		return m_tailHash;
 	}
 
-	const File::HashVal & File::get_whole_hash() const
+	const File::hash_type & File::get_whole_hash() const
 	{
 		if (m_wholeHash.empty()) {
 			if (count_hash(m_wholeHash, get_full_path(), 0, size()))
@@ -88,7 +88,7 @@ namespace fsys {
 		LogDebug(L"0x%08X 0x%016X '%s'\n", m_volume_sn, m_inode, m_name.c_str());
 	}
 
-	bool File::count_hash(HashVal & out, ustring path, uint64_t first, uint64_t last)
+	bool File::count_hash(hash_type & out, ustring path, uint64_t first, uint64_t last)
 	{
 		auto file(fsys::file::open(path));
 		if (file && file->set_position(static_cast<int64_t>(first), fsys::file::Seek::FromBeginOfFile)) {

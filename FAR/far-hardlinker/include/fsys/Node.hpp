@@ -3,15 +3,20 @@
 
 #include <fsys.hpp>
 
+#include <basis/simstd/list>
 #include <basis/simstd/vector>
 
 namespace fsys {
 
 	class Node;
+	class Folder;
+	class File;
 
 	typedef simstd::shared_ptr<Node> Node_t;
-	typedef simstd::vector<Node_t>   Nodes_t;
-	typedef simstd::vector<Node_t>   Folders_t;
+//	typedef simstd::vector<Node_t>   Nodes_t;
+	typedef simstd::list<Node_t>     Folders_t;
+	typedef simstd::shared_ptr<File> File_t;
+	typedef simstd::vector<File_t>   Files_t;
 
 	class Node {
 	public:
@@ -21,7 +26,7 @@ namespace fsys {
 
 		Node(const ustring & name, Node_t parent);
 
-		bool is_equal_path(Node * other) const;
+		bool is_equal_path(Node_t other) const;
 
 		ustring get_name() const;
 
@@ -43,7 +48,7 @@ namespace fsys {
 
 	class File: public Node {
 	public:
-		typedef simstd::vector<char> HashVal;
+		typedef simstd::vector<char> hash_type;
 
 		~File();
 
@@ -61,23 +66,23 @@ namespace fsys {
 
 		uint64_t inode() const;
 
-		const HashVal & get_head_hash() const;
+		const hash_type & get_head_hash() const;
 
-		const HashVal & get_tail_hash() const;
+		const hash_type & get_tail_hash() const;
 
-		const HashVal & get_whole_hash() const;
+		const hash_type & get_whole_hash() const;
 
 	private:
 		void refresh_handle_info() const;
 
-		static bool count_hash(HashVal & out, ustring path, uint64_t first, uint64_t last);
+		static bool count_hash(hash_type & out, ustring path, uint64_t first, uint64_t last);
 
 		uint64_t             m_size;
 		uint64_t             m_mtime;
 		size_t               m_attr;
-		mutable HashVal      m_headHash;
-		mutable HashVal      m_tailHash;
-		mutable HashVal      m_wholeHash;
+		mutable hash_type    m_headHash;
+		mutable hash_type    m_tailHash;
+		mutable hash_type    m_wholeHash;
 		mutable size_t       m_volume_sn;
 		mutable uint64_t     m_inode;
 		mutable ustring m_full_path;
@@ -90,14 +95,10 @@ namespace fsys {
 
 	bool compare_hash(const File & file1, const File & file2);
 
-	typedef simstd::shared_ptr<File> File_t;
-	typedef simstd::vector<File_t>   Files_t;
-
 	inline Node::Node(const ustring & name) :
 		m_name(name),
 		m_parent(nullptr)
 	{
-
 	}
 
 	inline Node::Node(const ustring & name, Node_t parent) :

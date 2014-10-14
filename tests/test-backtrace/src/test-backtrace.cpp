@@ -49,11 +49,16 @@ void test_zero_division()
 	LogTrace();
 }
 
-int main()
+extern "C" int wmain(int argc, wchar_t * argv[])
 {
-	crt::set_unhandled_exception_filter();
+	UNUSED(argc);
+	UNUSED(argv);
+
+	console::printf(L"%S:%d\n", __PRETTY_FUNCTION__, __LINE__);
 
 	setup_logger();
+
+	crt::set_unhandled_exception_filter();
 
 	test_backtrace();
 
@@ -62,4 +67,9 @@ int main()
 	test_access_violation();
 
 	return 0;
+}
+
+int WINAPI wWinMain(HINSTANCE /*hInstance*/, HINSTANCE /*hPrevInstance*/, LPWSTR /*lpCmdLine*/, int /*nShowCmd*/)
+{
+	return wmain(0, nullptr);
 }

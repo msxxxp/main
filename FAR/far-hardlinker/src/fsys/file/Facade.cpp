@@ -58,7 +58,7 @@ namespace {
 
 	Facade_impl::~Facade_impl()
 	{
-		if (m_hndl != INVALID_HANDLE_VALUE)
+		if (is_valid())
 			::CloseHandle(m_hndl);
 	}
 

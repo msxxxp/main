@@ -24,7 +24,7 @@
 
 #include <basis/ext/pattern.hpp>
 
-//#include <basis/simstd/memory>
+#include <basis/simstd/memory>
 #include <basis/simstd/string>
 
 namespace Far {

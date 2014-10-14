@@ -1,11 +1,10 @@
+#include <basis/os/dbghelp.hpp>
 #include <basis/sys/traceback.hpp>
 #include <basis/sys/totext.hpp>
 #include <basis/sys/logger.hpp>
 
 #include <basis/simstd/algorithm>
 #include <basis/simstd/string>
-
-#include <dbghelp.h>
 
 #if defined(__GNUC__)
 #include <bfd.h>
@@ -25,7 +24,7 @@ namespace traceback {
 	private:
 		~DebugSymbols()
 		{
-			bool ret = ::SymCleanup(::GetCurrentProcess());
+			bool ret = os::Dbghelp_dll::inst().SymCleanup(::GetCurrentProcess());
 			LogTraceIf(ret);
 			LogErrorIf(!ret, L"%s\n", totext::api_error().c_str());
 			UNUSED(ret);
@@ -33,8 +32,8 @@ namespace traceback {
 
 		DebugSymbols(const wchar_t * path)
 		{
-			::SymSetOptions(::SymGetOptions() | /*SYMOPT_DEFERRED_LOADS | */SYMOPT_FAIL_CRITICAL_ERRORS | SYMOPT_LOAD_LINES);
-			bool ret = ::SymInitializeW(::GetCurrentProcess(), path, TRUE);
+			os::Dbghelp_dll::inst().SymSetOptions(os::Dbghelp_dll::inst().SymGetOptions() | /*SYMOPT_DEFERRED_LOADS | */SYMOPT_FAIL_CRITICAL_ERRORS | SYMOPT_LOAD_LINES);
+			bool ret = os::Dbghelp_dll::inst().SymInitializeW(::GetCurrentProcess(), path, TRUE);
 			LogNoiseIf(ret, L"['%s']\n", path);
 			LogErrorIf(!ret, L"['%s'] -> %s\n", path, totext::api_error().c_str());
 			UNUSED(ret);
@@ -106,7 +105,9 @@ namespace traceback {
 #endif
 
 		while (depth-- > 0) {
-			BOOL res = StackWalk64(machine, GetCurrentProcess(), GetCurrentThread(), &sf, (void*)context, nullptr, &SymFunctionTableAccess64, &SymGetModuleBase64, nullptr);
+			PFUNCTION_TABLE_ACCESS_ROUTINE64 tar = (PFUNCTION_TABLE_ACCESS_ROUTINE64)&os::Dbghelp_dll::inst().SymFunctionTableAccess64;
+			PGET_MODULE_BASE_ROUTINE64 mbr = (PGET_MODULE_BASE_ROUTINE64)&os::Dbghelp_dll::inst().SymGetModuleBase64;
+			BOOL res = os::Dbghelp_dll::inst().StackWalk64(machine, GetCurrentProcess(), GetCurrentThread(), &sf, (void*)context, nullptr, tar, mbr, nullptr);
 #ifdef _AMD64_
 			if (!res || sf.AddrReturn.Offset == 0)
 				break;

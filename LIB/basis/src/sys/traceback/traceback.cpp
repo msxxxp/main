@@ -1,3 +1,4 @@
+#include <basis/os/dbghelp.hpp>
 #include <basis/sys/traceback.hpp>
 #include <basis/sys/logger.hpp>
 #include <basis/sys/sstr.hpp>
@@ -5,8 +6,6 @@
 #include <basis/ext/pattern.hpp>
 
 #include <basis/simstd/string>
-
-#include <dbghelp.h>
 
 #if defined(__GNUC__)
 #include <bfd.h>
@@ -202,7 +201,7 @@ namespace traceback {
 		modInfo.SizeOfStruct = sizeof(modInfo) - 8;
 
 		LogNoise(L"[%p]\n", address);
-		bool res = ::SymGetModuleInfoW64(::GetCurrentProcess(), reinterpret_cast<DWORD64>(address), &modInfo);
+		bool res = os::Dbghelp_dll::inst().SymGetModuleInfoW64(::GetCurrentProcess(), reinterpret_cast<DWORD64>(address), &modInfo);
 		LogErrorIf(!res, L"%s %p\n", totext::api_error().c_str(), address);
 
 		if (res) {
@@ -272,7 +271,7 @@ namespace traceback {
 			symInfo->MaxNameLen = MAX_SYM_NAME;
 
 			DWORD64 displacement;
-			bool res = ::SymFromAddrW(::GetCurrentProcess(), reinterpret_cast<DWORD64>(address), &displacement, symInfo);
+			bool res = os::Dbghelp_dll::inst().SymFromAddrW(::GetCurrentProcess(), reinterpret_cast<DWORD64>(address), &displacement, symInfo);
 			LogErrorIf(!res, L"%s\n", totext::api_error().c_str());
 			if (res) {
 				m_address = reinterpret_cast<void*>(symInfo->Address);
@@ -289,7 +288,7 @@ namespace traceback {
 			info.SizeOfStruct = sizeof(info);
 
 			DWORD dwLineDisplacement = 0;
-			bool res = ::SymGetLineFromAddrW64(::GetCurrentProcess(), reinterpret_cast<DWORD64>(address), &dwLineDisplacement, &info);
+			bool res = os::Dbghelp_dll::inst().SymGetLineFromAddrW64(::GetCurrentProcess(), reinterpret_cast<DWORD64>(address), &dwLineDisplacement, &info);
 //			LogErrorIf(!res, L"%s\n", totext::api_error().c_str());
 			if (res) {
 				m_line = info.LineNumber;

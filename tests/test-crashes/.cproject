@@ -25,7 +25,6 @@
 								<option id="gnu.cpp.link.option.libs.1075722709" name="Libraries (-l)" superClass="gnu.cpp.link.option.libs" valueType="libs">
 									<listOptionValue builtIn="false" value="excis"/>
 									<listOptionValue builtIn="false" value="basis"/>
-									<listOptionValue builtIn="false" value="dbghelp"/>
 									<listOptionValue builtIn="false" value="bfd"/>
 									<listOptionValue builtIn="false" value="iberty"/>
 									<listOptionValue builtIn="false" value="z"/>
@@ -90,7 +89,6 @@
 								<option id="gnu.cpp.link.option.libs.703566051" name="Libraries (-l)" superClass="gnu.cpp.link.option.libs" valueType="libs">
 									<listOptionValue builtIn="false" value="excis"/>
 									<listOptionValue builtIn="false" value="basis"/>
-									<listOptionValue builtIn="false" value="dbghelp"/>
 									<listOptionValue builtIn="false" value="bfd"/>
 									<listOptionValue builtIn="false" value="iberty"/>
 									<listOptionValue builtIn="false" value="z"/>
@@ -159,7 +157,6 @@
 								<option id="gnu.cpp.link.option.libs.458152687" name="Libraries (-l)" superClass="gnu.cpp.link.option.libs" valueType="libs">
 									<listOptionValue builtIn="false" value="excis"/>
 									<listOptionValue builtIn="false" value="basis"/>
-									<listOptionValue builtIn="false" value="dbghelp"/>
 									<listOptionValue builtIn="false" value="bfd"/>
 									<listOptionValue builtIn="false" value="iberty"/>
 									<listOptionValue builtIn="false" value="z"/>
@@ -224,7 +221,6 @@
 								<option id="gnu.cpp.link.option.libs.1789597470" name="Libraries (-l)" superClass="gnu.cpp.link.option.libs" valueType="libs">
 									<listOptionValue builtIn="false" value="excis"/>
 									<listOptionValue builtIn="false" value="basis"/>
-									<listOptionValue builtIn="false" value="dbghelp"/>
 									<listOptionValue builtIn="false" value="bfd"/>
 									<listOptionValue builtIn="false" value="iberty"/>
 									<listOptionValue builtIn="false" value="z"/>

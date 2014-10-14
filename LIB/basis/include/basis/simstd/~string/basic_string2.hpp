@@ -1,5 +1,5 @@
-﻿#ifndef BASIS_STRING_BASIC_STRING_HPP_
-#define BASIS_STRING_BASIC_STRING_HPP_
+﻿#ifndef BASIS_STRING_BASIC_STRING2_HPP_
+#define BASIS_STRING_BASIC_STRING2_HPP_
 
 #include <basis/ext/pattern.hpp>
 #include <basis/simstd/algorithm>

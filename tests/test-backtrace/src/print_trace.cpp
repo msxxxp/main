@@ -9,7 +9,7 @@ namespace local {
 	void init_print_trace()
 	{
 		LogSetOptions(L"logger:///module?name=print_trace;prefix=fu;level=in");
-		LogSetOptions(L"logger:///module?name=traceback;prefix=fu;level=tr");
+		LogSetOptions(L"logger:///module?name=traceback;prefix=fu;level=in");
 		traceback::init();
 	}
 

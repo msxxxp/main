@@ -25,7 +25,7 @@ extern "C" int wmain(int argc, wchar_t * argv[])
 
 	setup_logger();
 
-	auto db = sqlite::open_database(L"qwe.db");
+	auto db = sqlite::open_database(L"../qwe.db");
 //	auto db = sqlite::open_database(L"src");
 	if (db) {
 		db->exec("CREATE TABLE IF NOT EXISTS test_table(Id INTEGER PRIMARY KEY, key TEXT NOT NULL);");

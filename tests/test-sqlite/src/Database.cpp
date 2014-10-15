@@ -53,6 +53,11 @@ namespace sqlite {
 		return err_str;
 	}
 
+	const char * error_message(int err)
+	{
+		return sqlite::sqlite3_errstr(err);
+	}
+
 	namespace internal {
 		bool database_close(sqlite3 * db)
 		{
@@ -73,7 +78,7 @@ namespace sqlite {
 			}
 
 			if (err != SQLITE_OK) {
-				LogErrorIf(err != SQLITE_OK, L"error: %s\n", to_str(err));
+				LogErrorIf(err != SQLITE_OK, L"error: %s (%S)\n", to_str(err), error_message(err));
 				database_close(db);
 				return nullptr;
 			}
@@ -99,6 +104,7 @@ namespace sqlite {
 		LogTraceObj();
 		LogDebug(L"[%s] -> %p\n", path.c_str(), m_db);
 		if (is_valid()) {
+			sqlite::sqlite3_extended_result_codes(m_db, 1);
 			sqlite::sqlite3_busy_timeout(m_db, 500);
 		}
 	}

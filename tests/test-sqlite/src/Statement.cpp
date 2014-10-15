@@ -7,11 +7,6 @@ namespace sqlite {
 		finalize();
 	}
 
-	Statement::Statement() :
-		m_stmt(nullptr)
-	{
-	}
-
 	Statement::Statement(sqlite::sqlite3_stmt* stmt) :
 		m_stmt(stmt)
 	{

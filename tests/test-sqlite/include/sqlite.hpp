@@ -24,6 +24,7 @@ namespace sqlite {
 	string get_version();
 
 	const wchar_t * to_str(int err);
+	const char * error_message(int err);
 
 	class Database: private pattern::Uncopyable {
 	public:

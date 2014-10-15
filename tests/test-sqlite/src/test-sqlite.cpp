@@ -1,7 +1,7 @@
 #include <basis/sys/crt.hpp>
 #include <basis/sys/logger.hpp>
 
-#include <sqlite.hpp>
+#include <sqlite_wrap/sqlite.hpp>
 
 namespace {
 	void setup_logger()

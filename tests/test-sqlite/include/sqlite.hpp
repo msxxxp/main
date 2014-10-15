@@ -3,92 +3,76 @@
 
 #include <basis/ext/pattern.hpp>
 #include <basis/simstd/memory>
-#include <basis/simstd/string>
-
-typedef simstd::wstring string;
 
 namespace sqlite {
 
 	struct sqlite3;
 	struct sqlite3_stmt;
 
-	class Statement;
+	class Database_i;
+	class Statement_i;
 
-	enum ColumnType {
-		TYPE_INTEGER,
-		TYPE_STRING,
-		TYPE_BLOB,
-		TYPE_UNKNOWN
+	typedef simstd::unique_ptr<Database_i> Database;
+	typedef simstd::unique_ptr<Statement_i> Statement;
+
+	enum class ColumnType: ssize_t {
+		Integer,
+		Text,
+		Blob,
+		Unknown,
 	};
 
-	string get_version();
+//	string get_version();
 
 	const wchar_t * to_str(int err);
+
 	const char * error_message(int err);
 
-	class Database: private pattern::Uncopyable {
+	class Statement_i {
 	public:
-		virtual ~Database();
+		virtual ~Statement_i() = default;
 
-		Database(const string& path);
-		bool is_valid() const;
+		virtual void reset() = 0;
+		virtual bool step() = 0;
+		virtual void bind(int param) = 0;
+		virtual void bind(int param, int32_t value) = 0;
+		virtual void bind(int param, int64_t value) = 0;
+		virtual void bind(int param, double value) = 0;
+		virtual void bind(int param, const char* str, bool copy = true) = 0;
+		virtual void bind(int param, const wchar_t* str, bool copy = true) = 0;
+		virtual void bind(int param, const void* blob, size_t size, bool copy = true) = 0;
 
-		bool exec(const char * command);
-		bool transaction_begin();
-		bool transaction_end();
-		bool transaction_rollback();
-		bool enable_foreign_keys_constraints();
-		int64_t last_insert_id() const;
-		Statement get_statement(const wchar_t * cmd);
+		virtual const wchar_t* get_text16(int column) const = 0;
+		virtual const char*    get_text8(int column) const = 0;
+		virtual int32_t        get_int32(int column) const = 0;
+		virtual int64_t        get_int64(int column) const = 0;
+		virtual const void*    get_blob(int column) const = 0;
+		virtual size_t         get_size(int column) const = 0;
 
-	protected:
-		bool close();
-
-		string strPath;
-		string m_Name;
-
-	private:
-		sqlite::sqlite3 *m_db;
+		virtual size_t         get_count() const = 0;
+		virtual const wchar_t* get_name(int column) const = 0;
+		virtual ColumnType     get_type(int colunmn) const = 0;
 	};
 
-	typedef simstd::unique_ptr<Database> DatabaseHolder;
-
-	DatabaseHolder open_database(const string& name);
-
-	class Statement: private pattern::Uncopyable {
+	class Database_i {
 	public:
-		~Statement();
+		virtual ~Database_i() = default;
 
-		Statement(Statement && other);
-		Statement& operator = (Statement && other);
+		virtual bool exec(const char * sql) = 0;
 
-		void swap(Statement & other);
+		virtual bool transaction_begin() = 0;
+		virtual bool transaction_end() = 0;
+		virtual bool transaction_rollback() = 0;
 
-		bool is_valid() const;
+		virtual bool enable_foreign_keys_constraints() = 0;
 
-		bool finalize();
-		void reset();
-		bool step();
-		void bind(int param, int32_t value);
-		void bind(int param, int64_t value);
-		void bind(int param, const wchar_t* str, bool copy = true);
-		void bind(int param, const void* blob, size_t size, bool copy = true);
+		virtual int64_t last_insert_rowid() const = 0;
 
-		size_t         get_count() const;
-		const wchar_t* get_text16(int column);
-		const char*    get_text8(int column);
-		int32_t        get_int32(int column);
-		int64_t        get_int64(int column);
-		const char*    get_blob(int column);
-		ColumnType     get_type(int colunmn);
-
-	private:
-		Statement(sqlite::sqlite3_stmt* stmt);
-
-		sqlite::sqlite3_stmt* m_stmt;
-
-		friend class Database;
+		virtual Statement get_statement(const wchar_t * sql) = 0;
 	};
+
+	Database open_database(const wchar_t* path);
+
 }
 
 #endif

@@ -28,15 +28,22 @@ extern "C" int wmain(int argc, wchar_t * argv[])
 	auto db = sqlite::open_database(L"qwe.db");
 //	auto db = sqlite::open_database(L"src");
 	if (db) {
-		db->exec("CREATE TABLE IF NOT EXISTS general_config(Id INTEGER PRIMARY KEY, key TEXT NOT NULL);");
-//		db->exec("CREATE TABLE IF NOT EXISTS general_config(key TEXT NOT NULL, name TEXT NOT NULL, value BLOB, PRIMARY KEY (key, name));");
-		db->exec("INSERT INTO general_config(key) VALUES('adasdasdasdadasasda');");
-		db->exec("INSERT INTO general_config(key) VALUES('ssfdfsdfsdfsdfsdfsd');");
+		db->exec("CREATE TABLE IF NOT EXISTS test_table(Id INTEGER PRIMARY KEY, key TEXT NOT NULL);");
+//		db->exec("CREATE TABLE IF NOT EXISTS test_table(key TEXT NOT NULL, name TEXT NOT NULL, value BLOB, PRIMARY KEY (key, name));");
+		db->exec("INSERT INTO test_table(key) VALUES('adasdasdasdadasasda');");
+		db->exec("INSERT INTO test_table(key) VALUES('ssfdfsdfsdfsdfsdfsd');");
 
-		auto stmt = db->get_statement(L"SELECT * FROM general_config");
-		while (stmt.step()) {
-			LogReport(L"id: %I64d\n", stmt.get_int64(0));
-			LogReport(L"key: %s\n", stmt.get_text16(1));
+		{
+			auto stmt = db->get_statement(L"SELECT count(*) FROM test_table");
+			if (stmt && stmt->step())
+				LogReport(L"count: %I64d\n", stmt->get_int64(0));
+		}
+		{
+			auto stmt = db->get_statement(L"SELECT * FROM test_table");
+			while (stmt && stmt->step()) {
+				LogReport(L"id: %I64d\n", stmt->get_int64(0));
+				LogReport(L"key: %s\n", stmt->get_text16(1));
+			}
 		}
 	}
 

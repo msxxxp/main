@@ -1,6 +1,7 @@
 #include <basis/sys/path.hpp>
 #include <basis/sys/cstr.hpp>
 #include <basis/sys/sstr.hpp>
+#include <basis/sys/logger.hpp>
 
 #include <basis/simstd/string>
 

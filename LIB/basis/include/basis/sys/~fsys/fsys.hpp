@@ -7,6 +7,8 @@ namespace fsys {
 
 	bool del_nt(const wchar_t * path);
 
+	bool is_exist(const wchar_t * path);
+
 }
 
 #endif

@@ -21,6 +21,11 @@ namespace fsys {
 
 namespace fsys {
 
+	inline bool is_valid(Attributes attr)
+	{
+		return attr != INVALID_FILE_ATTRIBUTES;
+	}
+
 	inline bool is_file(Attributes attr)
 	{
 		return !(attr & FILE_ATTRIBUTE_DIRECTORY);

@@ -3,6 +3,7 @@
 #include <basis/sys/fsys.hpp>
 #include <basis/sys/path.hpp>
 #include <basis/sys/memory.hpp>
+#include <basis/sys/totext.hpp>
 
 #include <fsys.hpp>
 
@@ -13,6 +14,11 @@ namespace fsys {
 		m_options(options),
 		m_statistics(statistics)
 	{
+		LogDebug(L"path:                '%s'\n", path.c_str());
+		LogDebug(L"options.mask:        '%s'\n", options.mask.c_str());
+		LogDebug(L"options.fileMinSize: %I64u\n", options.fileMinSize);
+		LogDebug(L"options.fileMaxSize: %I64u\n", options.fileMaxSize);
+		LogDebug(L"options.flags:       0x%I64X\n", static_cast<uint64_t>(options.flags));
 	}
 
 	Sequence::const_iterator Sequence::begin() const
@@ -58,6 +64,7 @@ namespace fsys {
 			if (m_impl->m_find_handle == INVALID_HANDLE_VALUE) {
 				ustring pattern = path::make(m_impl->m_sequence->path(), opt.mask);
 				m_impl->m_find_handle = ::FindFirstFileW(pattern.c_str(), &st.m_stat);
+				LogErrorIf(m_impl->m_find_handle == INVALID_HANDLE_VALUE, L"'%s' -> %s\n", pattern.c_str(), totext::api_error().c_str());
 				if (m_impl->m_find_handle == INVALID_HANDLE_VALUE) {
 					m_impl.reset(new impl);
 					break;
@@ -153,7 +160,7 @@ namespace fsys {
 			ret = (options.flags & incDots) ? true : (cstr::compare(stat.name(), L".") != 0 && cstr::compare(stat.name(), L"..") != 0);
 		}
 
-		LogConsoleDebug(-1, L"found folder: '%s' -> %d\n", stat.name(), ret);
+		LogConsoleDebug(-1, L"found folder: '%s' -> %s\n", stat.name(), ret ? L"add" : L"skip");
 		return ret;
 	}
 
@@ -197,7 +204,7 @@ namespace fsys {
 			ret = true;
 		}
 
-		LogConsoleDebug(-1, L"found file: '%s' -> %d\n", stat.name(), ret);
+		LogConsoleDebug(-1, L"found file: '%s' -> %s\n", stat.name(), ret ? L"add" : L"skip");
 		return ret;
 	}
 

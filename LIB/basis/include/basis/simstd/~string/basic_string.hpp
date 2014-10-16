@@ -3,7 +3,7 @@
 
 #include <basis/ext/pattern.hpp>
 #include <basis/sys/crt.hpp>
-//#include <basis/sys/console.hpp>
+//#include <basis/sys/logger.hpp>
 #include <basis/simstd/string>
 #include <basis/simstd/iterator>
 #include <basis/simstd/~memory/allocator.hpp>
@@ -319,12 +319,14 @@ namespace simstd {
 	basic_string<C, T, A>::basic_string(const this_type & other):
 		base_type(other)
 	{
+//		LogTraceObj();
 	}
 
 	template<typename C, typename T, typename A>
 	basic_string<C, T, A>::basic_string(const this_type & other, const allocator_type& alloc):
 		base_type(other, alloc)
 	{
+//		LogTraceObj();
 		if (base_type::m_impl != other.m_impl)
 			raw_append(other.c_str(), other.size());
 	}
@@ -333,12 +335,14 @@ namespace simstd {
 	basic_string<C, T, A>::basic_string(this_type && other):
 		base_type(other)
 	{
+//		LogTraceObj();
 	}
 
 	template<typename C, typename T, typename A>
 	basic_string<C, T, A>::basic_string(this_type&& other, const allocator_type& alloc):
 		base_type(other, alloc)
 	{
+//		LogTraceObj();
 		if (base_type::m_impl != other.m_impl)
 			raw_append(other.c_str(), other.size());
 	}
@@ -426,7 +430,7 @@ namespace simstd {
 	template<typename C, typename T, typename A>
 	typename basic_string<C, T, A>::allocator_type basic_string<C, T, A>::get_allocator() const
 	{
-		// TODO
+		return base_type::m_impl->get_allocator();
 	}
 
 	template<typename C, typename T, typename A>
@@ -1171,7 +1175,7 @@ namespace simstd {
 	template<typename C, typename T, typename A>
 	basic_string<C, T, A> operator +(const basic_string<C, T, A> & left, const basic_string<C, T, A> & right)
 	{
-		return basic_string<C, T, A>(left.c_str(), left.size(), left.size() + right.size()) += right;
+		return basic_string<C, T, A>(left.get_allocator(), left.c_str(), left.size(), left.size() + right.size()) += right;
 	}
 
 	template<typename C, typename T, typename A>
@@ -1179,26 +1183,26 @@ namespace simstd {
 	{
 		typedef typename basic_string<C, T, A>::traits_type traits_type;
 		typename basic_string<C, T, A>::size_type length = traits_type::length(left);
-		return basic_string<C, T, A>(left, length, length + right.size()) += right;
+		return basic_string<C, T, A>(right.get_allocator(), left, length, length + right.size()) += right;
 	}
 
 	template<typename C, typename T, typename A>
 	basic_string<C, T, A> operator +(C left, const basic_string<C, T, A> & right)
 	{
-		return basic_string<C, T, A>(&left, 1, 1 + right.size()) += right;
+		return basic_string<C, T, A>(right.get_allocator(), &left, 1, 1 + right.size()) += right;
 	}
 
 	template<typename C, typename T, typename A>
 	basic_string<C, T, A> operator +(const basic_string<C, T, A> & left, const C * right)
 	{
 		typedef typename basic_string<C, T, A>::traits_type traits_type;
-		return basic_string<C, T, A>(left.c_str(), left.size(), left.size() + traits_type::length(right)) += right;
+		return basic_string<C, T, A>(left.get_allocator(), left.c_str(), left.size(), left.size() + traits_type::length(right)) += right;
 	}
 
 	template<typename C, typename T, typename A>
 	basic_string<C, T, A> operator +(const basic_string<C, T, A> & left, C right)
 	{
-		return basic_string<C, T, A>(left.c_str(), left.size(), left.size() + 1) += right;
+		return basic_string<C, T, A>(left.get_allocator(), left.c_str(), left.size(), left.size() + 1) += right;
 	}
 
 	template<typename C, typename T, typename A>

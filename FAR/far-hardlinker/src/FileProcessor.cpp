@@ -33,45 +33,26 @@ bool CompareAndLink(fsys::Files_t::iterator it1, fsys::Files_t::iterator it2)
 {
 	auto file1 = *it1;
 	auto file2 = *it2;
-	ustring path1(file1->get_full_path());
-	ustring path2(file2->get_full_path());
+	auto path1(file1->get_full_path());
+	auto path2(file2->get_full_path());
 
-	LogConsoleDebug(FOREGROUND_INTENSITY | FOREGROUND_BLUE | FOREGROUND_GREEN, L"Comparing files [size = %I64u]:\n", file2->size());
-	LogConsoleDebug(-1, L"  %s\n", path1.c_str());
-	LogConsoleDebug(-1, L"  %s\n", path2.c_str());
 	++global::statistics().fileCompares;
 
+
+	const wchar_t * logStr = nullptr;
 	if (global::options().attrMustMatch && file1->attr() != file2->attr()) {
-		LogConsoleDebug(FOREGROUND_INTENSITY | FOREGROUND_RED | FOREGROUND_GREEN, L"  Attributes of files do not match, skipping\n");
+		logStr = L"  Attributes of files do not match -> ignore\n";
 		++global::statistics().fileMetaDataMismatch;
-		return false;
-	}
-
-	if (global::options().attrMustMatch && file1->attr() != file2->attr()) {
-		LogConsoleDebug(FOREGROUND_INTENSITY | FOREGROUND_RED | FOREGROUND_GREEN, L"  Attributes of files do not match, skipping\n");
+	} else if (global::options().timeMustMatch && file1->mtime() != file2->mtime()) {
+		logStr = L"  Modification timestamps of files do not match -> ignore\n";
 		++global::statistics().fileMetaDataMismatch;
-		return false;
-	}
-
-	if (global::options().timeMustMatch && file1->mtime() != file2->mtime()) {
-		LogConsoleDebug(FOREGROUND_INTENSITY | FOREGROUND_RED | FOREGROUND_GREEN, L"  Modification timestamps of files do not match, skipping\n");
-		++global::statistics().fileMetaDataMismatch;
-		return false;
-	}
-
-	if (!CompareByVolumeEqual(file1, file2)) {
-		LogConsoleDebug(FOREGROUND_INTENSITY | FOREGROUND_RED | FOREGROUND_GREEN, L"  Files ignored - on different volumes\n");
+	} else if (!CompareByVolumeEqual(file1, file2)) {
+		logStr = L"  Files on different volumes -> ignore\n";
 		++global::statistics().filesOnDifferentVolumes;
-		return false;
-	}
-
-	if (CompareByInodeEqual(file1, file2)) {
+	} else if (CompareByInodeEqual(file1, file2)) {
 		++global::statistics().fileAlreadyLinked;
-		LogConsoleDebug(FOREGROUND_INTENSITY | FOREGROUND_GREEN, L"  Files ignored - already linked\n");
-		return false;
-	}
-
-	if (fsys::compare_hash(*file1, *file2)) {
+		logStr = L"  Files already linked -> ignore\n";
+	} else  if (fsys::compare_hash(*file1, *file2)) {
 		++global::statistics().fileContentSame;
 		LogConsoleReport(FOREGROUND_INTENSITY | FOREGROUND_BLUE | FOREGROUND_GREEN, L"Comparing files [size = %I64u]:\n", file1->size());
 		LogConsoleReport(-1, L"  %s\n", path1.c_str());
@@ -84,15 +65,23 @@ bool CompareAndLink(fsys::Files_t::iterator it1, fsys::Files_t::iterator it2)
 		return true;
 	}
 
-	LogConsoleDebug(FOREGROUND_INTENSITY | FOREGROUND_RED | FOREGROUND_GREEN, L"  Files differ in content (hash)\n");
-	++global::statistics().hashComparesHit1;
+	LogConsoleDebug(FOREGROUND_INTENSITY | FOREGROUND_BLUE | FOREGROUND_GREEN, L"Comparing files [size = %I64u]:\n", file2->size());
+	LogConsoleDebug(-1, L"  %s\n", path1.c_str());
+	LogConsoleDebug(-1, L"  %s\n", path2.c_str());
+	if (logStr) {
+		LogConsoleDebug(FOREGROUND_INTENSITY | FOREGROUND_GREEN, logStr);
+	} else {
+		LogConsoleDebug(FOREGROUND_INTENSITY | FOREGROUND_RED | FOREGROUND_GREEN, L"  Files differ in content (hash) -> ignore\n");
+		++global::statistics().hashComparesHit1;
+	}
+
 	return false;
 }
 
 void process_equal_sized_files(fsys::Files_t & files)
 {
 //	LogDebug(L"size [%I64u] count [%I64u]\n", files.begin()->get()->size(), files.size());
-	while (files.size() > 1)
+	while (!files.empty())
 	{
 		auto keyIt = files.end() - 1;
 //		LogDebug(L"[%I64u] '%s'\n", keyIt->get()->size(), keyIt->get()->get_name().c_str());
@@ -130,8 +119,24 @@ void scan_single_folder(fsys::Node_t folder)
 	auto fullPath = folder->get_full_path();
 	LogConsoleDebug(-1, L"processing: '%s'\n", fullPath.c_str());
 
+	if (!fsys::is_exist(fullPath.c_str())) {
+		LogConsoleError(FOREGROUND_INTENSITY | FOREGROUND_RED, L"not found: '%s'\n", fullPath.c_str());
+		return;
+	}
+
 	fsys::Sequence::SearchOptions opt;
+	opt.fileMinSize |= global::options().fileMinSize;
+	opt.fileMaxSize |= global::options().fileMaxSize;
 	opt.flags |= global::options().doRecursive ? 0 : fsys::Sequence::SearchFlags::folderSkipAll;
+	opt.flags |= global::options().folderSkipReadOnly ? 0 : fsys::Sequence::SearchFlags::folderSkipReadOnly;
+	opt.flags |= global::options().folderSkipHidden ? 0 : fsys::Sequence::SearchFlags::folderSkipHidden;
+	opt.flags |= global::options().folderSkipSystem ? 0 : fsys::Sequence::SearchFlags::folderSkipSystem;
+	opt.flags |= global::options().folderSkipLink ? 0 : fsys::Sequence::SearchFlags::folderSkipLink;
+	opt.flags |= global::options().fileSkipReadOnly ? 0 : fsys::Sequence::SearchFlags::fileSkipReadOnly;
+	opt.flags |= global::options().fileSkipHidden ? 0 : fsys::Sequence::SearchFlags::fileSkipHidden;
+	opt.flags |= global::options().fileSkipSystem ? 0 : fsys::Sequence::SearchFlags::fileSkipSystem;
+	opt.flags |= global::options().fileSkipLink ? 0 : fsys::Sequence::SearchFlags::fileSkipLink;
+	opt.flags |= global::options().fileSkipZeroSize ? 0 : fsys::Sequence::SearchFlags::fileSkipZeroSize;
 
 	fsys::Sequence dir(fullPath, opt, global::statistics());
 	for (auto it = dir.begin(); it != dir.end(); ++it) {
@@ -157,10 +162,10 @@ ssize_t FileProcessor::execute()
 	}
 
 	if (global::vars().files.empty()) {
-		LogConsoleInfo(-1, L"No files to process\n");
+		LogConsoleInfo(-1, L"No files found to process\n");
 		return 1;
 	} else {
-		LogConsoleInfo(-1, L"Files to process: %I64u\n", global::vars().files.size());
+		LogConsoleInfo(-1, L"Files found to process: %I64u\n", global::vars().files.size());
 	}
 
 	using namespace global;
@@ -171,7 +176,7 @@ ssize_t FileProcessor::execute()
 		auto bounds = simstd::equal_range(vars().files.begin(), vars().files.end(), vars().files.front(), CompareBySizeLess);
 		if (simstd::distance(bounds.first, bounds.second) == 1) {
 			++statistics().filesFoundUnique;
-			LogDebug(L"unique [%I64u] '%s'\n", bounds.first->get()->size(), bounds.first->get()->get_name().c_str());
+			LogConsoleDebug(-1, L"skip unique file [%I64u] '%s'\n", bounds.first->get()->size(), bounds.first->get()->get_name().c_str());
 		} else {
 			fsys::Files_t files(bounds.first, bounds.second);
 //			fsys::Files_t files;

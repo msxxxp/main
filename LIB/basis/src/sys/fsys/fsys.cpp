@@ -15,4 +15,10 @@ namespace fsys {
 		return false;
 	}
 
+	bool is_exist(const wchar_t * path)
+	{
+		auto attr = get_attr_nt(path);
+		return is_valid(attr) && (is_file(attr) || is_dir(attr));
+	}
+
 }

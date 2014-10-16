@@ -105,7 +105,7 @@
 							<tool id="cdt.managedbuild.tool.gnu.cpp.linker.mingw.exe.debug.1092207936" name="MinGW C++ Linker" superClass="cdt.managedbuild.tool.gnu.cpp.linker.mingw.exe.debug">
 								<option id="gnu.cpp.link.option.paths.1512785829" name="Library search path (-L)" superClass="gnu.cpp.link.option.paths" valueType="libPaths">
 									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/basis/x64-Release}&quot;"/>
-									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/sqlite_wrap/x64-Release}&quot;"/>
+									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/sqlite_wrap/x64-Embedded-Release}&quot;"/>
 								</option>
 								<option id="gnu.cpp.link.option.libs.258805211" name="Libraries (-l)" superClass="gnu.cpp.link.option.libs" valueType="libs">
 									<listOptionValue builtIn="false" value="basis"/>
@@ -117,6 +117,8 @@
 								<option id="gnu.cpp.link.option.flags.1935117289" name="Linker flags" superClass="gnu.cpp.link.option.flags" value="-Wl,-Map=${ProjName}.map -m64 -static -municode" valueType="string"/>
 								<option id="gnu.cpp.link.option.strip.1241201554" name="Omit all symbol information (-s)" superClass="gnu.cpp.link.option.strip" value="true" valueType="boolean"/>
 								<option id="gnu.cpp.link.option.nostart.800317638" name="Do not use standard start files (-nostartfiles)" superClass="gnu.cpp.link.option.nostart" value="true" valueType="boolean"/>
+								<option id="gnu.cpp.link.option.nodeflibs.506903873" name="Do not use default libraries (-nodefaultlibs)" superClass="gnu.cpp.link.option.nodeflibs" value="false" valueType="boolean"/>
+								<option id="gnu.cpp.link.option.nostdlibs.1762070639" name="No startup or default libs (-nostdlib)" superClass="gnu.cpp.link.option.nostdlibs" value="false" valueType="boolean"/>
 								<inputType id="cdt.managedbuild.tool.gnu.cpp.linker.input.1169522160" superClass="cdt.managedbuild.tool.gnu.cpp.linker.input">
 									<additionalInput kind="additionalinputdependency" paths="$(USER_OBJS)"/>
 									<additionalInput kind="additionalinput" paths="$(LIBS)"/>
@@ -180,7 +182,7 @@
 									<listOptionValue builtIn="false" value="iberty"/>
 									<listOptionValue builtIn="false" value="z"/>
 								</option>
-								<option id="gnu.cpp.link.option.flags.942921038" name="Linker flags" superClass="gnu.cpp.link.option.flags" value="-Wl,-Map=test-backtrace.map -m32 -static -municode" valueType="string"/>
+								<option id="gnu.cpp.link.option.flags.942921038" name="Linker flags" superClass="gnu.cpp.link.option.flags" value="-Wl,-Map=${ProjName}.map -m32 -static -municode" valueType="string"/>
 								<inputType id="cdt.managedbuild.tool.gnu.cpp.linker.input.74866391" superClass="cdt.managedbuild.tool.gnu.cpp.linker.input">
 									<additionalInput kind="additionalinputdependency" paths="$(USER_OBJS)"/>
 									<additionalInput kind="additionalinput" paths="$(LIBS)"/>
@@ -256,9 +258,6 @@
 							</tool>
 						</toolChain>
 					</folderInfo>
-					<fileInfo id="cdt.managedbuild.config.gnu.mingw.exe.debug.213078829.1424341064.693235998.1271434816" name="stub.cpp" rcbsApplicability="disable" resourcePath="src/stub.cpp" toolsToInvoke="cdt.managedbuild.tool.gnu.cpp.compiler.mingw.exe.debug.1792201892.393697549">
-						<tool id="cdt.managedbuild.tool.gnu.cpp.compiler.mingw.exe.debug.1792201892.393697549" name="GCC C++ Compiler" superClass="cdt.managedbuild.tool.gnu.cpp.compiler.mingw.exe.debug.1792201892"/>
-					</fileInfo>
 					<sourceEntries>
 						<entry excluding="stub.cpp" flags="VALUE_WORKSPACE_PATH|RESOLVED" kind="sourcePath" name="src"/>
 					</sourceEntries>

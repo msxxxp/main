@@ -29,7 +29,7 @@ namespace Far {
 	struct Dialog_i {
 		virtual ~Dialog_i() = default;
 
-		virtual ssize_t show();
+		virtual ssize_t show() = 0;
 	};
 
 	typedef simstd::unique_ptr<Dialog_i> Dialog;

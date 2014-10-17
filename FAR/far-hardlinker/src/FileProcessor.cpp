@@ -8,6 +8,8 @@
 //#include <list>
 //#include <algorithm>
 
+#include <libfar3/dialog.hpp>
+#include <guid.hpp>
 
 bool CompareBySizeLess(const fsys::File_t & file1, const fsys::File_t & file2)
 {
@@ -138,6 +140,24 @@ ssize_t FileProcessor::execute()
 {
 	LogTrace();
 	LogConsoleInfo(-1, L"folders to process: %I64u\n", global::vars().folders.size());
+
+	int m_width = 50;
+	int m_height = 15;
+	FarDialogItem FindDlgData[]=
+	{
+		{DI_DOUBLEBOX, 3, 1,  m_width-4, m_height-2, 0, nullptr, nullptr, DIF_SHOWAMPERSAND, L""},
+		{DI_LISTBOX,   4, 2,  m_width-5, m_height-7, 0, nullptr, nullptr, DIF_LISTNOBOX | DIF_DISABLE, 0},
+		{DI_TEXT,     -1, m_height-6, 0, m_height-6, 0, nullptr, nullptr, DIF_SEPARATOR2, L""},
+		{DI_BUTTON,    0, m_height-3, 0, m_height-3, 0, nullptr, nullptr, DIF_FOCUS | DIF_DEFAULTBUTTON | DIF_CENTERGROUP, L"a"},
+		{DI_BUTTON,    0, m_height-3, 0, m_height-3, 0, nullptr, nullptr, DIF_CENTERGROUP | DIF_DISABLE, L"b"},
+		{DI_BUTTON,    0, m_height-3, 0, m_height-3, 0, nullptr, nullptr, DIF_CENTERGROUP | DIF_DISABLE, L"c"},
+		{DI_BUTTON,    0, m_height-3, 0, m_height-3, 0, nullptr, nullptr, DIF_CENTERGROUP | DIF_DISABLE, L"d"},
+		{DI_BUTTON,    0, m_height-3, 0, m_height-3, 0, nullptr, nullptr, DIF_CENTERGROUP, L"e"},
+	};
+
+	auto foundDlg = Far::create_dialog(ListMenuGuid, -1, -1, m_width, m_height, FindDlgData, lengthof(FindDlgData), 0);
+	foundDlg->show();
+	return 0;
 
 	while (!global::vars().folders.empty())
 	{

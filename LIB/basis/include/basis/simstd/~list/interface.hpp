@@ -194,7 +194,7 @@ namespace simstd {
 	template<typename Type, typename Allocator>
 	list<Type, Allocator>::~list()
 	{
-		//\\LogTraceObj();
+		LogTraceObj();
 		clear();
 	}
 
@@ -202,21 +202,21 @@ namespace simstd {
 	list<Type, Allocator>::list():
 		base_type(NodeAllocator())
 	{
-		//\\LogTraceObj();
+		LogTraceObj();
 	}
 
 	template<typename Type, typename Allocator>
 	list<Type, Allocator>::list(const allocator_type & allocator):
 		base_type(NodeAllocator(allocator))
 	{
-		//\\LogTraceObj();
+		LogTraceObj();
 	}
 
 	template<typename Type, typename Allocator>
 	list<Type, Allocator>::list(size_type count, const value_type& value, const allocator_type& allocator):
 		base_type(NodeAllocator(allocator))
 	{
-		//\\LogTraceObj();
+		LogTraceObj();
 		for (; count; --count)
 			emplace_back(value);
 	}
@@ -225,7 +225,7 @@ namespace simstd {
 	list<Type, Allocator>::list(size_type count, const allocator_type& allocator):
 		base_type(NodeAllocator(allocator))
 	{
-		//\\LogTraceObj();
+		LogTraceObj();
 		_default_append(count);
 	}
 
@@ -234,7 +234,7 @@ namespace simstd {
 	list<Type, Allocator>::list(InputIterator first, InputIterator last, const allocator_type& allocator):
 		base_type(NodeAllocator(allocator))
 	{
-		//\\LogTraceObj();
+		LogTraceObj();
 		_initialize(first, last);
 	}
 
@@ -242,7 +242,7 @@ namespace simstd {
 	list<Type, Allocator>::list(const this_type & other):
 		base_type(other.get_node_allocator())
 	{
-		//\\LogTraceObj();
+		LogTraceObj();
 		_initialize(other.begin(), other.end());
 	}
 
@@ -250,7 +250,7 @@ namespace simstd {
 	list<Type, Allocator>::list(const this_type & other, const allocator_type & allocator):
 		base_type(NodeAllocator(allocator))
 	{
-		//\\LogTraceObj();
+		LogTraceObj();
 		_initialize(other.begin(), other.end());
 	}
 
@@ -258,21 +258,21 @@ namespace simstd {
 	list<Type, Allocator>::list(this_type && other):
 		base_type(simstd::move(other))
 	{
-		//\\LogTraceObj();
+		LogTraceObj();
 	}
 
 	template<typename Type, typename Allocator>
 	list<Type, Allocator>::list(this_type && other, const allocator_type & allocator):
 		base_type(NodeAllocator(allocator))
 	{
-		//\\LogTraceObj();
+		LogTraceObj();
 	}
 
 	template<typename Type, typename Allocator>
 	typename
 	list<Type, Allocator>::this_type& list<Type, Allocator>::operator =(const this_type& other)
 	{
-		//\\LogTraceObj();
+		LogTraceObj();
 		this_type(other).swap(*this);
 		return *this;
 	}
@@ -281,7 +281,7 @@ namespace simstd {
 	typename
 	list<Type, Allocator>::this_type& list<Type, Allocator>::operator =(this_type && other)
 	{
-		//\\LogTraceObj();
+		LogTraceObj();
 		this_type(simstd::move(other)).swap(*this);
 		return *this;
 	}
@@ -290,14 +290,14 @@ namespace simstd {
 	template<typename InputIterator>
 	void list<Type, Allocator>::assign(InputIterator first, InputIterator last)
 	{
-		//\\LogTraceObj();
+		LogTraceObj();
 		this_type(first, last).swap(*this);
 	}
 
 	template<typename Type, typename Allocator>
 	void list<Type, Allocator>::assign(size_type n, const value_type& value)
 	{
-		//\\LogTraceObj();
+		LogTraceObj();
 		this_type(n, value).swap(*this);
 	}
 
@@ -305,7 +305,7 @@ namespace simstd {
 	typename
 	list<Type, Allocator>::allocator_type list<Type, Allocator>::get_allocator() const
 	{
-		//\\LogTraceObj();
+		LogTraceObj();
 		return base_type::get_allocator();
 	}
 
@@ -455,7 +455,7 @@ namespace simstd {
 	typename
 	list<Type, Allocator>::iterator list<Type, Allocator>::insert(const_iterator pos, InputIterator first, InputIterator last)
 	{
-		//\\LogTraceObj();
+		LogTraceObj();
 		this_type tmp(first, last, get_allocator());
 		splice(pos, tmp);
 	}
@@ -464,7 +464,7 @@ namespace simstd {
 	typename
 	list<Type, Allocator>::iterator list<Type, Allocator>::insert(const_iterator pos, const value_type& value)
 	{
-		//\\LogTraceObj();
+		LogTraceObj();
 		return emplace(pos, value);
 	}
 
@@ -472,7 +472,7 @@ namespace simstd {
 	typename
 	list<Type, Allocator>::iterator list<Type, Allocator>::insert(const_iterator pos, size_type n, const value_type& value)
 	{
-		//\\LogTraceObj();
+		LogTraceObj();
 		this_type tmp(n, value, get_allocator());
 		splice(pos, tmp);
 	}
@@ -481,7 +481,7 @@ namespace simstd {
 	typename
 	list<Type, Allocator>::iterator list<Type, Allocator>::insert(const_iterator pos, value_type&& value)
 	{
-		//\\LogTraceObj();
+		LogTraceObj();
 		return emplace(pos, simstd::move(value));
 	}
 
@@ -490,7 +490,7 @@ namespace simstd {
 	typename
 	list<Type, Allocator>::iterator list<Type, Allocator>::emplace(const_iterator pos, Args&&... args)
 	{
-		//\\LogTraceObj();
+		LogTraceObj();
 		auto tmp = base_type::new_node(simstd::forward<Args>(args)...);
 		tmp->hook(pos.m_node);
 		return iterator(tmp);
@@ -500,7 +500,7 @@ namespace simstd {
 	typename
 	list<Type, Allocator>::iterator list<Type, Allocator>::erase(const_iterator pos)
 	{
-		//\\LogTraceObj();
+		LogTraceObj();
 		iterator ret(pos.m_node->m_next);
 
 		iterator it(pos.iterator_cast());
@@ -514,7 +514,7 @@ namespace simstd {
 	typename
 	list<Type, Allocator>::iterator list<Type, Allocator>::erase(const_iterator first, const_iterator last)
 	{
-		//\\LogTraceObj();
+		LogTraceObj();
 		while (first != last)
 			first = erase(first);
 		return last.iterator_cast();
@@ -523,14 +523,14 @@ namespace simstd {
 	template<typename Type, typename Allocator>
 	void list<Type, Allocator>::push_back(const value_type& value)
 	{
-		//\\LogTraceObj();
+		LogTraceObj();
 		emplace(cend(), value);
 	}
 
 	template<typename Type, typename Allocator>
 	void list<Type, Allocator>::push_back(value_type&& value)
 	{
-		//\\LogTraceObj();
+		LogTraceObj();
 		emplace(cend(), simstd::move(value));
 	}
 
@@ -538,14 +538,14 @@ namespace simstd {
 	template<typename... Args>
 	void list<Type, Allocator>::emplace_back(Args&&... args)
 	{
-		//\\LogTraceObj();
+		LogTraceObj();
 		emplace(cend(), simstd::forward<Args>(args)...);
 	}
 
 	template<typename Type, typename Allocator>
 	void list<Type, Allocator>::pop_back()
 	{
-		//\\LogTraceObj();
+		LogTraceObj();
 		const_iterator pos = cend();
 		erase(--pos);
 	}
@@ -553,14 +553,14 @@ namespace simstd {
 	template<typename Type, typename Allocator>
 	void list<Type, Allocator>::push_front(const value_type& value)
 	{
-		//\\LogTraceObj();
+		LogTraceObj();
 		emplace(cbegin(), value);
 	}
 
 	template<typename Type, typename Allocator>
 	void list<Type, Allocator>::push_front(value_type&& value)
 	{
-		//\\LogTraceObj();
+		LogTraceObj();
 		emplace(cbegin(), simstd::move(value));
 	}
 
@@ -568,14 +568,14 @@ namespace simstd {
 	template<typename... Args>
 	void list<Type, Allocator>::emplace_front(Args&&... args)
 	{
-		//\\LogTraceObj();
+		LogTraceObj();
 		emplace(cbegin(), simstd::forward<Args>(args)...);
 	}
 
 	template<typename Type, typename Allocator>
 	void list<Type, Allocator>::pop_front()
 	{
-		//\\LogTraceObj();
+		LogTraceObj();
 		erase(cbegin());
 	}
 
@@ -757,7 +757,7 @@ namespace simstd {
 	template<typename Type, typename Allocator>
 	void list<Type, Allocator>::reverse()
 	{
-		//\\LogTraceObj();
+		LogTraceObj();
 		base_type::m_impl.m_end.reverse();
 	}
 

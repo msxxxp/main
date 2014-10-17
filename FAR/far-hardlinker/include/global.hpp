@@ -8,7 +8,7 @@
 #include <fsys.hpp>
 
 namespace global {
-	struct Statistics: fsys::Sequence::SearchStatistics {
+	struct Statistics: fsys::Sequence::Statistics {
 		uint64_t filesFoundUnique;
 		uint64_t filesOnDifferentVolumes;
 
@@ -71,7 +71,7 @@ namespace global {
 		uint64_t attrMustMatch;
 		uint64_t timeMustMatch;
 		uint64_t doHardlink;
-		fsys::Sequence::SearchOptions searchOptions;
+		fsys::Sequence::Options searchOptions;
 
 		Options();
 	};

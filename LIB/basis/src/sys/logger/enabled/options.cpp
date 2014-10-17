@@ -51,25 +51,29 @@ namespace logger {
 		Level convert_to_level(const wchar_t * str)
 		{
 			Level ret = defaults::get_level();
-			if (cstr::compare_ci_1st_length(L"t", str) == 0 || cstr::compare(L"0", str) == 0) {
+			if (cstr::compare_ci_1st_length(L"to", str) == 0 || cstr::compare(L"0", str) == 0) {
+				ret = Level::TrObj;
+			} else if (cstr::compare_ci_1st_length(L"t", str) == 0 || cstr::compare(L"1", str) == 0) {
 				ret = Level::Trace;
-			} else if (cstr::compare_ci_1st_length(L"d", str) == 0 || cstr::compare(L"1", str) == 0) {
+			} else if (cstr::compare_ci_1st_length(L"dm", str) == 0 || cstr::compare(L"2", str) == 0) {
 				ret = Level::Debug;
-			} else if (cstr::compare_ci_1st_length(L"i", str) == 0 || cstr::compare(L"2", str) == 0) {
+			} else if (cstr::compare_ci_1st_length(L"d", str) == 0 || cstr::compare(L"3", str) == 0) {
+				ret = Level::Debug;
+			} else if (cstr::compare_ci_1st_length(L"i", str) == 0 || cstr::compare(L"4", str) == 0) {
 				ret = Level::Info;
-			} else if (cstr::compare_ci_1st_length(L"r", str) == 0 || cstr::compare(L"3", str) == 0) {
+			} else if (cstr::compare_ci_1st_length(L"r", str) == 0 || cstr::compare(L"5", str) == 0) {
 				ret = Level::Report;
-			} else if (cstr::compare_ci_1st_length(L"at", str) == 0 || cstr::compare(L"4", str) == 0) {
+			} else if (cstr::compare_ci_1st_length(L"at", str) == 0 || cstr::compare(L"6", str) == 0) {
 				ret = Level::Atten;
-			} else if (cstr::compare_ci_1st_length(L"w", str) == 0 || cstr::compare(L"5", str) == 0) {
+			} else if (cstr::compare_ci_1st_length(L"w", str) == 0 || cstr::compare(L"7", str) == 0) {
 				ret = Level::Warn;
-			} else if (cstr::compare_ci_1st_length(L"er", str) == 0 || cstr::compare(L"6", str) == 0) {
+			} else if (cstr::compare_ci_1st_length(L"er", str) == 0 || cstr::compare(L"8", str) == 0) {
 				ret = Level::Error;
-			} else if (cstr::compare_ci_1st_length(L"f", str) == 0 || cstr::compare(L"7", str) == 0) {
+			} else if (cstr::compare_ci_1st_length(L"f", str) == 0 || cstr::compare(L"9", str) == 0) {
 				ret = Level::Fatal;
-			} else if (cstr::compare_ci_1st_length(L"al", str) == 0 || cstr::compare(L"8", str) == 0) {
+			} else if (cstr::compare_ci_1st_length(L"al", str) == 0 || cstr::compare(L"10", str) == 0) {
 				ret = Level::Alert;
-			} else if (cstr::compare_ci_1st_length(L"em", str) == 0 || cstr::compare(L"9", str) == 0) {
+			} else if (cstr::compare_ci_1st_length(L"em", str) == 0 || cstr::compare(L"11", str) == 0) {
 				ret = Level::Emerg;
 			}
 //			console::printf(L"%S '%s' -> %d(%s)\n", __PRETTY_FUNCTION__, str, ret, to_str(ret));

@@ -22,6 +22,7 @@
 
 #include <libfar3/helper.hpp>
 #include <libfar3/dialog_builder.hpp>
+#include <libfar3/dialog.hpp>
 
 #include <farplugin.hpp>
 #include <globalinfo.hpp>
@@ -83,6 +84,48 @@ void FarPlugin::GetPluginInfo(PluginInfo * info)
 }
 
 namespace Far {
+	class FoundDialog: Dialog {
+	public:
+		~FoundDialog();
+		FoundDialog();
+
+		void show();
+
+	private:
+		static intptr_t handler(HANDLE dlg, intptr_t msg, intptr_t param1, void* param2);
+
+		HANDLE m_hndl;
+		int m_width;
+		int m_height;
+	};
+
+	FoundDialog::FoundDialog():
+		m_hndl(nullptr),
+		m_width(),
+		m_height()
+	{
+	}
+
+	void FoundDialog::show()
+	{
+		//		int width = ScrX + 1 - 2;
+		//		int height = ScrY + 1 - 2;
+		m_width = 50;
+		m_height = 15;
+		FarDialogItem FindDlgData[]=
+		{
+			{DI_DOUBLEBOX, 3, 1,  m_width-4, m_height-2, 0, nullptr, nullptr, DIF_SHOWAMPERSAND, title.data()},
+			{DI_LISTBOX,   4, 2,  m_width-5, m_height-7, 0, nullptr, nullptr, DIF_LISTNOBOX | DIF_DISABLE, 0},
+			{DI_TEXT,     -1, m_height-6, 0, m_height-6, 0, nullptr, nullptr, DIF_SEPARATOR2, L""},
+			{DI_BUTTON,    0, m_height-3, 0, m_height-3, 0, nullptr, nullptr, DIF_FOCUS | DIF_DEFAULTBUTTON | DIF_CENTERGROUP, MSG(MFindNewSearch)},
+			{DI_BUTTON,    0, m_height-3, 0, m_height-3, 0, nullptr, nullptr, DIF_CENTERGROUP | DIF_DISABLE, MSG(MFindGoTo)},
+			{DI_BUTTON,    0, m_height-3, 0, m_height-3, 0, nullptr, nullptr, DIF_CENTERGROUP | DIF_DISABLE, MSG(MFindView)},
+			{DI_BUTTON,    0, m_height-3, 0, m_height-3, 0, nullptr, nullptr, DIF_CENTERGROUP | DIF_DISABLE, MSG(MFindPanel)},
+			{DI_BUTTON,    0, m_height-3, 0, m_height-3, 0, nullptr, nullptr, DIF_CENTERGROUP, MSG(MFindStop)},
+		};
+
+		psi().DialogInit(get_plugin_guid(), ListMenuGuid, -1, -1, m_width, m_height, nullptr, FindDlgData, lengthof(FindDlgData), nullptr, FDLG_NONE, handler, nullptr);
+	}
 
 	class Menu {
 	public:

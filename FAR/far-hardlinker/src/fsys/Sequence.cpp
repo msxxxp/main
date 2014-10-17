@@ -9,11 +9,10 @@
 
 namespace fsys {
 
-	Sequence::Sequence(const ustring & path, const ustring & mask, const SearchOptions & options, SearchStatistics & statistics) :
+	Sequence::Sequence(const ustring & path, const ustring & mask, const Options & options) :
 		m_path(path),
 		m_mask(mask),
-		m_options(options),
-		m_statistics(statistics)
+		m_options(options)
 	{
 		LogTraceObj();
 		LogDebug(L"path:                '%s'\n", m_path.c_str());
@@ -38,25 +37,20 @@ namespace fsys {
 		return begin() == end();
 	}
 
-	const Sequence::SearchOptions & Sequence::options() const
+	const Sequence::Options& Sequence::options() const
 	{
 		return m_options;
 	}
 
-	const Sequence::SearchStatistics & Sequence::statistics() const
-	{
-		return m_statistics;
-	}
-
 	///=================================================================================================================
-	Sequence::SearchOptions::SearchOptions():
+	Sequence::Options::Options():
 		fileMinSize(0),
 		fileMaxSize(UINT64_MAX),
 		flags()
 	{
 	}
 
-	void Sequence::SearchOptions::set_flag(SearchFlags flag, bool value)
+	void Sequence::Options::set_flag(SearchFlags flag, bool value)
 	{
 		if (value)
 			flags |= flag;
@@ -64,9 +58,105 @@ namespace fsys {
 			flags &= ~flag;
 	}
 
-	bool Sequence::SearchOptions::get_flag(SearchFlags flag) const
+	bool Sequence::Options::get_flag(SearchFlags flag) const
 	{
 		return flags & flag;
+	}
+
+	bool Sequence::Options::is_filtered_folder(const FindStat & stat) const
+	{
+		bool ret = false;
+
+		statistics.folder_found(stat);
+
+		if (flags & folderSkipAll) {
+			LogConsoleDebug(FOREGROUND_INTENSITY | FOREGROUND_RED | FOREGROUND_GREEN, L"  folder ignored [not recursive]:");
+			statistics.folder_ignored();
+		} else if ((flags & folderSkipLink) && stat.is_link()) {
+			LogConsoleDebug(FOREGROUND_INTENSITY | FOREGROUND_RED | FOREGROUND_GREEN, L"  folder ignored [link]:");
+			statistics.folder_ignored_link();
+		} else if ((flags & folderSkipArchive) && (stat.attr() & FILE_ATTRIBUTE_ARCHIVE)) {
+			LogConsoleDebug(FOREGROUND_INTENSITY | FOREGROUND_RED | FOREGROUND_GREEN, L"  folder ignored [archive]:");
+			statistics.folder_ignored_archive();
+		} else if ((flags & folderSkipReadOnly) && (stat.attr() & FILE_ATTRIBUTE_READONLY)) {
+			LogConsoleDebug(FOREGROUND_INTENSITY | FOREGROUND_RED | FOREGROUND_GREEN, L"  folder ignored [read only]:");
+			statistics.folder_ignored_readonly();
+		} else if ((flags & folderSkipHidden) && (stat.attr() & FILE_ATTRIBUTE_HIDDEN)) {
+			LogConsoleDebug(FOREGROUND_INTENSITY | FOREGROUND_RED | FOREGROUND_GREEN, L"  folder ignored [hidden]:");
+			statistics.folder_ignored_hidden();
+		} else if ((flags & folderSkipSystem) && (stat.attr() & FILE_ATTRIBUTE_SYSTEM)) {
+			LogConsoleDebug(FOREGROUND_INTENSITY | FOREGROUND_RED | FOREGROUND_GREEN, L"  folder ignored [system]:");
+			statistics.folder_ignored_system();
+		} else if (!(flags & folderIncludeDots) && ((cstr::compare(stat.name(), L".") == 0 || cstr::compare(stat.name(), L"..") == 0))) {
+			LogConsoleDebug(FOREGROUND_INTENSITY | FOREGROUND_RED | FOREGROUND_GREEN, L"  folder ignored [invalid]:");
+		} else {
+			ret = true;
+		}
+
+		if (ret)
+			LogConsoleDebug(-1, L"  folder accepted: '%s'\n", stat.name());
+		else
+			LogConsoleDebug(-1, L" '%s'\n", stat.name());
+		return ret;
+	}
+
+	bool Sequence::Options::is_filtered_file(const FindStat & stat) const
+	{
+		bool ret = false;
+
+		statistics.file_found(stat);
+
+		if ((flags & fileSkipLink) && stat.is_link()) {
+			LogConsoleDebug(FOREGROUND_INTENSITY | FOREGROUND_RED | FOREGROUND_GREEN, L"  file ignored [link]:");
+			statistics.file_ignored_link();
+		} else if ((flags & fileSkipArchive) && (stat.attr() & FILE_ATTRIBUTE_ARCHIVE)) {
+			LogConsoleDebug(FOREGROUND_INTENSITY | FOREGROUND_RED | FOREGROUND_GREEN, L"  file ignored [read only]:");
+			statistics.file_ignored_archive();
+		} else if ((flags & fileSkipReadOnly) && (stat.attr() & FILE_ATTRIBUTE_READONLY)) {
+			LogConsoleDebug(FOREGROUND_INTENSITY | FOREGROUND_RED | FOREGROUND_GREEN, L"  file ignored [read only]:");
+			statistics.file_ignored_readonly();
+		} else if ((flags & fileSkipHidden) && (stat.attr() & FILE_ATTRIBUTE_HIDDEN)) {
+			LogConsoleDebug(FOREGROUND_INTENSITY | FOREGROUND_RED | FOREGROUND_GREEN, L"  file ignored [hidden]:");
+			statistics.file_ignored_hidden();
+		} else if ((flags & fileSkipSystem) && (stat.attr() & FILE_ATTRIBUTE_SYSTEM)) {
+			LogConsoleDebug(FOREGROUND_INTENSITY | FOREGROUND_RED | FOREGROUND_GREEN, L"  file ignored [system]:");
+			statistics.file_ignored_system();
+//		} else if ((flags & fileSkipStreamed) && (stat.attr() & FILE_ATTRIBUTE_SYSTEM)) {
+//			LogConsoleDebug(FOREGROUND_INTENSITY | FOREGROUND_RED | FOREGROUND_GREEN, L"file ignored [streamed]:");
+//			statistics.file_ignored_streamed();
+		} else if ((flags & fileSkipCompressed) && (stat.attr() & FILE_ATTRIBUTE_COMPRESSED)) {
+			LogConsoleDebug(FOREGROUND_INTENSITY | FOREGROUND_RED | FOREGROUND_GREEN, L"  file ignored [compressed]:");
+			statistics.file_ignored_compressed();
+		} else if ((flags & fileSkipEncrypted) && (stat.attr() & FILE_ATTRIBUTE_ENCRYPTED)) {
+			LogConsoleDebug(FOREGROUND_INTENSITY | FOREGROUND_RED | FOREGROUND_GREEN, L"  file ignored [encrypted]:");
+			statistics.file_ignored_encrypted();
+		} else if ((flags & fileSkipSparse) && (stat.attr() & FILE_ATTRIBUTE_SPARSE_FILE)) {
+			LogConsoleDebug(FOREGROUND_INTENSITY | FOREGROUND_RED | FOREGROUND_GREEN, L"  file ignored [sparse]:");
+			statistics.file_ignored_sparse();
+		} else if ((flags & fileSkipTemporary) && (stat.attr() & FILE_ATTRIBUTE_TEMPORARY)) {
+			LogConsoleDebug(FOREGROUND_INTENSITY | FOREGROUND_RED | FOREGROUND_GREEN, L"  file ignored [temporary]:");
+			statistics.file_ignored_temporary();
+		} else if ((flags & fileSkipOffline) && (stat.attr() & FILE_ATTRIBUTE_OFFLINE)) {
+			LogConsoleDebug(FOREGROUND_INTENSITY | FOREGROUND_RED | FOREGROUND_GREEN, L"  file ignored [offline]:");
+			statistics.file_ignored_offline();
+		} else if ((flags & fileSkipZeroSize) && stat.size() == 0LL) {
+			LogConsoleDebug(FOREGROUND_INTENSITY | FOREGROUND_RED | FOREGROUND_GREEN, L"  file ignored [zero]: ");
+			statistics.file_ignored_zero();
+		} else if (stat.size() < fileMinSize) {
+			LogConsoleDebug(FOREGROUND_INTENSITY | FOREGROUND_RED | FOREGROUND_GREEN, L"  file ignored [to small]:");
+			statistics.file_ignored_to_small();
+		} else if (stat.size() > fileMaxSize) {
+			LogConsoleDebug(FOREGROUND_INTENSITY | FOREGROUND_RED | FOREGROUND_GREEN, L"  file ignored [to big]:");
+			statistics.file_ignored_to_big();
+		} else {
+			ret = true;
+		}
+
+		if (ret)
+			LogConsoleDebug(-1, L"  file accepted: '%s'\n", stat.name());
+		else
+			LogConsoleDebug(-1, L" '%s'\n", stat.name());
+		return ret;
 	}
 
 	///=================================================================================================================
@@ -89,11 +179,12 @@ namespace fsys {
 				}
 			}
 
+			const Options& options = m_impl->m_sequence->options();
 			if (st.is_dir()) {
-				if (is_filtered_folder(st))
+				if (options.is_filtered_folder(st))
 					break;
 			} else {
-				if (is_filtered_file(st))
+				if (options.is_filtered_file(st))
 					break;
 			}
 
@@ -137,120 +228,6 @@ namespace fsys {
 		m_impl(new impl(seq))
 	{
 		operator++();
-	}
-
-	bool Sequence::ci_iterator::is_filtered_folder(const FindStat & stat)
-	{
-		bool ret = false;
-
-		auto & options = m_impl->m_sequence->m_options;
-//		const SearchOptions & options = m_impl->m_sequence->m_options;
-		auto & statistics = m_impl->m_sequence->m_statistics;
-//		SearchStatistics & statistics = m_impl->m_sequence->m_statistics;
-
-		if (stat.is_link()) {
-			++statistics.foldersLinksFound;
-		} else {
-			++statistics.foldersFound;
-		}
-
-		if (options.flags & folderSkipAll) {
-			LogConsoleDebug(FOREGROUND_INTENSITY | FOREGROUND_RED | FOREGROUND_GREEN, L"  folder ignored [not recursive]:");
-			++statistics.foldersIgnored;
-		} else if ((options.flags & folderSkipLink) && stat.is_link()) {
-			LogConsoleDebug(FOREGROUND_INTENSITY | FOREGROUND_RED | FOREGROUND_GREEN, L"  folder ignored [link]:");
-			++statistics.foldersIgnoredLink;
-		} else if ((options.flags & folderSkipArchive) && (stat.attr() & FILE_ATTRIBUTE_ARCHIVE)) {
-			LogConsoleDebug(FOREGROUND_INTENSITY | FOREGROUND_RED | FOREGROUND_GREEN, L"  folder ignored [archive]:");
-			++statistics.foldersIgnoredArchive;
-		} else if ((options.flags & folderSkipReadOnly) && (stat.attr() & FILE_ATTRIBUTE_READONLY)) {
-			LogConsoleDebug(FOREGROUND_INTENSITY | FOREGROUND_RED | FOREGROUND_GREEN, L"  folder ignored [read only]:");
-			++statistics.foldersIgnoredReadOnly;
-		} else if ((options.flags & folderSkipHidden) && (stat.attr() & FILE_ATTRIBUTE_HIDDEN)) {
-			LogConsoleDebug(FOREGROUND_INTENSITY | FOREGROUND_RED | FOREGROUND_GREEN, L"  folder ignored [hidden]:");
-			++statistics.foldersIgnoredHidden;
-		} else if ((options.flags & folderSkipSystem) && (stat.attr() & FILE_ATTRIBUTE_SYSTEM)) {
-			LogConsoleDebug(FOREGROUND_INTENSITY | FOREGROUND_RED | FOREGROUND_GREEN, L"  folder ignored [system]:");
-			++statistics.foldersIgnoredSystem;
-		} else if (!(options.flags & folderIncludeDots) && ((cstr::compare(stat.name(), L".") == 0 || cstr::compare(stat.name(), L"..") == 0))) {
-			LogConsoleDebug(FOREGROUND_INTENSITY | FOREGROUND_RED | FOREGROUND_GREEN, L"  folder ignored [invalid]:");
-		} else {
-			ret = true;
-		}
-
-		if (ret)
-			LogConsoleDebug(-1, L"  folder accepted: '%s'\n", stat.name());
-		else
-			LogConsoleDebug(-1, L" '%s'\n", stat.name());
-		return ret;
-	}
-
-	bool Sequence::ci_iterator::is_filtered_file(const FindStat & stat)
-	{
-		bool ret = false;
-
-		const SearchOptions & options = m_impl->m_sequence->m_options;
-		SearchStatistics & statistics = m_impl->m_sequence->m_statistics;
-
-		if (stat.is_link()) {
-			++statistics.filesLinksFound;
-			statistics.filesLinksFoundSize += stat.size();
-		} else {
-			++statistics.filesFound;
-			statistics.filesFoundSize += stat.size();
-		}
-
-		if ((options.flags & fileSkipLink) && stat.is_link()) {
-			LogConsoleDebug(FOREGROUND_INTENSITY | FOREGROUND_RED | FOREGROUND_GREEN, L"  file ignored [link]:");
-			++statistics.filesIgnoredLink;
-		} else if ((options.flags & fileSkipArchive) && (stat.attr() & FILE_ATTRIBUTE_ARCHIVE)) {
-			LogConsoleDebug(FOREGROUND_INTENSITY | FOREGROUND_RED | FOREGROUND_GREEN, L"  file ignored [read only]:");
-			++statistics.filesIgnoredArchive;
-		} else if ((options.flags & fileSkipReadOnly) && (stat.attr() & FILE_ATTRIBUTE_READONLY)) {
-			LogConsoleDebug(FOREGROUND_INTENSITY | FOREGROUND_RED | FOREGROUND_GREEN, L"  file ignored [read only]:");
-			++statistics.filesIgnoredReadOnly;
-		} else if ((options.flags & fileSkipHidden) && (stat.attr() & FILE_ATTRIBUTE_HIDDEN)) {
-			LogConsoleDebug(FOREGROUND_INTENSITY | FOREGROUND_RED | FOREGROUND_GREEN, L"  file ignored [hidden]:");
-			++statistics.filesIgnoredHidden;
-		} else if ((options.flags & fileSkipSystem) && (stat.attr() & FILE_ATTRIBUTE_SYSTEM)) {
-			LogConsoleDebug(FOREGROUND_INTENSITY | FOREGROUND_RED | FOREGROUND_GREEN, L"  file ignored [system]:");
-			++statistics.filesIgnoredSystem;
-//		} else if ((options.flags & fileSkipStreamed) && (stat.attr() & FILE_ATTRIBUTE_SYSTEM)) {
-//			LogConsoleDebug(FOREGROUND_INTENSITY | FOREGROUND_RED | FOREGROUND_GREEN, L"file ignored [streamed]:");
-//			++statistics.filesIgnoredStreamed;
-		} else if ((options.flags & fileSkipCompressed) && (stat.attr() & FILE_ATTRIBUTE_COMPRESSED)) {
-			LogConsoleDebug(FOREGROUND_INTENSITY | FOREGROUND_RED | FOREGROUND_GREEN, L"  file ignored [compressed]:");
-			++statistics.filesIgnoredCompressed;
-		} else if ((options.flags & fileSkipEncrypted) && (stat.attr() & FILE_ATTRIBUTE_ENCRYPTED)) {
-			LogConsoleDebug(FOREGROUND_INTENSITY | FOREGROUND_RED | FOREGROUND_GREEN, L"  file ignored [encrypted]:");
-			++statistics.filesIgnoredEncrypted;
-		} else if ((options.flags & fileSkipSparse) && (stat.attr() & FILE_ATTRIBUTE_SPARSE_FILE)) {
-			LogConsoleDebug(FOREGROUND_INTENSITY | FOREGROUND_RED | FOREGROUND_GREEN, L"  file ignored [sparse]:");
-			++statistics.filesIgnoredSparse;
-		} else if ((options.flags & fileSkipTemporary) && (stat.attr() & FILE_ATTRIBUTE_TEMPORARY)) {
-			LogConsoleDebug(FOREGROUND_INTENSITY | FOREGROUND_RED | FOREGROUND_GREEN, L"  file ignored [temporary]:");
-			++statistics.filesIgnoredTemporary;
-		} else if ((options.flags & fileSkipOffline) && (stat.attr() & FILE_ATTRIBUTE_OFFLINE)) {
-			LogConsoleDebug(FOREGROUND_INTENSITY | FOREGROUND_RED | FOREGROUND_GREEN, L"  file ignored [offline]:");
-			++statistics.filesIgnoredOffline;
-		} else if ((options.flags & fileSkipZeroSize) && stat.size() == 0LL) {
-			LogConsoleDebug(FOREGROUND_INTENSITY | FOREGROUND_RED | FOREGROUND_GREEN, L"  file ignored [zero]: ");
-			++statistics.filesIgnoredZeroSize;
-		} else if (stat.size() < options.fileMinSize) {
-			LogConsoleDebug(FOREGROUND_INTENSITY | FOREGROUND_RED | FOREGROUND_GREEN, L"  file ignored [to small]:");
-			++statistics.filesIgnoredMinSize;
-		} else if (stat.size() > options.fileMaxSize) {
-			LogConsoleDebug(FOREGROUND_INTENSITY | FOREGROUND_RED | FOREGROUND_GREEN, L"  file ignored [to big]:");
-			++statistics.filesIgnoredMaxSize;
-		} else {
-			ret = true;
-		}
-
-		if (ret)
-			LogConsoleDebug(-1, L"  file accepted: '%s'\n", stat.name());
-		else
-			LogConsoleDebug(-1, L" '%s'\n", stat.name());
-		return ret;
 	}
 
 	///=================================================================================================================

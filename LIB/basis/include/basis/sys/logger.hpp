@@ -6,11 +6,11 @@
 
 #if (defined(DEBUG) || defined(ENABLE_LOGGER)) && !defined(DISABLE_LOGGER)
 #   define LogSetOptions(url)                                logger::set_options(url)
+#   define LogTraceObj()                                     get_logger_module()->out_debug(THIS_PLACE, logger::Level::TrObj, L"[%p, %I64u]\n", this, sizeof(*this))
+#   define LogTraceObjBegin()                                get_logger_module()->out_debug(THIS_PLACE_SHORT, logger::Level::TrObj, L"[%p, %I64u] begin\n", this, sizeof(*this))
+#   define LogTraceObjEnd()                                  get_logger_module()->out_debug(THIS_PLACE_SHORT, logger::Level::TrObj, L"[%p, %I64u] end\n", this, sizeof(*this))
 #   define LogTrace()                                        get_logger_module()->out_debug(THIS_PLACE_SHORT, logger::Level::Trace, L"\n")
 #   define LogTraceIf(condition)              if (condition) get_logger_module()->out_debug(THIS_PLACE_SHORT, logger::Level::Trace, L"\n")
-#   define LogTraceObj()                                     get_logger_module()->out_debug(THIS_PLACE, logger::Level::Trace, L"[%p, %I64u]\n", this, sizeof(*this))
-#   define LogTraceObjBegin()                                get_logger_module()->out_debug(THIS_PLACE_SHORT, logger::Level::Trace, L"[%p, %I64u] begin\n", this, sizeof(*this))
-#   define LogTraceObjEnd()                                  get_logger_module()->out_debug(THIS_PLACE_SHORT, logger::Level::Trace, L"[%p, %I64u] end\n", this, sizeof(*this))
 //#   ifdef _MSC_VER
 //#       define LogNoise(format, ...)              get_logger_module()->out(THIS_PLACE_SHORT, logger::Level::Trace, format, __VA_ARGS__)
 //#       define LogNoiseIf(condition, format, ...) if (condition) get_logger_module()->out(THIS_PLACE_SHORT, logger::Level::Trace, format, __VA_ARGS__)
@@ -72,11 +72,11 @@ namespace { \
 }
 #else
 #   define LogSetOptions(url)
-#   define LogTrace()
-#   define LogTraceIf(condition)                       (void)(condition)
 #   define LogTraceObj()
 #   define LogTraceObjBegin()
 #   define LogTraceObjEnd()
+#   define LogTrace()
+#   define LogTraceIf(condition)                       (void)(condition)
 #   define LogNoise(format, ...)
 #   define LogNoiseIf(condition, format, ...)          (void)(condition)
 #   define LogDebug(format, ...)
@@ -130,17 +130,19 @@ namespace { \
 namespace logger {
 
 	enum class Level : ssize_t {
-		Trace,
-		Debug,
-		Info,
-		Report,
-		Atten,
-		Warn,
-		Error,
-		Fatal,
-		Alert,
-		Emerg,
-		Force,
+		TrObj,    // Trace objects
+		Trace,    // Trace
+		DbgMo,    // Debug more
+		Debug,    // Debug
+		Info,     // Information
+		Report,   // Report
+		Atten,    // Attention
+		Warn,     // Warning
+		Error,    // Error
+		Fatal,    // Fatal error
+		Alert,    // Alert
+		Emerg,    // Emergency
+		Force,    // Force log without level
 	};
 
 	const wchar_t * to_str(Level lvl);

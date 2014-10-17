@@ -6,8 +6,6 @@
 #include <basis/sys/fsys.hpp>
 #include <basis/simstd/string>
 
-#include <atomic>
-
 namespace fsys {
 
 	///=================================================================================================================
@@ -17,8 +15,8 @@ namespace fsys {
 
 	public:
 		struct FindStat;
-		struct SearchOptions;
-		struct SearchStatistics;
+		struct Options;
+		struct Statistics;
 
 		enum SearchFlags {
 			folderIncludeDots  = 0x0000001,
@@ -51,7 +49,7 @@ namespace fsys {
 		typedef ci_iterator iterator;
 		typedef ci_iterator const_iterator;
 
-		Sequence(const ustring & path, const ustring & mask, const SearchOptions & options, SearchStatistics & statistics);
+		Sequence(const ustring & path, const ustring & mask, const Options & options);
 
 		const_iterator begin() const;
 
@@ -63,15 +61,12 @@ namespace fsys {
 
 		const ustring& mask() const;
 
-		const SearchOptions & options() const;
-
-		const SearchStatistics & statistics() const;
+		const Options & options() const;
 
 	private:
-		ustring               m_path;
-		ustring               m_mask;
-		const SearchOptions & m_options;
-		SearchStatistics    & m_statistics;
+		ustring         m_path;
+		ustring         m_mask;
+		const Options & m_options;
 	};
 
 	inline const ustring& Sequence::path() const
@@ -160,45 +155,56 @@ namespace fsys {
 	}
 
 	///=================================================================================================================
-	struct Sequence::SearchOptions {
-		uint64_t   fileMinSize;
-		uint64_t   fileMaxSize;
-		flags_type flags;
+	struct Sequence::Statistics {
+		Statistics();
 
-		SearchOptions();
+		void init_statistics();
+		void free_statistics();
 
-		void set_flag(SearchFlags flag, bool value);
-		bool get_flag(SearchFlags flag) const;
+		void folder_found(const FindStat& stat);
+		void folder_ignored();
+		void folder_ignored_archive();
+		void folder_ignored_readonly();
+		void folder_ignored_hidden();
+		void folder_ignored_system();
+		void folder_ignored_link();
+
+		void file_found(const FindStat& stat);
+		void file_ignored();
+		void file_ignored_to_small();
+		void file_ignored_to_big();
+		void file_ignored_archive();
+		void file_ignored_readonly();
+		void file_ignored_hidden();
+		void file_ignored_system();
+		void file_ignored_link();
+		void file_ignored_streamed();
+		void file_ignored_compressed();
+		void file_ignored_encrypted();
+		void file_ignored_sparse();
+		void file_ignored_temporary();
+		void file_ignored_offline();
+		void file_ignored_zero();
+
+	private:
+		struct Impl;
+		Impl* m_impl;
 	};
 
 	///=================================================================================================================
-	struct Sequence::SearchStatistics {
-		std::atomic<uint64_t> filesFound;
-		std::atomic<uint64_t> filesFoundSize;
-		std::atomic<uint64_t> filesLinksFound;
-		std::atomic<uint64_t> filesLinksFoundSize;
-		std::atomic<uint64_t> filesIgnoredMinSize;
-		std::atomic<uint64_t> filesIgnoredMaxSize;
-		std::atomic<uint64_t> filesIgnoredArchive;
-		std::atomic<uint64_t> filesIgnoredReadOnly;
-		std::atomic<uint64_t> filesIgnoredHidden;
-		std::atomic<uint64_t> filesIgnoredSystem;
-		std::atomic<uint64_t> filesIgnoredLink;
-		std::atomic<uint64_t> filesIgnoredStreamed;
-		std::atomic<uint64_t> filesIgnoredCompressed;
-		std::atomic<uint64_t> filesIgnoredEncrypted;
-		std::atomic<uint64_t> filesIgnoredSparse;
-		std::atomic<uint64_t> filesIgnoredTemporary;
-		std::atomic<uint64_t> filesIgnoredOffline;
-		std::atomic<uint64_t> filesIgnoredZeroSize;
-		std::atomic<uint64_t> foldersFound;
-		std::atomic<uint64_t> foldersLinksFound;
-		std::atomic<uint64_t> foldersIgnored;
-		std::atomic<uint64_t> foldersIgnoredArchive;
-		std::atomic<uint64_t> foldersIgnoredReadOnly;
-		std::atomic<uint64_t> foldersIgnoredHidden;
-		std::atomic<uint64_t> foldersIgnoredSystem;
-		std::atomic<uint64_t> foldersIgnoredLink;
+	struct Sequence::Options {
+		uint64_t                 fileMinSize;
+		uint64_t                 fileMaxSize;
+		flags_type               flags;
+		mutable Statistics statistics;
+
+		Options();
+
+		void set_flag(SearchFlags flag, bool value);
+		bool get_flag(SearchFlags flag) const;
+
+		bool is_filtered_folder(const FindStat & stat) const;
+		bool is_filtered_file(const FindStat & stat) const;
 	};
 
 	///=================================================================================================================
@@ -222,10 +228,6 @@ namespace fsys {
 		ci_iterator();
 
 		ci_iterator(const Sequence & seq);
-
-		bool is_filtered_folder(const FindStat & stat);
-
-		bool is_filtered_file(const FindStat & stat);
 
 		struct impl;
 		simstd::shared_ptr<impl> m_impl;

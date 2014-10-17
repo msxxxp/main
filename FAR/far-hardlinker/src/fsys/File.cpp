@@ -8,8 +8,9 @@ namespace fsys {
 
 	File::~File()
 	{
+		LogTraceObj();
+		LogNoise(L"'%s'\n", m_name.c_str());
 		++global::statistics().fileObjectsDestroyed;
-		LogDebug(L"'%s'\n", m_name.c_str());
 	}
 
 	File::File(const fsys::Sequence::FindStat & info, Node_t parent) :
@@ -20,7 +21,8 @@ namespace fsys {
 		m_volume_sn(),
 		m_inode()
 	{
-		LogDebug(L"'%s'\n", m_name.c_str());
+		LogTraceObj();
+		LogNoise(L"'%s'\n", m_name.c_str());
 		++global::statistics().fileObjectsCreated;
 	}
 
@@ -85,7 +87,7 @@ namespace fsys {
 			m_volume_sn = stat->volume_sn();
 			m_inode     = stat->inode();
 		}
-		LogDebug(L"0x%08X 0x%016X '%s'\n", m_volume_sn, m_inode, m_name.c_str());
+		LogDebug(L"vol: 0x%08X, inode: 0x%016X '%s'\n", m_volume_sn, m_inode, m_name.c_str());
 	}
 
 	bool File::count_hash(hash_type & out, ustring path, uint64_t first, uint64_t last)
@@ -135,4 +137,5 @@ namespace fsys {
 
 		return compare_head_hash(file1, file2) && compare_tail_hash(file1, file2) && compare_whole_hash(file1, file2);
 	}
+
 }

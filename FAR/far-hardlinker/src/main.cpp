@@ -29,8 +29,9 @@
 namespace {
 	void setup_logger()
 	{
-		LogSetOptions(L"logger:///default?level=tr;prefix=fu;target=fo(hardlinker.log)");
-//		LogSetOptions(L"logger:///module?name=user_console;prefix=0;level=fa;target=n");
+		LogSetOptions(L"logger:///default?level=d;prefix=fu;target=fo(hardlinker.log)");
+//		LogSetOptions(L"logger:///module?name=std_console;level=fa;prefix=0;target=n");
+		LogSetOptions(L"logger:///module?name=std_console;level=t;prefix=0;target=fo(hardlinkerConsole.log)");
 	}
 }
 

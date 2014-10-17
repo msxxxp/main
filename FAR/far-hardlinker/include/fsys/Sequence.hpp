@@ -21,29 +21,37 @@ namespace fsys {
 		struct SearchStatistics;
 
 		enum SearchFlags {
-			incDots            = 0x00001,
+			folderIncludeDots  = 0x0000001,
 
-			folderSkipAll      = 0x00010,
-			folderSkipReadOnly = 0x00020,
-			folderSkipHidden   = 0x00040,
-			folderSkipSystem   = 0x00080,
-			folderSkipLink     = 0x00100,
+			folderSkipAll      = 0x0000010,
+			folderSkipArchive  = 0x0000020,
+			folderSkipReadOnly = 0x0000040,
+			folderSkipHidden   = 0x0000080,
+			folderSkipSystem   = 0x0000100,
+			folderSkipLink     = 0x0000200,
 
-			fileSkipAll        = 0x01000,
-			fileSkipReadOnly   = 0x02000,
-			fileSkipHidden     = 0x04000,
-			fileSkipSystem     = 0x08000,
-			fileSkipLink       = 0x10000,
-			fileSkipZeroSize   = 0x20000,
+			fileSkipAll        = 0x0001000,
+			fileSkipArchive    = 0x0002000,
+			fileSkipReadOnly   = 0x0004000,
+			fileSkipHidden     = 0x0008000,
+			fileSkipSystem     = 0x0010000,
+			fileSkipLink       = 0x0020000,
+			fileSkipStreamed   = 0x0040000,
+			fileSkipCompressed = 0x0080000,
+			fileSkipEncrypted  = 0x0100000,
+			fileSkipSparse     = 0x0200000,
+			fileSkipTemporary  = 0x0400000,
+			fileSkipOffline    = 0x0800000,
+			fileSkipZeroSize   = 0x1000000,
 		};
 
 		typedef FindStat    value_type;
 		typedef size_t      size_type;
-		typedef size_t      flags_type;
+		typedef uint64_t    flags_type;
 		typedef ci_iterator iterator;
 		typedef ci_iterator const_iterator;
 
-		Sequence(const ustring & path, const SearchOptions & options, SearchStatistics & statistics);
+		Sequence(const ustring & path, const ustring & mask, const SearchOptions & options, SearchStatistics & statistics);
 
 		const_iterator begin() const;
 
@@ -51,7 +59,9 @@ namespace fsys {
 
 		bool empty() const;
 
-		ustring path() const;
+		const ustring& path() const;
+
+		const ustring& mask() const;
 
 		const SearchOptions & options() const;
 
@@ -59,13 +69,19 @@ namespace fsys {
 
 	private:
 		ustring               m_path;
+		ustring               m_mask;
 		const SearchOptions & m_options;
 		SearchStatistics    & m_statistics;
 	};
 
-	inline ustring Sequence::path() const
+	inline const ustring& Sequence::path() const
 	{
 		return m_path;
+	}
+
+	inline const ustring& Sequence::mask() const
+	{
+		return m_mask;
 	}
 
 	///=================================================================================================================
@@ -147,10 +163,12 @@ namespace fsys {
 	struct Sequence::SearchOptions {
 		uint64_t   fileMinSize;
 		uint64_t   fileMaxSize;
-		ustring    mask;
 		flags_type flags;
 
 		SearchOptions();
+
+		void set_flag(SearchFlags flag, bool value);
+		bool get_flag(SearchFlags flag) const;
 	};
 
 	///=================================================================================================================
@@ -159,16 +177,24 @@ namespace fsys {
 		std::atomic<uint64_t> filesFoundSize;
 		std::atomic<uint64_t> filesLinksFound;
 		std::atomic<uint64_t> filesLinksFoundSize;
+		std::atomic<uint64_t> filesIgnoredMinSize;
+		std::atomic<uint64_t> filesIgnoredMaxSize;
+		std::atomic<uint64_t> filesIgnoredArchive;
 		std::atomic<uint64_t> filesIgnoredReadOnly;
 		std::atomic<uint64_t> filesIgnoredHidden;
 		std::atomic<uint64_t> filesIgnoredSystem;
 		std::atomic<uint64_t> filesIgnoredLink;
+		std::atomic<uint64_t> filesIgnoredStreamed;
+		std::atomic<uint64_t> filesIgnoredCompressed;
+		std::atomic<uint64_t> filesIgnoredEncrypted;
+		std::atomic<uint64_t> filesIgnoredSparse;
+		std::atomic<uint64_t> filesIgnoredTemporary;
+		std::atomic<uint64_t> filesIgnoredOffline;
 		std::atomic<uint64_t> filesIgnoredZeroSize;
-		std::atomic<uint64_t> filesIgnoredMinSize;
-		std::atomic<uint64_t> filesIgnoredMaxSize;
 		std::atomic<uint64_t> foldersFound;
 		std::atomic<uint64_t> foldersLinksFound;
 		std::atomic<uint64_t> foldersIgnored;
+		std::atomic<uint64_t> foldersIgnoredArchive;
 		std::atomic<uint64_t> foldersIgnoredReadOnly;
 		std::atomic<uint64_t> foldersIgnoredHidden;
 		std::atomic<uint64_t> foldersIgnoredSystem;
@@ -218,17 +244,6 @@ namespace fsys {
 		FindStat         m_fstat;
 	};
 
-	inline Sequence::ci_iterator::impl::impl() noexcept :
-		m_sequence(nullptr),
-		m_find_handle(nullptr)
-	{
-	}
-
-	inline Sequence::ci_iterator::impl::impl(const Sequence & seq) noexcept :
-		m_sequence(&seq),
-		m_find_handle(INVALID_HANDLE_VALUE)
-	{
-	}
 }
 
 #endif

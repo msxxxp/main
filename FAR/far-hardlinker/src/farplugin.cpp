@@ -82,6 +82,34 @@ void FarPlugin::GetPluginInfo(PluginInfo * info)
 	info->CommandPrefix = get_global_info()->prefix;
 }
 
+namespace Far {
+
+	class Menu {
+	public:
+		Menu(const GUID& guid):
+			m_guid(guid)
+		{
+			LogTraceObj();
+		}
+
+		bool show() {
+			LogTraceObj();
+
+			static FarMenuItem items[] = {
+				{MIF_NONE, L"qwe1", {0, 0}, 0, {0, 0}},
+			};
+
+			auto ptr = Far::psi().Menu(get_plugin_guid(), &m_guid, -1, -1, 0, FMENU_NONE, L"menu", nullptr, nullptr, nullptr, nullptr, items, lengthof(items));
+			return ptr;
+		}
+
+	private:
+		const GUID& m_guid;
+	};
+
+}
+
+
 Far::PanelController_i * FarPlugin::Open(const OpenInfo * info)
 {
 	UNUSED(info);
@@ -96,6 +124,11 @@ Far::PanelController_i * FarPlugin::Open(const OpenInfo * info)
 		{0, get_msg(lbHardlinkAuto), {0}},
 		{0, get_msg(lbHardlinkManual), {0}},
 	};
+
+	Far::Menu menu(ListMenuGuid);
+	menu.show();
+
+	return nullptr;
 
 	auto dialog = create_dialog_builder(DialogGuid, get_msg(DlgTitle));
 	LogTrace();

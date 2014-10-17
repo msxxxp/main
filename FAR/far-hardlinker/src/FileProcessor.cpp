@@ -38,20 +38,19 @@ bool CompareAndLink(fsys::Files_t::iterator it1, fsys::Files_t::iterator it2)
 
 	++global::statistics().fileCompares;
 
-
 	const wchar_t * logStr = nullptr;
 	if (global::options().attrMustMatch && file1->attr() != file2->attr()) {
-		logStr = L"  Attributes of files do not match -> ignore\n";
+		logStr = L"  attributes of files do not match -> ignore\n";
 		++global::statistics().fileMetaDataMismatch;
 	} else if (global::options().timeMustMatch && file1->mtime() != file2->mtime()) {
-		logStr = L"  Modification timestamps of files do not match -> ignore\n";
+		logStr = L"  modification timestamps of files do not match -> ignore\n";
 		++global::statistics().fileMetaDataMismatch;
 	} else if (!CompareByVolumeEqual(file1, file2)) {
-		logStr = L"  Files on different volumes -> ignore\n";
+		logStr = L"  files on different volumes -> ignore\n";
 		++global::statistics().filesOnDifferentVolumes;
 	} else if (CompareByInodeEqual(file1, file2)) {
 		++global::statistics().fileAlreadyLinked;
-		logStr = L"  Files already linked -> ignore\n";
+		logStr = L"  files already linked -> ignore\n";
 	} else  if (fsys::compare_hash(*file1, *file2)) {
 		++global::statistics().fileContentSame;
 		LogConsoleReport(FOREGROUND_INTENSITY | FOREGROUND_BLUE | FOREGROUND_GREEN, L"Comparing files [size = %I64u]:\n", file1->size());
@@ -65,13 +64,13 @@ bool CompareAndLink(fsys::Files_t::iterator it1, fsys::Files_t::iterator it2)
 		return true;
 	}
 
-	LogConsoleDebug(FOREGROUND_INTENSITY | FOREGROUND_BLUE | FOREGROUND_GREEN, L"Comparing files [size = %I64u]:\n", file2->size());
+	LogConsoleDebug(FOREGROUND_INTENSITY | FOREGROUND_BLUE | FOREGROUND_GREEN, L"comparing files [size = %I64u]:\n", file2->size());
 	LogConsoleDebug(-1, L"  %s\n", path1.c_str());
 	LogConsoleDebug(-1, L"  %s\n", path2.c_str());
 	if (logStr) {
 		LogConsoleDebug(FOREGROUND_INTENSITY | FOREGROUND_GREEN, logStr);
 	} else {
-		LogConsoleDebug(FOREGROUND_INTENSITY | FOREGROUND_RED | FOREGROUND_GREEN, L"  Files differ in content (hash) -> ignore\n");
+		LogConsoleDebug(FOREGROUND_INTENSITY | FOREGROUND_RED | FOREGROUND_GREEN, L"  files differ in content (hash) -> ignore\n");
 		++global::statistics().hashComparesHit1;
 	}
 
@@ -124,21 +123,7 @@ void scan_single_folder(fsys::Node_t folder)
 		return;
 	}
 
-	fsys::Sequence::SearchOptions opt;
-	opt.fileMinSize |= global::options().fileMinSize;
-	opt.fileMaxSize |= global::options().fileMaxSize;
-	opt.flags |= global::options().doRecursive ? 0 : fsys::Sequence::SearchFlags::folderSkipAll;
-	opt.flags |= global::options().folderSkipReadOnly ? 0 : fsys::Sequence::SearchFlags::folderSkipReadOnly;
-	opt.flags |= global::options().folderSkipHidden ? 0 : fsys::Sequence::SearchFlags::folderSkipHidden;
-	opt.flags |= global::options().folderSkipSystem ? 0 : fsys::Sequence::SearchFlags::folderSkipSystem;
-	opt.flags |= global::options().folderSkipLink ? 0 : fsys::Sequence::SearchFlags::folderSkipLink;
-	opt.flags |= global::options().fileSkipReadOnly ? 0 : fsys::Sequence::SearchFlags::fileSkipReadOnly;
-	opt.flags |= global::options().fileSkipHidden ? 0 : fsys::Sequence::SearchFlags::fileSkipHidden;
-	opt.flags |= global::options().fileSkipSystem ? 0 : fsys::Sequence::SearchFlags::fileSkipSystem;
-	opt.flags |= global::options().fileSkipLink ? 0 : fsys::Sequence::SearchFlags::fileSkipLink;
-	opt.flags |= global::options().fileSkipZeroSize ? 0 : fsys::Sequence::SearchFlags::fileSkipZeroSize;
-
-	fsys::Sequence dir(fullPath, opt, global::statistics());
+	fsys::Sequence dir(fullPath, L"*", global::options().searchOptions, global::statistics());
 	for (auto it = dir.begin(); it != dir.end(); ++it) {
 //		LogDebug(L"%s\n", it->name());
 		if (it->is_dir()) {
@@ -152,7 +137,7 @@ void scan_single_folder(fsys::Node_t folder)
 ssize_t FileProcessor::execute()
 {
 	LogTrace();
-	LogConsoleInfo(-1, L"Folders to process: %I64u\n", global::vars().folders.size());
+	LogConsoleInfo(-1, L"folders to process: %I64u\n", global::vars().folders.size());
 
 	while (!global::vars().folders.empty())
 	{
@@ -162,10 +147,10 @@ ssize_t FileProcessor::execute()
 	}
 
 	if (global::vars().files.empty()) {
-		LogConsoleInfo(-1, L"No files found to process\n");
+		LogConsoleInfo(-1, L"no files found to process\n");
 		return 1;
 	} else {
-		LogConsoleInfo(-1, L"Files found to process: %I64u\n", global::vars().files.size());
+		LogConsoleInfo(-1, L"files found to process: %I64u\n", global::vars().files.size());
 	}
 
 	using namespace global;

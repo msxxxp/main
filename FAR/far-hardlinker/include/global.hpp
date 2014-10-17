@@ -66,23 +66,12 @@ namespace global {
 	};
 
 	struct Options {
-		uint64_t fileMinSize;          // Minimum file size so that hard linking will be checked...
-		uint64_t fileMaxSize;          // Minimum file size so that hard linking will be checked...
 		uint64_t firstBlockHash;
-		uint64_t showStatistics :1;
-		uint64_t attrMustMatch :1;
-		uint64_t timeMustMatch :1;
-		uint64_t doHardlink :1;
-		uint64_t doRecursive :1;
-		uint64_t folderSkipReadOnly :1;
-		uint64_t folderSkipHidden :1;
-		uint64_t folderSkipSystem :1;
-		uint64_t folderSkipLink :1;
-		uint64_t fileSkipReadOnly :1;
-		uint64_t fileSkipHidden :1;
-		uint64_t fileSkipSystem :1;
-		uint64_t fileSkipLink :1;
-		uint64_t fileSkipZeroSize :1;
+		uint64_t showStatistics;
+		uint64_t attrMustMatch;
+		uint64_t timeMustMatch;
+		uint64_t doHardlink;
+		fsys::Sequence::SearchOptions searchOptions;
 
 		Options();
 	};

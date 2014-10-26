@@ -16,43 +16,16 @@
  along with this program. If not, see <http://www.gnu.org/licenses/>.
  **/
 
-#ifndef _FAR3_DIALOG_ITEMBINDING_HPP_
-#define _FAR3_DIALOG_ITEMBINDING_HPP_
-
-#include <far3/~3rdparty/plugin.hpp>
-//#include <far3/helper.hpp>
-
-#include <basis/ext/pattern.hpp>
+#ifndef _FAR3_FWD_HPP_
+#define _FAR3_FWD_HPP_
 
 namespace far3 {
-	namespace dialog {
 
-		class ItemBinding {
-		public:
-			virtual ~ItemBinding() = default;
+	struct GlobalInfo_i;
+	struct PanelController_i;
+	struct Plugin_i;
+	struct PluginSettings_i;
 
-			HANDLE get_dialog() const;
-
-			ssize_t get_index() const;
-
-			void set_index(ssize_t index);
-
-			virtual void save() const = 0;
-
-			virtual ssize_t get_width() const = 0;
-
-			virtual ssize_t get_height() const;
-
-		protected:
-			ItemBinding();
-			ItemBinding(HANDLE dlg, ssize_t index);
-
-		private:
-			HANDLE  m_dialog;
-			ssize_t m_index;
-		};
-
-	}
 }
 
 #endif

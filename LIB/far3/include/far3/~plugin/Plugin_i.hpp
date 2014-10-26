@@ -16,43 +16,50 @@
  along with this program. If not, see <http://www.gnu.org/licenses/>.
  **/
 
-#ifndef _FAR3_DIALOG_ITEMBINDING_HPP_
-#define _FAR3_DIALOG_ITEMBINDING_HPP_
+#ifndef _FAR3_PLUGIN_I_HPP_
+#define _FAR3_PLUGIN_I_HPP_
 
-#include <far3/~3rdparty/plugin.hpp>
-//#include <far3/helper.hpp>
+#include <far3/plugin.hpp>
 
 #include <basis/ext/pattern.hpp>
 
 namespace far3 {
-	namespace dialog {
 
-		class ItemBinding {
-		public:
-			virtual ~ItemBinding() = default;
+	class Plugin_i: public pattern::Destroyable {
+	public:
+		virtual ~Plugin_i() = default;
 
-			HANDLE get_dialog() const;
+		Plugin_i(const PluginStartupInfo * info);
 
-			ssize_t get_index() const;
+	public:
+		void GetPluginInfoW(PluginInfo * info);
 
-			void set_index(ssize_t index);
+		PanelController_i * OpenW(const OpenInfo * info);
 
-			virtual void save() const = 0;
+		void ExitFARW(const ExitInfo * info);
 
-			virtual ssize_t get_width() const = 0;
+		const PluginStartupInfo & psi() const
+		{
+			return m_psi;
+		}
 
-			virtual ssize_t get_height() const;
+		const FarStandardFunctions & fsf() const
+		{
+			return m_fsf;
+		}
 
-		protected:
-			ItemBinding();
-			ItemBinding(HANDLE dlg, ssize_t index);
+	private:
+		virtual void GetPluginInfo(PluginInfo * pi) = 0;
 
-		private:
-			HANDLE  m_dialog;
-			ssize_t m_index;
-		};
+		virtual PanelController_i * Open(const OpenInfo * info);
 
-	}
+		virtual void ExitFAR(const ExitInfo * info);
+
+	private:
+		PluginStartupInfo    m_psi;
+		FarStandardFunctions m_fsf;
+	};
+
 }
 
 #endif

@@ -16,43 +16,58 @@
  along with this program. If not, see <http://www.gnu.org/licenses/>.
  **/
 
-#ifndef _FAR3_DIALOG_ITEMBINDING_HPP_
-#define _FAR3_DIALOG_ITEMBINDING_HPP_
+#include <far3/plugin.hpp>
 
-#include <far3/~3rdparty/plugin.hpp>
-//#include <far3/helper.hpp>
-
-#include <basis/ext/pattern.hpp>
+#include <far3/~plugin/GlobalInfo_i.hpp>
+#include <far3/~plugin/Plugin_i.hpp>
 
 namespace far3 {
-	namespace dialog {
 
-		class ItemBinding {
-		public:
-			virtual ~ItemBinding() = default;
-
-			HANDLE get_dialog() const;
-
-			ssize_t get_index() const;
-
-			void set_index(ssize_t index);
-
-			virtual void save() const = 0;
-
-			virtual ssize_t get_width() const = 0;
-
-			virtual ssize_t get_height() const;
-
-		protected:
-			ItemBinding();
-			ItemBinding(HANDLE dlg, ssize_t index);
-
-		private:
-			HANDLE  m_dialog;
-			ssize_t m_index;
-		};
-
+	helper_t& helper_t::inst()
+	{
+		static helper_t ret;
+		return ret;
 	}
-}
 
-#endif
+	helper_t::~helper_t()
+	{
+		delete m_gi;
+	}
+
+	helper_t& helper_t::init(GlobalInfo_i * gi)
+	{
+		m_gi = gi;
+		return *this;
+	}
+
+	const GUID* helper_t::get_guid() const
+	{
+		return m_gi->get_guid();
+	}
+
+	const PluginStartupInfo& helper_t::psi() const
+	{
+		return get_plugin()->psi();
+	}
+
+	const FarStandardFunctions& helper_t::fsf() const
+	{
+		return get_plugin()->fsf();
+	}
+
+	GlobalInfo_i* helper_t::get_global_info() const
+	{
+		return m_gi;
+	}
+
+	Plugin_i* helper_t::get_plugin() const
+	{
+		return m_gi->get_plugin();
+	}
+
+	helper_t::helper_t() :
+		m_gi(nullptr)
+	{
+	}
+
+}

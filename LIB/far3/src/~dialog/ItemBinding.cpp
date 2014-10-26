@@ -21,45 +21,34 @@
 namespace far3 {
 	namespace dialog {
 
-		HANDLE ItemBinding::get_dlg() const
+		ItemBinding::ItemBinding() :
+			m_dialog(),
+			m_index()
 		{
-			return (this) ? *m_dlg : nullptr;
+		}
+
+		ItemBinding::ItemBinding(HANDLE dlg, ssize_t index) :
+			m_dialog(dlg),
+			m_index(index)
+		{
+		}
+
+		HANDLE ItemBinding::get_dialog() const
+		{
+			return m_dialog;
 		}
 
 		ssize_t ItemBinding::get_index() const
 		{
-			return (this) ? m_index : 0;
-		}
-
-		void ItemBinding::set_dlg(HANDLE * hndl)
-		{
-			if (this)
-				m_dlg = hndl;
+			return m_index;
 		}
 
 		void ItemBinding::set_index(ssize_t index)
 		{
-			if (this)
-				m_index = index;
-		}
-
-		void ItemBinding::save() const
-		{
-			if (this)
-				save_();
+			m_index = index;
 		}
 
 		ssize_t ItemBinding::get_height() const
-		{
-			return (this) ? get_height_() : 1;
-		}
-
-		ssize_t ItemBinding::get_width() const
-		{
-			return (this) ? get_width_() : 0;
-		}
-
-		ssize_t ItemBinding::get_height_() const
 		{
 			return 1;
 		}

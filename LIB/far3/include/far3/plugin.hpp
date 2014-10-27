@@ -29,15 +29,6 @@
 
 namespace far3 {
 
-	enum {
-		MenuTitle,
-		DiskTitle,
-		DlgTitle,
-
-		txtBtnOk,
-		txtBtnCancel,
-	};
-
 	///==================================================================================== helper_t
 	struct helper_t {
 		static helper_t & inst();
@@ -78,8 +69,6 @@ namespace far3 {
 	}
 
 	///=============================================================================================
-	const wchar_t* get_msg(ssize_t MsgId);
-
 	void ibox(const wchar_t* text, const wchar_t* tit = L"Info");
 
 	void mbox(const wchar_t* text, const wchar_t* tit = L"Message");

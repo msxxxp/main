@@ -68,21 +68,6 @@ namespace far3 {
 		return helper_t::inst().fsf();
 	}
 
-	///=============================================================================================
-	void ibox(const wchar_t* text, const wchar_t* tit = L"Info");
-
-	void mbox(const wchar_t* text, const wchar_t* tit = L"Message");
-
-	void ebox(const wchar_t* text, const wchar_t* tit = L"Error");
-
-	void ebox(const wchar_t* msgs[], size_t size, const wchar_t* help = nullptr);
-
-//	void ebox(const cstr::mstring & msg, const wchar_t* title = EMPTY_STR);
-
-	void ebox(DWORD err);
-
-	bool question(const wchar_t* text, const wchar_t* tit);
-
 //	///================================================================================= KeyAction_t
 //	typedef bool (PanelController_i::*PanelMemFun)();
 //

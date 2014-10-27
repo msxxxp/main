@@ -19,48 +19,46 @@
 
 #include <far3/dialog.hpp>
 
+#include <basis/sys/logger.hpp>
+
 namespace far3 {
 	namespace dialog {
 
-		ItemBinding::ItemBinding() :
-			m_dialog(),
-			m_index()
+		struct CheckBoxBinding: public ItemBinding {
+			CheckBoxBinding(ssize_t * value);
+
+			void save() const override;
+
+			ssize_t get_width() const override;
+
+		private:
+			ssize_t * Value;
+		};
+
+		CheckBoxBinding::CheckBoxBinding(ssize_t * value) :
+			Value(value)
 		{
 		}
 
-		ItemBinding::ItemBinding(HANDLE dlg, ssize_t index) :
-			m_dialog(dlg),
-			m_index(index)
+		void CheckBoxBinding::save() const
 		{
+			intptr_t Selected = psi().SendDlgMessage(get_dialog(), DM_GETCHECK, get_index(), 0);
+			*Value = Selected;
+			LogNoise(L"dlg: %p, index: %Id, value: %Id\n", get_dialog(), get_index(), *Value);
 		}
 
-		HANDLE ItemBinding::get_dialog() const
-		{
-			return m_dialog;
-		}
-
-		ssize_t ItemBinding::get_index() const
-		{
-			return m_index;
-		}
-
-		void ItemBinding::set_index(ssize_t index)
-		{
-			m_index = index;
-		}
-
-		void ItemBinding::save() const
-		{
-		}
-
-		ssize_t ItemBinding::get_width() const
+		ssize_t CheckBoxBinding::get_width() const
 		{
 			return 0;
 		}
 
-		ssize_t ItemBinding::get_height() const
+		Item* create_checkbox(ssize_t * value, PCWSTR text, FARDIALOGITEMFLAGS flags)
 		{
-			return 1;
+			LogNoise(L"'%s' %Id, 0x%I64X\n", text, *value, flags);
+			auto ret = new Item(new CheckBoxBinding(value), DI_CHECKBOX, text, flags);
+			ret->Selected = *value;
+
+			return ret;
 		}
 
 	}

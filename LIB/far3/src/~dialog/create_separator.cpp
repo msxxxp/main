@@ -17,43 +17,19 @@
  along with this program. If not, see <http://www.gnu.org/licenses/>.
  **/
 
-#ifndef _FAR3_DIALOG_ITEMBINDING_HPP_
-#define _FAR3_DIALOG_ITEMBINDING_HPP_
-
 #include <far3/dialog.hpp>
 
-#include <basis/ext/pattern.hpp>
+#include <basis/sys/logger.hpp>
 
 namespace far3 {
 	namespace dialog {
 
-		class ItemBinding {
-		public:
-			ItemBinding();
-
-			virtual ~ItemBinding() = default;
-
-			HANDLE get_dialog() const;
-
-			ssize_t get_index() const;
-
-			void set_index(ssize_t index);
-
-			virtual void save() const;
-
-			virtual ssize_t get_width() const;
-
-			virtual ssize_t get_height() const;
-
-		protected:
-			ItemBinding(HANDLE dlg, ssize_t index);
-
-		private:
-			HANDLE  m_dialog;
-			ssize_t m_index;
-		};
+		Item* create_separator(PCWSTR text, FARDIALOGITEMFLAGS flags)
+		{
+			flags |= DIF_SEPARATOR;
+			LogNoise(L"'%s' 0x%I64X\n", text, flags);
+			return new Item(DI_TEXT, text, flags);
+		}
 
 	}
 }
-
-#endif

@@ -22,5 +22,6 @@
 
 #include <far3/plugin.hpp>
 #include <far3/~message/common.hpp>
+#include <far3/~message/box.hpp>
 
 #endif

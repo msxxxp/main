@@ -25,16 +25,16 @@
 namespace far3 {
 	namespace message {
 
-		enum {
-			MenuTitle,
-			DiskTitle,
-			DlgTitle,
-
-			txtBtnOk,
-			txtBtnCancel,
+		enum class Lng : ssize_t{
+			Empty        = -1,
+			MenuTitle    = 0,
+			DiskTitle    = 1,
+			DlgTitle     = 2,
+			txtBtnOk     = 3,
+			txtBtnCancel = 4,
 		};
 
-		const wchar_t* get(ssize_t MsgId);
+		const wchar_t* get(Lng MsgId);
 
 	}
 }

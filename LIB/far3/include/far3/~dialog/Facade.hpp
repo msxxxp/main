@@ -20,9 +20,7 @@
 #ifndef _FAR3_DIALOG_FACADE_HPP_
 #define _FAR3_DIALOG_FACADE_HPP_
 
-#include <far3/plugin.hpp>
-
-#include <basis/simstd/memory>
+#include <far3/dialog.hpp>
 
 namespace far3 {
 	namespace dialog {

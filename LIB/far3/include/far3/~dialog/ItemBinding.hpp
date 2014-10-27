@@ -20,8 +20,7 @@
 #ifndef _FAR3_DIALOG_ITEMBINDING_HPP_
 #define _FAR3_DIALOG_ITEMBINDING_HPP_
 
-#include <far3/~3rdparty/plugin.hpp>
-//#include <far3/helper.hpp>
+#include <far3/dialog.hpp>
 
 #include <basis/ext/pattern.hpp>
 

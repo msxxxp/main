@@ -17,12 +17,16 @@
  along with this program. If not, see <http://www.gnu.org/licenses/>.
  **/
 
-#ifndef _FAR3_HELPER_HPP_
-#define _FAR3_HELPER_HPP_
+#ifndef _FAR3_PLUGIN_HPP_
+#define _FAR3_PLUGIN_HPP_
 
 #include <basis/configure.hpp>
 #include <far3/~3rdparty/plugin.hpp>
 #include <far3/~plugin/fwd.hpp>
+#include <far3/~plugin/GlobalInfo_i.hpp>
+#include <far3/~plugin/PanelController_i.hpp>
+#include <far3/~plugin/Plugin_i.hpp>
+#include <far3/~plugin/Settings_i.hpp>
 
 //#include <basis/sys/cstr.hpp>
 //#include <basis/sys/memory.hpp>

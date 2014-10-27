@@ -1,4 +1,5 @@
-﻿/**
+﻿
+/**
  © 2014 Andrew Grechkin
  Source code: <http://code.google.com/p/andrew-grechkin>
 
@@ -19,10 +20,11 @@
 #ifndef _FAR3_HELPER_HPP_
 #define _FAR3_HELPER_HPP_
 
+#include <basis/configure.hpp>
 #include <far3/~3rdparty/plugin.hpp>
 #include <far3/~plugin/fwd.hpp>
 
-#include <basis/sys/cstr.hpp>
+//#include <basis/sys/cstr.hpp>
 //#include <basis/sys/memory.hpp>
 
 namespace far3 {
@@ -86,7 +88,7 @@ namespace far3 {
 
 	void ebox(const wchar_t* msgs[], size_t size, const wchar_t* help = nullptr);
 
-	void ebox(const cstr::mstring & msg, const wchar_t* title = EMPTY_STR);
+//	void ebox(const cstr::mstring & msg, const wchar_t* title = EMPTY_STR);
 
 	void ebox(DWORD err);
 

@@ -17,50 +17,27 @@
  along with this program. If not, see <http://www.gnu.org/licenses/>.
  **/
 
-#ifndef _FAR3_PLUGIN_I_HPP_
-#define _FAR3_PLUGIN_I_HPP_
+#ifndef _FAR3_DIALOG_FACADE_HPP_
+#define _FAR3_DIALOG_FACADE_HPP_
 
 #include <far3/plugin.hpp>
 
-#include <basis/ext/pattern.hpp>
+#include <basis/simstd/memory>
 
 namespace far3 {
+	namespace dialog {
 
-	class Plugin_i: public pattern::Destroyable {
-	public:
-		virtual ~Plugin_i() = default;
+		struct Facade_i {
+			virtual ~Facade_i() = default;
 
-		Plugin_i(const PluginStartupInfo * info);
+			virtual ssize_t show() = 0;
+		};
 
-	public:
-		void GetPluginInfoW(PluginInfo * info);
+		typedef simstd::unique_ptr<Facade_i> Facade;
 
-		PanelController_i * OpenW(const OpenInfo * info);
+		Facade create(const GUID & guid, int x1, int y1, int x2, int y2, FarDialogItem* items, int count, DWORD flags);
 
-		void ExitFARW(const ExitInfo * info);
-
-		const PluginStartupInfo & psi() const
-		{
-			return m_psi;
-		}
-
-		const FarStandardFunctions & fsf() const
-		{
-			return m_fsf;
-		}
-
-	private:
-		virtual void GetPluginInfo(PluginInfo * pi) = 0;
-
-		virtual PanelController_i * Open(const OpenInfo * info);
-
-		virtual void ExitFAR(const ExitInfo * info);
-
-	private:
-		PluginStartupInfo    m_psi;
-		FarStandardFunctions m_fsf;
-	};
-
+	}
 }
 
 #endif

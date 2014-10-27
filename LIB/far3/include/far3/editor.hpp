@@ -17,16 +17,10 @@
  along with this program. If not, see <http://www.gnu.org/licenses/>.
  **/
 
-#ifndef _FAR3_FWD_HPP_
-#define _FAR3_FWD_HPP_
+#ifndef _FAR3_EDITOR_HPP_
+#define _FAR3_EDITOR_HPP_
 
-namespace far3 {
-
-	struct GlobalInfo_i;
-	struct PanelController_i;
-	struct Plugin_i;
-	struct PluginSettings_i;
-
-}
+#include <far3/plugin.hpp>
+#include <far3/~editor/common.hpp>
 
 #endif

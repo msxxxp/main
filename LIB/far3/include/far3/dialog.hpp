@@ -1,4 +1,5 @@
-﻿/**
+﻿
+/**
  © 2014 Andrew Grechkin
  Source code: <http://code.google.com/p/andrew-grechkin>
 
@@ -20,6 +21,7 @@
 #define _FAR3_DIALOG_HPP_
 
 #include <basis/configure.hpp>
+#include <far3/~dialog/Facade.hpp>
 #include <far3/~dialog/ItemBinding.hpp>
 
 #endif

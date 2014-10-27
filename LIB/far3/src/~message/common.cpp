@@ -22,9 +22,9 @@
 namespace far3 {
 	namespace message {
 
-		const wchar_t* get(Lng msgId)
+		const wchar_t* get(ssize_t msgId)
 		{
-			return (msgId == Lng::Empty) ? EMPTY_STR : psi().GetMsg(get_plugin_guid(), static_cast<intptr_t>(msgId));
+			return (msgId == Empty) ? EMPTY_STR : psi().GetMsg(get_plugin_guid(), static_cast<intptr_t>(msgId));
 		}
 
 	}

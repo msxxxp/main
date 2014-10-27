@@ -25,7 +25,7 @@
 namespace far3 {
 	namespace message {
 
-		enum class Lng : ssize_t{
+		enum {
 			Empty        = -1,
 			MenuTitle    = 0,
 			DiskTitle    = 1,
@@ -34,7 +34,7 @@ namespace far3 {
 			txtBtnCancel = 4,
 		};
 
-		const wchar_t* get(Lng MsgId);
+		const wchar_t* get(ssize_t msgId);
 
 	}
 }

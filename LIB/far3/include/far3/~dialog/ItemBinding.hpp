@@ -37,6 +37,8 @@ namespace far3 {
 
 			ssize_t get_index() const;
 
+			void set_dialog(HANDLE dialog);
+
 			void set_index(ssize_t index);
 
 			virtual void save() const;
@@ -46,7 +48,7 @@ namespace far3 {
 			virtual ssize_t get_height() const;
 
 		protected:
-			ItemBinding(HANDLE dlg, ssize_t index);
+			ItemBinding(HANDLE dialog, ssize_t index);
 
 		private:
 			HANDLE  m_dialog;

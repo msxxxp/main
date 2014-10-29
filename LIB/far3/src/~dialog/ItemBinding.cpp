@@ -44,6 +44,11 @@ namespace far3 {
 			return m_index;
 		}
 
+		void ItemBinding::set_dialog(HANDLE dialog)
+		{
+			m_dialog = dialog;
+		}
+
 		void ItemBinding::set_index(ssize_t index)
 		{
 			m_index = index;

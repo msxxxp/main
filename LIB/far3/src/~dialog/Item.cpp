@@ -120,9 +120,9 @@ namespace far3 {
 			return ret;
 		}
 
-		void Item::set_dlg(HANDLE* /*dlg*/)
+		void Item::set_dialog(HANDLE dialog)
 		{
-//			reinterpret_cast<ItemBinding*>(UserData)->set_dlg(dlg);
+			reinterpret_cast<ItemBinding*>(UserData)->set_dialog(dialog);
 		}
 
 		void Item::set_index(ssize_t ind)

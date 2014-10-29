@@ -43,7 +43,7 @@ namespace far3 {
 
 		ssize_t get_width() const;
 
-		void set_dlg(HANDLE * dlg);
+		void set_dialog(HANDLE dlg);
 
 		void set_index(ssize_t ind);
 

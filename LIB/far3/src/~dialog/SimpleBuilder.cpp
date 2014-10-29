@@ -293,7 +293,7 @@ namespace far3 {
 		LogTrace();
 		DialogItems.emplace_back(Type, Text, flags);
 		auto ret = &DialogItems.back();
-		ret->set_dlg(&DialogHandle);
+		ret->set_dialog(DialogHandle);
 		ret->set_index(DialogItems.size() - 1);
 
 		LogNoise(L"DialogItems.size(): %Iu\n", DialogItems.size());
@@ -307,7 +307,7 @@ namespace far3 {
 		delete item;
 
 		Item * ret = &DialogItems.back();
-		ret->set_dlg(&DialogHandle);
+		ret->set_dialog(DialogHandle);
 		ret->set_index(DialogItems.size() - 1);
 
 		return ret;

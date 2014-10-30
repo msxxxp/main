@@ -46,7 +46,7 @@ namespace far3 {
 	public:
 		~SimpleBuilder();
 
-		SimpleBuilder(const GUID& guid, PCWSTR Label, PCWSTR aHelpTopic, FARWINDOWPROC aDlgProc, void* aUserParam);
+		SimpleBuilder(size_t count, const GUID& guid, PCWSTR Label, PCWSTR aHelpTopic, FARWINDOWPROC aDlgProc, void* aUserParam);
 
 		bool is_valid() const;
 
@@ -122,7 +122,7 @@ namespace far3 {
 		LogTrace();
 	}
 
-	SimpleBuilder::SimpleBuilder(const GUID & guid, PCWSTR label, PCWSTR aHelpTopic, FARWINDOWPROC aDlgProc, void * aUserParam) :
+	SimpleBuilder::SimpleBuilder(size_t count, const GUID & guid, PCWSTR label, PCWSTR aHelpTopic, FARWINDOWPROC aDlgProc, void * aUserParam) :
 		m_guid(guid),
 		DlgProc(aDlgProc),
 		HelpTopic(aHelpTopic),
@@ -136,6 +136,8 @@ namespace far3 {
 	{
 		LogNoise(L"'%s'\n", label);
 
+		DialogItems.reserve(count);
+
 		// create border
 		Item& item(add_dialog_item(DI_DOUBLEBOX, label));
 		item.set_dimensions(DEFAULT_BORDER_INDENT_X, DEFAULT_BORDER_INDENT_Y, item.get_width() + 4, 4);
@@ -144,7 +146,9 @@ namespace far3 {
 
 	bool SimpleBuilder::is_valid() const
 	{
-		return DialogHandle;
+//		LogErrorIf(!DialogHandle, L"handle is invalid\n");
+//		return DialogHandle;
+		return true;
 	}
 
 	Item& SimpleBuilder::add_item(Item&& it)
@@ -290,8 +294,9 @@ namespace far3 {
 	///---------------------------------------------------------------------------------------------
 	Item& SimpleBuilder::add_dialog_item(FARDIALOGITEMTYPES type, PCWSTR text, FARDIALOGITEMFLAGS flags)
 	{
-		CRT_ASSERT(DialogItems.size() != DialogItems.capacity());
 		LogTrace();
+		LogFatalIf(DialogItems.size() == DialogItems.capacity(), L"dialog items container will be replaced\n");
+		CRT_ASSERT(DialogItems.size() != DialogItems.capacity());
 		DialogItems.emplace_back(type, text, flags);
 		Item& ret = DialogItems.back();
 		ret.set_dialog(DialogHandle);
@@ -373,10 +378,10 @@ namespace far3 {
 	}
 
 	///=============================================================================================
-	Builder create_builder(const GUID & aId, PCWSTR TitleLabel, PCWSTR aHelpTopic, FARWINDOWPROC aDlgProc, void * aUserParam)
+	Builder create_builder(size_t count, const GUID & aId, PCWSTR TitleLabel, PCWSTR aHelpTopic, FARWINDOWPROC aDlgProc, void * aUserParam)
 	{
 		LogTrace();
-		simstd::unique_ptr<SimpleBuilder> tmp(new SimpleBuilder(aId, TitleLabel, aHelpTopic, aDlgProc, aUserParam));
+		simstd::unique_ptr<SimpleBuilder> tmp(new SimpleBuilder(count, aId, TitleLabel, aHelpTopic, aDlgProc, aUserParam));
 		return tmp->is_valid() ? Builder(simstd::move(tmp)) : Builder();
 	}
 

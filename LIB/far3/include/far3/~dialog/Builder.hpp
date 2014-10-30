@@ -56,7 +56,7 @@ namespace far3 {
 
 		typedef simstd::unique_ptr<Builder_i> Builder;
 
-		Builder create_builder(const GUID& aId, PCWSTR TitleLabel, PCWSTR aHelpTopic = nullptr, FARWINDOWPROC aDlgProc = nullptr, void * aUserParam = nullptr);
+		Builder create_builder(size_t count, const GUID& aId, PCWSTR TitleLabel, PCWSTR aHelpTopic = nullptr, FARWINDOWPROC aDlgProc = nullptr, void * aUserParam = nullptr);
 
 	}
 }

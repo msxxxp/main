@@ -33,7 +33,6 @@
 
 namespace far3 {
 
-	///==================================================================================== helper_t
 	struct helper_t {
 		static helper_t & inst();
 

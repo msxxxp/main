@@ -24,11 +24,11 @@
 namespace far3 {
 	namespace dialog {
 
-		Item* create_separator(PCWSTR text, FARDIALOGITEMFLAGS flags)
+		Item create_separator(const wchar_t* text, FARDIALOGITEMFLAGS flags)
 		{
 			flags |= DIF_SEPARATOR;
 			LogNoise(L"'%s' 0x%I64X\n", text, flags);
-			return new Item(DI_TEXT, text, flags);
+			return Item(DI_TEXT, text, flags);
 		}
 
 	}

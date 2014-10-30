@@ -31,9 +31,9 @@ namespace far3 {
 	struct Item: public FarDialogItem, private pattern::Uncopyable {
 		~Item();
 
-		Item(FARDIALOGITEMTYPES type, PCWSTR text, FARDIALOGITEMFLAGS flags = DIF_NONE);
+		Item(FARDIALOGITEMTYPES type, const wchar_t* text, FARDIALOGITEMFLAGS flags = DIF_NONE);
 
-		Item(ItemBinding* binding, FARDIALOGITEMTYPES type, PCWSTR text, FARDIALOGITEMFLAGS flags = DIF_NONE);
+		Item(ItemBinding* binding, FARDIALOGITEMTYPES type, const wchar_t* text, FARDIALOGITEMFLAGS flags = DIF_NONE);
 
 		Item(Item && other);
 
@@ -52,32 +52,32 @@ namespace far3 {
 		void save() const;
 	};
 
-	Item * create_label(PCWSTR text, FARDIALOGITEMFLAGS flags = DIF_NONE);
+	Item create_label(const wchar_t* text, FARDIALOGITEMFLAGS flags = DIF_NONE);
 
-	inline Item * create_label(ssize_t msg_id, FARDIALOGITEMFLAGS flags = DIF_NONE)
+	inline Item create_label(ssize_t msg_id, FARDIALOGITEMFLAGS flags = DIF_NONE)
 	{
 		return create_label(message::get(msg_id), flags);
 	}
 
-	Item * create_separator(PCWSTR text = nullptr, FARDIALOGITEMFLAGS flags = DIF_NONE);
+	Item create_separator(const wchar_t* text = nullptr, FARDIALOGITEMFLAGS flags = DIF_NONE);
 
-	inline Item * create_separator(ssize_t msg_id, FARDIALOGITEMFLAGS flags = DIF_NONE)
+	inline Item create_separator(ssize_t msg_id, FARDIALOGITEMFLAGS flags = DIF_NONE)
 	{
 		return create_separator(message::get(msg_id), flags);
 	}
 
-	Item * create_checkbox(ssize_t * value, PCWSTR text, FARDIALOGITEMFLAGS flags = DIF_NONE);
+	Item create_checkbox(ssize_t* value, const wchar_t* text, FARDIALOGITEMFLAGS flags = DIF_NONE);
 
-	inline Item * create_checkbox(ssize_t * value, ssize_t msg_id, FARDIALOGITEMFLAGS flags = DIF_NONE)
+	inline Item create_checkbox(ssize_t* value, ssize_t msg_id, FARDIALOGITEMFLAGS flags = DIF_NONE)
 	{
 		return create_checkbox(value, message::get(msg_id), flags);
 	}
 
-	Item * create_combobox(ssize_t * value, FarListItem items[], size_t count, FARDIALOGITEMFLAGS flags = DIF_NONE);
+	Item create_combobox(ssize_t* value, FarListItem items[], size_t count, FARDIALOGITEMFLAGS flags = DIF_NONE);
 
-	Item * create_edit(simstd::wstring* value, ssize_t width = -1, PCWSTR history_id = nullptr, bool use_last_history = false, FARDIALOGITEMFLAGS flags = DIF_NONE);
+	Item create_edit(simstd::wstring* value, ssize_t width = -1, const wchar_t* history_id = nullptr, bool use_last_history = false, FARDIALOGITEMFLAGS flags = DIF_NONE);
 
-	Item * create_password(simstd::wstring* value, ssize_t width = -1, FARDIALOGITEMFLAGS flags = DIF_NONE);
+	Item create_password(simstd::wstring* value, ssize_t width = -1, FARDIALOGITEMFLAGS flags = DIF_NONE);
 
 	struct AddRadioButton_t {
 		ssize_t id;

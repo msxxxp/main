@@ -26,7 +26,7 @@ namespace far3 {
 	namespace dialog {
 
 		struct ComboBoxBinding: public ItemBinding {
-			ComboBoxBinding(ssize_t * value, FarListItem items[], size_t count);
+			ComboBoxBinding(ssize_t* value, FarListItem items[], size_t count);
 
 			void save() const override;
 
@@ -35,11 +35,11 @@ namespace far3 {
 			FarList* get_items() const;
 
 		private:
-			ssize_t * Value;
-			FarList m_items;
+			ssize_t* Value;
+			FarList  m_items;
 		};
 
-		ComboBoxBinding::ComboBoxBinding(ssize_t * value, FarListItem items[], size_t count) :
+		ComboBoxBinding::ComboBoxBinding(ssize_t* value, FarListItem items[], size_t count) :
 			Value(value)
 		{
 			m_items.StructSize = sizeof(m_items);
@@ -58,27 +58,27 @@ namespace far3 {
 			size_t width = 4;
 			for (size_t i = 0; i < m_items.ItemsNumber; ++i) {
 				width = simstd::max(width, cstr::length(m_items.Items[i].Text));
-//			LogNoise(L"'%s'\n", m_items.Items[i].Text);
+//				LogNoise(L"'%s'\n", m_items.Items[i].Text);
 			}
 			width = (width / 16 + 1) * 16 + 3;
 			LogNoise(L"-> %Iu\n", width);
 			return width;
 		}
 
-		FarList * ComboBoxBinding::get_items() const
+		FarList* ComboBoxBinding::get_items() const
 		{
 			return (FarList *)&m_items;
 		}
 
-		Item * create_combobox(ssize_t * value, FarListItem items[], size_t count, FARDIALOGITEMFLAGS flags)
+		Item create_combobox(ssize_t * value, FarListItem items[], size_t count, FARDIALOGITEMFLAGS flags)
 		{
 			LogNoise(L"%Iu, %Id, 0x%I64X\n", count, *value, flags);
 			items[*value].Flags |= LIF_SELECTED;
 			auto binding = new ComboBoxBinding(value, items, count);
-			auto ret = new Item(binding, DI_COMBOBOX, nullptr, flags);
-			ret->ListItems = binding->get_items();
-			ret->X2 = ret->X1 + ret->get_width() - 3;
-			LogNoise(L"X1: %Id, Y1: %Id, X2: %Id\n", ret->X1, ret->Y1, ret->X2);
+			Item ret(binding, DI_COMBOBOX, nullptr, flags);
+			ret.ListItems = binding->get_items();
+			ret.X2 = ret.X1 + ret.get_width() - 3;
+			LogNoise(L"X1: %Id, Y1: %Id, X2: %Id\n", ret.X1, ret.Y1, ret.X2);
 
 			return ret;
 		}

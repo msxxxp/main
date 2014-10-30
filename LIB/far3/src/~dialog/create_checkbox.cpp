@@ -25,17 +25,17 @@ namespace far3 {
 	namespace dialog {
 
 		struct CheckBoxBinding: public ItemBinding {
-			CheckBoxBinding(ssize_t * value);
+			CheckBoxBinding(ssize_t* value);
 
 			void save() const override;
 
 			ssize_t get_width() const override;
 
 		private:
-			ssize_t * Value;
+			ssize_t* Value;
 		};
 
-		CheckBoxBinding::CheckBoxBinding(ssize_t * value) :
+		CheckBoxBinding::CheckBoxBinding(ssize_t* value) :
 			Value(value)
 		{
 		}
@@ -52,11 +52,11 @@ namespace far3 {
 			return 0;
 		}
 
-		Item* create_checkbox(ssize_t * value, PCWSTR text, FARDIALOGITEMFLAGS flags)
+		Item create_checkbox(ssize_t* value, const wchar_t* text, FARDIALOGITEMFLAGS flags)
 		{
 			LogNoise(L"'%s' %Id, 0x%I64X\n", text, *value, flags);
-			auto ret = new Item(new CheckBoxBinding(value), DI_CHECKBOX, text, flags);
-			ret->Selected = *value;
+			Item ret(new CheckBoxBinding(value), DI_CHECKBOX, text, flags);
+			ret.Selected = *value;
 
 			return ret;
 		}

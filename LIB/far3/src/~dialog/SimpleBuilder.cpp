@@ -50,11 +50,11 @@ namespace far3 {
 
 		bool is_valid() const;
 
-		Item * add_item(Item * item) override;
+		Item& add_item(const Item& item) override;
 
-		Item * add_item_before(Item * item) override;
+		Item& add_item_before(const Item& item) override;
 
-		Item * add_item_after(Item * item) override;
+		Item& add_item_after(const Item& item) override;
 
 //		void add_radiobuttons(ssize_t * Value, ssize_t OptionCount, const AddRadioButton_t list[], bool FocusOnSelected) override;
 
@@ -75,15 +75,15 @@ namespace far3 {
 		int show() override;
 
 	protected:
-		Item* add_dialog_item(FARDIALOGITEMTYPES Type, PCWSTR Text, FARDIALOGITEMFLAGS flags = DIF_NONE);
+		Item& add_dialog_item(FARDIALOGITEMTYPES Type, PCWSTR Text, FARDIALOGITEMFLAGS flags = DIF_NONE);
 
-		Item* add_dialog_item(Item * item);
+		Item& add_dialog_item(const Item& item);
 
 		ssize_t GetMaxItemX2() const;
 
 		void save();
 
-		void set_next_y(Item * item);
+		void set_next_y(Item& item);
 
 		int show_dialog_();
 
@@ -137,8 +137,8 @@ namespace far3 {
 		LogNoise(L"'%s'\n", label);
 
 		// create border
-		auto item = add_dialog_item(DI_DOUBLEBOX, label);
-		item->set_dimension(DEFAULT_BORDER_INDENT_X, DEFAULT_BORDER_INDENT_Y, item->get_width() + 4, 4);
+		Item& item(add_dialog_item(DI_DOUBLEBOX, label));
+		item.set_dimensions(DEFAULT_BORDER_INDENT_X, DEFAULT_BORDER_INDENT_Y, item.get_width() + 4, 4);
 		LogNoise(L"NextY: %Id, size: %Iu\n", NextY, DialogItems.size());
 	}
 
@@ -147,39 +147,39 @@ namespace far3 {
 		return DialogHandle;
 	}
 
-	Item * SimpleBuilder::add_item(Item * it)
+	Item& SimpleBuilder::add_item(const Item& it)
 	{
 		LogTrace();
-		Item * ret = add_dialog_item(it);
+		Item& ret(add_dialog_item(it));
 		set_next_y(ret);
 
 		return ret;
 	}
 
-	Item * SimpleBuilder::add_item_before(Item * it)
+	Item& SimpleBuilder::add_item_before(const Item& it)
 	{
-		Item * item = add_dialog_item(it);
-		Item * RelativeTo = &DialogItems[DialogItems.size() - 2];
-		item->Y1 = item->Y2 = RelativeTo->Y1;
-		item->X1 = RelativeTo->X1;
-		item->X2 = item->X1 + item->get_width() - 1;
+		Item& item(add_dialog_item(it));
+		Item& RelativeTo(DialogItems[DialogItems.size() - 2]);
+		item.Y1 = item.Y2 = RelativeTo.Y1;
+		item.X1 = RelativeTo.X1;
+		item.X2 = item.X1 + item.get_width() - 1;
 
-		ssize_t RelativeToWidth = RelativeTo->X2 - RelativeTo->X1;
-		RelativeTo->X1 = item->X2 + DEFAULT_PADDING + 1;
-		RelativeTo->X2 = RelativeTo->X1 + RelativeToWidth;
+		ssize_t RelativeToWidth = RelativeTo.X2 - RelativeTo.X1;
+		RelativeTo.X1 = item.X2 + DEFAULT_PADDING + 1;
+		RelativeTo.X2 = RelativeTo.X1 + RelativeToWidth;
 
 		return item;
 	}
 
-	Item * SimpleBuilder::add_item_after(Item* it)
+	Item& SimpleBuilder::add_item_after(const Item& it)
 	{
 		LogTrace();
-		Item * item = add_dialog_item(it);
-		Item * RelativeTo = &DialogItems[DialogItems.size() - 2];
-		item->Y1 = item->Y2 = RelativeTo->Y1;
-		ssize_t ItemWidth = item->X2 - item->X1;
-		item->X1 = RelativeTo->X1 + RelativeTo->get_width() - 1 + DEFAULT_PADDING + 1;
-		item->X2 = item->X1 + ItemWidth;
+		Item& item(add_dialog_item(it));
+		Item& RelativeTo(DialogItems[DialogItems.size() - 2]);
+		item.Y1 = item.Y2 = RelativeTo.Y1;
+		ssize_t ItemWidth = item.X2 - item.X1;
+		item.X1 = RelativeTo.X1 + RelativeTo.get_width() - 1 + DEFAULT_PADDING + 1;
+		item.X2 = item.X1 + ItemWidth;
 		return item;
 	}
 
@@ -209,18 +209,18 @@ namespace far3 {
 	void SimpleBuilder::add_OKCancel(PCWSTR OKLabel, PCWSTR CancelLabel, PCWSTR ExtraLabel)
 	{
 		LogTrace();
-		Item * OKButton = add_dialog_item(DI_BUTTON, OKLabel, DIF_CENTERGROUP | DIF_DEFAULTBUTTON);
-		OKButton->Y1 = OKButton->Y2 = NextY++;
+		Item& OKButton(add_dialog_item(DI_BUTTON, OKLabel, DIF_CENTERGROUP | DIF_DEFAULTBUTTON));
+		OKButton.Y1 = OKButton.Y2 = NextY++;
 		OKButtonId = DialogItems.size() - 1;
 
 		if (!cstr::is_empty(CancelLabel)) {
-			Item * CancelButton = add_dialog_item(DI_BUTTON, CancelLabel, DIF_CENTERGROUP);
-			CancelButton->Y1 = CancelButton->Y2 = OKButton->Y1;
+			Item& CancelButton(add_dialog_item(DI_BUTTON, CancelLabel, DIF_CENTERGROUP));
+			CancelButton.Y1 = CancelButton.Y2 = OKButton.Y1;
 		}
 
 		if (!cstr::is_empty(ExtraLabel)) {
-			Item * ExtraButton = add_dialog_item(DI_BUTTON, ExtraLabel, DIF_CENTERGROUP);
-			ExtraButton->Y1 = ExtraButton->Y2 = OKButton->Y1;
+			Item& ExtraButton(add_dialog_item(DI_BUTTON, ExtraLabel, DIF_CENTERGROUP));
+			ExtraButton.Y1 = ExtraButton.Y2 = OKButton.Y1;
 		}
 	}
 
@@ -253,11 +253,11 @@ namespace far3 {
 
 	void SimpleBuilder::start_singlebox(ssize_t Width, PCWSTR Label, bool LeftAlign)
 	{
-		Item * SingleBox = add_dialog_item(DI_SINGLEBOX, Label);
-		SingleBox->Flags = LeftAlign ? DIF_LEFTTEXT : DIF_NONE;
-		SingleBox->X1 = ZERO_X + DEFAULT_PADDING + Indent;
-		SingleBox->X2 = SingleBox->X1 + Width;
-		SingleBox->Y1 = NextY++;
+		Item& SingleBox(add_dialog_item(DI_SINGLEBOX, Label));
+		SingleBox.Flags = LeftAlign ? DIF_LEFTTEXT : DIF_NONE;
+		SingleBox.X1 = ZERO_X + DEFAULT_PADDING + Indent;
+		SingleBox.X2 = SingleBox.X1 + Width;
+		SingleBox.Y1 = NextY++;
 		Indent += 2;
 		SingleBoxIndex = DialogItems.size() - 1;
 	}
@@ -288,27 +288,28 @@ namespace far3 {
 
 
 	///---------------------------------------------------------------------------------------------
-	Item * SimpleBuilder::add_dialog_item(FARDIALOGITEMTYPES Type, PCWSTR Text, FARDIALOGITEMFLAGS flags)
+	Item& SimpleBuilder::add_dialog_item(FARDIALOGITEMTYPES type, PCWSTR text, FARDIALOGITEMFLAGS flags)
 	{
+		CRT_ASSERT(DialogItems.size() != DialogItems.capacity());
 		LogTrace();
-		DialogItems.emplace_back(Type, Text, flags);
-		auto ret = &DialogItems.back();
-		ret->set_dialog(DialogHandle);
-		ret->set_index(DialogItems.size() - 1);
+		DialogItems.emplace_back(type, text, flags);
+		Item& ret = DialogItems.back();
+		ret.set_dialog(DialogHandle);
+		ret.set_index(DialogItems.size() - 1);
 
 		LogNoise(L"DialogItems.size(): %Iu\n", DialogItems.size());
 		return ret;
 	}
 
-	Item * SimpleBuilder::add_dialog_item(Item * item)
+	Item& SimpleBuilder::add_dialog_item(const Item& item)
 	{
+		CRT_ASSERT(DialogItems.size() != DialogItems.capacity());
 		LogTrace();
-		DialogItems.emplace_back(simstd::move(*item));
-		delete item;
+		DialogItems.emplace_back(simstd::move(const_cast<Item&>(item)));
 
-		Item * ret = &DialogItems.back();
-		ret->set_dialog(DialogHandle);
-		ret->set_index(DialogItems.size() - 1);
+		Item& ret = DialogItems.back();
+		ret.set_dialog(DialogHandle);
+		ret.set_index(DialogItems.size() - 1);
 
 		return ret;
 	}
@@ -330,10 +331,10 @@ namespace far3 {
 		}
 	}
 
-	void SimpleBuilder::set_next_y(Item * item)
+	void SimpleBuilder::set_next_y(Item& item)
 	{
 		LogTrace();
-		item->set_dimension(ZERO_X + DEFAULT_PADDING + Indent, NextY++, (item->X2) ? item->X2 : item->get_width());
+		item.set_dimensions(ZERO_X + DEFAULT_PADDING + Indent, NextY++, (item.X2) ? item.X2 : item.get_width());
 		LogNoise(L"NextY: %Id\n", NextY);
 
 //		Item->X1 = ZERO_X + DEFAULT_PADDING + Indent;

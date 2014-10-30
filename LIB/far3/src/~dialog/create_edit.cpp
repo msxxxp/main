@@ -26,17 +26,17 @@ namespace far3 {
 	namespace dialog {
 
 		struct PluginEditFieldBinding: public ItemBinding {
-			PluginEditFieldBinding(simstd::wstring * value);
+			PluginEditFieldBinding(simstd::wstring* value);
 
 			void save() const override;
 
 			ssize_t get_width() const override;
 
 		private:
-			simstd::wstring * m_value;
+			simstd::wstring* m_value;
 		};
 
-		PluginEditFieldBinding::PluginEditFieldBinding(simstd::wstring * value) :
+		PluginEditFieldBinding::PluginEditFieldBinding(simstd::wstring* value) :
 			m_value(value)
 		{
 			LogTrace();
@@ -54,33 +54,33 @@ namespace far3 {
 			return static_cast<ssize_t>(m_value->size());
 		}
 
-		Item* create_edit(simstd::wstring * value, ssize_t width, PCWSTR history_id, bool use_last_history, FARDIALOGITEMFLAGS flags)
+		Item create_edit(simstd::wstring* value, ssize_t width, const wchar_t* history_id, bool use_last_history, FARDIALOGITEMFLAGS flags)
 		{
 			LogNoise(L"'%s', flags: 0x%I64X\n", value->c_str(), flags);
-			auto ret = new Item(new PluginEditFieldBinding(value), DI_EDIT, value->c_str(), flags);
+			Item ret(new PluginEditFieldBinding(value), DI_EDIT, value->c_str(), flags);
 			if (width == -1)
 				width = 10;
 
-			ret->X2 = ret->X1 + width - 1;
+			ret.X2 = ret.X1 + width - 1;
 
 			if (history_id) {
-				ret->History = history_id;
-				ret->Flags |= DIF_HISTORY;
+				ret.History = history_id;
+				ret.Flags |= DIF_HISTORY;
 				if (use_last_history)
-					ret->Flags |= DIF_USELASTHISTORY;
+					ret.Flags |= DIF_USELASTHISTORY;
 			}
 
 			return ret;
 		}
 
-		Item* create_password(simstd::wstring * value, ssize_t width, FARDIALOGITEMFLAGS flags)
+		Item create_password(simstd::wstring * value, ssize_t width, FARDIALOGITEMFLAGS flags)
 		{
 			LogNoise(L"%flags: 0x%I64X\n", flags);
-			auto ret = new Item(new PluginEditFieldBinding(value), DI_PSWEDIT, value->c_str(), flags);
+			Item ret(new PluginEditFieldBinding(value), DI_PSWEDIT, value->c_str(), flags);
 			if (width == -1)
 				width = 10;
 
-			ret->X2 = ret->X1 + width - 1;
+			ret.X2 = ret.X1 + width - 1;
 
 			return ret;
 		}

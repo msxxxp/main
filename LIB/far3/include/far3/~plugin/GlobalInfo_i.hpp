@@ -1,5 +1,4 @@
-﻿
-/**
+﻿/**
  © 2014 Andrew Grechkin
  Source code: <http://code.google.com/p/andrew-grechkin>
 
@@ -41,13 +40,13 @@ namespace far3 {
 		Plugin_i * get_plugin() const;
 
 	public:
-		virtual PCWSTR get_author() const = 0;
+		virtual const wchar_t* get_author() const = 0;
 
-		virtual PCWSTR get_description() const = 0;
+		virtual const wchar_t* get_description() const = 0;
 
 		virtual const GUID * get_guid() const = 0;
 
-		virtual PCWSTR get_title() const = 0;
+		virtual const wchar_t* get_title() const = 0;
 
 		virtual VersionInfo get_version() const = 0;
 

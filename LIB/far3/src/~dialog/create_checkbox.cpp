@@ -1,5 +1,4 @@
-﻿
-/**
+﻿/**
  © 2014 Andrew Grechkin
  Source code: <http://code.google.com/p/andrew-grechkin>
 
@@ -25,26 +24,26 @@ namespace far3 {
 	namespace dialog {
 
 		struct CheckBoxBinding: public ItemBinding {
-			CheckBoxBinding(ssize_t* value);
+			CheckBoxBinding(ssize_t& value);
 
 			void save() const override;
 
 			ssize_t get_width() const override;
 
 		private:
-			ssize_t* Value;
+			ssize_t& m_value;
 		};
 
-		CheckBoxBinding::CheckBoxBinding(ssize_t* value) :
-			Value(value)
+		CheckBoxBinding::CheckBoxBinding(ssize_t& value) :
+			m_value(value)
 		{
 		}
 
 		void CheckBoxBinding::save() const
 		{
 			intptr_t Selected = psi().SendDlgMessage(get_dialog(), DM_GETCHECK, get_index(), 0);
-			*Value = Selected;
-			LogNoise(L"dlg: %p, index: %Id, value: %Id\n", get_dialog(), get_index(), *Value);
+			m_value = Selected;
+			LogNoise(L"dlg: %p, index: %Id, value: %Id\n", get_dialog(), get_index(), m_value);
 		}
 
 		ssize_t CheckBoxBinding::get_width() const
@@ -52,11 +51,11 @@ namespace far3 {
 			return 0;
 		}
 
-		Item create_checkbox(ssize_t* value, const wchar_t* text, FARDIALOGITEMFLAGS flags)
+		Item create_checkbox(ssize_t& value, const wchar_t* text, FARDIALOGITEMFLAGS flags)
 		{
-			LogNoise(L"'%s' %Id, 0x%I64X\n", text, *value, flags);
+			LogNoise(L"'%s' %Id, 0x%I64X\n", text, value, flags);
 			Item ret(new CheckBoxBinding(value), DI_CHECKBOX, text, flags);
-			ret.Selected = *value;
+			ret.Selected = value;
 
 			return ret;
 		}

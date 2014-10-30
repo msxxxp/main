@@ -1,5 +1,4 @@
-﻿
-/**
+﻿/**
  © 2014 Andrew Grechkin
  Source code: <http://code.google.com/p/andrew-grechkin>
 
@@ -26,17 +25,17 @@ namespace far3 {
 	namespace dialog {
 
 		struct PluginEditFieldBinding: public ItemBinding {
-			PluginEditFieldBinding(simstd::wstring* value);
+			PluginEditFieldBinding(simstd::wstring& value);
 
 			void save() const override;
 
 			ssize_t get_width() const override;
 
 		private:
-			simstd::wstring* m_value;
+			simstd::wstring& m_value;
 		};
 
-		PluginEditFieldBinding::PluginEditFieldBinding(simstd::wstring* value) :
+		PluginEditFieldBinding::PluginEditFieldBinding(simstd::wstring& value) :
 			m_value(value)
 		{
 			LogTrace();
@@ -45,19 +44,19 @@ namespace far3 {
 		void PluginEditFieldBinding::save() const
 		{
 			auto DataPtr = (const wchar_t *)psi().SendDlgMessage(get_dialog(), DM_GETCONSTTEXTPTR, get_index(), nullptr);
-			*m_value = (DataPtr) ? DataPtr : EMPTY_STR;
-			LogDebug(L"value: '%s'\n", m_value->c_str());
+			m_value = (DataPtr) ? DataPtr : EMPTY_STR;
+			LogDebug(L"value: '%s'\n", m_value.c_str());
 		}
 
 		ssize_t PluginEditFieldBinding::get_width() const
 		{
-			return static_cast<ssize_t>(m_value->size());
+			return static_cast<ssize_t>(m_value.length());
 		}
 
-		Item create_edit(simstd::wstring* value, ssize_t width, const wchar_t* history_id, bool use_last_history, FARDIALOGITEMFLAGS flags)
+		Item create_edit(simstd::wstring& value, ssize_t width, const wchar_t* history_id, bool use_last_history, FARDIALOGITEMFLAGS flags)
 		{
-			LogNoise(L"'%s', flags: 0x%I64X\n", value->c_str(), flags);
-			Item ret(new PluginEditFieldBinding(value), DI_EDIT, value->c_str(), flags);
+			LogNoise(L"'%s', flags: 0x%I64X\n", value.c_str(), flags);
+			Item ret(new PluginEditFieldBinding(value), DI_EDIT, value.c_str(), flags);
 			if (width == -1)
 				width = 10;
 
@@ -73,10 +72,10 @@ namespace far3 {
 			return ret;
 		}
 
-		Item create_password(simstd::wstring * value, ssize_t width, FARDIALOGITEMFLAGS flags)
+		Item create_password(simstd::wstring& value, ssize_t width, FARDIALOGITEMFLAGS flags)
 		{
 			LogNoise(L"%flags: 0x%I64X\n", flags);
-			Item ret(new PluginEditFieldBinding(value), DI_PSWEDIT, value->c_str(), flags);
+			Item ret(new PluginEditFieldBinding(value), DI_PSWEDIT, value.c_str(), flags);
 			if (width == -1)
 				width = 10;
 

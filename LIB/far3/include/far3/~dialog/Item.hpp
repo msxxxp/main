@@ -1,5 +1,4 @@
-﻿
-/**
+﻿/**
  © 2014 Andrew Grechkin
  Source code: <http://code.google.com/p/andrew-grechkin>
 
@@ -66,18 +65,18 @@ namespace far3 {
 		return create_separator(message::get(msg_id), flags);
 	}
 
-	Item create_checkbox(ssize_t* value, const wchar_t* text, FARDIALOGITEMFLAGS flags = DIF_NONE);
+	Item create_checkbox(ssize_t& value, const wchar_t* text, FARDIALOGITEMFLAGS flags = DIF_NONE);
 
-	inline Item create_checkbox(ssize_t* value, ssize_t msg_id, FARDIALOGITEMFLAGS flags = DIF_NONE)
+	inline Item create_checkbox(ssize_t& value, ssize_t msg_id, FARDIALOGITEMFLAGS flags = DIF_NONE)
 	{
 		return create_checkbox(value, message::get(msg_id), flags);
 	}
 
-	Item create_combobox(ssize_t* value, FarListItem items[], size_t count, FARDIALOGITEMFLAGS flags = DIF_NONE);
+	Item create_combobox(ssize_t& value, FarListItem items[], size_t count, FARDIALOGITEMFLAGS flags = DIF_NONE);
 
-	Item create_edit(simstd::wstring* value, ssize_t width = -1, const wchar_t* history_id = nullptr, bool use_last_history = false, FARDIALOGITEMFLAGS flags = DIF_NONE);
+	Item create_edit(simstd::wstring& value, ssize_t width = -1, const wchar_t* history_id = nullptr, bool use_last_history = false, FARDIALOGITEMFLAGS flags = DIF_NONE);
 
-	Item create_password(simstd::wstring* value, ssize_t width = -1, FARDIALOGITEMFLAGS flags = DIF_NONE);
+	Item create_password(simstd::wstring& value, ssize_t width = -1, FARDIALOGITEMFLAGS flags = DIF_NONE);
 
 	struct AddRadioButton_t {
 		ssize_t id;

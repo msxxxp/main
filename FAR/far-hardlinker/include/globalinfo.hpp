@@ -31,13 +31,13 @@ struct FarGlobalInfo: public far3::GlobalInfo_i, private pattern::Uncopyable {
 
 	FarGlobalInfo();
 
-	PCWSTR get_author() const override;
+	const wchar_t* get_author() const override;
 
-	PCWSTR get_description() const override;
+	const wchar_t* get_description() const override;
 
-	const GUID * get_guid() const override;
+	const GUID* get_guid() const override;
 
-	PCWSTR get_title() const override;
+	const wchar_t* get_title() const override;
 
 	VersionInfo get_version() const override;
 
@@ -49,8 +49,18 @@ struct FarGlobalInfo: public far3::GlobalInfo_i, private pattern::Uncopyable {
 
 	void save_settings() const;
 
-	WCHAR prefix[32];
-	ssize_t m_cbOperation;
+	wchar_t prefix[32];
+
+	enum class CheckBoxMasks: uint64_t {
+		Operation        = bin<000000000000000000000111>::value, // 0b000000000000000000000111,
+		PathMask         = bin<000000000000000000001000>::value,  // 0b000000000000000000001000,
+		DoHardlink       = bin<000000000000000000010000>::value,  // 0b000000000000000000010000,
+		DoRecursive      = bin<000000000000000000100000>::value,  // 0b000000000000000000100000,
+		AskConfirmation  = bin<000000000000000001000000>::value,  // 0b000000000000000001000000,
+		Euristic         = bin<000000000000000010000000>::value,  // 0b000000000000000010000000,
+	};
+
+	int64_t m_cbOperation;
 	int64_t m_cbMask;
 	int64_t m_cbDoHardlink;
 	int64_t m_cbDoRecursive;

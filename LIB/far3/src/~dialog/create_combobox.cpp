@@ -1,5 +1,4 @@
-﻿
-/**
+﻿/**
  © 2014 Andrew Grechkin
  Source code: <http://code.google.com/p/andrew-grechkin>
 
@@ -26,7 +25,7 @@ namespace far3 {
 	namespace dialog {
 
 		struct ComboBoxBinding: public ItemBinding {
-			ComboBoxBinding(ssize_t* value, FarListItem items[], size_t count);
+			ComboBoxBinding(ssize_t& value, FarListItem items[], size_t count);
 
 			void save() const override;
 
@@ -35,12 +34,12 @@ namespace far3 {
 			FarList* get_items() const;
 
 		private:
-			ssize_t* Value;
+			ssize_t& m_value;
 			FarList  m_items;
 		};
 
-		ComboBoxBinding::ComboBoxBinding(ssize_t* value, FarListItem items[], size_t count) :
-			Value(value)
+		ComboBoxBinding::ComboBoxBinding(ssize_t& value, FarListItem items[], size_t count) :
+			m_value(value)
 		{
 			m_items.StructSize = sizeof(m_items);
 			m_items.ItemsNumber = count;
@@ -49,8 +48,8 @@ namespace far3 {
 
 		void ComboBoxBinding::save() const
 		{
-			*Value = psi().SendDlgMessage(get_dialog(), DM_LISTGETCURPOS, get_index(), 0);
-			LogDebug(L"value: %Id\n", *Value);
+			m_value = psi().SendDlgMessage(get_dialog(), DM_LISTGETCURPOS, get_index(), 0);
+			LogDebug(L"value: %Id\n", m_value);
 		}
 
 		ssize_t ComboBoxBinding::get_width() const
@@ -70,10 +69,10 @@ namespace far3 {
 			return (FarList *)&m_items;
 		}
 
-		Item create_combobox(ssize_t * value, FarListItem items[], size_t count, FARDIALOGITEMFLAGS flags)
+		Item create_combobox(ssize_t& value, FarListItem items[], size_t count, FARDIALOGITEMFLAGS flags)
 		{
-			LogNoise(L"%Iu, %Id, 0x%I64X\n", count, *value, flags);
-			items[*value].Flags |= LIF_SELECTED;
+			LogNoise(L"%Iu, %Id, 0x%I64X\n", count, value, flags);
+			items[value].Flags |= LIF_SELECTED;
 			auto binding = new ComboBoxBinding(value, items, count);
 			Item ret(binding, DI_COMBOBOX, nullptr, flags);
 			ret.ListItems = binding->get_items();

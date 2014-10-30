@@ -59,12 +59,12 @@ FarGlobalInfo::~FarGlobalInfo()
 	LogTrace();
 }
 
-PCWSTR FarGlobalInfo::get_author() const
+const wchar_t* FarGlobalInfo::get_author() const
 {
 	return L"© 2014 Andrew Grechkin";
 }
 
-PCWSTR FarGlobalInfo::get_description() const
+const wchar_t* FarGlobalInfo::get_description() const
 {
 	return L"Search duplicates and make hardlinks";
 }
@@ -74,7 +74,7 @@ const GUID * FarGlobalInfo::get_guid() const
 	return &PluginGuid;
 }
 
-PCWSTR FarGlobalInfo::get_title() const
+const wchar_t* FarGlobalInfo::get_title() const
 {
 	return L"hardlinker";
 }

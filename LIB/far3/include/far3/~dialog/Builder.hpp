@@ -29,11 +29,11 @@ namespace far3 {
 		public:
 			virtual ~Builder_i() = default;
 
-			virtual Item& add_item(const Item& item) = 0;
+			virtual Item& add_item(Item&& item) = 0;
 
-			virtual Item& add_item_before(const Item& item) = 0;
+			virtual Item& add_item_before(Item&& item) = 0;
 
-			virtual Item& add_item_after(const Item& item) = 0;
+			virtual Item& add_item_after(Item&& item) = 0;
 
 			virtual void add_empty_line() = 0;
 

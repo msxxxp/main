@@ -50,11 +50,11 @@ namespace far3 {
 
 		bool is_valid() const;
 
-		Item& add_item(const Item& item) override;
+		Item& add_item(Item&& item) override;
 
-		Item& add_item_before(const Item& item) override;
+		Item& add_item_before(Item&& item) override;
 
-		Item& add_item_after(const Item& item) override;
+		Item& add_item_after(Item&& item) override;
 
 //		void add_radiobuttons(ssize_t * Value, ssize_t OptionCount, const AddRadioButton_t list[], bool FocusOnSelected) override;
 
@@ -77,7 +77,7 @@ namespace far3 {
 	protected:
 		Item& add_dialog_item(FARDIALOGITEMTYPES Type, PCWSTR Text, FARDIALOGITEMFLAGS flags = DIF_NONE);
 
-		Item& add_dialog_item(const Item& item);
+		Item& add_dialog_item(Item&& item);
 
 		ssize_t GetMaxItemX2() const;
 
@@ -147,18 +147,18 @@ namespace far3 {
 		return DialogHandle;
 	}
 
-	Item& SimpleBuilder::add_item(const Item& it)
+	Item& SimpleBuilder::add_item(Item&& it)
 	{
 		LogTrace();
-		Item& ret(add_dialog_item(it));
+		Item& ret(add_dialog_item(simstd::move(it)));
 		set_next_y(ret);
 
 		return ret;
 	}
 
-	Item& SimpleBuilder::add_item_before(const Item& it)
+	Item& SimpleBuilder::add_item_before(Item&& it)
 	{
-		Item& item(add_dialog_item(it));
+		Item& item(add_dialog_item(simstd::move(it)));
 		Item& RelativeTo(DialogItems[DialogItems.size() - 2]);
 		item.Y1 = item.Y2 = RelativeTo.Y1;
 		item.X1 = RelativeTo.X1;
@@ -171,10 +171,10 @@ namespace far3 {
 		return item;
 	}
 
-	Item& SimpleBuilder::add_item_after(const Item& it)
+	Item& SimpleBuilder::add_item_after(Item&& it)
 	{
 		LogTrace();
-		Item& item(add_dialog_item(it));
+		Item& item(add_dialog_item(simstd::move(it)));
 		Item& RelativeTo(DialogItems[DialogItems.size() - 2]);
 		item.Y1 = item.Y2 = RelativeTo.Y1;
 		ssize_t ItemWidth = item.X2 - item.X1;
@@ -301,11 +301,11 @@ namespace far3 {
 		return ret;
 	}
 
-	Item& SimpleBuilder::add_dialog_item(const Item& item)
+	Item& SimpleBuilder::add_dialog_item(Item&& item)
 	{
 		CRT_ASSERT(DialogItems.size() != DialogItems.capacity());
 		LogTrace();
-		DialogItems.emplace_back(simstd::move(const_cast<Item&>(item)));
+		DialogItems.emplace_back(simstd::move(item));
 
 		Item& ret = DialogItems.back();
 		ret.set_dialog(DialogHandle);

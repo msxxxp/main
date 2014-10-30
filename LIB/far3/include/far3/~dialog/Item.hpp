@@ -31,23 +31,23 @@ namespace far3 {
 	struct Item: public FarDialogItem, private pattern::Uncopyable {
 		~Item();
 
-		Item(FARDIALOGITEMTYPES Type_, PCWSTR Text_, FARDIALOGITEMFLAGS flags_ = DIF_NONE);
+		Item(FARDIALOGITEMTYPES type, PCWSTR text, FARDIALOGITEMFLAGS flags = DIF_NONE);
 
-		Item(ItemBinding* binding, FARDIALOGITEMTYPES Type_, PCWSTR Text_, FARDIALOGITEMFLAGS flags_ = DIF_NONE);
+		Item(ItemBinding* binding, FARDIALOGITEMTYPES type, PCWSTR text, FARDIALOGITEMFLAGS flags = DIF_NONE);
 
-		Item(Item && right);
+		Item(Item && other);
 
-		Item & operator = (Item && right);
+		Item & operator =(Item && other);
 
 		ssize_t get_height() const;
 
 		ssize_t get_width() const;
 
-		void set_dialog(HANDLE dlg);
+		void set_dialog(HANDLE dialog);
 
-		void set_index(ssize_t ind);
+		void set_index(ssize_t index);
 
-		void set_dimension(ssize_t x, ssize_t y, ssize_t width, ssize_t height = 1);
+		void set_dimensions(ssize_t x, ssize_t y, ssize_t width, ssize_t height = 1);
 
 		void save() const;
 	};

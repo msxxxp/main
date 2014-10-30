@@ -6,9 +6,10 @@ namespace logger {
 
 	const wchar_t * const LogLevelNames[(int)Level::Force + 1] = {
 		L"TO",
-		L"TR",
-		L"DM",
-		L"DB",
+		L"T2",
+		L"T1",
+		L"D2",
+		L"D1",
 		L"IN",
 		L"RP",
 		L"AT",

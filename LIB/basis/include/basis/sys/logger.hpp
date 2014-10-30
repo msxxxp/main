@@ -9,8 +9,8 @@
 #   define LogTraceObj()                                     get_logger_module()->out_debug(THIS_PLACE, logger::Level::TrObj, L"[%p, %I64u]\n", this, sizeof(*this))
 #   define LogTraceObjBegin()                                get_logger_module()->out_debug(THIS_PLACE_SHORT, logger::Level::TrObj, L"[%p, %I64u] begin\n", this, sizeof(*this))
 #   define LogTraceObjEnd()                                  get_logger_module()->out_debug(THIS_PLACE_SHORT, logger::Level::TrObj, L"[%p, %I64u] end\n", this, sizeof(*this))
-#   define LogTrace()                                        get_logger_module()->out_debug(THIS_PLACE_SHORT, logger::Level::Trace, L"\n")
-#   define LogTraceIf(condition)              if (condition) get_logger_module()->out_debug(THIS_PLACE_SHORT, logger::Level::Trace, L"\n")
+#   define LogTrace()                                        get_logger_module()->out_debug(THIS_PLACE_SHORT, logger::Level::Trace1, L"\n")
+#   define LogTraceIf(condition)              if (condition) get_logger_module()->out_debug(THIS_PLACE_SHORT, logger::Level::Trace1, L"\n")
 //#   ifdef _MSC_VER
 //#       define LogNoise(format, ...)              get_logger_module()->out(THIS_PLACE_SHORT, logger::Level::Trace, format, __VA_ARGS__)
 //#       define LogNoiseIf(condition, format, ...) if (condition) get_logger_module()->out(THIS_PLACE_SHORT, logger::Level::Trace, format, __VA_ARGS__)
@@ -25,10 +25,14 @@
 //#       define LogErrorIf(condition, format, ...) if (condition) get_logger_module()->out(THIS_PLACE_SHORT, logger::Level::Error, format, __VA_ARGS__)
 //#       define LogFatal(format, ...)	            get_logger_module()->out(THIS_PLACE_SHORT, logger::Level::Fatal, format, __VA_ARGS__)
 //#   else
-#   define LogNoise(format, ...)                              get_logger_module()->out_debug(THIS_PLACE_SHORT, logger::Level::Trace, format, ##__VA_ARGS__)
-#   define LogNoiseIf(condition, format, ...)  if (condition) get_logger_module()->out_debug(THIS_PLACE_SHORT, logger::Level::Trace, format, ##__VA_ARGS__)
-#   define LogDebug(format, ...)                              get_logger_module()->out_debug(THIS_PLACE_SHORT, logger::Level::Debug, format, ##__VA_ARGS__)
-#   define LogDebugIf(condition, format, ...)  if (condition) get_logger_module()->out_debug(THIS_PLACE_SHORT, logger::Level::Debug, format, ##__VA_ARGS__)
+#   define LogNoise2(format, ...)                             get_logger_module()->out_debug(THIS_PLACE_SHORT, logger::Level::Trace2, format, ##__VA_ARGS__)
+#   define LogNoise2If(condition, format, ...) if (condition) get_logger_module()->out_debug(THIS_PLACE_SHORT, logger::Level::Trace2, format, ##__VA_ARGS__)
+#   define LogNoise(format, ...)                              get_logger_module()->out_debug(THIS_PLACE_SHORT, logger::Level::Trace1, format, ##__VA_ARGS__)
+#   define LogNoiseIf(condition, format, ...)  if (condition) get_logger_module()->out_debug(THIS_PLACE_SHORT, logger::Level::Trace1, format, ##__VA_ARGS__)
+#   define LogDebug2(format, ...)                             get_logger_module()->out_debug(THIS_PLACE_SHORT, logger::Level::Debug2, format, ##__VA_ARGS__)
+#   define LogDebug2If(condition, format, ...) if (condition) get_logger_module()->out_debug(THIS_PLACE_SHORT, logger::Level::Debug2, format, ##__VA_ARGS__)
+#   define LogDebug(format, ...)                              get_logger_module()->out_debug(THIS_PLACE_SHORT, logger::Level::Debug1, format, ##__VA_ARGS__)
+#   define LogDebugIf(condition, format, ...)  if (condition) get_logger_module()->out_debug(THIS_PLACE_SHORT, logger::Level::Debug1, format, ##__VA_ARGS__)
 #   define LogInfo(format, ...)                               get_logger_module()->out_debug(THIS_PLACE_SHORT, logger::Level::Info, format, ##__VA_ARGS__)
 #   define LogInfoIf(condition, format, ...)   if (condition) get_logger_module()->out_debug(THIS_PLACE_SHORT, logger::Level::Info, format, ##__VA_ARGS__)
 #   define LogReport(format, ...)                             get_logger_module()->out_debug(THIS_PLACE_SHORT, logger::Level::Report, format, ##__VA_ARGS__)
@@ -77,8 +81,12 @@ namespace { \
 #   define LogTraceObjEnd()
 #   define LogTrace()
 #   define LogTraceIf(condition)                       (void)(condition)
+#   define LogNoise2(format, ...)
+#   define LogNoise2If(condition, format, ...)          (void)(condition)
 #   define LogNoise(format, ...)
 #   define LogNoiseIf(condition, format, ...)          (void)(condition)
+#   define LogDebug2(format, ...)
+#   define LogDebug2If(condition, format, ...)          (void)(condition)
 #   define LogDebug(format, ...)
 #   define LogDebugIf(condition, format, ...)          (void)(condition)
 #   define LogInfo(format, ...)
@@ -104,10 +112,14 @@ namespace { \
 #	define LogRegisterLocal(name)
 #endif
 
-#define LogConsoleNoise(color, format, ...)                              get_console_logger_module()->out_console((WORD)color, logger::Level::Trace, format, ##__VA_ARGS__)
-#define LogConsoleNoiseIf(condition, color, format, ...)  if (condition) get_console_logger_module()->out_console((WORD)color, logger::Level::Trace, format, ##__VA_ARGS__)
-#define LogConsoleDebug(color, format, ...)                              get_console_logger_module()->out_console((WORD)color, logger::Level::Debug, format, ##__VA_ARGS__)
-#define LogConsoleDebugIf(condition, color, format, ...)  if (condition) get_console_logger_module()->out_console((WORD)color, logger::Level::Debug, format, ##__VA_ARGS__)
+#define LogConsoleNoise2(color, format, ...)                             get_console_logger_module()->out_console((WORD)color, logger::Level::Trace2, format, ##__VA_ARGS__)
+#define LogConsoleNoise2If(condition, color, format, ...) if (condition) get_console_logger_module()->out_console((WORD)color, logger::Level::Trace2, format, ##__VA_ARGS__)
+#define LogConsoleNoise(color, format, ...)                              get_console_logger_module()->out_console((WORD)color, logger::Level::Trace1, format, ##__VA_ARGS__)
+#define LogConsoleNoiseIf(condition, color, format, ...)  if (condition) get_console_logger_module()->out_console((WORD)color, logger::Level::Trace1, format, ##__VA_ARGS__)
+#define LogConsoleDebug2(color, format, ...)                             get_console_logger_module()->out_console((WORD)color, logger::Level::Debug2, format, ##__VA_ARGS__)
+#define LogConsoleDebug2If(condition, color, format, ...) if (condition) get_console_logger_module()->out_console((WORD)color, logger::Level::Debug2, format, ##__VA_ARGS__)
+#define LogConsoleDebug(color, format, ...)                              get_console_logger_module()->out_console((WORD)color, logger::Level::Debug1, format, ##__VA_ARGS__)
+#define LogConsoleDebugIf(condition, color, format, ...)  if (condition) get_console_logger_module()->out_console((WORD)color, logger::Level::Debug1, format, ##__VA_ARGS__)
 #define LogConsoleInfo(color, format, ...)                               get_console_logger_module()->out_console((WORD)color, logger::Level::Info, format, ##__VA_ARGS__)
 #define LogConsoleInfoIf(condition, color, format, ...)   if (condition) get_console_logger_module()->out_console((WORD)color, logger::Level::Info, format, ##__VA_ARGS__)
 #define LogConsoleReport(color, format, ...)                             get_console_logger_module()->out_console((WORD)color, logger::Level::Report, format, ##__VA_ARGS__)
@@ -131,9 +143,10 @@ namespace logger {
 
 	enum class Level : ssize_t {
 		TrObj,    // Trace objects
-		Trace,    // Trace
-		DbgMo,    // Debug more
-		Debug,    // Debug
+		Trace2,   // Trace more
+		Trace1,   // Trace
+		Debug2,   // Debug more
+		Debug1,   // Debug
 		Info,     // Information
 		Report,   // Report
 		Atten,    // Attention

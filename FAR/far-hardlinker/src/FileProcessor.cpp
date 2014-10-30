@@ -1,15 +1,15 @@
-﻿#include <basis/sys/logger.hpp>
-
-#include <FileProcessor.hpp>
+﻿#include <FileProcessor.hpp>
 #include <global.hpp>
 #include <fsys.hpp>
+#include <guid.hpp>
 
+#include <far3/dialog.hpp>
+
+#include <basis/sys/logger.hpp>
 #include <basis/simstd/algorithm>
+
 //#include <list>
 //#include <algorithm>
-
-#include <libfar3/dialog.hpp>
-#include <guid.hpp>
 
 bool CompareBySizeLess(const fsys::File_t & file1, const fsys::File_t & file2)
 {
@@ -155,7 +155,7 @@ ssize_t FileProcessor::execute()
 		{DI_BUTTON,    0, m_height-3, 0, m_height-3, 0, nullptr, nullptr, DIF_CENTERGROUP, L"e"},
 	};
 
-	auto foundDlg = Far::create_dialog(ListMenuGuid, -1, -1, m_width, m_height, FindDlgData, lengthof(FindDlgData), 0);
+	auto foundDlg = far3::dialog::create(ListMenuGuid, -1, -1, m_width, m_height, FindDlgData, lengthof(FindDlgData), 0);
 	foundDlg->show();
 	return 0;
 

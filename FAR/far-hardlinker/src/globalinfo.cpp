@@ -23,7 +23,7 @@
 #include <guid.hpp>
 #include <lang.hpp>
 
-#include <libfar3/helper.hpp>
+#include <far3/plugin.hpp>
 
 #include <basis/sys/cstr.hpp>
 #include <basis/sys/logger.hpp>
@@ -90,10 +90,10 @@ VersionInfo FarGlobalInfo::get_min_version() const
 	return MAKEFARVERSION(3, 0, 0, 3000, VS_RELEASE);
 }
 
-Far::Plugin_i * FarGlobalInfo::CreatePlugin(const PluginStartupInfo * Info) const
+far3::Plugin_i* FarGlobalInfo::CreatePlugin(const PluginStartupInfo* psi) const
 {
 	LogTrace();
-	Far::Plugin_i * plugin = create_FarPlugin(Info);
+	far3::Plugin_i* plugin = create_FarPlugin(psi);
 	return plugin;
 }
 
@@ -107,7 +107,7 @@ void FarGlobalInfo::save_settings() const
 	LogTrace();
 }
 
-FarGlobalInfo * get_global_info()
+FarGlobalInfo* get_global_info()
 {
-	return (FarGlobalInfo*)Far::helper_t::inst().get_global_info();
+	return (FarGlobalInfo*)far3::helper_t::inst().get_global_info();
 }

@@ -21,8 +21,8 @@
 #ifndef _FARPLUGIN_HPP_
 #define _FARPLUGIN_HPP_
 
-#include <libfar3/plugin_i.hpp>
+#include <far3/plugin.hpp>
 
-Far::Plugin_i * create_FarPlugin(const PluginStartupInfo * psi);
+far3::Plugin_i* create_FarPlugin(const PluginStartupInfo* psi);
 
 #endif

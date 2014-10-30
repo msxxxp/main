@@ -21,7 +21,7 @@
 #ifndef _FILE_PROCESSOR_HPP_
 #define _FILE_PROCESSOR_HPP_
 
-#include <libfar3/globalinfo_i.hpp>
+#include <far3/plugin.hpp>
 
 #include <basis/ext/pattern.hpp>
 #include <basis/simstd/string>

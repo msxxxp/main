@@ -18,11 +18,10 @@
 	along with this program.  If not, see <http://www.gnu.org/licenses/>.
 **/
 
+#include <far3/plugin.hpp>
+
 #include <globalinfo.hpp>
 #include <farplugin.hpp>
-
-#include <libfar3/helper.hpp>
-#include <libfar3/plugin_i.hpp>
 
 #include <basis/sys/logger.hpp>
 
@@ -43,7 +42,7 @@ void WINAPI GetGlobalInfoW(GlobalInfo * info)
 	setup_logger();
 
 	LogTrace();
-	Far::helper_t::inst().init(new FarGlobalInfo);
+	far3::helper_t::inst().init(new FarGlobalInfo);
 	get_global_info()->GetGlobalInfoW(info);
 }
 
@@ -64,19 +63,19 @@ intptr_t WINAPI ConfigureW(const ConfigureInfo * info)
 void WINAPI GetPluginInfoW(PluginInfo * info)
 {
 	LogTrace();
-	Far::helper_t::inst().get_plugin()->GetPluginInfoW(info);
+	far3::helper_t::inst().get_plugin()->GetPluginInfoW(info);
 }
 
 HANDLE WINAPI OpenW(const OpenInfo * info)
 {
 	LogTrace();
-	return Far::helper_t::inst().get_plugin()->OpenW(info);
+	return far3::helper_t::inst().get_plugin()->OpenW(info);
 }
 
 void WINAPI ExitFARW(const ExitInfo *info)
 {
 	LogTrace();
-	Far::helper_t::inst().get_plugin()->ExitFARW(info);
+	far3::helper_t::inst().get_plugin()->ExitFARW(info);
 }
 
 /// Panel

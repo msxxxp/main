@@ -26,11 +26,11 @@
 							<tool id="cdt.managedbuild.tool.gnu.cpp.linker.mingw.so.debug.1111376427" name="MinGW C++ Linker" superClass="cdt.managedbuild.tool.gnu.cpp.linker.mingw.so.debug">
 								<option defaultValue="true" id="gnu.cpp.link.mingw.so.debug.option.shared.712623704" name="Shared (-shared)" superClass="gnu.cpp.link.mingw.so.debug.option.shared" valueType="boolean"/>
 								<option id="gnu.cpp.link.option.paths.1727969503" name="Library search path (-L)" superClass="gnu.cpp.link.option.paths" valueType="libPaths">
-									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/libfar3/x64-Debug}&quot;"/>
+									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/far3/x64-Debug}&quot;"/>
 									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/basis/x64-Debug}&quot;"/>
 								</option>
 								<option id="gnu.cpp.link.option.libs.1285605904" name="Libraries (-l)" superClass="gnu.cpp.link.option.libs" valueType="libs">
-									<listOptionValue builtIn="false" value="libfar3"/>
+									<listOptionValue builtIn="false" value="far3"/>
 									<listOptionValue builtIn="false" value="basis"/>
 								</option>
 								<option id="gnu.cpp.link.option.flags.1345784613" name="Linker flags" superClass="gnu.cpp.link.option.flags" value="-m64 -static -Wl,-Map=hardlinker-x64.map ..\src\mainW.gcc.def" valueType="string"/>
@@ -53,7 +53,7 @@
 								</option>
 								<option id="gnu.cpp.compiler.option.include.paths.1758267893" name="Include paths (-I)" superClass="gnu.cpp.compiler.option.include.paths" useByScannerDiscovery="false" valueType="includePath">
 									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/${ProjName}/include}&quot;"/>
-									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/libfar3/include}&quot;"/>
+									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/far3/include}&quot;"/>
 									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/basis/include}&quot;"/>
 								</option>
 								<option id="gnu.cpp.compiler.option.warnings.extrawarn.352327531" name="Extra warnings (-Wextra)" superClass="gnu.cpp.compiler.option.warnings.extrawarn" useByScannerDiscovery="false" value="true" valueType="boolean"/>
@@ -96,11 +96,11 @@
 							<tool id="cdt.managedbuild.tool.gnu.cpp.linker.mingw.so.debug.1494410315" name="MinGW C++ Linker" superClass="cdt.managedbuild.tool.gnu.cpp.linker.mingw.so.debug">
 								<option defaultValue="true" id="gnu.cpp.link.mingw.so.debug.option.shared.632237445" name="Shared (-shared)" superClass="gnu.cpp.link.mingw.so.debug.option.shared" valueType="boolean"/>
 								<option id="gnu.cpp.link.option.paths.1428773676" name="Library search path (-L)" superClass="gnu.cpp.link.option.paths" valueType="libPaths">
-									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/libfar3/x64-Release}&quot;"/>
+									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/far3/x64-Release}&quot;"/>
 									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/basis/x64-Release}&quot;"/>
 								</option>
 								<option id="gnu.cpp.link.option.libs.1456602139" name="Libraries (-l)" superClass="gnu.cpp.link.option.libs" valueType="libs">
-									<listOptionValue builtIn="false" value="libfar3"/>
+									<listOptionValue builtIn="false" value="far3"/>
 									<listOptionValue builtIn="false" value="basis"/>
 									<listOptionValue builtIn="false" value="gcc"/>
 									<listOptionValue builtIn="false" value="mingwex"/>
@@ -136,7 +136,7 @@
 								</option>
 								<option id="gnu.cpp.compiler.option.include.paths.452893795" name="Include paths (-I)" superClass="gnu.cpp.compiler.option.include.paths" useByScannerDiscovery="false" valueType="includePath">
 									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/${ProjName}/include}&quot;"/>
-									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/libfar3/include}&quot;"/>
+									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/far3/include}&quot;"/>
 									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/basis/include}&quot;"/>
 								</option>
 								<option id="gnu.cpp.compiler.option.warnings.extrawarn.1851464512" name="Extra warnings (-Wextra)" superClass="gnu.cpp.compiler.option.warnings.extrawarn" useByScannerDiscovery="false" value="true" valueType="boolean"/>

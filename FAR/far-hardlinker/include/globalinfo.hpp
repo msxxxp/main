@@ -21,12 +21,12 @@
 #ifndef _GLOBALINFO_HPP_
 #define _GLOBALINFO_HPP_
 
-#include <libfar3/globalinfo_i.hpp>
+#include <far3/plugin.hpp>
 
 #include <basis/ext/pattern.hpp>
 #include <basis/simstd/string>
 
-struct FarGlobalInfo: public Far::GlobalInfo_i, private pattern::Uncopyable {
+struct FarGlobalInfo: public far3::GlobalInfo_i, private pattern::Uncopyable {
 	~FarGlobalInfo();
 
 	FarGlobalInfo();
@@ -43,7 +43,7 @@ struct FarGlobalInfo: public Far::GlobalInfo_i, private pattern::Uncopyable {
 
 	VersionInfo get_min_version() const override;
 
-	Far::Plugin_i * CreatePlugin(const PluginStartupInfo * Info) const override;
+	far3::Plugin_i* CreatePlugin(const PluginStartupInfo* info) const override;
 
 	void load_settings();
 

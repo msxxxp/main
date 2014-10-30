@@ -18,11 +18,6 @@
 	along with this program.  If not, see <http://www.gnu.org/licenses/>.
 **/
 
-#include <basis/sys/logger.hpp>
-
-#include <libfar3/helper.hpp>
-#include <libfar3/dialog_builder.hpp>
-
 #include <farplugin.hpp>
 #include <globalinfo.hpp>
 #include <guid.hpp>
@@ -31,8 +26,14 @@
 #include <global.hpp>
 #include <fsys.hpp>
 
-///======================================================================================= FarPlugin
-struct FarPlugin: public Far::Plugin_i {
+#include <far3/plugin.hpp>
+#include <far3/message.hpp>
+#include <far3/dialog.hpp>
+
+#include <basis/sys/cstr.hpp>
+#include <basis/sys/logger.hpp>
+
+struct FarPlugin: public far3::Plugin_i {
 	~FarPlugin();
 
 	FarPlugin(const PluginStartupInfo * info);
@@ -41,7 +42,7 @@ struct FarPlugin: public Far::Plugin_i {
 
 	void GetPluginInfo(PluginInfo * info) override;
 
-	Far::PanelController_i * Open(const OpenInfo * info) override;
+	far3::PanelController_i* Open(const OpenInfo* info) override;
 
 private:
 	mutable WCHAR menu_item[64];
@@ -53,7 +54,7 @@ FarPlugin::~FarPlugin()
 }
 
 FarPlugin::FarPlugin(const PluginStartupInfo * info):
-	Far::Plugin_i(info)
+	far3::Plugin_i(info)
 {
 	LogTraceObj();
 
@@ -73,7 +74,7 @@ void FarPlugin::GetPluginInfo(PluginInfo * info)
 	static GUID PluginMenuGuids[] = {MenuGuid,};
 	static PCWSTR PluginMenuStrings[] = {menu_item,};
 
-	cstr::copy(menu_item, Far::get_msg(Far::MenuTitle), lengthof(menu_item));
+	cstr::copy(menu_item, far3::message::get(far3::message::MenuTitle), lengthof(menu_item));
 
 	info->PluginMenu.Guids = PluginMenuGuids;
 	info->PluginMenu.Strings = PluginMenuStrings;
@@ -82,7 +83,7 @@ void FarPlugin::GetPluginInfo(PluginInfo * info)
 	info->CommandPrefix = get_global_info()->prefix;
 }
 
-namespace Far {
+namespace far3 {
 	class Menu {
 	public:
 		Menu(const GUID& guid):
@@ -98,7 +99,7 @@ namespace Far {
 				{MIF_NONE, L"qwe1", {0, 0}, 0, {0, 0}},
 			};
 
-			auto ptr = Far::psi().Menu(get_plugin_guid(), &m_guid, -1, -1, 0, FMENU_NONE, L"menu", nullptr, nullptr, nullptr, nullptr, items, lengthof(items));
+			auto ptr = far3::psi().Menu(get_plugin_guid(), &m_guid, -1, -1, 0, FMENU_NONE, L"menu", nullptr, nullptr, nullptr, nullptr, items, lengthof(items));
 			return ptr;
 		}
 
@@ -108,53 +109,53 @@ namespace Far {
 
 }
 
-Far::PanelController_i * FarPlugin::Open(const OpenInfo * info)
+far3::PanelController_i* FarPlugin::Open(const OpenInfo * info)
 {
 	UNUSED(info);
 	LogTrace();
 
-	using namespace Far;
+	using namespace far3;
 	auto fgi = get_global_info();
 	fgi->load_settings();
 
 	FarListItem cbOperation[] = {
-		{0, get_msg(lbSearchOnly), {0}},
-		{0, get_msg(lbHardlinkAuto), {0}},
-		{0, get_msg(lbHardlinkManual), {0}},
+		{0, message::get(lbSearchOnly), {0}},
+		{0, message::get(lbHardlinkAuto), {0}},
+		{0, message::get(lbHardlinkManual), {0}},
 	};
 
-	auto dialog = create_dialog_builder(DialogGuid, get_msg(DlgTitle));
+	auto dialog = dialog::create_builder(DialogGuid, message::get(message::DlgTitle));
 	LogTrace();
-	dialog->add_item(create_label(txOperation));
-	dialog->add_item_after(create_combobox(reinterpret_cast<ssize_t*>(&fgi->m_cbOperation), cbOperation, lengthof(cbOperation), DIF_DROPDOWNLIST | DIF_LISTNOAMPERSAND));
-	dialog->add_item(create_separator());
-//	dialog->add_item(create_label(txComparation));
-//	dialog->add_item(create_combobox(reinterpret_cast<ssize_t*>(&fgi->cbValue_Comparation), cbComparation, Base::lengthof(cbComparation), DIF_DROPDOWNLIST | DIF_LISTNOAMPERSAND));
-	dialog->add_item(create_checkbox(&fgi->m_cbMask, cbMask));
-	dialog->add_item_after(create_edit(&fgi->m_edMask, 20));
-	dialog->add_item(create_checkbox(&fgi->m_cbDoRecursive, cbDoRecursive));
-	dialog->add_item(create_separator(txFileFilters, DIF_CENTERTEXT));
-	dialog->add_item(create_checkbox(&fgi->m_cbFilterFileReadOnly, cbFilterFileReadOnly));
-	dialog->add_item_after(create_checkbox(&fgi->m_cbFilterDirReadOnly, cbFilterDirReadOnly));
-	dialog->add_item(create_checkbox(&fgi->m_cbFilterFileHidden, cbFilterFileHidden));
-	dialog->add_item_after(create_checkbox(&fgi->m_cbFilterDirHidden, cbFilterDirHidden));
-	dialog->add_item(create_checkbox(&fgi->m_cbFilterFileSystem, cbFilterFileSystem));
-	dialog->add_item_after(create_checkbox(&fgi->m_cbFilterDirSystem, cbFilterDirSystem));
-	dialog->add_item(create_checkbox(&fgi->m_cbFilterFileLink, cbFilterFileLink));
-	dialog->add_item_after(create_checkbox(&fgi->m_cbFilterDirLink, cbFilterDirLink));
-	dialog->add_item(create_separator());
-	dialog->add_item(create_checkbox(&fgi->m_cbFilterFileSize, cbFilterFileSize));
-//	dialog->add_item(create_separator(txFileRestrictions, DIF_CENTERTEXT));
-//	dialog->add_item(create_checkbox(&fgi->m_cbRestrictionFileTime, cbRestrictionFileTime));
-//	dialog->add_item(create_checkbox(&fgi->m_cbRestrictionFileAttributes, cbRestrictionFileAttributes));
-//	dialog->add_item(create_separator());
-//	dialog->add_item(create_label(txWhitespace));
-//	dialog->add_item_after(create_edit(fgi->edValue_Whitespaces, 10));
-//	dialog->add_item(create_separator());
-//	dialog->add_item(create_checkbox(&fgi->cbValue_Selected, cbSelected, (fgi->get_block_type() != BTYPE_COLUMN) ? DIF_DISABLE : 0));
-//	dialog->add_item(create_checkbox(&fgi->cbValue_AsEmpty, cbAsEmpty, (fgi->get_block_type() != BTYPE_COLUMN) ? DIF_DISABLE : 0));
-	dialog->add_item(create_separator());
-	dialog->add_OKCancel(get_msg(txtBtnOk), get_msg(txtBtnCancel));
+	dialog->add_item(dialog::create_label(txOperation));
+	dialog->add_item_after(dialog::create_combobox(reinterpret_cast<ssize_t*>(&fgi->m_cbOperation), cbOperation, lengthof(cbOperation), DIF_DROPDOWNLIST | DIF_LISTNOAMPERSAND));
+	dialog->add_item(dialog::create_separator());
+//	dialog->add_item(dialog::create_label(txComparation));
+//	dialog->add_item(dialog::create_combobox(reinterpret_cast<ssize_t*>(&fgi->cbValue_Comparation), cbComparation, Base::lengthof(cbComparation), DIF_DROPDOWNLIST | DIF_LISTNOAMPERSAND));
+	dialog->add_item(dialog::create_checkbox(&fgi->m_cbMask, cbMask));
+	dialog->add_item_after(dialog::create_edit(&fgi->m_edMask, 20));
+	dialog->add_item(dialog::create_checkbox(&fgi->m_cbDoRecursive, cbDoRecursive));
+	dialog->add_item(dialog::create_separator(txFileFilters, DIF_CENTERTEXT));
+	dialog->add_item(dialog::create_checkbox(&fgi->m_cbFilterFileReadOnly, cbFilterFileReadOnly));
+	dialog->add_item_after(dialog::create_checkbox(&fgi->m_cbFilterDirReadOnly, cbFilterDirReadOnly));
+	dialog->add_item(dialog::create_checkbox(&fgi->m_cbFilterFileHidden, cbFilterFileHidden));
+	dialog->add_item_after(dialog::create_checkbox(&fgi->m_cbFilterDirHidden, cbFilterDirHidden));
+	dialog->add_item(dialog::create_checkbox(&fgi->m_cbFilterFileSystem, cbFilterFileSystem));
+	dialog->add_item_after(dialog::create_checkbox(&fgi->m_cbFilterDirSystem, cbFilterDirSystem));
+	dialog->add_item(dialog::create_checkbox(&fgi->m_cbFilterFileLink, cbFilterFileLink));
+	dialog->add_item_after(dialog::create_checkbox(&fgi->m_cbFilterDirLink, cbFilterDirLink));
+	dialog->add_item(dialog::create_separator());
+	dialog->add_item(dialog::create_checkbox(&fgi->m_cbFilterFileSize, cbFilterFileSize));
+//	dialog->add_item(dialog::create_separator(txFileRestrictions, DIF_CENTERTEXT));
+//	dialog->add_item(dialog::create_checkbox(&fgi->m_cbRestrictionFileTime, cbRestrictionFileTime));
+//	dialog->add_item(dialog::create_checkbox(&fgi->m_cbRestrictionFileAttributes, cbRestrictionFileAttributes));
+//	dialog->add_item(dialog::create_separator());
+//	dialog->add_item(dialog::create_label(txWhitespace));
+//	dialog->add_item_after(dialog::create_edit(fgi->edValue_Whitespaces, 10));
+//	dialog->add_item(dialog::create_separator());
+//	dialog->add_item(dialog::create_checkbox(&fgi->cbValue_Selected, cbSelected, (fgi->get_block_type() != BTYPE_COLUMN) ? DIF_DISABLE : 0));
+//	dialog->add_item(dialog::create_checkbox(&fgi->cbValue_AsEmpty, cbAsEmpty, (fgi->get_block_type() != BTYPE_COLUMN) ? DIF_DISABLE : 0));
+	dialog->add_item(dialog::create_separator());
+	dialog->add_OKCancel(message::get(message::txtBtnOk), message::get(message::txtBtnCancel));
 	LogTrace();
 	if (dialog->show()) {
 		fgi->save_settings();
@@ -170,7 +171,7 @@ Far::PanelController_i * FarPlugin::Open(const OpenInfo * info)
 }
 
 ///=================================================================================================
-Far::Plugin_i * create_FarPlugin(const PluginStartupInfo * psi)
+far3::Plugin_i* create_FarPlugin(const PluginStartupInfo* psi)
 {
 	return new FarPlugin(psi);
 }

@@ -50,7 +50,6 @@ private:
 
 FarPlugin::~FarPlugin()
 {
-	LogTraceObj();
 }
 
 FarPlugin::FarPlugin(const PluginStartupInfo * info):
@@ -126,25 +125,25 @@ far3::PanelController_i* FarPlugin::Open(const OpenInfo * info)
 
 	auto dialog = dialog::create_builder(32, DialogGuid, message::get(message::DlgTitle));
 	if (dialog) {
-		dialog->add_item(dialog::create_label(txOperation));
-		dialog->add_item_after(dialog::create_combobox(fgi->m_cbOperation, cbOperation, lengthof(cbOperation), DIF_DROPDOWNLIST | DIF_LISTNOAMPERSAND));
+		dialog->add_item(dialog::create_label(-1, txOperation));
+		dialog->add_item_after(dialog::create_combobox(fgi->m_cbOperation, cbOperation, lengthof(cbOperation), -1, DIF_DROPDOWNLIST | DIF_LISTNOAMPERSAND));
 		dialog->add_item(dialog::create_separator());
 	//	dialog->add_item(dialog::create_label(txComparation));
 	//	dialog->add_item(dialog::create_combobox(reinterpret_cast<ssize_t*>(&fgi->cbValue_Comparation), cbComparation, Base::lengthof(cbComparation), DIF_DROPDOWNLIST | DIF_LISTNOAMPERSAND));
-		dialog->add_item(dialog::create_checkbox(fgi->m_cbMask, cbMask));
+		dialog->add_item(dialog::create_checkbox(fgi->m_cbMask, -1, cbMask));
 		dialog->add_item_after(dialog::create_edit(fgi->m_edMask, 20));
-		dialog->add_item(dialog::create_checkbox(fgi->m_cbDoRecursive, cbDoRecursive));
+		dialog->add_item(dialog::create_checkbox(fgi->m_cbDoRecursive, -1, cbDoRecursive));
 		dialog->add_item(dialog::create_separator(txFileFilters, DIF_CENTERTEXT));
-		dialog->add_item(dialog::create_checkbox(fgi->m_cbFilterFileReadOnly, cbFilterFileReadOnly));
-		dialog->add_item_after(dialog::create_checkbox(fgi->m_cbFilterDirReadOnly, cbFilterDirReadOnly));
-		dialog->add_item(dialog::create_checkbox(fgi->m_cbFilterFileHidden, cbFilterFileHidden));
-		dialog->add_item_after(dialog::create_checkbox(fgi->m_cbFilterDirHidden, cbFilterDirHidden));
-		dialog->add_item(dialog::create_checkbox(fgi->m_cbFilterFileSystem, cbFilterFileSystem));
-		dialog->add_item_after(dialog::create_checkbox(fgi->m_cbFilterDirSystem, cbFilterDirSystem));
-		dialog->add_item(dialog::create_checkbox(fgi->m_cbFilterFileLink, cbFilterFileLink));
-		dialog->add_item_after(dialog::create_checkbox(fgi->m_cbFilterDirLink, cbFilterDirLink));
+		dialog->add_item(dialog::create_checkbox(fgi->m_cbFilterFileReadOnly, 20, cbFilterFileReadOnly));
+		dialog->add_item_after(dialog::create_checkbox(fgi->m_cbFilterDirReadOnly, 20, cbFilterDirReadOnly));
+		dialog->add_item(dialog::create_checkbox(fgi->m_cbFilterFileHidden, 20, cbFilterFileHidden));
+		dialog->add_item_after(dialog::create_checkbox(fgi->m_cbFilterDirHidden, 20, cbFilterDirHidden));
+		dialog->add_item(dialog::create_checkbox(fgi->m_cbFilterFileSystem, 20, cbFilterFileSystem));
+		dialog->add_item_after(dialog::create_checkbox(fgi->m_cbFilterDirSystem, 20, cbFilterDirSystem));
+		dialog->add_item(dialog::create_checkbox(fgi->m_cbFilterFileLink, 20, cbFilterFileLink));
+		dialog->add_item_after(dialog::create_checkbox(fgi->m_cbFilterDirLink, 20, cbFilterDirLink));
 		dialog->add_item(dialog::create_separator());
-		dialog->add_item(dialog::create_checkbox(fgi->m_cbFilterFileSize, cbFilterFileSize));
+		dialog->add_item(dialog::create_checkbox(fgi->m_cbFilterFileSize, -1, cbFilterFileSize));
 	//	dialog->add_item(dialog::create_separator(txFileRestrictions, DIF_CENTERTEXT));
 	//	dialog->add_item(dialog::create_checkbox(fgi->m_cbRestrictionFileTime, cbRestrictionFileTime));
 	//	dialog->add_item(dialog::create_checkbox(fgi->m_cbRestrictionFileAttributes, cbRestrictionFileAttributes));

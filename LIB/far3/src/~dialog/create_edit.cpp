@@ -25,7 +25,7 @@ namespace far3 {
 	namespace dialog {
 
 		struct PluginEditFieldBinding: public ItemBinding {
-			PluginEditFieldBinding(simstd::wstring& value);
+			PluginEditFieldBinding(simstd::wstring& value, ssize_t min_width);
 
 			void save() const override;
 
@@ -35,7 +35,8 @@ namespace far3 {
 			simstd::wstring& m_value;
 		};
 
-		PluginEditFieldBinding::PluginEditFieldBinding(simstd::wstring& value) :
+		PluginEditFieldBinding::PluginEditFieldBinding(simstd::wstring& value, ssize_t min_width) :
+			ItemBinding(min_width),
 			m_value(value)
 		{
 			LogTrace();
@@ -53,14 +54,14 @@ namespace far3 {
 			return static_cast<ssize_t>(m_value.length());
 		}
 
-		Item create_edit(simstd::wstring& value, ssize_t width, const wchar_t* history_id, bool use_last_history, FARDIALOGITEMFLAGS flags)
+		Item create_edit(simstd::wstring& value, ssize_t min_width, const wchar_t* history_id, bool use_last_history, FARDIALOGITEMFLAGS flags)
 		{
 			LogNoise(L"'%s', flags: 0x%I64X\n", value.c_str(), flags);
-			Item ret(new PluginEditFieldBinding(value), DI_EDIT, value.c_str(), flags);
-			if (width == -1)
-				width = 10;
+			Item ret(new PluginEditFieldBinding(value, min_width), DI_EDIT, value.c_str(), flags);
+			if (min_width == -1)
+				min_width = 10;
 
-			ret.X2 = ret.X1 + width - 1;
+			ret.X2 = ret.X1 + min_width - 1;
 
 			if (history_id) {
 				ret.History = history_id;
@@ -72,14 +73,14 @@ namespace far3 {
 			return ret;
 		}
 
-		Item create_password(simstd::wstring& value, ssize_t width, FARDIALOGITEMFLAGS flags)
+		Item create_password(simstd::wstring& value, ssize_t min_width, FARDIALOGITEMFLAGS flags)
 		{
 			LogNoise(L"%flags: 0x%I64X\n", flags);
-			Item ret(new PluginEditFieldBinding(value), DI_PSWEDIT, value.c_str(), flags);
-			if (width == -1)
-				width = 10;
+			Item ret(new PluginEditFieldBinding(value, min_width), DI_PSWEDIT, value.c_str(), flags);
+			if (min_width == -1)
+				min_width = 10;
 
-			ret.X2 = ret.X1 + width - 1;
+			ret.X2 = ret.X1 + min_width - 1;
 
 			return ret;
 		}

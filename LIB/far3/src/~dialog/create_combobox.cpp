@@ -25,7 +25,7 @@ namespace far3 {
 	namespace dialog {
 
 		struct ComboBoxBinding: public ItemBinding {
-			ComboBoxBinding(ssize_t& value, FarListItem items[], size_t count);
+			ComboBoxBinding(ssize_t& value, FarListItem items[], size_t count, ssize_t min_width);
 
 			void save() const override;
 
@@ -38,7 +38,8 @@ namespace far3 {
 			FarList  m_items;
 		};
 
-		ComboBoxBinding::ComboBoxBinding(ssize_t& value, FarListItem items[], size_t count) :
+		ComboBoxBinding::ComboBoxBinding(ssize_t& value, FarListItem items[], size_t count, ssize_t min_width) :
+			ItemBinding(min_width),
 			m_value(value)
 		{
 			m_items.StructSize = sizeof(m_items);
@@ -69,11 +70,11 @@ namespace far3 {
 			return (FarList *)&m_items;
 		}
 
-		Item create_combobox(ssize_t& value, FarListItem items[], size_t count, FARDIALOGITEMFLAGS flags)
+		Item create_combobox(ssize_t& value, FarListItem items[], size_t count, ssize_t min_width, FARDIALOGITEMFLAGS flags)
 		{
 			LogNoise(L"%Iu, %Id, 0x%I64X\n", count, value, flags);
 			items[value].Flags |= LIF_SELECTED;
-			auto binding = new ComboBoxBinding(value, items, count);
+			auto binding = new ComboBoxBinding(value, items, count, min_width);
 			Item ret(binding, DI_COMBOBOX, nullptr, flags);
 			ret.ListItems = binding->get_items();
 			ret.X2 = ret.X1 + ret.get_width() - 3;

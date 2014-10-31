@@ -4,11 +4,13 @@ namespace global {
 
 	Statistics::Statistics()
 	{
+		LogTraceObj();
 		memset(this, 0, sizeof(*this));
 	}
 
 	Options::Options()
 	{
+		LogTraceObj();
 		firstBlockHash = 65 * 1024;
 		showStatistics = 1;
 		attrMustMatch = 0;

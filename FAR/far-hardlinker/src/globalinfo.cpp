@@ -32,7 +32,7 @@
 
 FarGlobalInfo::FarGlobalInfo()
 {
-	LogTrace();
+	LogTraceObj();
 	cstr::copy(prefix, L"hardlinker");
 	m_cbOperation = 0;
 	m_cbMask = 0;
@@ -56,37 +56,43 @@ FarGlobalInfo::FarGlobalInfo()
 
 FarGlobalInfo::~FarGlobalInfo()
 {
-	LogTrace();
+	LogTraceObj();
 }
 
 const wchar_t* FarGlobalInfo::get_author() const
 {
+	LogTraceObj();
 	return L"© 2014 Andrew Grechkin";
 }
 
 const wchar_t* FarGlobalInfo::get_description() const
 {
+	LogTraceObj();
 	return L"Search duplicates and make hardlinks";
 }
 
 const GUID * FarGlobalInfo::get_guid() const
 {
+	LogTraceObj();
 	return &PluginGuid;
 }
 
 const wchar_t* FarGlobalInfo::get_title() const
 {
+	LogTraceObj();
 	return L"hardlinker";
 }
 
 VersionInfo FarGlobalInfo::get_version() const
 {
+	LogTraceObj();
 	using namespace AutoVersion;
 	return MAKEFARVERSION(MAJOR, MINOR, BUILD, FARMANAGERVERSION_BUILD, VS_RELEASE);
 }
 
 VersionInfo FarGlobalInfo::get_min_version() const
 {
+	LogTraceObj();
 	return MAKEFARVERSION(3, 0, 0, 3000, VS_RELEASE);
 }
 

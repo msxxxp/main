@@ -28,7 +28,7 @@ namespace far3 {
 		{
 			flags |= DIF_SEPARATOR;
 			LogNoise(L"'%s' 0x%I64X\n", text, flags);
-			return Item(DI_TEXT, text, flags);
+			return Item(-1, DI_TEXT, text, flags);
 		}
 
 	}

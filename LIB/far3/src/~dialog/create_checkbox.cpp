@@ -24,7 +24,7 @@ namespace far3 {
 	namespace dialog {
 
 		struct CheckBoxBinding: public ItemBinding {
-			CheckBoxBinding(ssize_t& value);
+			CheckBoxBinding(ssize_t& value, ssize_t min_width);
 
 			void save() const override;
 
@@ -34,7 +34,8 @@ namespace far3 {
 			ssize_t& m_value;
 		};
 
-		CheckBoxBinding::CheckBoxBinding(ssize_t& value) :
+		CheckBoxBinding::CheckBoxBinding(ssize_t& value, ssize_t min_width) :
+			ItemBinding(min_width),
 			m_value(value)
 		{
 		}
@@ -48,13 +49,13 @@ namespace far3 {
 
 		ssize_t CheckBoxBinding::get_width() const
 		{
-			return 0;
+			return m_min_width;
 		}
 
-		Item create_checkbox(ssize_t& value, const wchar_t* text, FARDIALOGITEMFLAGS flags)
+		Item create_checkbox(ssize_t& value, const wchar_t* text, ssize_t min_width, FARDIALOGITEMFLAGS flags)
 		{
 			LogNoise(L"'%s' %Id, 0x%I64X\n", text, value, flags);
-			Item ret(new CheckBoxBinding(value), DI_CHECKBOX, text, flags);
+			Item ret(new CheckBoxBinding(value, min_width), DI_CHECKBOX, text, flags);
 			ret.Selected = value;
 
 			return ret;

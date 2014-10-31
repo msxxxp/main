@@ -27,24 +27,19 @@
 namespace far3 {
 	namespace dialog {
 
-		ssize_t inline get_text_width(const Item& item)
-		{
-			return item.Data ? cstr::length(item.Data) : 0;
-		}
-
 		Item::~Item()
 		{
 			delete reinterpret_cast<ItemBinding*>(UserData);
 		}
 
-		Item::Item(FARDIALOGITEMTYPES type, PCWSTR text, FARDIALOGITEMFLAGS flags)
+		Item::Item(ssize_t min_width, FARDIALOGITEMTYPES type, PCWSTR text, FARDIALOGITEMFLAGS flags)
 		{
 			LogNoise(L"'%s' %d, 0x%I64X\n", text, type, flags);
 			memory::zero(*this);
 			Type = type;
 			Data = text;
 			Flags = flags;
-			UserData = reinterpret_cast<intptr_t>(new ItemBinding);
+			UserData = reinterpret_cast<intptr_t>(new ItemBinding(min_width));
 		}
 
 		Item::Item(ItemBinding* binding, FARDIALOGITEMTYPES type, PCWSTR text, FARDIALOGITEMFLAGS flags)
@@ -85,17 +80,19 @@ namespace far3 {
 			ssize_t ret = 0;
 			switch (Type) {
 				case DI_TEXT:
-					ret = get_text_width(*this);
+					ret = get_text_width();
 					break;
 
 				case DI_DOUBLEBOX:
-					ret = simstd::max(get_text_width(*this), static_cast<ssize_t>(22));
+					ret = simstd::max(get_text_width(), static_cast<ssize_t>(22));
 					break;
 
 				case DI_CHECKBOX:
+					ret = 4 + simstd::max(get_text_width(), reinterpret_cast<ItemBinding*>(UserData)->get_width());
+					break;
 				case DI_RADIOBUTTON:
 				case DI_BUTTON:
-					ret = get_text_width(*this) + 4;
+					ret = get_text_width() + 4;
 					break;
 
 				case DI_EDIT:
@@ -118,6 +115,11 @@ namespace far3 {
 			}
 			LogNoise(L"-> %Id\n", ret);
 			return ret;
+		}
+
+		ssize_t Item::get_text_width() const
+		{
+			return Data ? cstr::length(Data) : 0;
 		}
 
 		void Item::set_dialog(HANDLE dialog)

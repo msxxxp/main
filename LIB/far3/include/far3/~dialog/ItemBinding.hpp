@@ -29,9 +29,9 @@ namespace far3 {
 
 		class ItemBinding {
 		public:
-			ItemBinding();
-
 			virtual ~ItemBinding() = default;
+
+			ItemBinding(ssize_t min_width);
 
 			HANDLE get_dialog() const;
 
@@ -48,11 +48,12 @@ namespace far3 {
 			virtual ssize_t get_height() const;
 
 		protected:
-			ItemBinding(HANDLE dialog, ssize_t index);
+			ItemBinding(HANDLE dialog, ssize_t index, ssize_t min_width);
 
 		private:
 			HANDLE  m_dialog;
 			ssize_t m_index;
+			ssize_t m_min_width;
 		};
 
 	}

@@ -75,7 +75,7 @@ namespace far3 {
 		int show() override;
 
 	protected:
-		Item& add_dialog_item(FARDIALOGITEMTYPES Type, PCWSTR Text, FARDIALOGITEMFLAGS flags = DIF_NONE);
+		Item& add_dialog_item(ssize_t min_width, FARDIALOGITEMTYPES Type, PCWSTR Text, FARDIALOGITEMFLAGS flags = DIF_NONE);
 
 		Item& add_dialog_item(Item&& item);
 
@@ -139,7 +139,7 @@ namespace far3 {
 		DialogItems.reserve(count);
 
 		// create border
-		Item& item(add_dialog_item(DI_DOUBLEBOX, label));
+		Item& item(add_dialog_item(-1, DI_DOUBLEBOX, label));
 		item.set_dimensions(DEFAULT_BORDER_INDENT_X, DEFAULT_BORDER_INDENT_Y, item.get_width() + 4, 4);
 		LogNoise(L"NextY: %Id, size: %Iu\n", NextY, DialogItems.size());
 	}
@@ -213,17 +213,17 @@ namespace far3 {
 	void SimpleBuilder::add_OKCancel(PCWSTR OKLabel, PCWSTR CancelLabel, PCWSTR ExtraLabel)
 	{
 		LogTrace();
-		Item& OKButton(add_dialog_item(DI_BUTTON, OKLabel, DIF_CENTERGROUP | DIF_DEFAULTBUTTON));
+		Item& OKButton(add_dialog_item(-1, DI_BUTTON, OKLabel, DIF_CENTERGROUP | DIF_DEFAULTBUTTON));
 		OKButton.Y1 = OKButton.Y2 = NextY++;
 		OKButtonId = DialogItems.size() - 1;
 
 		if (!cstr::is_empty(CancelLabel)) {
-			Item& CancelButton(add_dialog_item(DI_BUTTON, CancelLabel, DIF_CENTERGROUP));
+			Item& CancelButton(add_dialog_item(-1, DI_BUTTON, CancelLabel, DIF_CENTERGROUP));
 			CancelButton.Y1 = CancelButton.Y2 = OKButton.Y1;
 		}
 
 		if (!cstr::is_empty(ExtraLabel)) {
-			Item& ExtraButton(add_dialog_item(DI_BUTTON, ExtraLabel, DIF_CENTERGROUP));
+			Item& ExtraButton(add_dialog_item(-1, DI_BUTTON, ExtraLabel, DIF_CENTERGROUP));
 			ExtraButton.Y1 = ExtraButton.Y2 = OKButton.Y1;
 		}
 	}
@@ -257,7 +257,7 @@ namespace far3 {
 
 	void SimpleBuilder::start_singlebox(ssize_t Width, PCWSTR Label, bool LeftAlign)
 	{
-		Item& SingleBox(add_dialog_item(DI_SINGLEBOX, Label));
+		Item& SingleBox(add_dialog_item(-1, DI_SINGLEBOX, Label));
 		SingleBox.Flags = LeftAlign ? DIF_LEFTTEXT : DIF_NONE;
 		SingleBox.X1 = ZERO_X + DEFAULT_PADDING + Indent;
 		SingleBox.X2 = SingleBox.X1 + Width;
@@ -292,12 +292,12 @@ namespace far3 {
 
 
 	///---------------------------------------------------------------------------------------------
-	Item& SimpleBuilder::add_dialog_item(FARDIALOGITEMTYPES type, PCWSTR text, FARDIALOGITEMFLAGS flags)
+	Item& SimpleBuilder::add_dialog_item(ssize_t min_width, FARDIALOGITEMTYPES type, PCWSTR text, FARDIALOGITEMFLAGS flags)
 	{
 		LogTrace();
 		LogFatalIf(DialogItems.size() == DialogItems.capacity(), L"dialog items container will be replaced\n");
 		CRT_ASSERT(DialogItems.size() != DialogItems.capacity());
-		DialogItems.emplace_back(type, text, flags);
+		DialogItems.emplace_back(min_width, type, text, flags);
 		Item& ret = DialogItems.back();
 		ret.set_dialog(DialogHandle);
 		ret.set_index(DialogItems.size() - 1);

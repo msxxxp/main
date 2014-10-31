@@ -24,10 +24,10 @@
 namespace far3 {
 	namespace dialog {
 
-		Item create_label(const wchar_t* text, FARDIALOGITEMFLAGS flags)
+		Item create_label(const wchar_t* text, ssize_t min_width, FARDIALOGITEMFLAGS flags)
 		{
 			LogNoise(L"'%s' 0x%I64X\n", text, flags);
-			return Item(DI_TEXT, text, flags);
+			return Item(min_width, DI_TEXT, text, flags);
 		}
 
 	}

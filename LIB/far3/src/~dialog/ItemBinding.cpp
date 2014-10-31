@@ -22,15 +22,17 @@
 namespace far3 {
 	namespace dialog {
 
-		ItemBinding::ItemBinding() :
+		ItemBinding::ItemBinding(ssize_t min_width) :
 			m_dialog(),
-			m_index()
+			m_index(),
+			m_min_width(min_width)
 		{
 		}
 
-		ItemBinding::ItemBinding(HANDLE dlg, ssize_t index) :
+		ItemBinding::ItemBinding(HANDLE dlg, ssize_t index, ssize_t min_width) :
 			m_dialog(dlg),
-			m_index(index)
+			m_index(index),
+			m_min_width(min_width)
 		{
 		}
 

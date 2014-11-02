@@ -168,6 +168,8 @@ namespace logger {
 
 		virtual bool is_color_mode() const = 0;
 
+		virtual bool is_utf8_mode() const = 0;
+
 		virtual void out(Level lvl, const wchar_t * format, ...) const = 0;
 
 		virtual void out_console(WORD color, Level lvl, const wchar_t * format, ...) const = 0;

@@ -67,6 +67,8 @@ namespace logger {
 
 		bool is_color_mode() const override;
 
+		bool is_utf8_mode() const override;
+
 		void out(Level lvl, const wchar_t * format, ...) const override;
 
 		void out_console(WORD color, Level lvl, const wchar_t * format, ...) const override;
@@ -104,6 +106,7 @@ namespace logger {
 		Prefix::flags m_prefix;
 		uint32_t      m_color:1;
 		uint32_t      m_enabled:1;
+		uint32_t      m_utf8_out:1;
 	};
 
 	Module_impl * get_module_impl(const wchar_t * name);

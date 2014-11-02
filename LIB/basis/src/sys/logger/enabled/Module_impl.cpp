@@ -15,7 +15,8 @@ namespace logger {
 		m_lvl(lvl),
 		m_prefix(defaults::get_prefix()),
 		m_color(1),
-		m_enabled(1)
+		m_enabled(1),
+		m_utf8_out(0)
 	{
 		TraceFunc();
 		cstr::copy(m_name, name, lengthof(m_name));
@@ -46,6 +47,11 @@ namespace logger {
 	bool Module_impl::is_color_mode() const
 	{
 		return m_color;
+	}
+
+	bool Module_impl::is_utf8_mode() const
+	{
+		return m_utf8_out;
 	}
 
 	void Module_impl::set_level(Level lvl)

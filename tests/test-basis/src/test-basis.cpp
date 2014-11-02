@@ -15,8 +15,7 @@ namespace {
 	}
 }
 
-class A
-{
+class A {
 public:
 	~A();
 	A();
@@ -24,10 +23,10 @@ public:
 	A(const A & other);
 	A(A && other);
 
-	A & operator = (const A & other);
-	A & operator = (A && other);
+	A & operator =(const A & other);
+	A & operator =(A && other);
 
-	A operator + (const A & other) const;
+	A operator +(const A & other) const;
 
 	void swap(A & other);
 
@@ -43,23 +42,27 @@ A::~A()
 	LogNoise(L"val: %d\n", m_a);
 }
 
-A::A(): m_a()
+A::A() :
+	m_a()
 {
 	LogTraceObj();
 }
 
-A::A(int a): m_a(a)
+A::A(int a) :
+	m_a(a)
 {
 	LogTraceObj();
 	LogNoise(L"%d\n", m_a);
 }
 
-A::A(const A& other): m_a(other.m_a)
+A::A(const A& other) :
+	m_a(other.m_a)
 {
 	LogTraceObj();
 }
 
-A::A(A&& other): m_a(simstd::move(other.m_a))
+A::A(A&& other) :
+	m_a(simstd::move(other.m_a))
 {
 	LogTraceObj();
 }
@@ -78,7 +81,7 @@ A& A::operator =(A&& other)
 	return *this;
 }
 
-A A::operator + (const A & /*other*/) const
+A A::operator +(const A & /*other*/) const
 {
 	return A();
 }
@@ -100,7 +103,11 @@ typedef typename simstd::AllocatorHeap<A, heap_type> EqAlloc;
 
 #include <string>
 
-extern "C" int wmain(int /*argc*/, wchar_t * /*argv*/[])
+#ifdef DEBUG
+int main(int /*argc*/, char* /*argv*/[])
+#else
+extern "C" int wmain(int /*argc*/, wchar_t* /*argv*/[])
+#endif
 {
 	setup_logger();
 
@@ -113,7 +120,6 @@ extern "C" int wmain(int /*argc*/, wchar_t * /*argv*/[])
 
 	{
 		heap_type::init();
-
 
 //		LogTrace();
 //		A a;
@@ -178,9 +184,9 @@ extern "C" int wmain(int /*argc*/, wchar_t * /*argv*/[])
 	}
 	{
 		const memory::heap::Stat& stat = heap_type::get_stat();
-		console::printf(L"stat alloc: %I64u, %I64u \n", stat.allocations, stat.allocSize);
-		console::printf(L"stat free : %I64u, %I64u \n", stat.frees, stat.freeSize);
-		console::printf(L"stat diff : %I64d \n", stat.allocSize - stat.freeSize);
+		console::printf("stat alloc: %I64u, %I64u\n", stat.allocations, stat.allocSize);
+		console::printf("stat free : %I64u, %I64u\n", stat.frees, stat.freeSize);
+		console::printf("stat diff : %I64d\n", stat.allocSize - stat.freeSize);
 	}
 
 	return 0;

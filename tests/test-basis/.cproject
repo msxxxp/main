@@ -84,7 +84,7 @@
 								<option id="gnu.cpp.link.option.paths.613285884" name="Library search path (-L)" superClass="gnu.cpp.link.option.paths" valueType="libPaths">
 									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/basis/x64-Debug}&quot;"/>
 								</option>
-								<option id="gnu.cpp.link.option.flags.1361681053" name="Linker flags" superClass="gnu.cpp.link.option.flags" value="-m64 -Wl,-Map=test-test-basis.exe.map -static -municode" valueType="string"/>
+								<option id="gnu.cpp.link.option.flags.1361681053" name="Linker flags" superClass="gnu.cpp.link.option.flags" value="-m64 -Wl,-Map=test-test-basis.exe.map -static" valueType="string"/>
 								<inputType id="cdt.managedbuild.tool.gnu.cpp.linker.input.1572953677" superClass="cdt.managedbuild.tool.gnu.cpp.linker.input">
 									<additionalInput kind="additionalinputdependency" paths="$(USER_OBJS)"/>
 									<additionalInput kind="additionalinput" paths="$(LIBS)"/>
@@ -141,7 +141,7 @@
 								<option id="gnu.cpp.link.option.paths.1883226430" name="Library search path (-L)" superClass="gnu.cpp.link.option.paths" valueType="libPaths">
 									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/basis/x32-Debug}&quot;"/>
 								</option>
-								<option id="gnu.cpp.link.option.flags.1057765678" name="Linker flags" superClass="gnu.cpp.link.option.flags" value="-m32 -Wl,-Map=test-test-basis.exe.map -static -municode" valueType="string"/>
+								<option id="gnu.cpp.link.option.flags.1057765678" name="Linker flags" superClass="gnu.cpp.link.option.flags" value="-m32 -Wl,-Map=test-test-basis.exe.map -static" valueType="string"/>
 								<inputType id="cdt.managedbuild.tool.gnu.cpp.linker.input.1594384628" superClass="cdt.managedbuild.tool.gnu.cpp.linker.input">
 									<additionalInput kind="additionalinputdependency" paths="$(USER_OBJS)"/>
 									<additionalInput kind="additionalinput" paths="$(LIBS)"/>

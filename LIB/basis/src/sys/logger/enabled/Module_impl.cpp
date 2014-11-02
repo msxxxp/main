@@ -16,7 +16,7 @@ namespace logger {
 		m_prefix(defaults::get_prefix()),
 		m_color(1),
 		m_enabled(1),
-		m_utf8_out(0)
+		m_utf8_out(1)
 	{
 		TraceFunc();
 		cstr::copy(m_name, name, lengthof(m_name));

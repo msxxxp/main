@@ -69,9 +69,15 @@ namespace logger {
 			auto lockScope(lock_scope());
 			if (lgr->is_color_mode()) {
 				console::Color color(LogLevelColors[static_cast<ssize_t>(lvl)]);
-				console::puts(str, size);
+				if (lgr->is_utf8_mode())
+					console::puts8(str, size);
+				else
+					console::puts(str, size);
 			} else {
-				console::puts(str, size);
+				if (lgr->is_utf8_mode())
+					console::puts8(str, size);
+				else
+					console::puts(str, size);
 			}
 		}
 
@@ -84,9 +90,15 @@ namespace logger {
 				if (color == 0)
 					color = LogLevelColors[static_cast<ssize_t>(lvl)];
 				console::Color clr(color);
-				console::puts(str, size);
+				if (lgr->is_utf8_mode())
+					console::puts8(str, size);
+				else
+					console::puts(str, size);
 			} else {
-				console::puts(str, size);
+				if (lgr->is_utf8_mode())
+					console::puts8(str, size);
+				else
+					console::puts(str, size);
 			}
 		}
 

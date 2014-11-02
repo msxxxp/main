@@ -9,6 +9,8 @@
 #   define LogTraceObj()                                     get_logger_module()->out_debug(THIS_PLACE, logger::Level::TrObj, L"[%p, %I64u]\n", this, sizeof(*this))
 #   define LogTraceObjBegin()                                get_logger_module()->out_debug(THIS_PLACE_SHORT, logger::Level::TrObj, L"[%p, %I64u] begin\n", this, sizeof(*this))
 #   define LogTraceObjEnd()                                  get_logger_module()->out_debug(THIS_PLACE_SHORT, logger::Level::TrObj, L"[%p, %I64u] end\n", this, sizeof(*this))
+#   define LogTrace2()                                       get_logger_module()->out_debug(THIS_PLACE_SHORT, logger::Level::Trace2, L"\n")
+#   define LogTrace2If(condition)             if (condition) get_logger_module()->out_debug(THIS_PLACE_SHORT, logger::Level::Trace2, L"\n")
 #   define LogTrace()                                        get_logger_module()->out_debug(THIS_PLACE_SHORT, logger::Level::Trace1, L"\n")
 #   define LogTraceIf(condition)              if (condition) get_logger_module()->out_debug(THIS_PLACE_SHORT, logger::Level::Trace1, L"\n")
 //#   ifdef _MSC_VER

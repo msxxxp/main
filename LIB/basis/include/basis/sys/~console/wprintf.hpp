@@ -13,6 +13,10 @@ namespace console {
 
 	size_t puts(const wchar_t * str, Handle hnd = Handle::OUTPUT);
 
+	size_t puts8(const wchar_t * str, size_t len, Handle hnd = Handle::OUTPUT);
+
+	size_t puts8(const wchar_t * str, Handle hnd = Handle::OUTPUT);
+
 	size_t putc(Handle hnd, wchar_t ch);
 
 	size_t vprintf(Handle hnd, const wchar_t * format, va_list vl);

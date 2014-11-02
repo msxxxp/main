@@ -125,8 +125,8 @@ namespace logger {
 		TraceFunc();
 		defaultModule = register_module(defaultModuleName, defaultTarget, defaultLevel);
 		TraceFunc();
-		defaultModule->out(Level::Force, L"Logger has been created\n");
-		TraceFunc();
+//		defaultModule->out(Level::Force, L"Logger has been created\n");
+//		TraceFunc();
 	}
 
 	Module_impl * Logger_impl::register_module(const wchar_t * name, const Target_t & target, Level lvl)

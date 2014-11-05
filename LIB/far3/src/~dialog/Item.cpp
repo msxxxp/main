@@ -29,12 +29,14 @@ namespace far3 {
 
 		Item::~Item()
 		{
+			LogTraceObj();
 			delete reinterpret_cast<ItemBinding*>(UserData);
 		}
 
 		Item::Item(ssize_t min_width, FARDIALOGITEMTYPES type, PCWSTR text, FARDIALOGITEMFLAGS flags)
 		{
-			LogNoise(L"'%s' %d, 0x%I64X\n", text, type, flags);
+			LogTraceObj();
+			LogNoise(L"%Id, %d, 0x%I64X '%s'\n", min_width, type, flags, text);
 			memory::zero(*this);
 			Type = type;
 			Data = text;
@@ -44,7 +46,8 @@ namespace far3 {
 
 		Item::Item(ItemBinding* binding, FARDIALOGITEMTYPES type, PCWSTR text, FARDIALOGITEMFLAGS flags)
 		{
-			LogNoise(L"'%s' %d, 0x%I64X, %p\n", text, type, flags, binding);
+			LogTraceObj();
+			LogNoise(L"%d, 0x%I64X, %p '%s'\n", type, flags, binding, text);
 			memory::zero(*this);
 			Type = type;
 			Data = text;
@@ -55,13 +58,13 @@ namespace far3 {
 		Item::Item(Item&& other) :
 			FarDialogItem(other)
 		{
-			LogTrace();
+			LogTraceObj();
 			other.UserData = 0;
 		}
 
 		Item& Item::operator =(Item&& other)
 		{
-			LogTrace();
+			LogTraceObj();
 			FarDialogItem::operator =(other);
 //			::memcpy(this, &other, sizeof(*this));
 			other.UserData = 0;
@@ -70,29 +73,24 @@ namespace far3 {
 
 		ssize_t Item::get_height() const
 		{
-			LogTrace();
+			LogTrace2();
 			return reinterpret_cast<ItemBinding*>(UserData)->get_height();
 		}
 
 		ssize_t Item::get_width() const
 		{
-			LogTrace();
+			LogTrace2();
 			ssize_t ret = 0;
 			switch (Type) {
 				case DI_TEXT:
-					ret = get_text_width();
-					break;
-
 				case DI_DOUBLEBOX:
-					ret = simstd::max(get_text_width(), static_cast<ssize_t>(22));
+					ret = simstd::max(get_text_width(), reinterpret_cast<ItemBinding*>(UserData)->get_width());
 					break;
 
 				case DI_CHECKBOX:
-					ret = 4 + simstd::max(get_text_width(), reinterpret_cast<ItemBinding*>(UserData)->get_width());
-					break;
 				case DI_RADIOBUTTON:
 				case DI_BUTTON:
-					ret = get_text_width() + 4;
+					ret = simstd::max(4 + get_text_width(), reinterpret_cast<ItemBinding*>(UserData)->get_width());
 					break;
 
 				case DI_EDIT:
@@ -113,22 +111,27 @@ namespace far3 {
 					ret = reinterpret_cast<ItemBinding*>(UserData)->get_width();
 					break;
 			}
-			LogNoise(L"-> %Id\n", ret);
+			LogDebug2(L"-> %Id\n", ret);
 			return ret;
 		}
 
 		ssize_t Item::get_text_width() const
 		{
-			return Data ? cstr::length(Data) : 0;
+			LogTrace2();
+			ssize_t ret = Data ? cstr::length(Data) : 0;
+			LogDebug2(L"-> %Id\n", ret);
+			return ret;
 		}
 
 		void Item::set_dialog(HANDLE dialog)
 		{
+			LogTrace2();
 			reinterpret_cast<ItemBinding*>(UserData)->set_dialog(dialog);
 		}
 
 		void Item::set_index(ssize_t index)
 		{
+			LogTrace2();
 			reinterpret_cast<ItemBinding*>(UserData)->set_index(index);
 		}
 
@@ -138,11 +141,12 @@ namespace far3 {
 			Y1 = y;
 			X2 = simstd::max(x + width - 1, static_cast<ssize_t>(0));
 			Y2 = simstd::max(y + height - 1, static_cast<ssize_t>(0));
-			LogNoise(L"(%Id, %Id, %Id, %Id)\n", X1, Y1, X2, Y2);
+			LogDebug2(L"(%Id, %Id, %Id, %Id)\n", X1, Y1, X2, Y2);
 		}
 
 		void Item::save() const
 		{
+			LogTrace2();
 			reinterpret_cast<ItemBinding*>(UserData)->save();
 		}
 

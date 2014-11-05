@@ -25,6 +25,7 @@ namespace {
 		LogWarn(L"division by zero\n");
 		int zero = 0;
 		int p = 42 / zero;
+		LogWarn(L"%d\n", p);
 		UNUSED(p);
 	}
 }
@@ -54,7 +55,7 @@ extern "C" int wmain(int argc, wchar_t * argv[])
 	UNUSED(argc);
 	UNUSED(argv);
 
-	console::printf(L"%S:%d\n", __PRETTY_FUNCTION__, __LINE__);
+	console::printf("%s:%d\n", __PRETTY_FUNCTION__, __LINE__);
 
 	setup_logger();
 

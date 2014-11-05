@@ -26,7 +26,7 @@ namespace far3 {
 
 		Item create_label(const wchar_t* text, ssize_t min_width, FARDIALOGITEMFLAGS flags)
 		{
-			LogNoise(L"'%s' 0x%I64X\n", text, flags);
+			LogNoise(L"'%s' %Id, 0x%I64X\n", text, min_width, flags);
 			return Item(min_width, DI_TEXT, text, flags);
 		}
 

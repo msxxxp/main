@@ -72,7 +72,7 @@ namespace far3 {
 
 		Item create_combobox(ssize_t& value, FarListItem items[], size_t count, ssize_t min_width, FARDIALOGITEMFLAGS flags)
 		{
-			LogNoise(L"%Iu, %Id, 0x%I64X\n", count, value, flags);
+			LogNoise(L"%Id, %Iu, %Id, 0x%I64X\n", value, count, min_width, flags);
 			items[value].Flags |= LIF_SELECTED;
 			auto binding = new ComboBoxBinding(value, items, count, min_width);
 			Item ret(binding, DI_COMBOBOX, nullptr, flags);

@@ -62,7 +62,7 @@ namespace far3 {
 
 		ssize_t ItemBinding::get_width() const
 		{
-			return 0;
+			return m_min_width;
 		}
 
 		ssize_t ItemBinding::get_height() const

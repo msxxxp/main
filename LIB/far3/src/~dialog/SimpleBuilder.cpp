@@ -139,7 +139,7 @@ namespace far3 {
 		DialogItems.reserve(count);
 
 		// create border
-		Item& item(add_dialog_item(-1, DI_DOUBLEBOX, label));
+		Item& item(add_dialog_item(22, DI_DOUBLEBOX, label));
 		item.set_dimensions(DEFAULT_BORDER_INDENT_X, DEFAULT_BORDER_INDENT_Y, item.get_width() + 4, 4);
 		LogNoise(L"NextY: %Id, size: %Iu\n", NextY, DialogItems.size());
 	}

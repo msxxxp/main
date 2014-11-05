@@ -194,7 +194,7 @@ namespace traceback {
 		m_offset(0),
 		m_line(0),
 		m_module_base(0),
-		m_function(L"?")
+		m_function(L"")
 	{
 		IMAGEHLP_MODULEW64 modInfo;
 		memory::zero(modInfo);

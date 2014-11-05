@@ -18,12 +18,12 @@ namespace crt {
 			LogReport(L"param[%u]:    0x%I64X\n", i, ep->ExceptionRecord->ExceptionInformation[i]);
 		}
 
-		LogFatal(L"terminating process %s\n", totext::nt_status(ep->ExceptionRecord->ExceptionCode).c_str());
 		traceback::LazyFrame frame(reinterpret_cast<void*>(ep->ExceptionRecord->ExceptionAddress));
 		LogFatal(L"exception at %s\n", frame.to_str().c_str());
 
 //		print_trace(ep->ContextRecord, reinterpret_cast<void*>(ep->ExceptionRecord->ExceptionAddress));
 
+		LogFatal(L"terminating process %s\n", totext::nt_status(ep->ExceptionRecord->ExceptionCode).c_str());
 //		return EXCEPTION_CONTINUE_EXECUTION; // should terminate process.
 		return EXCEPTION_EXECUTE_HANDLER; // should terminate process.
 	}

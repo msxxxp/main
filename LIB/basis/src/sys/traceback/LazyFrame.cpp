@@ -78,7 +78,10 @@ namespace traceback {
 	{
 		wchar_t buf[MAX_PATH];
 		if (file().empty())
-			safe_snprintf(buf, lengthof(buf), L"[%s] (%p) %s:0x%Ix", module().c_str(), address(), function().c_str(), offset());
+			if (function().empty())
+				safe_snprintf(buf, lengthof(buf), L"[%s] (%p)", module().c_str(), address());
+			else
+				safe_snprintf(buf, lengthof(buf), L"[%s] (%p) %s:0x%Ix", module().c_str(), address(), function().c_str(), offset());
 		else
 			safe_snprintf(buf, lengthof(buf), L"[%s] (%p) %s:0x%Ix {%s:%Iu}", module().c_str(), address(), function().c_str(), offset(), file().c_str(), line());
 		return simstd::move(ustring(buf));

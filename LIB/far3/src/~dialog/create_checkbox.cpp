@@ -28,7 +28,7 @@ namespace far3 {
 
 			void save() const override;
 
-			ssize_t get_width() const override;
+//			ssize_t get_width() const override;
 
 		private:
 			ssize_t& m_value;
@@ -47,10 +47,10 @@ namespace far3 {
 			LogNoise(L"dlg: %p, index: %Id, value: %Id\n", get_dialog(), get_index(), m_value);
 		}
 
-		ssize_t CheckBoxBinding::get_width() const
-		{
-			return m_min_width;
-		}
+//		ssize_t CheckBoxBinding::get_width() const
+//		{
+//			return m_min_width;
+//		}
 
 		Item create_checkbox(ssize_t& value, const wchar_t* text, ssize_t min_width, FARDIALOGITEMFLAGS flags)
 		{

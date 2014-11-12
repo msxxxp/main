@@ -11,34 +11,26 @@
 
 namespace logger {
 
-	///=============================================================================================
-//	struct pModule_less {
-//		bool operator ()(const Module_impl * lhs, const Module_impl * rhs) const
-//		{
-//			return cstr::compare_ci(lhs->get_name(), rhs->get_name()) < 0;
-//		}
-//	};
-
 	struct pModule_less {
-		bool operator ()(const Module_impl * lhs, const wchar_t * rhs) const
+		bool operator ()(const Module_impl* left, const wchar_t* right) const
 		{
-			return cstr::compare_ci(lhs->get_name(), rhs) < 0;
+			return cstr::compare_ci(left->get_name(), right) < 0;
 		}
 
-		bool operator ()(const wchar_t * left, const Module_impl * right) const
+		bool operator ()(const wchar_t* left, const Module_impl* right) const
 		{
 			return cstr::compare_ci(left, right->get_name()) < 0;
 		}
 
-		bool operator ()(const Module_impl * lhs, const Module_impl * rhs) const
+		bool operator ()(const Module_impl* left, const Module_impl* right) const
 		{
-			return cstr::compare_ci(lhs->get_name(), rhs->get_name()) < 0;
+			return cstr::compare_ci(left->get_name(), right->get_name()) < 0;
 		}
 	};
 
 	///================================================================================= Logger_impl
 	struct Logger_impl: private pattern::Uncopyable {
-		static Logger_impl & get_instance();
+		static Logger_impl& get_instance();
 
 		~Logger_impl();
 

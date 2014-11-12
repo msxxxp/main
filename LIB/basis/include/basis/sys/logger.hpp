@@ -54,28 +54,33 @@
 #   define LogForce(format, ...)                              get_logger_module()->out_debug(THIS_PLACE_SHORT, logger::Level::Force, format, ##__VA_ARGS__)
 #   define LogForceIf(condition, format, ...)  if (condition) get_logger_module()->out_debug(THIS_PLACE_SHORT, logger::Level::Force, format, ##__VA_ARGS__)
 //#   endif
+
 #	define LogDeclare() \
-logger::Module_i * get_logger_module();
+logger::Module_i* get_logger_module();
+
 #	define LogRegister(name) \
-logger::Module_i * get_logger_module() \
+logger::Module_i* get_logger_module() \
 { \
 	auto static module = logger::get_module(name); \
 	return module; \
 }
+
 #	define LogRegisterClass(className, name) \
-logger::Module_i * className::get_logger_module() \
+logger::Module_i* className::get_logger_module() \
 { \
 	auto static module = logger::get_module(name); \
 	return module; \
 }
+
 #	define LogRegisterLocal(name) \
 namespace { \
-	logger::Module_i * get_logger_module() \
+	logger::Module_i* get_logger_module() \
 	{ \
 		auto static module = logger::get_module(name); \
 		return module; \
 	} \
 }
+
 #else
 #   define LogSetOptions(url)
 #   define LogTraceObj()
@@ -84,11 +89,11 @@ namespace { \
 #   define LogTrace()
 #   define LogTraceIf(condition)                       (void)(condition)
 #   define LogNoise2(format, ...)
-#   define LogNoise2If(condition, format, ...)          (void)(condition)
+#   define LogNoise2If(condition, format, ...)         (void)(condition)
 #   define LogNoise(format, ...)
 #   define LogNoiseIf(condition, format, ...)          (void)(condition)
 #   define LogDebug2(format, ...)
-#   define LogDebug2If(condition, format, ...)          (void)(condition)
+#   define LogDebug2If(condition, format, ...)         (void)(condition)
 #   define LogDebug(format, ...)
 #   define LogDebugIf(condition, format, ...)          (void)(condition)
 #   define LogInfo(format, ...)
@@ -160,9 +165,9 @@ namespace logger {
 		Force,    // Force log without level
 	};
 
-	const wchar_t * to_str(Level lvl);
+	const wchar_t* to_str(Level lvl);
 
-	void set_options(const wchar_t * url);
+	void set_options(const wchar_t* url);
 
 	///==================================================================================== Module_i
 	struct Module_i {
@@ -172,29 +177,30 @@ namespace logger {
 
 		virtual bool is_utf8_mode() const = 0;
 
-		virtual void out(Level lvl, const wchar_t * format, ...) const = 0;
+		virtual void out(Level lvl, const wchar_t* format, ...) const = 0;
 
-		virtual void out_console(WORD color, Level lvl, const wchar_t * format, ...) const = 0;
+		virtual void out_console(WORD color, Level lvl, const wchar_t* format, ...) const = 0;
 
-		virtual void out_debug(const char * file, int line, const char * func, Level lvl, const wchar_t * format, ...) const = 0;
+		virtual void out_debug(const char* file, int line, const char* func, Level lvl, const wchar_t* format, ...) const = 0;
 	};
 
-	Module_i * get_module(const wchar_t * name);
+	Module_i* get_module(const wchar_t* name);
 
 	namespace defaults {
 
-		Module_i * get_module();
+		Module_i* get_module();
 
-	}  // namespace defaults
+	}
 
-}  // namespace logger
-
-inline logger::Module_i * get_logger_module()
-{
-	return logger::defaults::get_module();
 }
 
-inline logger::Module_i * get_console_logger_module()
+inline logger::Module_i* get_logger_module()
+{
+	auto static module = logger::defaults::get_module();
+	return module;
+}
+
+inline logger::Module_i* get_console_logger_module()
 {
 	auto static module = logger::get_module(L"std_console");
 	return module;

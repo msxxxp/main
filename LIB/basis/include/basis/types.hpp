@@ -4,6 +4,7 @@
 #include <stdint.h>
 
 namespace simstd {
+
 	typedef decltype(nullptr) nullptr_t;
 
 	template<typename Type>

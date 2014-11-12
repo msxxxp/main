@@ -320,7 +320,7 @@ namespace traceback {
 			LogNoise(L"offs: %Id\n", m_offset);
 
 			if (file)
-				m_file = sstr::cp2w(filename_only(file, '/'), CP_OEMCP);
+				m_file = sstr::cp2w(filename_only(file), CP_OEMCP);
 			if (func) {
 				char buf[MAX_PATH];
 				size_t size = sizeof(buf);

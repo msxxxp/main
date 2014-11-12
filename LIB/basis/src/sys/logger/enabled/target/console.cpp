@@ -41,9 +41,9 @@ namespace logger {
 
 			LogToConsole() = default;
 
-			void out(const Module_i * lgr, Level lvl, const wchar_t * str, size_t size) const override;
+			void out(const Module * lgr, Level lvl, const wchar_t * str, size_t size) const override;
 
-			void out(const Module_i * lgr, WORD color, Level lvl, const wchar_t * str, size_t size) const override;
+			void out(const Module * lgr, WORD color, Level lvl, const wchar_t * str, size_t size) const override;
 
 			void out(const wchar_t * str, size_t size) const override;
 
@@ -63,7 +63,7 @@ namespace logger {
 //			console::printf(L"%S():%d\n", __FUNCTION__, __LINE__);
 //		}
 
-		void LogToConsole::out(const Module_i * lgr, Level lvl, const wchar_t * str, size_t size) const
+		void LogToConsole::out(const Module * lgr, Level lvl, const wchar_t * str, size_t size) const
 		{
 //			console::printf(L"%S():%d\n", __FUNCTION__, __LINE__);
 			auto lockScope(lock_scope());
@@ -81,7 +81,7 @@ namespace logger {
 			}
 		}
 
-		void LogToConsole::out(const Module_i * lgr, WORD color, Level lvl, const wchar_t * str, size_t size) const
+		void LogToConsole::out(const Module * lgr, WORD color, Level lvl, const wchar_t * str, size_t size) const
 		{
 //			console::printf(L"%S():%d\n", __FUNCTION__, __LINE__);
 			auto lockScope(lock_scope());

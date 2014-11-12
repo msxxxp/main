@@ -36,9 +36,9 @@ namespace logger {
 	struct Target_i {
 		virtual ~Target_i() = default;
 
-		virtual void out(const Module_i * module, Level lvl, const wchar_t * str, size_t size) const = 0;
+		virtual void out(const Module * module, Level lvl, const wchar_t * str, size_t size) const = 0;
 
-		virtual void out(const Module_i * module, WORD color, Level lvl, const wchar_t * str, size_t size) const = 0;
+		virtual void out(const Module * module, WORD color, Level lvl, const wchar_t * str, size_t size) const = 0;
 
 		virtual void out(const wchar_t * str, size_t size) const = 0;
 
@@ -57,9 +57,9 @@ namespace logger {
 
 	Target_t get_TargetToMult(const Target_t & first, const Target_t & second);
 
-	///================================================================================= Module_impl
-	struct Module_impl: public Module_i, public pattern::Destroyable, private pattern::Uncopyable {
-		Module_impl(const wchar_t * name, const Target_t & tgt, Level lvl);
+	///================================================================================== ModuleImpl
+	struct ModuleImpl: public Module, public pattern::Destroyable, private pattern::Uncopyable {
+		ModuleImpl(const wchar_t * name, const Target_t & tgt, Level lvl);
 
 		void destroy() const override;
 
@@ -71,9 +71,9 @@ namespace logger {
 
 		void out(Level lvl, const wchar_t * format, ...) const override;
 
-		void out_console(WORD color, Level lvl, const wchar_t * format, ...) const override;
+		void out_with_color(WORD color, Level lvl, const wchar_t * format, ...) const override;
 
-		void out_debug(const char * file, int line, const char * func, Level lvl, const wchar_t * format, ...) const override;
+		void out_with_place(const char * file, int line, const char * func, Level lvl, const wchar_t * format, ...) const override;
 
 		Level get_level() const;
 
@@ -109,9 +109,9 @@ namespace logger {
 		uint32_t      m_utf8_out:1;
 	};
 
-	Module_impl * get_module_impl(const wchar_t * name);
+	ModuleImpl * get_module_impl(const wchar_t * name);
 
-	Module_impl * create_Module_impl(const wchar_t * name, const Target_t & tgt, Level lvl);
+	ModuleImpl * create_Module_impl(const wchar_t * name, const Target_t & tgt, Level lvl);
 
 	namespace defaults {
 		Level get_level();
@@ -127,42 +127,42 @@ namespace logger {
 		void set_target(Target_t target);
 	}  // namespace defaults
 
-//	inline void set_target(Module_impl * module, const Target_t & target)
+//	inline void set_target(ModuleImpl * module, const Target_t & target)
 //	{
 //		module->set_target(target);
 //	}
 //
-//	inline void set_level(Module_impl * module, Level lvl)
+//	inline void set_level(ModuleImpl * module, Level lvl)
 //	{
 //		module->set_level(lvl);
 //	}
 //
-//	inline void set_prefix(Module_impl * module, size_t prefix)
+//	inline void set_prefix(ModuleImpl * module, size_t prefix)
 //	{
 //		module->set_prefix(prefix);
 //	}
 //
-//	inline Prefix::flags get_prefix(Module_impl * module)
+//	inline Prefix::flags get_prefix(ModuleImpl * module)
 //	{
 //		return module->get_prefix();
 //	}
 //
-//	inline Level get_level(Module_impl * module)
+//	inline Level get_level(ModuleImpl * module)
 //	{
 //		return module->get_level();
 //	}
 //
-//	inline void set_color_mode(Module_impl * module, bool mode)
+//	inline void set_color_mode(ModuleImpl * module, bool mode)
 //	{
 //		module->set_color_mode(mode);
 //	}
 //
-//	inline void set_enabled(Module_impl * module, bool enabled)
+//	inline void set_enabled(ModuleImpl * module, bool enabled)
 //	{
 //		module->set_enabled(enabled);
 //	}
 //
-//	inline sync::ScopeGuard lock_scope(Module_impl * module)
+//	inline sync::ScopeGuard lock_scope(ModuleImpl * module)
 //	{
 //		return module->lock_scope();
 //	}

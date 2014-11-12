@@ -13,9 +13,9 @@ namespace logger {
 
 			LogToFile(const wchar_t * path, bool overwrite);
 
-			void out(const Module_i * lgr, Level lvl, const wchar_t * str, size_t size) const override;
+			void out(const Module * lgr, Level lvl, const wchar_t * str, size_t size) const override;
 
-			void out(const Module_i * lgr, WORD color, Level lvl, const wchar_t * str, size_t size) const override;
+			void out(const Module * lgr, WORD color, Level lvl, const wchar_t * str, size_t size) const override;
 
 			void out(const wchar_t * str, size_t size) const override;
 
@@ -38,12 +38,12 @@ namespace logger {
 			}
 		}
 
-		void LogToFile::out(const Module_i * /*lgr*/, Level /*lvl*/, const wchar_t * str, size_t size) const
+		void LogToFile::out(const Module * /*lgr*/, Level /*lvl*/, const wchar_t * str, size_t size) const
 		{
 			out(str, size);
 		}
 
-		void LogToFile::out(const Module_i * /*lgr*/, WORD /*color*/, Level /*lvl*/, const wchar_t * str, size_t size) const
+		void LogToFile::out(const Module * /*lgr*/, WORD /*color*/, Level /*lvl*/, const wchar_t * str, size_t size) const
 		{
 			out(str, size);
 		}

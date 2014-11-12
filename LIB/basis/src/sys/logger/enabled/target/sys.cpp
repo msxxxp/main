@@ -27,9 +27,9 @@ namespace logger {
 
 			LogToSys(const wchar_t * name, const wchar_t * path);
 
-			void out(const Module_i * lgr, Level lvl, const wchar_t * str, size_t size) const override;
+			void out(const Module * lgr, Level lvl, const wchar_t * str, size_t size) const override;
 
-			void out(const Module_i * lgr, WORD color, Level lvl, const wchar_t * str, size_t size) const override;
+			void out(const Module * lgr, WORD color, Level lvl, const wchar_t * str, size_t size) const override;
 
 			void out(const wchar_t * str, size_t size) const override;
 
@@ -53,7 +53,7 @@ namespace logger {
 			m_hndl = ::RegisterEventSourceW(nullptr, name);
 		}
 
-		void LogToSys::out(const Module_i * /*lgr*/, Level lvl, const wchar_t * str, size_t /*size*/) const
+		void LogToSys::out(const Module * /*lgr*/, Level lvl, const wchar_t * str, size_t /*size*/) const
 		{
 			//			PSID user = nullptr;
 			//			HANDLE token;
@@ -68,7 +68,7 @@ namespace logger {
 			//			free(token_user);
 		}
 
-		void LogToSys::out(const Module_i * /*lgr*/, WORD /*color*/, Level lvl, const wchar_t * str, size_t /*size*/) const
+		void LogToSys::out(const Module * /*lgr*/, WORD /*color*/, Level lvl, const wchar_t * str, size_t /*size*/) const
 		{
 			::ReportEventW(m_hndl, LogLevelTypes[(int)lvl], 0, EV_MSG_STRING, nullptr, 1, 0, &str, nullptr);
 		}

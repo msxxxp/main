@@ -12,67 +12,66 @@
 namespace logger {
 
 	struct pModule_less {
-		bool operator ()(const Module_impl* left, const wchar_t* right) const
+		bool operator ()(const ModuleImpl* left, const wchar_t* right) const
 		{
 			return cstr::compare_ci(left->get_name(), right) < 0;
 		}
 
-		bool operator ()(const wchar_t* left, const Module_impl* right) const
+		bool operator ()(const wchar_t* left, const ModuleImpl* right) const
 		{
 			return cstr::compare_ci(left, right->get_name()) < 0;
 		}
 
-		bool operator ()(const Module_impl* left, const Module_impl* right) const
+		bool operator ()(const ModuleImpl* left, const ModuleImpl* right) const
 		{
 			return cstr::compare_ci(left->get_name(), right->get_name()) < 0;
 		}
 	};
 
 	///================================================================================= Logger_impl
-	struct Logger_impl: private pattern::Uncopyable {
-		static Logger_impl& get_instance();
+	struct Logger: private pattern::Uncopyable {
+		static Logger& get_instance();
 
-		~Logger_impl();
+		~Logger();
 
-		Module_impl * get_module(const wchar_t * name);
+		ModuleImpl* get_module(const wchar_t* name);
 
-		void free_module(Module_impl * module);
+		void free_module(ModuleImpl* module);
 
 	private:
-		Logger_impl();
+		Logger();
 
-		Module_impl * register_module(const wchar_t * name, const Target_t & target, Level lvl);
+		ModuleImpl* register_module(const wchar_t* name, const Target_t& target, Level lvl);
 
-		typedef simstd::vector<Module_impl*> ModulesArray;
+		typedef simstd::vector<ModuleImpl*> Modules;
 
-		sync_type    m_sync;
-		ModulesArray m_modules;
+		sync_type m_sync;
+		Modules m_modules;
 
 	public:
-		static Level                 defaultLevel;
-		static size_t                defaultPrefix;
-		static Target_t              defaultTarget;
-		static Module_impl *         defaultModule;
-		static const wchar_t * const defaultModuleName;
+		static Level                defaultLevel;
+		static size_t               defaultPrefix;
+		static Target_t             defaultTarget;
+		static ModuleImpl*          defaultModule;
+		static const wchar_t* const defaultModuleName;
 	};
 
-	Level                 Logger_impl::defaultLevel      = Level::Atten;
-	size_t                Logger_impl::defaultPrefix     = Prefix::Medium;
-	Target_t              Logger_impl::defaultTarget;
-	Module_impl *         Logger_impl::defaultModule     = nullptr;
-	const wchar_t * const Logger_impl::defaultModuleName = L"default";
+	Level                Logger::defaultLevel      = Level::Atten;
+	size_t               Logger::defaultPrefix     = Prefix::Medium;
+	Target_t             Logger::defaultTarget;
+	ModuleImpl*          Logger::defaultModule     = nullptr;
+	const wchar_t* const Logger::defaultModuleName = L"default";
 
-	Logger_impl & Logger_impl::get_instance()
+	Logger & Logger::get_instance()
 	{
-		static Logger_impl ret;
+		static Logger ret;
 		return ret;
 	}
 
-	Logger_impl::~Logger_impl()
+	Logger::~Logger()
 	{
-//		TraceFunc();
-//		auto lockScope(simstd::auto_lock(m_sync));
 		TraceFunc();
+//		auto lockScope(simstd::auto_lock(m_sync));
 		defaultModule->out(Level::Force, L"Logger is being destroyed\n");
 		while (!m_modules.empty()) {
 			m_modules.back()->destroy();
@@ -81,7 +80,7 @@ namespace logger {
 		TraceFunc();
 	}
 
-	Module_impl * Logger_impl::get_module(const wchar_t * name)
+	ModuleImpl* Logger::get_module(const wchar_t* name)
 	{
 		TraceFunc();
 		auto lockScope(simstd::auto_lock(m_sync));
@@ -92,19 +91,19 @@ namespace logger {
 		return register_module(name, defaults::get_target(), defaults::get_level());
 	}
 
-	void Logger_impl::free_module(Module_impl * module)
+	void Logger::free_module(ModuleImpl* module)
 	{
 		TraceFunc();
 		auto lockScope(simstd::auto_lock(m_sync));
 		TraceFunc();
 		auto range = simstd::equal_range(m_modules.begin(), m_modules.end(), module, pModule_less());
-		simstd::for_each(range.first, range.second, [](Module_impl * found_module) {
+		simstd::for_each(range.first, range.second, [](ModuleImpl* found_module) {
 			found_module->destroy();
 		});
 		m_modules.erase(range.first, range.second);
 	}
 
-	Logger_impl::Logger_impl()
+	Logger::Logger()
 	{
 		TraceFunc();
 		auto lockScope(simstd::auto_lock(m_sync));
@@ -121,7 +120,7 @@ namespace logger {
 		TraceFunc();
 	}
 
-	Module_impl * Logger_impl::register_module(const wchar_t * name, const Target_t & target, Level lvl)
+	ModuleImpl* Logger::register_module(const wchar_t* name, const Target_t& target, Level lvl)
 	{
 		TraceFunc();
 		auto lockScope(simstd::auto_lock(m_sync));
@@ -140,48 +139,56 @@ namespace logger {
 	namespace defaults {
 		Level get_level()
 		{
-			return Logger_impl::defaultLevel;
+			return Logger::defaultLevel;
 		}
 
 		void set_level(Level lvl)
 		{
-			Logger_impl::defaultLevel = lvl;
+			Logger::defaultLevel = lvl;
 		}
 
 		size_t get_prefix()
 		{
-			return Logger_impl::defaultPrefix;
+			return Logger::defaultPrefix;
 		}
 
 		void set_prefix(size_t prefix)
 		{
-			Logger_impl::defaultPrefix = prefix;
+			Logger::defaultPrefix = prefix;
 		}
 
 		Target_t get_target()
 		{
-			return Logger_impl::defaultTarget;
+			return Logger::defaultTarget;
 		}
 
 		void set_target(Target_t target)
 		{
-			Logger_impl::defaultTarget = target;
+			Logger::defaultTarget = target;
 		}
 
-		Module_i * get_module()
-		{
-			return Logger_impl::get_instance().defaultModule; // defaultModule initializes only on Logger construct
-		}
-	} // namespace defaults
-
-	Module_i * get_module(const wchar_t * name)
-	{
-		return Logger_impl::get_instance().get_module(name);
 	}
 
-	Module_impl * get_module_impl(const wchar_t * name)
+	Module* get_default_module()
 	{
-		return Logger_impl::get_instance().get_module(name);
+		auto static module = Logger::get_instance().defaultModule; // defaultModule being initialized only on Logger construct
+		return module;
+	}
+
+	Module* get_console_module()
+	{
+		auto static module = get_module(L"std_console");
+		return module;
+	}
+
+	Module* get_module(const wchar_t* name)
+	{
+		return Logger::get_instance().get_module(name);
+	}
+
+	ModuleImpl* get_module_impl(const wchar_t* name)
+	{
+		return Logger::get_instance().get_module(name);
 	}
 
 }

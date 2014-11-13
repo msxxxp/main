@@ -11,20 +11,7 @@
 
 namespace logger {
 
-	namespace Prefix {
-		typedef size_t flags;
-		const static flags Function = 0x0001;
-		const static flags Level    = 0x0002;
-		const static flags Module   = 0x0004;
-		const static flags Place    = 0x0008;
-		const static flags Thread   = 0x0010;
-		const static flags Time     = 0x0020;
-		const static flags Date     = 0x0040;
-
-		const static flags Lite     = Time | Level;
-		const static flags Medium   = Time | Level | Function;
-		const static flags Full     = Time | Level | Function | Date | Module | Thread | Place;
-	}
+	const wchar_t* to_str(Level lvl);
 
 	const wchar_t * to_str(Prefix::flags fl);
 

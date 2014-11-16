@@ -6,7 +6,7 @@
 namespace os {
 
 	struct wininet_dll: private linkage::DynamicLibrary {
-		typedef BOOL WINAPI (*FInternetCrackUrlW)(const wchar_t *, DWORD, DWORD, void *);
+		typedef BOOL (WINAPI *FInternetCrackUrlW)(const wchar_t *, DWORD, DWORD, void *);
 
 		DEFINE_FUNC(InternetCrackUrlW);
 

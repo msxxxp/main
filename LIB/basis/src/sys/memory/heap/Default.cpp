@@ -18,7 +18,7 @@ namespace memory {
 			return HeapAlloc(GetProcessHeap(), flags, size);
 		}
 
-		void* DefaultStat::realloc(void* ptr, size_t size, size_t flags)
+		void* Default::realloc(void* ptr, size_t size, size_t flags)
 		{
 			return HeapReAlloc(GetProcessHeap(), flags, ptr, size);
 		}

@@ -180,6 +180,8 @@
     <ClInclude Include="include\basis\~configure\obligatory\Va_list.hpp" />
     <ClInclude Include="include\basis\~configure\os\windows_epilog.hpp" />
     <ClInclude Include="include\basis\~configure\os\windows_prolog.hpp" />
+    <ClInclude Include="src\sys\logger\logger_pvt.hpp" />
+    <ClInclude Include="src\sys\sync\MessageManager.hpp" />
   </ItemGroup>
   <ItemGroup>
     <None Include="include\basis\simstd\algorithm" />
@@ -197,9 +199,188 @@
     <None Include="include\basis\simstd\string" />
     <None Include="include\basis\simstd\utility" />
     <None Include="include\basis\simstd\vector" />
+    <None Include="src\sys\path\file_path.cpp.dep" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="src\configure\obligatory\sprintf.cpp" />
+    <ClCompile Include="src\configure\obligatory\swprintf.cpp" />
+    <ClCompile Include="src\configure\obligatory\this_file01.cpp" />
+    <ClCompile Include="src\configure\obligatory\this_file02.cpp" />
+    <ClCompile Include="src\configure\obligatory\this_file03.cpp" />
+    <ClCompile Include="src\configure\obligatory\this_file04.cpp" />
+    <ClCompile Include="src\configure\obligatory\Va_list.cpp" />
+    <ClCompile Include="src\ext\pattern\RefCounter.cpp" />
+    <ClCompile Include="src\os\dbghelp.cpp" />
+    <ClCompile Include="src\os\kernel32.cpp" />
+    <ClCompile Include="src\os\shlwapi.cpp" />
+    <ClCompile Include="src\os\wininet.cpp" />
+    <ClCompile Include="src\simstd\chrono\perfomance_clock.cpp" />
+    <ClCompile Include="src\simstd\list\node.cpp" />
+    <ClCompile Include="src\simstd\string\convert_a.cpp" />
+    <ClCompile Include="src\simstd\string\convert_w.cpp" />
     <ClCompile Include="src\stub.cpp" />
+    <ClCompile Include="src\sys\console\aprintf.cpp" />
+    <ClCompile Include="src\sys\console\Color.cpp" />
+    <ClCompile Include="src\sys\console\console.cpp" />
+    <ClCompile Include="src\sys\console\wprintf01.cpp" />
+    <ClCompile Include="src\sys\console\wprintf02.cpp" />
+    <ClCompile Include="src\sys\console\wprintf03.cpp" />
+    <ClCompile Include="src\sys\console\wprintf04.cpp" />
+    <ClCompile Include="src\sys\console\wprintf05.cpp" />
+    <ClCompile Include="src\sys\console\wprintf06.cpp" />
+    <ClCompile Include="src\sys\console\wprintf07.cpp" />
+    <ClCompile Include="src\sys\console\wprintf08.cpp" />
+    <ClCompile Include="src\sys\console\wprintf09.cpp" />
+    <ClCompile Include="src\sys\console\wprintf10.cpp" />
+    <ClCompile Include="src\sys\console\wprintf11.cpp" />
+    <ClCompile Include="src\sys\console\wprintf12.cpp" />
+    <ClCompile Include="src\sys\console\wprintf13.cpp" />
+    <ClCompile Include="src\sys\console\wprintf14.cpp" />
+    <ClCompile Include="src\sys\crt\assert.cpp" />
+    <ClCompile Include="src\sys\crt\crt.cpp" />
+    <ClCompile Include="src\sys\crt\seh.cpp" />
+    <ClCompile Include="src\sys\cstr\cstr_convert_a.cpp" />
+    <ClCompile Include="src\sys\cstr\cstr_convert_w.cpp" />
+    <ClCompile Include="src\sys\cstr\mstring.cpp" />
+    <ClCompile Include="src\sys\dll\dll.cpp" />
+    <ClCompile Include="src\sys\environment\environment.cpp" />
+    <ClCompile Include="src\sys\fsys\attributes.cpp" />
+    <ClCompile Include="src\sys\fsys\directory.cpp" />
+    <ClCompile Include="src\sys\fsys\dll_shlwapi.cpp" />
+    <ClCompile Include="src\sys\fsys\file.cpp" />
+    <ClCompile Include="src\sys\fsys\file_Map_nt.cpp" />
+    <ClCompile Include="src\sys\fsys\fsys.cpp" />
+    <ClCompile Include="src\sys\logger\Logger.cpp" />
+    <ClCompile Include="src\sys\logger\logger_to_str.cpp" />
+    <ClCompile Include="src\sys\logger\LogToConsole.cpp" />
+    <ClCompile Include="src\sys\logger\LogToFile.cpp" />
+    <ClCompile Include="src\sys\logger\LogToMult.cpp" />
+    <ClCompile Include="src\sys\logger\LogToNull.cpp" />
+    <ClCompile Include="src\sys\logger\LogToSys.cpp" />
+    <ClCompile Include="src\sys\logger\ModuleImpl.cpp" />
+    <ClCompile Include="src\sys\logger\options.cpp" />
+    <ClCompile Include="src\sys\memory\delete.cpp" />
+    <ClCompile Include="src\sys\memory\delete[].cpp" />
+    <ClCompile Include="src\sys\memory\heap\Default.cpp" />
+    <ClCompile Include="src\sys\memory\heap\DefaultLogged.cpp" />
+    <ClCompile Include="src\sys\memory\heap\DefaultMovable.cpp" />
+    <ClCompile Include="src\sys\memory\heap\DefaultStat.cpp" />
+    <ClCompile Include="src\sys\memory\heap\Heap.cpp" />
+    <ClCompile Include="src\sys\memory\memory.cpp" />
+    <ClCompile Include="src\sys\memory\new.cpp" />
+    <ClCompile Include="src\sys\memory\new[].cpp" />
+    <ClCompile Include="src\sys\path\defaults01.cpp" />
+    <ClCompile Include="src\sys\path\defaults02.cpp" />
+    <ClCompile Include="src\sys\path\defaults03.cpp" />
+    <ClCompile Include="src\sys\path\defaults04.cpp" />
+    <ClCompile Include="src\sys\path\defaults05.cpp" />
+    <ClCompile Include="src\sys\path\defaults06.cpp" />
+    <ClCompile Include="src\sys\path\dll_shlwapi01.cpp" />
+    <ClCompile Include="src\sys\path\dll_shlwapi01a.cpp" />
+    <ClCompile Include="src\sys\path\dll_shlwapi02.cpp" />
+    <ClCompile Include="src\sys\path\dll_shlwapi02a.cpp" />
+    <ClCompile Include="src\sys\path\dll_shlwapi02b.cpp" />
+    <ClCompile Include="src\sys\path\dll_shlwapi03.cpp" />
+    <ClCompile Include="src\sys\path\dll_shlwapi03a.cpp" />
+    <ClCompile Include="src\sys\path\dll_shlwapi03b.cpp" />
+    <ClCompile Include="src\sys\path\dll_shlwapi04.cpp" />
+    <ClCompile Include="src\sys\path\dll_shlwapi04a.cpp" />
+    <ClCompile Include="src\sys\path\dll_shlwapi04b.cpp" />
+    <ClCompile Include="src\sys\path\dll_shlwapi05.cpp" />
+    <ClCompile Include="src\sys\path\dll_shlwapi05a.cpp" />
+    <ClCompile Include="src\sys\path\dll_shlwapi05b.cpp" />
+    <ClCompile Include="src\sys\path\dll_shlwapi06.cpp" />
+    <ClCompile Include="src\sys\path\filename01.cpp" />
+    <ClCompile Include="src\sys\path\filename02.cpp" />
+    <ClCompile Include="src\sys\path\filename03.cpp" />
+    <ClCompile Include="src\sys\path\inplace01.cpp" />
+    <ClCompile Include="src\sys\path\inplace01a.cpp" />
+    <ClCompile Include="src\sys\path\inplace02.cpp" />
+    <ClCompile Include="src\sys\path\inplace02a.cpp" />
+    <ClCompile Include="src\sys\path\inplace03.cpp" />
+    <ClCompile Include="src\sys\path\inplace04.cpp" />
+    <ClCompile Include="src\sys\path\inplace04a.cpp" />
+    <ClCompile Include="src\sys\path\inplace05.cpp" />
+    <ClCompile Include="src\sys\path\inplace05a.cpp" />
+    <ClCompile Include="src\sys\path\inplace06.cpp" />
+    <ClCompile Include="src\sys\path\inplace06a.cpp" />
+    <ClCompile Include="src\sys\path\inplace07.cpp" />
+    <ClCompile Include="src\sys\path\inplace08.cpp" />
+    <ClCompile Include="src\sys\path\inplace08a.cpp" />
+    <ClCompile Include="src\sys\path\path01.cpp" />
+    <ClCompile Include="src\sys\path\path02.cpp" />
+    <ClCompile Include="src\sys\path\path02a.cpp" />
+    <ClCompile Include="src\sys\path\path03.cpp" />
+    <ClCompile Include="src\sys\path\path03a.cpp" />
+    <ClCompile Include="src\sys\path\path04.cpp" />
+    <ClCompile Include="src\sys\path\path04a.cpp" />
+    <ClCompile Include="src\sys\path\path05.cpp" />
+    <ClCompile Include="src\sys\path\path06.cpp" />
+    <ClCompile Include="src\sys\path\path06a.cpp" />
+    <ClCompile Include="src\sys\path\path07.cpp" />
+    <ClCompile Include="src\sys\path\path08.cpp" />
+    <ClCompile Include="src\sys\path\path09.cpp" />
+    <ClCompile Include="src\sys\path\path09a.cpp" />
+    <ClCompile Include="src\sys\path\path10.cpp" />
+    <ClCompile Include="src\sys\path\path10a.cpp" />
+    <ClCompile Include="src\sys\path\path11.cpp" />
+    <ClCompile Include="src\sys\path\path11a.cpp" />
+    <ClCompile Include="src\sys\path\path12.cpp" />
+    <ClCompile Include="src\sys\path\path12a.cpp" />
+    <ClCompile Include="src\sys\path\path13.cpp" />
+    <ClCompile Include="src\sys\path\path14.cpp" />
+    <ClCompile Include="src\sys\path\path14a.cpp" />
+    <ClCompile Include="src\sys\process\exec.cpp" />
+    <ClCompile Include="src\sys\process\process.cpp" />
+    <ClCompile Include="src\sys\sstr\aconvert.cpp" />
+    <ClCompile Include="src\sys\sstr\aformat.cpp" />
+    <ClCompile Include="src\sys\sstr\defaults.cpp" />
+    <ClCompile Include="src\sys\sstr\empty.cpp" />
+    <ClCompile Include="src\sys\sstr\hash.cpp" />
+    <ClCompile Include="src\sys\sstr\inplace.cpp" />
+    <ClCompile Include="src\sys\sstr\str.cpp" />
+    <ClCompile Include="src\sys\sstr\wconvert.cpp" />
+    <ClCompile Include="src\sys\sstr\wformat.cpp" />
+    <ClCompile Include="src\sys\sstr\wstr.cpp" />
+    <ClCompile Include="src\sys\sync\CriticalSection_impl.cpp" />
+    <ClCompile Include="src\sys\sync\Delivery.cpp" />
+    <ClCompile Include="src\sys\sync\lock.cpp" />
+    <ClCompile Include="src\sys\sync\Message.cpp" />
+    <ClCompile Include="src\sys\sync\MessageManager.cpp" />
+    <ClCompile Include="src\sys\sync\MessageManager_simple.cpp" />
+    <ClCompile Include="src\sys\sync\Mutex.cpp" />
+    <ClCompile Include="src\sys\sync\Observable.cpp" />
+    <ClCompile Include="src\sys\sync\Observer.cpp" />
+    <ClCompile Include="src\sys\sync\Queue.cpp" />
+    <ClCompile Include="src\sys\sync\ReadWrite.cpp" />
+    <ClCompile Include="src\sys\sync\ScopeGuard.cpp" />
+    <ClCompile Include="src\sys\sync\Semaphore.cpp" />
+    <ClCompile Include="src\sys\sync\totext.cpp" />
+    <ClCompile Include="src\sys\thread\logger.cpp" />
+    <ClCompile Include="src\sys\thread\Parameters.cpp" />
+    <ClCompile Include="src\sys\thread\Pool.cpp" />
+    <ClCompile Include="src\sys\thread\Routine.cpp" />
+    <ClCompile Include="src\sys\thread\threads_holder.cpp" />
+    <ClCompile Include="src\sys\thread\totext.cpp" />
+    <ClCompile Include="src\sys\thread\Unit.cpp" />
+    <ClCompile Include="src\sys\thread\Unit_io.cpp" />
+    <ClCompile Include="src\sys\time\time.cpp" />
+    <ClCompile Include="src\sys\totext\error01.cpp" />
+    <ClCompile Include="src\sys\totext\error02.cpp" />
+    <ClCompile Include="src\sys\totext\error03.cpp" />
+    <ClCompile Include="src\sys\traceback\Enum.cpp" />
+    <ClCompile Include="src\sys\traceback\LazyFrame.cpp" />
+    <ClCompile Include="src\sys\traceback\traceback.cpp" />
+    <ClCompile Include="src\sys\url\url01.cpp" />
+    <ClCompile Include="src\sys\url\url02.cpp" />
+    <ClCompile Include="src\sys\win64\win64.cpp" />
+    <ClCompile Include="src\sys\window\window.cpp" />
+    <ClCompile Include="src\tst\test_algorithm.cpp" />
+    <ClCompile Include="src\tst\test_a_string.cpp" />
+    <ClCompile Include="src\tst\test_mstring.cpp" />
+    <ClCompile Include="src\tst\test_sstr.cpp" />
+    <ClCompile Include="src\tst\test_vector.cpp" />
+    <ClCompile Include="src\tst\test_w_string.cpp" />
   </ItemGroup>
   <PropertyGroup Label="Globals">
     <ProjectGuid>{343321A6-6C99-4F4F-B24C-31A0A5E17963}</ProjectGuid>
@@ -269,6 +450,8 @@
       <WarningLevel>Level3</WarningLevel>
       <Optimization>Disabled</Optimization>
       <PreprocessorDefinitions>WIN32;_DEBUG;_LIB;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <MultiProcessorCompilation>true</MultiProcessorCompilation>
+      <ExceptionHandling>false</ExceptionHandling>
     </ClCompile>
     <Link>
       <SubSystem>Windows</SubSystem>
@@ -282,6 +465,8 @@
       <WarningLevel>Level3</WarningLevel>
       <Optimization>Disabled</Optimization>
       <PreprocessorDefinitions>WIN32;_DEBUG;_LIB;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <MultiProcessorCompilation>true</MultiProcessorCompilation>
+      <ExceptionHandling>false</ExceptionHandling>
     </ClCompile>
     <Link>
       <SubSystem>Windows</SubSystem>
@@ -297,6 +482,9 @@
       <FunctionLevelLinking>true</FunctionLevelLinking>
       <IntrinsicFunctions>true</IntrinsicFunctions>
       <PreprocessorDefinitions>WIN32;NDEBUG;_LIB;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <TreatWarningAsError>true</TreatWarningAsError>
+      <MultiProcessorCompilation>true</MultiProcessorCompilation>
+      <ExceptionHandling>false</ExceptionHandling>
     </ClCompile>
     <Link>
       <SubSystem>Windows</SubSystem>
@@ -314,6 +502,9 @@
       <FunctionLevelLinking>true</FunctionLevelLinking>
       <IntrinsicFunctions>true</IntrinsicFunctions>
       <PreprocessorDefinitions>WIN32;NDEBUG;_LIB;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <TreatWarningAsError>true</TreatWarningAsError>
+      <MultiProcessorCompilation>true</MultiProcessorCompilation>
+      <ExceptionHandling>false</ExceptionHandling>
     </ClCompile>
     <Link>
       <SubSystem>Windows</SubSystem>

@@ -1,152 +1,79 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <ItemGroup>
-    <Filter Include="include">
-    </Filter>
-    <Filter Include="include\basis">
-    </Filter>
-    <Filter Include="include\basis\ext">
-    </Filter>
-    <Filter Include="include\basis\ext\~bits">
-    </Filter>
-    <Filter Include="include\basis\ext\~pattern">
-    </Filter>
-    <Filter Include="include\basis\os">
-    </Filter>
-    <Filter Include="include\basis\simstd">
-    </Filter>
-    <Filter Include="include\basis\simstd\~algorithm">
-    </Filter>
-    <Filter Include="include\basis\simstd\~functional">
-    </Filter>
-    <Filter Include="include\basis\simstd\~iterator">
-    </Filter>
-    <Filter Include="include\basis\simstd\~list">
-    </Filter>
-    <Filter Include="include\basis\simstd\~memory">
-    </Filter>
-    <Filter Include="include\basis\simstd\~mutex">
-    </Filter>
-    <Filter Include="include\basis\simstd\~numeric">
-    </Filter>
-    <Filter Include="include\basis\simstd\~string">
-    </Filter>
-    <Filter Include="include\basis\simstd\~type_traits">
-    </Filter>
-    <Filter Include="include\basis\simstd\~utility">
-    </Filter>
-    <Filter Include="include\basis\simstd\~vector">
-    </Filter>
-    <Filter Include="include\basis\sys">
-    </Filter>
-    <Filter Include="include\basis\sys\~console">
-    </Filter>
-    <Filter Include="include\basis\sys\~crt">
-    </Filter>
-    <Filter Include="include\basis\sys\~cstr">
-    </Filter>
-    <Filter Include="include\basis\sys\~fsys">
-    </Filter>
-    <Filter Include="include\basis\sys\~linkage">
-    </Filter>
-    <Filter Include="include\basis\sys\~logger">
-    </Filter>
-    <Filter Include="include\basis\sys\~memory">
-    </Filter>
-    <Filter Include="include\basis\sys\~memory\heap">
-    </Filter>
-    <Filter Include="include\basis\sys\~path">
-    </Filter>
-    <Filter Include="include\basis\sys\~process">
-    </Filter>
-    <Filter Include="include\basis\sys\~register">
-    </Filter>
-    <Filter Include="include\basis\sys\~security">
-    </Filter>
-    <Filter Include="include\basis\sys\~sstr">
-    </Filter>
-    <Filter Include="include\basis\sys\~sync">
-    </Filter>
-    <Filter Include="include\basis\sys\~thread">
-    </Filter>
-    <Filter Include="include\basis\sys\~time">
-    </Filter>
-    <Filter Include="include\basis\sys\~totext">
-    </Filter>
-    <Filter Include="include\basis\sys\~window">
-    </Filter>
-    <Filter Include="src">
-    </Filter>
-    <Filter Include="src\ext">
-    </Filter>
-    <Filter Include="src\ext\pattern">
-    </Filter>
-    <Filter Include="src\os">
-    </Filter>
-    <Filter Include="src\simstd">
-    </Filter>
-    <Filter Include="src\simstd\chrono">
-    </Filter>
-    <Filter Include="src\simstd\list">
-    </Filter>
-    <Filter Include="src\simstd\string">
-    </Filter>
-    <Filter Include="src\sys">
-    </Filter>
-    <Filter Include="src\sys\configure">
-    </Filter>
-    <Filter Include="src\sys\configure\obligatory">
-    </Filter>
-    <Filter Include="src\sys\console">
-    </Filter>
-    <Filter Include="src\sys\crt">
-    </Filter>
-    <Filter Include="src\sys\cstr">
-    </Filter>
-    <Filter Include="src\sys\dll">
-    </Filter>
-    <Filter Include="src\sys\environment">
-    </Filter>
-    <Filter Include="src\sys\fsys">
-    </Filter>
-    <Filter Include="src\sys\logger">
-    </Filter>
-    <Filter Include="src\sys\logger\common">
-    </Filter>
-    <Filter Include="src\sys\logger\enabled">
-    </Filter>
-    <Filter Include="src\sys\memory">
-    </Filter>
-    <Filter Include="src\sys\memory\heap">
-    </Filter>
-    <Filter Include="src\sys\path">
-    </Filter>
-    <Filter Include="src\sys\process">
-    </Filter>
-    <Filter Include="src\sys\sstr">
-    </Filter>
-    <Filter Include="src\sys\sync">
-    </Filter>
-    <Filter Include="src\sys\thread">
-    </Filter>
-    <Filter Include="src\sys\time">
-    </Filter>
-    <Filter Include="src\sys\totext">
-    </Filter>
-    <Filter Include="src\sys\traceback">
-    </Filter>
-    <Filter Include="src\sys\url">
-    </Filter>
-    <Filter Include="src\sys\win64">
-    </Filter>
-    <Filter Include="src\sys\window">
-    </Filter>
-    <Filter Include="src\tst">
-    </Filter>
+    <Filter Include="include" />
+    <Filter Include="include\basis" />
     <Filter Include="include\basis\~configure" />
     <Filter Include="include\basis\~configure\compiler" />
     <Filter Include="include\basis\~configure\obligatory" />
     <Filter Include="include\basis\~configure\os" />
+    <Filter Include="include\basis\ext" />
+    <Filter Include="include\basis\ext\~bits" />
+    <Filter Include="include\basis\ext\~pattern" />
+    <Filter Include="include\basis\os" />
+    <Filter Include="include\basis\simstd" />
+    <Filter Include="include\basis\simstd\~algorithm" />
+    <Filter Include="include\basis\simstd\~functional" />
+    <Filter Include="include\basis\simstd\~iterator" />
+    <Filter Include="include\basis\simstd\~list" />
+    <Filter Include="include\basis\simstd\~memory" />
+    <Filter Include="include\basis\simstd\~mutex" />
+    <Filter Include="include\basis\simstd\~numeric" />
+    <Filter Include="include\basis\simstd\~string" />
+    <Filter Include="include\basis\simstd\~type_traits" />
+    <Filter Include="include\basis\simstd\~utility" />
+    <Filter Include="include\basis\simstd\~vector" />
+    <Filter Include="include\basis\sys" />
+    <Filter Include="include\basis\sys\~console" />
+    <Filter Include="include\basis\sys\~crt" />
+    <Filter Include="include\basis\sys\~cstr" />
+    <Filter Include="include\basis\sys\~fsys" />
+    <Filter Include="include\basis\sys\~linkage" />
+    <Filter Include="include\basis\sys\~logger" />
+    <Filter Include="include\basis\sys\~memory" />
+    <Filter Include="include\basis\sys\~memory\heap" />
+    <Filter Include="include\basis\sys\~path" />
+    <Filter Include="include\basis\sys\~process" />
+    <Filter Include="include\basis\sys\~register" />
+    <Filter Include="include\basis\sys\~security" />
+    <Filter Include="include\basis\sys\~sstr" />
+    <Filter Include="include\basis\sys\~sync" />
+    <Filter Include="include\basis\sys\~thread" />
+    <Filter Include="include\basis\sys\~time" />
+    <Filter Include="include\basis\sys\~totext" />
+    <Filter Include="include\basis\sys\~window" />
+    <Filter Include="src" />
+    <Filter Include="src\ext" />
+    <Filter Include="src\ext\pattern" />
+    <Filter Include="src\os" />
+    <Filter Include="src\simstd" />
+    <Filter Include="src\simstd\chrono" />
+    <Filter Include="src\simstd\list" />
+    <Filter Include="src\simstd\string" />
+    <Filter Include="src\sys" />
+    <Filter Include="src\sys\console" />
+    <Filter Include="src\sys\crt" />
+    <Filter Include="src\sys\cstr" />
+    <Filter Include="src\sys\dll" />
+    <Filter Include="src\sys\environment" />
+    <Filter Include="src\sys\fsys" />
+    <Filter Include="src\sys\logger" />
+    <Filter Include="src\sys\memory" />
+    <Filter Include="src\sys\memory\heap" />
+    <Filter Include="src\sys\path" />
+    <Filter Include="src\sys\process" />
+    <Filter Include="src\sys\sstr" />
+    <Filter Include="src\sys\sync" />
+    <Filter Include="src\sys\thread" />
+    <Filter Include="src\sys\time" />
+    <Filter Include="src\sys\totext" />
+    <Filter Include="src\sys\traceback" />
+    <Filter Include="src\sys\url" />
+    <Filter Include="src\sys\win64" />
+    <Filter Include="src\sys\window" />
+    <Filter Include="src\tst" />
+    <Filter Include="src\configure" />
+    <Filter Include="src\configure\obligatory" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="include\basis\configure.hpp">
@@ -632,6 +559,12 @@
     <ClInclude Include="include\basis\~configure\os\windows_prolog.hpp">
       <Filter>include\basis\~configure\os</Filter>
     </ClInclude>
+    <ClInclude Include="src\sys\logger\logger_pvt.hpp">
+      <Filter>src\sys\logger</Filter>
+    </ClInclude>
+    <ClInclude Include="src\sys\sync\MessageManager.hpp">
+      <Filter>src\sys\sync</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <None Include="include\basis\simstd\algorithm">
@@ -679,10 +612,547 @@
     <None Include="include\basis\simstd\vector">
       <Filter>include\basis\simstd</Filter>
     </None>
+    <None Include="src\sys\path\file_path.cpp.dep">
+      <Filter>src\sys\path</Filter>
+    </None>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\stub.cpp">
       <Filter>src</Filter>
+    </ClCompile>
+    <ClCompile Include="src\os\dbghelp.cpp">
+      <Filter>src\os</Filter>
+    </ClCompile>
+    <ClCompile Include="src\os\kernel32.cpp">
+      <Filter>src\os</Filter>
+    </ClCompile>
+    <ClCompile Include="src\os\shlwapi.cpp">
+      <Filter>src\os</Filter>
+    </ClCompile>
+    <ClCompile Include="src\os\wininet.cpp">
+      <Filter>src\os</Filter>
+    </ClCompile>
+    <ClCompile Include="src\ext\pattern\RefCounter.cpp">
+      <Filter>src\ext\pattern</Filter>
+    </ClCompile>
+    <ClCompile Include="src\simstd\chrono\perfomance_clock.cpp">
+      <Filter>src\simstd\chrono</Filter>
+    </ClCompile>
+    <ClCompile Include="src\simstd\list\node.cpp">
+      <Filter>src\simstd\list</Filter>
+    </ClCompile>
+    <ClCompile Include="src\simstd\string\convert_a.cpp">
+      <Filter>src\simstd\string</Filter>
+    </ClCompile>
+    <ClCompile Include="src\simstd\string\convert_w.cpp">
+      <Filter>src\simstd\string</Filter>
+    </ClCompile>
+    <ClCompile Include="src\configure\obligatory\sprintf.cpp">
+      <Filter>src\configure\obligatory</Filter>
+    </ClCompile>
+    <ClCompile Include="src\configure\obligatory\swprintf.cpp">
+      <Filter>src\configure\obligatory</Filter>
+    </ClCompile>
+    <ClCompile Include="src\configure\obligatory\this_file01.cpp">
+      <Filter>src\configure\obligatory</Filter>
+    </ClCompile>
+    <ClCompile Include="src\configure\obligatory\this_file02.cpp">
+      <Filter>src\configure\obligatory</Filter>
+    </ClCompile>
+    <ClCompile Include="src\configure\obligatory\this_file03.cpp">
+      <Filter>src\configure\obligatory</Filter>
+    </ClCompile>
+    <ClCompile Include="src\configure\obligatory\this_file04.cpp">
+      <Filter>src\configure\obligatory</Filter>
+    </ClCompile>
+    <ClCompile Include="src\configure\obligatory\Va_list.cpp">
+      <Filter>src\configure\obligatory</Filter>
+    </ClCompile>
+    <ClCompile Include="src\sys\console\aprintf.cpp">
+      <Filter>src\sys\console</Filter>
+    </ClCompile>
+    <ClCompile Include="src\sys\console\Color.cpp">
+      <Filter>src\sys\console</Filter>
+    </ClCompile>
+    <ClCompile Include="src\sys\console\console.cpp">
+      <Filter>src\sys\console</Filter>
+    </ClCompile>
+    <ClCompile Include="src\sys\console\wprintf01.cpp">
+      <Filter>src\sys\console</Filter>
+    </ClCompile>
+    <ClCompile Include="src\sys\console\wprintf02.cpp">
+      <Filter>src\sys\console</Filter>
+    </ClCompile>
+    <ClCompile Include="src\sys\console\wprintf03.cpp">
+      <Filter>src\sys\console</Filter>
+    </ClCompile>
+    <ClCompile Include="src\sys\console\wprintf04.cpp">
+      <Filter>src\sys\console</Filter>
+    </ClCompile>
+    <ClCompile Include="src\sys\console\wprintf05.cpp">
+      <Filter>src\sys\console</Filter>
+    </ClCompile>
+    <ClCompile Include="src\sys\console\wprintf06.cpp">
+      <Filter>src\sys\console</Filter>
+    </ClCompile>
+    <ClCompile Include="src\sys\console\wprintf07.cpp">
+      <Filter>src\sys\console</Filter>
+    </ClCompile>
+    <ClCompile Include="src\sys\console\wprintf08.cpp">
+      <Filter>src\sys\console</Filter>
+    </ClCompile>
+    <ClCompile Include="src\sys\console\wprintf09.cpp">
+      <Filter>src\sys\console</Filter>
+    </ClCompile>
+    <ClCompile Include="src\sys\console\wprintf10.cpp">
+      <Filter>src\sys\console</Filter>
+    </ClCompile>
+    <ClCompile Include="src\sys\console\wprintf11.cpp">
+      <Filter>src\sys\console</Filter>
+    </ClCompile>
+    <ClCompile Include="src\sys\console\wprintf12.cpp">
+      <Filter>src\sys\console</Filter>
+    </ClCompile>
+    <ClCompile Include="src\sys\console\wprintf13.cpp">
+      <Filter>src\sys\console</Filter>
+    </ClCompile>
+    <ClCompile Include="src\sys\console\wprintf14.cpp">
+      <Filter>src\sys\console</Filter>
+    </ClCompile>
+    <ClCompile Include="src\sys\crt\assert.cpp">
+      <Filter>src\sys\crt</Filter>
+    </ClCompile>
+    <ClCompile Include="src\sys\crt\crt.cpp">
+      <Filter>src\sys\crt</Filter>
+    </ClCompile>
+    <ClCompile Include="src\sys\crt\seh.cpp">
+      <Filter>src\sys\crt</Filter>
+    </ClCompile>
+    <ClCompile Include="src\sys\cstr\mstring.cpp">
+      <Filter>src\sys\cstr</Filter>
+    </ClCompile>
+    <ClCompile Include="src\sys\dll\dll.cpp">
+      <Filter>src\sys\dll</Filter>
+    </ClCompile>
+    <ClCompile Include="src\sys\environment\environment.cpp">
+      <Filter>src\sys\environment</Filter>
+    </ClCompile>
+    <ClCompile Include="src\sys\fsys\attributes.cpp">
+      <Filter>src\sys\fsys</Filter>
+    </ClCompile>
+    <ClCompile Include="src\sys\fsys\directory.cpp">
+      <Filter>src\sys\fsys</Filter>
+    </ClCompile>
+    <ClCompile Include="src\sys\fsys\dll_shlwapi.cpp">
+      <Filter>src\sys\fsys</Filter>
+    </ClCompile>
+    <ClCompile Include="src\sys\fsys\file.cpp">
+      <Filter>src\sys\fsys</Filter>
+    </ClCompile>
+    <ClCompile Include="src\sys\fsys\file_Map_nt.cpp">
+      <Filter>src\sys\fsys</Filter>
+    </ClCompile>
+    <ClCompile Include="src\sys\fsys\fsys.cpp">
+      <Filter>src\sys\fsys</Filter>
+    </ClCompile>
+    <ClCompile Include="src\sys\cstr\cstr_convert_a.cpp">
+      <Filter>src\sys\cstr</Filter>
+    </ClCompile>
+    <ClCompile Include="src\sys\cstr\cstr_convert_w.cpp">
+      <Filter>src\sys\cstr</Filter>
+    </ClCompile>
+    <ClCompile Include="src\sys\logger\Logger.cpp">
+      <Filter>src\sys\logger</Filter>
+    </ClCompile>
+    <ClCompile Include="src\sys\logger\logger_to_str.cpp">
+      <Filter>src\sys\logger</Filter>
+    </ClCompile>
+    <ClCompile Include="src\sys\logger\LogToConsole.cpp">
+      <Filter>src\sys\logger</Filter>
+    </ClCompile>
+    <ClCompile Include="src\sys\logger\LogToFile.cpp">
+      <Filter>src\sys\logger</Filter>
+    </ClCompile>
+    <ClCompile Include="src\sys\logger\LogToMult.cpp">
+      <Filter>src\sys\logger</Filter>
+    </ClCompile>
+    <ClCompile Include="src\sys\logger\LogToNull.cpp">
+      <Filter>src\sys\logger</Filter>
+    </ClCompile>
+    <ClCompile Include="src\sys\logger\LogToSys.cpp">
+      <Filter>src\sys\logger</Filter>
+    </ClCompile>
+    <ClCompile Include="src\sys\logger\ModuleImpl.cpp">
+      <Filter>src\sys\logger</Filter>
+    </ClCompile>
+    <ClCompile Include="src\sys\logger\options.cpp">
+      <Filter>src\sys\logger</Filter>
+    </ClCompile>
+    <ClCompile Include="src\sys\memory\delete.cpp">
+      <Filter>src\sys\memory</Filter>
+    </ClCompile>
+    <ClCompile Include="src\sys\memory\delete[].cpp">
+      <Filter>src\sys\memory</Filter>
+    </ClCompile>
+    <ClCompile Include="src\sys\memory\memory.cpp">
+      <Filter>src\sys\memory</Filter>
+    </ClCompile>
+    <ClCompile Include="src\sys\memory\new.cpp">
+      <Filter>src\sys\memory</Filter>
+    </ClCompile>
+    <ClCompile Include="src\sys\memory\new[].cpp">
+      <Filter>src\sys\memory</Filter>
+    </ClCompile>
+    <ClCompile Include="src\sys\memory\heap\Default.cpp">
+      <Filter>src\sys\memory\heap</Filter>
+    </ClCompile>
+    <ClCompile Include="src\sys\memory\heap\DefaultLogged.cpp">
+      <Filter>src\sys\memory\heap</Filter>
+    </ClCompile>
+    <ClCompile Include="src\sys\memory\heap\DefaultMovable.cpp">
+      <Filter>src\sys\memory\heap</Filter>
+    </ClCompile>
+    <ClCompile Include="src\sys\memory\heap\DefaultStat.cpp">
+      <Filter>src\sys\memory\heap</Filter>
+    </ClCompile>
+    <ClCompile Include="src\sys\memory\heap\Heap.cpp">
+      <Filter>src\sys\memory\heap</Filter>
+    </ClCompile>
+    <ClCompile Include="src\sys\path\defaults01.cpp">
+      <Filter>src\sys\path</Filter>
+    </ClCompile>
+    <ClCompile Include="src\sys\path\defaults02.cpp">
+      <Filter>src\sys\path</Filter>
+    </ClCompile>
+    <ClCompile Include="src\sys\path\defaults03.cpp">
+      <Filter>src\sys\path</Filter>
+    </ClCompile>
+    <ClCompile Include="src\sys\path\defaults04.cpp">
+      <Filter>src\sys\path</Filter>
+    </ClCompile>
+    <ClCompile Include="src\sys\path\defaults05.cpp">
+      <Filter>src\sys\path</Filter>
+    </ClCompile>
+    <ClCompile Include="src\sys\path\defaults06.cpp">
+      <Filter>src\sys\path</Filter>
+    </ClCompile>
+    <ClCompile Include="src\sys\path\dll_shlwapi01.cpp">
+      <Filter>src\sys\path</Filter>
+    </ClCompile>
+    <ClCompile Include="src\sys\path\dll_shlwapi01a.cpp">
+      <Filter>src\sys\path</Filter>
+    </ClCompile>
+    <ClCompile Include="src\sys\path\dll_shlwapi02.cpp">
+      <Filter>src\sys\path</Filter>
+    </ClCompile>
+    <ClCompile Include="src\sys\path\dll_shlwapi02a.cpp">
+      <Filter>src\sys\path</Filter>
+    </ClCompile>
+    <ClCompile Include="src\sys\path\dll_shlwapi02b.cpp">
+      <Filter>src\sys\path</Filter>
+    </ClCompile>
+    <ClCompile Include="src\sys\path\dll_shlwapi03.cpp">
+      <Filter>src\sys\path</Filter>
+    </ClCompile>
+    <ClCompile Include="src\sys\path\dll_shlwapi03a.cpp">
+      <Filter>src\sys\path</Filter>
+    </ClCompile>
+    <ClCompile Include="src\sys\path\dll_shlwapi03b.cpp">
+      <Filter>src\sys\path</Filter>
+    </ClCompile>
+    <ClCompile Include="src\sys\path\dll_shlwapi04.cpp">
+      <Filter>src\sys\path</Filter>
+    </ClCompile>
+    <ClCompile Include="src\sys\path\dll_shlwapi04a.cpp">
+      <Filter>src\sys\path</Filter>
+    </ClCompile>
+    <ClCompile Include="src\sys\path\dll_shlwapi04b.cpp">
+      <Filter>src\sys\path</Filter>
+    </ClCompile>
+    <ClCompile Include="src\sys\path\dll_shlwapi05.cpp">
+      <Filter>src\sys\path</Filter>
+    </ClCompile>
+    <ClCompile Include="src\sys\path\dll_shlwapi05a.cpp">
+      <Filter>src\sys\path</Filter>
+    </ClCompile>
+    <ClCompile Include="src\sys\path\dll_shlwapi05b.cpp">
+      <Filter>src\sys\path</Filter>
+    </ClCompile>
+    <ClCompile Include="src\sys\path\dll_shlwapi06.cpp">
+      <Filter>src\sys\path</Filter>
+    </ClCompile>
+    <ClCompile Include="src\sys\path\filename01.cpp">
+      <Filter>src\sys\path</Filter>
+    </ClCompile>
+    <ClCompile Include="src\sys\path\filename02.cpp">
+      <Filter>src\sys\path</Filter>
+    </ClCompile>
+    <ClCompile Include="src\sys\path\filename03.cpp">
+      <Filter>src\sys\path</Filter>
+    </ClCompile>
+    <ClCompile Include="src\sys\path\inplace01.cpp">
+      <Filter>src\sys\path</Filter>
+    </ClCompile>
+    <ClCompile Include="src\sys\path\inplace01a.cpp">
+      <Filter>src\sys\path</Filter>
+    </ClCompile>
+    <ClCompile Include="src\sys\path\inplace02.cpp">
+      <Filter>src\sys\path</Filter>
+    </ClCompile>
+    <ClCompile Include="src\sys\path\inplace02a.cpp">
+      <Filter>src\sys\path</Filter>
+    </ClCompile>
+    <ClCompile Include="src\sys\path\inplace03.cpp">
+      <Filter>src\sys\path</Filter>
+    </ClCompile>
+    <ClCompile Include="src\sys\path\inplace04.cpp">
+      <Filter>src\sys\path</Filter>
+    </ClCompile>
+    <ClCompile Include="src\sys\path\inplace04a.cpp">
+      <Filter>src\sys\path</Filter>
+    </ClCompile>
+    <ClCompile Include="src\sys\path\inplace05.cpp">
+      <Filter>src\sys\path</Filter>
+    </ClCompile>
+    <ClCompile Include="src\sys\path\inplace05a.cpp">
+      <Filter>src\sys\path</Filter>
+    </ClCompile>
+    <ClCompile Include="src\sys\path\inplace06.cpp">
+      <Filter>src\sys\path</Filter>
+    </ClCompile>
+    <ClCompile Include="src\sys\path\inplace06a.cpp">
+      <Filter>src\sys\path</Filter>
+    </ClCompile>
+    <ClCompile Include="src\sys\path\inplace07.cpp">
+      <Filter>src\sys\path</Filter>
+    </ClCompile>
+    <ClCompile Include="src\sys\path\inplace08.cpp">
+      <Filter>src\sys\path</Filter>
+    </ClCompile>
+    <ClCompile Include="src\sys\path\inplace08a.cpp">
+      <Filter>src\sys\path</Filter>
+    </ClCompile>
+    <ClCompile Include="src\sys\path\path01.cpp">
+      <Filter>src\sys\path</Filter>
+    </ClCompile>
+    <ClCompile Include="src\sys\path\path02.cpp">
+      <Filter>src\sys\path</Filter>
+    </ClCompile>
+    <ClCompile Include="src\sys\path\path02a.cpp">
+      <Filter>src\sys\path</Filter>
+    </ClCompile>
+    <ClCompile Include="src\sys\path\path03.cpp">
+      <Filter>src\sys\path</Filter>
+    </ClCompile>
+    <ClCompile Include="src\sys\path\path03a.cpp">
+      <Filter>src\sys\path</Filter>
+    </ClCompile>
+    <ClCompile Include="src\sys\path\path04.cpp">
+      <Filter>src\sys\path</Filter>
+    </ClCompile>
+    <ClCompile Include="src\sys\path\path04a.cpp">
+      <Filter>src\sys\path</Filter>
+    </ClCompile>
+    <ClCompile Include="src\sys\path\path05.cpp">
+      <Filter>src\sys\path</Filter>
+    </ClCompile>
+    <ClCompile Include="src\sys\path\path06.cpp">
+      <Filter>src\sys\path</Filter>
+    </ClCompile>
+    <ClCompile Include="src\sys\path\path06a.cpp">
+      <Filter>src\sys\path</Filter>
+    </ClCompile>
+    <ClCompile Include="src\sys\path\path07.cpp">
+      <Filter>src\sys\path</Filter>
+    </ClCompile>
+    <ClCompile Include="src\sys\path\path08.cpp">
+      <Filter>src\sys\path</Filter>
+    </ClCompile>
+    <ClCompile Include="src\sys\path\path09.cpp">
+      <Filter>src\sys\path</Filter>
+    </ClCompile>
+    <ClCompile Include="src\sys\path\path09a.cpp">
+      <Filter>src\sys\path</Filter>
+    </ClCompile>
+    <ClCompile Include="src\sys\path\path10.cpp">
+      <Filter>src\sys\path</Filter>
+    </ClCompile>
+    <ClCompile Include="src\sys\path\path10a.cpp">
+      <Filter>src\sys\path</Filter>
+    </ClCompile>
+    <ClCompile Include="src\sys\path\path11.cpp">
+      <Filter>src\sys\path</Filter>
+    </ClCompile>
+    <ClCompile Include="src\sys\path\path11a.cpp">
+      <Filter>src\sys\path</Filter>
+    </ClCompile>
+    <ClCompile Include="src\sys\path\path12.cpp">
+      <Filter>src\sys\path</Filter>
+    </ClCompile>
+    <ClCompile Include="src\sys\path\path12a.cpp">
+      <Filter>src\sys\path</Filter>
+    </ClCompile>
+    <ClCompile Include="src\sys\path\path13.cpp">
+      <Filter>src\sys\path</Filter>
+    </ClCompile>
+    <ClCompile Include="src\sys\path\path14.cpp">
+      <Filter>src\sys\path</Filter>
+    </ClCompile>
+    <ClCompile Include="src\sys\path\path14a.cpp">
+      <Filter>src\sys\path</Filter>
+    </ClCompile>
+    <ClCompile Include="src\sys\process\exec.cpp">
+      <Filter>src\sys\process</Filter>
+    </ClCompile>
+    <ClCompile Include="src\sys\process\process.cpp">
+      <Filter>src\sys\process</Filter>
+    </ClCompile>
+    <ClCompile Include="src\sys\sstr\aconvert.cpp">
+      <Filter>src\sys\sstr</Filter>
+    </ClCompile>
+    <ClCompile Include="src\sys\sstr\aformat.cpp">
+      <Filter>src\sys\sstr</Filter>
+    </ClCompile>
+    <ClCompile Include="src\sys\sstr\defaults.cpp">
+      <Filter>src\sys\sstr</Filter>
+    </ClCompile>
+    <ClCompile Include="src\sys\sstr\empty.cpp">
+      <Filter>src\sys\sstr</Filter>
+    </ClCompile>
+    <ClCompile Include="src\sys\sstr\hash.cpp">
+      <Filter>src\sys\sstr</Filter>
+    </ClCompile>
+    <ClCompile Include="src\sys\sstr\inplace.cpp">
+      <Filter>src\sys\sstr</Filter>
+    </ClCompile>
+    <ClCompile Include="src\sys\sstr\str.cpp">
+      <Filter>src\sys\sstr</Filter>
+    </ClCompile>
+    <ClCompile Include="src\sys\sstr\wconvert.cpp">
+      <Filter>src\sys\sstr</Filter>
+    </ClCompile>
+    <ClCompile Include="src\sys\sstr\wformat.cpp">
+      <Filter>src\sys\sstr</Filter>
+    </ClCompile>
+    <ClCompile Include="src\sys\sstr\wstr.cpp">
+      <Filter>src\sys\sstr</Filter>
+    </ClCompile>
+    <ClCompile Include="src\sys\sync\CriticalSection_impl.cpp">
+      <Filter>src\sys\sync</Filter>
+    </ClCompile>
+    <ClCompile Include="src\sys\sync\Delivery.cpp">
+      <Filter>src\sys\sync</Filter>
+    </ClCompile>
+    <ClCompile Include="src\sys\sync\lock.cpp">
+      <Filter>src\sys\sync</Filter>
+    </ClCompile>
+    <ClCompile Include="src\sys\sync\Message.cpp">
+      <Filter>src\sys\sync</Filter>
+    </ClCompile>
+    <ClCompile Include="src\sys\sync\MessageManager.cpp">
+      <Filter>src\sys\sync</Filter>
+    </ClCompile>
+    <ClCompile Include="src\sys\sync\MessageManager_simple.cpp">
+      <Filter>src\sys\sync</Filter>
+    </ClCompile>
+    <ClCompile Include="src\sys\sync\Mutex.cpp">
+      <Filter>src\sys\sync</Filter>
+    </ClCompile>
+    <ClCompile Include="src\sys\sync\Observable.cpp">
+      <Filter>src\sys\sync</Filter>
+    </ClCompile>
+    <ClCompile Include="src\sys\sync\Observer.cpp">
+      <Filter>src\sys\sync</Filter>
+    </ClCompile>
+    <ClCompile Include="src\sys\sync\Queue.cpp">
+      <Filter>src\sys\sync</Filter>
+    </ClCompile>
+    <ClCompile Include="src\sys\sync\ReadWrite.cpp">
+      <Filter>src\sys\sync</Filter>
+    </ClCompile>
+    <ClCompile Include="src\sys\sync\ScopeGuard.cpp">
+      <Filter>src\sys\sync</Filter>
+    </ClCompile>
+    <ClCompile Include="src\sys\sync\Semaphore.cpp">
+      <Filter>src\sys\sync</Filter>
+    </ClCompile>
+    <ClCompile Include="src\sys\sync\totext.cpp">
+      <Filter>src\sys\sync</Filter>
+    </ClCompile>
+    <ClCompile Include="src\sys\thread\logger.cpp">
+      <Filter>src\sys\thread</Filter>
+    </ClCompile>
+    <ClCompile Include="src\sys\thread\Parameters.cpp">
+      <Filter>src\sys\thread</Filter>
+    </ClCompile>
+    <ClCompile Include="src\sys\thread\Pool.cpp">
+      <Filter>src\sys\thread</Filter>
+    </ClCompile>
+    <ClCompile Include="src\sys\thread\Routine.cpp">
+      <Filter>src\sys\thread</Filter>
+    </ClCompile>
+    <ClCompile Include="src\sys\thread\threads_holder.cpp">
+      <Filter>src\sys\thread</Filter>
+    </ClCompile>
+    <ClCompile Include="src\sys\thread\totext.cpp">
+      <Filter>src\sys\thread</Filter>
+    </ClCompile>
+    <ClCompile Include="src\sys\thread\Unit.cpp">
+      <Filter>src\sys\thread</Filter>
+    </ClCompile>
+    <ClCompile Include="src\sys\thread\Unit_io.cpp">
+      <Filter>src\sys\thread</Filter>
+    </ClCompile>
+    <ClCompile Include="src\sys\time\time.cpp">
+      <Filter>src\sys\time</Filter>
+    </ClCompile>
+    <ClCompile Include="src\sys\totext\error01.cpp">
+      <Filter>src\sys\totext</Filter>
+    </ClCompile>
+    <ClCompile Include="src\sys\totext\error02.cpp">
+      <Filter>src\sys\totext</Filter>
+    </ClCompile>
+    <ClCompile Include="src\sys\totext\error03.cpp">
+      <Filter>src\sys\totext</Filter>
+    </ClCompile>
+    <ClCompile Include="src\sys\traceback\Enum.cpp">
+      <Filter>src\sys\traceback</Filter>
+    </ClCompile>
+    <ClCompile Include="src\sys\traceback\LazyFrame.cpp">
+      <Filter>src\sys\traceback</Filter>
+    </ClCompile>
+    <ClCompile Include="src\sys\traceback\traceback.cpp">
+      <Filter>src\sys\traceback</Filter>
+    </ClCompile>
+    <ClCompile Include="src\sys\url\url01.cpp">
+      <Filter>src\sys\url</Filter>
+    </ClCompile>
+    <ClCompile Include="src\sys\url\url02.cpp">
+      <Filter>src\sys\url</Filter>
+    </ClCompile>
+    <ClCompile Include="src\sys\win64\win64.cpp">
+      <Filter>src\sys\win64</Filter>
+    </ClCompile>
+    <ClCompile Include="src\sys\window\window.cpp">
+      <Filter>src\sys\window</Filter>
+    </ClCompile>
+    <ClCompile Include="src\tst\test_a_string.cpp">
+      <Filter>src\tst</Filter>
+    </ClCompile>
+    <ClCompile Include="src\tst\test_algorithm.cpp">
+      <Filter>src\tst</Filter>
+    </ClCompile>
+    <ClCompile Include="src\tst\test_mstring.cpp">
+      <Filter>src\tst</Filter>
+    </ClCompile>
+    <ClCompile Include="src\tst\test_sstr.cpp">
+      <Filter>src\tst</Filter>
+    </ClCompile>
+    <ClCompile Include="src\tst\test_vector.cpp">
+      <Filter>src\tst</Filter>
+    </ClCompile>
+    <ClCompile Include="src\tst\test_w_string.cpp">
+      <Filter>src\tst</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>

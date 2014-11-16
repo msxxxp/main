@@ -18,6 +18,12 @@ struct Va_list {
 	{
 		return &m_args;
 	}
+	
+	Va_list& operator =(va_list vl)
+	{
+		m_args = vl;
+		return *this;
+	}
 
 private:
 	va_list m_args;

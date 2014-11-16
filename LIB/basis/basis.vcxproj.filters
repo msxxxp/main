@@ -1,0 +1,689 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <Filter Include="include">
+    </Filter>
+    <Filter Include="include\basis">
+    </Filter>
+    <Filter Include="include\basis\ext">
+    </Filter>
+    <Filter Include="include\basis\ext\~bits">
+    </Filter>
+    <Filter Include="include\basis\ext\~pattern">
+    </Filter>
+    <Filter Include="include\basis\os">
+    </Filter>
+    <Filter Include="include\basis\simstd">
+    </Filter>
+    <Filter Include="include\basis\simstd\~algorithm">
+    </Filter>
+    <Filter Include="include\basis\simstd\~functional">
+    </Filter>
+    <Filter Include="include\basis\simstd\~iterator">
+    </Filter>
+    <Filter Include="include\basis\simstd\~list">
+    </Filter>
+    <Filter Include="include\basis\simstd\~memory">
+    </Filter>
+    <Filter Include="include\basis\simstd\~mutex">
+    </Filter>
+    <Filter Include="include\basis\simstd\~numeric">
+    </Filter>
+    <Filter Include="include\basis\simstd\~string">
+    </Filter>
+    <Filter Include="include\basis\simstd\~type_traits">
+    </Filter>
+    <Filter Include="include\basis\simstd\~utility">
+    </Filter>
+    <Filter Include="include\basis\simstd\~vector">
+    </Filter>
+    <Filter Include="include\basis\sys">
+    </Filter>
+    <Filter Include="include\basis\sys\~configure">
+    </Filter>
+    <Filter Include="include\basis\sys\~configure\compiler">
+    </Filter>
+    <Filter Include="include\basis\sys\~configure\obligatory">
+    </Filter>
+    <Filter Include="include\basis\sys\~configure\os">
+    </Filter>
+    <Filter Include="include\basis\sys\~console">
+    </Filter>
+    <Filter Include="include\basis\sys\~crt">
+    </Filter>
+    <Filter Include="include\basis\sys\~cstr">
+    </Filter>
+    <Filter Include="include\basis\sys\~fsys">
+    </Filter>
+    <Filter Include="include\basis\sys\~linkage">
+    </Filter>
+    <Filter Include="include\basis\sys\~logger">
+    </Filter>
+    <Filter Include="include\basis\sys\~memory">
+    </Filter>
+    <Filter Include="include\basis\sys\~memory\heap">
+    </Filter>
+    <Filter Include="include\basis\sys\~path">
+    </Filter>
+    <Filter Include="include\basis\sys\~process">
+    </Filter>
+    <Filter Include="include\basis\sys\~register">
+    </Filter>
+    <Filter Include="include\basis\sys\~security">
+    </Filter>
+    <Filter Include="include\basis\sys\~sstr">
+    </Filter>
+    <Filter Include="include\basis\sys\~sync">
+    </Filter>
+    <Filter Include="include\basis\sys\~thread">
+    </Filter>
+    <Filter Include="include\basis\sys\~time">
+    </Filter>
+    <Filter Include="include\basis\sys\~totext">
+    </Filter>
+    <Filter Include="include\basis\sys\~window">
+    </Filter>
+    <Filter Include="src">
+    </Filter>
+    <Filter Include="src\ext">
+    </Filter>
+    <Filter Include="src\ext\pattern">
+    </Filter>
+    <Filter Include="src\os">
+    </Filter>
+    <Filter Include="src\simstd">
+    </Filter>
+    <Filter Include="src\simstd\chrono">
+    </Filter>
+    <Filter Include="src\simstd\list">
+    </Filter>
+    <Filter Include="src\simstd\string">
+    </Filter>
+    <Filter Include="src\sys">
+    </Filter>
+    <Filter Include="src\sys\configure">
+    </Filter>
+    <Filter Include="src\sys\configure\obligatory">
+    </Filter>
+    <Filter Include="src\sys\console">
+    </Filter>
+    <Filter Include="src\sys\crt">
+    </Filter>
+    <Filter Include="src\sys\cstr">
+    </Filter>
+    <Filter Include="src\sys\dll">
+    </Filter>
+    <Filter Include="src\sys\environment">
+    </Filter>
+    <Filter Include="src\sys\fsys">
+    </Filter>
+    <Filter Include="src\sys\logger">
+    </Filter>
+    <Filter Include="src\sys\logger\common">
+    </Filter>
+    <Filter Include="src\sys\logger\enabled">
+    </Filter>
+    <Filter Include="src\sys\memory">
+    </Filter>
+    <Filter Include="src\sys\memory\heap">
+    </Filter>
+    <Filter Include="src\sys\path">
+    </Filter>
+    <Filter Include="src\sys\process">
+    </Filter>
+    <Filter Include="src\sys\sstr">
+    </Filter>
+    <Filter Include="src\sys\sync">
+    </Filter>
+    <Filter Include="src\sys\thread">
+    </Filter>
+    <Filter Include="src\sys\time">
+    </Filter>
+    <Filter Include="src\sys\totext">
+    </Filter>
+    <Filter Include="src\sys\traceback">
+    </Filter>
+    <Filter Include="src\sys\url">
+    </Filter>
+    <Filter Include="src\sys\win64">
+    </Filter>
+    <Filter Include="src\sys\window">
+    </Filter>
+    <Filter Include="src\tst">
+    </Filter>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="include\basis\configure.hpp">
+      <Filter>include\basis</Filter>
+    </ClInclude>
+    <ClInclude Include="include\basis\types.hpp">
+      <Filter>include\basis</Filter>
+    </ClInclude>
+    <ClInclude Include="include\basis\ext\bits.hpp">
+      <Filter>include\basis\ext</Filter>
+    </ClInclude>
+    <ClInclude Include="include\basis\ext\pattern.hpp">
+      <Filter>include\basis\ext</Filter>
+    </ClInclude>
+    <ClInclude Include="include\basis\ext\~bits\bit_str.hpp">
+      <Filter>include\basis\ext\~bits</Filter>
+    </ClInclude>
+    <ClInclude Include="include\basis\ext\~bits\bits.hpp">
+      <Filter>include\basis\ext\~bits</Filter>
+    </ClInclude>
+    <ClInclude Include="include\basis\ext\~bits\flags.hpp">
+      <Filter>include\basis\ext\~bits</Filter>
+    </ClInclude>
+    <ClInclude Include="include\basis\ext\~pattern\Command.hpp">
+      <Filter>include\basis\ext\~pattern</Filter>
+    </ClInclude>
+    <ClInclude Include="include\basis\ext\~pattern\Destroyable.hpp">
+      <Filter>include\basis\ext\~pattern</Filter>
+    </ClInclude>
+    <ClInclude Include="include\basis\ext\~pattern\Inited.hpp">
+      <Filter>include\basis\ext\~pattern</Filter>
+    </ClInclude>
+    <ClInclude Include="include\basis\ext\~pattern\RefCounter.hpp">
+      <Filter>include\basis\ext\~pattern</Filter>
+    </ClInclude>
+    <ClInclude Include="include\basis\ext\~pattern\Singleton.hpp">
+      <Filter>include\basis\ext\~pattern</Filter>
+    </ClInclude>
+    <ClInclude Include="include\basis\ext\~pattern\Uncopyable.hpp">
+      <Filter>include\basis\ext\~pattern</Filter>
+    </ClInclude>
+    <ClInclude Include="include\basis\os\dbghelp.hpp">
+      <Filter>include\basis\os</Filter>
+    </ClInclude>
+    <ClInclude Include="include\basis\os\kernel32.hpp">
+      <Filter>include\basis\os</Filter>
+    </ClInclude>
+    <ClInclude Include="include\basis\os\shlwapi.hpp">
+      <Filter>include\basis\os</Filter>
+    </ClInclude>
+    <ClInclude Include="include\basis\os\wininet.hpp">
+      <Filter>include\basis\os</Filter>
+    </ClInclude>
+    <ClInclude Include="include\basis\simstd\~algorithm\base.hpp">
+      <Filter>include\basis\simstd\~algorithm</Filter>
+    </ClInclude>
+    <ClInclude Include="include\basis\simstd\~algorithm\extra.hpp">
+      <Filter>include\basis\simstd\~algorithm</Filter>
+    </ClInclude>
+    <ClInclude Include="include\basis\simstd\~algorithm\heap.hpp">
+      <Filter>include\basis\simstd\~algorithm</Filter>
+    </ClInclude>
+    <ClInclude Include="include\basis\simstd\~algorithm\sort.hpp">
+      <Filter>include\basis\simstd\~algorithm</Filter>
+    </ClInclude>
+    <ClInclude Include="include\basis\simstd\~functional\functional.hpp">
+      <Filter>include\basis\simstd\~functional</Filter>
+    </ClInclude>
+    <ClInclude Include="include\basis\simstd\~iterator\back_insert_iterator.hpp">
+      <Filter>include\basis\simstd\~iterator</Filter>
+    </ClInclude>
+    <ClInclude Include="include\basis\simstd\~iterator\base.hpp">
+      <Filter>include\basis\simstd\~iterator</Filter>
+    </ClInclude>
+    <ClInclude Include="include\basis\simstd\~iterator\front_insert_iterator.hpp">
+      <Filter>include\basis\simstd\~iterator</Filter>
+    </ClInclude>
+    <ClInclude Include="include\basis\simstd\~iterator\functional.hpp">
+      <Filter>include\basis\simstd\~iterator</Filter>
+    </ClInclude>
+    <ClInclude Include="include\basis\simstd\~iterator\insert_iterator.hpp">
+      <Filter>include\basis\simstd\~iterator</Filter>
+    </ClInclude>
+    <ClInclude Include="include\basis\simstd\~iterator\move_iterator.hpp">
+      <Filter>include\basis\simstd\~iterator</Filter>
+    </ClInclude>
+    <ClInclude Include="include\basis\simstd\~iterator\pvt_const_value_iterator.hpp">
+      <Filter>include\basis\simstd\~iterator</Filter>
+    </ClInclude>
+    <ClInclude Include="include\basis\simstd\~iterator\pvt_normal_iterator.hpp">
+      <Filter>include\basis\simstd\~iterator</Filter>
+    </ClInclude>
+    <ClInclude Include="include\basis\simstd\~iterator\reverse_iterator.hpp">
+      <Filter>include\basis\simstd\~iterator</Filter>
+    </ClInclude>
+    <ClInclude Include="include\basis\simstd\~list\base.hpp">
+      <Filter>include\basis\simstd\~list</Filter>
+    </ClInclude>
+    <ClInclude Include="include\basis\simstd\~list\interface.hpp">
+      <Filter>include\basis\simstd\~list</Filter>
+    </ClInclude>
+    <ClInclude Include="include\basis\simstd\~list\iterator.hpp">
+      <Filter>include\basis\simstd\~list</Filter>
+    </ClInclude>
+    <ClInclude Include="include\basis\simstd\~list\node.hpp">
+      <Filter>include\basis\simstd\~list</Filter>
+    </ClInclude>
+    <ClInclude Include="include\basis\simstd\~memory\allocator.hpp">
+      <Filter>include\basis\simstd\~memory</Filter>
+    </ClInclude>
+    <ClInclude Include="include\basis\simstd\~memory\allocator_traits.hpp">
+      <Filter>include\basis\simstd\~memory</Filter>
+    </ClInclude>
+    <ClInclude Include="include\basis\simstd\~memory\AllocatorHeap.hpp">
+      <Filter>include\basis\simstd\~memory</Filter>
+    </ClInclude>
+    <ClInclude Include="include\basis\simstd\~memory\AllocatorHeapLogged.hpp">
+      <Filter>include\basis\simstd\~memory</Filter>
+    </ClInclude>
+    <ClInclude Include="include\basis\simstd\~memory\auto_ptr.hpp">
+      <Filter>include\basis\simstd\~memory</Filter>
+    </ClInclude>
+    <ClInclude Include="include\basis\simstd\~memory\base.hpp">
+      <Filter>include\basis\simstd\~memory</Filter>
+    </ClInclude>
+    <ClInclude Include="include\basis\simstd\~memory\default_deleters.hpp">
+      <Filter>include\basis\simstd\~memory</Filter>
+    </ClInclude>
+    <ClInclude Include="include\basis\simstd\~memory\functional.hpp">
+      <Filter>include\basis\simstd\~memory</Filter>
+    </ClInclude>
+    <ClInclude Include="include\basis\simstd\~memory\movable_allocator.hpp">
+      <Filter>include\basis\simstd\~memory</Filter>
+    </ClInclude>
+    <ClInclude Include="include\basis\simstd\~memory\new.hpp">
+      <Filter>include\basis\simstd\~memory</Filter>
+    </ClInclude>
+    <ClInclude Include="include\basis\simstd\~memory\raw_storage_iterator.hpp">
+      <Filter>include\basis\simstd\~memory</Filter>
+    </ClInclude>
+    <ClInclude Include="include\basis\simstd\~memory\shared_ptr.hpp">
+      <Filter>include\basis\simstd\~memory</Filter>
+    </ClInclude>
+    <ClInclude Include="include\basis\simstd\~memory\unique_ptr.hpp">
+      <Filter>include\basis\simstd\~memory</Filter>
+    </ClInclude>
+    <ClInclude Include="include\basis\simstd\~mutex\functional.hpp">
+      <Filter>include\basis\simstd\~mutex</Filter>
+    </ClInclude>
+    <ClInclude Include="include\basis\simstd\~mutex\lock_guard.hpp">
+      <Filter>include\basis\simstd\~mutex</Filter>
+    </ClInclude>
+    <ClInclude Include="include\basis\simstd\~mutex\once.hpp">
+      <Filter>include\basis\simstd\~mutex</Filter>
+    </ClInclude>
+    <ClInclude Include="include\basis\simstd\~mutex\recursive_mutex.hpp">
+      <Filter>include\basis\simstd\~mutex</Filter>
+    </ClInclude>
+    <ClInclude Include="include\basis\simstd\~mutex\recursive_timed_mutex.hpp">
+      <Filter>include\basis\simstd\~mutex</Filter>
+    </ClInclude>
+    <ClInclude Include="include\basis\simstd\~mutex\types.hpp">
+      <Filter>include\basis\simstd\~mutex</Filter>
+    </ClInclude>
+    <ClInclude Include="include\basis\simstd\~mutex\unique_lock.hpp">
+      <Filter>include\basis\simstd\~mutex</Filter>
+    </ClInclude>
+    <ClInclude Include="include\basis\simstd\~numeric\numeric.hpp">
+      <Filter>include\basis\simstd\~numeric</Filter>
+    </ClInclude>
+    <ClInclude Include="include\basis\simstd\~string\basic_string.hpp">
+      <Filter>include\basis\simstd\~string</Filter>
+    </ClInclude>
+    <ClInclude Include="include\basis\simstd\~string\basic_string2.hpp">
+      <Filter>include\basis\simstd\~string</Filter>
+    </ClInclude>
+    <ClInclude Include="include\basis\simstd\~string\char_traits.hpp">
+      <Filter>include\basis\simstd\~string</Filter>
+    </ClInclude>
+    <ClInclude Include="include\basis\simstd\~string\convert_a.hpp">
+      <Filter>include\basis\simstd\~string</Filter>
+    </ClInclude>
+    <ClInclude Include="include\basis\simstd\~string\convert_w.hpp">
+      <Filter>include\basis\simstd\~string</Filter>
+    </ClInclude>
+    <ClInclude Include="include\basis\simstd\~string\Str_base.hpp">
+      <Filter>include\basis\simstd\~string</Filter>
+    </ClInclude>
+    <ClInclude Include="include\basis\simstd\~string\Str_impl.hpp">
+      <Filter>include\basis\simstd\~string</Filter>
+    </ClInclude>
+    <ClInclude Include="include\basis\simstd\~type_traits\conditional.hpp">
+      <Filter>include\basis\simstd\~type_traits</Filter>
+    </ClInclude>
+    <ClInclude Include="include\basis\simstd\~type_traits\integral_constant.hpp">
+      <Filter>include\basis\simstd\~type_traits</Filter>
+    </ClInclude>
+    <ClInclude Include="include\basis\simstd\~type_traits\remove_cv.hpp">
+      <Filter>include\basis\simstd\~type_traits</Filter>
+    </ClInclude>
+    <ClInclude Include="include\basis\simstd\~type_traits\type.hpp">
+      <Filter>include\basis\simstd\~type_traits</Filter>
+    </ClInclude>
+    <ClInclude Include="include\basis\simstd\~utility\pair.hpp">
+      <Filter>include\basis\simstd\~utility</Filter>
+    </ClInclude>
+    <ClInclude Include="include\basis\simstd\~utility\rel_ops.hpp">
+      <Filter>include\basis\simstd\~utility</Filter>
+    </ClInclude>
+    <ClInclude Include="include\basis\simstd\~vector\interface.hpp">
+      <Filter>include\basis\simstd\~vector</Filter>
+    </ClInclude>
+    <ClInclude Include="include\basis\simstd\~vector\movable_vector.hpp">
+      <Filter>include\basis\simstd\~vector</Filter>
+    </ClInclude>
+    <ClInclude Include="include\basis\simstd\~vector\vector_base.hpp">
+      <Filter>include\basis\simstd\~vector</Filter>
+    </ClInclude>
+    <ClInclude Include="include\basis\sys\~configure\compiler\gcc.hpp">
+      <Filter>include\basis\sys\~configure\compiler</Filter>
+    </ClInclude>
+    <ClInclude Include="include\basis\sys\~configure\compiler\vc.hpp">
+      <Filter>include\basis\sys\~configure\compiler</Filter>
+    </ClInclude>
+    <ClInclude Include="include\basis\sys\~configure\obligatory\array.hpp">
+      <Filter>include\basis\sys\~configure\obligatory</Filter>
+    </ClInclude>
+    <ClInclude Include="include\basis\sys\~configure\obligatory\constants.hpp">
+      <Filter>include\basis\sys\~configure\obligatory</Filter>
+    </ClInclude>
+    <ClInclude Include="include\basis\sys\~configure\obligatory\definitions.hpp">
+      <Filter>include\basis\sys\~configure\obligatory</Filter>
+    </ClInclude>
+    <ClInclude Include="include\basis\sys\~configure\obligatory\make_ll.hpp">
+      <Filter>include\basis\sys\~configure\obligatory</Filter>
+    </ClInclude>
+    <ClInclude Include="include\basis\sys\~configure\obligatory\safe.hpp">
+      <Filter>include\basis\sys\~configure\obligatory</Filter>
+    </ClInclude>
+    <ClInclude Include="include\basis\sys\~configure\obligatory\this_file.hpp">
+      <Filter>include\basis\sys\~configure\obligatory</Filter>
+    </ClInclude>
+    <ClInclude Include="include\basis\sys\~configure\obligatory\types.hpp">
+      <Filter>include\basis\sys\~configure\obligatory</Filter>
+    </ClInclude>
+    <ClInclude Include="include\basis\sys\~configure\obligatory\Va_list.hpp">
+      <Filter>include\basis\sys\~configure\obligatory</Filter>
+    </ClInclude>
+    <ClInclude Include="include\basis\sys\~configure\os\windows.hpp">
+      <Filter>include\basis\sys\~configure\os</Filter>
+    </ClInclude>
+    <ClInclude Include="include\basis\sys\~console\aprintf.hpp">
+      <Filter>include\basis\sys\~console</Filter>
+    </ClInclude>
+    <ClInclude Include="include\basis\sys\~console\Color.hpp">
+      <Filter>include\basis\sys\~console</Filter>
+    </ClInclude>
+    <ClInclude Include="include\basis\sys\~console\console.hpp">
+      <Filter>include\basis\sys\~console</Filter>
+    </ClInclude>
+    <ClInclude Include="include\basis\sys\~console\wprintf.hpp">
+      <Filter>include\basis\sys\~console</Filter>
+    </ClInclude>
+    <ClInclude Include="include\basis\sys\~crt\assert.hpp">
+      <Filter>include\basis\sys\~crt</Filter>
+    </ClInclude>
+    <ClInclude Include="include\basis\sys\~crt\atexit.hpp">
+      <Filter>include\basis\sys\~crt</Filter>
+    </ClInclude>
+    <ClInclude Include="include\basis\sys\~crt\seh.hpp">
+      <Filter>include\basis\sys\~crt</Filter>
+    </ClInclude>
+    <ClInclude Include="include\basis\sys\~cstr\char.hpp">
+      <Filter>include\basis\sys\~cstr</Filter>
+    </ClInclude>
+    <ClInclude Include="include\basis\sys\~cstr\char_traits.hpp">
+      <Filter>include\basis\sys\~cstr</Filter>
+    </ClInclude>
+    <ClInclude Include="include\basis\sys\~cstr\convert_a.hpp">
+      <Filter>include\basis\sys\~cstr</Filter>
+    </ClInclude>
+    <ClInclude Include="include\basis\sys\~cstr\convert_w.hpp">
+      <Filter>include\basis\sys\~cstr</Filter>
+    </ClInclude>
+    <ClInclude Include="include\basis\sys\~cstr\cstr.hpp">
+      <Filter>include\basis\sys\~cstr</Filter>
+    </ClInclude>
+    <ClInclude Include="include\basis\sys\~cstr\from_number.hpp">
+      <Filter>include\basis\sys\~cstr</Filter>
+    </ClInclude>
+    <ClInclude Include="include\basis\sys\~cstr\mstring.hpp">
+      <Filter>include\basis\sys\~cstr</Filter>
+    </ClInclude>
+    <ClInclude Include="include\basis\sys\~cstr\NamedValues.hpp">
+      <Filter>include\basis\sys\~cstr</Filter>
+    </ClInclude>
+    <ClInclude Include="include\basis\sys\~cstr\to_number.hpp">
+      <Filter>include\basis\sys\~cstr</Filter>
+    </ClInclude>
+    <ClInclude Include="include\basis\sys\~fsys\attributes.hpp">
+      <Filter>include\basis\sys\~fsys</Filter>
+    </ClInclude>
+    <ClInclude Include="include\basis\sys\~fsys\direcrory.hpp">
+      <Filter>include\basis\sys\~fsys</Filter>
+    </ClInclude>
+    <ClInclude Include="include\basis\sys\~fsys\file.hpp">
+      <Filter>include\basis\sys\~fsys</Filter>
+    </ClInclude>
+    <ClInclude Include="include\basis\sys\~fsys\fsys.hpp">
+      <Filter>include\basis\sys\~fsys</Filter>
+    </ClInclude>
+    <ClInclude Include="include\basis\sys\~linkage\dll.hpp">
+      <Filter>include\basis\sys\~linkage</Filter>
+    </ClInclude>
+    <ClInclude Include="include\basis\sys\~logger\macros.hpp">
+      <Filter>include\basis\sys\~logger</Filter>
+    </ClInclude>
+    <ClInclude Include="include\basis\sys\~logger\Module.hpp">
+      <Filter>include\basis\sys\~logger</Filter>
+    </ClInclude>
+    <ClInclude Include="include\basis\sys\~path\defaults.hpp">
+      <Filter>include\basis\sys\~path</Filter>
+    </ClInclude>
+    <ClInclude Include="include\basis\sys\~path\filename.hpp">
+      <Filter>include\basis\sys\~path</Filter>
+    </ClInclude>
+    <ClInclude Include="include\basis\sys\~path\inplace.hpp">
+      <Filter>include\basis\sys\~path</Filter>
+    </ClInclude>
+    <ClInclude Include="include\basis\sys\~path\path.hpp">
+      <Filter>include\basis\sys\~path</Filter>
+    </ClInclude>
+    <ClInclude Include="include\basis\sys\~memory\auto_array.hpp">
+      <Filter>include\basis\sys\~memory</Filter>
+    </ClInclude>
+    <ClInclude Include="include\basis\sys\~memory\auto_buf.hpp">
+      <Filter>include\basis\sys\~memory</Filter>
+    </ClInclude>
+    <ClInclude Include="include\basis\sys\~memory\auto_close.hpp">
+      <Filter>include\basis\sys\~memory</Filter>
+    </ClInclude>
+    <ClInclude Include="include\basis\sys\~memory\auto_destroy.hpp">
+      <Filter>include\basis\sys\~memory</Filter>
+    </ClInclude>
+    <ClInclude Include="include\basis\sys\~memory\constraints.hpp">
+      <Filter>include\basis\sys\~memory</Filter>
+    </ClInclude>
+    <ClInclude Include="include\basis\sys\~memory\memory.hpp">
+      <Filter>include\basis\sys\~memory</Filter>
+    </ClInclude>
+    <ClInclude Include="include\basis\sys\~memory\heap\Default.hpp">
+      <Filter>include\basis\sys\~memory\heap</Filter>
+    </ClInclude>
+    <ClInclude Include="include\basis\sys\~memory\heap\DefaultLogged.hpp">
+      <Filter>include\basis\sys\~memory\heap</Filter>
+    </ClInclude>
+    <ClInclude Include="include\basis\sys\~memory\heap\DefaultMovable.hpp">
+      <Filter>include\basis\sys\~memory\heap</Filter>
+    </ClInclude>
+    <ClInclude Include="include\basis\sys\~memory\heap\DefaultStat.hpp">
+      <Filter>include\basis\sys\~memory\heap</Filter>
+    </ClInclude>
+    <ClInclude Include="include\basis\sys\~memory\heap\DefaultStatTag.hpp">
+      <Filter>include\basis\sys\~memory\heap</Filter>
+    </ClInclude>
+    <ClInclude Include="include\basis\sys\~memory\heap\Heap.hpp">
+      <Filter>include\basis\sys\~memory\heap</Filter>
+    </ClInclude>
+    <ClInclude Include="include\basis\sys\~memory\heap\Special.hpp">
+      <Filter>include\basis\sys\~memory\heap</Filter>
+    </ClInclude>
+    <ClInclude Include="include\basis\sys\~memory\heap\SpecialLogged.hpp">
+      <Filter>include\basis\sys\~memory\heap</Filter>
+    </ClInclude>
+    <ClInclude Include="include\basis\sys\~memory\heap\Stat.hpp">
+      <Filter>include\basis\sys\~memory\heap</Filter>
+    </ClInclude>
+    <ClInclude Include="include\basis\sys\~process\environment.hpp">
+      <Filter>include\basis\sys\~process</Filter>
+    </ClInclude>
+    <ClInclude Include="include\basis\sys\~process\process.hpp">
+      <Filter>include\basis\sys\~process</Filter>
+    </ClInclude>
+    <ClInclude Include="include\basis\sys\~register\reg.hpp">
+      <Filter>include\basis\sys\~register</Filter>
+    </ClInclude>
+    <ClInclude Include="include\basis\sys\~security\system.hpp">
+      <Filter>include\basis\sys\~security</Filter>
+    </ClInclude>
+    <ClInclude Include="include\basis\sys\~sstr\convert.hpp">
+      <Filter>include\basis\sys\~sstr</Filter>
+    </ClInclude>
+    <ClInclude Include="include\basis\sys\~sstr\format.hpp">
+      <Filter>include\basis\sys\~sstr</Filter>
+    </ClInclude>
+    <ClInclude Include="include\basis\sys\~sstr\string.hpp">
+      <Filter>include\basis\sys\~sstr</Filter>
+    </ClInclude>
+    <ClInclude Include="include\basis\sys\~sstr\wstr.hpp">
+      <Filter>include\basis\sys\~sstr</Filter>
+    </ClInclude>
+    <ClInclude Include="include\basis\sys\~sync\CriticalSection.hpp">
+      <Filter>include\basis\sys\~sync</Filter>
+    </ClInclude>
+    <ClInclude Include="include\basis\sys\~sync\Mutex.hpp">
+      <Filter>include\basis\sys\~sync</Filter>
+    </ClInclude>
+    <ClInclude Include="include\basis\sys\~sync\Semaphore.hpp">
+      <Filter>include\basis\sys\~sync</Filter>
+    </ClInclude>
+    <ClInclude Include="include\basis\sys\~thread\base.hpp">
+      <Filter>include\basis\sys\~thread</Filter>
+    </ClInclude>
+    <ClInclude Include="include\basis\sys\~thread\Pool.hpp">
+      <Filter>include\basis\sys\~thread</Filter>
+    </ClInclude>
+    <ClInclude Include="include\basis\sys\~thread\Routine.hpp">
+      <Filter>include\basis\sys\~thread</Filter>
+    </ClInclude>
+    <ClInclude Include="include\basis\sys\~thread\totext.hpp">
+      <Filter>include\basis\sys\~thread</Filter>
+    </ClInclude>
+    <ClInclude Include="include\basis\sys\~thread\Unit.hpp">
+      <Filter>include\basis\sys\~thread</Filter>
+    </ClInclude>
+    <ClInclude Include="include\basis\sys\~time\time.hpp">
+      <Filter>include\basis\sys\~time</Filter>
+    </ClInclude>
+    <ClInclude Include="include\basis\sys\~totext\error.hpp">
+      <Filter>include\basis\sys\~totext</Filter>
+    </ClInclude>
+    <ClInclude Include="include\basis\sys\~window\window.hpp">
+      <Filter>include\basis\sys\~window</Filter>
+    </ClInclude>
+    <ClInclude Include="include\basis\sys\console.hpp">
+      <Filter>include\basis\sys</Filter>
+    </ClInclude>
+    <ClInclude Include="include\basis\sys\crt.hpp">
+      <Filter>include\basis\sys</Filter>
+    </ClInclude>
+    <ClInclude Include="include\basis\sys\cstr.hpp">
+      <Filter>include\basis\sys</Filter>
+    </ClInclude>
+    <ClInclude Include="include\basis\sys\fsys.hpp">
+      <Filter>include\basis\sys</Filter>
+    </ClInclude>
+    <ClInclude Include="include\basis\sys\linkage.hpp">
+      <Filter>include\basis\sys</Filter>
+    </ClInclude>
+    <ClInclude Include="include\basis\sys\logger.hpp">
+      <Filter>include\basis\sys</Filter>
+    </ClInclude>
+    <ClInclude Include="include\basis\sys\memory.hpp">
+      <Filter>include\basis\sys</Filter>
+    </ClInclude>
+    <ClInclude Include="include\basis\sys\path.hpp">
+      <Filter>include\basis\sys</Filter>
+    </ClInclude>
+    <ClInclude Include="include\basis\sys\process.hpp">
+      <Filter>include\basis\sys</Filter>
+    </ClInclude>
+    <ClInclude Include="include\basis\sys\sstr.hpp">
+      <Filter>include\basis\sys</Filter>
+    </ClInclude>
+    <ClInclude Include="include\basis\sys\sync.hpp">
+      <Filter>include\basis\sys</Filter>
+    </ClInclude>
+    <ClInclude Include="include\basis\sys\thread.hpp">
+      <Filter>include\basis\sys</Filter>
+    </ClInclude>
+    <ClInclude Include="include\basis\sys\totext.hpp">
+      <Filter>include\basis\sys</Filter>
+    </ClInclude>
+    <ClInclude Include="include\basis\sys\traceback.hpp">
+      <Filter>include\basis\sys</Filter>
+    </ClInclude>
+    <ClInclude Include="include\basis\sys\url.hpp">
+      <Filter>include\basis\sys</Filter>
+    </ClInclude>
+    <ClInclude Include="include\basis\sys\win64.hpp">
+      <Filter>include\basis\sys</Filter>
+    </ClInclude>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="include\basis\simstd\algorithm">
+      <Filter>include\basis\simstd</Filter>
+    </None>
+    <None Include="include\basis\simstd\chrono">
+      <Filter>include\basis\simstd</Filter>
+    </None>
+    <None Include="include\basis\simstd\functional">
+      <Filter>include\basis\simstd</Filter>
+    </None>
+    <None Include="include\basis\simstd\initializer_list">
+      <Filter>include\basis\simstd</Filter>
+    </None>
+    <None Include="include\basis\simstd\iosfwd">
+      <Filter>include\basis\simstd</Filter>
+    </None>
+    <None Include="include\basis\simstd\iterator">
+      <Filter>include\basis\simstd</Filter>
+    </None>
+    <None Include="include\basis\simstd\limits">
+      <Filter>include\basis\simstd</Filter>
+    </None>
+    <None Include="include\basis\simstd\list">
+      <Filter>include\basis\simstd</Filter>
+    </None>
+    <None Include="include\basis\simstd\memory">
+      <Filter>include\basis\simstd</Filter>
+    </None>
+    <None Include="include\basis\simstd\mutex">
+      <Filter>include\basis\simstd</Filter>
+    </None>
+    <None Include="include\basis\simstd\new">
+      <Filter>include\basis\simstd</Filter>
+    </None>
+    <None Include="include\basis\simstd\numeric">
+      <Filter>include\basis\simstd</Filter>
+    </None>
+    <None Include="include\basis\simstd\string">
+      <Filter>include\basis\simstd</Filter>
+    </None>
+    <None Include="include\basis\simstd\utility">
+      <Filter>include\basis\simstd</Filter>
+    </None>
+    <None Include="include\basis\simstd\vector">
+      <Filter>include\basis\simstd</Filter>
+    </None>
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="src\stub.cpp">
+      <Filter>src</Filter>
+    </ClCompile>
+  </ItemGroup>
+</Project>

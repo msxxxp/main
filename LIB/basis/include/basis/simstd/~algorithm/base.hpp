@@ -34,28 +34,28 @@ namespace simstd {
 #undef max
 #endif
 
-	template<typename T, typename Compare>
-	const T& max(const T& a, const T& b, Compare comp)
+	template<typename T>
+	const T& min(const T& a, const T& b)
 	{
-		return (comp(a, b)) ? b : a;
+		return (b < a) ? b : a;
+	}
+
+	template<typename T, typename Comparator>
+	const T& min(const T& a, const T& b, Comparator comp)
+	{
+		return comp(b, a) ? b : a;
 	}
 
 	template<typename T>
 	const T& max(const T& a, const T& b)
 	{
-		return (a < b) ? b : a;
+		return (b < a) ? a : b;
 	}
 
-	template<typename T, typename Compare>
-	const T& min(const T& a, const T& b, Compare comp)
+	template<typename T, typename Comparator>
+	const T& max(const T& a, const T& b, Comparator comp)
 	{
-		return (comp(b, a)) ? b : a;
-	}
-
-	template<typename T>
-	const T& min(const T& a, const T& b)
-	{
-		return (b < a) ? b : a;
+		return comp(b, a) ? a : b;
 	}
 
 	template<typename InputIt1, typename InputIt2>

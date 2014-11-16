@@ -1,0 +1,326 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project DefaultTargets="Build" ToolsVersion="12.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup Label="ProjectConfigurations">
+    <ProjectConfiguration Include="Debug|Win32">
+      <Configuration>Debug</Configuration>
+      <Platform>Win32</Platform>
+    </ProjectConfiguration>
+    <ProjectConfiguration Include="Debug|x64">
+      <Configuration>Debug</Configuration>
+      <Platform>x64</Platform>
+    </ProjectConfiguration>
+    <ProjectConfiguration Include="Release|Win32">
+      <Configuration>Release</Configuration>
+      <Platform>Win32</Platform>
+    </ProjectConfiguration>
+    <ProjectConfiguration Include="Release|x64">
+      <Configuration>Release</Configuration>
+      <Platform>x64</Platform>
+    </ProjectConfiguration>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="include\basis\configure.hpp" />
+    <ClInclude Include="include\basis\ext\bits.hpp" />
+    <ClInclude Include="include\basis\ext\pattern.hpp" />
+    <ClInclude Include="include\basis\ext\~bits\bits.hpp" />
+    <ClInclude Include="include\basis\ext\~bits\bit_str.hpp" />
+    <ClInclude Include="include\basis\ext\~bits\flags.hpp" />
+    <ClInclude Include="include\basis\ext\~pattern\Command.hpp" />
+    <ClInclude Include="include\basis\ext\~pattern\Destroyable.hpp" />
+    <ClInclude Include="include\basis\ext\~pattern\Inited.hpp" />
+    <ClInclude Include="include\basis\ext\~pattern\RefCounter.hpp" />
+    <ClInclude Include="include\basis\ext\~pattern\Singleton.hpp" />
+    <ClInclude Include="include\basis\ext\~pattern\Uncopyable.hpp" />
+    <ClInclude Include="include\basis\os\dbghelp.hpp" />
+    <ClInclude Include="include\basis\os\kernel32.hpp" />
+    <ClInclude Include="include\basis\os\shlwapi.hpp" />
+    <ClInclude Include="include\basis\os\wininet.hpp" />
+    <ClInclude Include="include\basis\simstd\~algorithm\base.hpp" />
+    <ClInclude Include="include\basis\simstd\~algorithm\extra.hpp" />
+    <ClInclude Include="include\basis\simstd\~algorithm\heap.hpp" />
+    <ClInclude Include="include\basis\simstd\~algorithm\sort.hpp" />
+    <ClInclude Include="include\basis\simstd\~functional\functional.hpp" />
+    <ClInclude Include="include\basis\simstd\~iterator\back_insert_iterator.hpp" />
+    <ClInclude Include="include\basis\simstd\~iterator\base.hpp" />
+    <ClInclude Include="include\basis\simstd\~iterator\front_insert_iterator.hpp" />
+    <ClInclude Include="include\basis\simstd\~iterator\functional.hpp" />
+    <ClInclude Include="include\basis\simstd\~iterator\insert_iterator.hpp" />
+    <ClInclude Include="include\basis\simstd\~iterator\move_iterator.hpp" />
+    <ClInclude Include="include\basis\simstd\~iterator\pvt_const_value_iterator.hpp" />
+    <ClInclude Include="include\basis\simstd\~iterator\pvt_normal_iterator.hpp" />
+    <ClInclude Include="include\basis\simstd\~iterator\reverse_iterator.hpp" />
+    <ClInclude Include="include\basis\simstd\~list\base.hpp" />
+    <ClInclude Include="include\basis\simstd\~list\interface.hpp" />
+    <ClInclude Include="include\basis\simstd\~list\iterator.hpp" />
+    <ClInclude Include="include\basis\simstd\~list\node.hpp" />
+    <ClInclude Include="include\basis\simstd\~memory\allocator.hpp" />
+    <ClInclude Include="include\basis\simstd\~memory\AllocatorHeap.hpp" />
+    <ClInclude Include="include\basis\simstd\~memory\AllocatorHeapLogged.hpp" />
+    <ClInclude Include="include\basis\simstd\~memory\allocator_traits.hpp" />
+    <ClInclude Include="include\basis\simstd\~memory\auto_ptr.hpp" />
+    <ClInclude Include="include\basis\simstd\~memory\base.hpp" />
+    <ClInclude Include="include\basis\simstd\~memory\default_deleters.hpp" />
+    <ClInclude Include="include\basis\simstd\~memory\functional.hpp" />
+    <ClInclude Include="include\basis\simstd\~memory\movable_allocator.hpp" />
+    <ClInclude Include="include\basis\simstd\~memory\new.hpp" />
+    <ClInclude Include="include\basis\simstd\~memory\raw_storage_iterator.hpp" />
+    <ClInclude Include="include\basis\simstd\~memory\shared_ptr.hpp" />
+    <ClInclude Include="include\basis\simstd\~memory\unique_ptr.hpp" />
+    <ClInclude Include="include\basis\simstd\~mutex\functional.hpp" />
+    <ClInclude Include="include\basis\simstd\~mutex\lock_guard.hpp" />
+    <ClInclude Include="include\basis\simstd\~mutex\once.hpp" />
+    <ClInclude Include="include\basis\simstd\~mutex\recursive_mutex.hpp" />
+    <ClInclude Include="include\basis\simstd\~mutex\recursive_timed_mutex.hpp" />
+    <ClInclude Include="include\basis\simstd\~mutex\types.hpp" />
+    <ClInclude Include="include\basis\simstd\~mutex\unique_lock.hpp" />
+    <ClInclude Include="include\basis\simstd\~numeric\numeric.hpp" />
+    <ClInclude Include="include\basis\simstd\~string\basic_string.hpp" />
+    <ClInclude Include="include\basis\simstd\~string\basic_string2.hpp" />
+    <ClInclude Include="include\basis\simstd\~string\char_traits.hpp" />
+    <ClInclude Include="include\basis\simstd\~string\convert_a.hpp" />
+    <ClInclude Include="include\basis\simstd\~string\convert_w.hpp" />
+    <ClInclude Include="include\basis\simstd\~string\Str_base.hpp" />
+    <ClInclude Include="include\basis\simstd\~string\Str_impl.hpp" />
+    <ClInclude Include="include\basis\simstd\~type_traits\conditional.hpp" />
+    <ClInclude Include="include\basis\simstd\~type_traits\integral_constant.hpp" />
+    <ClInclude Include="include\basis\simstd\~type_traits\remove_cv.hpp" />
+    <ClInclude Include="include\basis\simstd\~type_traits\type.hpp" />
+    <ClInclude Include="include\basis\simstd\~utility\pair.hpp" />
+    <ClInclude Include="include\basis\simstd\~utility\rel_ops.hpp" />
+    <ClInclude Include="include\basis\simstd\~vector\interface.hpp" />
+    <ClInclude Include="include\basis\simstd\~vector\movable_vector.hpp" />
+    <ClInclude Include="include\basis\simstd\~vector\vector_base.hpp" />
+    <ClInclude Include="include\basis\sys\console.hpp" />
+    <ClInclude Include="include\basis\sys\crt.hpp" />
+    <ClInclude Include="include\basis\sys\cstr.hpp" />
+    <ClInclude Include="include\basis\sys\fsys.hpp" />
+    <ClInclude Include="include\basis\sys\linkage.hpp" />
+    <ClInclude Include="include\basis\sys\logger.hpp" />
+    <ClInclude Include="include\basis\sys\memory.hpp" />
+    <ClInclude Include="include\basis\sys\path.hpp" />
+    <ClInclude Include="include\basis\sys\process.hpp" />
+    <ClInclude Include="include\basis\sys\sstr.hpp" />
+    <ClInclude Include="include\basis\sys\sync.hpp" />
+    <ClInclude Include="include\basis\sys\thread.hpp" />
+    <ClInclude Include="include\basis\sys\totext.hpp" />
+    <ClInclude Include="include\basis\sys\traceback.hpp" />
+    <ClInclude Include="include\basis\sys\url.hpp" />
+    <ClInclude Include="include\basis\sys\win64.hpp" />
+    <ClInclude Include="include\basis\sys\~configure\compiler\gcc.hpp" />
+    <ClInclude Include="include\basis\sys\~configure\compiler\vc.hpp" />
+    <ClInclude Include="include\basis\sys\~configure\obligatory\array.hpp" />
+    <ClInclude Include="include\basis\sys\~configure\obligatory\constants.hpp" />
+    <ClInclude Include="include\basis\sys\~configure\obligatory\definitions.hpp" />
+    <ClInclude Include="include\basis\sys\~configure\obligatory\make_ll.hpp" />
+    <ClInclude Include="include\basis\sys\~configure\obligatory\safe.hpp" />
+    <ClInclude Include="include\basis\sys\~configure\obligatory\this_file.hpp" />
+    <ClInclude Include="include\basis\sys\~configure\obligatory\types.hpp" />
+    <ClInclude Include="include\basis\sys\~configure\obligatory\Va_list.hpp" />
+    <ClInclude Include="include\basis\sys\~configure\os\windows.hpp" />
+    <ClInclude Include="include\basis\sys\~console\aprintf.hpp" />
+    <ClInclude Include="include\basis\sys\~console\Color.hpp" />
+    <ClInclude Include="include\basis\sys\~console\console.hpp" />
+    <ClInclude Include="include\basis\sys\~console\wprintf.hpp" />
+    <ClInclude Include="include\basis\sys\~crt\assert.hpp" />
+    <ClInclude Include="include\basis\sys\~crt\atexit.hpp" />
+    <ClInclude Include="include\basis\sys\~crt\seh.hpp" />
+    <ClInclude Include="include\basis\sys\~cstr\char.hpp" />
+    <ClInclude Include="include\basis\sys\~cstr\char_traits.hpp" />
+    <ClInclude Include="include\basis\sys\~cstr\convert_a.hpp" />
+    <ClInclude Include="include\basis\sys\~cstr\convert_w.hpp" />
+    <ClInclude Include="include\basis\sys\~cstr\cstr.hpp" />
+    <ClInclude Include="include\basis\sys\~cstr\from_number.hpp" />
+    <ClInclude Include="include\basis\sys\~cstr\mstring.hpp" />
+    <ClInclude Include="include\basis\sys\~cstr\NamedValues.hpp" />
+    <ClInclude Include="include\basis\sys\~cstr\to_number.hpp" />
+    <ClInclude Include="include\basis\sys\~fsys\attributes.hpp" />
+    <ClInclude Include="include\basis\sys\~fsys\direcrory.hpp" />
+    <ClInclude Include="include\basis\sys\~fsys\file.hpp" />
+    <ClInclude Include="include\basis\sys\~fsys\fsys.hpp" />
+    <ClInclude Include="include\basis\sys\~linkage\dll.hpp" />
+    <ClInclude Include="include\basis\sys\~logger\macros.hpp" />
+    <ClInclude Include="include\basis\sys\~logger\Module.hpp" />
+    <ClInclude Include="include\basis\sys\~memory\auto_array.hpp" />
+    <ClInclude Include="include\basis\sys\~memory\auto_buf.hpp" />
+    <ClInclude Include="include\basis\sys\~memory\auto_close.hpp" />
+    <ClInclude Include="include\basis\sys\~memory\auto_destroy.hpp" />
+    <ClInclude Include="include\basis\sys\~memory\constraints.hpp" />
+    <ClInclude Include="include\basis\sys\~memory\heap\Default.hpp" />
+    <ClInclude Include="include\basis\sys\~memory\heap\DefaultLogged.hpp" />
+    <ClInclude Include="include\basis\sys\~memory\heap\DefaultMovable.hpp" />
+    <ClInclude Include="include\basis\sys\~memory\heap\DefaultStat.hpp" />
+    <ClInclude Include="include\basis\sys\~memory\heap\DefaultStatTag.hpp" />
+    <ClInclude Include="include\basis\sys\~memory\heap\Heap.hpp" />
+    <ClInclude Include="include\basis\sys\~memory\heap\Special.hpp" />
+    <ClInclude Include="include\basis\sys\~memory\heap\SpecialLogged.hpp" />
+    <ClInclude Include="include\basis\sys\~memory\heap\Stat.hpp" />
+    <ClInclude Include="include\basis\sys\~memory\memory.hpp" />
+    <ClInclude Include="include\basis\sys\~path\defaults.hpp" />
+    <ClInclude Include="include\basis\sys\~path\filename.hpp" />
+    <ClInclude Include="include\basis\sys\~path\inplace.hpp" />
+    <ClInclude Include="include\basis\sys\~path\path.hpp" />
+    <ClInclude Include="include\basis\sys\~process\environment.hpp" />
+    <ClInclude Include="include\basis\sys\~process\process.hpp" />
+    <ClInclude Include="include\basis\sys\~register\reg.hpp" />
+    <ClInclude Include="include\basis\sys\~security\system.hpp" />
+    <ClInclude Include="include\basis\sys\~sstr\convert.hpp" />
+    <ClInclude Include="include\basis\sys\~sstr\format.hpp" />
+    <ClInclude Include="include\basis\sys\~sstr\string.hpp" />
+    <ClInclude Include="include\basis\sys\~sstr\wstr.hpp" />
+    <ClInclude Include="include\basis\sys\~sync\CriticalSection.hpp" />
+    <ClInclude Include="include\basis\sys\~sync\Mutex.hpp" />
+    <ClInclude Include="include\basis\sys\~sync\Semaphore.hpp" />
+    <ClInclude Include="include\basis\sys\~thread\base.hpp" />
+    <ClInclude Include="include\basis\sys\~thread\Pool.hpp" />
+    <ClInclude Include="include\basis\sys\~thread\Routine.hpp" />
+    <ClInclude Include="include\basis\sys\~thread\totext.hpp" />
+    <ClInclude Include="include\basis\sys\~thread\Unit.hpp" />
+    <ClInclude Include="include\basis\sys\~time\time.hpp" />
+    <ClInclude Include="include\basis\sys\~totext\error.hpp" />
+    <ClInclude Include="include\basis\sys\~window\window.hpp" />
+    <ClInclude Include="include\basis\types.hpp" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="include\basis\simstd\algorithm" />
+    <None Include="include\basis\simstd\chrono" />
+    <None Include="include\basis\simstd\functional" />
+    <None Include="include\basis\simstd\initializer_list" />
+    <None Include="include\basis\simstd\iosfwd" />
+    <None Include="include\basis\simstd\iterator" />
+    <None Include="include\basis\simstd\limits" />
+    <None Include="include\basis\simstd\list" />
+    <None Include="include\basis\simstd\memory" />
+    <None Include="include\basis\simstd\mutex" />
+    <None Include="include\basis\simstd\new" />
+    <None Include="include\basis\simstd\numeric" />
+    <None Include="include\basis\simstd\string" />
+    <None Include="include\basis\simstd\utility" />
+    <None Include="include\basis\simstd\vector" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="src\stub.cpp" />
+  </ItemGroup>
+  <PropertyGroup Label="Globals">
+    <ProjectGuid>{343321A6-6C99-4F4F-B24C-31A0A5E17963}</ProjectGuid>
+    <Keyword>Win32Proj</Keyword>
+    <RootNamespace>basis</RootNamespace>
+  </PropertyGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'" Label="Configuration">
+    <ConfigurationType>StaticLibrary</ConfigurationType>
+    <UseDebugLibraries>true</UseDebugLibraries>
+    <PlatformToolset>CTP_Nov2013</PlatformToolset>
+    <CharacterSet>Unicode</CharacterSet>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'" Label="Configuration">
+    <ConfigurationType>StaticLibrary</ConfigurationType>
+    <UseDebugLibraries>true</UseDebugLibraries>
+    <PlatformToolset>CTP_Nov2013</PlatformToolset>
+    <CharacterSet>Unicode</CharacterSet>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'" Label="Configuration">
+    <ConfigurationType>StaticLibrary</ConfigurationType>
+    <UseDebugLibraries>false</UseDebugLibraries>
+    <PlatformToolset>CTP_Nov2013</PlatformToolset>
+    <WholeProgramOptimization>true</WholeProgramOptimization>
+    <CharacterSet>Unicode</CharacterSet>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'" Label="Configuration">
+    <ConfigurationType>StaticLibrary</ConfigurationType>
+    <UseDebugLibraries>false</UseDebugLibraries>
+    <PlatformToolset>CTP_Nov2013</PlatformToolset>
+    <WholeProgramOptimization>true</WholeProgramOptimization>
+    <CharacterSet>Unicode</CharacterSet>
+  </PropertyGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.props" />
+  <ImportGroup Label="ExtensionSettings">
+  </ImportGroup>
+  <ImportGroup Label="PropertySheets" Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+  </ImportGroup>
+  <ImportGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'" Label="PropertySheets">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+  </ImportGroup>
+  <ImportGroup Label="PropertySheets" Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+  </ImportGroup>
+  <ImportGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'" Label="PropertySheets">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+  </ImportGroup>
+  <PropertyGroup Label="UserMacros" />
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
+    <IncludePath>include;$(IncludePath)</IncludePath>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
+    <IncludePath>include;$(IncludePath)</IncludePath>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
+    <IncludePath>include;$(IncludePath)</IncludePath>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
+    <IncludePath>include;$(IncludePath)</IncludePath>
+  </PropertyGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
+    <ClCompile>
+      <PrecompiledHeader>
+      </PrecompiledHeader>
+      <WarningLevel>Level3</WarningLevel>
+      <Optimization>Disabled</Optimization>
+      <PreprocessorDefinitions>WIN32;_DEBUG;_LIB;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+    </ClCompile>
+    <Link>
+      <SubSystem>Windows</SubSystem>
+      <GenerateDebugInformation>true</GenerateDebugInformation>
+    </Link>
+  </ItemDefinitionGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
+    <ClCompile>
+      <PrecompiledHeader>
+      </PrecompiledHeader>
+      <WarningLevel>Level3</WarningLevel>
+      <Optimization>Disabled</Optimization>
+      <PreprocessorDefinitions>WIN32;_DEBUG;_LIB;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+    </ClCompile>
+    <Link>
+      <SubSystem>Windows</SubSystem>
+      <GenerateDebugInformation>true</GenerateDebugInformation>
+    </Link>
+  </ItemDefinitionGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
+    <ClCompile>
+      <WarningLevel>Level3</WarningLevel>
+      <PrecompiledHeader>
+      </PrecompiledHeader>
+      <Optimization>MaxSpeed</Optimization>
+      <FunctionLevelLinking>true</FunctionLevelLinking>
+      <IntrinsicFunctions>true</IntrinsicFunctions>
+      <PreprocessorDefinitions>WIN32;NDEBUG;_LIB;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+    </ClCompile>
+    <Link>
+      <SubSystem>Windows</SubSystem>
+      <GenerateDebugInformation>true</GenerateDebugInformation>
+      <EnableCOMDATFolding>true</EnableCOMDATFolding>
+      <OptimizeReferences>true</OptimizeReferences>
+    </Link>
+  </ItemDefinitionGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
+    <ClCompile>
+      <WarningLevel>Level3</WarningLevel>
+      <PrecompiledHeader>
+      </PrecompiledHeader>
+      <Optimization>MaxSpeed</Optimization>
+      <FunctionLevelLinking>true</FunctionLevelLinking>
+      <IntrinsicFunctions>true</IntrinsicFunctions>
+      <PreprocessorDefinitions>WIN32;NDEBUG;_LIB;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+    </ClCompile>
+    <Link>
+      <SubSystem>Windows</SubSystem>
+      <GenerateDebugInformation>true</GenerateDebugInformation>
+      <EnableCOMDATFolding>true</EnableCOMDATFolding>
+      <OptimizeReferences>true</OptimizeReferences>
+    </Link>
+  </ItemDefinitionGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
+  <ImportGroup Label="ExtensionTargets">
+  </ImportGroup>
+</Project>

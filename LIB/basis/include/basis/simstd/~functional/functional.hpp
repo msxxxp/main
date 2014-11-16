@@ -121,18 +121,12 @@ namespace simstd {
 		}
 	};
 
-//	template<typename T1, typename T2 = T1>
-//	struct less {
-//		typedef bool result_type;
-//		typedef T1 first_argument_type;
-//		typedef T2 second_argument_type;
-//
-//		result_type operator ()(const first_argument_type& a, const second_argument_type& b) const
-//		{
-//			return a < b;
-//		}
-//	};
-//
+	template<>
+	class less<void> {
+		template<class T, class U>
+		constexpr auto operator()(T&& lhs, U&& rhs) const -> decltype(simstd::forward<T>(lhs) < simstd::forward<U>(rhs));
+	};
+
 	template<typename T>
 	struct less_equal
 	{

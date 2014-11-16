@@ -372,9 +372,6 @@
     <ClInclude Include="include\basis\sys\~configure\compiler\gcc.hpp">
       <Filter>include\basis\sys\~configure\compiler</Filter>
     </ClInclude>
-    <ClInclude Include="include\basis\sys\~configure\compiler\vc.hpp">
-      <Filter>include\basis\sys\~configure\compiler</Filter>
-    </ClInclude>
     <ClInclude Include="include\basis\sys\~configure\obligatory\array.hpp">
       <Filter>include\basis\sys\~configure\obligatory</Filter>
     </ClInclude>
@@ -398,9 +395,6 @@
     </ClInclude>
     <ClInclude Include="include\basis\sys\~configure\obligatory\Va_list.hpp">
       <Filter>include\basis\sys\~configure\obligatory</Filter>
-    </ClInclude>
-    <ClInclude Include="include\basis\sys\~configure\os\windows.hpp">
-      <Filter>include\basis\sys\~configure\os</Filter>
     </ClInclude>
     <ClInclude Include="include\basis\sys\~console\aprintf.hpp">
       <Filter>include\basis\sys\~console</Filter>
@@ -632,6 +626,18 @@
     </ClInclude>
     <ClInclude Include="include\basis\sys\win64.hpp">
       <Filter>include\basis\sys</Filter>
+    </ClInclude>
+    <ClInclude Include="include\basis\sys\~configure\os\windows_epilog.hpp">
+      <Filter>include\basis\sys\~configure\os</Filter>
+    </ClInclude>
+    <ClInclude Include="include\basis\sys\~configure\os\windows_prolog.hpp">
+      <Filter>include\basis\sys\~configure\os</Filter>
+    </ClInclude>
+    <ClInclude Include="include\basis\sys\~configure\compiler\vc_epilog.hpp">
+      <Filter>include\basis\sys\~configure\compiler</Filter>
+    </ClInclude>
+    <ClInclude Include="include\basis\sys\~configure\compiler\vc_prolog.hpp">
+      <Filter>include\basis\sys\~configure\compiler</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

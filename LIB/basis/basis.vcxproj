@@ -107,7 +107,8 @@
     <ClInclude Include="include\basis\sys\url.hpp" />
     <ClInclude Include="include\basis\sys\win64.hpp" />
     <ClInclude Include="include\basis\sys\~configure\compiler\gcc.hpp" />
-    <ClInclude Include="include\basis\sys\~configure\compiler\vc.hpp" />
+    <ClInclude Include="include\basis\sys\~configure\compiler\vc_epilog.hpp" />
+    <ClInclude Include="include\basis\sys\~configure\compiler\vc_prolog.hpp" />
     <ClInclude Include="include\basis\sys\~configure\obligatory\array.hpp" />
     <ClInclude Include="include\basis\sys\~configure\obligatory\constants.hpp" />
     <ClInclude Include="include\basis\sys\~configure\obligatory\definitions.hpp" />
@@ -116,7 +117,8 @@
     <ClInclude Include="include\basis\sys\~configure\obligatory\this_file.hpp" />
     <ClInclude Include="include\basis\sys\~configure\obligatory\types.hpp" />
     <ClInclude Include="include\basis\sys\~configure\obligatory\Va_list.hpp" />
-    <ClInclude Include="include\basis\sys\~configure\os\windows.hpp" />
+    <ClInclude Include="include\basis\sys\~configure\os\windows_epilog.hpp" />
+    <ClInclude Include="include\basis\sys\~configure\os\windows_prolog.hpp" />
     <ClInclude Include="include\basis\sys\~console\aprintf.hpp" />
     <ClInclude Include="include\basis\sys\~console\Color.hpp" />
     <ClInclude Include="include\basis\sys\~console\console.hpp" />
@@ -256,6 +258,7 @@
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
     <IncludePath>include;$(IncludePath)</IncludePath>
+    <OutDir>$(SolutionDir)$(ProjectName)\$(Platform)\$(Configuration)\</OutDir>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
     <IncludePath>include;$(IncludePath)</IncludePath>

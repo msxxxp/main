@@ -1,7 +1,6 @@
 ﻿#ifndef BASIS_MEMORY_ALLOCATORLOGGED_HPP_
 #define BASIS_MEMORY_ALLOCATORLOGGED_HPP_
 
-#include <basis/types.hpp>
 #include <basis/sys/console.hpp>
 
 namespace simstd {

@@ -1,7 +1,6 @@
 ﻿#ifndef BASIS_ALGORITHM_SORT_HPP_
 #define BASIS_ALGORITHM_SORT_HPP_
 
-#include <basis/types.hpp>
 #include <basis/simstd/~functional/functional.hpp>
 #include <basis/simstd/~iterator/base.hpp>
 #include <basis/simstd/~utility/pair.hpp>

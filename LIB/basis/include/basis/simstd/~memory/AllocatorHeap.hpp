@@ -1,8 +1,6 @@
 ﻿#ifndef BASIS_MEMORY_ALLOCATORHEAP_HPP_
 #define BASIS_MEMORY_ALLOCATORHEAP_HPP_
 
-#include <basis/types.hpp>
-
 namespace simstd {
 
 	template<typename Type, typename HeapType>

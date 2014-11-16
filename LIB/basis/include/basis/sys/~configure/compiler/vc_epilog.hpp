@@ -1,7 +1,0 @@
-#ifndef BASIS_SYS_CONFIGURE_COMPILER_VC_EPILOG_HPP_
-#define BASIS_SYS_CONFIGURE_COMPILER_VC_EPILOG_HPP_
-
-typedef int WINBOOL;
-typedef SSIZE_T ssize_t;
-
-#endif

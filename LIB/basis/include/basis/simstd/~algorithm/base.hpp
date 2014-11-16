@@ -1,7 +1,7 @@
 ﻿#ifndef BASIS_ALGORITHM_BASE_HPP_
 #define BASIS_ALGORITHM_BASE_HPP_
 
-#include <basis/types.hpp>
+#include <basis/configure.hpp>
 
 namespace simstd {
 

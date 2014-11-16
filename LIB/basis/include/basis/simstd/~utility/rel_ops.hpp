@@ -1,8 +1,6 @@
 ﻿#ifndef BASIS_GENERIC_HPP_
 #define BASIS_GENERIC_HPP_
 
-#include <basis/types.hpp>
-
 namespace simstd {
 	namespace rel_ops {
 		template<typename T1, typename T2>

@@ -1,7 +1,6 @@
 ﻿#ifndef BASIS_PAIR_HPP_
 #define BASIS_PAIR_HPP_
 
-#include <basis/types.hpp>
 #include <basis/simstd/~algorithm/base.hpp>
 #include <basis/simstd/~utility/rel_ops.hpp>
 

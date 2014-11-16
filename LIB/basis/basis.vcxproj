@@ -106,19 +106,6 @@
     <ClInclude Include="include\basis\sys\traceback.hpp" />
     <ClInclude Include="include\basis\sys\url.hpp" />
     <ClInclude Include="include\basis\sys\win64.hpp" />
-    <ClInclude Include="include\basis\sys\~configure\compiler\gcc.hpp" />
-    <ClInclude Include="include\basis\sys\~configure\compiler\vc_epilog.hpp" />
-    <ClInclude Include="include\basis\sys\~configure\compiler\vc_prolog.hpp" />
-    <ClInclude Include="include\basis\sys\~configure\obligatory\array.hpp" />
-    <ClInclude Include="include\basis\sys\~configure\obligatory\constants.hpp" />
-    <ClInclude Include="include\basis\sys\~configure\obligatory\definitions.hpp" />
-    <ClInclude Include="include\basis\sys\~configure\obligatory\make_ll.hpp" />
-    <ClInclude Include="include\basis\sys\~configure\obligatory\safe.hpp" />
-    <ClInclude Include="include\basis\sys\~configure\obligatory\this_file.hpp" />
-    <ClInclude Include="include\basis\sys\~configure\obligatory\types.hpp" />
-    <ClInclude Include="include\basis\sys\~configure\obligatory\Va_list.hpp" />
-    <ClInclude Include="include\basis\sys\~configure\os\windows_epilog.hpp" />
-    <ClInclude Include="include\basis\sys\~configure\os\windows_prolog.hpp" />
     <ClInclude Include="include\basis\sys\~console\aprintf.hpp" />
     <ClInclude Include="include\basis\sys\~console\Color.hpp" />
     <ClInclude Include="include\basis\sys\~console\console.hpp" />
@@ -180,7 +167,19 @@
     <ClInclude Include="include\basis\sys\~time\time.hpp" />
     <ClInclude Include="include\basis\sys\~totext\error.hpp" />
     <ClInclude Include="include\basis\sys\~window\window.hpp" />
-    <ClInclude Include="include\basis\types.hpp" />
+    <ClInclude Include="include\basis\~configure\compiler\gcc.hpp" />
+    <ClInclude Include="include\basis\~configure\compiler\vc_epilog.hpp" />
+    <ClInclude Include="include\basis\~configure\compiler\vc_prolog.hpp" />
+    <ClInclude Include="include\basis\~configure\obligatory\array.hpp" />
+    <ClInclude Include="include\basis\~configure\obligatory\constants.hpp" />
+    <ClInclude Include="include\basis\~configure\obligatory\definitions.hpp" />
+    <ClInclude Include="include\basis\~configure\obligatory\make_ll.hpp" />
+    <ClInclude Include="include\basis\~configure\obligatory\safe.hpp" />
+    <ClInclude Include="include\basis\~configure\obligatory\this_file.hpp" />
+    <ClInclude Include="include\basis\~configure\obligatory\types.hpp" />
+    <ClInclude Include="include\basis\~configure\obligatory\Va_list.hpp" />
+    <ClInclude Include="include\basis\~configure\os\windows_epilog.hpp" />
+    <ClInclude Include="include\basis\~configure\os\windows_prolog.hpp" />
   </ItemGroup>
   <ItemGroup>
     <None Include="include\basis\simstd\algorithm" />

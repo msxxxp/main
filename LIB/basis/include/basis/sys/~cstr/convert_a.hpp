@@ -1,8 +1,6 @@
 ﻿#ifndef BASIS_CSTR_CONVERT_A_HPP_
 #define BASIS_CSTR_CONVERT_A_HPP_
 
-#include <basis/types.hpp>
-
 namespace cstr {
 
 	void to_string(char * str, size_t len, int value);

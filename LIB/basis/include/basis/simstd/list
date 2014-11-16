@@ -2,7 +2,6 @@
 #define BASIS_LIST_
 
 #include <basis/configure.hpp>
-#include <basis/types.hpp>
 
 #include <basis/simstd/iterator>
 #include <basis/simstd/memory>

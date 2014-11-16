@@ -1,7 +1,6 @@
 ﻿#ifndef BASIS_MEMORY_ALLOCATOR_HPP_
 #define BASIS_MEMORY_ALLOCATOR_HPP_
 
-#include <basis/types.hpp>
 #include <basis/simstd/~memory/base.hpp>
 #include <basis/simstd/~memory/new.hpp>
 

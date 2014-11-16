@@ -1,7 +1,6 @@
 ﻿#ifndef BASIS_VECTOR_MOVABLE_VECTOR_HPP_
 #define BASIS_VECTOR_MOVABLE_VECTOR_HPP_
 
-#include <basis/types.hpp>
 #include <basis/simstd/iterator>
 #include <basis/simstd/memory>
 #include <basis/simstd/vector>

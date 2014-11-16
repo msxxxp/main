@@ -1,5 +1,5 @@
-#ifndef BASIS_SYS_CONFIGURE_COMPILER_VC_PROLOG_HPP_
-#define BASIS_SYS_CONFIGURE_COMPILER_VC_PROLOG_HPP_
+#ifndef BASIS_CONFIGURE_COMPILER_VC_PROLOG_HPP_
+#define BASIS_CONFIGURE_COMPILER_VC_PROLOG_HPP_
 
 //#pragma warning( disable : 4507 34; once : 4385; error : 164 )
 #pragma warning(disable: 4800)

@@ -1,7 +1,6 @@
 ﻿#ifndef BASIS_FUNCTIONAL_HPP_
 #define BASIS_FUNCTIONAL_HPP_
 
-#include <basis/types.hpp>
 #include <basis/simstd/~utility/rel_ops.hpp>
 
 namespace simstd {

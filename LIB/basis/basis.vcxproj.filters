@@ -39,14 +39,6 @@
     </Filter>
     <Filter Include="include\basis\sys">
     </Filter>
-    <Filter Include="include\basis\sys\~configure">
-    </Filter>
-    <Filter Include="include\basis\sys\~configure\compiler">
-    </Filter>
-    <Filter Include="include\basis\sys\~configure\obligatory">
-    </Filter>
-    <Filter Include="include\basis\sys\~configure\os">
-    </Filter>
     <Filter Include="include\basis\sys\~console">
     </Filter>
     <Filter Include="include\basis\sys\~crt">
@@ -151,12 +143,13 @@
     </Filter>
     <Filter Include="src\tst">
     </Filter>
+    <Filter Include="include\basis\~configure" />
+    <Filter Include="include\basis\~configure\compiler" />
+    <Filter Include="include\basis\~configure\obligatory" />
+    <Filter Include="include\basis\~configure\os" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="include\basis\configure.hpp">
-      <Filter>include\basis</Filter>
-    </ClInclude>
-    <ClInclude Include="include\basis\types.hpp">
       <Filter>include\basis</Filter>
     </ClInclude>
     <ClInclude Include="include\basis\ext\bits.hpp">
@@ -368,33 +361,6 @@
     </ClInclude>
     <ClInclude Include="include\basis\simstd\~vector\vector_base.hpp">
       <Filter>include\basis\simstd\~vector</Filter>
-    </ClInclude>
-    <ClInclude Include="include\basis\sys\~configure\compiler\gcc.hpp">
-      <Filter>include\basis\sys\~configure\compiler</Filter>
-    </ClInclude>
-    <ClInclude Include="include\basis\sys\~configure\obligatory\array.hpp">
-      <Filter>include\basis\sys\~configure\obligatory</Filter>
-    </ClInclude>
-    <ClInclude Include="include\basis\sys\~configure\obligatory\constants.hpp">
-      <Filter>include\basis\sys\~configure\obligatory</Filter>
-    </ClInclude>
-    <ClInclude Include="include\basis\sys\~configure\obligatory\definitions.hpp">
-      <Filter>include\basis\sys\~configure\obligatory</Filter>
-    </ClInclude>
-    <ClInclude Include="include\basis\sys\~configure\obligatory\make_ll.hpp">
-      <Filter>include\basis\sys\~configure\obligatory</Filter>
-    </ClInclude>
-    <ClInclude Include="include\basis\sys\~configure\obligatory\safe.hpp">
-      <Filter>include\basis\sys\~configure\obligatory</Filter>
-    </ClInclude>
-    <ClInclude Include="include\basis\sys\~configure\obligatory\this_file.hpp">
-      <Filter>include\basis\sys\~configure\obligatory</Filter>
-    </ClInclude>
-    <ClInclude Include="include\basis\sys\~configure\obligatory\types.hpp">
-      <Filter>include\basis\sys\~configure\obligatory</Filter>
-    </ClInclude>
-    <ClInclude Include="include\basis\sys\~configure\obligatory\Va_list.hpp">
-      <Filter>include\basis\sys\~configure\obligatory</Filter>
     </ClInclude>
     <ClInclude Include="include\basis\sys\~console\aprintf.hpp">
       <Filter>include\basis\sys\~console</Filter>
@@ -627,17 +593,44 @@
     <ClInclude Include="include\basis\sys\win64.hpp">
       <Filter>include\basis\sys</Filter>
     </ClInclude>
-    <ClInclude Include="include\basis\sys\~configure\os\windows_epilog.hpp">
-      <Filter>include\basis\sys\~configure\os</Filter>
+    <ClInclude Include="include\basis\~configure\compiler\gcc.hpp">
+      <Filter>include\basis\~configure\compiler</Filter>
     </ClInclude>
-    <ClInclude Include="include\basis\sys\~configure\os\windows_prolog.hpp">
-      <Filter>include\basis\sys\~configure\os</Filter>
+    <ClInclude Include="include\basis\~configure\compiler\vc_epilog.hpp">
+      <Filter>include\basis\~configure\compiler</Filter>
     </ClInclude>
-    <ClInclude Include="include\basis\sys\~configure\compiler\vc_epilog.hpp">
-      <Filter>include\basis\sys\~configure\compiler</Filter>
+    <ClInclude Include="include\basis\~configure\compiler\vc_prolog.hpp">
+      <Filter>include\basis\~configure\compiler</Filter>
     </ClInclude>
-    <ClInclude Include="include\basis\sys\~configure\compiler\vc_prolog.hpp">
-      <Filter>include\basis\sys\~configure\compiler</Filter>
+    <ClInclude Include="include\basis\~configure\obligatory\array.hpp">
+      <Filter>include\basis\~configure\obligatory</Filter>
+    </ClInclude>
+    <ClInclude Include="include\basis\~configure\obligatory\constants.hpp">
+      <Filter>include\basis\~configure\obligatory</Filter>
+    </ClInclude>
+    <ClInclude Include="include\basis\~configure\obligatory\definitions.hpp">
+      <Filter>include\basis\~configure\obligatory</Filter>
+    </ClInclude>
+    <ClInclude Include="include\basis\~configure\obligatory\make_ll.hpp">
+      <Filter>include\basis\~configure\obligatory</Filter>
+    </ClInclude>
+    <ClInclude Include="include\basis\~configure\obligatory\safe.hpp">
+      <Filter>include\basis\~configure\obligatory</Filter>
+    </ClInclude>
+    <ClInclude Include="include\basis\~configure\obligatory\this_file.hpp">
+      <Filter>include\basis\~configure\obligatory</Filter>
+    </ClInclude>
+    <ClInclude Include="include\basis\~configure\obligatory\types.hpp">
+      <Filter>include\basis\~configure\obligatory</Filter>
+    </ClInclude>
+    <ClInclude Include="include\basis\~configure\obligatory\Va_list.hpp">
+      <Filter>include\basis\~configure\obligatory</Filter>
+    </ClInclude>
+    <ClInclude Include="include\basis\~configure\os\windows_epilog.hpp">
+      <Filter>include\basis\~configure\os</Filter>
+    </ClInclude>
+    <ClInclude Include="include\basis\~configure\os\windows_prolog.hpp">
+      <Filter>include\basis\~configure\os</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

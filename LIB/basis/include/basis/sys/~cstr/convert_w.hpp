@@ -1,8 +1,6 @@
 ﻿#ifndef BASIS_CSTR_CONVERT_W_HPP_
 #define BASIS_CSTR_CONVERT_W_HPP_
 
-#include <basis/types.hpp>
-
 namespace cstr {
 
 	void to_wstring(wchar_t * str, size_t len, int value);

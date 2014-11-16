@@ -1,7 +1,6 @@
 ﻿#ifndef BASIS_NEW_HPP_
 #define BASIS_NEW_HPP_
 
-#include <basis/types.hpp>
 #include <basis/sys/~memory/heap/DefaultStat.hpp>
 
 namespace simstd {

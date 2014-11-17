@@ -7,7 +7,7 @@
 
 #include <basis/simstd/string>
 
-#if defined(__GNUC__)
+#if defined(__GNUC__) && !defined(_MSC_VER)
 #include <bfd.h>
 #include <cxxabi.h>
 

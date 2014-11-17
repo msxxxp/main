@@ -360,7 +360,6 @@
     <ClCompile Include="src\sys\thread\Pool.cpp" />
     <ClCompile Include="src\sys\thread\Routine.cpp" />
     <ClCompile Include="src\sys\thread\threads_holder.cpp" />
-    <ClCompile Include="src\sys\thread\thread_logger.cpp" />
     <ClCompile Include="src\sys\thread\thread_totext.cpp" />
     <ClCompile Include="src\sys\thread\Unit.cpp" />
     <ClCompile Include="src\sys\thread\Unit_io.cpp" />
@@ -452,6 +451,7 @@
       <PreprocessorDefinitions>WIN32;_DEBUG;_LIB;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <MultiProcessorCompilation>true</MultiProcessorCompilation>
       <ExceptionHandling>false</ExceptionHandling>
+      <MinimalRebuild>false</MinimalRebuild>
     </ClCompile>
     <Link>
       <SubSystem>Windows</SubSystem>
@@ -467,6 +467,7 @@
       <PreprocessorDefinitions>WIN32;_DEBUG;_LIB;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <MultiProcessorCompilation>true</MultiProcessorCompilation>
       <ExceptionHandling>false</ExceptionHandling>
+      <MinimalRebuild>false</MinimalRebuild>
     </ClCompile>
     <Link>
       <SubSystem>Windows</SubSystem>

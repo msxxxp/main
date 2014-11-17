@@ -5,6 +5,8 @@
 
 namespace thread {
 
+	LogRegister(L"threads");
+
 	Unit::~Unit() noexcept
 	{
 		if (m_handle) {

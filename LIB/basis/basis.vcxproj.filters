@@ -1079,9 +1079,6 @@
     <ClCompile Include="src\sys\sync\totext.cpp">
       <Filter>src\sys\sync</Filter>
     </ClCompile>
-    <ClCompile Include="src\sys\thread\logger.cpp">
-      <Filter>src\sys\thread</Filter>
-    </ClCompile>
     <ClCompile Include="src\sys\thread\Parameters.cpp">
       <Filter>src\sys\thread</Filter>
     </ClCompile>
@@ -1092,9 +1089,6 @@
       <Filter>src\sys\thread</Filter>
     </ClCompile>
     <ClCompile Include="src\sys\thread\threads_holder.cpp">
-      <Filter>src\sys\thread</Filter>
-    </ClCompile>
-    <ClCompile Include="src\sys\thread\totext.cpp">
       <Filter>src\sys\thread</Filter>
     </ClCompile>
     <ClCompile Include="src\sys\thread\Unit.cpp">
@@ -1153,6 +1147,12 @@
     </ClCompile>
     <ClCompile Include="src\tst\test_w_string.cpp">
       <Filter>src\tst</Filter>
+    </ClCompile>
+    <ClCompile Include="src\sys\thread\thread_logger.cpp">
+      <Filter>src\sys\thread</Filter>
+    </ClCompile>
+    <ClCompile Include="src\sys\thread\thread_totext.cpp">
+      <Filter>src\sys\thread</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>

@@ -1,7 +1,8 @@
 #include <basis/os/dbghelp.hpp>
 #include <basis/sys/traceback.hpp>
-#include <basis/sys/totext.hpp>
+#include <basis/sys/memory.hpp>
 #include <basis/sys/logger.hpp>
+#include <basis/sys/totext.hpp>
 
 #include <basis/simstd/algorithm>
 #include <basis/simstd/string>
@@ -55,13 +56,13 @@ namespace traceback {
 		LogNoise(L"depth: %Iu\n", depth);
 
 		{
-			void * tempFramesArray[get_max_depth()];
+			PVOID* tempFramesArray = memory::calloc<PVOID*>(get_max_depth());
 			WORD sz = ::RtlCaptureStackBackTrace(1, simstd::min(depth, get_max_depth()), tempFramesArray, nullptr);
 			for (WORD i = 0; i < sz; ++i) {
 				emplace_back(tempFramesArray[i]);
 //				LogDebug(L"frame[%d]: %p\n", (int)i, tempFramesArray[i]);
 			}
-
+			memory::free(tempFramesArray);
 		}
 		LogDebug(L"captured frames: %Iu\n", size());
 	}

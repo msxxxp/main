@@ -356,12 +356,12 @@
     <ClCompile Include="src\sys\sync\ScopeGuard.cpp" />
     <ClCompile Include="src\sys\sync\Semaphore.cpp" />
     <ClCompile Include="src\sys\sync\totext.cpp" />
-    <ClCompile Include="src\sys\thread\logger.cpp" />
     <ClCompile Include="src\sys\thread\Parameters.cpp" />
     <ClCompile Include="src\sys\thread\Pool.cpp" />
     <ClCompile Include="src\sys\thread\Routine.cpp" />
     <ClCompile Include="src\sys\thread\threads_holder.cpp" />
-    <ClCompile Include="src\sys\thread\totext.cpp" />
+    <ClCompile Include="src\sys\thread\thread_logger.cpp" />
+    <ClCompile Include="src\sys\thread\thread_totext.cpp" />
     <ClCompile Include="src\sys\thread\Unit.cpp" />
     <ClCompile Include="src\sys\thread\Unit_io.cpp" />
     <ClCompile Include="src\sys\time\time.cpp" />

@@ -2,6 +2,7 @@
 #define BASIS_MUTEX_UNIQUE_LOCK_HPP_
 
 #include <basis/simstd/mutex>
+#include <basis/simstd/algorithm>
 #include <basis/ext/pattern.hpp>
 
 namespace simstd {

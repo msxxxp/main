@@ -98,8 +98,8 @@ int A::val() const
 	return m_a;
 }
 
-typedef typename memory::heap::DefaultStatTag<A> heap_type;
-typedef typename simstd::AllocatorHeap<A, heap_type> EqAlloc;
+typedef memory::heap::DefaultStatTag<A> heap_type;
+typedef simstd::AllocatorHeap<A, heap_type> EqAlloc;
 
 #include <string>
 

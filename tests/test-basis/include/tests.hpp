@@ -5,4 +5,6 @@ void test_list();
 
 void test_logger();
 
+void test_string()
+
 #endif

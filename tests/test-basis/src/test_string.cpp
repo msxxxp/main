@@ -10,8 +10,6 @@ void test_string()
 	typedef typename simstd::AllocatorHeap<char, Heap> Allocator;
 	typedef typename simstd::basic_string<char, simstd::char_traits<char>, Allocator> tstring;
 
-	setup_logger();
-
 	LogTrace();
 
 	Heap::init();

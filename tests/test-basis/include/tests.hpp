@@ -3,4 +3,6 @@
 
 void test_list();
 
+void test_logger();
+
 #endif

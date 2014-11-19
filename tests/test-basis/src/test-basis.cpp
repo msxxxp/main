@@ -39,8 +39,10 @@ extern "C" int wmain(int argc, wchar_t* argv[])
 //	test_traceback();
 //
 //	test_threads();
-
-	test_window();
+//
+//	test_url();
+//
+//	test_window();
 
 	return 0;
 }

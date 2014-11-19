@@ -19,6 +19,8 @@ void test_threads();
 
 void test_traceback();
 
+void test_url();
+
 void test_window();
 
 #endif

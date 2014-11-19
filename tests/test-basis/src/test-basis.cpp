@@ -22,11 +22,15 @@ int WINAPI wWinMain(HINSTANCE /*hInstance*/, HINSTANCE /*hPrevInstance*/, LPWSTR
 	return 0;
 }
 
-extern "C" int wmain(int /*argc*/, wchar_t * /*argv*/[])
+extern "C" int wmain(int argc, wchar_t* argv[])
 {
 	console::printf(L"%S:%d\n", __PRETTY_FUNCTION__, __LINE__);
 
 	setup_logger();
+
+	LogDebug(L"argc: %d\n", argc);
+	for (int i = 0; i < argc; ++i)
+		LogDebug(L"'%s'\n", argv[i]);
 
 	test_logger();
 

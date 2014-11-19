@@ -69,7 +69,7 @@ void test_chrono()
 	tp = std::chrono::system_clock::time_point::min();
 	out_timepoint(L"min:   ", tp);
 
-	for (uint64_t size = 1; size < 100000000; size *= 5) {
+	for (uint64_t size = 1; size < 200000000; size *= 10) {
 		auto start1 = std::chrono::steady_clock::now();
 //		auto start2 = std::chrono::system_clock::now();
 		auto start3 = simstd::chrono::perfomance_clock::now();

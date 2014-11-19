@@ -1,19 +1,18 @@
-﻿#include <basis/os/kernel32.hpp>
+﻿#include <basis/os/ntdll.hpp>
 
 namespace os {
 
-	kernel32_dll & kernel32_dll::inst()
+	ntdll_dll& ntdll_dll::inst()
 	{
-		static kernel32_dll ret;
+		static ntdll_dll ret;
 		return ret;
 	}
 
-	kernel32_dll::kernel32_dll() :
-		DynamicLibrary(L"kernel32.dll")
+	ntdll_dll::ntdll_dll() :
+		DynamicLibrary(L"ntdll.dll")
 	{
-		GET_DLL_FUNC(IsWow64Process);
-		GET_DLL_FUNC(Wow64DisableWow64FsRedirection);
-		GET_DLL_FUNC(Wow64RevertWow64FsRedirection);
+		GET_DLL_FUNC(NtSetInformationThread);
+		GET_DLL_FUNC(NtQueryInformationThread);
 	}
 
 }

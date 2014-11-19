@@ -39,7 +39,7 @@
 //    std::cout << "task_thread:\t" << result.get() << '\n';
 //}
 
-void test_logger()
+void test_future()
 {
 	LogTrace();
 }

@@ -32,9 +32,11 @@ extern "C" int wmain(int argc, wchar_t* argv[])
 	for (int i = 0; i < argc; ++i)
 		LogDebug(L"'%s'\n", argv[i]);
 
-	test_logger();
+//	test_logger();
+//
+//	test_chrono();
 
-	test_chrono();
+	test_traceback();
 
 	return 0;
 }

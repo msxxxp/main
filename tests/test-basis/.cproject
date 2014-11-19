@@ -83,6 +83,9 @@
 								<option id="gnu.cpp.link.option.strip.844122499" name="Omit all symbol information (-s)" superClass="gnu.cpp.link.option.strip" value="false" valueType="boolean"/>
 								<option id="gnu.cpp.link.option.libs.1468401369" name="Libraries (-l)" superClass="gnu.cpp.link.option.libs" valueType="libs">
 									<listOptionValue builtIn="false" value="basis"/>
+									<listOptionValue builtIn="false" value="bfd"/>
+									<listOptionValue builtIn="false" value="iberty"/>
+									<listOptionValue builtIn="false" value="z"/>
 								</option>
 								<option id="gnu.cpp.link.option.paths.613285884" name="Library search path (-L)" superClass="gnu.cpp.link.option.paths" valueType="libPaths">
 									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/basis/x64-Debug}&quot;"/>

@@ -28,7 +28,9 @@ extern "C" int wmain(int /*argc*/, wchar_t * /*argv*/[])
 
 	setup_logger();
 
-	test_list();
+	test_logger();
+
+	test_chrono();
 
 	return 0;
 }

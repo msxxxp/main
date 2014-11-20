@@ -2,16 +2,11 @@
 #include <basis/sys/logger.hpp>
 #include <basis/sys/totext.hpp>
 #include <basis/sys/sync.hpp>
+#include <basis/sys/traceback.hpp>
 
-#ifdef DEBUG
-#	include <basis/sys/traceback.hpp>
-#endif
-
-#include <basis/std/string>
-
+#include <basis/simstd/string>
 
 #include <excis/exception.hpp>
-
 #include <excis/dacl.hpp>
 #include <excis/sd.hpp>
 
@@ -117,8 +112,8 @@ extern "C" int wmain(int argc, wchar_t * argv[])
 //		test_service();
 		test_auth();
 //		add_auth();
-	} catch (Ext::AbstractError & e) {
-		LogError(L"exception cought: %s, %s\n", e.what().c_str(), e.where());
+	} catch (exception::AbstractError& e) {
+		LogError(L"exception cought: %s, %s\n", e.what().c_str(), e.where().c_str());
 		return e.code();
 	} catch (std::exception & e) {
 		LogError(L"std::exception [%S]:\n", typeid(e).name());

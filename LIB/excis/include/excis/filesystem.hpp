@@ -10,7 +10,8 @@
 #include <basis/simstd/string>
 
 namespace fsys {
-	logger::Module_i * get_logger_module();
+
+	LogDeclare();
 
 	namespace file {
 		struct Facade;

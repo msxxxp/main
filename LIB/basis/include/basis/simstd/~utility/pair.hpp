@@ -2,7 +2,6 @@
 #define BASIS_PAIR_HPP_
 
 #include <basis/simstd/~algorithm/base.hpp>
-#include <basis/simstd/~utility/rel_ops.hpp>
 
 namespace simstd {
 

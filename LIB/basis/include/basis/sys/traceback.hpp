@@ -80,6 +80,7 @@ namespace traceback {
 		using base_type::size;
 		using base_type::operator[];
 	};
+
 }
 
 #endif

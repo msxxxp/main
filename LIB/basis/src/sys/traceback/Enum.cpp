@@ -7,7 +7,7 @@
 #include <basis/simstd/algorithm>
 #include <basis/simstd/string>
 
-#if defined(__GNUC__)
+#if defined(__GNUC__) && defined(DEBUG)
 #include <bfd.h>
 #endif
 
@@ -39,7 +39,7 @@ namespace traceback {
 			LogErrorIf(!ret, L"['%s'] -> %s\n", path, totext::api_error().c_str());
 			UNUSED(ret);
 
-#if defined(__GNUC__)
+#if defined(__GNUC__) && defined(DEBUG)
 			bfd_init();
 #endif
 		}

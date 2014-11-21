@@ -1134,19 +1134,19 @@ namespace simstd {
 			this_type(base_type::get_allocator(), c_str(), size(), capacity()).swap(*this);
 	}
 
-//	template<typename C, typename T, typename A>
-//	int basic_string<C, T, A>::compare(const_pointer str1, size_type count1, const_pointer str2, size_type count2)
-//	{
-//		int result = traits_type::compare(str1, str2, simstd::min(count1, count2));
-//		if (result != 0)
-//			return result;
-//		if (count1 < count2)
-//			return -1;
-//		if (count1 > count2)
-//			return 1;
-//		return 0;
-//	}
-//
+	template<typename C, typename T, typename A>
+	int basic_string<C, T, A>::compare(const_pointer str1, size_type count1, const_pointer str2, size_type count2)
+	{
+		int result = traits_type::compare(str1, str2, simstd::min(count1, count2));
+		if (result != 0)
+			return result;
+		if (count1 < count2)
+			return -1;
+		if (count1 > count2)
+			return 1;
+		return 0;
+	}
+
 //	template<typename C, typename T, typename A>
 //	typename basic_string<C, T, A>::size_type basic_string<C, T, A>::find(const_pointer str, size_type pos, size_type length) const
 //	{

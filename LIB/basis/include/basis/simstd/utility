@@ -3,6 +3,5 @@
 
 #include <basis/configure.hpp>
 #include <basis/simstd/~utility/pair.hpp>
-#include <basis/simstd/~utility/rel_ops.hpp>
 
 #endif

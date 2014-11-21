@@ -7,7 +7,7 @@
 
 #include <basis/simstd/string>
 
-#if defined(__GNUC__) && !defined(_MSC_VER)
+#if defined(__GNUC__) && defined(DEBUG) && !defined(_MSC_VER)
 #include <bfd.h>
 #include <cxxabi.h>
 
@@ -304,7 +304,7 @@ namespace traceback {
 		LogTrace();
 		bool ret = false;
 		m_address = address;
-#if defined(__GNUC__)
+#if defined(__GNUC__) && defined(DEBUG)
 		bfd_set * set = static_cast<bfd_set*>(malloc(sizeof(*set)));
 		memory::zero(set, sizeof(*set));
 

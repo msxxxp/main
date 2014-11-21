@@ -25,5 +25,6 @@
 #include <basis/~configure/obligatory/safe.hpp>
 #include <basis/~configure/obligatory/this_file.hpp>
 #include <basis/~configure/obligatory/Va_list.hpp>
+#include <basis/~configure/simstd/rel_ops.hpp>
 
 #endif

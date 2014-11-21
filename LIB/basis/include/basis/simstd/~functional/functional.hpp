@@ -1,8 +1,6 @@
 ﻿#ifndef BASIS_FUNCTIONAL_HPP_
 #define BASIS_FUNCTIONAL_HPP_
 
-#include <basis/simstd/~utility/rel_ops.hpp>
-
 namespace simstd {
 	template<typename T>
 	struct plus

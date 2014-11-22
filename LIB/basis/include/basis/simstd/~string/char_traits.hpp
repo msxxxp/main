@@ -45,9 +45,9 @@ namespace simstd {
 			return memcmp(str1, str2, count);
 		}
 
-		static size_t length(const char_type * str)
+		static size_t length(const char_type* str)
 		{
-			return strlen(str);
+			return str ? strlen(str) : 0;
 		}
 
 		static const char_type * find(const char_type * where, size_t length, const char_type & what)
@@ -127,9 +127,9 @@ namespace simstd {
 			return wmemcmp(str1, str2, count);
 		}
 
-		static size_t length(const char_type * str)
+		static size_t length(const char_type* str)
 		{
-			return wcslen(str);
+			return str ? wcslen(str) : 0;
 		}
 
 		static const char_type * find(const char_type * where, size_t length, const char_type & what)

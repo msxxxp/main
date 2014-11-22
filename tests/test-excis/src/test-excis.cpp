@@ -20,11 +20,9 @@
 namespace {
 	void setup_logger()
 	{
-		LogSetOptions(L"logger:///default?level=tr;prefix=fu;target=co");
+		LogSetOptions(L"logger:///default?level=d;prefix=fu;target=co");
 
-#ifdef DEBUG
 		traceback::init();
-#endif
 	}
 }
 
@@ -37,7 +35,7 @@ struct ServicesView: public sync::Observer
 		m_svcs->register_observer(this);
 	}
 
-	void notify(const sync::Message & event) {
+	void notify(const sync::Message& event) {
 		UNUSED(event);
 		LogReport(L"Services changed. size: %Iu\n", m_svcs->size());
 
@@ -47,7 +45,7 @@ struct ServicesView: public sync::Observer
 	}
 
 private:
-	Ext::Services * m_svcs;
+	Ext::Services* m_svcs;
 };
 
 void test_service()
@@ -105,7 +103,12 @@ extern "C" int wmain(int argc, wchar_t * argv[])
 	UNUSED(argc);
 	UNUSED(argv);
 
+	console::printf(L"%S:%d\n", __PRETTY_FUNCTION__, __LINE__);
+
 	setup_logger();
+
+	exception::set_vectored_exception_filter();
+	exception::set_unhandled_exception_filter();
 
 	try {
 		LogTrace();
@@ -114,11 +117,18 @@ extern "C" int wmain(int argc, wchar_t * argv[])
 //		add_auth();
 	} catch (exception::AbstractError& e) {
 		LogError(L"exception cought: %s, %s\n", e.what().c_str(), e.where().c_str());
+
+		auto mstr = e.format_error();
+		for (size_t i = 0; i < mstr.size(); ++i)
+			LogError(L"\t%s\n", mstr[i]);
+
 		return e.code();
-	} catch (std::exception & e) {
+	} catch (std::exception& e) {
 		LogError(L"std::exception [%S]:\n", typeid(e).name());
 		LogError(L"What: %S\n", e.what());
 		return 1;
+	} catch (...) {
+		LogError(L"cpp exception cought\n");
 	}
 
 	return 0;

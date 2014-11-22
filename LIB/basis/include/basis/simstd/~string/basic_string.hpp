@@ -3,15 +3,9 @@
 
 #include <basis/ext/pattern.hpp>
 #include <basis/sys/crt.hpp>
-//#include <basis/sys/logger.hpp>
 #include <basis/simstd/string>
 #include <basis/simstd/iterator>
 #include <basis/simstd/~memory/allocator.hpp>
-
-//#include <basis/simstd/algorithm>
-//#include <basis/simstd/algorithm>
-//#include <basis/simstd/memory>
-//#include <basis/sys/crt.hpp>
 
 namespace simstd {
 
@@ -304,7 +298,7 @@ namespace simstd {
 
 	template<typename C, typename T, typename A>
 	basic_string<C, T, A>::basic_string(const_pointer str, const allocator_type& alloc):
-		this_type(str, traits_type::length(str), alloc)
+		this_type(str, str ? traits_type::length(str) : 0, alloc)
 	{
 	}
 

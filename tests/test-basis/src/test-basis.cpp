@@ -17,8 +17,6 @@ int WINAPI wWinMain(HINSTANCE /*hInstance*/, HINSTANCE /*hPrevInstance*/, LPWSTR
 
 	setup_logger();
 
-	test_list();
-
 	return 0;
 }
 

@@ -3,6 +3,8 @@
 
 void test_auth();
 
+void test_crashes();
+
 void test_service();
 
 #endif

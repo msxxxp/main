@@ -15,7 +15,7 @@ namespace exception {
 		m_code(ep->ExceptionRecord->ExceptionCode),
 		m_address(ep->ExceptionRecord->ExceptionAddress)
 	{
-		LogDebug(L"ep: %p\n", ep);
+		LogDebug(L"ep:      %p\n", ep);
 		LogReport(L"code:    0x%X\n", ep->ExceptionRecord->ExceptionCode);
 		LogReport(L"flags:   0x%X\n", ep->ExceptionRecord->ExceptionFlags);
 		LogReport(L"record:  0x%p\n", ep->ExceptionRecord->ExceptionRecord);

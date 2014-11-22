@@ -19,15 +19,6 @@ namespace {
 	}
 }
 
-int WINAPI wWinMain(HINSTANCE /*hInstance*/, HINSTANCE /*hPrevInstance*/, LPWSTR /*lpCmdLine*/, int /*nShowCmd*/)
-{
-	console::printf(L"%S:%d\n", __PRETTY_FUNCTION__, __LINE__);
-
-	setup_logger();
-
-	return 0;
-}
-
 extern "C" int wmain(int argc, wchar_t* argv[])
 {
 	console::printf(L"%S:%d\n", __PRETTY_FUNCTION__, __LINE__);
@@ -43,8 +34,11 @@ extern "C" int wmain(int argc, wchar_t* argv[])
 
 	try {
 		LogTrace();
+		test_crashes();
+
 		test_auth();
 //		add_auth();
+
 		test_service();
 	} catch (exception::AbstractError& e) {
 		LogError(L"exception cought: %s, %s\n", e.what().c_str(), e.where().c_str());
@@ -63,4 +57,9 @@ extern "C" int wmain(int argc, wchar_t* argv[])
 	}
 
 	return 0;
+}
+
+int WINAPI wWinMain(HINSTANCE /*hInstance*/, HINSTANCE /*hPrevInstance*/, LPWSTR /*lpCmdLine*/, int /*nShowCmd*/)
+{
+	return wmain(0, nullptr);
 }

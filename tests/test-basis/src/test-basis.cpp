@@ -33,6 +33,8 @@ extern "C" int wmain(int argc, wchar_t* argv[])
 //	test_logger();
 //
 //	test_chrono();
+
+	test_console_input();
 //
 //	test_traceback();
 //

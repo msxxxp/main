@@ -1,4 +1,7 @@
-#include <system/console.hpp>
+#include <tests.hpp>
+
+#include <basis/sys/console.hpp>
+#include <basis/sys/logger.hpp>
 
 void KeyEventProc(KEY_EVENT_RECORD ker)
 {
@@ -61,9 +64,9 @@ void ResizeEventProc(WINDOW_BUFFER_SIZE_RECORD wbsr)
 	console::printf(L"Console screen buffer is %d columns by %d rows.\n", wbsr.dwSize.X, wbsr.dwSize.Y);
 }
 
-int main()
+void test_console_input()
 {
-	console::printf(L"%S\n", __PRETTY_FUNCTION__);
+	LogAtten(L"\n");
 
 	HANDLE hStdin = ::GetStdHandle(STD_INPUT_HANDLE);
 	console::printf(L"%S hStdin: %p\n", __PRETTY_FUNCTION__, hStdin);
@@ -109,7 +112,5 @@ int main()
 	}
 
 	// Restore input mode on exit.
-
 	SetConsoleMode(hStdin, fdwSaveOldMode);
-	return 0;
 }

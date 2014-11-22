@@ -5,6 +5,8 @@ void test_atomic();
 
 void test_chrono();
 
+void test_console_input();
+
 void test_future();
 
 void test_list();

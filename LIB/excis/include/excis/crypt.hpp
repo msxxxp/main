@@ -4,7 +4,7 @@
 #include <basis/configure.hpp>
 #include <basis/ext/pattern.hpp>
 
-#include <excis/sub_crypt/Provider.hpp>
-#include <excis/sub_crypt/Hash.hpp>
+#include <excis/~crypt/Provider.hpp>
+#include <excis/~crypt/Hash.hpp>
 
 #endif

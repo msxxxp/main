@@ -20,14 +20,22 @@
 								<option id="gnu.cpp.link.option.strip.1941747321" name="Omit all symbol information (-s)" superClass="gnu.cpp.link.option.strip" value="true" valueType="boolean"/>
 								<option id="gnu.cpp.link.option.libs.744066529" name="Libraries (-l)" superClass="gnu.cpp.link.option.libs" valueType="libs">
 									<listOptionValue builtIn="false" value="basis"/>
+									<listOptionValue builtIn="false" value="gcc"/>
+									<listOptionValue builtIn="false" value="mingwex"/>
+									<listOptionValue builtIn="false" value="mingw32"/>
+									<listOptionValue builtIn="false" value="ntdll"/>
+									<listOptionValue builtIn="false" value="kernel32"/>
+									<listOptionValue builtIn="false" value="shell32"/>
+									<listOptionValue builtIn="false" value="user32"/>
+									<listOptionValue builtIn="false" value="msvcrt"/>
 								</option>
 								<option id="gnu.cpp.link.option.paths.1910158143" name="Library search path (-L)" superClass="gnu.cpp.link.option.paths" valueType="libPaths">
 									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/basis/x64-Release}&quot;"/>
 								</option>
-								<option id="gnu.cpp.link.option.flags.1376403447" name="Linker flags" superClass="gnu.cpp.link.option.flags" value="-m64 -Wl,-Map=test-test-basis.exe.map -static -municode" valueType="string"/>
-								<option id="gnu.cpp.link.option.nostdlibs.1650577836" name="No startup or default libs (-nostdlib)" superClass="gnu.cpp.link.option.nostdlibs" value="false" valueType="boolean"/>
-								<option id="gnu.cpp.link.option.nodeflibs.1531438291" name="Do not use default libraries (-nodefaultlibs)" superClass="gnu.cpp.link.option.nodeflibs" value="false" valueType="boolean"/>
-								<option id="gnu.cpp.link.option.nostart.1447651214" name="Do not use standard start files (-nostartfiles)" superClass="gnu.cpp.link.option.nostart" value="false" valueType="boolean"/>
+								<option id="gnu.cpp.link.option.flags.1376403447" name="Linker flags" superClass="gnu.cpp.link.option.flags" value="-m64 -Wl,-Map=${ProjName}.map -static -municode" valueType="string"/>
+								<option id="gnu.cpp.link.option.nostdlibs.1650577836" name="No startup or default libs (-nostdlib)" superClass="gnu.cpp.link.option.nostdlibs" value="true" valueType="boolean"/>
+								<option id="gnu.cpp.link.option.nodeflibs.1531438291" name="Do not use default libraries (-nodefaultlibs)" superClass="gnu.cpp.link.option.nodeflibs" value="true" valueType="boolean"/>
+								<option id="gnu.cpp.link.option.nostart.1447651214" name="Do not use standard start files (-nostartfiles)" superClass="gnu.cpp.link.option.nostart" value="true" valueType="boolean"/>
 								<inputType id="cdt.managedbuild.tool.gnu.cpp.linker.input.1646094624" superClass="cdt.managedbuild.tool.gnu.cpp.linker.input">
 									<additionalInput kind="additionalinputdependency" paths="$(USER_OBJS)"/>
 									<additionalInput kind="additionalinput" paths="$(LIBS)"/>
@@ -50,7 +58,7 @@
 								</option>
 								<option id="gnu.cpp.compiler.option.warnings.extrawarn.980590597" name="Extra warnings (-Wextra)" superClass="gnu.cpp.compiler.option.warnings.extrawarn" useByScannerDiscovery="false" value="true" valueType="boolean"/>
 								<option id="gnu.cpp.compiler.option.other.other.1575374057" name="Other flags" superClass="gnu.cpp.compiler.option.other.other" useByScannerDiscovery="false" value="-c -fmessage-length=0 -fno-threadsafe-statics -fno-exceptions -fno-rtti" valueType="string"/>
-								<option id="gnu.cpp.compiler.option.warnings.toerrors.1685942354" name="Warnings as errors (-Werror)" superClass="gnu.cpp.compiler.option.warnings.toerrors" value="true" valueType="boolean"/>
+								<option id="gnu.cpp.compiler.option.warnings.toerrors.1685942354" name="Warnings as errors (-Werror)" superClass="gnu.cpp.compiler.option.warnings.toerrors" useByScannerDiscovery="false" value="true" valueType="boolean"/>
 								<inputType id="cdt.managedbuild.tool.gnu.cpp.compiler.input.2112410135" superClass="cdt.managedbuild.tool.gnu.cpp.compiler.input"/>
 							</tool>
 							<tool id="cdt.managedbuild.tool.gnu.archiver.mingw.base.475922485" name="GCC Archiver" superClass="cdt.managedbuild.tool.gnu.archiver.mingw.base"/>
@@ -58,7 +66,7 @@
 					</folderInfo>
 					<sourceEntries>
 						<entry flags="VALUE_WORKSPACE_PATH|RESOLVED" kind="sourcePath" name="include"/>
-						<entry flags="VALUE_WORKSPACE_PATH|RESOLVED" kind="sourcePath" name="src"/>
+						<entry excluding="test_chrono.cpp" flags="VALUE_WORKSPACE_PATH|RESOLVED" kind="sourcePath" name="src"/>
 					</sourceEntries>
 				</configuration>
 			</storageModule>
@@ -90,7 +98,7 @@
 								<option id="gnu.cpp.link.option.paths.613285884" name="Library search path (-L)" superClass="gnu.cpp.link.option.paths" valueType="libPaths">
 									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/basis/x64-Debug}&quot;"/>
 								</option>
-								<option id="gnu.cpp.link.option.flags.1361681053" name="Linker flags" superClass="gnu.cpp.link.option.flags" value="-m64 -Wl,-Map=test-test-basis.exe.map -static -municode" valueType="string"/>
+								<option id="gnu.cpp.link.option.flags.1361681053" name="Linker flags" superClass="gnu.cpp.link.option.flags" value="-m64 -Wl,-Map=${ProjName}.map -static -municode" valueType="string"/>
 								<inputType id="cdt.managedbuild.tool.gnu.cpp.linker.input.1572953677" superClass="cdt.managedbuild.tool.gnu.cpp.linker.input">
 									<additionalInput kind="additionalinputdependency" paths="$(USER_OBJS)"/>
 									<additionalInput kind="additionalinput" paths="$(LIBS)"/>
@@ -149,7 +157,7 @@
 								<option id="gnu.cpp.link.option.paths.1883226430" name="Library search path (-L)" superClass="gnu.cpp.link.option.paths" valueType="libPaths">
 									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/basis/x32-Debug}&quot;"/>
 								</option>
-								<option id="gnu.cpp.link.option.flags.1057765678" name="Linker flags" superClass="gnu.cpp.link.option.flags" value="-m32 -Wl,-Map=test-test-basis.exe.map -static -municode" valueType="string"/>
+								<option id="gnu.cpp.link.option.flags.1057765678" name="Linker flags" superClass="gnu.cpp.link.option.flags" value="-m32 -Wl,-Map=${ProjName}.map -static -municode" valueType="string"/>
 								<inputType id="cdt.managedbuild.tool.gnu.cpp.linker.input.1594384628" superClass="cdt.managedbuild.tool.gnu.cpp.linker.input">
 									<additionalInput kind="additionalinputdependency" paths="$(USER_OBJS)"/>
 									<additionalInput kind="additionalinput" paths="$(LIBS)"/>
@@ -208,7 +216,7 @@
 								<option id="gnu.cpp.link.option.paths.604049954" name="Library search path (-L)" superClass="gnu.cpp.link.option.paths" valueType="libPaths">
 									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/basis/x32-Release}&quot;"/>
 								</option>
-								<option id="gnu.cpp.link.option.flags.964814971" name="Linker flags" superClass="gnu.cpp.link.option.flags" value="-m32 -Wl,-Map=test-test-basis.exe.map -static -municode" valueType="string"/>
+								<option id="gnu.cpp.link.option.flags.964814971" name="Linker flags" superClass="gnu.cpp.link.option.flags" value="-m32 -Wl,-Map=${ProjName}.map -static -municode" valueType="string"/>
 								<option id="gnu.cpp.link.option.nostdlibs.861303693" name="No startup or default libs (-nostdlib)" superClass="gnu.cpp.link.option.nostdlibs" value="false" valueType="boolean"/>
 								<option id="gnu.cpp.link.option.nodeflibs.1439629863" name="Do not use default libraries (-nodefaultlibs)" superClass="gnu.cpp.link.option.nodeflibs" value="false" valueType="boolean"/>
 								<option id="gnu.cpp.link.option.nostart.1433415982" name="Do not use standard start files (-nostartfiles)" superClass="gnu.cpp.link.option.nostart" value="false" valueType="boolean"/>

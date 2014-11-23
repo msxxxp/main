@@ -1,6 +1,9 @@
 ﻿#ifndef EXCIS_CONNECTION_HPP_
 #define EXCIS_CONNECTION_HPP_
 
-#include <excis/sub_connection/Remote.hpp>
+#include <basis/configure.hpp>
+#include <basis/simstd/iosfwd>
+
+#include <excis/~connection/Remote.hpp>
 
 #endif

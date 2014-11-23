@@ -42,13 +42,14 @@
 									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/excis/x64-Release}&quot;"/>
 									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/basis/x64-Release}&quot;"/>
 								</option>
-								<option id="gnu.cpp.link.option.flags.1737343171" name="Linker flags" superClass="gnu.cpp.link.option.flags" value="-Wl,-Map=test-excis.map -static -municode -m64" valueType="string"/>
+								<option id="gnu.cpp.link.option.flags.1737343171" name="Linker flags" superClass="gnu.cpp.link.option.flags" value="-Wl,-Map=${ProjName}.map -static -municode -m64" valueType="string"/>
 								<option id="gnu.cpp.link.option.libs.118132398" name="Libraries (-l)" superClass="gnu.cpp.link.option.libs" valueType="libs">
 									<listOptionValue builtIn="false" value="excis"/>
 									<listOptionValue builtIn="false" value="basis"/>
 									<listOptionValue builtIn="false" value="credui"/>
 								</option>
 								<option id="gnu.cpp.link.option.strip.1226297471" name="Omit all symbol information (-s)" superClass="gnu.cpp.link.option.strip" value="true" valueType="boolean"/>
+								<option id="gnu.cpp.link.option.nostart.283714047" superClass="gnu.cpp.link.option.nostart" value="true" valueType="boolean"/>
 								<inputType id="cdt.managedbuild.tool.gnu.cpp.linker.input.899911578" superClass="cdt.managedbuild.tool.gnu.cpp.linker.input">
 									<additionalInput kind="additionalinputdependency" paths="$(USER_OBJS)"/>
 									<additionalInput kind="additionalinput" paths="$(LIBS)"/>
@@ -106,7 +107,7 @@
 									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/excis/x64-Debug}&quot;"/>
 									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/basis/x64-Debug}&quot;"/>
 								</option>
-								<option id="gnu.cpp.link.option.flags.1500977211" name="Linker flags" superClass="gnu.cpp.link.option.flags" value="-Wl,-Map=test-excis.map -static -municode -m64" valueType="string"/>
+								<option id="gnu.cpp.link.option.flags.1500977211" name="Linker flags" superClass="gnu.cpp.link.option.flags" value="-Wl,-Map=${ProjName}.map -static -municode -m64" valueType="string"/>
 								<option id="gnu.cpp.link.option.libs.1187457777" name="Libraries (-l)" superClass="gnu.cpp.link.option.libs" valueType="libs">
 									<listOptionValue builtIn="false" value="excis"/>
 									<listOptionValue builtIn="false" value="basis"/>

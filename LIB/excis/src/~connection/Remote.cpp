@@ -1,33 +1,13 @@
-﻿#include <basis/sys/logger.hpp>
+﻿#include <excis/connection.hpp>
+
+#include <basis/sys/logger.hpp>
+#include <basis/os/mpr.hpp>
 #include <basis/simstd/string>
 
-#include <excis/connection.hpp>
 #include <excis/dll.hpp>
 #include <excis/exception.hpp>
 
 namespace {
-	struct Mpr_dll: private Ext::DynamicLibrary {
-		typedef DWORD (WINAPI *FWNetAddConnection2W)(LPNETRESOURCEW, LPCWSTR, LPCWSTR, DWORD);
-		typedef DWORD (WINAPI *FWNetCancelConnection2W)(LPCWSTR, DWORD, WINBOOL);
-
-		DEFINE_FUNC(WNetAddConnection2W);
-		DEFINE_FUNC(WNetCancelConnection2W);
-
-		static Mpr_dll & inst()
-		{
-			static Mpr_dll ret;
-			return ret;
-		}
-
-	private:
-		Mpr_dll() :
-			Ext::DynamicLibrary(L"mpr.dll")
-		{
-			GET_DLL_FUNC(WNetAddConnection2W);
-			GET_DLL_FUNC(WNetCancelConnection2W);
-		}
-	};
-
 	ustring make_IPC_string(const ustring & host)
 	{
 		PCWSTR prefix = (host[0] != PATH_SEPARATOR_C || host[1] != PATH_SEPARATOR_C) ? NETWORK_PATH_PREFIX : EMPTY_STR;
@@ -77,7 +57,7 @@ namespace connection {
 		if (m_connected) {
 			ustring ipc = make_IPC_string(m_host);
 			LogDebug(L"'%s'\n", m_host.c_str());
-			CheckApiError(Mpr_dll::inst().WNetCancelConnection2W(ipc.c_str(), 0, FALSE));
+			CheckApiError(os::mpr_dll::inst().WNetCancelConnection2W(ipc.c_str(), 0, FALSE));
 			m_connected = false;
 		}
 		m_host.clear();
@@ -102,7 +82,7 @@ namespace connection {
 				user = nullptr;
 				pass = nullptr;
 			}
-			CheckApiError(Mpr_dll::inst().WNetAddConnection2W(&NetRes, pass, user, 0));
+			CheckApiError(os::mpr_dll::inst().WNetAddConnection2W(&NetRes, pass, user, 0));
 			m_host = host;
 			m_connected = true;
 		}
@@ -111,26 +91,22 @@ namespace connection {
 }
 
 namespace connection {
-	Remote::~Remote()
-	{
-	}
-
 	void Remote::connect()
 	{
 		do_connect(ustring(), nullptr, nullptr);
 	}
 
-	void Remote::connect(const ustring & host, const wchar_t * user, const wchar_t * pass)
+	void Remote::connect(const ustring& host, const wchar_t* user, const wchar_t* pass)
 	{
 		do_connect(host, user, pass);
 	}
 
-	Remote * Remote::create()
+	Remote* Remote::create()
 	{
 		return new RemoteImpl(ustring(), nullptr, nullptr);
 	}
 
-	Remote * Remote::create(const ustring & host, const wchar_t * user, const wchar_t * pass)
+	Remote* Remote::create(const ustring& host, const wchar_t* user, const wchar_t* pass)
 	{
 		return new RemoteImpl(host, user, pass);
 	}

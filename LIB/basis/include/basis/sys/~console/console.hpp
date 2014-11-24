@@ -11,6 +11,17 @@ namespace console {
 		ERR    = STD_ERROR_HANDLE,
 	};
 
+	enum class Codepage: size_t {
+		UTF16LE = 1200,
+		UTF16BE = 1201,
+		UTF8 = 65001,
+	};
+
+	size_t get_output_codepage();
+
+	void set_output_codepage(ssize_t cp);
+
+	void set_output_codepage(Codepage cp);
 }
 
 /*

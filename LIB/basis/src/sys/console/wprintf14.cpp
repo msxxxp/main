@@ -6,7 +6,7 @@ namespace console {
 
 	size_t puts8(const wchar_t* str, Handle hnd)
 	{
-		static UINT codepage = GetConsoleOutputCP();
+		static auto codepage = get_output_codepage();
 		size_t ret = 0;
 		auto size = cstr::convert(str, codepage/*CP_UTF8*/);
 		if (size) {

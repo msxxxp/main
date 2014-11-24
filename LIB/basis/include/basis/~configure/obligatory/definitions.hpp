@@ -3,10 +3,9 @@
 
 #define UNUSED(val) ((void)val)
 
-#define THIS_FILE        filename_only(__FILE__)
-#define THIS_FUNCNAME    funcname_only(__PRETTY_FUNCTION__)
-#define THIS_PLACE       THIS_FILE, __LINE__, __PRETTY_FUNCTION__
-#define THIS_PLACE_SHORT THIS_FILE, __LINE__, THIS_FUNCNAME
-//#define THIS_PLACE_SHORT THIS_FILE, __LINE__, __FUNCTION__
+//#define THIS_FILE        filename_only(__FILE__)
+//#define THIS_FUNCNAME    funcname_only(__PRETTY_FUNCTION__)
+
+#define THIS_PLACE  __FILE__, __LINE__, __PRETTY_FUNCTION__
 
 #endif

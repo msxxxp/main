@@ -9,7 +9,7 @@
 #ifdef NDEBUG
 	#define MemoryAllocate(p1) memory::malloc(p1)
 #else
-	#define MemoryAllocate(p1) memory::malloc(p1, THIS_PLACE_SHORT)
+	#define MemoryAllocate(p1) memory::malloc(p1, THIS_PLACE)
 #endif
 
 #define MemoryFree(p1) memory::free(p1)

@@ -97,7 +97,7 @@ namespace logger {
 		TraceFunc();
 	}
 
-	void ModuleImpl::out_with_color(WORD color, Level lvl, const wchar_t * format, ...) const
+	void ModuleImpl::out_with_color(WORD color, Level lvl, const wchar_t* format, ...) const
 	{
 		TraceFunc();
 		if (m_enabled && lvl >= m_lvl) {
@@ -108,7 +108,7 @@ namespace logger {
 		TraceFunc();
 	}
 
-	void ModuleImpl::out_with_place(const char * file, int line, const char * func, Level lvl, const wchar_t * format, ...) const
+	void ModuleImpl::out_with_place(const char* file, int line, const char* func, Level lvl, const wchar_t* format, ...) const
 	{
 		TraceFunc();
 		if (m_enabled && m_lvl <= lvl) {
@@ -127,7 +127,7 @@ namespace logger {
 		return m_target->lock_scope();
 	}
 
-	wchar_t * ModuleImpl::add_prefix(Level lvl, wchar_t * buff, size_t size) const
+	wchar_t* ModuleImpl::add_prefix(Level lvl, wchar_t* buff, size_t size) const
 	{
 		TraceFunc();
 		size_t written = 0;
@@ -154,15 +154,15 @@ namespace logger {
 		return buff + written;
 	}
 
-	wchar_t * ModuleImpl::add_place(wchar_t * buff, size_t size, const char * file, int line, const char * func) const
+	wchar_t* ModuleImpl::add_place(wchar_t* buff, size_t size, const char* file, int line, const char* func) const
 	{
 		TraceFunc();
 		size_t written = 0;
 		if (m_prefix & Prefix::Place) {
-			written += safe_snprintf(buff + written, size - written, L"%14.14S:%5d ", file, line);
+			written += safe_snprintf(buff + written, size - written, L"%14.14S:%5d ", filename_only(file), line);
 		}
 		if (m_prefix & Prefix::Function) {
-			written += safe_snprintf(buff + written, size - written, L"%S() ", func);
+			written += safe_snprintf(buff + written, size - written, L"%S() ", funcname_only(func));
 		}
 		TraceFunc();
 		return buff + written;

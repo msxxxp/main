@@ -156,19 +156,19 @@ namespace sync {
 
 		Queue();
 
-		Queue(Queue && right);
+		Queue(Queue&& right);
 
-		Queue & operator = (Queue && right);
+		Queue& operator =(Queue&& right);
 
-		void swap(Queue & right);
+		void swap(Queue& right);
 
-		void put_message(const Message & message);
+		void put_message(const Message& message);
 
-		WaitResult_t get_message(Message & message, Timeout_t timeout_msec = WAIT_FOREVER);
+		WaitResult_t get_message(Message& message, Timeout_t timeout_msec = WAIT_FOREVER);
 
 	private:
 		struct Queue_impl;
-		Queue_impl * m_impl;
+		Queue_impl* m_impl;
 	};
 
 	///============================================================================== MessageManager

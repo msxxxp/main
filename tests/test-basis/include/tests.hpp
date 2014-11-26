@@ -13,6 +13,8 @@ void test_list();
 
 void test_lock();
 
+void test_lock_rw();
+
 void test_logger();
 
 void test_string();
@@ -24,5 +26,7 @@ void test_traceback();
 void test_url();
 
 void test_window();
+
+void test_zodiac();
 
 #endif

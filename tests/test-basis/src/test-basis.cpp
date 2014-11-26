@@ -30,11 +30,13 @@ int main(int argc, char* argv[])
 //
 //	test_traceback();
 //
-	test_threads();
+//	test_threads();
 //
 //	test_url();
 //
 //	test_window();
+
+	test_zodiac();
 
 	return 0;
 }

@@ -1,4 +1,3 @@
-
 #ifndef BASIS_MUTEX_LOCK_GUARD_HPP_
 #define BASIS_MUTEX_LOCK_GUARD_HPP_
 
@@ -15,16 +14,16 @@ namespace simstd {
 
 		~lock_guard();
 
-		explicit lock_guard(mutex_type & m);
+		explicit lock_guard(mutex_type& m);
 
 		explicit lock_guard(defer_lock_t);
 
-		lock_guard(mutex_type & m, adopt_lock_t);
+		lock_guard(mutex_type& m, adopt_lock_t);
 
-		lock_guard(lock_guard && other);
+		lock_guard(lock_guard&& other);
 
 	private:
-		mutex_type * m_sync;
+		mutex_type* m_sync;
 	};
 
 	template<typename Mutex>
@@ -35,7 +34,7 @@ namespace simstd {
 	}
 
 	template<typename Mutex>
-	lock_guard<Mutex>::lock_guard(mutex_type & m) :
+	lock_guard<Mutex>::lock_guard(mutex_type& m) :
 		m_sync(&m)
 	{
 		m_sync->lock();
@@ -48,24 +47,24 @@ namespace simstd {
 	}
 
 	template<typename Mutex>
-	lock_guard<Mutex>::lock_guard(mutex_type & m, adopt_lock_t) :
+	lock_guard<Mutex>::lock_guard(mutex_type& m, adopt_lock_t) :
 		m_sync(&m)
 	{
 	}
 
 	template<typename Mutex>
-	lock_guard<Mutex>::lock_guard(lock_guard && other) :
+	lock_guard<Mutex>::lock_guard(lock_guard&& other) :
 		m_sync(other.m_sync)
 	{
 		other.m_sync = nullptr;
 	}
 
 	template<typename Mutex>
-	lock_guard<Mutex> auto_lock(Mutex & mutex)
+	lock_guard<Mutex> auto_lock(Mutex& mutex)
 	{
 		return simstd::move(lock_guard<Mutex>(mutex));
 	}
 
-}    // namespace simstd
+}
 
 #endif

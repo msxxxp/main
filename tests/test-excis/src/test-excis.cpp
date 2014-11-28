@@ -21,6 +21,7 @@ namespace {
 
 int main(int argc, char* argv[])
 {
+	console::set_output_codepage(console::Codepage::UTF8);
 	console::printf("%s:%d\n", __PRETTY_FUNCTION__, __LINE__);
 
 	setup_logger();
@@ -29,8 +30,8 @@ int main(int argc, char* argv[])
 	for (int i = 0; i < argc; ++i)
 		LogDebug(L"'%S'\n", argv[i]);
 
-	exception::set_vectored_exception_filter();
-	exception::set_unhandled_exception_filter();
+//	exception::set_vectored_exception_filter();
+//	exception::set_unhandled_exception_filter();
 
 	try {
 		LogTrace();

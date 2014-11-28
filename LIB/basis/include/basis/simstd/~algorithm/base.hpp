@@ -195,7 +195,7 @@ namespace simstd {
 		template<typename Type>
 		Type abs(Type a)
 		{
-			return (a <= 0) ? -a : a;
+			return (a < Type(0)) ? -a : a;
 		}
 
 		template<typename Size>

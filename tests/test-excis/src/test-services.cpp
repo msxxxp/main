@@ -40,7 +40,7 @@ void test_service()
 {
 	LogAtten(L"\n");
 
-	Ext::Services svcs(L"localhost");
+	Ext::Services svcs;//(L"localhost");
 
 	LogTrace();
 	ServicesView obs(&svcs);
@@ -54,7 +54,7 @@ void test_service()
 	svcs.set_type(Ext::Service::EnumerateType_t::DRIVERS);
 
 	LogTrace();
-	svcs.set_host(L"127.0.0.1");
+	svcs.set_host(L"localhost");
 
 //	svcs.stop_batch();
 

@@ -1,8 +1,6 @@
 ﻿#ifndef BASIS_SYS_CONSOLE_CONSOLE_HPP_
 #define BASIS_SYS_CONSOLE_CONSOLE_HPP_
 
-#include <basis/sys/console.hpp>
-
 namespace console {
 
 	enum class Handle : uint32_t {

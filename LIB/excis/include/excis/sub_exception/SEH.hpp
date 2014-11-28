@@ -3,9 +3,9 @@
 
 namespace exception {
 
-	void set_unhandled_exception_filter();
-
 	void set_vectored_exception_filter();
+
+	void set_unhandled_exception_filter();
 
 }
 

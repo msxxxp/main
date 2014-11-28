@@ -28,9 +28,9 @@ int main(int argc, char* argv[])
 //
 //	test_console_input();
 //
-//	test_traceback();
+	test_traceback();
 //
-	test_threads();
+//	test_threads();
 //
 //	test_url();
 //

@@ -1,8 +1,6 @@
 ﻿#ifndef BASIS_SYS_CONSOLE_APRINTF_HPP_
 #define BASIS_SYS_CONSOLE_APRINTF_HPP_
 
-#include <basis/sys/console.hpp>
-
 namespace console {
 
 	size_t fputs(const char * str, size_t len, HANDLE hndl);

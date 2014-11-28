@@ -1,8 +1,6 @@
 ﻿#ifndef BASIS_SYS_CONSOLE_WPRINTF_HPP_
 #define BASIS_SYS_CONSOLE_WPRINTF_HPP_
 
-#include <basis/sys/console.hpp>
-
 namespace console {
 
 	size_t fputs(const wchar_t * str, size_t len, HANDLE hndl);

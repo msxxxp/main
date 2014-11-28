@@ -30,11 +30,10 @@ int main(int argc, char* argv[])
 	for (int i = 0; i < argc; ++i)
 		LogDebug(L"'%S'\n", argv[i]);
 
-//	exception::set_vectored_exception_filter();
-//	exception::set_unhandled_exception_filter();
+	exception::set_vectored_exception_filter();
+	exception::set_unhandled_exception_filter();
 
 	try {
-		LogTrace();
 //		test_crashes();
 
 //		test_auth();

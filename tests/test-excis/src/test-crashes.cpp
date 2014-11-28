@@ -50,7 +50,7 @@ void test_zero_division()
 
 void test_crashes()
 {
-//	test_null_string();
+	test_null_string();
 
 	test_zero_division();
 

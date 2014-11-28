@@ -1,11 +1,12 @@
 ﻿#ifndef LIBBASE_REG_HPP_
 #define LIBBASE_REG_HPP_
 
-#include <libbase/std.hpp>
+#include <basis/configure.hpp>
+#include <basis/ext/pattern.hpp>
 
 namespace Base {
 
-	struct Register: private Uncopyable {
+	struct Register: private pattern::Uncopyable {
 		~Register()
 		{
 			close();

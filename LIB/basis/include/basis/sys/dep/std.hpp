@@ -1,10 +1,7 @@
 ﻿#ifndef LIBBASE_STD_HPP_
 #define LIBBASE_STD_HPP_
 
-#include "pvt/config.hpp"
-#include "pvt/memory.hpp"
-#include "pvt/fwd.hpp"
-
+#include <basis/configure.hpp>
 
 typedef const void * PCVOID;
 
@@ -22,9 +19,6 @@ namespace Base {
 	const UINT CP_UTF32be = 1203;
 //	const size_t CP_AUTODETECT = (UINT)-1;
 	const UINT DEFAULT_CP = CP_UTF8;
-
-	///=============================================================================================
-
 
 }
 

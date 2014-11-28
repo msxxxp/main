@@ -1,7 +1,7 @@
 #ifndef LIBBASE_WINDOW_HPP_
 #define LIBBASE_WINDOW_HPP_
 
-#include <libbase/std.hpp>
+#include <basis/configure.hpp>
 
 #include <algorithm>
 #include <vector>

@@ -1,14 +1,14 @@
 #ifndef LIBBASE_THREAD_HOLDER_HPP_
 #define LIBBASE_THREAD_HOLDER_HPP_
 
-#include <libbase/thread.hpp>
-#include <patterns/Uncopyable.hpp>
+#include <basis/configure.hpp>
+#include <basis/ext/pattern.hpp>
 
 #include <vector>
 
 namespace Base {
 
-	struct ThreadsHolder: private Pattern::Uncopyable {
+	struct ThreadsHolder: private pattern::Uncopyable {
 
 		~ThreadsHolder();
 

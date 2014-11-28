@@ -11,10 +11,15 @@
 
 struct ServicesView: public sync::Observer
 {
+	~ServicesView()
+	{
+		LogTraceObj();
+	}
+
 	ServicesView(Ext::Services* svcs):
 		m_svcs(svcs)
 	{
-		LogTrace();
+		LogTraceObj();
 		m_svcs->register_observer(this);
 	}
 

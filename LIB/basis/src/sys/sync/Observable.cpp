@@ -5,7 +5,7 @@ namespace sync {
 
 	Observable::~Observable()
 	{
-		m_manager->unregister_all(this);
+		m_manager->unregister_observable(this);
 	}
 
 	Observable::Observable() :

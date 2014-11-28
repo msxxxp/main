@@ -51,7 +51,7 @@ namespace logger {
 		Level convert_to_level(const wchar_t * str)
 		{
 			Level ret = defaults::get_level();
-			if (cstr::compare_ci_1st_length(L"to", str) == 0 || cstr::compare(L"0", str) == 0) {
+			if (cstr::compare_ci_1st_length(L"to", str) == 0 || cstr::compare_ci_1st_length(L"t3", str) == 0 || cstr::compare(L"0", str) == 0) {
 				ret = Level::TrObj;
 			} else if (cstr::compare_ci_1st_length(L"t2", str) == 0 || cstr::compare(L"1", str) == 0) {
 				ret = Level::Trace2;

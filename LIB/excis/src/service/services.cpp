@@ -269,7 +269,7 @@ namespace Ext {
 		set_changed(true);
 		if (!m_batch_started) {
 			LogTrace();
-			notify_all(sync::Message());
+			notify_observers(sync::Message());
 		}
 	}
 
@@ -277,7 +277,7 @@ namespace Ext {
 	{
 		LogTrace();
 		m_batch_started = false;
-		notify_all(sync::Message());
+		notify_observers(sync::Message());
 	}
 
 	void Services::set_wait_state(bool new_state)

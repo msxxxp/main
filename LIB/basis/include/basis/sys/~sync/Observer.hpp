@@ -15,9 +15,9 @@ namespace sync {
 
 		virtual void unregister_observer(const Observable* subject, const Observer* observer) = 0;
 
-		virtual void unregister_all(const Observable* subject) = 0;
+		virtual void unregister_observable(const Observable* subject) = 0;
 
-		virtual void unregister_all(const Observer* observer) = 0;
+		virtual void unregister_observer(const Observer* observer) = 0;
 
 		virtual void notify(const Observable* subject, const Message& event) const = 0;
 	};
@@ -53,6 +53,8 @@ namespace sync {
 		virtual void notify(const Message& event) = 0;
 
 		Observer();
+
+		Observer(const Observable* subject);
 
 	private:
 		MessageManager* m_manager;

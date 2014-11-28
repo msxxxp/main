@@ -13,30 +13,30 @@
 namespace {
 	void setup_logger()
 	{
-		LogSetOptions(L"logger:///default?level=d;prefix=fu;target=co");
+		LogSetOptions(L"logger:///default?level=t3;prefix=fu;target=co");
 
 		traceback::init();
 	}
 }
 
-extern "C" int wmain(int argc, wchar_t* argv[])
+int main(int argc, char* argv[])
 {
-	console::printf(L"%S:%d\n", __PRETTY_FUNCTION__, __LINE__);
+	console::printf("%s:%d\n", __PRETTY_FUNCTION__, __LINE__);
 
 	setup_logger();
 
 	LogDebug(L"argc: %d\n", argc);
 	for (int i = 0; i < argc; ++i)
-		LogDebug(L"'%s'\n", argv[i]);
+		LogDebug(L"'%S'\n", argv[i]);
 
 	exception::set_vectored_exception_filter();
 	exception::set_unhandled_exception_filter();
 
 	try {
 		LogTrace();
-		test_crashes();
+//		test_crashes();
 
-		test_auth();
+//		test_auth();
 //		add_auth();
 
 		test_service();
@@ -56,10 +56,16 @@ extern "C" int wmain(int argc, wchar_t* argv[])
 		LogError(L"cpp exception cought\n");
 	}
 
+	console::printf("%s:%d\n", __PRETTY_FUNCTION__, __LINE__);
 	return 0;
+}
+
+extern "C" int wmain(int /*argc*/, wchar_t* /*argv*/[])
+{
+	return main(0, nullptr);
 }
 
 int WINAPI wWinMain(HINSTANCE /*hInstance*/, HINSTANCE /*hPrevInstance*/, LPWSTR /*lpCmdLine*/, int /*nShowCmd*/)
 {
-	return wmain(0, nullptr);
+	return main(0, nullptr);
 }

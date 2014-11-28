@@ -1,7 +1,7 @@
 ﻿#ifndef _LIBEXT_EXCEPTION_EXCEPTION_DEBUG_HPP_
 #define _LIBEXT_EXCEPTION_EXCEPTION_DEBUG_HPP_
 
-#define THROW_PLACE THIS_FILE, __LINE__, __PRETTY_FUNCTION__
+#define THROW_PLACE __FILE__, __LINE__, __PRETTY_FUNCTION__
 
 #define THROW_PLACE_STR exception::ThrowPlaceString(file, line, func)
 

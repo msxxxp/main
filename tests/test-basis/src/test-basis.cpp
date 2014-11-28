@@ -7,7 +7,7 @@ namespace {
 	void setup_logger()
 	{
 		console::set_output_codepage(console::Codepage::UTF8);
-		LogSetOptions(L"logger:///default?level=tr;prefix=f;target=co");
+		LogSetOptions(L"logger:///default?level=to;prefix=f;target=co");
 //		LogSetOptions(L"logger:///default?level=tr;prefix=f;target=fo(c:\\qwe.log)");
 	}
 }
@@ -30,14 +30,15 @@ int main(int argc, char* argv[])
 //
 //	test_traceback();
 //
-//	test_threads();
+	test_threads();
 //
 //	test_url();
 //
 //	test_window();
+//
+//	test_zodiac();
 
-	test_zodiac();
-
+	console::printf("%s:%d\n", __PRETTY_FUNCTION__, __LINE__);
 	return 0;
 }
 

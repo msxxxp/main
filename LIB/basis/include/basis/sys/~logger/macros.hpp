@@ -1,8 +1,6 @@
 ﻿#ifndef BASIS_SYS_LOGGER_MACROS_HPP_
 #define BASIS_SYS_LOGGER_MACROS_HPP_
 
-#include <basis/sys/logger.hpp>
-
 #if (defined(DEBUG) || defined(ENABLE_LOGGER)) && !defined(DISABLE_LOGGER)
 #   define LogSetOptions(url)                                logger::set_options(url)
 #   define LogTraceObj()                                     get_logger_module()->out_with_place(THIS_PLACE, logger::Level::TrObj, L"[%p, %I64u]\n", this, sizeof(*this))

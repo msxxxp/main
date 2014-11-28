@@ -5,21 +5,6 @@
 
 namespace simstd {
 
-	template<typename Type>
-	void swap(Type & a, Type & b)
-	{
-		Type tmp(move(a));
-		a = move(b);
-		b = move(tmp);
-	}
-
-	template<typename Type, size_t Num>
-	void swap(Type (&a)[Num], Type (&b)[Num])
-	{
-		for (size_t n = 0; n < Num; ++n)
-			swap(a[n], b[n]);
-	}
-
 	template<typename ForwardIt1, typename ForwardIt2>
 	void iter_swap(ForwardIt1 a, ForwardIt2 b)
 	{
@@ -56,15 +41,6 @@ namespace simstd {
 	const T& max(const T& a, const T& b, Comparator comp)
 	{
 		return comp(b, a) ? a : b;
-	}
-
-	template<typename InputIt1, typename InputIt2>
-	bool equal(InputIt1 first1, InputIt1 last1, InputIt2 first2)
-	{
-		for (; first1 != last1; ++first1, ++first2)
-			if (!(*first1 == *first2))
-				return false;
-		return true;
 	}
 
 	template<typename InputIt1, typename InputIt2, typename Compare>

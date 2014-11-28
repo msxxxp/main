@@ -1,8 +1,6 @@
 #ifndef BASIS_SYS_MEMORY_AUTO_ARRAY_HPP_
 #define BASIS_SYS_MEMORY_AUTO_ARRAY_HPP_
 
-#include <basis/sys/memory.hpp>
-
 namespace memory {
 
 	template<typename Type>

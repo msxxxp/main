@@ -17,12 +17,12 @@
 
 namespace memory {
 
-	template<typename Type>
-	inline Type & reverse_bytes(Type & inout)
-	{
-		simstd::reverse((char*)&inout, ((char*)&inout) + sizeof(inout));
-		return inout;
-	}
+//	template<typename Type>
+//	inline Type & reverse_bytes(Type & inout)
+//	{
+//		simstd::reverse((char*)&inout, ((char*)&inout) + sizeof(inout));
+//		return inout;
+//	}
 
 	inline WORD & swap_bytes(WORD & inout)
 	{

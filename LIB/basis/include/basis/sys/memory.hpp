@@ -4,8 +4,6 @@
 #include <basis/configure.hpp>
 #include <basis/ext/pattern.hpp>
 
-#include <basis/simstd/~algorithm/base.hpp>
-
 #include <basis/sys/~memory/constraints.hpp>
 #include <basis/sys/~memory/heap/Stat.hpp>
 #include <basis/sys/~memory/heap/Default.hpp>

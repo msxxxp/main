@@ -1,8 +1,6 @@
 ﻿#ifndef BASIS_SYS_LOGGER_MODULE_HPP_
 #define BASIS_SYS_LOGGER_MODULE_HPP_
 
-#include <basis/sys/logger.hpp>
-
 namespace logger {
 
 	class Module;

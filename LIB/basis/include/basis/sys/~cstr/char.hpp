@@ -1,8 +1,6 @@
 #ifndef LIBBASE_CSTR_CHAR_HPP_
 #define LIBBASE_CSTR_CHAR_HPP_
 
-#include <basis/sys/cstr.hpp>
-
 namespace cstr {
 
 	template<typename CharType>

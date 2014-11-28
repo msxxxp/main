@@ -1,8 +1,6 @@
 #ifndef LIBBASE_CSTR_TO_NUMBER_HPP_
 #define LIBBASE_CSTR_TO_NUMBER_HPP_
 
-#include <basis/sys/cstr.hpp>
-
 #ifndef _MSC_VER
 extern "C" {
 	long long __MINGW_NOTHROW wcstoll(const wchar_t * __restrict__, wchar_t** __restrict__, int);

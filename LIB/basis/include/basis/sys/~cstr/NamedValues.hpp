@@ -1,8 +1,6 @@
 #ifndef LIBBASE_CSTR_NAMEDVALUES_HPP_
 #define LIBBASE_CSTR_NAMEDVALUES_HPP_
 
-#include <basis/sys/cstr.hpp>
-
 namespace cstr {
 
 	template<typename Type>

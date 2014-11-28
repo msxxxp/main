@@ -5,6 +5,7 @@
 #include <basis/sys/~fsys/attributes.hpp>
 #include <basis/sys/~fsys/direcrory.hpp>
 #include <basis/sys/~fsys/file.hpp>
+#include <basis/sys/~fsys/Map_nt.hpp>
 #include <basis/sys/~fsys/fsys.hpp>
 
 #endif

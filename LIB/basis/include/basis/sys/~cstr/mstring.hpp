@@ -7,24 +7,24 @@ namespace cstr {
 		typedef mstring this_type;
 
 	public:
-		typedef wchar_t value_type;
-		typedef size_t size_type;
-		typedef value_type & reference;
-		typedef const value_type & const_reference;
-		typedef value_type * pointer;
-		typedef const value_type * const_pointer;
+		typedef wchar_t           value_type;
+		typedef size_t            size_type;
+		typedef value_type&       reference;
+		typedef const value_type& const_reference;
+		typedef value_type*       pointer;
+		typedef const value_type* const_pointer;
 
 		~mstring();
 
 		mstring(const_pointer in = EMPTY_STR);
 
-		mstring(const this_type & other);
+		mstring(const this_type& other);
 
-		mstring & operator =(const this_type & other);
+		mstring& operator =(const this_type& other);
 
-		mstring(this_type && rhs);
+		mstring(this_type&& rhs);
 
-		mstring & operator =(this_type && rhs);
+		mstring& operator =(this_type&& rhs);
 
 		void push_back(const_pointer str);
 
@@ -36,7 +36,7 @@ namespace cstr {
 
 		const_pointer operator [](size_type index) const;
 
-		void swap(this_type & other);
+		void swap(this_type& other);
 
 		static ssize_t unit_test();
 

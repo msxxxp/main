@@ -1,42 +1,17 @@
 #ifndef BASIS_SYS_FSYS_FILE_HPP_
 #define BASIS_SYS_FSYS_FILE_HPP_
 
-#include <basis/sys/fsys.hpp>
-
 namespace fsys {
 
 	namespace file {
 
-		bool del_nt(const wchar_t * path);
+		bool del_nt(const wchar_t* path);
 
-		bool copy(const wchar_t * path, const wchar_t * dest);
+		bool copy(const wchar_t* path, const wchar_t* dest);
 
-		bool copy_link(const wchar_t * path, const wchar_t * dest);
+		bool copy_link(const wchar_t* path, const wchar_t* dest);
 
-		bool move(const wchar_t * path, const wchar_t * dest, DWORD flag = 0);
-
-		struct Map_nt {
-			typedef uint64_t size_type;
-
-			~Map_nt();
-
-			Map_nt(const wchar_t * path, size_type size = static_cast<size_type>(-1), bool write = false);
-
-			size_type size() const;
-
-			void * data() const;
-
-			bool is_writeble() const;
-
-			bool is_valid() const;
-
-		private:
-			uint64_t get_size(HANDLE file) const;
-
-			void *    m_data;
-			size_type m_size;
-			bool      m_write;
-		};
+		bool move(const wchar_t* path, const wchar_t* dest, DWORD flag = 0);
 
 	}
 

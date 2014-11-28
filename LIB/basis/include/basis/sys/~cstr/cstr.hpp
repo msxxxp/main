@@ -1,8 +1,6 @@
 #ifndef LIBBASE_CSTR_CSTR_HPP_
 #define LIBBASE_CSTR_CSTR_HPP_
 
-#include <basis/sys/cstr.hpp>
-
 #include <basis/sys/memory.hpp>
 
 namespace cstr {

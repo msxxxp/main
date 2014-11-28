@@ -1,13 +1,8 @@
 ﻿#ifndef BASIS_STRING_CHAR_TRAITS_HPP_
 #define BASIS_STRING_CHAR_TRAITS_HPP_
 
-//#include <basis/simstd/string>
-
 #include <string.h>
 #include <wchar.h>
-
-//#include <cstring>
-//#include <cwchar>
 
 namespace simstd {
 

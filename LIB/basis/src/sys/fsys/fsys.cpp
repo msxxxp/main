@@ -2,10 +2,10 @@
 
 namespace fsys {
 
-	bool del_nt(const wchar_t * path)
+	bool del_nt(const wchar_t* path)
 	{
-		DWORD attr = get_attr_nt(path);
-		if (attr != INVALID_FILE_ATTRIBUTES) {
+		auto attr = get_attr_nt(path);
+		if (is_valid(attr)) {
 			if (is_dir(attr)) {
 				return directory::del_nt(path);
 			} else {
@@ -15,10 +15,9 @@ namespace fsys {
 		return false;
 	}
 
-	bool is_exist(const wchar_t * path)
+	bool is_exist(const wchar_t* path)
 	{
-		auto attr = get_attr_nt(path);
-		return is_valid(attr) && (is_file(attr) || is_dir(attr));
+		return is_valid(get_attr_nt(path));
 	}
 
 }

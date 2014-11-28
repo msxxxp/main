@@ -26,7 +26,7 @@ void Reader::handle_message(const MessageType& msg)
 
 DWORD WINAPI Reader::thread_func(PVOID data)
 {
-	Reader * th = static_cast<Reader*>(data);
+	Reader* th = static_cast<Reader*>(data);
 	LogConsoleReport(-1, L"Reader::run(%d, %p)\n", th->m_num, th->m_thread);
 	while (true) {
 		MessageType msg;

@@ -1,13 +1,23 @@
 #include <basis/configure.hpp>
 #include <basis/sys/sync.hpp>
 
-#include "MessageManager.hpp"
-
 namespace sync {
 
 	Observable::~Observable()
 	{
 		m_manager->unregister_all(this);
+	}
+
+	Observable::Observable() :
+		m_manager(get_simple_message_manager()),
+		m_changed(false)
+	{
+	}
+
+	Observable::Observable(MessageManager* manager) :
+		m_manager(manager),
+		m_changed(false)
+	{
 	}
 
 	void Observable::register_observer(Observer * observer)

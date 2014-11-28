@@ -9,14 +9,8 @@ namespace sync {
 	}
 
 	Observer::Observer() :
-		m_manager(get_simple_message_manager())
+		m_manager(MessageManager::get_default())
 	{
 	}
-
-	Observer::Observer(MessageManager* manager) :
-		m_manager(manager)
-	{
-	}
-
 
 }

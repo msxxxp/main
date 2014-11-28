@@ -7,20 +7,43 @@ namespace sync {
 
 	class MessageManager {
 	public:
+		static MessageManager* get_default();
+
 		virtual ~MessageManager() = default;
 
-		virtual void register_observer(Observable* subject, Observer* observer) = 0;
+		virtual void register_observer(const Observable* subject, Observer* observer) = 0;
 
-		virtual void unregister_observer(Observable* subject, Observer* observer) = 0;
+		virtual void unregister_observer(const Observable* subject, const Observer* observer) = 0;
 
-		virtual void unregister_all(Observable* subject) = 0;
+		virtual void unregister_all(const Observable* subject) = 0;
 
-		virtual void unregister_all(Observer* observer) = 0;
+		virtual void unregister_all(const Observer* observer) = 0;
 
 		virtual void notify(const Observable* subject, const Message& event) const = 0;
 	};
 
-	MessageManager* get_simple_message_manager();
+	///================================================================================== Observable
+	class Observable {
+	public:
+		virtual ~Observable();
+
+		Observable();
+
+		void register_observer(Observer* observer) const;
+
+		void unregister_observer(Observer* observer) const;
+
+		void notify_observers(const Message& event) const;
+
+	protected:
+		void set_changed(bool changed) const;
+
+		bool get_changed() const;
+
+	private:
+		mutable MessageManager* m_manager;
+		mutable bool m_changed;
+	};
 
 	///==================================================================================== Observer
 	class Observer {
@@ -31,34 +54,8 @@ namespace sync {
 
 		Observer();
 
-		Observer(MessageManager* manager);
-
 	private:
 		MessageManager* m_manager;
-	};
-
-	///================================================================================== Observable
-	class Observable {
-	public:
-		virtual ~Observable();
-
-		Observable();
-
-		Observable(MessageManager* manager);
-
-		void register_observer(Observer* observer);
-
-		void unregister_observer(Observer* observer);
-
-		void notify_all(const Message& event) const;
-
-		void set_changed(bool changed) const;
-
-		bool get_changed() const;
-
-	private:
-		MessageManager* m_manager;
-		mutable bool m_changed;
 	};
 
 }

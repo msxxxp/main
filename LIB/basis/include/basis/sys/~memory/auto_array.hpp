@@ -7,17 +7,16 @@ namespace memory {
 	class auto_array: private pattern::Uncopyable {
 		typedef auto_array this_type;
 		typedef Type value_type;
-		typedef Type * pointer;
-		typedef const Type * const_pointer;
-		typedef Type & reference;
-		typedef const Type & const_reference;
+		typedef Type* pointer;
+		typedef const Type* const_pointer;
+		typedef Type& reference;
+		typedef const Type& const_reference;
 		typedef size_t size_type;
 
 	public:
 		~auto_array()
 		{
-			if (m_ptr)
-				memory::free(m_ptr);
+			memory::free(m_ptr);
 		}
 
 		explicit auto_array(size_type count) :
@@ -26,17 +25,17 @@ namespace memory {
 		{
 		}
 
-		auto_array(this_type && rhs) :
+		auto_array(this_type&& other) :
 			m_ptr(nullptr),
 			m_count(0)
 		{
-			swap(rhs);
+			swap(other);
 		}
 
-		this_type & operator =(this_type && rhs)
+		this_type& operator =(this_type&& other)
 		{
-			if (this != &rhs)
-				this_type(simstd::move(rhs)).swap(*this);
+			if (m_ptr != other.m_ptr)
+				this_type(simstd::move(other)).swap(*this);
 			return *this;
 		}
 
@@ -83,12 +82,7 @@ namespace memory {
 			return m_ptr[ind];
 		}
 
-		bool operator ==(const this_type & rhs) const
-		{
-			return (m_count == rhs.m_count) ? simstd::equal(m_ptr, m_ptr + m_count, rhs.m_ptr) : false;
-		}
-
-		void detach(pointer & ptr, size_t & size)
+		void detach(pointer& ptr, size_t& size)
 		{
 			ptr = m_ptr;
 			size = m_count;
@@ -96,11 +90,11 @@ namespace memory {
 			m_count = 0;
 		}
 
-		void swap(this_type & rhs)
+		void swap(this_type & other)
 		{
 			using simstd::swap;
-			swap(m_ptr, rhs.m_ptr);
-			swap(m_count, rhs.m_count);
+			swap(m_ptr, other.m_ptr);
+			swap(m_count, other.m_count);
 		}
 
 	private:
@@ -109,7 +103,7 @@ namespace memory {
 	};
 
 	template<typename Type>
-	void swap(auto_array<Type> & b1, auto_array<Type> & b2)
+	void swap(auto_array<Type>& b1, auto_array<Type>& b2)
 	{
 		b1.swap(b2);
 	}

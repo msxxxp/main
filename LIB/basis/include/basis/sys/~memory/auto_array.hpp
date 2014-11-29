@@ -16,8 +16,7 @@ namespace memory {
 	public:
 		~auto_array()
 		{
-			if (m_ptr)
-				memory::free(m_ptr);
+			memory::free(m_ptr);
 		}
 
 		explicit auto_array(size_type count) :

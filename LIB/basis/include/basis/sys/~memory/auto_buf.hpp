@@ -1,8 +1,6 @@
 #ifndef BASIS_SYS_MEMORY_AUTO_BUF_HPP_
 #define BASIS_SYS_MEMORY_AUTO_BUF_HPP_
 
-#include <basis/sys/memory.hpp>
-
 namespace memory {
 
 	template<typename Type>
@@ -22,28 +20,28 @@ namespace memory {
 		{
 		}
 
-		explicit auto_buf(size_type size) :
-			m_ptr(memory::malloc<value_type>(size))
+		explicit auto_buf(size_type size_bytes) :
+			m_ptr(memory::malloc<value_type>(size_bytes))
 		{
 		}
 
-		auto_buf(this_type && rhs) :
+		auto_buf(this_type&& other) :
 			m_ptr(nullptr)
 		{
-			swap(rhs);
+			swap(other);
 		}
 
-		this_type & operator =(this_type && rhs)
+		this_type& operator =(this_type&& other)
 		{
-			if (this != &rhs)
-				this_type(simstd::move(rhs)).swap(*this);
+			if (m_ptr != other.m_ptr)
+				this_type(simstd::move(other)).swap(*this);
 			return *this;
 		}
 
-		void reserve(size_type new_size)
+		void reserve(size_type new_size_bytes)
 		{
-			if (size() < new_size) {
-				memory::realloc(m_ptr, new_size);
+			if (size() < new_size_bytes) {
+				memory::realloc(m_ptr, new_size_bytes);
 			}
 		}
 
@@ -73,32 +71,32 @@ namespace memory {
 		}
 
 		bool operator !() const
-		{
+		{ // FIXME
 			return m_ptr;
 		}
 
-		void attach(value_type & ptr)
-		{
+		void attach(value_type& ptr)
+		{ //  FIXME
 			memory::free(m_ptr);
 			m_ptr = ptr;
 		}
 
-		void detach(value_type & ptr)
+		void detach(value_type& ptr)
 		{
 			ptr = m_ptr;
 			m_ptr = nullptr;
 		}
 
-		void swap(value_type & ptr) noexcept
+		void swap(value_type& ptr) noexcept
 		{
 			using simstd::swap;
 			swap(m_ptr, ptr);
 		}
 
-		void swap(this_type & rhs) noexcept
+		void swap(this_type& other) noexcept
 		{
 			using simstd::swap;
-			swap(m_ptr, rhs.m_ptr);
+			swap(m_ptr, other.m_ptr);
 		}
 
 	private:
@@ -106,7 +104,7 @@ namespace memory {
 	};
 
 	template<typename Type>
-	void swap(auto_buf<Type> & b1, auto_buf<Type> & b2)
+	void swap(auto_buf<Type>& b1, auto_buf<Type>& b2)
 	{
 		b1.swap(b2);
 	}

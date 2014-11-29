@@ -4,10 +4,10 @@
 
 namespace path {
 
-	ustring remove_prefix(const ustring & path)
+	ustring remove_prefix(const ustring& path)
 	{
 		ustring tmp(path);
-		return inplace::remove_prefix(tmp, get_path_prefixw());
+		return inplace::remove_prefix(tmp, get_prefixw());
 	}
 
 }

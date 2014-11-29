@@ -4,7 +4,7 @@
 
 namespace path {
 
-	astring get_path_prefixa()
+	astring get_prefixa()
 	{
 		return astring();
 	}

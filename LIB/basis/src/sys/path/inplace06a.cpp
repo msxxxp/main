@@ -4,7 +4,7 @@
 
 namespace path {
 
-	ustring ensure_prefix(const ustring & path, const ustring & pref)
+	ustring ensure_prefix(const ustring& path, const ustring& pref)
 	{
 		ustring tmp(path);
 		return inplace::ensure_prefix(tmp, pref);

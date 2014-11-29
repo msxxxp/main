@@ -4,7 +4,7 @@
 
 namespace path {
 
-	astring get_path_separatora()
+	astring get_separatora()
 	{
 		return astring();
 	}

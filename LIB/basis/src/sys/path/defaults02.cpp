@@ -4,7 +4,7 @@
 
 namespace path {
 
-	ustring get_path_prefixw()
+	ustring get_prefixw()
 	{
 		return ustring();
 	}

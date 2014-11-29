@@ -4,7 +4,7 @@
 
 namespace path {
 
-	ustring canonicalize(const ustring &path)
+	ustring canonicalize(const ustring& path)
 	{
 		return canonicalize(path.c_str());
 	}

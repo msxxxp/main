@@ -6,9 +6,9 @@ namespace path {
 
 	namespace inplace {
 
-		ustring & ensure_prefix(ustring & path)
+		ustring& ensure_prefix(ustring& path)
 		{
-			return ensure_prefix(path, get_path_prefixw());
+			return ensure_prefix(path, get_prefixw());
 		}
 
 	}

@@ -6,7 +6,7 @@
 
 namespace path {
 
-	ustring ensure_no_end_separator(const ustring & path)
+	ustring ensure_no_end_separator(const ustring& path)
 	{
 		ustring tmp(path);
 		return inplace::ensure_no_end_separator(tmp);

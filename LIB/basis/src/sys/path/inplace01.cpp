@@ -6,9 +6,9 @@ namespace path {
 
 	namespace inplace {
 
-		ustring & remove_prefix(ustring & path)
+		ustring& remove_prefix(ustring& path)
 		{
-			return remove_prefix(path, get_path_prefixw());
+			return remove_prefix(path, get_prefixw());
 		}
 
 	}

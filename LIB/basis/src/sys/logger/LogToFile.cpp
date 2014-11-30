@@ -11,13 +11,13 @@ namespace logger {
 		struct LogToFile: public Target_i {
 			~LogToFile() = default;
 
-			LogToFile(const wchar_t * path, bool overwrite);
+			LogToFile(const wchar_t* path, bool overwrite);
 
-			void out(const Module * lgr, Level lvl, const wchar_t * str, size_t size) const override;
+			void out(const Module * lgr, Level lvl, const wchar_t* str, size_t size) const override;
 
-			void out(const Module * lgr, WORD color, Level lvl, const wchar_t * str, size_t size) const override;
+			void out(const Module * lgr, WORD color, Level lvl, const wchar_t* str, size_t size) const override;
 
-			void out(const wchar_t * str, size_t size) const override;
+			void out(const wchar_t* str, size_t size) const override;
 
 			lock_type lock_scope() const override;
 
@@ -30,7 +30,7 @@ namespace logger {
 //		{
 //		}
 
-		LogToFile::LogToFile(const wchar_t * path, bool overwrite) :
+		LogToFile::LogToFile(const wchar_t* path, bool overwrite) :
 			m_file(::CreateFileW(path, GENERIC_WRITE, FILE_SHARE_READ | FILE_SHARE_DELETE, nullptr, overwrite ? CREATE_ALWAYS : OPEN_ALWAYS, FILE_ATTRIBUTE_NORMAL, nullptr))
 		{
 			if (m_file.is_valid()) {
@@ -38,17 +38,17 @@ namespace logger {
 			}
 		}
 
-		void LogToFile::out(const Module * /*lgr*/, Level /*lvl*/, const wchar_t * str, size_t size) const
+		void LogToFile::out(const Module * /*lgr*/, Level /*lvl*/, const wchar_t* str, size_t size) const
 		{
 			out(str, size);
 		}
 
-		void LogToFile::out(const Module * /*lgr*/, WORD /*color*/, Level /*lvl*/, const wchar_t * str, size_t size) const
+		void LogToFile::out(const Module * /*lgr*/, WORD /*color*/, Level /*lvl*/, const wchar_t* str, size_t size) const
 		{
 			out(str, size);
 		}
 
-		void LogToFile::out(const wchar_t * str, size_t size) const
+		void LogToFile::out(const wchar_t* str, size_t size) const
 		{
 			if (m_file.is_valid()) {
 				DWORD written = 0;
@@ -64,7 +64,7 @@ namespace logger {
 
 	}
 
-	Target_t get_TargetToFile(const wchar_t * path, bool overwrite)
+	Target_t get_TargetToFile(const wchar_t* path, bool overwrite)
 	{
 		return Target_t(new LogToFile(path, overwrite));
 	}

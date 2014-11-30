@@ -8,7 +8,7 @@ namespace sync {
 		::CloseHandle(reinterpret_cast<HANDLE>(m_handle));
 	}
 
-	Semaphore::Semaphore(const wchar_t * name) :
+	Semaphore::Semaphore(const wchar_t* name) :
 		m_handle(nullptr)
 	{
 		m_handle = reinterpret_cast<native_handle_type>(::CreateSemaphoreW(nullptr, 0, LONG_MAX, name));

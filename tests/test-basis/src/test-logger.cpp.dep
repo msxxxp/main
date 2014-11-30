@@ -37,7 +37,7 @@ public:
 		console::printf(L"%S[%d] %Iu '%s'\n", __PRETTY_FUNCTION__, __LINE__, _i, _str);
 	}
 
-	A(size_t i, const wchar_t * str):
+	A(size_t i, const wchar_t* str):
 		_i(i),
 		_str(str)
 	{
@@ -88,7 +88,7 @@ public:
 
 private:
 	size_t _i;
-	const wchar_t * _str;
+	const wchar_t* _str;
 };
 
 A get_a()

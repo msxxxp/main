@@ -7,7 +7,7 @@
 //{
 //	LogTrace();
 //
-//	const wchar_t * w = L"hello\0";
+//	const wchar_t* w = L"hello\0";
 //	wchar_t q[] = {L'1', L'\0', L'2', L'2', L'\0', L'3', L'3', L'3', L'\0', L'\0'};
 //
 //	Base::mstring mstr1;

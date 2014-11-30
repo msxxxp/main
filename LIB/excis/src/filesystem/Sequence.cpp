@@ -13,14 +13,14 @@ namespace fsys {
 		return path::make(m_path, name());
 	}
 
-	Sequence::Sequence(const ustring & path, flags_type flags) :
+	Sequence::Sequence(const ustring& path, flags_type flags) :
 		m_path(path),
 		m_mask(L"*"),
 		m_flags(flags)
 	{
 	}
 
-	Sequence::Sequence(const ustring & path, const ustring & mask, flags_type flags) :
+	Sequence::Sequence(const ustring& path, const ustring& mask, flags_type flags) :
 		m_path(path),
 		m_mask(mask),
 		m_flags(flags)

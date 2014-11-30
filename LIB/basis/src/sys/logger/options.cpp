@@ -14,31 +14,31 @@ namespace logger {
 
 		struct CompareWithDelim
 		{
-			CompareWithDelim(const wchar_t * delim): m_delim(delim)
+			CompareWithDelim(const wchar_t* delim): m_delim(delim)
 			{
 			}
-			bool operator ()(const wchar_t & ch) const
+			bool operator ()(const wchar_t& ch) const
 			{
 				return cstr::find(m_delim, ch);
 			}
 		private:
-			const wchar_t * m_delim;
+			const wchar_t* m_delim;
 		};
 
-		const wchar_t * find_first_of(const wchar_t * first, const wchar_t * last, const wchar_t * delim)
+		const wchar_t* find_first_of(const wchar_t* first, const wchar_t* last, const wchar_t* delim)
 		{
-			const wchar_t * found = simstd::find_if(first, last, CompareWithDelim(delim));
+			const wchar_t* found = simstd::find_if(first, last, CompareWithDelim(delim));
 			return found == last ? nullptr : found;
 		}
 
-		void get_substr_in(wchar_t * dest, size_t size, const wchar_t * str, const wchar_t * delim)
+		void get_substr_in(wchar_t* dest, size_t size, const wchar_t* str, const wchar_t* delim)
 		{
-			const wchar_t * found1 = find_first_of(str, str + cstr::length(str), delim);
+			const wchar_t* found1 = find_first_of(str, str + cstr::length(str), delim);
 
 			if (found1) {
 				++found1;
 //				console::printf(L"%S '%s' -> found1: '%s'\n", __PRETTY_FUNCTION__, str, found1);
-				const wchar_t * found2 = find_first_of(found1, found1 + cstr::length(found1), delim);
+				const wchar_t* found2 = find_first_of(found1, found1 + cstr::length(found1), delim);
 				if (found2) {
 //					console::printf(L"%S '%s' -> found2: '%s'\n", __PRETTY_FUNCTION__, str, found2);
 					cstr::copy(dest, found1, simstd::min(size, (size_t)(found2 - found1) + 1));
@@ -48,7 +48,7 @@ namespace logger {
 			}
 		}
 
-		Level convert_to_level(const wchar_t * str)
+		Level convert_to_level(const wchar_t* str)
 		{
 			Level ret = defaults::get_level();
 			if (cstr::compare_ci_1st_length(L"to", str) == 0 || cstr::compare_ci_1st_length(L"t3", str) == 0 || cstr::compare(L"0", str) == 0) {
@@ -82,7 +82,7 @@ namespace logger {
 			return ret;
 		}
 
-		Prefix::flags convert_to_prefix(const wchar_t * str)
+		Prefix::flags convert_to_prefix(const wchar_t* str)
 		{
 			Prefix::flags ret = defaults::get_prefix();
 			if (cstr::compare_ci_1st_length(L"0", str) == 0) {
@@ -102,7 +102,7 @@ namespace logger {
 			return ret;
 		}
 
-		Target_t convert_to_target(const wchar_t * str)
+		Target_t convert_to_target(const wchar_t* str)
 		{
 			Target_t ret = defaults::get_target();
 			if (cstr::compare_ci_1st_length(L"n", str) == 0) {
@@ -127,7 +127,7 @@ namespace logger {
 			return ret;
 		}
 
-		size_t convert_to_bit(const wchar_t * str)
+		size_t convert_to_bit(const wchar_t* str)
 		{
 			size_t ret = 1;
 			if (cstr::compare_ci_1st_length(L"f", str) == 0 || cstr::compare(L"0", str) == 0) {
@@ -148,17 +148,17 @@ namespace logger {
 				set_level = set_prefix = set_target = set_color = set_enabled = 0;
 			}
 
-			void name(const wchar_t * str) {cstr::copy(m_name1, str, lengthof(m_name1));}
+			void name(const wchar_t* str) {cstr::copy(m_name1, str, lengthof(m_name1));}
 
-			void level(const wchar_t * str) {m_level = convert_to_level(str); set_level = 1;}
+			void level(const wchar_t* str) {m_level = convert_to_level(str); set_level = 1;}
 
-			void prefix(const wchar_t * str) {m_prefix = convert_to_prefix(str); set_prefix = 1;}
+			void prefix(const wchar_t* str) {m_prefix = convert_to_prefix(str); set_prefix = 1;}
 
-			void target(const wchar_t * str) {m_target = convert_to_target(str); set_target = 1;}
+			void target(const wchar_t* str) {m_target = convert_to_target(str); set_target = 1;}
 
-			void color(const wchar_t * str) {m_color = convert_to_bit(str); set_color = 1;}
+			void color(const wchar_t* str) {m_color = convert_to_bit(str); set_color = 1;}
 
-			void enabled(const wchar_t * str) {m_enabled = convert_to_bit(str); set_enabled = 1;}
+			void enabled(const wchar_t* str) {m_enabled = convert_to_bit(str); set_enabled = 1;}
 
 			void execute() {
 				if (!cstr::is_empty(m_name1)) {
@@ -192,7 +192,7 @@ namespace logger {
 			uint32_t      set_enabled:1;
 		};
 
-		bool get_value(const wchar_t * name, const wchar_t * parameter, const wchar_t *& value)
+		bool get_value(const wchar_t* name, const wchar_t* parameter, const wchar_t *& value)
 		{
 			auto len = cstr::length(name);
 
@@ -204,10 +204,10 @@ namespace logger {
 			return false;
 		}
 
-		const wchar_t * get_parameter(wchar_t * str)
+		const wchar_t* get_parameter(wchar_t* str)
 		{
-			wchar_t * found = nullptr;
-			wchar_t * end = str + cstr::length(str);
+			wchar_t* found = nullptr;
+			wchar_t* end = str + cstr::length(str);
 			while (end > str)
 				if (cstr::find(L"?;", *(--end))) {
 					found = end;
@@ -221,14 +221,14 @@ namespace logger {
 			return L"";
 		}
 
-		void set_defaults(wchar_t * options, size_t size)
+		void set_defaults(wchar_t* options, size_t size)
 		{
 			options[size] = static_cast<wchar_t>(0);
 			while (!cstr::is_empty(options)) {
 //				console::printf(L"%S:%d '%s'\n", __PRETTY_FUNCTION__, __LINE__, options);
 				auto prm = get_parameter(options);
 //				console::printf(L"%S:%d '%s'\n", __PRETTY_FUNCTION__, __LINE__, prm);
-				const wchar_t * value = nullptr;
+				const wchar_t* value = nullptr;
 				if (get_value(L"level=", prm, value)) {
 					defaults::set_level(convert_to_level(value));
 				} else if (get_value(L"prefix=", prm, value)) {
@@ -239,11 +239,11 @@ namespace logger {
 			}
 		}
 
-		void set_globals(wchar_t * /*options*/, size_t /*size*/)
+		void set_globals(wchar_t* /*options*/, size_t /*size*/)
 		{
 		}
 
-		void set_module(wchar_t * options, size_t size)
+		void set_module(wchar_t* options, size_t size)
 		{
 			options[size] = static_cast<wchar_t>(0);
 			ModuleOptionsSetter mos;
@@ -251,7 +251,7 @@ namespace logger {
 //				console::printf(L"%S:%d '%s'\n", __PRETTY_FUNCTION__, __LINE__, options);
 				auto prm = get_parameter(options);
 //				console::printf(L"%S:%d '%s'\n", __PRETTY_FUNCTION__, __LINE__, prm);
-				const wchar_t * value = nullptr;
+				const wchar_t* value = nullptr;
 				if (get_value(L"name=", prm, value)) {
 					mos.name(value);
 				} else if (get_value(L"level=", prm, value)) {
@@ -271,7 +271,7 @@ namespace logger {
 
 	}
 
-	void set_options(const wchar_t * url)
+	void set_options(const wchar_t* url)
 	{
 		auto urlCopy = cstr::dup(url);
 

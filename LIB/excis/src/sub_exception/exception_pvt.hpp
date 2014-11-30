@@ -15,7 +15,7 @@ namespace exception {
 
 		virtual DWORD code() const override;
 
-		virtual void format_error(cstr::mstring & out) const override;
+		virtual void format_error(cstr::mstring& out) const override;
 
 	protected:
 #ifdef NDEBUG
@@ -45,7 +45,7 @@ namespace exception {
 
 		virtual DWORD code() const override;
 
-		virtual void format_error(cstr::mstring & out) const override;
+		virtual void format_error(cstr::mstring& out) const override;
 
 	private:
 		DWORD  m_code;

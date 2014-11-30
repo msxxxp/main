@@ -2,7 +2,7 @@
 
 namespace console {
 
-	size_t vprintf(const wchar_t * format, va_list vl)
+	size_t vprintf(const wchar_t* format, va_list vl)
 	{
 		return vprintf(Handle::OUTPUT, format, vl);
 	}

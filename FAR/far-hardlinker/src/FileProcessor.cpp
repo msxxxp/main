@@ -40,7 +40,7 @@ bool CompareAndLink(fsys::Files_t::iterator it1, fsys::Files_t::iterator it2)
 
 	++global::statistics().fileCompares;
 
-	const wchar_t * logStr = nullptr;
+	const wchar_t* logStr = nullptr;
 	if (global::options().attrMustMatch && file1->attr() != file2->attr()) {
 		logStr = L"  attributes of files do not match -> ignore\n";
 		++global::statistics().fileMetaDataMismatch;

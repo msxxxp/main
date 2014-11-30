@@ -29,11 +29,11 @@ namespace Ext {
 				::NetApiBufferFree(info);
 		}
 
-		UserBuf(const ustring & name, const ustring & dom = ustring()) {
+		UserBuf(const ustring& name, const ustring& dom = ustring()) {
 			CheckApiError(::NetUserGetInfo(dom.c_str(), name.c_str(), 3, (PBYTE*)&info));
 		}
 
-		void set(const ustring & name, const ustring & dom = ustring()) {
+		void set(const ustring& name, const ustring& dom = ustring()) {
 			CheckApiError(::NetUserSetInfo(dom.c_str(), name.c_str(), 3, (PBYTE)info, nullptr));
 		}
 
@@ -50,7 +50,7 @@ namespace Ext {
 	};
 
 	///============================================================================================ User
-	bool User::is_exist(const ustring & name, const ustring & dom) {
+	bool User::is_exist(const ustring& name, const ustring& dom) {
 		const DWORD dwLevel = 0;
 		LPUSER_INFO_0 info = nullptr;
 		NET_API_STATUS err = ::NetUserGetInfo(dom.c_str(), name.c_str(), dwLevel, (PBYTE*) & info);
@@ -59,67 +59,67 @@ namespace Ext {
 		return err == NERR_Success;
 	}
 
-	bool User::is_disabled(const ustring & name, const ustring & dom) {
+	bool User::is_disabled(const ustring& name, const ustring& dom) {
 		UserBuf info(name, dom);
 		return info->usri3_flags & UF_ACCOUNTDISABLE;
 	}
 
-	bool User::is_expired(const ustring & name, const ustring & dom) {
+	bool User::is_expired(const ustring& name, const ustring& dom) {
 		UserBuf info(name, dom);
 		return info->usri3_password_expired;
 	}
 
-	ustring User::get_comm(const ustring & name, const ustring & dom) {
+	ustring User::get_comm(const ustring& name, const ustring& dom) {
 		UserBuf info(name, dom);
 		return ustring(info->usri3_usr_comment);
 	}
 
-	ustring User::get_desc(const ustring & name, const ustring & dom) {
+	ustring User::get_desc(const ustring& name, const ustring& dom) {
 		UserBuf info(name, dom);
 		return ustring(info->usri3_comment);
 	}
 
-	ustring User::get_fname(const ustring & name, const ustring & dom) {
+	ustring User::get_fname(const ustring& name, const ustring& dom) {
 		UserBuf info(name, dom);
 		return ustring(info->usri3_full_name);
 	}
 
-	ustring User::get_home(const ustring & name, const ustring & dom) {
+	ustring User::get_home(const ustring& name, const ustring& dom) {
 		UserBuf info(name, dom);
 		return ustring(info->usri3_home_dir);
 	}
 
-	ustring User::get_params(const ustring & name, const ustring & dom) {
+	ustring User::get_params(const ustring& name, const ustring& dom) {
 		UserBuf info(name, dom);
 		return ustring(info->usri3_profile);
 	}
 
-	ustring User::get_profile(const ustring & name, const ustring & dom) {
+	ustring User::get_profile(const ustring& name, const ustring& dom) {
 		UserBuf info(name, dom);
 		return ustring(info->usri3_profile);
 	}
 
-	ustring User::get_script(const ustring & name, const ustring & dom) {
+	ustring User::get_script(const ustring& name, const ustring& dom) {
 		UserBuf info(name, dom);
 		return ustring(info->usri3_script_path);
 	}
 
-	ustring User::get_workstations(const ustring & name, const ustring & dom) {
+	ustring User::get_workstations(const ustring& name, const ustring& dom) {
 		UserBuf info(name, dom);
 		return ustring(info->usri3_workstations);
 	}
 
-	DWORD User::get_flags(const ustring & name, const ustring & dom) {
+	DWORD User::get_flags(const ustring& name, const ustring& dom) {
 		UserBuf info(name, dom);
 		return info->usri3_flags;
 	}
 
-	DWORD User::get_uid(const ustring & name, const ustring & dom) {
+	DWORD User::get_uid(const ustring& name, const ustring& dom) {
 		UserBuf info(name, dom);
 		return info->usri3_user_id;
 	}
 
-	void User::add(const ustring & name, const ustring & pass, const ustring & dom) {
+	void User::add(const ustring& name, const ustring& pass, const ustring& dom) {
 		DWORD dwLevel = 1;
 		USER_INFO_1 info;
 		memory::zero(info);
@@ -132,86 +132,86 @@ namespace Ext {
 		CheckApiError(::NetUserAdd(dom.c_str(), dwLevel, (PBYTE)&info, nullptr));
 	}
 
-	void User::del(const ustring & name, const ustring & dom) {
+	void User::del(const ustring& name, const ustring& dom) {
 		CheckApiError(::NetUserDel(dom.c_str(), name.c_str()));
 	}
 
-	void User::disable(const ustring & name, const ustring & dom) {
+	void User::disable(const ustring& name, const ustring& dom) {
 		set_flags(name, UF_ACCOUNTDISABLE, true, dom);
 	}
 
-	void User::enable(const ustring & name, const ustring & dom) {
+	void User::enable(const ustring& name, const ustring& dom) {
 		set_flags(name, UF_ACCOUNTDISABLE, false, dom);
 	}
 
-	static void set_info(const ustring & name, const ustring & dom, DWORD level, PVOID info) {
+	static void set_info(const ustring& name, const ustring& dom, DWORD level, PVOID info) {
 		CheckApiError(::NetUserSetInfo(dom.c_str(), name.c_str(), level, (PBYTE)info, nullptr));
 	}
 
-	void User::set_expire(const ustring & name, bool in, const ustring & dom) {
+	void User::set_expire(const ustring& name, bool in, const ustring& dom) {
 		const DWORD level = 1017;
 		USER_INFO_1017 info;
 		info.usri1017_acct_expires = (in) ? 1 : 0;
 		set_info(name, dom, level, &info);
 	}
 
-	void User::set_name(const ustring & name, const ustring & in, const ustring & dom) {
+	void User::set_name(const ustring& name, const ustring& in, const ustring& dom) {
 		const DWORD level = 0;
 		USER_INFO_0 info;
 		info.usri0_name = const_cast<PWSTR>(in.c_str());
 		set_info(name, dom, level, &info);
 	}
 
-	void User::set_pass(const ustring & name, const ustring & in, const ustring & dom) {
+	void User::set_pass(const ustring& name, const ustring& in, const ustring& dom) {
 		const DWORD level = 1003;
 		USER_INFO_1003	info;
 		info.usri1003_password = const_cast<PWSTR>(in.c_str());
 		set_info(name, dom, level, &info);
 	}
 
-	void User::set_desc(const ustring & name, const ustring & in, const ustring & dom) {
+	void User::set_desc(const ustring& name, const ustring& in, const ustring& dom) {
 		const DWORD level = 1007;
 		USER_INFO_1007 info;
 		info.usri1007_comment = const_cast<PWSTR>(in.c_str());
 		set_info(name, dom, level, &info);
 	}
 
-	void User::set_fname(const ustring & name, const ustring & in, const ustring & dom) {
+	void User::set_fname(const ustring& name, const ustring& in, const ustring& dom) {
 		const DWORD level = 1011;
 		USER_INFO_1011 info;
 		info.usri1011_full_name = const_cast<PWSTR>(in.c_str());
 		set_info(name, dom, level, &info);
 	}
 
-	void User::set_comm(const ustring & name, const ustring & in, const ustring & dom) {
+	void User::set_comm(const ustring& name, const ustring& in, const ustring& dom) {
 		const DWORD level = 1012;
 		USER_INFO_1012 info;
 		info.usri1012_usr_comment = const_cast<PWSTR>(in.c_str());
 		set_info(name, dom, level, &info);
 	}
 
-	void User::set_home(const ustring & name, const ustring & in, const ustring & dom) {
+	void User::set_home(const ustring& name, const ustring& in, const ustring& dom) {
 		const DWORD level = 1006;
 		USER_INFO_1006 info;
 		info.usri1006_home_dir = const_cast<PWSTR>(in.c_str());
 		set_info(name, dom, level, &info);
 	}
 
-	void User::set_profile(const ustring & name, const ustring & in, const ustring & dom) {
+	void User::set_profile(const ustring& name, const ustring& in, const ustring& dom) {
 		const DWORD level = 1052;
 		USER_INFO_1052 info;
 		info.usri1052_profile = const_cast<PWSTR>(in.c_str());
 		set_info(name, dom, level, &info);
 	}
 
-	void User::set_script(const ustring & name, const ustring & in, const ustring & dom) {
+	void User::set_script(const ustring& name, const ustring& in, const ustring& dom) {
 		const DWORD level = 1009;
 		USER_INFO_1009 info;
 		info.usri1009_script_path = const_cast<PWSTR>(in.c_str());
 		set_info(name, dom, level, &info);
 	}
 
-	void User::set_flags(const ustring & name, DWORD in, bool value, const ustring & dom) {
+	void User::set_flags(const ustring& name, DWORD in, bool value, const ustring& dom) {
 		const DWORD level = 1008;
 		DWORD dwFlags = get_flags(name, dom);
 		if (value)
@@ -229,7 +229,7 @@ namespace Ext {
 	//	flags(0) {
 	//}
 
-	UserInfo::UserInfo(const ustring & n) :
+	UserInfo::UserInfo(const ustring& n) :
 		name(n),
 		priv(0),
 		flags(0) {
@@ -251,7 +251,7 @@ namespace Ext {
 		return name < rhs.name;
 	}
 
-	bool UserInfo::operator==(const ustring & nm) const {
+	bool UserInfo::operator==(const ustring& nm) const {
 		return this->name == nm;
 	}
 
@@ -269,7 +269,7 @@ namespace Ext {
 			cache();
 	}
 
-	bool WinUsers::cache(const ustring & dom) {
+	bool WinUsers::cache(const ustring& dom) {
 		const DWORD dwLevel = 3, dwPrefMaxLen = MAX_PREFERRED_LENGTH;
 		DWORD dwEntriesRead = 0, dwTotalEntries = 0, dwResumeHandle = 0;
 		NET_API_STATUS nStatus;
@@ -291,7 +291,7 @@ namespace Ext {
 		return (nStatus == NERR_Success);
 	}
 
-	bool WinUsers::cache_by_priv(DWORD priv, const ustring & dom) {
+	bool WinUsers::cache_by_priv(DWORD priv, const ustring& dom) {
 		const DWORD dwLevel = 3, dwPrefMaxLen = MAX_PREFERRED_LENGTH;
 		DWORD dwEntriesRead = 0, dwTotalEntries = 0, dwResumeHandle = 0;
 		NET_API_STATUS nStatus;
@@ -316,7 +316,7 @@ namespace Ext {
 		return (NERR_Success == nStatus);
 	}
 
-	bool WinUsers::cache_by_group(const ustring & group, const ustring & dom) {
+	bool WinUsers::cache_by_group(const ustring& group, const ustring& dom) {
 		// Cache members of group "name".
 		const DWORD dwLevel = 1, dwPrefMaxLen = MAX_PREFERRED_LENGTH;
 		DWORD dwEntriesRead = 0, dwTotalEntries = 0;
@@ -340,22 +340,22 @@ namespace Ext {
 		return (NERR_Success == nStatus);
 	}
 
-	bool WinUsers::cache_by_gid(const ustring & gid, const ustring & dom) {
+	bool WinUsers::cache_by_gid(const ustring& gid, const ustring& dom) {
 		return cache_by_group(SidString(gid).get_name(), dom);
 	}
 
-	WinUsers::iterator WinUsers::find(const ustring & name) {
+	WinUsers::iterator WinUsers::find(const ustring& name) {
 		return simstd::find(begin(), end(), name);
 	}
 
-	void WinUsers::add(const ustring & name, const ustring & pass) {
+	void WinUsers::add(const ustring& name, const ustring& pass) {
 		User::add(name, pass);
 		push_back(UserInfo(UserBuf(name).data()));
 		if (!m_group.empty())
 			Group::add_member(m_group, Sid(name));
 	}
 
-	void WinUsers::del(const ustring & name) {
+	void WinUsers::del(const ustring& name) {
 		iterator it = find(name);
 		if (it != end())
 			del(it);
@@ -366,28 +366,28 @@ namespace Ext {
 		erase(it);
 	}
 
-	void WinUsers::rename(const ustring & name, const ustring & new_name) {
+	void WinUsers::rename(const ustring& name, const ustring& new_name) {
 		iterator it = find(name);
 		if (it != end())
 			rename(it, new_name);
 	}
 
-	void WinUsers::rename(iterator it, const ustring & new_name) {
+	void WinUsers::rename(iterator it, const ustring& new_name) {
 		User::set_name(it->name, new_name);
 		it->name = new_name;
 	}
 
-	WinUsersByPriv::WinUsersByPriv(DWORD priv, const ustring & dom):
+	WinUsersByPriv::WinUsersByPriv(DWORD priv, const ustring& dom):
 		WinUsers(false) {
 		cache_by_priv(priv, dom);
 	}
 
-	WinUsersByGroup::WinUsersByGroup(const ustring & group, const ustring & dom):
+	WinUsersByGroup::WinUsersByGroup(const ustring& group, const ustring& dom):
 		WinUsers(false) {
 		cache_by_group(group, dom);
 	}
 
-	WinUsersByGid::WinUsersByGid(const ustring & gid, const ustring & dom):
+	WinUsersByGid::WinUsersByGid(const ustring& gid, const ustring& dom):
 		WinUsers(false) {
 		cache_by_gid(gid, dom);
 	}

@@ -4,7 +4,7 @@
 
 namespace path {
 
-	ustring unexpand(const wchar_t * path)
+	ustring unexpand(const wchar_t* path)
 	{
 		//	bool	unx = IsPathUnix(path);
 		//	if (unx)

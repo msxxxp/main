@@ -26,19 +26,19 @@ namespace Ext {
 //			hKeyReq(HKEY_CURRENT_USER) {
 //		}
 //
-//		WinReg(HKEY hkey, const ustring & path):
+//		WinReg(HKEY hkey, const ustring& path):
 //			hKeyOpend(0),
 //			hKeyReq(hkey),
 //			m_path(path) {
 //		}
 //
-//		WinReg(const ustring & path);
+//		WinReg(const ustring& path);
 //
 //		ustring path() const {
 //			return m_path;
 //		}
 //
-//		void path(const ustring & path) {
+//		void path(const ustring& path) {
 //			m_path = path;
 //		}
 //
@@ -46,21 +46,21 @@ namespace Ext {
 //			hKeyReq = hkey;
 //		}
 //
-//		bool Add(const ustring & name) const;
+//		bool Add(const ustring& name) const;
 //
-//		bool Del(const ustring & name) const;
+//		bool Del(const ustring& name) const;
 //
-//		void Set(const ustring & name, PCWSTR value) const;
+//		void Set(const ustring& name, PCWSTR value) const;
 //
-//		void Set(const ustring & name, const ustring & value) const {
+//		void Set(const ustring& name, const ustring& value) const {
 //			Set(name, value.c_str());
 //		}
 //
-//		void Set(const ustring & name, int value) const;
+//		void Set(const ustring& name, int value) const;
 //
-//		bool Get(const ustring & name, ustring &value, const ustring & def) const;
+//		bool Get(const ustring& name, ustring &value, const ustring& def) const;
 //
-//		bool Get(const ustring & name, int &value, int def) const;
+//		bool Get(const ustring& name, int &value, int def) const;
 //
 //	private:
 //		HKEY mutable hKeyOpend;
@@ -73,10 +73,10 @@ namespace Ext {
 //			return OpenKey(hKeyReq, m_path, acc);
 //		}
 //
-//		bool OpenKey(HKEY hkey, const ustring & path, ACCESS_MASK acc) const;
+//		bool OpenKey(HKEY hkey, const ustring& path, ACCESS_MASK acc) const;
 //
 //		template <typename Type>
-//		void SetRaw(const ustring & name, const Type &value, DWORD type = REG_BINARY) const {
+//		void SetRaw(const ustring& name, const Type &value, DWORD type = REG_BINARY) const {
 //			if (OpenKey(KEY_WRITE)) {
 //				::RegSetValueExW(hKeyOpend, name.c_str(), 0, type, (PBYTE)(&value), sizeof(value));
 //				CloseKey();
@@ -84,7 +84,7 @@ namespace Ext {
 //		}
 //
 //		template <typename Type>
-//		bool GetRaw(const ustring & name, Type &value, const Type &def) const {
+//		bool GetRaw(const ustring& name, Type &value, const Type &def) const {
 //			bool Result = OpenKey(KEY_READ);
 //			value = def;
 //			if (Result) {

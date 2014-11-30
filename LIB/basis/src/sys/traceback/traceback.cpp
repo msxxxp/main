@@ -17,7 +17,7 @@ struct bfd_ctx {
 };
 
 struct bfd_set {
-	const wchar_t * name;
+	const wchar_t* name;
 	struct bfd_ctx * bc;
 	struct bfd_set *next;
 };
@@ -50,7 +50,7 @@ void release_set(bfd_set * set)
 	}
 }
 
-int init_bfd_ctx(bfd_ctx * bc, const wchar_t * image)
+int init_bfd_ctx(bfd_ctx * bc, const wchar_t* image)
 {
 	bc->handle = NULL;
 	bc->symbol = NULL;
@@ -88,7 +88,7 @@ int init_bfd_ctx(bfd_ctx * bc, const wchar_t * image)
 	return 0;
 }
 
-bfd_ctx * get_bc(bfd_set * set, const wchar_t * image)
+bfd_ctx * get_bc(bfd_set * set, const wchar_t* image)
 {
 	while (set->name) {
 		if (wcscmp(set->name, image) == 0)
@@ -156,11 +156,11 @@ namespace traceback {
 
 		void * address() const override;
 
-		const ustring & module() const override;
+		const ustring& module() const override;
 
-		const ustring & file() const override;
+		const ustring& file() const override;
 
-		const ustring & function() const override;
+		const ustring& function() const override;
 
 		size_t line() const override;
 
@@ -229,17 +229,17 @@ namespace traceback {
 		return m_address;
 	}
 
-	const ustring & Frame::module() const
+	const ustring& Frame::module() const
 	{
 		return m_module;
 	}
 
-	const ustring & Frame::file() const
+	const ustring& Frame::file() const
 	{
 		return m_file;
 	}
 
-	const ustring & Frame::function() const
+	const ustring& Frame::function() const
 	{
 		return m_function;
 	}
@@ -310,8 +310,8 @@ namespace traceback {
 
 		bfd_ctx * bc = get_bc(set, m_image.c_str());
 		if (bc) {
-			const char * file = NULL;
-			const char * func = NULL;
+			const char* file = NULL;
+			const char* func = NULL;
 
 			find(bc, reinterpret_cast<size_t>(m_address), file, func, m_line, m_offset);
 			LogNoise(L"file: '%S'\n", file);

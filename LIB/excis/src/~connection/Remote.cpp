@@ -8,7 +8,7 @@
 #include <excis/exception.hpp>
 
 namespace {
-	ustring make_IPC_string(const ustring & host)
+	ustring make_IPC_string(const ustring& host)
 	{
 		PCWSTR prefix = (host[0] != PATH_SEPARATOR_C || host[1] != PATH_SEPARATOR_C) ? NETWORK_PATH_PREFIX : EMPTY_STR;
 
@@ -24,14 +24,14 @@ namespace connection {
 	struct RemoteImpl: public Remote {
 		~RemoteImpl();
 
-		RemoteImpl(const ustring & host, const wchar_t * user, const wchar_t * pass);
+		RemoteImpl(const ustring& host, const wchar_t* user, const wchar_t* pass);
 
 		void disconnect() override;
 
 		ustring get_host() const override;
 
 	private:
-		void do_connect(const ustring & host, const wchar_t * user, const wchar_t * pass) override;
+		void do_connect(const ustring& host, const wchar_t* user, const wchar_t* pass) override;
 
 		ustring m_host;
 		bool m_connected;
@@ -44,7 +44,7 @@ namespace connection {
 		LogTraceObjEnd();
 	}
 
-	RemoteImpl::RemoteImpl(const ustring & host, const wchar_t * user, const wchar_t * pass) :
+	RemoteImpl::RemoteImpl(const ustring& host, const wchar_t* user, const wchar_t* pass) :
 		m_connected(false)
 	{
 		LogTraceObjBegin();
@@ -68,7 +68,7 @@ namespace connection {
 		return m_host;
 	}
 
-	void RemoteImpl::do_connect(const ustring & host, PCWSTR user, PCWSTR pass)
+	void RemoteImpl::do_connect(const ustring& host, PCWSTR user, PCWSTR pass)
 	{
 		disconnect();
 		if (!host.empty()) {

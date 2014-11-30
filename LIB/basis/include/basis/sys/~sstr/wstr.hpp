@@ -87,11 +87,11 @@ namespace Base {
 
 		mstring(const this_type & other);
 
-		mstring & operator =(const this_type & other);
+		mstring& operator =(const this_type & other);
 
 		mstring(this_type && rhs);
 
-		mstring & operator =(this_type && rhs);
+		mstring& operator =(this_type && rhs);
 
 		void push_back(const_pointer str);
 

@@ -5,7 +5,7 @@
 
 namespace path {
 
-	ustring temp_file(const wchar_t * path)
+	ustring temp_file(const wchar_t* path)
 	{
 		wchar_t buf[MAX_PATH];
 		wchar_t pid[32];

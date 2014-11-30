@@ -8,7 +8,7 @@ namespace {
 
 namespace console {
 
-	size_t fputs(const char * str, size_t len, HANDLE hndl)
+	size_t fputs(const char* str, size_t len, HANDLE hndl)
 	{
 		DWORD written = 0;
 		if (len) {
@@ -20,17 +20,17 @@ namespace console {
 		return written;
 	}
 
-	size_t fputs(const char * str, HANDLE hndl)
+	size_t fputs(const char* str, HANDLE hndl)
 	{
 		return fputs(str, cstr::length(str), hndl);
 	}
 
-	size_t puts(const char * str, size_t len, Handle hnd)
+	size_t puts(const char* str, size_t len, Handle hnd)
 	{
 		return fputs(str, len, ::GetStdHandle(static_cast<DWORD>(hnd)));
 	}
 
-	size_t puts(const char * str, Handle hnd)
+	size_t puts(const char* str, Handle hnd)
 	{
 		return fputs(str, ::GetStdHandle(static_cast<DWORD>(hnd)));
 	}
@@ -41,7 +41,7 @@ namespace console {
 		return puts(str, lengthof(str), hnd);
 	}
 
-	size_t vprintf(Handle hnd, const char * format, va_list vl)
+	size_t vprintf(Handle hnd, const char* format, va_list vl)
 	{
 		memory::auto_array<char> buf(DEFAULT_PRINTF_BUFFER);
 		while (!safe_vsnprintf(buf.data(), buf.size(), format, vl))
@@ -49,19 +49,19 @@ namespace console {
 		return puts(buf.data(), cstr::length(buf.data()), hnd);
 	}
 
-	size_t vprintf(const char * format, va_list vl)
+	size_t vprintf(const char* format, va_list vl)
 	{
 		return vprintf(Handle::OUTPUT, format, vl);
 	}
 
-	int printf(Handle hnd, const char * format, ...)
+	int printf(Handle hnd, const char* format, ...)
 	{
 		Va_list vl;
 		va_start(vl, format);
 		return vprintf(hnd, format, vl);
 	}
 
-	int printf(const char * format, ...)
+	int printf(const char* format, ...)
 	{
 		Va_list vl;
 		va_start(vl, format);

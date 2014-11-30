@@ -62,7 +62,7 @@ namespace Ext {
 		return name < rhs.name;
 	}
 
-	bool Service::Info_t::operator == (const ustring & nm) const {
+	bool Service::Info_t::operator == (const ustring& nm) const {
 		return this->name == nm;
 	}
 

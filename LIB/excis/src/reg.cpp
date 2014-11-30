@@ -16,7 +16,7 @@ namespace Ext {
 //		}
 //	}
 //
-//	bool	WinReg::OpenKey(HKEY hkey, const ustring & path, ACCESS_MASK acc) const {
+//	bool	WinReg::OpenKey(HKEY hkey, const ustring& path, ACCESS_MASK acc) const {
 //		CloseKey();
 //		bool	Result = false;
 //		if (WinFlag::Check(acc, (ACCESS_MASK)KEY_READ))
@@ -26,7 +26,7 @@ namespace Ext {
 //		return Result;
 //	}
 //
-//	WinReg::WinReg(const ustring & path): hKeyOpend(0), hKeyReq(0), m_path(path) {
+//	WinReg::WinReg(const ustring& path): hKeyOpend(0), hKeyReq(0), m_path(path) {
 //		hKeyReq = HKEY_CURRENT_USER;
 //		ustring	tmp = L"HKEY_CURRENT_USER\\";
 //		if (find_str(m_path.c_str(), tmp.c_str())) {
@@ -76,7 +76,7 @@ namespace Ext {
 //		}
 //	}
 //
-//	bool	WinReg::Add(const ustring & name) const {
+//	bool	WinReg::Add(const ustring& name) const {
 //		bool	Result = OpenKey(KEY_WRITE);
 //		if (Result) {
 //			HKEY tmp = nullptr;
@@ -89,7 +89,7 @@ namespace Ext {
 //		return Result;
 //	}
 //
-//	bool	WinReg::Del(const ustring & name) const {
+//	bool	WinReg::Del(const ustring& name) const {
 //		bool	Result = OpenKey(KEY_WRITE);
 //		if (Result) {
 //			Result = (::RegDeleteValueW(hKeyOpend, name.c_str()) == ERROR_SUCCESS);
@@ -98,18 +98,18 @@ namespace Ext {
 //		return Result;
 //	}
 //
-//	void	WinReg::Set(const ustring & name, PCWSTR value) const {
+//	void	WinReg::Set(const ustring& name, PCWSTR value) const {
 //		if (OpenKey(KEY_WRITE)) {
 //			::RegSetValueExW(hKeyOpend, name.c_str(), 0, REG_SZ, (PBYTE)value, (get_str_len(value) + 1) * sizeof(wchar_t));
 //			CloseKey();
 //		}
 //	}
 //
-//	void	WinReg::Set(const ustring & name, int value) const {
+//	void	WinReg::Set(const ustring& name, int value) const {
 //		SetRaw(name, value, REG_DWORD);
 //	}
 //
-//	bool	WinReg::Get(const ustring & name, ustring &value, const ustring & def) const {
+//	bool	WinReg::Get(const ustring& name, ustring &value, const ustring& def) const {
 //		bool	Result = OpenKey(KEY_READ);
 //		value = def;
 //		if (Result) {
@@ -130,7 +130,7 @@ namespace Ext {
 //		return Result;
 //	}
 //
-//	bool	WinReg::Get(const ustring & name, int &value, int def) const {
+//	bool	WinReg::Get(const ustring& name, int &value, int def) const {
 //		return GetRaw(name, value, def);
 //	}
 

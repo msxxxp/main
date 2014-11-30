@@ -9,8 +9,8 @@
 namespace {
 
 	struct Stat_impl: public fsys::Stat_i {
-//		static HANDLE open(const char * path);
-		static HANDLE open(const wchar_t * path);
+//		static HANDLE open(const char* path);
+		static HANDLE open(const wchar_t* path);
 
 		Stat_impl(HANDLE hndl);
 
@@ -35,11 +35,11 @@ namespace {
 		BY_HANDLE_FILE_INFORMATION m_info;
 	};
 
-//	HANDLE Stat_impl::open(const char * path)
+//	HANDLE Stat_impl::open(const char* path)
 //	{
 //	}
 
-	HANDLE Stat_impl::open(const wchar_t * path)
+	HANDLE Stat_impl::open(const wchar_t* path)
 	{
 //		Ext::Privilege priv(SE_BACKUP_NAME);
 
@@ -131,12 +131,12 @@ namespace fsys {
 		return Stat();
 	}
 
-//	Stat stat(const char * path)
+//	Stat stat(const char* path)
 //	{
 //		return get_stat(Stat_impl::open(path));
 //	}
 
-	Stat stat(const wchar_t * path)
+	Stat stat(const wchar_t* path)
 	{
 		return stat(Stat_impl::open(path));
 	}

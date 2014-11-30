@@ -56,7 +56,7 @@ namespace exception {
 		return m_code;
 	}
 
-	void SehError::format_error(cstr::mstring & out) const
+	void SehError::format_error(cstr::mstring& out) const
 	{
 		wchar_t buf[MAX_PATH_LEN] = {0};
 

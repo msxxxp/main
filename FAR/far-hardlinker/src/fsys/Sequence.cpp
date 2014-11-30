@@ -9,7 +9,7 @@
 
 namespace fsys {
 
-	Sequence::Sequence(const ustring & path, const ustring & mask, const Options & options) :
+	Sequence::Sequence(const ustring& path, const ustring& mask, const Options & options) :
 		m_path(path),
 		m_mask(mask),
 		m_options(options)
@@ -252,6 +252,5 @@ namespace fsys {
 	{
 		LogTraceObj();
 	}
-
 
 }

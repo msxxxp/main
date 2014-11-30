@@ -22,9 +22,9 @@ namespace fsys {
 	public:
 		virtual ~Node() = default;
 
-		Node(const ustring & name);
+		Node(const ustring& name);
 
-		Node(const ustring & name, Node_t parent);
+		Node(const ustring& name, Node_t parent);
 
 		bool is_equal_path(Node_t other) const;
 
@@ -41,9 +41,9 @@ namespace fsys {
 	public:
 		~Folder();
 
-		Folder(const ustring & name);
+		Folder(const ustring& name);
 
-		Folder(const ustring & name, Node_t parent);
+		Folder(const ustring& name, Node_t parent);
 	};
 
 	class File: public Node {
@@ -95,13 +95,13 @@ namespace fsys {
 
 	bool compare_hash(const File & file1, const File & file2);
 
-	inline Node::Node(const ustring & name) :
+	inline Node::Node(const ustring& name) :
 		m_name(name),
 		m_parent(nullptr)
 	{
 	}
 
-	inline Node::Node(const ustring & name, Node_t parent) :
+	inline Node::Node(const ustring& name, Node_t parent) :
 		m_name(name),
 		m_parent(parent)
 	{

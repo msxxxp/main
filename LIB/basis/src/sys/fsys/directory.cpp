@@ -9,7 +9,7 @@ namespace fsys {
 			return ::RemoveDirectoryW(path);
 		}
 
-		bool del_attrcheck_nt(const wchar_t * path)
+		bool del_attrcheck_nt(const wchar_t* path)
 		{
 			auto attr = get_attr_nt(path);
 			if (is_valid(attr) && set_attr_nt(path, FILE_ATTRIBUTE_NORMAL)) {

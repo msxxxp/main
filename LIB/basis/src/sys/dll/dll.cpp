@@ -13,7 +13,7 @@ namespace linkage {
 		return m_hnd;
 	}
 
-	DynamicLibrary::DynamicLibrary(const wchar_t * path, DWORD flags) noexcept :
+	DynamicLibrary::DynamicLibrary(const wchar_t* path, DWORD flags) noexcept :
 		m_hnd(::LoadLibraryExW(path, nullptr, flags)),
 		m_flags(flags)
 	{
@@ -61,12 +61,12 @@ namespace linkage {
 		return m_flags;
 	}
 
-	bool DynamicLibrary::get_path(wchar_t * path, size_t size) const noexcept
+	bool DynamicLibrary::get_path(wchar_t* path, size_t size) const noexcept
 	{
 		return ::GetModuleFileNameW(m_hnd, path, size);
 	}
 
-	FARPROC DynamicLibrary::get_function(const char * name) const noexcept
+	FARPROC DynamicLibrary::get_function(const char* name) const noexcept
 	{
 		return ::GetProcAddress(m_hnd, name);
 	}

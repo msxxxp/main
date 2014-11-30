@@ -13,7 +13,7 @@ namespace {
 	struct Facade_impl: public fsys::file::Facade_i, private pattern::Uncopyable {
 		~Facade_impl();
 
-		Facade_impl(const ustring & path, const fsys::file::OpenOptions & options);
+		Facade_impl(const ustring& path, const fsys::file::OpenOptions & options);
 
 		bool is_valid() const;
 
@@ -47,9 +47,9 @@ namespace {
 //			return ::DeviceIoControl(m_hndl, code, nullptr, 0, &data, sizeof(Type), &size_ret, nullptr) != 0;
 //		}
 
-		static HANDLE Open(const ustring & path, const fsys::file::OpenOptions & options);
+		static HANDLE Open(const ustring& path, const fsys::file::OpenOptions & options);
 
-		static HANDLE Open(const ustring & path, ACCESS_MASK access, DWORD share, PSECURITY_ATTRIBUTES sa, DWORD creat, DWORD flags);
+		static HANDLE Open(const ustring& path, ACCESS_MASK access, DWORD share, PSECURITY_ATTRIBUTES sa, DWORD creat, DWORD flags);
 
 	private:
 		ustring m_path;
@@ -62,7 +62,7 @@ namespace {
 			::CloseHandle(m_hndl);
 	}
 
-	Facade_impl::Facade_impl(const ustring & path, const fsys::file::OpenOptions & options):
+	Facade_impl::Facade_impl(const ustring& path, const fsys::file::OpenOptions & options):
 		m_path(path),
 		m_hndl(Open(path, options))
 	{
@@ -169,7 +169,7 @@ namespace {
 		return ::SetFileTime(m_hndl, nullptr, nullptr, &l_time);
 	}
 
-	HANDLE Facade_impl::Open(const ustring & path, const fsys::file::OpenOptions & options)
+	HANDLE Facade_impl::Open(const ustring& path, const fsys::file::OpenOptions & options)
 	{
 
 		ACCESS_MASK access = (options.write) ? GENERIC_READ | GENERIC_WRITE : GENERIC_READ;
@@ -179,7 +179,7 @@ namespace {
 		return Open(path, access, share, nullptr, creat, flags);
 	}
 
-	HANDLE Facade_impl::Open(const ustring & path, ACCESS_MASK access, DWORD share, PSECURITY_ATTRIBUTES sa, DWORD creat, DWORD flags)
+	HANDLE Facade_impl::Open(const ustring& path, ACCESS_MASK access, DWORD share, PSECURITY_ATTRIBUTES sa, DWORD creat, DWORD flags)
 	{
 //		LogNoise(L"'%s', 0x%08X, 0x%08X, %p\n", path.c_str(), access, share, sa);
 		return ::CreateFileW(path.c_str(), access, share, sa, creat, flags, nullptr);
@@ -197,7 +197,7 @@ namespace fsys {
 		}
 
 		///=============================================================================================================
-		Facade open(const ustring & path, const OpenOptions & options)
+		Facade open(const ustring& path, const OpenOptions & options)
 		{
 			simstd::unique_ptr<Facade_impl> tmp(new Facade_impl(path, options));
 			return tmp->is_valid() ? Facade(simstd::move(tmp)) : Facade();

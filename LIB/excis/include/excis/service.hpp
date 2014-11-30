@@ -59,7 +59,7 @@ namespace Ext {
 		};
 
 		struct Create_t {
-			Create_t(const ustring & _name, const ustring & _binaryPathName);
+			Create_t(const ustring& _name, const ustring& _binaryPathName);
 			void set_type(Type_t n);
 			void set_start(Start_t n);
 			void set_error_control(Error_t n);
@@ -146,7 +146,7 @@ namespace Ext {
 			Info_t(SC_HANDLE scm, const ENUM_SERVICE_STATUS_PROCESSW & st);
 			Info_t(PCWSTR _name, const Service & svc);
 			bool operator < (const Info_t & rhs) const;
-			bool operator == (const ustring & nm) const;
+			bool operator == (const ustring& nm) const;
 
 			Type_t get_type() const {
 				return (Type_t)status.dwServiceType;

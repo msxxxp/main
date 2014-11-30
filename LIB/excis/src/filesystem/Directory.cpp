@@ -21,7 +21,7 @@ namespace fsys {
 			CheckApi(create_nt(path, lpsa));
 		}
 
-		bool create_full_nt(const ustring & p, LPSECURITY_ATTRIBUTES sa) throw() {
+		bool create_full_nt(const ustring& p, LPSECURITY_ATTRIBUTES sa) throw() {
 			try {
 				ustring path(path::get_fullpath(p));
 				path = path::nice(path);
@@ -52,7 +52,7 @@ namespace fsys {
 			return true;
 		}
 
-		void create_full(const ustring & p, LPSECURITY_ATTRIBUTES sa) {
+		void create_full(const ustring& p, LPSECURITY_ATTRIBUTES sa) {
 			CheckApi(create_full_nt(p, sa));
 		}
 

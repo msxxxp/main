@@ -5,13 +5,13 @@
 
 namespace sstr {
 
-	ustring format(const wchar_t * format, ...);
+	ustring format(const wchar_t* format, ...);
 
-	ustring format(const wchar_t * format, va_list args);
+	ustring format(const wchar_t* format, va_list args);
 
-	astring format(const char * format, ...);
+	astring format(const char* format, ...);
 
-	astring format(const char * format, va_list args);
+	astring format(const char* format, va_list args);
 
 }
 

@@ -7,7 +7,7 @@
 
 namespace totext {
 
-	ustring api_error(DWORD err = ::GetLastError(), const wchar_t * lib = nullptr);
+	ustring api_error(DWORD err = ::GetLastError(), const wchar_t* lib = nullptr);
 
 	ustring nt_status(ULONG status);
 

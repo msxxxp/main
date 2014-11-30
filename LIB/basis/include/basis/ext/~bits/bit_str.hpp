@@ -11,7 +11,7 @@ namespace bits {
 
 	template<typename Type>
 	struct BitMask {
-		static Type from_str(const ustring & in, size_t lim = 0)
+		static Type from_str(const ustring& in, size_t lim = 0)
 		{
 			// count bits from 1
 			Type Result = 0;
@@ -25,7 +25,7 @@ namespace bits {
 			return Result;
 		}
 
-		static Type from_str_0(const ustring & in, size_t lim = 0)
+		static Type from_str_0(const ustring& in, size_t lim = 0)
 		{
 			// count bits from zero
 			Type Result = 0;

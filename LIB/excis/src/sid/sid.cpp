@@ -34,7 +34,7 @@ namespace Ext {
 		m_sid(this_type::get_sid(name, srv)) {
 	}
 
-	Sid::Sid(const ustring & name, PCWSTR srv):
+	Sid::Sid(const ustring& name, PCWSTR srv):
 		m_sid(this_type::get_sid(name.c_str(), srv)) {
 	}
 
@@ -114,7 +114,7 @@ namespace Ext {
 	//	FreeSid(psid);
 	//}
 
-	SidString::SidString(const ustring & str)
+	SidString::SidString(const ustring& str)
 	{
 		init(str.c_str());
 	}

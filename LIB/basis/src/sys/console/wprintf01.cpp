@@ -2,7 +2,7 @@
 
 namespace console {
 
-	size_t fputs(const wchar_t * str, size_t len, HANDLE hndl)
+	size_t fputs(const wchar_t* str, size_t len, HANDLE hndl)
 	{
 		DWORD written = 0;
 		if (len) {

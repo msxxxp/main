@@ -24,7 +24,7 @@ namespace Ext {
 		CheckApi(is_valid(m_dacl));
 	}
 
-	WinDacl::WinDacl(const ustring & name, SE_OBJECT_TYPE type):
+	WinDacl::WinDacl(const ustring& name, SE_OBJECT_TYPE type):
 		m_dacl(WinDacl::copy(WinSDW(name, type))) {
 		CheckApi(is_valid(m_dacl));
 	}
@@ -82,7 +82,7 @@ namespace Ext {
 		WinDacl::set_entries(ExpAccess(name, acc, DENY_ACCESS));
 	}
 
-	void WinDacl::set_to(DWORD flag, const ustring & name, SE_OBJECT_TYPE type) const {
+	void WinDacl::set_to(DWORD flag, const ustring& name, SE_OBJECT_TYPE type) const {
 		WinDacl::set(name.c_str(), m_dacl, flag, type);
 	}
 
@@ -205,7 +205,7 @@ namespace Ext {
 		set(path, dacl, PROTECTED_DACL_SECURITY_INFORMATION, type);
 	}
 
-	void WinDacl::inherit(const ustring & path, SE_OBJECT_TYPE type) {
+	void WinDacl::inherit(const ustring& path, SE_OBJECT_TYPE type) {
 		WinSDW sd(path);
 		if (sd.is_protected())
 			set(path.c_str(), sd.get_dacl(), UNPROTECTED_DACL_SECURITY_INFORMATION, type);
@@ -219,7 +219,7 @@ namespace Ext {
 		}
 	}
 
-	void WinDacl::protect_copy(const ustring & path, SE_OBJECT_TYPE type) {
+	void WinDacl::protect_copy(const ustring& path, SE_OBJECT_TYPE type) {
 		WinSDW sd(path);
 		if (!sd.is_protected())
 			set(path.c_str(), sd.get_dacl(), PROTECTED_DACL_SECURITY_INFORMATION, type);

@@ -8,7 +8,7 @@ namespace path {
 
 	namespace filename {
 
-		bool is_valid(const ustring & name)
+		bool is_valid(const ustring& name)
 		{
 			return is_valid(name.c_str());
 		}

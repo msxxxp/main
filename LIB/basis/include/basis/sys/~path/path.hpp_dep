@@ -7,7 +7,7 @@
 
 namespace fsys {
 
-	bool substr_match(const ustring& str, size_t pos, const wchar_t * mstr);
+	bool substr_match(const ustring& str, size_t pos, const wchar_t* mstr);
 
 	void locate_path_root(const ustring& path, size_t& path_root_len, bool& is_unc_path);
 

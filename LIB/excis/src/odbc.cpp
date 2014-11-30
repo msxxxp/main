@@ -22,11 +22,11 @@ ustring DBServerNames[] = {
 };
 
 ///======================================================================================= ODBC_base
-void ODBC_base::SetODBCDriver(DBServer type, const ustring & ds) {
+void ODBC_base::SetODBCDriver(DBServer type, const ustring& ds) {
 	DBServerNames[type] = ds;
 }
 
-bool ODBC_base::FindAndSetDriver(SQLHENV conn, DBServer type, const ustring & ds) {
+bool ODBC_base::FindAndSetDriver(SQLHENV conn, DBServer type, const ustring& ds) {
 	bool Result = false;
 
 	if (conn) {
@@ -45,7 +45,7 @@ bool ODBC_base::FindAndSetDriver(SQLHENV conn, DBServer type, const ustring & ds
 	return Result;
 }
 
-bool ODBC_base::GetStr(SQLHSTMT hstm, size_t col, ustring & out) {
+bool ODBC_base::GetStr(SQLHSTMT hstm, size_t col, ustring& out) {
 	SQLLEN size = 0;
 	memory::auto_array<wchar_t> buf(4096);
 	SQLRETURN err = ::SQLGetData(hstm, col, SQL_C_WCHAR, buf, buf.size(), &size);
@@ -63,7 +63,7 @@ ustring ODBC_base::GetState(SQLSMALLINT type, SQLHANDLE handle, SQLSMALLINT RecN
 	return Msg;
 }
 
-ustring ODBC_base::MakeConnStr(const ustring & drv, const ustring &host, const ustring &port, const ustring &schm, const ustring &name, const ustring &pass, const ustring &add) {
+ustring ODBC_base::MakeConnStr(const ustring& drv, const ustring &host, const ustring &port, const ustring &schm, const ustring &name, const ustring &pass, const ustring &add) {
 	using namespace sstr::inplace;
 	ustring Result(L"Driver");
 	add_word(Result, drv, L"={");
@@ -207,7 +207,7 @@ ustring ODBC_Conn::GetInfo(SQLUSMALLINT type) const {
 	return data.data();
 }
 
-ustring ODBC_Conn::GetStr(const ustring & query, size_t col) const {
+ustring ODBC_Conn::GetStr(const ustring& query, size_t col) const {
 	ustring Result;
 	SQLHSTMT hstm;
 	SQLRETURN err = ::SQLAllocHandle(SQL_HANDLE_STMT, m_hdbc, &hstm);

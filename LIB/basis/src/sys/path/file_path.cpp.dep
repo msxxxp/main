@@ -56,7 +56,7 @@ namespace fsys {
 	}
 
 	///=================================================================================================
-	bool substr_match(const ustring& str, size_t pos, const wchar_t * mstr)
+	bool substr_match(const ustring& str, size_t pos, const wchar_t* mstr)
 	{
 		size_t mstr_len = cstr::length(mstr);
 		if ((pos > str.size()) || (pos + mstr_len > str.size())) {

@@ -4,7 +4,7 @@
 
 namespace path {
 
-	ustring unexpand(const ustring & path)
+	ustring unexpand(const ustring& path)
 	{
 		return unexpand(path.c_str());
 	}

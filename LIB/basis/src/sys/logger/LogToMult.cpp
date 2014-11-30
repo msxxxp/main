@@ -11,11 +11,11 @@ namespace logger {
 
 			~LogToMult();
 
-			void out(const Module * lgr, Level lvl, const wchar_t * str, size_t size) const override;
+			void out(const Module * lgr, Level lvl, const wchar_t* str, size_t size) const override;
 
-			void out(const Module * lgr, WORD color, Level lvl, const wchar_t * str, size_t size) const override;
+			void out(const Module * lgr, WORD color, Level lvl, const wchar_t* str, size_t size) const override;
 
-			void out(const wchar_t * str, size_t size) const override;
+			void out(const wchar_t* str, size_t size) const override;
 
 			lock_type lock_scope() const override;
 
@@ -34,19 +34,19 @@ namespace logger {
 		{
 		}
 
-		void LogToMult::out(const Module * lgr, Level lvl, const wchar_t * str, size_t size) const
+		void LogToMult::out(const Module * lgr, Level lvl, const wchar_t* str, size_t size) const
 		{
 			m_first->out(lgr, lvl, str, size);
 			m_second->out(lgr, lvl, str, size);
 		}
 
-		void LogToMult::out(const Module * lgr, WORD color, Level lvl, const wchar_t * str, size_t size) const
+		void LogToMult::out(const Module * lgr, WORD color, Level lvl, const wchar_t* str, size_t size) const
 		{
 			m_first->out(lgr, color, lvl, str, size);
 			m_second->out(lgr, color, lvl, str, size);
 		}
 
-		void LogToMult::out(const wchar_t * str, size_t size) const
+		void LogToMult::out(const wchar_t* str, size_t size) const
 		{
 			m_first->out(str, size);
 			m_second->out(str, size);

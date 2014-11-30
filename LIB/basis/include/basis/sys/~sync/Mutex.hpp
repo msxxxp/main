@@ -14,7 +14,7 @@ namespace sync {
 
 		~Mutex();
 
-		Mutex(const wchar_t * name = nullptr);
+		Mutex(const wchar_t* name = nullptr);
 
 		void lock();
 

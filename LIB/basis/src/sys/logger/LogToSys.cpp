@@ -25,18 +25,18 @@ namespace logger {
 		struct LogToSys: public Target_i {
 			~LogToSys();
 
-			LogToSys(const wchar_t * name, const wchar_t * path);
+			LogToSys(const wchar_t* name, const wchar_t* path);
 
-			void out(const Module * lgr, Level lvl, const wchar_t * str, size_t size) const override;
+			void out(const Module * lgr, Level lvl, const wchar_t* str, size_t size) const override;
 
-			void out(const Module * lgr, WORD color, Level lvl, const wchar_t * str, size_t size) const override;
+			void out(const Module * lgr, WORD color, Level lvl, const wchar_t* str, size_t size) const override;
 
-			void out(const wchar_t * str, size_t size) const override;
+			void out(const wchar_t* str, size_t size) const override;
 
 			lock_type lock_scope() const override;
 
 		private:
-			static void app_register(const wchar_t * name, const wchar_t * path);
+			static void app_register(const wchar_t* name, const wchar_t* path);
 
 			mutable sync_type m_sync;
 			HANDLE m_hndl;
@@ -47,13 +47,13 @@ namespace logger {
 			::DeregisterEventSource(m_hndl);
 		}
 
-		LogToSys::LogToSys(const wchar_t * name, const wchar_t * path)
+		LogToSys::LogToSys(const wchar_t* name, const wchar_t* path)
 		{
 			app_register(name, path);
 			m_hndl = ::RegisterEventSourceW(nullptr, name);
 		}
 
-		void LogToSys::out(const Module * /*lgr*/, Level lvl, const wchar_t * str, size_t /*size*/) const
+		void LogToSys::out(const Module * /*lgr*/, Level lvl, const wchar_t* str, size_t /*size*/) const
 		{
 			//			PSID user = nullptr;
 			//			HANDLE token;
@@ -68,12 +68,12 @@ namespace logger {
 			//			free(token_user);
 		}
 
-		void LogToSys::out(const Module * /*lgr*/, WORD /*color*/, Level lvl, const wchar_t * str, size_t /*size*/) const
+		void LogToSys::out(const Module * /*lgr*/, WORD /*color*/, Level lvl, const wchar_t* str, size_t /*size*/) const
 		{
 			::ReportEventW(m_hndl, LogLevelTypes[(int)lvl], 0, EV_MSG_STRING, nullptr, 1, 0, &str, nullptr);
 		}
 
-		void LogToSys::out(const wchar_t * str, size_t /*size*/) const
+		void LogToSys::out(const wchar_t* str, size_t /*size*/) const
 		{
 			::ReportEventW(m_hndl, LogLevelTypes[(int)defaults::get_level()], 0, EV_MSG_STRING, nullptr, 1, 0, &str, nullptr);
 		}
@@ -83,7 +83,7 @@ namespace logger {
 			return simstd::auto_lock(m_sync);
 		}
 
-		void LogToSys::app_register(const wchar_t * name, const wchar_t * path)
+		void LogToSys::app_register(const wchar_t* name, const wchar_t* path)
 		{
 			wchar_t path_buf[MAX_PATH_LEN], *fullpath = path_buf;
 			if (cstr::is_empty(path)) {
@@ -109,7 +109,7 @@ namespace logger {
 
 	}
 
-	Target_t get_TargetToSys(const wchar_t * name, const wchar_t * path)
+	Target_t get_TargetToSys(const wchar_t* name, const wchar_t* path)
 	{
 		return Target_t(new LogToSys(name, path));
 	}

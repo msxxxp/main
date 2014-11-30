@@ -25,9 +25,9 @@ namespace Http {
 	struct HttpBindIP: public HTTP_SERVICE_CONFIG_SSL_KEY {
 		~HttpBindIP();
 
-		HttpBindIP(const ustring & ipport);
+		HttpBindIP(const ustring& ipport);
 
-		HttpBindIP(const ustring & ip, const ustring & port);
+		HttpBindIP(const ustring& ip, const ustring& port);
 
 		explicit HttpBindIP(const HTTP_SERVICE_CONFIG_SSL_KEY & in);
 
@@ -52,15 +52,15 @@ namespace Http {
 		void swap(HttpBindIP & rhs);
 
 	private:
-		bool is_valid(const ustring & ip);
-		bool Assign(const ustring & ip, const ustring & port);
+		bool is_valid(const ustring& ip);
+		bool Assign(const ustring& ip, const ustring& port);
 	};
 
 	///=================================================================================== HttpBindParam
 	struct HttpBindParam : public HTTP_SERVICE_CONFIG_SSL_PARAM, private pattern::Uncopyable {
 		~HttpBindParam();
 
-		HttpBindParam(const ustring & hash);
+		HttpBindParam(const ustring& hash);
 
 		bool copy(HTTP_SERVICE_CONFIG_SSL_PARAM & out) const;
 	};
@@ -101,9 +101,9 @@ namespace Http {
 
 		void del(const HttpBindIP & ip) const;
 
-		bool find(const ustring & hash) const;
+		bool find(const ustring& hash) const;
 
-		bool is_exist(const ustring & ip, const ustring & port);
+		bool is_exist(const ustring& ip, const ustring& port);
 	};
 #endif
 }

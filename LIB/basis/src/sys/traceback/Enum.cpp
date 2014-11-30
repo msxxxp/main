@@ -16,7 +16,7 @@ namespace traceback {
 	LogRegisterLocal(L"traceback");
 
 	struct DebugSymbols {
-		static DebugSymbols & inst(const wchar_t * path = nullptr)
+		static DebugSymbols & inst(const wchar_t* path = nullptr)
 		{
 			static DebugSymbols instance(path);
 			return instance;
@@ -31,7 +31,7 @@ namespace traceback {
 			UNUSED(ret);
 		}
 
-		DebugSymbols(const wchar_t * path)
+		DebugSymbols(const wchar_t* path)
 		{
 			os::Dbghelp_dll::inst().SymSetOptions(os::Dbghelp_dll::inst().SymGetOptions() | /*SYMOPT_DEFERRED_LOADS | */SYMOPT_FAIL_CRITICAL_ERRORS | SYMOPT_LOAD_LINES);
 			bool ret = os::Dbghelp_dll::inst().SymInitializeW(::GetCurrentProcess(), path, TRUE);
@@ -45,7 +45,7 @@ namespace traceback {
 		}
 	};
 
-	void init(const wchar_t * path)
+	void init(const wchar_t* path)
 	{
 		DebugSymbols::inst(path);
 	}

@@ -15,27 +15,27 @@ namespace sstr {
 	ustring get_trim_default_uchars();
 
 	namespace inplace {
-		astring & trim_left(astring & str, const astring & chrs);
-		ustring & trim_left(ustring & str, const ustring & chrs);
+		astring& trim_left(astring& str, const astring& chrs);
+		ustring& trim_left(ustring& str, const ustring& chrs);
 
-		astring & trim_right(astring & str, const astring & chrs);
-		ustring & trim_right(ustring & str, const ustring & chrs);
+		astring& trim_right(astring& str, const astring& chrs);
+		ustring& trim_right(ustring& str, const ustring& chrs);
 
-		astring & trim(astring & str, const astring & chrs);
-		ustring & trim(ustring & str, const ustring & chrs);
+		astring& trim(astring& str, const astring& chrs);
+		ustring& trim(ustring& str, const ustring& chrs);
 
-		astring & replace_all(astring & str, const astring & from, const astring & to);
-		ustring & replace_all(ustring & str, const ustring & from, const ustring & to);
+		astring& replace_all(astring& str, const astring& from, const astring& to);
+		ustring& replace_all(ustring& str, const ustring& from, const ustring& to);
 
-		ustring & to_lower(ustring & inout);
+		ustring& to_lower(ustring& inout);
 
-		ustring & to_upper(ustring & inout);
+		ustring& to_upper(ustring& inout);
 
-		astring & add_word(astring & inout, const astring & add);
-		ustring & add_word(ustring & inout, const ustring & add);
+		astring& add_word(astring& inout, const astring& add);
+		ustring& add_word(ustring& inout, const ustring& add);
 
-		astring & add_word(astring & inout, const astring & add, const astring & delim);
-		ustring & add_word(ustring & inout, const ustring & add, const ustring & delim);
+		astring& add_word(astring& inout, const astring& add, const astring& delim);
+		ustring& add_word(ustring& inout, const ustring& add, const ustring& delim);
 	}
 
 	template <typename StrType>
@@ -74,23 +74,23 @@ namespace sstr {
 
 	ustring GetWord(const ustring &str, wchar_t d = PATH_SEPARATOR_C);
 
-	ustring CutWord(ustring & inout, const ustring &delim, bool delDelim = true);
+	ustring CutWord(ustring& inout, const ustring &delim, bool delDelim = true);
 
-	ustring CutWordEx(ustring & inout, const ustring & delim, bool delDelim = true);
+	ustring CutWordEx(ustring& inout, const ustring& delim, bool delDelim = true);
 
-	ustring & Add(ustring & str, const wchar_t add);
+	ustring& Add(ustring& str, const wchar_t add);
 
-	ustring & Add(ustring & str, const ustring & add);
+	ustring& Add(ustring& str, const ustring& add);
 
-	ustring & Cut(ustring & str, const ustring & sub);
+	ustring& Cut(ustring& str, const ustring& sub);
 
-	bool Cut(ustring & str, intmax_t & num, int base = 10);
+	bool Cut(ustring& str, intmax_t & num, int base = 10);
 
 	astring Hash2Str(const PBYTE buf, size_t size);
 
 	astring Hash2StrNum(const PBYTE buf, size_t size);
 
-	bool Str2Hash(const astring & str, PVOID & hash, ULONG & size);
+	bool Str2Hash(const astring& str, PVOID & hash, ULONG & size);
 
 	UINT CheckUnicode(const PVOID buf, size_t size);
 
@@ -98,7 +98,7 @@ namespace sstr {
 
 	bool GetCP(HANDLE hFile, UINT & cp, bool bUseHeuristics = false);
 
-	ustring copy_after_last(const ustring & in, const ustring & delim);
+	ustring copy_after_last(const ustring& in, const ustring& delim);
 
 	size_t length(const astring &in);
 	size_t length(const ustring &in);
@@ -107,16 +107,16 @@ namespace sstr {
 
 	ustring to_str(int64_t num, int base = 10);
 
-	astring oem(const wchar_t * in);
+	astring oem(const wchar_t* in);
 	astring oem(const ustring &in);
 
-	astring ansi(const wchar_t * in);
+	astring ansi(const wchar_t* in);
 	astring ansi(const ustring &in);
 
-	astring utf8(const wchar_t * in);
+	astring utf8(const wchar_t* in);
 	astring utf8(const ustring &in);
 
-	ustring utf16(const char * in, UINT cp = CP_UTF8);
+	ustring utf16(const char* in, UINT cp = CP_UTF8);
 	ustring utf16(const astring &in, UINT cp = CP_UTF8);
 }
 
@@ -187,8 +187,8 @@ ustring to_str(const PBYTE buf, size_t size);
 
 ustring to_str(memory::auto_array<BYTE> buf);
 
-memory::auto_array<BYTE> to_hash(const ustring & str);
+memory::auto_array<BYTE> to_hash(const ustring& str);
 
-void to_hash(const ustring & str, PBYTE & buf, size_t & size);
+void to_hash(const ustring& str, PBYTE & buf, size_t & size);
 
 #endif

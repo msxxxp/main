@@ -47,7 +47,7 @@ namespace Ext {
 		CheckApi(::InitializeSecurityDescriptor(m_sd, SECURITY_DESCRIPTOR_REVISION));
 	}
 
-	WinAbsSD::WinAbsSD(const ustring & name, const ustring & group, bool prot):
+	WinAbsSD::WinAbsSD(const ustring& name, const ustring& group, bool prot):
 		m_owner(nullptr),
 		m_group(nullptr),
 		m_dacl(nullptr),

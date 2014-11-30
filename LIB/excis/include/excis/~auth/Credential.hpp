@@ -13,7 +13,7 @@ namespace auth {
 
 		~Credential();
 
-		Credential(const wchar_t * name);
+		Credential(const wchar_t* name);
 
 		Credential(Credential && right);
 
@@ -41,9 +41,9 @@ namespace auth {
 
 		size_t persist() const;
 
-		static void add(const wchar_t * name, const wchar_t * pass, const wchar_t * target = nullptr);
+		static void add(const wchar_t* name, const wchar_t* pass, const wchar_t* target = nullptr);
 
-		static void del(const wchar_t * name);
+		static void del(const wchar_t* name);
 
 	private:
 		native_handle_type m_cred;

@@ -4,7 +4,7 @@
 
 namespace Ext {
 
-	ustring Mode2Sddl(const ustring & owner, const ustring & group, mode_t mode) {
+	ustring Mode2Sddl(const ustring& owner, const ustring& group, mode_t mode) {
 		ustring Result = L"(A;OICI;FA;;;BA)";
 		ustring sm;
 		if ((mode & 0700) && !owner.empty()) {

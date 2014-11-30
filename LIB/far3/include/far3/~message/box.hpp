@@ -33,7 +33,7 @@ namespace far3 {
 
 		void ebox(const wchar_t* msgs[], size_t size, const wchar_t* help = nullptr);
 
-//		void ebox(const cstr::mstring & msg, const wchar_t* title = EMPTY_STR);
+//		void ebox(const cstr::mstring& msg, const wchar_t* title = EMPTY_STR);
 
 		void ebox(DWORD err);
 

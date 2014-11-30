@@ -2,7 +2,7 @@
 
 namespace console {
 
-	int printf(const wchar_t * format, ...)
+	int printf(const wchar_t* format, ...)
 	{
 		Va_list vl;
 		va_start(vl, format);

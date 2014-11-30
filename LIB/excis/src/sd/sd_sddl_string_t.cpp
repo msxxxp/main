@@ -6,7 +6,7 @@
 namespace Ext {
 
 	///=============================================================================== sddl_string_t
-	sddl_string_t::sddl_string_t(const ustring & str):
+	sddl_string_t::sddl_string_t(const ustring& str):
 		m_str(str) {
 	}
 

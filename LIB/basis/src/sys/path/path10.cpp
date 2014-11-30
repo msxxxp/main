@@ -4,7 +4,7 @@
 
 namespace path {
 
-	ustring nice(const wchar_t * path)
+	ustring nice(const wchar_t* path)
 	{
 		return canonicalize(expand(path));
 	}

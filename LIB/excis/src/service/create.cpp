@@ -4,7 +4,7 @@
 
 namespace Ext {
 
-	Service::Create_t::Create_t(const ustring & _name, const ustring & _binaryPathName) :
+	Service::Create_t::Create_t(const ustring& _name, const ustring& _binaryPathName) :
 		name(_name),
 		serviceType(SERVICE_WIN32_OWN_PROCESS),
 		startType(SERVICE_DEMAND_START),

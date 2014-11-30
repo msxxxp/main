@@ -10,7 +10,7 @@ namespace logger {
 	const size_t default_buffer_size = 4 * 1024;
 
 	///================================================================================== ModuleImpl
-	ModuleImpl::ModuleImpl(const wchar_t * name, const Target_t & tgt, Level lvl) :
+	ModuleImpl::ModuleImpl(const wchar_t* name, const Target_t & tgt, Level lvl) :
 		m_target(tgt),
 		m_lvl(lvl),
 		m_prefix(defaults::get_prefix()),
@@ -29,7 +29,7 @@ namespace logger {
 		delete this;
 	}
 
-	const wchar_t * ModuleImpl::get_name() const
+	const wchar_t* ModuleImpl::get_name() const
 	{
 		return m_name;
 	}
@@ -84,7 +84,7 @@ namespace logger {
 		m_enabled = enabled;
 	}
 
-	void ModuleImpl::out(Level lvl, const wchar_t * format, ...) const
+	void ModuleImpl::out(Level lvl, const wchar_t* format, ...) const
 	{
 		TraceFunc();
 		if (m_enabled && lvl >= m_lvl) {
@@ -168,7 +168,7 @@ namespace logger {
 		return buff + written;
 	}
 
-	void ModuleImpl::out_args(Level lvl, wchar_t * buff, wchar_t * pend, size_t size, const wchar_t * frmat, va_list & args) const
+	void ModuleImpl::out_args(Level lvl, wchar_t* buff, wchar_t* pend, size_t size, const wchar_t* frmat, va_list & args) const
 	{
 		TraceFunc();
 		size_t written = safe_vsnprintf(pend, size, frmat, args);
@@ -177,7 +177,7 @@ namespace logger {
 		TraceFunc();
 	}
 
-	void ModuleImpl::out_args(WORD color, Level lvl, const wchar_t * frmat, va_list args) const
+	void ModuleImpl::out_args(WORD color, Level lvl, const wchar_t* frmat, va_list args) const
 	{
 		TraceFunc();
 		wchar_t buff[4096];
@@ -188,7 +188,7 @@ namespace logger {
 	}
 
 	///=============================================================================================
-	ModuleImpl * create_Module_impl(const wchar_t * name, const Target_t & tgt, Level lvl)
+	ModuleImpl * create_Module_impl(const wchar_t* name, const Target_t & tgt, Level lvl)
 	{
 		return new ModuleImpl(name, tgt, lvl);
 	}

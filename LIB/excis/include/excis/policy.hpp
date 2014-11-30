@@ -16,7 +16,7 @@ namespace Ext {
 
 		void AccountRightDel(PCWSTR right, PCWSTR name, PCWSTR dom = EMPTY_STR);
 
-		bool GetTokenUser(HANDLE hToken, ustring & name);
+		bool GetTokenUser(HANDLE hToken, ustring& name);
 	}
 
 }

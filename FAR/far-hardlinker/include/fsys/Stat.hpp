@@ -28,9 +28,9 @@ namespace fsys {
 
 	typedef simstd::unique_ptr<Stat_i> Stat;
 
-	Stat stat(const char * path);
+	Stat stat(const char* path);
 
-	Stat stat(const wchar_t * path);
+	Stat stat(const wchar_t* path);
 
 }
 

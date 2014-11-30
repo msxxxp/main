@@ -8,7 +8,7 @@ namespace Ext {
 		return Sid::get_name(WinSDH(hnd, type).get_owner());
 	}
 
-	ustring get_owner(const ustring & path, SE_OBJECT_TYPE type) {
+	ustring get_owner(const ustring& path, SE_OBJECT_TYPE type) {
 		return Sid::get_name(WinSDW(path, type).get_owner());
 	}
 

@@ -4,7 +4,7 @@
 
 namespace path {
 
-	ustring get_root(const ustring & path)
+	ustring get_root(const ustring& path)
 	{
 		return get_root(path.c_str());
 	}

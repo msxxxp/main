@@ -44,19 +44,19 @@ namespace traceback {
 		return m_address;
 	}
 
-	const ustring & LazyFrame::module() const
+	const ustring& LazyFrame::module() const
 	{
 		init_data();
 		return m_data->module();
 	}
 
-	const ustring & LazyFrame::file() const
+	const ustring& LazyFrame::file() const
 	{
 		init_data();
 		return m_data->file();
 	}
 
-	const ustring & LazyFrame::function() const
+	const ustring& LazyFrame::function() const
 	{
 		init_data();
 		return m_data->function();

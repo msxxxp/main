@@ -7,7 +7,7 @@ namespace sstr {
 
 	namespace inplace {
 
-		astring & trim_left(astring & str, const astring & chrs)
+		astring& trim_left(astring& str, const astring& chrs)
 		{
 			astring::size_type pos = str.find_first_not_of(chrs);
 			if (pos && pos != astring::npos) {
@@ -16,7 +16,7 @@ namespace sstr {
 			return str;
 		}
 
-		ustring & trim_left(ustring & str, const ustring & chrs)
+		ustring& trim_left(ustring& str, const ustring& chrs)
 		{
 			ustring::size_type pos = str.find_first_not_of(chrs);
 			if (pos && pos != ustring::npos) {
@@ -25,7 +25,7 @@ namespace sstr {
 			return str;
 		}
 
-		astring & trim_right(astring & str, const astring & chrs)
+		astring& trim_right(astring& str, const astring& chrs)
 		{
 			astring::size_type pos = str.find_last_not_of(chrs);
 			if (pos != astring::npos && (++pos < str.size())) {
@@ -34,7 +34,7 @@ namespace sstr {
 			return str;
 		}
 
-		ustring & trim_right(ustring & str, const ustring & chrs)
+		ustring& trim_right(ustring& str, const ustring& chrs)
 		{
 			ustring::size_type pos = str.find_last_not_of(chrs);
 			if (pos != ustring::npos && (++pos < str.size())) {
@@ -43,21 +43,21 @@ namespace sstr {
 			return str;
 		}
 
-		astring & trim(astring & str, const astring & chrs)
+		astring& trim(astring& str, const astring& chrs)
 		{
 			trim_right(str, chrs);
 			trim_left(str, chrs);
 			return str;
 		}
 
-		ustring & trim(ustring & str, const ustring & chrs)
+		ustring& trim(ustring& str, const ustring& chrs)
 		{
 			trim_right(str, chrs);
 			trim_left(str, chrs);
 			return str;
 		}
 
-		ustring & replace_all(ustring & str, const ustring & from, const ustring & to)
+		ustring& replace_all(ustring& str, const ustring& from, const ustring& to)
 		{
 			ustring::size_type pos;
 			while ((pos = str.find(from)) != ustring::npos) {
@@ -66,7 +66,7 @@ namespace sstr {
 			return str;
 		}
 
-		ustring & to_lower(ustring & inout)
+		ustring& to_lower(ustring& inout)
 		{
 			if (!inout.empty()) {
 				::CharLowerW((wchar_t*)inout.c_str());
@@ -74,7 +74,7 @@ namespace sstr {
 			return inout;
 		}
 
-		ustring & to_upper(ustring & inout)
+		ustring& to_upper(ustring& inout)
 		{
 			if (!inout.empty()) {
 				::CharUpperW((wchar_t*)inout.c_str());
@@ -82,12 +82,12 @@ namespace sstr {
 			return inout;
 		}
 
-		ustring & add_word(ustring & inout, const ustring & add)
+		ustring& add_word(ustring& inout, const ustring& add)
 		{
 			return add_word(inout, add, ustring());
 		}
 
-		ustring & add_word(ustring & inout, const ustring & add, const ustring & delim)
+		ustring& add_word(ustring& inout, const ustring& add, const ustring& delim)
 		{
 			// добаваляет строку через разделитель кроме случаев
 			// 1) исходная строка пуста

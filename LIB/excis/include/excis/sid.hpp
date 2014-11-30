@@ -27,7 +27,7 @@ namespace Ext {
 
 		explicit Sid(PCWSTR name, PCWSTR srv = nullptr);
 
-		explicit Sid(const ustring & name, PCWSTR srv = nullptr);
+		explicit Sid(const ustring& name, PCWSTR srv = nullptr);
 
 		Sid(const this_type & rhs);
 
@@ -86,7 +86,7 @@ namespace Ext {
 		static ustring as_str(value_type in);
 
 		// PSID to name
-		static void get_name_dom(value_type sid, ustring & name, ustring & dom, PCWSTR srv = nullptr);
+		static void get_name_dom(value_type sid, ustring& name, ustring& dom, PCWSTR srv = nullptr);
 		static ustring get_name(value_type sid, PCWSTR srv = nullptr);
 		static ustring get_full_name(value_type sid, PCWSTR srv = nullptr);
 		static ustring get_domain(value_type sid, PCWSTR srv = nullptr);
@@ -109,7 +109,7 @@ namespace Ext {
 			init(str);
 		}
 
-		explicit SidString(const ustring & str);
+		explicit SidString(const ustring& str);
 
 	private:
 		void init(PCWSTR str);

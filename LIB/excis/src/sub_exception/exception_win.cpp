@@ -54,7 +54,7 @@ namespace exception {
 		return m_code;
 	}
 
-	void WinError::format_error(cstr::mstring & out) const
+	void WinError::format_error(cstr::mstring& out) const
 	{
 		wchar_t buf[MAX_PATH_LEN] = {0};
 

@@ -3,7 +3,7 @@
 
 namespace Ext {
 
-//	ServicesDelete::ServicesDelete(WinServices * svcs, const ustring & name):
+//	ServicesDelete::ServicesDelete(WinServices * svcs, const ustring& name):
 //		m_svcs(svcs),
 //		m_name(name)
 //	{

@@ -9,7 +9,7 @@
 
 namespace traceback {
 
-	void init(const wchar_t * path = nullptr);
+	void init(const wchar_t* path = nullptr);
 
 	struct Frame_i
 	{
@@ -17,11 +17,11 @@ namespace traceback {
 
 		virtual void * address() const = 0;
 
-		virtual const ustring & module() const = 0;
+		virtual const ustring& module() const = 0;
 
-		virtual const ustring & file() const = 0;
+		virtual const ustring& file() const = 0;
 
-		virtual const ustring & function() const = 0;
+		virtual const ustring& function() const = 0;
 
 		virtual size_t line() const = 0;
 
@@ -46,11 +46,11 @@ namespace traceback {
 
 		void * address() const override;
 
-		const ustring & module() const override;
+		const ustring& module() const override;
 
-		const ustring & file() const override;
+		const ustring& file() const override;
 
-		const ustring & function() const override;
+		const ustring& function() const override;
 
 		size_t line() const override;
 

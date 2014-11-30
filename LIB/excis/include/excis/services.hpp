@@ -31,18 +31,18 @@ namespace Ext {
 		using base_type::operator[];
 
 		~Services();
-		Services(const ustring & host = ustring(), PCWSTR user = nullptr, PCWSTR pass = nullptr);
+		Services(const ustring& host = ustring(), PCWSTR user = nullptr, PCWSTR pass = nullptr);
 
 		Service::EnumerateType_t get_type() const;
 		void set_type(Service::EnumerateType_t type);
 
 		ustring get_host() const;
-		void set_host(const ustring & host = ustring(), PCWSTR user = nullptr, PCWSTR pass = nullptr);
+		void set_host(const ustring& host = ustring(), PCWSTR user = nullptr, PCWSTR pass = nullptr);
 
 		void update();
 
-		iterator find(const ustring & name);
-		const_iterator find(const ustring & name) const;
+		iterator find(const ustring& name);
+		const_iterator find(const ustring& name) const;
 
 		void add(const Service::Create_t & info);
 

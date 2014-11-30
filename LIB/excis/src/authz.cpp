@@ -55,7 +55,7 @@ namespace Ext {
 		};
 	}
 
-//	void SetSecurity(const ustring & path, const Sid & uid, const Sid & gid, mode_t mode, bool protect, SE_OBJECT_TYPE type) {
+//	void SetSecurity(const ustring& path, const Sid & uid, const Sid & gid, mode_t mode, bool protect, SE_OBJECT_TYPE type) {
 //		SetSecurity(path, WinAbsSD(uid.get_name(), gid.get_name(), mode, protect), type);
 //	}
 

@@ -26,7 +26,7 @@ namespace auth {
 		size_t             m_size;
 	};
 
-	void parse_username(const wchar_t * fullname, ustring & dom, ustring & name);
+	void parse_username(const wchar_t* fullname, ustring& dom, ustring& name);
 
 }
 

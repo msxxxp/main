@@ -13,7 +13,7 @@ namespace logger {
 
 	const wchar_t* to_str(Level lvl);
 
-	const wchar_t * to_str(Prefix::flags fl);
+	const wchar_t* to_str(Prefix::flags fl);
 
 	typedef sync::CriticalSection sync_type;
 
@@ -23,11 +23,11 @@ namespace logger {
 	struct Target_i {
 		virtual ~Target_i() = default;
 
-		virtual void out(const Module * module, Level lvl, const wchar_t * str, size_t size) const = 0;
+		virtual void out(const Module * module, Level lvl, const wchar_t* str, size_t size) const = 0;
 
-		virtual void out(const Module * module, WORD color, Level lvl, const wchar_t * str, size_t size) const = 0;
+		virtual void out(const Module * module, WORD color, Level lvl, const wchar_t* str, size_t size) const = 0;
 
-		virtual void out(const wchar_t * str, size_t size) const = 0;
+		virtual void out(const wchar_t* str, size_t size) const = 0;
 
 		virtual lock_type lock_scope() const = 0;
 	};
@@ -38,29 +38,29 @@ namespace logger {
 
 	Target_t get_TargetToConsole();
 
-	Target_t get_TargetToFile(const wchar_t * path, bool overwrite = false);
+	Target_t get_TargetToFile(const wchar_t* path, bool overwrite = false);
 
-	Target_t get_TargetToSys(const wchar_t * name, const wchar_t * path = nullptr);
+	Target_t get_TargetToSys(const wchar_t* name, const wchar_t* path = nullptr);
 
 	Target_t get_TargetToMult(const Target_t & first, const Target_t & second);
 
 	///================================================================================== ModuleImpl
 	struct ModuleImpl: public Module, public pattern::Destroyable, private pattern::Uncopyable {
-		ModuleImpl(const wchar_t * name, const Target_t & tgt, Level lvl);
+		ModuleImpl(const wchar_t* name, const Target_t & tgt, Level lvl);
 
 		void destroy() const override;
 
-		const wchar_t * get_name() const;
+		const wchar_t* get_name() const;
 
 		bool is_color_mode() const override;
 
 		bool is_utf8_mode() const override;
 
-		void out(Level lvl, const wchar_t * format, ...) const override;
+		void out(Level lvl, const wchar_t* format, ...) const override;
 
-		void out_with_color(WORD color, Level lvl, const wchar_t * format, ...) const override;
+		void out_with_color(WORD color, Level lvl, const wchar_t* format, ...) const override;
 
-		void out_with_place(const char * file, int line, const char * func, Level lvl, const wchar_t * format, ...) const override;
+		void out_with_place(const char* file, int line, const char* func, Level lvl, const wchar_t* format, ...) const override;
 
 		Level get_level() const;
 
@@ -79,13 +79,13 @@ namespace logger {
 		lock_type lock_scope() const;
 
 	private:
-		wchar_t * add_prefix(Level lvl, wchar_t * buff, size_t size) const;
+		wchar_t* add_prefix(Level lvl, wchar_t* buff, size_t size) const;
 
-		wchar_t * add_place(wchar_t * buff, size_t size, const char * file, int line, const char * func) const;
+		wchar_t* add_place(wchar_t* buff, size_t size, const char* file, int line, const char* func) const;
 
-		void out_args(Level lvl, wchar_t * buff, wchar_t * pend, size_t size, const wchar_t * frmat, va_list & args) const;
+		void out_args(Level lvl, wchar_t* buff, wchar_t* pend, size_t size, const wchar_t* frmat, va_list & args) const;
 
-		void out_args(WORD color, Level lvl, const wchar_t * frmat, va_list args) const;
+		void out_args(WORD color, Level lvl, const wchar_t* frmat, va_list args) const;
 
 		wchar_t       m_name[16];
 		Target_t      m_target;
@@ -96,9 +96,9 @@ namespace logger {
 		uint32_t      m_utf8_out:1;
 	};
 
-	ModuleImpl * get_module_impl(const wchar_t * name);
+	ModuleImpl * get_module_impl(const wchar_t* name);
 
-	ModuleImpl * create_Module_impl(const wchar_t * name, const Target_t & tgt, Level lvl);
+	ModuleImpl * create_Module_impl(const wchar_t* name, const Target_t & tgt, Level lvl);
 
 	namespace defaults {
 		Level get_level();

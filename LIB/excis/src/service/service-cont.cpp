@@ -14,7 +14,7 @@ namespace Ext {
 //			cache();
 //	}
 //
-//	bool WinServices::cache_by_name(const ustring & /*in*/, RemoteConnection * /*conn*/) {
+//	bool WinServices::cache_by_name(const ustring& /*in*/, RemoteConnection * /*conn*/) {
 //		//	try {
 //		//		WinScm		scm(SC_MANAGER_CONNECT | SC_MANAGER_ENUMERATE_SERVICE);
 //		//		DWORD	dwBufNeed = 0, dwNumberOfService = 0;
@@ -96,15 +96,15 @@ namespace Ext {
 //		return true;
 //	}
 //
-//	WinServices::iterator WinServices::find(const ustring & name) {
+//	WinServices::iterator WinServices::find(const ustring& name) {
 //		return simstd::find(begin(), end(), name);
 //	}
 //
-//	WinServices::const_iterator WinServices::find(const ustring & name) const {
+//	WinServices::const_iterator WinServices::find(const ustring& name) const {
 //		return simstd::find(begin(), end(), name);
 //	}
 //
-//	void WinServices::add(const ustring & /*name*/, const ustring & /*path*/) {
+//	void WinServices::add(const ustring& /*name*/, const ustring& /*path*/) {
 //		try {
 ////			WinScm(m_conn, SC_MANAGER_CREATE_SERVICE).create_service(name.c_str(), path.c_str(), SERVICE_DEMAND_START);
 ////			push_back(ServiceInfo(name));
@@ -113,7 +113,7 @@ namespace Ext {
 //		}
 //	}
 //
-//	void WinServices::del(const ustring & name, PCWSTR msg) {
+//	void WinServices::del(const ustring& name, PCWSTR msg) {
 //		iterator it = find(name);
 //		if (it != end())
 //			del(it, msg);

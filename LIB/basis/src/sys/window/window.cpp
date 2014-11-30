@@ -31,7 +31,7 @@
 //		return 0;
 //	}
 //
-//	bool Window::create(HWND parent, const wchar_t * title, DWORD exstyle, DWORD style, int x, int y, int w, int h, HMENU id)
+//	bool Window::create(HWND parent, const wchar_t* title, DWORD exstyle, DWORD style, int x, int y, int w, int h, HMENU id)
 //	{
 //		LogTrace();
 //		WNDCLASSEX wndc;

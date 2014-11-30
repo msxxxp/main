@@ -36,7 +36,7 @@ namespace {
 //				if (m_attr != INVALID_FILE_ATTRIBUTES)
 //					::SetFileAttributesW(m_path.c_str(), m_attr);
 //			}
-//			TemporarySetAttributes(const ustring & path, DWORD attr):
+//			TemporarySetAttributes(const ustring& path, DWORD attr):
 //				m_path(path),
 //				m_attr(FS::get_attr(m_path))
 //			{

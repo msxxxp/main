@@ -15,7 +15,7 @@ ssize_t simstd::Test::w_string(simstd::Test::wPrintFunc /*printFunc*/)
 	assert(*str1.cend() == 0);
 	assert(*str1.cbegin() == L'h');
 
-	const wchar_t * pcwstr = L"PCWSTR";
+	const wchar_t* pcwstr = L"PCWSTR";
 	wstring str2(pcwstr);
 	printFunc(L"str2: '%s' size: %d\n", str2.c_str(), (int)str2.size());
 	assert(cstr::compare(str2.c_str(), pcwstr) == 0);
@@ -24,7 +24,7 @@ ssize_t simstd::Test::w_string(simstd::Test::wPrintFunc /*printFunc*/)
 	assert(*str2.cend() == 0);
 	assert(*str2.cbegin() == L'P');
 
-	wchar_t * pwstr = (wchar_t *)L"1pwstr2";
+	wchar_t* pwstr = (wchar_t *)L"1pwstr2";
 	wstring str3 = pwstr;
 	printFunc(L"str3: '%s' size: %d\n\n", str3.c_str(), (int)str3.size());
 	assert(cstr::compare(str3.c_str(), pwstr) == 0);

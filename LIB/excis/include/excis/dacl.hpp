@@ -25,7 +25,7 @@ namespace Ext {
 		WinDacl(size_t size);
 		WinDacl(PACL acl);
 		WinDacl(PSECURITY_DESCRIPTOR sd);
-		WinDacl(const ustring & name, SE_OBJECT_TYPE type = SE_FILE_OBJECT);
+		WinDacl(const ustring& name, SE_OBJECT_TYPE type = SE_FILE_OBJECT);
 
 		WinDacl(const this_class & rhs);
 		this_class & operator =(const this_class & rhs);
@@ -38,7 +38,7 @@ namespace Ext {
 		void grant_access(PCWSTR name, ACCESS_MASK acc);
 		void deny_access(PCWSTR name, ACCESS_MASK acc);
 
-		void set_to(DWORD flag, const ustring & name, SE_OBJECT_TYPE type = SE_FILE_OBJECT) const;
+		void set_to(DWORD flag, const ustring& name, SE_OBJECT_TYPE type = SE_FILE_OBJECT) const;
 
 		size_t count() const;
 
@@ -66,9 +66,9 @@ namespace Ext {
 		static void set_protect(PCWSTR path, PACL dacl, SE_OBJECT_TYPE type = SE_FILE_OBJECT);
 		static void set_protect_copy(PCWSTR path, PACL dacl, SE_OBJECT_TYPE type = SE_FILE_OBJECT);
 
-		static void inherit(const ustring & path, SE_OBJECT_TYPE type = SE_FILE_OBJECT);
-		static void protect(const ustring & path, SE_OBJECT_TYPE type = SE_FILE_OBJECT);
-		static void protect_copy(const ustring & path, SE_OBJECT_TYPE type = SE_FILE_OBJECT);
+		static void inherit(const ustring& path, SE_OBJECT_TYPE type = SE_FILE_OBJECT);
+		static void protect(const ustring& path, SE_OBJECT_TYPE type = SE_FILE_OBJECT);
+		static void protect_copy(const ustring& path, SE_OBJECT_TYPE type = SE_FILE_OBJECT);
 
 		static PACL create(size_t size);
 		static PACL copy(PACL acl);

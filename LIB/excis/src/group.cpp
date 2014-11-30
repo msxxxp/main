@@ -22,7 +22,7 @@ namespace Ext {
 			::NetApiBufferFree(info);
 		}
 
-		GroupBuf(const ustring & name, const ustring & dom = ustring()) :
+		GroupBuf(const ustring& name, const ustring& dom = ustring()) :
 			info(nullptr)
 		{
 			CheckApiError(::NetLocalGroupGetInfo(dom.c_str(), name.c_str(), level, (PBYTE* )&info));
@@ -38,7 +38,7 @@ namespace Ext {
 		PLOCALGROUP_INFO_1 info;
 	};
 
-	bool Group::is_exist(const ustring & name, const ustring & dom)
+	bool Group::is_exist(const ustring& name, const ustring& dom)
 	{
 		try {
 			GroupBuf(name, dom);
@@ -50,58 +50,58 @@ namespace Ext {
 		return true;
 	}
 
-	bool Group::is_member(const ustring & group, const ustring & user, const ustring & dom)
+	bool Group::is_member(const ustring& group, const ustring& user, const ustring& dom)
 	{
 		WinUsers members(false);
 		members.cache_by_group(group, dom);
 		return members.find(user) != members.end();
 	}
 
-	void Group::add(const ustring & name, const ustring & comm, const ustring & dom)
+	void Group::add(const ustring& name, const ustring& comm, const ustring& dom)
 	{
 		const DWORD level = 1;
 		LOCALGROUP_INFO_1 info = {const_cast<PWSTR>(name.c_str()), const_cast<PWSTR>(comm.c_str())};
 		CheckApiError(::NetLocalGroupAdd(dom.c_str(), level, (PBYTE )&info, nullptr));
 	}
 
-	void Group::del(const ustring & name, const ustring & dom)
+	void Group::del(const ustring& name, const ustring& dom)
 	{
 		CheckApiError(::NetLocalGroupDel(dom.c_str(), name.c_str()));
 	}
 
-	void Group::add_member(const ustring & name, const Sid & user, const ustring & dom)
+	void Group::add_member(const ustring& name, const Sid & user, const ustring& dom)
 	{
 		const DWORD level = 0;
 		LOCALGROUP_MEMBERS_INFO_0 info = {user};
 		CheckApiError(::NetLocalGroupAddMembers(dom.c_str(), name.c_str(), level, (PBYTE )&info, 1));
 	}
 
-	void Group::add_member(const SidString & gid, const Sid & user, const ustring & dom)
+	void Group::add_member(const SidString & gid, const Sid & user, const ustring& dom)
 	{
 		add_member(gid.get_name(), user, dom);
 	}
 
-	void Group::del_member(const ustring & name, const Sid & user, const ustring & dom)
+	void Group::del_member(const ustring& name, const Sid & user, const ustring& dom)
 	{
 		const DWORD level = 0;
 		LOCALGROUP_MEMBERS_INFO_0 info = {user};
 		CheckApiError(::NetLocalGroupDelMembers(dom.c_str(), name.c_str(), level, (PBYTE )&info, 1));
 	}
 
-	ustring Group::get_comm(const ustring & name, const ustring & dom)
+	ustring Group::get_comm(const ustring& name, const ustring& dom)
 	{
 		GroupBuf info(name, dom);
 		return info->lgrpi1_comment;
 	}
 
-	void Group::set_name(const ustring & name, const ustring & in, const ustring & dom)
+	void Group::set_name(const ustring& name, const ustring& in, const ustring& dom)
 	{
 		const DWORD level = 0;
 		LOCALGROUP_INFO_0 info = {const_cast<PWSTR>(in.c_str())};
 		CheckApiError(::NetLocalGroupSetInfo(dom.c_str(), name.c_str(), level, (PBYTE )&info, nullptr));
 	}
 
-	void Group::set_comm(const ustring & name, const ustring & in, const ustring & dom)
+	void Group::set_comm(const ustring& name, const ustring& in, const ustring& dom)
 	{
 		const DWORD level = 1002;
 		GROUP_INFO_1002 info = {const_cast<PWSTR>(in.c_str())};
@@ -120,7 +120,7 @@ namespace Ext {
 		return name < rhs.name;
 	}
 
-	bool GroupInfo::operator ==(const ustring & nm) const
+	bool GroupInfo::operator ==(const ustring& nm) const
 	{
 		return this->name == nm;
 	}
@@ -132,7 +132,7 @@ namespace Ext {
 			cache();
 	}
 
-	bool WinGroups::cache(const ustring & dom)
+	bool WinGroups::cache(const ustring& dom)
 	{
 		// Cache all groups.
 		const DWORD dwLevel = 1, dwPrefMaxLen = MAX_PREFERRED_LENGTH;
@@ -156,7 +156,7 @@ namespace Ext {
 		return (NERR_Success == nStatus);
 	}
 
-	bool WinGroups::cache_by_user(const ustring & name, const ustring & dom)
+	bool WinGroups::cache_by_user(const ustring& name, const ustring& dom)
 	{
 		// Cache groups that contains USER "name".
 		const DWORD dwLevel = 0, dwPrefMaxLen = MAX_PREFERRED_LENGTH, dwFlags = LG_INCLUDE_INDIRECT;
@@ -178,12 +178,12 @@ namespace Ext {
 		return (NERR_Success == nStatus);
 	}
 
-	WinGroups::iterator WinGroups::find(const ustring & name)
+	WinGroups::iterator WinGroups::find(const ustring& name)
 	{
 		return simstd::find(begin(), end(), name);
 	}
 
-	void WinGroups::add(const ustring & name)
+	void WinGroups::add(const ustring& name)
 	{
 		Group::add(name);
 		GroupInfo grtmp;
@@ -191,7 +191,7 @@ namespace Ext {
 		push_back(grtmp);
 	}
 
-	void WinGroups::del(const ustring & name)
+	void WinGroups::del(const ustring& name)
 	{
 		iterator it = find(name);
 		if (it != end())
@@ -204,14 +204,14 @@ namespace Ext {
 		erase(it);
 	}
 
-	void WinGroups::rename(const ustring & name, const ustring & new_name)
+	void WinGroups::rename(const ustring& name, const ustring& new_name)
 	{
 		iterator it = find(name);
 		if (it != end())
 			rename(it, new_name);
 	}
 
-	void WinGroups::rename(iterator it, const ustring & new_name)
+	void WinGroups::rename(iterator it, const ustring& new_name)
 	{
 		Group::set_name(it->name, new_name);
 		it->name = new_name;

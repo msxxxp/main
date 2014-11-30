@@ -15,8 +15,9 @@ namespace fsys {
 
 	public:
 		struct FindStat;
-		struct Options;
-		struct Statistics;
+		class Filter;
+		class Options;
+		class Statistics;
 
 		enum SearchFlags {
 			folderIncludeDots  = 0x0000001,
@@ -49,7 +50,11 @@ namespace fsys {
 		typedef ci_iterator iterator;
 		typedef ci_iterator const_iterator;
 
-		Sequence(const ustring & path, const ustring & mask, const Options & options);
+		typedef size_t   Attr;
+		typedef uint64_t Time;
+		typedef uint64_t Size;
+
+		Sequence(const ustring& path, const ustring& mask, const Options& options);
 
 		const_iterator begin() const;
 
@@ -61,12 +66,12 @@ namespace fsys {
 
 		const ustring& mask() const;
 
-		const Options & options() const;
+		const Options& options() const;
 
 	private:
-		ustring         m_path;
-		ustring         m_mask;
-		const Options & m_options;
+		ustring        m_path;
+		ustring        m_mask;
+		const Options& m_options;
 	};
 
 	inline const ustring& Sequence::path() const
@@ -81,7 +86,7 @@ namespace fsys {
 
 	///=================================================================================================================
 	struct Sequence::FindStat {
-		const wchar_t * name() const;
+		const wchar_t* name() const;
 
 		uint64_t size() const;
 
@@ -104,7 +109,7 @@ namespace fsys {
 		friend struct ci_iterator;
 	};
 
-	inline const wchar_t * Sequence::FindStat::name() const
+	inline const wchar_t* Sequence::FindStat::name() const
 	{
 		return m_stat.cFileName;
 	}
@@ -155,7 +160,8 @@ namespace fsys {
 	}
 
 	///=================================================================================================================
-	struct Sequence::Statistics {
+	class Sequence::Statistics {
+	public:
 		Statistics();
 
 		void init_statistics();
@@ -192,10 +198,45 @@ namespace fsys {
 	};
 
 	///=================================================================================================================
-	struct Sequence::Options {
-		uint64_t                 fileMinSize;
-		uint64_t                 fileMaxSize;
-		flags_type               flags;
+	class Sequence::Filter {
+	public:
+		enum class Type: ssize_t
+		{
+			Include,
+			Exclude,
+		};
+
+		Filter();
+
+//		void set_flag(SearchFlags flag, bool value);
+//		bool get_flag(SearchFlags flag) const;
+
+		bool operator ()(const FindStat& stat, Statistics& statistics) const;
+
+	private:
+		bool apply_to_folder(const FindStat& stat, Statistics& statistics) const;
+		bool apply_to_file(const FindStat& stat, Statistics& statistics) const;
+
+		bool apply_attributes(const FindStat& stat, Statistics& statistics) const;
+		bool apply_mask(const FindStat& stat, Statistics& statistics) const;
+
+		ustring name;
+		ustring mask;
+		Type    type;
+		Size    minSize, maxSize;
+		Time    minWrTime, maxWrTime;
+		Time    minCrTime, maxCrTime;
+		Time    minAcTime, maxAcTime;
+		Time    minChTime, maxChTime;
+		Attr    enabledAttr, disabledAttr;
+	};
+
+	///=================================================================================================================
+	class Sequence::Options {
+	public:
+		uint64_t           fileMinSize;
+		uint64_t           fileMaxSize;
+		flags_type         flags;
 		mutable Statistics statistics;
 
 		Options();

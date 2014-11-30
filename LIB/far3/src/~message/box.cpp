@@ -45,7 +45,7 @@ namespace far3 {
 			psi().Message(get_plugin_guid(), nullptr, FMSG_WARNING | FMSG_MB_OK, help, msgs, size, 1);
 		}
 
-//		void ebox(const cstr::mstring & msg, PCWSTR title)
+//		void ebox(const cstr::mstring& msg, PCWSTR title)
 //		{
 //			size_t len = msg.size() + 1;
 //			PCWSTR tmp[len];

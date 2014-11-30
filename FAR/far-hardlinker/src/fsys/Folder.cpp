@@ -12,7 +12,7 @@ namespace fsys {
 		++global::statistics().folderObjectsDestroyed;
 	}
 
-	Folder::Folder(const ustring & name) :
+	Folder::Folder(const ustring& name) :
 		Node(name, Node_t(nullptr))
 	{
 		LogTraceObj();
@@ -20,7 +20,7 @@ namespace fsys {
 		++global::statistics().folderObjectsCreated;
 	}
 
-	Folder::Folder(const ustring & name, Node_t parent) :
+	Folder::Folder(const ustring& name, Node_t parent) :
 		Node(name, parent)
 	{
 		LogTraceObj();

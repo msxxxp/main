@@ -31,7 +31,7 @@ namespace cstr {
 		add_data(other.m_data);
 	}
 
-	mstring & mstring::operator =(const this_type & other)
+	mstring& mstring::operator =(const this_type & other)
 	{
 		if (m_data != other.m_data)
 			mstring(other).swap(*this);
@@ -44,7 +44,7 @@ namespace cstr {
 		swap(other);
 	}
 
-	mstring & mstring::operator =(this_type && other)
+	mstring& mstring::operator =(this_type && other)
 	{
 		if (m_data != other.m_data)
 			swap(other);

@@ -41,7 +41,7 @@ namespace Ext {
 
 	///=============================================================================== sddl_string_t
 	struct sddl_string_t {
-		sddl_string_t(const ustring & str);
+		sddl_string_t(const ustring& str);
 
 		ustring as_str() const;
 
@@ -222,7 +222,7 @@ namespace Ext {
 	/// Security descriptor by name
 	struct WinSDW: public WinSD {
 		~WinSDW();
-		WinSDW(const ustring & name, SE_OBJECT_TYPE type = SE_FILE_OBJECT):
+		WinSDW(const ustring& name, SE_OBJECT_TYPE type = SE_FILE_OBJECT):
 			m_name(name),
 			m_type(type)
 		{
@@ -242,10 +242,10 @@ namespace Ext {
 
 	///======================================================================================== util
 	ustring	get_owner(HANDLE hnd, SE_OBJECT_TYPE type = SE_FILE_OBJECT);
-	ustring	get_owner(const ustring & path, SE_OBJECT_TYPE type = SE_FILE_OBJECT);
+	ustring	get_owner(const ustring& path, SE_OBJECT_TYPE type = SE_FILE_OBJECT);
 
 	ustring	get_group(HANDLE hnd, SE_OBJECT_TYPE type = SE_FILE_OBJECT);
-	ustring	get_group(const ustring & path, SE_OBJECT_TYPE type = SE_FILE_OBJECT);
+	ustring	get_group(const ustring& path, SE_OBJECT_TYPE type = SE_FILE_OBJECT);
 
 	void	set_owner(HANDLE handle, PSID owner, SE_OBJECT_TYPE type = SE_FILE_OBJECT);
 	void	set_owner(PCWSTR path, PSID owner, SE_OBJECT_TYPE type = SE_FILE_OBJECT);
@@ -265,10 +265,10 @@ namespace Ext {
 //	void	SetSecurity(const ustring &path, const ustring &sddl, SE_OBJECT_TYPE type = SE_FILE_OBJECT);
 //	void	SetSecurity(const ustring &path, const Sid &uid, const Sid &gid, mode_t mode, bool protect = false, SE_OBJECT_TYPE type = SE_FILE_OBJECT);
 
-	ustring	Mode2Sddl(const ustring & owner, const ustring & group, mode_t mode);
+	ustring	Mode2Sddl(const ustring& owner, const ustring& group, mode_t mode);
 	ustring	MakeSDDL(const ustring &name, const ustring &group, mode_t mode, bool protect = false);
 
-	void SetOwnerRecur(const ustring & path, PSID owner, SE_OBJECT_TYPE type = SE_FILE_OBJECT);
+	void SetOwnerRecur(const ustring& path, PSID owner, SE_OBJECT_TYPE type = SE_FILE_OBJECT);
 
 }
 

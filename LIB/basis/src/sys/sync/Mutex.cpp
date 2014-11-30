@@ -8,7 +8,7 @@ namespace sync {
 		::CloseHandle(reinterpret_cast<HANDLE>(m_handle));
 	}
 
-	Mutex::Mutex(const wchar_t * name) :
+	Mutex::Mutex(const wchar_t* name) :
 		m_handle(nullptr)
 	{
 		m_handle = reinterpret_cast<native_handle_type>(::CreateMutexW(nullptr, 0, name));

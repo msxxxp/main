@@ -9,7 +9,7 @@ namespace {
 
 namespace console {
 
-	size_t vprintf_var(Handle hnd, const wchar_t * format, va_list vl)
+	size_t vprintf_var(Handle hnd, const wchar_t* format, va_list vl)
 	{
 		memory::auto_array<wchar_t> buf(DEFAULT_PRINTF_BUFFER);
 		while (!safe_vsnprintf(buf.data(), buf.size(), format, vl))
@@ -17,7 +17,7 @@ namespace console {
 		return puts(buf.data(), cstr::length(buf.data()), hnd);
 	}
 
-	size_t vprintf(Handle hnd, const wchar_t * format, va_list vl)
+	size_t vprintf(Handle hnd, const wchar_t* format, va_list vl)
 	{
 		{
 			wchar_t buff[DEFAULT_PRINTF_BUFFER / 2];

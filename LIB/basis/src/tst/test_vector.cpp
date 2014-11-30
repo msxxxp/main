@@ -164,7 +164,7 @@ public:
 
 typedef simstd::vector<Value> vec_t;
 
-void print_cont(const wchar_t * name, const simstd::vector<A>& c, simstd::Test::wPrintFunc printFunc)
+void print_cont(const wchar_t* name, const simstd::vector<A>& c, simstd::Test::wPrintFunc printFunc)
 {
 	using namespace simstd;
 	printFunc(L"%s: capa(): %Id, size(): %Id (", name, c.capacity(), c.size());

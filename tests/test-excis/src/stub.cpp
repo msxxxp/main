@@ -4,7 +4,7 @@
 #include <basis/sys/crt.hpp>
 #include <basis/sys/memory.hpp>
 
-extern "C" int wmain(int argc, wchar_t * argv[]);
+extern "C" int wmain(int argc, wchar_t* argv[]);
 
 extern int WINAPI wWinMain(HINSTANCE, HINSTANCE, LPWSTR, int);
 

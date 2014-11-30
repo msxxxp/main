@@ -18,17 +18,17 @@ namespace fsys {
 	}
 
 	bool is_exist(PCWSTR path);
-	inline bool is_exist(const ustring & path) {
+	inline bool is_exist(const ustring& path) {
 		return is_exist(path.c_str());
 	}
 
 	DWORD get_attr(PCWSTR path);
-	inline DWORD get_attr(const ustring & path) {
+	inline DWORD get_attr(const ustring& path) {
 		return get_attr(path.c_str());
 	}
 
 	void set_attr(PCWSTR path, DWORD attr);
-	inline void set_attr(const ustring & path, DWORD attr) {
+	inline void set_attr(const ustring& path, DWORD attr) {
 		return set_attr(path.c_str(), attr);
 	}
 
@@ -58,7 +58,7 @@ namespace fsys {
 	}
 
 	void del_on_reboot(PCWSTR path);
-	inline void del_on_reboot(const ustring & path) {
+	inline void del_on_reboot(const ustring& path) {
 		del_on_reboot(path.c_str());
 	}
 
@@ -104,11 +104,11 @@ namespace fsys {
 
 	HANDLE HandleWrite(PCWSTR path);
 
-	inline HANDLE HandleRead(const ustring & path) {
+	inline HANDLE HandleRead(const ustring& path) {
 		return HandleRead(path.c_str());
 	}
 
-	inline HANDLE HandleWrite(const ustring & path) {
+	inline HANDLE HandleWrite(const ustring& path) {
 		return HandleWrite(path.c_str());
 	}
 
@@ -237,7 +237,7 @@ namespace fsys {
 
 	public:
 		struct FindStat {
-			const wchar_t * name() const
+			const wchar_t* name() const
 			{
 				return m_stat.cFileName;
 			}
@@ -311,9 +311,9 @@ namespace fsys {
 			skipSystem  = 0x0020,
 		};
 
-		Sequence(const ustring & path, flags_type flags = 0);
+		Sequence(const ustring& path, flags_type flags = 0);
 
-		Sequence(const ustring & path, const ustring & mask, flags_type flags = 0);
+		Sequence(const ustring& path, const ustring& mask, flags_type flags = 0);
 
 		const_iterator begin() const;
 
@@ -380,12 +380,12 @@ namespace fsys {
 
 	namespace file {
 		bool is_exist(PCWSTR path);
-		inline bool is_exist(const ustring & path) {
+		inline bool is_exist(const ustring& path) {
 			return is_exist(path.c_str());
 		}
 
 		uint64_t get_size(PCWSTR path);
-		inline uint64_t get_size(const ustring & path) {
+		inline uint64_t get_size(const ustring& path) {
 			return get_size(path.c_str());
 		}
 
@@ -418,14 +418,14 @@ namespace fsys {
 		bool wipe(PCWSTR path);
 
 		void replace(PCWSTR from, PCWSTR to, PCWSTR backup = nullptr);
-		inline void replace(const ustring & from, const ustring & to, PCWSTR backup = nullptr) {
+		inline void replace(const ustring& from, const ustring& to, PCWSTR backup = nullptr) {
 			replace(from.c_str(), to.c_str(), backup);
 		}
 
 		uint64_t get_inode(PCWSTR path, size_t * nlink);
 
 		size_t write(HANDLE file, const void* data, size_t bytesToWrite);
-		inline size_t write(HANDLE file, const ustring & data) {
+		inline size_t write(HANDLE file, const ustring& data) {
 			return write(file, (const void*)data.c_str(), data.size() * sizeof(wchar_t));
 		}
 
@@ -433,12 +433,12 @@ namespace fsys {
 		inline void write(PCWSTR path, PCWSTR data, size_t size, bool rewrite = false) {
 			write(path, data, size * sizeof(wchar_t), rewrite);
 		}
-		inline void write(const ustring & path, const ustring & data, bool rewrite = false) {
+		inline void write(const ustring& path, const ustring& data, bool rewrite = false) {
 			write(path.c_str(), (const void*)data.c_str(), data.size() * sizeof(wchar_t), rewrite);
 		}
 
 		struct CopyCmd: public pattern::Command {
-			CopyCmd(const ustring & path, const ustring & dest):
+			CopyCmd(const ustring& path, const ustring& dest):
 				m_path(path),
 				m_dest(dest) {
 			}
@@ -450,7 +450,7 @@ namespace fsys {
 		};
 
 		struct MoveCmd: public pattern::Command {
-			MoveCmd(const ustring & path, const ustring & dest):
+			MoveCmd(const ustring& path, const ustring& dest):
 				m_path(path),
 				m_dest(dest) {
 			}
@@ -467,9 +467,9 @@ namespace fsys {
 
 			explicit Facade(HANDLE hndl);
 
-			Facade(const ustring & path, bool write = false);
+			Facade(const ustring& path, bool write = false);
 
-			Facade(const ustring & path, ACCESS_MASK access, DWORD share, PSECURITY_ATTRIBUTES sa, DWORD creat, DWORD flags);
+			Facade(const ustring& path, ACCESS_MASK access, DWORD share, PSECURITY_ATTRIBUTES sa, DWORD creat, DWORD flags);
 
 			uint64_t size() const;
 
@@ -531,9 +531,9 @@ namespace fsys {
 				return ::DeviceIoControl(m_hndl, code, nullptr, 0, &data, sizeof(Type), &size_ret, nullptr) != 0;
 			}
 
-			static HANDLE Open(const ustring & path, bool write = false);
+			static HANDLE Open(const ustring& path, bool write = false);
 
-			static HANDLE Open(const ustring & path, ACCESS_MASK access, DWORD share, PSECURITY_ATTRIBUTES sa, DWORD creat, DWORD flags);
+			static HANDLE Open(const ustring& path, ACCESS_MASK access, DWORD share, PSECURITY_ATTRIBUTES sa, DWORD creat, DWORD flags);
 
 			void set_del_on_close(bool delOnClose);
 
@@ -631,7 +631,7 @@ namespace fsys {
 	///=================================================================================== Directory
 	namespace directory {
 		bool is_exist(PCWSTR path);
-		inline bool is_exist(const ustring & path) {
+		inline bool is_exist(const ustring& path) {
 			return is_exist(path.c_str());
 		}
 
@@ -645,8 +645,8 @@ namespace fsys {
 			create(path.c_str(), lpsa);
 		}
 
-		bool create_full_nt(const ustring & p, LPSECURITY_ATTRIBUTES sa) throw();
-		void create_full(const ustring & p, LPSECURITY_ATTRIBUTES sa = nullptr);
+		bool create_full_nt(const ustring& p, LPSECURITY_ATTRIBUTES sa) throw();
+		void create_full(const ustring& p, LPSECURITY_ATTRIBUTES sa = nullptr);
 
 		bool create_dir(PCWSTR path, LPSECURITY_ATTRIBUTES lpsa = nullptr);
 		inline bool create_dir(const ustring &path, LPSECURITY_ATTRIBUTES lpsa = nullptr) {
@@ -672,37 +672,37 @@ namespace fsys {
 	///======================================================================================== Link
 	namespace link {
 		void copy(PCWSTR from, PCWSTR to);
-		inline void copy(const ustring & from, const ustring & to) {
+		inline void copy(const ustring& from, const ustring& to) {
 			copy(from.c_str(), to.c_str());
 		}
 
 		void create_sym(PCWSTR path, PCWSTR new_path);
-		inline void	create_sym(const ustring & path, const ustring & new_path) {
+		inline void	create_sym(const ustring& path, const ustring& new_path) {
 			create_sym(path.c_str(), new_path.c_str());
 		}
 
 		void create_junc(PCWSTR path, PCWSTR new_path);
-		inline void	create_junc(const ustring & path, const ustring & new_path) {
+		inline void	create_junc(const ustring& path, const ustring& new_path) {
 			return create_junc(path.c_str(), new_path.c_str());
 		}
 
 		void break_link(PCWSTR path);
-		inline void break_link(const ustring & path) {
+		inline void break_link(const ustring& path) {
 			break_link(path.c_str());
 		}
 
 		void del(PCWSTR path);
-		inline void del(const ustring & path) {
+		inline void del(const ustring& path) {
 			del(path.c_str());
 		}
 
 		ustring	read(PCWSTR path);
-		inline ustring read(const ustring & path) {
+		inline ustring read(const ustring& path) {
 			return read(path.c_str());
 		}
 
 		struct CreateSymCmd: public pattern::Command {
-			CreateSymCmd(const ustring & path, const ustring & new_path):
+			CreateSymCmd(const ustring& path, const ustring& new_path):
 				m_path(path),
 				m_new_path(new_path) {
 			}
@@ -717,7 +717,7 @@ namespace fsys {
 
 	///=============================================================================================
 	void copy_file_security(PCWSTR path, PCWSTR dest);
-	inline void copy_file_security(const ustring & path, const ustring & dest) {
+	inline void copy_file_security(const ustring& path, const ustring& dest) {
 		copy_file_security(path.c_str(), dest.c_str());
 	}
 

@@ -14,7 +14,7 @@ namespace sync {
 
 		~Semaphore();
 
-		Semaphore(const wchar_t * name = nullptr);
+		Semaphore(const wchar_t* name = nullptr);
 
 		void lock();
 

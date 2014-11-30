@@ -4,7 +4,7 @@
 
 namespace logger {
 
-	const wchar_t * const LogLevelNames[(int)Level::Force + 1] = {
+	const wchar_t* const LogLevelNames[(int)Level::Force + 1] = {
 		L"T3",
 		L"T2",
 		L"T1",
@@ -21,14 +21,14 @@ namespace logger {
 		L"  ",
 	};
 
-	const wchar_t * to_str(Level lvl)
+	const wchar_t* to_str(Level lvl)
 	{
 		return LogLevelNames[(int)lvl];
 	}
 
-	const wchar_t * to_str(Prefix::flags fl)
+	const wchar_t* to_str(Prefix::flags fl)
 	{
-		const wchar_t * ret = L"manual";
+		const wchar_t* ret = L"manual";
 
 		switch (fl) {
 			case Prefix::Lite:

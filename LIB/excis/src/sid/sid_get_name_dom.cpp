@@ -6,7 +6,7 @@
 
 namespace Ext {
 
-	void Sid::get_name_dom(value_type sid, ustring & name, ustring & dom, PCWSTR srv) {
+	void Sid::get_name_dom(value_type sid, ustring& name, ustring& dom, PCWSTR srv) {
 		check(sid);
 		DWORD size_nam = 0;
 		DWORD size_dom = 0;

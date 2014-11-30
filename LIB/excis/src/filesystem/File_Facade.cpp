@@ -28,7 +28,7 @@ namespace fsys {
 			fsys::Stat::refresh(m_hndl);
 		}
 
-		Facade::Facade(const ustring & path, bool write) :
+		Facade::Facade(const ustring& path, bool write) :
 			m_hndl(Open(path, write)),
 			m_path(path),
 			m_delOnClose(false)
@@ -36,7 +36,7 @@ namespace fsys {
 			fsys::Stat::refresh(m_hndl);
 		}
 
-		Facade::Facade(const ustring & path, ACCESS_MASK access, DWORD share, PSECURITY_ATTRIBUTES sa, DWORD creat, DWORD flags) :
+		Facade::Facade(const ustring& path, ACCESS_MASK access, DWORD share, PSECURITY_ATTRIBUTES sa, DWORD creat, DWORD flags) :
 			m_hndl(Open(path, access, share, sa, creat, flags)),
 			m_path(path),
 			m_delOnClose(false)
@@ -198,7 +198,7 @@ namespace fsys {
 			return ret;
 		}
 
-		HANDLE Facade::Open(const ustring & path, bool write)
+		HANDLE Facade::Open(const ustring& path, bool write)
 		{
 			ACCESS_MASK access = (write) ? GENERIC_READ | GENERIC_WRITE : GENERIC_READ;
 			DWORD share = (write) ? 0 : FILE_SHARE_DELETE | FILE_SHARE_READ;
@@ -207,7 +207,7 @@ namespace fsys {
 			return Open(path, access, share, nullptr, creat, flags);
 		}
 
-		HANDLE Facade::Open(const ustring & path, ACCESS_MASK access, DWORD share, PSECURITY_ATTRIBUTES sa, DWORD creat, DWORD flags)
+		HANDLE Facade::Open(const ustring& path, ACCESS_MASK access, DWORD share, PSECURITY_ATTRIBUTES sa, DWORD creat, DWORD flags)
 		{
 //			LogNoise(L"'%s', 0x%08X, 0x%08X, %p\n", path.c_str(), access, share, sa);
 			return CheckHandleErr(::CreateFileW(path.c_str(), access, share, sa, creat, flags, nullptr));

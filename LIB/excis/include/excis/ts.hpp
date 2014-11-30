@@ -55,9 +55,9 @@ namespace Ext {
 	///======================================================================================= WinTSInfo
 	class WinTSInfo {
 	public:
-		WinTSInfo(DWORD i, const ustring & s, const ustring & u, int st);
+		WinTSInfo(DWORD i, const ustring& s, const ustring& u, int st);
 
-		WinTSInfo(const WinTSHandle & host, DWORD id, const ustring & ws, int st);
+		WinTSInfo(const WinTSHandle & host, DWORD id, const ustring& ws, int st);
 
 		DWORD id() const {
 			return m_id;

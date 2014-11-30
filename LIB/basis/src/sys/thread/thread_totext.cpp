@@ -2,7 +2,7 @@
 
 namespace totext {
 
-	const wchar_t * c_str(thread::Priority prio)
+	const wchar_t* c_str(thread::Priority prio)
 	{
 		switch (prio) {
 			case thread::Priority::IDLE:
@@ -23,7 +23,7 @@ namespace totext {
 		return L"unknown";
 	}
 
-	const wchar_t * c_str(thread::IoPriority prio)
+	const wchar_t* c_str(thread::IoPriority prio)
 	{
 		switch (prio) {
 			case thread::IoPriority::VERY_LOW:

@@ -61,7 +61,7 @@ ssize_t simstd::Test::a_string(simstd::Test::aPrintFunc printFunc)
 		assert(cstr::compare(asd.c_str(), stdasd.c_str()) == 0);
 	}
 
-	const char * cc = "const char *";
+	const char* cc = "const char *";
 
 	string a;
 	string b("qwerty12345");
@@ -86,7 +86,7 @@ ssize_t simstd::Test::a_string(simstd::Test::aPrintFunc printFunc)
 	assert(*str1.cend() == 0);
 	assert(*str1.cbegin() == 'h');
 
-	const char * pcwstr = "PCWSTR";
+	const char* pcwstr = "PCWSTR";
 	string str2(pcwstr);
 	std::string stdstr2(pcwstr);
 	printFunc("str2: '%s' size: %d\n", str2.c_str(), (int)str2.size());
@@ -97,7 +97,7 @@ ssize_t simstd::Test::a_string(simstd::Test::aPrintFunc printFunc)
 	assert(*str2.cend() == 0);
 	assert(*str2.cbegin() == 'P');
 
-	char * pwstr = (char *)"1pwstr2";
+	char* pwstr = (char *)"1pwstr2";
 	string str3 = pwstr;
 	std::string stdstr3 = pwstr;
 	printFunc("str3: '%s' size: %d\n\n", str3.c_str(), (int)str3.size());
@@ -234,7 +234,7 @@ ssize_t simstd::Test::a_string(simstd::Test::aPrintFunc printFunc)
 	printFunc("stdstr2: '%s' size: %d capacity: %d\n", stdstr2.c_str(), (int)stdstr2.size(), (int)stdstr2.capacity());
 	assert(cstr::compare(str2.c_str(), stdstr2.c_str()) == 0);
 
-	const char * qqq = str2.c_str() + 3;
+	const char* qqq = str2.c_str() + 3;
 	str2.append(qqq, 5);
 	stdstr2.append(qqq, 5);
 	printFunc("str2: '%s' size: %d capacity: %d\n", str2.c_str(), (int)str2.size(), (int)str2.capacity());

@@ -127,7 +127,7 @@ typedef intptr_t (WINAPI *FARAPIMESSAGE)(
     const GUID* Id,
     FARMESSAGEFLAGS Flags,
     const wchar_t *HelpTopic,
-    const wchar_t * const *Items,
+    const wchar_t* const *Items,
     size_t ItemsNumber,
     intptr_t ButtonsNumber
 );
@@ -664,7 +664,7 @@ struct PluginPanelItem
 	const wchar_t *AlternateFileName;
 	const wchar_t *Description;
 	const wchar_t *Owner;
-	const wchar_t * const *CustomColumnData;
+	const wchar_t* const *CustomColumnData;
 	size_t CustomColumnNumber;
 	PLUGINPANELITEMFLAGS Flags;
 	struct UserDataItem UserData;
@@ -2159,7 +2159,7 @@ static const PLUGIN_FLAGS
 struct PluginMenuItem
 {
 	const GUID *Guids;
-	const wchar_t * const *Strings;
+	const wchar_t* const *Strings;
 	size_t Count;
 };
 
@@ -2245,7 +2245,7 @@ struct PanelMode
 {
 	const wchar_t *ColumnTypes;
 	const wchar_t *ColumnWidths;
-	const wchar_t * const *ColumnTitles;
+	const wchar_t* const *ColumnTitles;
 	const wchar_t *StatusColumnTypes;
 	const wchar_t *StatusColumnWidths;
 	PANELMODE_FLAGS Flags;
@@ -2316,7 +2316,7 @@ struct OpenPanelInfo
 	const wchar_t               *PanelTitle;
 	const struct InfoPanelLine  *InfoLines;
 	size_t                       InfoLinesNumber;
-	const wchar_t * const       *DescrFiles;
+	const wchar_t* const       *DescrFiles;
 	size_t                       DescrFilesNumber;
 	const struct PanelMode      *PanelModesArray;
 	size_t                       PanelModesNumber;

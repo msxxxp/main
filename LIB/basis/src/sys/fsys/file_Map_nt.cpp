@@ -12,7 +12,7 @@ namespace fsys {
 				::UnmapViewOfFile(m_data);
 		}
 
-		Map_nt::Map_nt(const wchar_t * path, size_type size, bool write) :
+		Map_nt::Map_nt(const wchar_t* path, size_type size, bool write) :
 			m_data(nullptr), m_size(0), m_write(write)
 		{
 			ACCESS_MASK access = write ? GENERIC_READ | GENERIC_WRITE : GENERIC_READ;

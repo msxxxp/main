@@ -16,9 +16,9 @@ typedef struct tagPARSEDURL {
 
 namespace url {
 
-	HRESULT parse(const wchar_t * url, PARSEDURL * parsedUrl);
+	HRESULT parse(const wchar_t* url, PARSEDURL * parsedUrl);
 
-	bool crack(const wchar_t * url, URL_COMPONENTSW * info);
+	bool crack(const wchar_t* url, URL_COMPONENTSW * info);
 
 }
 

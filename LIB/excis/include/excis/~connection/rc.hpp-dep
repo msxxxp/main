@@ -11,9 +11,9 @@ namespace Ext {
 	struct RemoteConnection {
 		~RemoteConnection();
 
-		RemoteConnection(const ustring & host = ustring(), PCWSTR user = nullptr, PCWSTR pass = nullptr);
+		RemoteConnection(const ustring& host = ustring(), PCWSTR user = nullptr, PCWSTR pass = nullptr);
 
-		void connect(const ustring & host = ustring(), PCWSTR user = nullptr, PCWSTR pass = nullptr);
+		void connect(const ustring& host = ustring(), PCWSTR user = nullptr, PCWSTR pass = nullptr);
 
 		void disconnect();
 

@@ -5,9 +5,9 @@
 
 namespace sstr {
 
-	astring w2cp(const wchar_t * str, UINT cp);
+	astring w2cp(const wchar_t* str, UINT cp);
 
-	ustring cp2w(const char * str, UINT cp);
+	ustring cp2w(const char* str, UINT cp);
 
 }
 

@@ -5,7 +5,7 @@
 
 namespace path {
 
-	ustring secure(const wchar_t * path)
+	ustring secure(const wchar_t* path)
 	{
 		ustring Result(path);
 		sstr::replace_all(Result, ustring(L".."), ustring(L""));

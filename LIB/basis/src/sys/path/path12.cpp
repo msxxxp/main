@@ -5,7 +5,7 @@
 
 namespace path {
 
-	ustring validate(const wchar_t * path)
+	ustring validate(const wchar_t* path)
 	{
 		ustring Result(nice(path));
 		sstr::replace_all(Result, ustring(L"..."), ustring(L""));

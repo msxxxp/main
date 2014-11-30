@@ -3,7 +3,7 @@
 
 namespace Ext {
 
-//	ServiceStop::ServiceStop(WinScm * scm, const ustring & name):
+//	ServiceStop::ServiceStop(WinScm * scm, const ustring& name):
 //		m_scm(scm),
 //		m_name(name)
 //	{

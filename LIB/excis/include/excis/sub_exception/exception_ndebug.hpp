@@ -76,7 +76,7 @@ namespace exception {
 			return (Type)CheckPointerErrFuncVoid((PVOID)ptr);
 		}
 
-		static void RethrowExceptionFunc(const AbstractError & prev, const ustring & what);
+		static void RethrowExceptionFunc(const AbstractError & prev, const ustring& what);
 	};
 
 }

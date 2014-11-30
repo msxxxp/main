@@ -153,7 +153,7 @@ namespace sstr {
 //		return nCodePage;
 //	}
 
-	ustring copy_after_last(const ustring & in, const ustring & delim)
+	ustring copy_after_last(const ustring& in, const ustring& delim)
 	{
 		ustring::size_type pos = in.find_last_of(delim);
 		return (pos != ustring::npos) ? in.substr(pos + 1) : ustring();
@@ -173,7 +173,7 @@ namespace sstr {
 		return ustring(buf);
 	}
 
-	astring oem(const wchar_t * in)
+	astring oem(const wchar_t* in)
 	{
 		return sstr::w2cp(in, CP_OEMCP);
 	}
@@ -183,7 +183,7 @@ namespace sstr {
 		return sstr::w2cp(in.c_str(), CP_OEMCP);
 	}
 
-	astring ansi(const wchar_t * in)
+	astring ansi(const wchar_t* in)
 	{
 		return sstr::w2cp(in, CP_ACP);
 	}
@@ -193,7 +193,7 @@ namespace sstr {
 		return sstr::w2cp(in.c_str(), CP_ACP);
 	}
 
-	astring utf8(const wchar_t * in)
+	astring utf8(const wchar_t* in)
 	{
 		return sstr::w2cp(in, CP_UTF8);
 	}
@@ -203,7 +203,7 @@ namespace sstr {
 		return sstr::w2cp(in.c_str(), CP_UTF8);
 	}
 
-	ustring utf16(const char * in, UINT cp)
+	ustring utf16(const char* in, UINT cp)
 	{
 		return sstr::cp2w(in, cp);
 	}
@@ -213,7 +213,7 @@ namespace sstr {
 		return sstr::cp2w(in.c_str(), cp);
 	}
 
-	ustring & Add(ustring & str, const wchar_t add)
+	ustring& Add(ustring& str, const wchar_t add)
 	{
 		auto pos = str.size() - 1;
 		if (!(str.empty() || (str.at(pos) == add)))
@@ -221,7 +221,7 @@ namespace sstr {
 		return str;
 	}
 
-	ustring & Add(ustring & str, const ustring & add)
+	ustring& Add(ustring& str, const ustring& add)
 	{
 		auto pos = str.size() - add.size();
 		if (!(add.empty() || str.empty() || (str.rfind(add) == pos)))
@@ -229,7 +229,7 @@ namespace sstr {
 		return str;
 	}
 
-	ustring & Cut(ustring & str, const ustring & sub)
+	ustring& Cut(ustring& str, const ustring& sub)
 	{
 		auto pos = str.find(sub);
 		if (pos != ustring::npos) {
@@ -238,7 +238,7 @@ namespace sstr {
 		return str;
 	}
 
-	bool Cut(ustring & str, intmax_t & num, int base)
+	bool Cut(ustring& str, intmax_t & num, int base)
 	{
 		auto pos1 = str.find_first_of(L"0123456789");
 		if (pos1 == ustring::npos)
@@ -273,7 +273,7 @@ namespace sstr {
 	//}
 
 	/*
-	 wchar_t *				CharFirstOf(const wchar_t * in, const wchar_t * mask) {
+	 wchar_t *				CharFirstOf(const wchar_t* in, const wchar_t* mask) {
 	 size_t	lin = Len(in);
 	 size_t	len = Len(mask);
 	 for (size_t i = 0; i < lin; ++i) {
@@ -284,7 +284,7 @@ namespace sstr {
 	 }
 	 return nullptr;
 	 }
-	 wchar_t *				CharFirstNotOf(const wchar_t * in, const wchar_t * mask) {
+	 wchar_t *				CharFirstNotOf(const wchar_t* in, const wchar_t* mask) {
 	 size_t	lin = Len(in);
 	 size_t	len = Len(mask);
 	 for (size_t i = 0; i < lin; ++i) {

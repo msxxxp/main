@@ -4,7 +4,7 @@
 
 namespace url {
 
-	bool crack(const wchar_t * url, URL_COMPONENTSW * info)
+	bool crack(const wchar_t* url, URL_COMPONENTSW * info)
 	{
 		memory::zero(*info);
 		info->dwStructSize = sizeof(*info);

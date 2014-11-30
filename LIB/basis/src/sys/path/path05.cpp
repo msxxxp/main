@@ -4,7 +4,7 @@
 
 namespace path {
 
-	ustring extract_from_mask(const ustring & path)
+	ustring extract_from_mask(const ustring& path)
 	{
 		ustring tmp(path);
 		ustring::size_type pos = tmp.find_first_of(MASK_CHARS);

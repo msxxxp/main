@@ -17,7 +17,7 @@ namespace exception {
 
 		virtual DWORD code() const = 0;
 
-		virtual void format_error(cstr::mstring & out) const = 0;
+		virtual void format_error(cstr::mstring& out) const = 0;
 
 		AbstractError * get_prev() const;
 

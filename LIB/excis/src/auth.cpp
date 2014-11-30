@@ -15,8 +15,8 @@ namespace auth {
 	//} CRED_PROTECTION_TYPE, *PCRED_PROTECTION_TYPE;
 	//
 	//extern "C" {
-	//	BOOL WINAPI CredProtectW(BOOL fAsSelf, const wchar_t * pszCredentials, DWORD cchCredentials, PWSTR pszProtectedCredentials, DWORD *pcchMaxChars, CRED_PROTECTION_TYPE *ProtectionType);
-	//	BOOL WINAPI CredUnprotectW(BOOL fAsSelf, const wchar_t * pszProtectedCredentials, DWORD cchCredentials, PWSTR pszCredentials, DWORD *pcchMaxChars);
+	//	BOOL WINAPI CredProtectW(BOOL fAsSelf, const wchar_t* pszCredentials, DWORD cchCredentials, PWSTR pszProtectedCredentials, DWORD *pcchMaxChars, CRED_PROTECTION_TYPE *ProtectionType);
+	//	BOOL WINAPI CredUnprotectW(BOOL fAsSelf, const wchar_t* pszProtectedCredentials, DWORD cchCredentials, PWSTR pszCredentials, DWORD *pcchMaxChars);
 	//}
 
 	Credential::~Credential()
@@ -33,7 +33,7 @@ namespace auth {
 	{
 	}
 
-	Credential::Credential(const wchar_t * name):
+	Credential::Credential(const wchar_t* name):
 		m_delete(true)
 	{
 		CheckApi(::CredReadW(name, CRED_TYPE_GENERIC, 0, reinterpret_cast<CREDENTIALW**>(&m_cred)));
@@ -110,7 +110,7 @@ namespace auth {
 		return reinterpret_cast<CREDENTIALW*>(m_cred)->Persist;
 	}
 
-	void Credential::add(const wchar_t * name, const wchar_t * pass, const wchar_t * target)
+	void Credential::add(const wchar_t* name, const wchar_t* pass, const wchar_t* target)
 	{
 		CREDENTIALW cred;
 		memory::zero(cred);
@@ -124,7 +124,7 @@ namespace auth {
 		CheckApi(::CredWriteW(&cred, 0));
 	}
 
-	void Credential::del(const wchar_t * name)
+	void Credential::del(const wchar_t* name)
 	{
 		CheckApi(::CredDeleteW(name, CRED_TYPE_GENERIC, 0));
 	}
@@ -161,7 +161,7 @@ namespace auth {
 		return Credential(reinterpret_cast<Credential::native_handle_type>(reinterpret_cast<CREDENTIALW**>(m_creds)[ind]));
 	}
 
-	void parse_username(const wchar_t * fullname, ustring & dom, ustring & name)
+	void parse_username(const wchar_t* fullname, ustring& dom, ustring& name)
 	{
 		wchar_t d[MAX_PATH];
 		wchar_t n[MAX_PATH];
@@ -170,13 +170,13 @@ namespace auth {
 		name = n;
 	}
 
-	void PassProtect(const wchar_t * pass, PWSTR prot, DWORD size)
+	void PassProtect(const wchar_t* pass, PWSTR prot, DWORD size)
 	{
 		CRED_PROTECTION_TYPE type;
 		CheckApi(CredProtectW(true, (PWSTR )pass, cstr::length(pass) + 1, prot, &size, &type));
 	}
 
-	void PassUnProtect(const wchar_t * prot, DWORD ps, PWSTR pass, DWORD size)
+	void PassUnProtect(const wchar_t* prot, DWORD ps, PWSTR pass, DWORD size)
 	{
 		CheckApi(::CredUnprotectW(true, (PWSTR )prot, ps, pass, &size));
 	}

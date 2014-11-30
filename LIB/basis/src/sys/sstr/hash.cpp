@@ -8,7 +8,7 @@ namespace sstr {
 	astring Hash2Str(const PBYTE hash, size_t size)
 	{
 		memory::auto_array<char> buf((size + 1) * 2);
-		char * tmp = buf.data();
+		char* tmp = buf.data();
 		for (size_t i = 0; i < size; ++i) {
 			safe_snprintf(tmp, buf.size() - i * 2, "%02x", hash[i]);
 			tmp += 2;
@@ -19,7 +19,7 @@ namespace sstr {
 	astring Hash2StrNum(const PBYTE hash, size_t size)
 	{
 		memory::auto_array<char> buf((size + 1) * 4);
-		char * tmp = buf.data();
+		char* tmp = buf.data();
 		for (size_t i = 0; i < size; ++i) {
 			tmp += safe_snprintf(tmp, buf.size() - i * 2, "%02i ", hash[i]);
 		}
@@ -66,7 +66,7 @@ ustring to_str(const FILETIME & in)
 ustring to_str(const PBYTE hash, size_t size)
 {
 	memory::auto_array<wchar_t> buf((size + 1) * 2);
-	wchar_t * tmp = buf.data();
+	wchar_t* tmp = buf.data();
 	for (size_t i = 0; i < size; ++i) {
 		safe_snprintf(tmp, buf.size() - i * 2, L"%02x", hash[i]);
 		tmp += 2;
@@ -74,7 +74,7 @@ ustring to_str(const PBYTE hash, size_t size)
 	return ustring(buf.data());
 }
 
-memory::auto_array<BYTE> to_hash(const ustring & str)
+memory::auto_array<BYTE> to_hash(const ustring& str)
 {
 	size_t size = str.size() / 2;
 	memory::auto_array<BYTE> ret(size);
@@ -85,7 +85,7 @@ memory::auto_array<BYTE> to_hash(const ustring & str)
 	return ret;
 }
 
-void to_hash(const ustring & str, PBYTE & buf, size_t & size)
+void to_hash(const ustring& str, PBYTE & buf, size_t & size)
 {
 	memory::auto_array < BYTE > (to_hash(str)).detach(buf, size);
 }

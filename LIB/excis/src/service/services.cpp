@@ -11,14 +11,14 @@ namespace Ext {
 
 	struct Services::Filter {
 		~Filter();
-		Filter(const ustring & host = ustring(), PCWSTR user = nullptr, PCWSTR pass = nullptr, Service::EnumerateType_t = Service::EnumerateType_t::SERVICES);
+		Filter(const ustring& host = ustring(), PCWSTR user = nullptr, PCWSTR pass = nullptr, Service::EnumerateType_t = Service::EnumerateType_t::SERVICES);
 
 		const connection::Remote & get_connection() const;
 		const Service::Manager & get_read_manager() const;
 		const Service::Manager & get_write_manager() const;
 
 		ustring get_host() const;
-		void set_host(const ustring & host = ustring(), PCWSTR user = nullptr, PCWSTR pass = nullptr);
+		void set_host(const ustring& host = ustring(), PCWSTR user = nullptr, PCWSTR pass = nullptr);
 
 	private:
 		size_t                                    mutable m_writable:1;
@@ -32,7 +32,7 @@ namespace Ext {
 		LogTraceObjEnd();
 	}
 
-	Services::Filter::Filter(const ustring & host, PCWSTR user, PCWSTR pass, Service::EnumerateType_t type) :
+	Services::Filter::Filter(const ustring& host, PCWSTR user, PCWSTR pass, Service::EnumerateType_t type) :
 		m_writable(0)
 	{
 		LogTraceObjBegin();
@@ -66,7 +66,7 @@ namespace Ext {
 		return m_conn->get_host();
 	}
 
-	void Services::Filter::set_host(const ustring & host, PCWSTR user, PCWSTR pass)
+	void Services::Filter::set_host(const ustring& host, PCWSTR user, PCWSTR pass)
 	{
 		LogNoise(L"host: '%s', user: '%s'\n", host.c_str(), user);
 		simstd::shared_ptr<connection::Remote> tmp_conn(connection::Remote::create(host, user, pass));
@@ -85,7 +85,7 @@ namespace Ext {
 		LogTraceObjEnd();
 	}
 
-	Services::Services(const ustring & host, PCWSTR user, PCWSTR pass) :
+	Services::Services(const ustring& host, PCWSTR user, PCWSTR pass) :
 		m_filter(new Services::Filter(host, user, pass)),
 		m_type(Service::EnumerateType_t::SERVICES),
 		m_wait_timout(10 * 1000),
@@ -115,7 +115,7 @@ namespace Ext {
 		return m_filter->get_host();
 	}
 
-	void Services::set_host(const ustring & host, PCWSTR user, PCWSTR pass)
+	void Services::set_host(const ustring& host, PCWSTR user, PCWSTR pass)
 	{
 		m_filter->set_host(host, user, pass);
 		update();
@@ -140,12 +140,12 @@ namespace Ext {
 //		notify_changed();
 	}
 
-	Services::iterator Services::find(const ustring & name)
+	Services::iterator Services::find(const ustring& name)
 	{
 		return simstd::find(begin(), end(), name);
 	}
 
-	Services::const_iterator Services::find(const ustring & name) const
+	Services::const_iterator Services::find(const ustring& name) const
 	{
 		return simstd::find(begin(), end(), name);
 	}

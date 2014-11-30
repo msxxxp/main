@@ -2,7 +2,7 @@
 
 namespace totext {
 
-	const wchar_t * c_str(sync::WaitResult_t waitResult)
+	const wchar_t* c_str(sync::WaitResult_t waitResult)
 	{
 		switch (waitResult) {
 			case sync::WaitResult_t::SUCCESS:

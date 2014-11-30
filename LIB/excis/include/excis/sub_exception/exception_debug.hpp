@@ -78,7 +78,7 @@ namespace exception {
 			return (Type)CheckPointerErrFuncVoid((PVOID)ptr, file, line, func);
 		}
 
-		static void RethrowExceptionFunc(const AbstractError & prev, const ustring & what, PCSTR file, size_t line, PCSTR func);
+		static void RethrowExceptionFunc(const AbstractError & prev, const ustring& what, PCSTR file, size_t line, PCSTR func);
 	};
 	extern PCWSTR const THROW_PLACE_FORMAT;
 

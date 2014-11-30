@@ -24,14 +24,14 @@ namespace Http {
 		delete pIpPort;
 	}
 
-	HttpBindIP::HttpBindIP(const ustring & ipport) {
+	HttpBindIP::HttpBindIP(const ustring& ipport) {
 		pIpPort = new (sockaddr);
 		ustring	port = ipport;
 		ustring	ip = sstr::CutWord(port, L":");
 		Assign(ip, port);
 	}
 
-	HttpBindIP::HttpBindIP(const ustring & ip, const ustring & port) {
+	HttpBindIP::HttpBindIP(const ustring& ip, const ustring& port) {
 		pIpPort = new (sockaddr);
 		Assign(ip, port);
 	}
@@ -84,13 +84,13 @@ namespace Http {
 		swap(pIpPort, rhs.pIpPort);
 	}
 
-	bool HttpBindIP::is_valid(const ustring & ip) {
+	bool HttpBindIP::is_valid(const ustring& ip) {
 		in_addr	addr;
 		addr.s_addr = inet_addr(sstr::utf8(ip).c_str());
 		return addr.s_addr != INADDR_NONE;
 	}
 
-	bool HttpBindIP::Assign(const ustring & ip, const ustring & port) {
+	bool HttpBindIP::Assign(const ustring& ip, const ustring& port) {
 		u_short	prt = htons(cstr::to_uint32(port.c_str()));
 		if (is_valid(ip) && prt) {
 			sockaddr_in *tmp = (sockaddr_in*)pIpPort;
@@ -107,7 +107,7 @@ namespace Http {
 		memory::free(pSslHash);
 	}
 
-	HttpBindParam::HttpBindParam(const ustring & hash) {
+	HttpBindParam::HttpBindParam(const ustring& hash) {
 		memory::zero(this, sizeof(*this));
 		PBYTE buf;
 		size_t size;
@@ -210,7 +210,7 @@ namespace Http {
 		CheckApiError(::HttpDeleteServiceConfiguration(NULL, HttpServiceConfigSSLCertInfo, (PVOID) &info, sizeof(info), NULL));
 	}
 
-	bool Server::find(const ustring & hash) const {
+	bool Server::find(const ustring& hash) const {
 		SslQuery query;
 		memory::auto_buf<PHTTP_SERVICE_CONFIG_SSL_SET> info;
 		while (get_ssl(query, info)) {
@@ -220,7 +220,7 @@ namespace Http {
 		return false;
 	}
 
-	bool Server::is_exist(const ustring & ip, const ustring & port) {
+	bool Server::is_exist(const ustring& ip, const ustring& port) {
 		memory::auto_buf<PHTTP_SERVICE_CONFIG_SSL_SET> info(512);
 		return get_ssl(HttpBindIP(ip, port), info) || get_ssl(HttpBindIP(L"0.0.0.0", port), info);
 	}

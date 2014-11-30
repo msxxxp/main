@@ -4,7 +4,7 @@
 
 namespace path {
 
-	ustring temp_file(const ustring & path)
+	ustring temp_file(const ustring& path)
 	{
 		return temp_file(path.c_str());
 	}

@@ -1,35 +1,36 @@
-#include <basis/sys/cstr.hpp>
-#include <basis/sys/logger.hpp>
 #include <excis/service.hpp>
+
+//#include <basis/sys/cstr.hpp>
+#include <basis/sys/logger.hpp>
 
 using cstr::compare_cs;
 
-namespace Ext {
+namespace service {
 
-	Service::Config_t::Config_t() :
+	ConfigRequest::ConfigRequest() :
 		serviceType(SERVICE_NO_CHANGE),
 		startType(SERVICE_NO_CHANGE),
 		errorControl(SERVICE_NO_CHANGE),
+		delayedStart(SERVICE_NO_CHANGE),
 		binaryPathName(nullptr),
 		loadOrderGroup(nullptr),
-		tagId(nullptr),
 		dependencies(nullptr),
 		displayName(nullptr),
-		delayedStart(SERVICE_NO_CHANGE)
+		tagId(nullptr)
 	{
 	}
 
-	void Service::Config_t::set_type(Type_t n, Type_t o)
+	void ConfigRequest::set_type(Type n, Type o)
 	{
 		if (n != o)
 			serviceType = (DWORD)n;
 	}
 
-	void Service::Config_t::set_start(Start_t n, Start_t o)
+	void ConfigRequest::set_start(Start n, Start o)
 	{
 		if (n != o) {
-			if (n == Start_t::AUTO_DELAYED) {
-				startType = (DWORD)Start_t::AUTO;
+			if (n == Start::AUTO_DELAYED) {
+				startType = (DWORD)Start::AUTO;
 				delayedStart = 1;
 			} else {
 				startType = (DWORD)n;
@@ -38,49 +39,49 @@ namespace Ext {
 		}
 	}
 
-	void Service::Config_t::set_error_control(Error_t n, Error_t o)
+	void ConfigRequest::set_error_control(Error n, Error o)
 	{
 		if (n != o)
 			errorControl = (DWORD)n;
 	}
 
-	void Service::Config_t::set_path(PCWSTR n, PCWSTR o)
+	void ConfigRequest::set_path(PCWSTR n, PCWSTR o)
 	{
 		if (compare_cs(n, o) != 0)
 			binaryPathName = n;
 	}
 
-	void Service::Config_t::set_group(PCWSTR n, PCWSTR o)
+	void ConfigRequest::set_group(PCWSTR n, PCWSTR o)
 	{
 		if (compare_cs(n, o) != 0)
 			loadOrderGroup = n;
 	}
 
-	void Service::Config_t::set_tag(DWORD & n, DWORD o)
+	void ConfigRequest::set_tag(DWORD & n, DWORD o)
 	{
 		if (n != o)
 			tagId = &n;
 	}
 
-	void Service::Config_t::set_dependencies(PCWSTR n, PCWSTR o)
+	void ConfigRequest::set_dependencies(const wchar_t* n, const wchar_t* o)
 	{
 		if (compare_cs(n, o) != 0)
 			dependencies = n;
 	}
 
-	void Service::Config_t::set_display_name(PCWSTR n, PCWSTR o)
+	void ConfigRequest::set_display_name(const wchar_t* n, const wchar_t* o)
 	{
 		if (compare_cs(n, o) != 0)
 			displayName = n;
 	}
 
-	void Service::Config_t::set_delayed_start(DWORD n, DWORD o)
+	void ConfigRequest::set_delayed_start(DWORD n, DWORD o)
 	{
 		if (n != o)
 			delayedStart = n;
 	}
 
-	void Service::Config_t::log() const
+	void ConfigRequest::log() const
 	{
 		LogInfo(L"serviceType: %d\n", (int)serviceType);
 		LogInfo(L"startType: %d\n", (int)startType);

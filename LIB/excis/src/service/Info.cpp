@@ -1,0 +1,69 @@
+#include <excis/service.hpp>
+#include <excis/exception.hpp>
+
+#include <basis/sys/logger.hpp>
+
+namespace service {
+
+	Info::Info(SC_HANDLE scm, const ENUM_SERVICE_STATUS_PROCESSW& st):
+		name(st.lpServiceName),
+		displayName(st.lpDisplayName),
+		startType(Start::DISABLED),
+		errorControl(Error::IGNORE_ERROR),
+		tagId(0),
+		status(st.ServiceStatusProcess)
+	{
+		try {
+			Item svc(scm, name.c_str(), SERVICE_QUERY_CONFIG);
+			memory::auto_buf<LPQUERY_SERVICE_CONFIGW> conf(svc.QueryConfig());
+			binaryPathName = conf->lpBinaryPathName;
+			loadOrderGroup = conf->lpLoadOrderGroup;
+			dependencies = conf->lpDependencies;
+			serviceStartName = conf->lpServiceStartName;
+			startType = (Start)(conf->dwStartType | ((conf->dwStartType == (DWORD)Start::AUTO && svc.get_delayed()) ? 0x10000 : 0));
+			errorControl = (Error)conf->dwErrorControl;
+			tagId = conf->dwTagId;
+			description = svc.get_description();
+		} catch (exception::AbstractError & e) {
+			LogWarn(L"exception cought: %s, %s\n", e.what().c_str(), e.where().c_str());
+			LogWarn(L"service: %s unavalible\n", name.c_str());
+			// skip query info
+		}
+	}
+
+	Info::Info(const wchar_t* name, const Item& svc):
+		name(name),
+		startType(Start::DISABLED),
+		errorControl(Error::IGNORE_ERROR),
+		tagId(0)
+	{
+		LogTrace();
+		memset(&status, 0, sizeof(status));
+		try {
+			memory::auto_buf<LPQUERY_SERVICE_CONFIGW> conf(svc.QueryConfig());
+			displayName = conf->lpDisplayName;
+			status = svc.get_status();
+			binaryPathName = conf->lpBinaryPathName;
+			loadOrderGroup = conf->lpLoadOrderGroup;
+			dependencies = conf->lpDependencies;
+			serviceStartName = conf->lpServiceStartName;
+			startType = (Start)(conf->dwStartType | ((conf->dwStartType == (DWORD)Start::AUTO && svc.get_delayed()) ? 0x10000 : 0));
+			errorControl = (Error)conf->dwErrorControl;
+			tagId = conf->dwTagId;
+			description = svc.get_description();
+		} catch (exception::AbstractError& e) {
+			LogWarn(L"exception cought: %s, %s\n", e.what().c_str(), e.where().c_str());
+			LogWarn(L"service: %s unavalible handle: %p\n", name, (SC_HANDLE)svc);
+			// skip query info
+		}
+	}
+
+	bool Info::operator <(const Info& other) const {
+		return name < other.name;
+	}
+
+	bool Info::operator ==(const ustring& name) const {
+		return this->name == name;
+	}
+
+}

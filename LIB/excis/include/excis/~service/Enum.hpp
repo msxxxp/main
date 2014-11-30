@@ -1,22 +1,12 @@
-#ifndef _LIBEXT_SERVICES_HPP_
-#define _LIBEXT_SERVICES_HPP_
+#ifndef EXCIS_SERVICE_ENUM_HPP_
+#define EXCIS_SERVICE_ENUM_HPP_
 
-#include <basis/configure.hpp>
-#include <basis/sys/sync.hpp>
-#include <excis/service.hpp>
+namespace service {
 
-#include <basis/simstd/iosfwd>
-#include <basis/simstd/memory>
-#include <basis/simstd/vector>
+	struct Enum: public sync::Observable, private simstd::vector<Info> {
 
-namespace Ext {
-
-	struct Services: public sync::Observable, private simstd::vector<Service::Info_t> {
-
-		struct Filter;
-
-		typedef Service::Info_t value_type;
-		typedef simstd::vector<Service::Info_t> base_type;
+		typedef Info value_type;
+		typedef simstd::vector<Info> base_type;
 
 		typedef base_type::size_type size_type;
 		typedef base_type::iterator iterator;
@@ -30,11 +20,11 @@ namespace Ext {
 		using base_type::empty;
 		using base_type::operator[];
 
-		~Services();
-		Services(const ustring& host = ustring(), PCWSTR user = nullptr, PCWSTR pass = nullptr);
+		~Enum();
+		Enum(const ustring& host = ustring(), PCWSTR user = nullptr, PCWSTR pass = nullptr);
 
-		Service::EnumerateType_t get_type() const;
-		void set_type(Service::EnumerateType_t type);
+		EnumerateType get_type() const;
+		void set_type(EnumerateType type);
 
 		ustring get_host() const;
 		void set_host(const ustring& host = ustring(), PCWSTR user = nullptr, PCWSTR pass = nullptr);
@@ -44,7 +34,7 @@ namespace Ext {
 		iterator find(const ustring& name);
 		const_iterator find(const ustring& name) const;
 
-		void add(const Service::Create_t & info);
+		void add(const CreateRequest& info);
 
 		void del(iterator it);
 
@@ -53,8 +43,8 @@ namespace Ext {
 		void restart(iterator it);
 		void contin(iterator it);
 		void pause(iterator it);
-		void set_config(iterator it, const Service::Config_t & info);
-		void set_logon(iterator it, const Service::Logon_t & info);
+		void set_config(iterator it, const ConfigRequest& info);
+		void set_logon(iterator it, const ConfigLogonRequest& info);
 
 		void start_batch();
 		void notify_changed();
@@ -68,7 +58,7 @@ namespace Ext {
 
 	private:
 		simstd::shared_ptr<Filter> m_filter;
-		Service::EnumerateType_t   m_type;
+		EnumerateType              m_type;
 		size_t                     m_wait_timout;
 		size_t                     m_wait_state :1;
 		size_t                     m_batch_started :1;

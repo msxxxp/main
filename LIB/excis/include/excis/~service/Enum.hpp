@@ -44,7 +44,6 @@ namespace service {
 		void contin(iterator it);
 		void pause(iterator it);
 		void set_config(iterator it, const ConfigRequest& info);
-		void set_logon(iterator it, const ConfigLogonRequest& info);
 
 		void start_batch();
 		void notify_changed();

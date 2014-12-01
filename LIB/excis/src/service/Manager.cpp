@@ -5,15 +5,30 @@
 
 namespace service {
 
+	namespace {
+		SC_HANDLE service_manager_open(connection::Remote* conn, ACCESS_MASK acc)
+		{
+			LogNoise(L"(%p, %X)\n", conn, acc);
+			return CheckHandleErr(::OpenSCManagerW(conn->get_host().c_str(), nullptr, acc));
+		}
+
+		void service_manager_close(SC_HANDLE scm)
+		{
+			LogNoise(L"(%p)\n", scm);
+			if (scm)
+				::CloseServiceHandle(scm);
+		}
+	}
+
 	Manager::~Manager()
 	{
 		LogTraceObjBegin();
-		close(m_hndl);
+		service_manager_close(m_hndl);
 		LogTraceObjEnd();
 	}
 
 	Manager::Manager(connection::Remote* conn, ACCESS_MASK acc) :
-		m_hndl(open(conn, acc))
+		m_hndl(service_manager_open(conn, acc))
 	{
 		LogTraceObjBegin();
 		LogTraceObjEnd();
@@ -39,19 +54,20 @@ namespace service {
 		swap(m_hndl, other.m_hndl);
 	}
 
-	Manager::operator SC_HANDLE() const {
+	SC_HANDLE Manager::get_handle() const
+	{
 		return m_hndl;
 	}
 
 	void Manager::reconnect(connection::Remote* conn, ACCESS_MASK acc)
 	{
 		LogNoise(L"(%p, %X)\n", conn, acc);
-		SC_HANDLE l_hndl = open(conn, acc);
+		SC_HANDLE l_hndl = service_manager_open(conn, acc);
 
 		using simstd::swap;
 		swap(m_hndl, l_hndl);
 
-		close(l_hndl);
+		service_manager_close(l_hndl);
 	}
 
 	bool Manager::is_exist(const wchar_t* name) const
@@ -61,19 +77,6 @@ namespace service {
 		if (hndl)
 			::CloseServiceHandle(hndl);
 		return hndl;
-	}
-
-	SC_HANDLE Manager::open(connection::Remote* conn, ACCESS_MASK acc)
-	{
-		LogNoise(L"(%p, %X)\n", conn, acc);
-		return CheckHandleErr(::OpenSCManagerW(conn->get_host().c_str(), nullptr, acc));
-	}
-
-	void Manager::close(SC_HANDLE scm)
-	{
-		LogNoise(L"(%p)\n", scm);
-		if (scm)
-			::CloseServiceHandle(scm);
 	}
 
 }

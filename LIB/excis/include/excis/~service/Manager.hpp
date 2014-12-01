@@ -53,6 +53,28 @@ namespace service {
 		CRITICAL = SERVICE_ERROR_CRITICAL,
 	};
 
+	class Manager: pattern::Uncopyable {
+	public:
+		~Manager();
+
+		Manager(connection::Remote* conn = nullptr, ACCESS_MASK acc = SC_MANAGER_CONNECT);
+
+		Manager(Manager&& other);
+
+		Manager& operator =(Manager&& other);
+
+		void swap(Manager& other);
+
+		SC_HANDLE get_handle() const;
+
+		void reconnect(connection::Remote* conn = nullptr, ACCESS_MASK acc = SC_MANAGER_CONNECT);
+
+		bool is_exist(const wchar_t* name) const;
+
+	private:
+		SC_HANDLE m_hndl;
+	};
+
 	class CreateRequest: private pattern::Uncopyable {
 	public:
 		CreateRequest(const ustring& name, const ustring& binaryPathName);
@@ -108,14 +130,12 @@ namespace service {
 		DWORD serviceType;
 		DWORD startType;
 		DWORD errorControl;
-
-		friend class Item;
 	};
 
 	struct Status: public SERVICE_STATUS_PROCESS {
 	};
 
-	///====================================================================================== Info_t
+	///====================================================================================== Info
 	struct Info {
 		ustring name;
 		ustring displayName;
@@ -150,32 +170,6 @@ namespace service {
 		bool is_disabled() const {
 			return startType == Start::DISABLED;
 		}
-	};
-
-	///===================================================================================== Manager
-	class Manager: pattern::Uncopyable {
-	public:
-		~Manager();
-
-		Manager(connection::Remote* conn = nullptr, ACCESS_MASK acc = SC_MANAGER_CONNECT);
-
-		Manager(Manager&& other);
-
-		Manager& operator =(Manager&& other);
-
-		void swap(Manager& other);
-
-		operator SC_HANDLE() const;
-
-		void reconnect(connection::Remote* conn = nullptr, ACCESS_MASK acc = SC_MANAGER_CONNECT);
-
-		bool is_exist(const wchar_t* name) const;
-
-	private:
-		static SC_HANDLE open(connection::Remote* conn, ACCESS_MASK acc);
-		static void close(SC_HANDLE scm);
-
-		SC_HANDLE m_hndl;
 	};
 
 }

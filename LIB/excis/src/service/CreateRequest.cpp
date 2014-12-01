@@ -66,9 +66,9 @@ namespace service {
 
 	Item CreateRequest::execute(const Manager& manager) const
 	{
-		LogNoise(L"(%p)\n", static_cast<SC_HANDLE>(manager));
+		LogNoise(L"(%p)\n", manager.get_handle());
 		SC_HANDLE hndl = CheckHandleErr(
-				::CreateServiceW(static_cast<SC_HANDLE>(manager),
+				::CreateServiceW(manager.get_handle(),
 			                 name.c_str(),
 			                 displayName.c_str(),
 			                 SERVICE_ALL_ACCESS,

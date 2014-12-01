@@ -248,15 +248,6 @@ namespace service {
 		}
 	}
 
-	void Enum::set_logon(iterator it, const ConfigLogonRequest& info)
-	{
-		if (it != end()) {
-			LogNoise(L"%s\n", it->name.c_str());
-			*it = Info(it->name.c_str(), Item::set_logon(m_filter->get_read_manager(), it->name.c_str(), info));
-			notify_changed();
-		}
-	}
-
 	void Enum::start_batch()
 	{
 		LogTrace();

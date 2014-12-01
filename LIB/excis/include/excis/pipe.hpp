@@ -30,9 +30,9 @@ namespace Ext {
 	struct Pipe {
 		~Pipe();
 
-		Pipe(PCWSTR name, DWORD openMode, DWORD pipeMode, DWORD maxInstances, LPSECURITY_ATTRIBUTES securityAttributes = nullptr);
+		Pipe(const wchar_t* name, DWORD openMode, DWORD pipeMode, DWORD maxInstances, LPSECURITY_ATTRIBUTES securityAttributes = nullptr);
 
-		Pipe(PCWSTR name, size_t /*timeout*/);
+		Pipe(const wchar_t* name, size_t /*timeout*/);
 
 		void connect();
 

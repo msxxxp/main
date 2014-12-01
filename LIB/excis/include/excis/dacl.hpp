@@ -33,10 +33,10 @@ namespace Ext {
 		operator PACL() const;
 
 		void set_entries(const ExpAccess & acc);
-		void set_access(PCWSTR name, ACCESS_MASK acc);
-		void revoke_access(PCWSTR name);
-		void grant_access(PCWSTR name, ACCESS_MASK acc);
-		void deny_access(PCWSTR name, ACCESS_MASK acc);
+		void set_access(const wchar_t* name, ACCESS_MASK acc);
+		void revoke_access(const wchar_t* name);
+		void grant_access(const wchar_t* name, ACCESS_MASK acc);
+		void deny_access(const wchar_t* name, ACCESS_MASK acc);
 
 		void set_to(DWORD flag, const ustring& name, SE_OBJECT_TYPE type = SE_FILE_OBJECT) const;
 
@@ -61,10 +61,10 @@ namespace Ext {
 
 		static void del_inherited_aces(PACL acl);
 
-		static void set(PCWSTR path, PACL dacl, DWORD flag, SE_OBJECT_TYPE type = SE_FILE_OBJECT);
-		static void set_inherit(PCWSTR path, PACL dacl, SE_OBJECT_TYPE type = SE_FILE_OBJECT);
-		static void set_protect(PCWSTR path, PACL dacl, SE_OBJECT_TYPE type = SE_FILE_OBJECT);
-		static void set_protect_copy(PCWSTR path, PACL dacl, SE_OBJECT_TYPE type = SE_FILE_OBJECT);
+		static void set(const wchar_t* path, PACL dacl, DWORD flag, SE_OBJECT_TYPE type = SE_FILE_OBJECT);
+		static void set_inherit(const wchar_t* path, PACL dacl, SE_OBJECT_TYPE type = SE_FILE_OBJECT);
+		static void set_protect(const wchar_t* path, PACL dacl, SE_OBJECT_TYPE type = SE_FILE_OBJECT);
+		static void set_protect_copy(const wchar_t* path, PACL dacl, SE_OBJECT_TYPE type = SE_FILE_OBJECT);
 
 		static void inherit(const ustring& path, SE_OBJECT_TYPE type = SE_FILE_OBJECT);
 		static void protect(const ustring& path, SE_OBJECT_TYPE type = SE_FILE_OBJECT);

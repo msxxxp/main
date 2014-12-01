@@ -54,29 +54,6 @@ namespace service {
 		close(l_hndl);
 	}
 
-	Item Manager::create_service(const CreateRequest& request) const
-	{
-		LogNoise(L"(%p)\n", &request);
-		SC_HANDLE hndl = CheckHandleErr(
-			::CreateServiceW(m_hndl, request.name.c_str(),
-			                 request.displayName,
-			                 SERVICE_ALL_ACCESS,
-			                 request.serviceType,
-			                 request.startType,
-			                 request.errorControl,
-			                 request.binaryPathName.c_str(),
-			                 request.loadOrderGroup,
-			                 request.tagId,
-			                 request.dependencies,
-			                 nullptr,
-			                 nullptr)
-		);
-		Item tmp(hndl);
-		if (request.delayedStart)
-			tmp.set_delayed(request.delayedStart);
-		return simstd::move(tmp);
-	}
-
 	bool Manager::is_exist(const wchar_t* name) const
 	{
 		LogNoise(L"(%s)\n", name);

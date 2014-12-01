@@ -29,7 +29,7 @@ namespace Ext {
 		}
 
 		WideConsoleOut& operator<<(const BStr &in) {
-			return this->operator<<((PCWSTR) in);
+			return this->operator<<((const wchar_t*) in);
 		}
 
 		WideConsoleOut& operator<<(const Variant &in) {
@@ -80,7 +80,7 @@ namespace Ext {
 		std::wstringstream m_str;
 	} wcout;
 
-	PCWSTR const wendl = L"\n";
+	const wchar_t* const wendl = L"\n";
 }
 
 #endif

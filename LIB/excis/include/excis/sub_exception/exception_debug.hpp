@@ -80,7 +80,7 @@ namespace exception {
 
 		static void RethrowExceptionFunc(const AbstractError & prev, const ustring& what, PCSTR file, size_t line, PCSTR func);
 	};
-	extern PCWSTR const THROW_PLACE_FORMAT;
+	extern const wchar_t* const THROW_PLACE_FORMAT;
 
 	ustring ThrowPlaceString(PCSTR file, int line, PCSTR func);
 

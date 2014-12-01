@@ -50,7 +50,7 @@ namespace Ext {
 //
 //		bool Del(const ustring& name) const;
 //
-//		void Set(const ustring& name, PCWSTR value) const;
+//		void Set(const ustring& name, const wchar_t* value) const;
 //
 //		void Set(const ustring& name, const ustring& value) const {
 //			Set(name, value.c_str());
@@ -101,43 +101,43 @@ namespace Ext {
 	struct Register {
 		~Register();
 
-		Register(PCWSTR path, HKEY hkey = HKEY_LOCAL_MACHINE, ACCESS_MASK acc = KEY_READ);
+		Register(const wchar_t* path, HKEY hkey = HKEY_LOCAL_MACHINE, ACCESS_MASK acc = KEY_READ);
 
 		Register(Register && right);
 
 		Register & operator = (Register & right);
 
-		static bool is_exist_key(PCWSTR path, HKEY hkey = HKEY_LOCAL_MACHINE);
+		static bool is_exist_key(const wchar_t* path, HKEY hkey = HKEY_LOCAL_MACHINE);
 
 //		bool del(FARSETTINGS_SUBFOLDERS root = FSSF_ROOT);
 //
-//		bool del(PCWSTR name, FARSETTINGS_SUBFOLDERS root = FSSF_ROOT);
+//		bool del(const wchar_t* name, FARSETTINGS_SUBFOLDERS root = FSSF_ROOT);
 //
-		size_t get(PCWSTR name, PVOID value, size_t size) const;
+		size_t get(const wchar_t* name, PVOID value, size_t size) const;
 
-		ustring get(PCWSTR name, PCWSTR def) const;
+		ustring get(const wchar_t* name, const wchar_t* def) const;
 
-		uint64_t get(PCWSTR name, uint64_t def) const;
+		uint64_t get(const wchar_t* name, uint64_t def) const;
 
-		int64_t get(PCWSTR name, int64_t def) const;
+		int64_t get(const wchar_t* name, int64_t def) const;
 
-		uint32_t get(PCWSTR name, uint32_t def) const;
+		uint32_t get(const wchar_t* name, uint32_t def) const;
 
-		int32_t get(PCWSTR name, int32_t def) const;
+		int32_t get(const wchar_t* name, int32_t def) const;
 
-		bool get(PCWSTR name, bool def) const;
+		bool get(const wchar_t* name, bool def) const;
 
-		void set(PCWSTR name, const void* value, size_t size);
+		void set(const wchar_t* name, const void* value, size_t size);
 
-		void set(PCWSTR name, PCWSTR value);
+		void set(const wchar_t* name, const wchar_t* value);
 
-		void set(PCWSTR name, uint64_t value);
+		void set(const wchar_t* name, uint64_t value);
 
 		operator HKEY () const;
 
-		Register open_subkey(PCWSTR path, ACCESS_MASK acc = 0) const;
+		Register open_subkey(const wchar_t* path, ACCESS_MASK acc = 0) const;
 
-		Register open_subkey_stored_in_key(PCWSTR path, ACCESS_MASK acc = 0) const;
+		Register open_subkey_stored_in_key(const wchar_t* path, ACCESS_MASK acc = 0) const;
 
 	private:
 		HKEY m_hndl;

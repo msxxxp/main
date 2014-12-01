@@ -8,13 +8,13 @@
 namespace Ext {
 
 	namespace Policy {
-		LSA_UNICODE_STRING ToLsaString(PCWSTR in);
+		LSA_UNICODE_STRING ToLsaString(const wchar_t* in);
 
-		LSA_HANDLE GetHandle(PCWSTR dom = EMPTY_STR);
+		LSA_HANDLE GetHandle(const wchar_t* dom = EMPTY_STR);
 
-		void AccountRightAdd(PCWSTR right, PCWSTR name, PCWSTR dom = EMPTY_STR);
+		void AccountRightAdd(const wchar_t* right, const wchar_t* name, const wchar_t* dom = EMPTY_STR);
 
-		void AccountRightDel(PCWSTR right, PCWSTR name, PCWSTR dom = EMPTY_STR);
+		void AccountRightDel(const wchar_t* right, const wchar_t* name, const wchar_t* dom = EMPTY_STR);
 
 		bool GetTokenUser(HANDLE hToken, ustring& name);
 	}

@@ -23,8 +23,6 @@ namespace service {
 		this_type& contin();
 		this_type& pause();
 
-		this_type& set_config(const ConfigRequest& request);
-		this_type& set_logon(const ConfigLogonRequest& request);
 		this_type& set_description(const wchar_t* info);
 		this_type& set_delayed(bool state);
 
@@ -46,7 +44,6 @@ namespace service {
 		static this_type pause(SC_HANDLE scm, const wchar_t* name);
 
 		static this_type set_config(SC_HANDLE scm, const wchar_t* name, const ConfigRequest& request);
-		static this_type set_logon(SC_HANDLE scm, const wchar_t* name, const ConfigLogonRequest& request);
 		static this_type set_desription(SC_HANDLE scm, const wchar_t* name, const wchar_t* info);
 
 		static Status get_status(SC_HANDLE scm, const wchar_t* name);
@@ -60,6 +57,7 @@ namespace service {
 		SC_HANDLE m_hndl;
 
 		friend class Manager;
+		friend class CreateRequest;
 	};
 
 }

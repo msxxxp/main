@@ -15,7 +15,7 @@ namespace crypt {
 		Provider(DWORD type = PROV_RSA_FULL);
 
 		// flags = CRYPT_MACHINE_KEYSET
-		Provider(PCWSTR name = nullptr, DWORD flags = CRYPT_VERIFYCONTEXT, PCWSTR prov = nullptr, DWORD type = PROV_RSA_FULL);
+		Provider(const wchar_t* name = nullptr, DWORD flags = CRYPT_VERIFYCONTEXT, const wchar_t* prov = nullptr, DWORD type = PROV_RSA_FULL);
 
 		bool is_exist_key(DWORD type) const;
 

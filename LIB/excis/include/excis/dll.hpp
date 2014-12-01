@@ -16,7 +16,7 @@ namespace Ext {
 	public:
 		~DynamicLibrary() noexcept;
 
-		DynamicLibrary(PCWSTR path, DWORD flags = 0);
+		DynamicLibrary(const wchar_t* path, DWORD flags = 0);
 
 		DynamicLibrary(HMODULE hndl, DWORD flags = 0);
 

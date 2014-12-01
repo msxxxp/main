@@ -15,21 +15,21 @@ const size_t MAX_MOUNT_POINT_LEN = 512;
  * return \c true - если нужно продолжить перечисление
  * @sa EnumVolumes
 */
-typedef bool (*ENUMVOLUMECALLBACK)(PCWSTR name, PVOID data);
+typedef bool (*ENUMVOLUMECALLBACK)(const wchar_t* name, PVOID data);
 
 void EnumVolumes(ENUMVOLUMECALLBACK callback, PVOID callbackData);
 
-void EnumVolumeMountPoints(ENUMVOLUMECALLBACK callback, PCWSTR volName, PVOID callbackData);
+void EnumVolumeMountPoints(ENUMVOLUMECALLBACK callback, const wchar_t* volName, PVOID callbackData);
 
-bool GetVolumePathNamesList(PCWSTR volName, TCHAR *&mntPointsList, DWORD &listSize);
+bool GetVolumePathNamesList(const wchar_t* volName, TCHAR *&mntPointsList, DWORD &listSize);
 
-bool CheckDriveRemovable(PCWSTR name, bool &isRemovable);
+bool CheckDriveRemovable(const wchar_t* name, bool &isRemovable);
 
-ustring GetVolumeByFileName(PCWSTR fileName);
+ustring GetVolumeByFileName(const wchar_t* fileName);
 
-void GetDriveGeometry(PCWSTR name, DISK_GEOMETRY &g);
+void GetDriveGeometry(const wchar_t* name, DISK_GEOMETRY &g);
 
-void GetVolumeDiskExtents(PCWSTR name, memory::auto_buf<PVOLUME_DISK_EXTENTS> &v);
+void GetVolumeDiskExtents(const wchar_t* name, memory::auto_buf<PVOLUME_DISK_EXTENTS> &v);
 
 ustring GetDrives();
 

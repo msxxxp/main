@@ -9,7 +9,7 @@ namespace Ext {
 
 	///================================================================================= FileVersion
 	struct FileVersion {
-		FileVersion(PCWSTR path);
+		FileVersion(const wchar_t* path);
 
 		ustring get_version() const {
 			return m_ver;

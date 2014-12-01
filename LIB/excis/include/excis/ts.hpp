@@ -23,7 +23,7 @@ namespace Ext {
 
 		WinTSHandle();
 
-		WinTSHandle(PCWSTR host);
+		WinTSHandle(const wchar_t* host);
 
 		operator HANDLE() const {
 			return m_ts;
@@ -35,17 +35,17 @@ namespace Ext {
 
 	///===================================================================================== WinTSession
 	namespace WinTSession {
-		void ConnectLocal(DWORD id, PCWSTR pass = L"");
+		void ConnectLocal(DWORD id, const wchar_t* pass = L"");
 
-		void ConnectRemote(DWORD id, PCWSTR host);
+		void ConnectRemote(DWORD id, const wchar_t* host);
 
 		void Disconnect(DWORD id, const WinTSHandle &host = WinTSHandle());
 
 		void LogOff(DWORD id, const WinTSHandle &host = WinTSHandle());
 
-		DWORD Question(DWORD id, PCWSTR ttl, PCWSTR msg, DWORD time = 60, const WinTSHandle &host = WinTSHandle());
+		DWORD Question(DWORD id, const wchar_t* ttl, const wchar_t* msg, DWORD time = 60, const WinTSHandle &host = WinTSHandle());
 
-		DWORD Message(DWORD id, PCWSTR ttl, PCWSTR msg, DWORD time = 60, bool wait = true, const WinTSHandle &host = WinTSHandle());
+		DWORD Message(DWORD id, const wchar_t* ttl, const wchar_t* msg, DWORD time = 60, bool wait = true, const WinTSHandle &host = WinTSHandle());
 
 		void Reboot(const WinTSHandle &host = WinTSHandle());
 
@@ -107,8 +107,8 @@ namespace Ext {
 
 		void Cache(const WinTSHandle &host);
 
-		bool FindSess(PCWSTR in) const;
-		bool FindUser(PCWSTR in) const;
+		bool FindSess(const wchar_t* in) const;
+		bool FindUser(const wchar_t* in) const;
 	};
 
 }

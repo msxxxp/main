@@ -21,13 +21,13 @@ namespace service {
 		using base_type::operator[];
 
 		~Enum();
-		Enum(const ustring& host = ustring(), PCWSTR user = nullptr, PCWSTR pass = nullptr);
+		Enum(const ustring& host = ustring(), const wchar_t* user = nullptr, const wchar_t* pass = nullptr);
 
 		EnumerateType get_type() const;
 		void set_type(EnumerateType type);
 
 		ustring get_host() const;
-		void set_host(const ustring& host = ustring(), PCWSTR user = nullptr, PCWSTR pass = nullptr);
+		void set_host(const ustring& host = ustring(), const wchar_t* user = nullptr, const wchar_t* pass = nullptr);
 
 		void update();
 

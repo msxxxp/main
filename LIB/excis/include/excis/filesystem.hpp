@@ -17,72 +17,72 @@ namespace fsys {
 		struct Facade;
 	}
 
-	bool is_exist(PCWSTR path);
+	bool is_exist(const wchar_t* path);
 	inline bool is_exist(const ustring& path) {
 		return is_exist(path.c_str());
 	}
 
-	DWORD get_attr(PCWSTR path);
+	DWORD get_attr(const wchar_t* path);
 	inline DWORD get_attr(const ustring& path) {
 		return get_attr(path.c_str());
 	}
 
-	void set_attr(PCWSTR path, DWORD attr);
+	void set_attr(const wchar_t* path, DWORD attr);
 	inline void set_attr(const ustring& path, DWORD attr) {
 		return set_attr(path.c_str(), attr);
 	}
 
-	bool is_file(PCWSTR path);
+	bool is_file(const wchar_t* path);
 	inline bool is_file(const ustring &path) {
 		return is_file(path.c_str());
 	}
 
-	bool is_dir(PCWSTR path);
+	bool is_dir(const wchar_t* path);
 	inline bool is_dir(const ustring &path) {
 		return is_dir(path.c_str());
 	}
 
-	void del(PCWSTR path);
+	void del(const wchar_t* path);
 	inline void del(const ustring &path) {
 		del(path.c_str());
 	}
 
-	void del_sh(PCWSTR path);
+	void del_sh(const wchar_t* path);
 	inline void del_sh(const ustring &path) {
 		del_sh(path.c_str());
 	}
 
-	void del_recycle(PCWSTR path);
+	void del_recycle(const wchar_t* path);
 	inline void del_recycle(const ustring &path) {
 		del_recycle(path.c_str());
 	}
 
-	void del_on_reboot(PCWSTR path);
+	void del_on_reboot(const wchar_t* path);
 	inline void del_on_reboot(const ustring& path) {
 		del_on_reboot(path.c_str());
 	}
 
-	bool del_by_mask(PCWSTR mask);
+	bool del_by_mask(const wchar_t* mask);
 	inline bool del_by_mask(const ustring &mask) {
 		return del_by_mask(mask.c_str());
 	}
 
-	bool is_link(PCWSTR path);
+	bool is_link(const wchar_t* path);
 	inline bool is_link(const ustring &path) {
 		return is_link(path.c_str());
 	}
 
-	bool is_symlink(PCWSTR path);
+	bool is_symlink(const wchar_t* path);
 	inline bool is_symlink(const ustring &path) {
 		return is_symlink(path.c_str());
 	}
 
-	bool is_junction(PCWSTR path);
+	bool is_junction(const wchar_t* path);
 	inline bool is_junction(const ustring &path) {
 		return is_junction(path.c_str());
 	}
 
-	ustring device_path_to_disk(PCWSTR path);
+	ustring device_path_to_disk(const wchar_t* path);
 
 	ustring get_path(HANDLE path);
 
@@ -100,9 +100,9 @@ namespace fsys {
 		ustring m_path;
 	};
 
-	HANDLE HandleRead(PCWSTR path);
+	HANDLE HandleRead(const wchar_t* path);
 
-	HANDLE HandleWrite(PCWSTR path);
+	HANDLE HandleWrite(const wchar_t* path);
 
 	inline HANDLE HandleRead(const ustring& path) {
 		return HandleRead(path.c_str());
@@ -129,11 +129,11 @@ namespace fsys {
 			refresh(hndl);
 		}
 
-		Stat(PCWSTR path);
+		Stat(const wchar_t* path);
 
 		Stat & operator =(HANDLE hndl);
 
-		Stat & operator =(PCWSTR path);
+		Stat & operator =(const wchar_t* path);
 
 		DWORD attr() const
 		{
@@ -379,12 +379,12 @@ namespace fsys {
 	};
 
 	namespace file {
-		bool is_exist(PCWSTR path);
+		bool is_exist(const wchar_t* path);
 		inline bool is_exist(const ustring& path) {
 			return is_exist(path.c_str());
 		}
 
-		uint64_t get_size(PCWSTR path);
+		uint64_t get_size(const wchar_t* path);
 		inline uint64_t get_size(const ustring& path) {
 			return get_size(path.c_str());
 		}
@@ -395,42 +395,42 @@ namespace fsys {
 
 		void set_position(HANDLE hFile, uint64_t pos, DWORD m = FILE_BEGIN);
 
-		void create(PCWSTR path, LPSECURITY_ATTRIBUTES lpsa = nullptr);
+		void create(const wchar_t* path, LPSECURITY_ATTRIBUTES lpsa = nullptr);
 		inline void create(const ustring &path, LPSECURITY_ATTRIBUTES lpsa = nullptr) {
 			create(path.c_str(), lpsa);
 		}
 
-		void create(PCWSTR path, PCSTR content, LPSECURITY_ATTRIBUTES lpsa = nullptr);
+		void create(const wchar_t* path, PCSTR content, LPSECURITY_ATTRIBUTES lpsa = nullptr);
 		inline void create(const ustring &path, PCSTR content, LPSECURITY_ATTRIBUTES lpsa = nullptr) {
 			create(path.c_str(), content, lpsa);
 		}
 
-		void create_hardlink(PCWSTR path, PCWSTR new_path);
+		void create_hardlink(const wchar_t* path, const wchar_t* new_path);
 		inline void create_hardlink(const ustring &path, const ustring &new_path) {
 			create_hardlink(path.c_str(), new_path.c_str());
 		}
 
-		void del(PCWSTR path);
+		void del(const wchar_t* path);
 		inline void del(const ustring &path) {
 			del(path.c_str());
 		}
 
-		bool wipe(PCWSTR path);
+		bool wipe(const wchar_t* path);
 
-		void replace(PCWSTR from, PCWSTR to, PCWSTR backup = nullptr);
-		inline void replace(const ustring& from, const ustring& to, PCWSTR backup = nullptr) {
+		void replace(const wchar_t* from, const wchar_t* to, const wchar_t* backup = nullptr);
+		inline void replace(const ustring& from, const ustring& to, const wchar_t* backup = nullptr) {
 			replace(from.c_str(), to.c_str(), backup);
 		}
 
-		uint64_t get_inode(PCWSTR path, size_t * nlink);
+		uint64_t get_inode(const wchar_t* path, size_t * nlink);
 
 		size_t write(HANDLE file, const void* data, size_t bytesToWrite);
 		inline size_t write(HANDLE file, const ustring& data) {
 			return write(file, (const void*)data.c_str(), data.size() * sizeof(wchar_t));
 		}
 
-		void write(PCWSTR path, const void* data, size_t bytesToWrite, bool rewrite = false);
-		inline void write(PCWSTR path, PCWSTR data, size_t size, bool rewrite = false) {
+		void write(const wchar_t* path, const void* data, size_t bytesToWrite, bool rewrite = false);
+		inline void write(const wchar_t* path, const wchar_t* data, size_t size, bool rewrite = false) {
 			write(path, data, size * sizeof(wchar_t), rewrite);
 		}
 		inline void write(const ustring& path, const ustring& data, bool rewrite = false) {
@@ -630,17 +630,17 @@ namespace fsys {
 
 	///=================================================================================== Directory
 	namespace directory {
-		bool is_exist(PCWSTR path);
+		bool is_exist(const wchar_t* path);
 		inline bool is_exist(const ustring& path) {
 			return is_exist(path.c_str());
 		}
 
-		bool is_empty(PCWSTR path);
+		bool is_empty(const wchar_t* path);
 		inline bool is_empty(const ustring &path) {
 			return is_empty(path.c_str());
 		}
 
-		void create(PCWSTR path, LPSECURITY_ATTRIBUTES lpsa = nullptr);
+		void create(const wchar_t* path, LPSECURITY_ATTRIBUTES lpsa = nullptr);
 		inline void create(const ustring &path, LPSECURITY_ATTRIBUTES lpsa = nullptr) {
 			create(path.c_str(), lpsa);
 		}
@@ -648,22 +648,22 @@ namespace fsys {
 		bool create_full_nt(const ustring& p, LPSECURITY_ATTRIBUTES sa) throw();
 		void create_full(const ustring& p, LPSECURITY_ATTRIBUTES sa = nullptr);
 
-		bool create_dir(PCWSTR path, LPSECURITY_ATTRIBUTES lpsa = nullptr);
+		bool create_dir(const wchar_t* path, LPSECURITY_ATTRIBUTES lpsa = nullptr);
 		inline bool create_dir(const ustring &path, LPSECURITY_ATTRIBUTES lpsa = nullptr) {
 			return create_dir(path.c_str(), lpsa);
 		}
 
-		void del(PCWSTR path);
+		void del(const wchar_t* path);
 		inline void del(const ustring &path) {
 			del(path.c_str());
 		}
 
-		bool remove_dir(PCWSTR path, bool follow_links = false);
+		bool remove_dir(const wchar_t* path, bool follow_links = false);
 		inline bool remove_dir(const ustring &path, bool follow_links = false) {
 			return remove_dir(path.c_str(), follow_links);
 		}
 
-		bool ensure_dir_exist(PCWSTR path, LPSECURITY_ATTRIBUTES lpsa = nullptr);
+		bool ensure_dir_exist(const wchar_t* path, LPSECURITY_ATTRIBUTES lpsa = nullptr);
 		inline bool ensure_dir_exist(const ustring &path, LPSECURITY_ATTRIBUTES lpsa = nullptr) {
 			return ensure_dir_exist(path.c_str(), lpsa);
 		}
@@ -671,32 +671,32 @@ namespace fsys {
 
 	///======================================================================================== Link
 	namespace link {
-		void copy(PCWSTR from, PCWSTR to);
+		void copy(const wchar_t* from, const wchar_t* to);
 		inline void copy(const ustring& from, const ustring& to) {
 			copy(from.c_str(), to.c_str());
 		}
 
-		void create_sym(PCWSTR path, PCWSTR new_path);
+		void create_sym(const wchar_t* path, const wchar_t* new_path);
 		inline void	create_sym(const ustring& path, const ustring& new_path) {
 			create_sym(path.c_str(), new_path.c_str());
 		}
 
-		void create_junc(PCWSTR path, PCWSTR new_path);
+		void create_junc(const wchar_t* path, const wchar_t* new_path);
 		inline void	create_junc(const ustring& path, const ustring& new_path) {
 			return create_junc(path.c_str(), new_path.c_str());
 		}
 
-		void break_link(PCWSTR path);
+		void break_link(const wchar_t* path);
 		inline void break_link(const ustring& path) {
 			break_link(path.c_str());
 		}
 
-		void del(PCWSTR path);
+		void del(const wchar_t* path);
 		inline void del(const ustring& path) {
 			del(path.c_str());
 		}
 
-		ustring	read(PCWSTR path);
+		ustring	read(const wchar_t* path);
 		inline ustring read(const ustring& path) {
 			return read(path.c_str());
 		}
@@ -716,7 +716,7 @@ namespace fsys {
 	}
 
 	///=============================================================================================
-	void copy_file_security(PCWSTR path, PCWSTR dest);
+	void copy_file_security(const wchar_t* path, const wchar_t* dest);
 	inline void copy_file_security(const ustring& path, const ustring& dest) {
 		copy_file_security(path.c_str(), dest.c_str());
 	}

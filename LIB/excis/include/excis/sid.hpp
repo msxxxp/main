@@ -25,9 +25,9 @@ namespace Ext {
 
 		explicit Sid(value_type rhs);
 
-		explicit Sid(PCWSTR name, PCWSTR srv = nullptr);
+		explicit Sid(const wchar_t* name, const wchar_t* srv = nullptr);
 
-		explicit Sid(const ustring& name, PCWSTR srv = nullptr);
+		explicit Sid(const ustring& name, const wchar_t* srv = nullptr);
 
 		Sid(const this_type & rhs);
 
@@ -86,14 +86,14 @@ namespace Ext {
 		static ustring as_str(value_type in);
 
 		// PSID to name
-		static void get_name_dom(value_type sid, ustring& name, ustring& dom, PCWSTR srv = nullptr);
-		static ustring get_name(value_type sid, PCWSTR srv = nullptr);
-		static ustring get_full_name(value_type sid, PCWSTR srv = nullptr);
-		static ustring get_domain(value_type sid, PCWSTR srv = nullptr);
+		static void get_name_dom(value_type sid, ustring& name, ustring& dom, const wchar_t* srv = nullptr);
+		static ustring get_name(value_type sid, const wchar_t* srv = nullptr);
+		static ustring get_full_name(value_type sid, const wchar_t* srv = nullptr);
+		static ustring get_domain(value_type sid, const wchar_t* srv = nullptr);
 
 		static PSID clone(value_type in);
 		static PSID get_sid(WELL_KNOWN_SID_TYPE wns);
-		static PSID get_sid(PCWSTR name, PCWSTR srv = nullptr);
+		static PSID get_sid(const wchar_t* name, const wchar_t* srv = nullptr);
 
 	protected:
 		Sid() :
@@ -104,7 +104,7 @@ namespace Ext {
 	};
 
 	struct SidString: public Sid {
-		explicit SidString(PCWSTR str)
+		explicit SidString(const wchar_t* str)
 		{
 			init(str);
 		}
@@ -112,7 +112,7 @@ namespace Ext {
 		explicit SidString(const ustring& str);
 
 	private:
-		void init(PCWSTR str);
+		void init(const wchar_t* str);
 	};
 
 	bool is_admin();

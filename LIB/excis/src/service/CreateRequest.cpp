@@ -1,41 +1,39 @@
 #include <excis/service.hpp>
+#include <excis/exception.hpp>
 
 #include <basis/sys/cstr.hpp>
+#include <basis/sys/logger.hpp>
 
 namespace service {
 
 	CreateRequest::CreateRequest(const ustring& name, const ustring& binaryPathName) :
 		name(name),
+		displayName(name),
 		binaryPathName(binaryPathName),
+		dependencies(nullptr),
+		loadOrderGroup(nullptr),
+		login(nullptr),
+		passw(nullptr),
+		tagId(nullptr),
 		serviceType(SERVICE_WIN32_OWN_PROCESS),
 		startType(SERVICE_DEMAND_START),
-		errorControl(SERVICE_ERROR_NORMAL),
-		loadOrderGroup(nullptr),
-		tagId(nullptr),
-		dependencies(nullptr),
-		displayName(name.c_str()),
-		delayedStart(0)
+		errorControl(SERVICE_ERROR_NORMAL)
 	{
 	}
 
 	void CreateRequest::set_type(Type n)
 	{
-		serviceType = (DWORD)n;
+		serviceType = static_cast<DWORD>(n);
 	}
 
 	void CreateRequest::set_start(Start n)
 	{
-		if (n == Start::AUTO_DELAYED) {
-			startType = (DWORD)Start::AUTO;
-			set_delayed_start(1);
-		} else {
-			startType = (DWORD)n;
-		}
+		startType = static_cast<DWORD>(n);
 	}
 
 	void CreateRequest::set_error_control(Error n)
 	{
-		errorControl = (DWORD)n;
+		errorControl = static_cast<DWORD>(n);
 	}
 
 	void CreateRequest::set_group(const wchar_t* n)
@@ -44,7 +42,7 @@ namespace service {
 			loadOrderGroup = n;
 	}
 
-	void CreateRequest::set_tag(DWORD & n)
+	void CreateRequest::set_tag(DWORD& n)
 	{
 		tagId = &n;
 	}
@@ -61,14 +59,35 @@ namespace service {
 			displayName = n;
 	}
 
-	void CreateRequest::set_delayed_start(DWORD n)
-	{
-		delayedStart = n;
-	}
+//	const wchar_t* CreateRequest::get_name() const
+//	{
+//		return name.c_str();
+//	}
 
-	const wchar_t* CreateRequest::get_name() const
+	Item CreateRequest::execute(const Manager& manager) const
 	{
-		return name.c_str();
+		LogNoise(L"(%p)\n", static_cast<SC_HANDLE>(manager));
+		SC_HANDLE hndl = CheckHandleErr(
+				::CreateServiceW(static_cast<SC_HANDLE>(manager),
+			                 name.c_str(),
+			                 displayName.c_str(),
+			                 SERVICE_ALL_ACCESS,
+			                 serviceType,
+			                 startType & 0xFFFF,
+			                 errorControl,
+			                 binaryPathName.c_str(),
+			                 loadOrderGroup,
+			                 tagId,
+			                 dependencies,
+			                 login,
+			                 passw)
+		);
+
+		Item svc(hndl);
+		if (startType == static_cast<DWORD>(Start::AUTO_DELAYED))
+			svc.set_delayed(true);
+
+		return simstd::move(svc);
 	}
 
 }

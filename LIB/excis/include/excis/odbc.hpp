@@ -62,7 +62,7 @@ struct OdbcError {
 		m_msg = sstr::copy_after_last(ODBC_base::GetState(type, hndl, 1, m_state), L"]");
 	}
 
-	ustring	msg(PCWSTR msg) {
+	ustring	msg(const wchar_t* msg) {
 		return (m_msg = msg);
 	}
 
@@ -75,7 +75,7 @@ struct OdbcError {
 	}
 
 	ustring	state() const {
-		return (PCWSTR) m_state;
+		return (const wchar_t*) m_state;
 	}
 
 	void	show() const {

@@ -7,14 +7,17 @@ namespace service {
 	class Item;
 	class Enum;
 	class Filter;
+	class CreateRequest;
+	class ConfigRequest;
+	class ConfigLogonRequest;
 
-	enum class EnumerateType: ssize_t {
+	enum class EnumerateType: size_t {
 		SERVICES = SERVICE_WIN32,
 		DRIVERS = SERVICE_DRIVER,
 //		ADAPTERS = SERVICE_ADAPTER,
 	};
 
-	enum class Type: ssize_t {
+	enum class Type: size_t {
 		KERNEL_DRIVER = SERVICE_KERNEL_DRIVER,
 		FILE_SYSTEM_DRIVER = SERVICE_FILE_SYSTEM_DRIVER,
 		ADAPTER = SERVICE_ADAPTER,
@@ -24,7 +27,7 @@ namespace service {
 		INTERACTIVE_PROCESS = SERVICE_INTERACTIVE_PROCESS,
 	};
 
-	enum class State: ssize_t {
+	enum class State: size_t {
 		STOPPED = 0x00000001,
 		STARTING = 0x00000002,
 		STOPPING = 0x00000003,
@@ -34,7 +37,7 @@ namespace service {
 		PAUSED = 0x00000007,
 	};
 
-	enum class Start: ssize_t {
+	enum class Start: size_t {
 		BOOT = SERVICE_BOOT_START,
 		SYSTEM = SERVICE_SYSTEM_START,
 		AUTO = SERVICE_AUTO_START,
@@ -43,78 +46,71 @@ namespace service {
 		DISABLED = SERVICE_DISABLED,
 	};
 
-	enum class Error: ssize_t {
+	enum class Error: size_t {
 		IGNORE_ERROR = SERVICE_ERROR_IGNORE,
 		NORMAL = SERVICE_ERROR_NORMAL,
 		SEVERE = SERVICE_ERROR_SEVERE,
 		CRITICAL = SERVICE_ERROR_CRITICAL,
 	};
 
-	struct CreateRequest {
-		CreateRequest(const ustring& _name, const ustring& _binaryPathName);
+	class CreateRequest: private pattern::Uncopyable {
+	public:
+		CreateRequest(const ustring& name, const ustring& binaryPathName);
 		void set_type(Type n);
 		void set_start(Start n);
 		void set_error_control(Error n);
-		void set_group(PCWSTR n);
-		void set_tag(DWORD & n);
-		void set_dependencies(PCWSTR n);
-		void set_display_name(PCWSTR n);
-		void set_delayed_start(DWORD n);
-		PCWSTR get_name() const;
+		void set_group(const wchar_t* n);
+		void set_tag(DWORD& n);
+		void set_dependencies(const wchar_t* n);
+		void set_display_name(const wchar_t* n);
+//		const wchar_t* get_name() const;
+
+		Item execute(const Manager& manager) const;
 
 	private:
 		ustring name;
+		ustring displayName;
 		ustring binaryPathName;
+		const wchar_t* dependencies;
+		const wchar_t* loadOrderGroup;
+		const wchar_t* login;
+		const wchar_t* passw;
+		PDWORD tagId;
 		DWORD serviceType;
 		DWORD startType;
 		DWORD errorControl;
-		PCWSTR loadOrderGroup;
-		PDWORD tagId;
-		PCWSTR dependencies;
-		PCWSTR displayName;
-		DWORD delayedStart;
-
-		friend class Manager;
 	};
 
-	struct ConfigRequest {
+	class ConfigRequest: private pattern::Uncopyable {
+	public:
 		ConfigRequest();
 		void set_type(Type n, Type o);
 		void set_start(Start n, Start o);
 		void set_error_control(Error n, Error o);
-		void set_path(PCWSTR n, PCWSTR o);
-		void set_group(PCWSTR n, PCWSTR o);
-		void set_tag(DWORD & n, DWORD o);
-		void set_dependencies(PCWSTR n, PCWSTR o);
-		void set_display_name(PCWSTR n, PCWSTR o);
-		void set_delayed_start(DWORD n, DWORD o);
+		void set_path(const wchar_t* n, const wchar_t* o);
+		void set_group(const wchar_t* n, const wchar_t* o);
+		void set_tag(DWORD& n, DWORD o);
+		void set_dependencies(const wchar_t* n, const wchar_t* o);
+		void set_display_name(const wchar_t* n, const wchar_t* o);
+		void set_login(const wchar_t* user, const wchar_t* pass = nullptr);
 		void log() const;
 
+		Item& execute(Item& svc) const;
+
 	private:
+		const wchar_t* binaryPathName;
+		const wchar_t* loadOrderGroup;
+		const wchar_t* dependencies;
+		const wchar_t* displayName;
+		const wchar_t* login;
+		const wchar_t* passw;
+		PDWORD tagId;
 		DWORD serviceType;
 		DWORD startType;
 		DWORD errorControl;
-		DWORD delayedStart;
-		PCWSTR binaryPathName;
-		PCWSTR loadOrderGroup;
-		PCWSTR dependencies;
-		PCWSTR displayName;
-		PDWORD tagId;
 
 		friend class Item;
 	};
-
-	struct ConfigLogonRequest: public ConfigRequest {
-		ConfigLogonRequest();
-		ConfigLogonRequest(const wchar_t* user, const wchar_t* pass = nullptr);
-
-	private:
-		const wchar_t* serviceStartName;
-		const wchar_t* password;
-
-		friend class Item;
-	};
-
 
 	struct Status: public SERVICE_STATUS_PROCESS {
 	};
@@ -172,8 +168,6 @@ namespace service {
 		operator SC_HANDLE() const;
 
 		void reconnect(connection::Remote* conn = nullptr, ACCESS_MASK acc = SC_MANAGER_CONNECT);
-
-		Item create_service(const CreateRequest& request) const;
 
 		bool is_exist(const wchar_t* name) const;
 

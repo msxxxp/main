@@ -169,7 +169,7 @@ namespace Ext {
 	/// Security descriptor by SDDL
 	struct WinSDDL: public WinSD {
 		~WinSDDL();
-		WinSDDL(PCWSTR sddl);
+		WinSDDL(const wchar_t* sddl);
 	};
 
 	///==================================================================================== WinAbsSD
@@ -233,7 +233,7 @@ namespace Ext {
 		}
 		void	Get();
 		void	Set() const;
-		void	Set(PCWSTR path) const;
+		void	Set(const wchar_t* path) const;
 
 	private:
 		ustring			m_name;
@@ -248,20 +248,20 @@ namespace Ext {
 	ustring	get_group(const ustring& path, SE_OBJECT_TYPE type = SE_FILE_OBJECT);
 
 	void	set_owner(HANDLE handle, PSID owner, SE_OBJECT_TYPE type = SE_FILE_OBJECT);
-	void	set_owner(PCWSTR path, PSID owner, SE_OBJECT_TYPE type = SE_FILE_OBJECT);
+	void	set_owner(const wchar_t* path, PSID owner, SE_OBJECT_TYPE type = SE_FILE_OBJECT);
 
 	void	set_group(HANDLE handle, PSID owner, SE_OBJECT_TYPE type = SE_FILE_OBJECT);
-	void	set_group(PCWSTR path, PSID owner, SE_OBJECT_TYPE type = SE_FILE_OBJECT);
+	void	set_group(const wchar_t* path, PSID owner, SE_OBJECT_TYPE type = SE_FILE_OBJECT);
 
 	void	set_dacl(HANDLE handle, PACL acl, SE_OBJECT_TYPE type = SE_FILE_OBJECT);
-	void	set_dacl(PCWSTR path, PACL pacl, SE_OBJECT_TYPE type = SE_FILE_OBJECT);
-	void	set_dacl(PCWSTR path, PSECURITY_DESCRIPTOR sd, SE_OBJECT_TYPE type = SE_FILE_OBJECT);
+	void	set_dacl(const wchar_t* path, PACL pacl, SE_OBJECT_TYPE type = SE_FILE_OBJECT);
+	void	set_dacl(const wchar_t* path, PSECURITY_DESCRIPTOR sd, SE_OBJECT_TYPE type = SE_FILE_OBJECT);
 
 	void	set_sacl(HANDLE handle, PACL acl, SE_OBJECT_TYPE type = SE_FILE_OBJECT);
-	void	set_sacl(PCWSTR path, PACL pacl, SE_OBJECT_TYPE type = SE_FILE_OBJECT);
+	void	set_sacl(const wchar_t* path, PACL pacl, SE_OBJECT_TYPE type = SE_FILE_OBJECT);
 
 	void	set_security(HANDLE hnd, PSECURITY_DESCRIPTOR sd, SE_OBJECT_TYPE type = SE_FILE_OBJECT);
-	void	set_security(PCWSTR path, PSECURITY_DESCRIPTOR sd, SE_OBJECT_TYPE type = SE_FILE_OBJECT);
+	void	set_security(const wchar_t* path, PSECURITY_DESCRIPTOR sd, SE_OBJECT_TYPE type = SE_FILE_OBJECT);
 //	void	SetSecurity(const ustring &path, const ustring &sddl, SE_OBJECT_TYPE type = SE_FILE_OBJECT);
 //	void	SetSecurity(const ustring &path, const Sid &uid, const Sid &gid, mode_t mode, bool protect = false, SE_OBJECT_TYPE type = SE_FILE_OBJECT);
 

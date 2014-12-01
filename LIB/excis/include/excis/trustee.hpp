@@ -12,14 +12,14 @@ namespace Ext {
 
 	///=================================================================================== trustee_t
 	struct trustee_t: public TRUSTEEW {
-		trustee_t(PCWSTR name);
+		trustee_t(const wchar_t* name);
 
 		trustee_t(PSID sid);
 	};
 
 	///======================================================================================= ExpAccess
 	struct ExpAccess: public EXPLICIT_ACCESSW {
-		ExpAccess(PCWSTR name, ACCESS_MASK acc, ACCESS_MODE mode, DWORD inh = SUB_CONTAINERS_AND_OBJECTS_INHERIT);
+		ExpAccess(const wchar_t* name, ACCESS_MASK acc, ACCESS_MODE mode, DWORD inh = SUB_CONTAINERS_AND_OBJECTS_INHERIT);
 
 		ExpAccess(PSID sid, ACCESS_MASK acc, ACCESS_MODE mode, DWORD inh = SUB_CONTAINERS_AND_OBJECTS_INHERIT);
 

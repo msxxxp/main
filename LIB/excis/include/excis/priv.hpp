@@ -28,25 +28,25 @@ namespace Ext {
 	///===================================================================================== WinPriv
 	namespace WinPriv {
 		bool is_exist(HANDLE token, const LUID & priv);
-		bool is_exist(HANDLE token, PCWSTR priv_name);
+		bool is_exist(HANDLE token, const wchar_t* priv_name);
 		bool is_exist(const LUID & priv);
-		bool is_exist(PCWSTR priv_name);
+		bool is_exist(const wchar_t* priv_name);
 
 		bool is_enabled(HANDLE token, const LUID & priv);
-		bool is_enabled(HANDLE token, PCWSTR priv_name);
+		bool is_enabled(HANDLE token, const wchar_t* priv_name);
 		bool is_enabled(const LUID & priv);
-		bool is_enabled(PCWSTR priv_name);
+		bool is_enabled(const wchar_t* priv_name);
 
 		void modify(HANDLE token, const LUID & priv, bool enable);
-		void modify(HANDLE token, PCWSTR priv_name, bool enable);
+		void modify(HANDLE token, const wchar_t* priv_name, bool enable);
 		void modify(const LUID & priv, bool enable);
-		void modify(PCWSTR priv_name, bool enable);
+		void modify(const wchar_t* priv_name, bool enable);
 
 		inline void disable(const LUID & in)
 		{
 			modify(in, false);
 		}
-		inline void disable(PCWSTR in)
+		inline void disable(const wchar_t* in)
 		{
 			modify(in, false);
 		}
@@ -55,19 +55,19 @@ namespace Ext {
 		{
 			modify(in, true);
 		}
-		inline void enable(PCWSTR in)
+		inline void enable(const wchar_t* in)
 		{
 			modify(in, true);
 		}
 
-		ustring GetName(PCWSTR priv_name);
+		ustring GetName(const wchar_t* priv_name);
 	}
 
 	///=================================================================================== Privilege
 	struct Privilege: private pattern::Uncopyable {
 		~Privilege();
 
-		explicit Privilege(PCWSTR priv_name);
+		explicit Privilege(const wchar_t* priv_name);
 
 	private:
 		TOKEN_PRIVILEGES m_tp;

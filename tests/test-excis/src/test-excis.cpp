@@ -34,12 +34,12 @@ int main(int argc, char* argv[])
 	exception::set_unhandled_exception_filter();
 
 	try {
-		test_crashes();
+//		test_crashes();
 
 //		test_auth();
 //		add_auth();
 
-//		test_service();
+		test_service();
 	} catch (exception::AbstractError& e) {
 		LogError(L"exception cought: %s, %s\n", e.what().c_str(), e.where().c_str());
 

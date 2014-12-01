@@ -117,24 +117,6 @@ namespace service {
 		return *this;
 	}
 
-	Item::this_type& Item::set_config(const ConfigRequest& request)
-	{
-		CheckApi(
-		    ::ChangeServiceConfigW(m_hndl, request.serviceType, request.startType, request.errorControl, request.binaryPathName, request.loadOrderGroup, request.tagId, request.dependencies, nullptr,
-		                           nullptr, request.displayName));
-		if (request.delayedStart != SERVICE_NO_CHANGE)
-			set_delayed(request.delayedStart);
-		return *this;
-	}
-
-	Item::this_type& Item::set_logon(const ConfigLogonRequest& request)
-	{
-		CheckApi(
-		    ::ChangeServiceConfigW(m_hndl, request.serviceType, request.startType, request.errorControl, request.binaryPathName, request.loadOrderGroup, request.tagId, request.dependencies,
-		                           request.serviceStartName, request.password, request.displayName));
-		return *this;
-	}
-
 	Item::this_type& Item::set_description(const wchar_t* info)
 	{
 		SERVICE_DESCRIPTIONW descr = {(PWSTR)info};
@@ -245,12 +227,8 @@ namespace service {
 
 	Item::this_type Item::set_config(SC_HANDLE scm, const wchar_t* name, const ConfigRequest& request)
 	{
-		return simstd::move(this_type(scm, name, SERVICE_CHANGE_CONFIG | SERVICE_QUERY_CONFIG | SERVICE_QUERY_STATUS).set_config(request));
-	}
-
-	Item::this_type Item::set_logon(SC_HANDLE scm, const wchar_t* name, const ConfigLogonRequest& request)
-	{
-		return simstd::move(this_type(scm, name, SERVICE_CHANGE_CONFIG | SERVICE_QUERY_CONFIG | SERVICE_QUERY_STATUS).set_logon(request));
+		this_type svc(scm, name, SERVICE_CHANGE_CONFIG | SERVICE_QUERY_CONFIG | SERVICE_QUERY_STATUS);
+		return simstd::move(request.execute(svc));
 	}
 
 	Status Item::get_status(SC_HANDLE scm, const wchar_t* name)

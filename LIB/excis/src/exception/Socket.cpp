@@ -1,5 +1,7 @@
 #include "exception_pvt.hpp"
 
+#include <basis/simstd/string>
+
 namespace exception {
 
 #ifdef NDEBUG

@@ -2,6 +2,8 @@
 #include <excis/exception.hpp>
 #include <excis/volume.hpp>
 
+#include <basis/simstd/string>
+
 namespace Ext {
 
 	void EnumVolumes(ENUMVOLUMECALLBACK callback, PVOID callbackData){

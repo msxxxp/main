@@ -4,6 +4,8 @@
 #include <excis/exception.hpp>
 #include <excis/exec.hpp>
 
+#include <basis/simstd/string>
+
 namespace Ext {
 
 	DWORD Exec::TIMEOUT = 20000;

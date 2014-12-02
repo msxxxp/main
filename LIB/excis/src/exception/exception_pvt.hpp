@@ -6,7 +6,7 @@
 namespace exception {
 
 	///==================================================================================== WinError
-	struct WinError: public AbstractError {
+	struct WinError: public Abstract {
 		virtual WinError * clone() const override;
 
 		virtual ustring type() const override;
@@ -34,7 +34,7 @@ namespace exception {
 
 
 	///========================================================================================= Seh
-	struct SehError: public AbstractError {
+	struct SehError: public Abstract {
 		SehError(PEXCEPTION_POINTERS ep);
 
 		virtual SehError * clone() const override;

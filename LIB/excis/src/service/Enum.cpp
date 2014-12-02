@@ -165,7 +165,7 @@ namespace service {
 			Item::del(m_filter->get_read_manager(), it->name.c_str());
 			erase(it);
 			notify_changed();
-//			} catch (AbstractError & e) {
+//			} catch (Abstract & e) {
 //				Rethrow(e, msg);
 //			}
 		}

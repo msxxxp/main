@@ -56,7 +56,6 @@ namespace service {
 
 		SC_HANDLE m_hndl;
 
-		friend class Manager;
 		friend class CreateRequest;
 	};
 

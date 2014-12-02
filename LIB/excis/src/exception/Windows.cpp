@@ -1,8 +1,9 @@
-﻿#include <basis/sys/logger.hpp>
-#include <basis/sys/totext.hpp>
-//#include <libbase/backtrace.hpp>
+﻿#include "exception_pvt.hpp"
 
-#include "exception_pvt.hpp"
+#include <basis/sys/logger.hpp>
+#include <basis/sys/totext.hpp>
+
+#include <basis/simstd/string>
 
 namespace exception {
 
@@ -20,14 +21,14 @@ namespace exception {
 	}
 #else
 	WinError::WinError(PCSTR file, size_t line, PCSTR func) :
-		AbstractError(file, line, func),
+		Abstract(file, line, func),
 		m_code(::GetLastError())
 	{
 		LogNoise(L"%s\n", what().c_str());
 	}
 
 	WinError::WinError(DWORD code, PCSTR file, size_t line, PCSTR func) :
-		AbstractError(file, line, func),
+		Abstract(file, line, func),
 		m_code(code)
 	{
 		LogNoise(L"%s\n", what().c_str());

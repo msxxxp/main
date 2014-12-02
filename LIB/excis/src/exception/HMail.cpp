@@ -2,6 +2,8 @@
 
 #include <basis/sys/totext.hpp>
 
+#include <basis/simstd/string>
+
 namespace exception {
 
 #ifdef NDEBUG

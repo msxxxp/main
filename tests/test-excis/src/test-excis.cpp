@@ -44,7 +44,7 @@ int main(int argc, char* argv[])
 //		add_auth();
 
 		test_service();
-	} catch (exception::AbstractError& e) {
+	} catch (exception::Abstract& e) {
 		LogError(L"exception cought: %s, %s\n", e.what().c_str(), e.where().c_str());
 
 		auto mstr = e.format_error();

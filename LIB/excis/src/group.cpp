@@ -42,7 +42,7 @@ namespace Ext {
 	{
 		try {
 			GroupBuf(name, dom);
-		} catch (exception::AbstractError & e) {
+		} catch (exception::Abstract & e) {
 			if (NERR_GroupNotFound == e.code())
 				return false;
 			throw;

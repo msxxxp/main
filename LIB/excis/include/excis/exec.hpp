@@ -4,6 +4,7 @@
 #include <basis/configure.hpp>
 
 #include <basis/simstd/iosfwd>
+#include <basis/simstd/string>
 
 namespace Ext {
 

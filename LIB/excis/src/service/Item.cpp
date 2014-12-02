@@ -141,7 +141,7 @@ namespace service {
 			auto conf(QueryConfig2(m_hndl, SERVICE_CONFIG_DELAYED_AUTO_START_INFO));
 			LPSERVICE_DELAYED_AUTO_START_INFO lpsd = (LPSERVICE_DELAYED_AUTO_START_INFO)conf.data();
 			ret = lpsd->fDelayedAutostart;
-		} catch (exception::AbstractError& e) {
+		} catch (exception::Abstract& e) {
 		}
 		return ret;
 	}

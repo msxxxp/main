@@ -1,6 +1,7 @@
 ﻿#include <excis/sid.hpp>
 #include <excis/exception.hpp>
 #include <basis/sys/memory.hpp>
+#include <basis/simstd/string>
 
 extern "C" {
 	WINADVAPI BOOL WINAPI ConvertSidToStringSidW(PSID Sid, PWSTR * StringSid);

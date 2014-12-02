@@ -69,7 +69,7 @@ namespace Ext {
 //			//			}
 //			//			Insert(pInfo[i].lpServiceName, info);
 //			//		}
-//		} catch (AbstractError & e) {
+//		} catch (Abstract & e) {
 //			//		farebox(e.code());
 //		}
 //		return true;
@@ -108,7 +108,7 @@ namespace Ext {
 //		try {
 ////			WinScm(m_conn, SC_MANAGER_CREATE_SERVICE).create_service(name.c_str(), path.c_str(), SERVICE_DEMAND_START);
 ////			push_back(ServiceInfo(name));
-//		} catch (AbstractError &e) {
+//		} catch (Abstract &e) {
 //			Rethrow(e, L"Unable to create service");
 //		}
 //	}
@@ -123,7 +123,7 @@ namespace Ext {
 //		try {
 //			WinSvc::del(WinScm(m_conn), it->Name.c_str());
 //			erase(it);
-//		} catch (AbstractError & e) {
+//		} catch (Abstract & e) {
 //			Rethrow(e, msg);
 //		}
 //	}

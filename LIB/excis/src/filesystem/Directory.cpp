@@ -46,7 +46,7 @@ namespace fsys {
 					if (!create_nt(tmp.c_str(), sa))
 						return false;
 				} while (pos != ustring::npos);
-			} catch (exception::AbstractError & e) {
+			} catch (exception::Abstract& e) {
 				return false;
 			}
 			return true;

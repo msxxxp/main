@@ -48,7 +48,7 @@ void test_cpp_exception()
 
 	try {
 		do_cpp_exception();
-	} catch (exception::AbstractError & e) {
+	} catch (exception::Abstract & e) {
 		LogFatal(L"SEH exception cought: %s\n", e.what().c_str());
 		LogFatal(L"SEH exception cought: %s\n", e.where().c_str());
 
@@ -68,7 +68,7 @@ void test_access_violation()
 
 	try {
 		do_acces_violation();
-	} catch (exception::AbstractError & e) {
+	} catch (exception::Abstract & e) {
 		LogFatal(L"SEH exception cought: %s\n", e.what().c_str());
 		LogFatal(L"SEH exception cought: %s\n", e.where().c_str());
 
@@ -88,7 +88,7 @@ void test_zero_division()
 
 	try {
 		do_zero_division();
-	} catch (exception::AbstractError & e) {
+	} catch (exception::Abstract & e) {
 		LogFatal(L"SEH exception cought: %s\n", e.what().c_str());
 		LogFatal(L"SEH exception cought: %s\n", e.where().c_str());
 

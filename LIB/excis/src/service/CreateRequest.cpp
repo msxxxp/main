@@ -59,10 +59,10 @@ namespace service {
 			displayName = n;
 	}
 
-//	const wchar_t* CreateRequest::get_name() const
-//	{
-//		return name.c_str();
-//	}
+	const wchar_t* CreateRequest::get_name() const
+	{
+		return name.c_str();
+	}
 
 	Item CreateRequest::execute(const Manager& manager) const
 	{

@@ -1,4 +1,5 @@
-#include <excis/service.hpp>
+#include "service_pvt.hpp"
+
 #include <excis/exception.hpp>
 
 #include <basis/sys/logger.hpp>
@@ -15,12 +16,12 @@ namespace service {
 	{
 		try {
 			Item svc(scm, name.c_str(), SERVICE_QUERY_CONFIG);
-			memory::auto_buf<LPQUERY_SERVICE_CONFIGW> conf(svc.QueryConfig());
+			auto conf(QueryConfig(svc));
 			binaryPathName = conf->lpBinaryPathName;
 			loadOrderGroup = conf->lpLoadOrderGroup;
 			dependencies = conf->lpDependencies;
 			serviceStartName = conf->lpServiceStartName;
-			startType = (Start)(conf->dwStartType | ((conf->dwStartType == (DWORD)Start::AUTO && svc.get_delayed()) ? 0x10000 : 0));
+			startType = (conf->dwStartType == (DWORD)Start::AUTO && svc.get_delayed()) ? Start::AUTO_DELAYED : static_cast<Start>(conf->dwStartType);
 			errorControl = (Error)conf->dwErrorControl;
 			tagId = conf->dwTagId;
 			description = svc.get_description();
@@ -40,15 +41,15 @@ namespace service {
 		LogTrace();
 		memset(&status, 0, sizeof(status));
 		try {
-			memory::auto_buf<LPQUERY_SERVICE_CONFIGW> conf(svc.QueryConfig());
+			auto conf(QueryConfig(svc));
 			displayName = conf->lpDisplayName;
 			status = svc.get_status();
 			binaryPathName = conf->lpBinaryPathName;
 			loadOrderGroup = conf->lpLoadOrderGroup;
 			dependencies = conf->lpDependencies;
 			serviceStartName = conf->lpServiceStartName;
-			startType = (Start)(conf->dwStartType | ((conf->dwStartType == (DWORD)Start::AUTO && svc.get_delayed()) ? 0x10000 : 0));
-			errorControl = (Error)conf->dwErrorControl;
+			startType = (conf->dwStartType == (DWORD)Start::AUTO && svc.get_delayed()) ? Start::AUTO_DELAYED : static_cast<Start>(conf->dwStartType);
+			errorControl = static_cast<Error>(conf->dwErrorControl);
 			tagId = conf->dwTagId;
 			description = svc.get_description();
 		} catch (exception::AbstractError& e) {

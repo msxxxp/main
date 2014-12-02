@@ -65,6 +65,8 @@ namespace service {
 
 		void swap(Manager& other);
 
+		operator SC_HANDLE() const;
+
 		SC_HANDLE get_handle() const;
 
 		void reconnect(connection::Remote* conn = nullptr, ACCESS_MASK acc = SC_MANAGER_CONNECT);
@@ -85,7 +87,7 @@ namespace service {
 		void set_tag(DWORD& n);
 		void set_dependencies(const wchar_t* n);
 		void set_display_name(const wchar_t* n);
-//		const wchar_t* get_name() const;
+		const wchar_t* get_name() const;
 
 		Item execute(const Manager& manager) const;
 

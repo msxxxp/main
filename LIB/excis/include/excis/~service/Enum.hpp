@@ -34,7 +34,7 @@ namespace service {
 		iterator find(const ustring& name);
 		const_iterator find(const ustring& name) const;
 
-		void add(const CreateRequest& info);
+		void add(const CreateRequest& request);
 
 		void del(iterator it);
 
@@ -43,7 +43,7 @@ namespace service {
 		void restart(iterator it);
 		void contin(iterator it);
 		void pause(iterator it);
-		void set_config(iterator it, const ConfigRequest& info);
+		void set_config(iterator it, const ConfigRequest& request);
 
 		void start_batch();
 		void notify_changed();

@@ -1,4 +1,5 @@
-#include <excis/service.hpp>
+#include "service_pvt.hpp"
+
 #include <excis/exception.hpp>
 
 #include <basis/sys/logger.hpp>
@@ -125,12 +126,13 @@ namespace service {
 	{
 		// filter is changed
 		LogNoise(L"type: 0x%X\n", (uint32_t)get_type());
-		DWORD dwBufNeed = 0, dwNumberOfService = 0;
-		::EnumServicesStatusExW(m_filter->get_read_manager(), SC_ENUM_PROCESS_INFO, (DWORD)get_type(), SERVICE_STATE_ALL, nullptr, 0, &dwBufNeed, &dwNumberOfService, nullptr, nullptr);
+		DWORD bufNeed = 0, dwNumberOfService = 0;
+		::EnumServicesStatusExW(m_filter->get_read_manager(), SC_ENUM_PROCESS_INFO, (DWORD)get_type(), SERVICE_STATE_ALL, nullptr, 0, &bufNeed, &dwNumberOfService, nullptr, nullptr);
 		CheckApi(::GetLastError() == ERROR_MORE_DATA);
 
-		memory::auto_buf<LPENUM_SERVICE_STATUS_PROCESSW> enum_svc(dwBufNeed);
-		CheckApi(::EnumServicesStatusExW(m_filter->get_read_manager(), SC_ENUM_PROCESS_INFO, (DWORD)get_type(), SERVICE_STATE_ALL, (PBYTE)enum_svc.data(), enum_svc.size(), &dwBufNeed, &dwNumberOfService, nullptr, nullptr));
+		memory::auto_buf<LPENUM_SERVICE_STATUS_PROCESSW> enum_svc(bufNeed);
+		CheckApi(::EnumServicesStatusExW(m_filter->get_read_manager(), SC_ENUM_PROCESS_INFO, (DWORD)get_type(), SERVICE_STATE_ALL, (PBYTE)enum_svc.data(), enum_svc.size(), &bufNeed, &dwNumberOfService, nullptr, nullptr));
+
 		clear();
 		for (ULONG i = 0; i < dwNumberOfService; ++i) {
 			emplace_back(m_filter->get_read_manager(), enum_svc.data()[i]);
@@ -149,14 +151,10 @@ namespace service {
 		return simstd::find(begin(), end(), name);
 	}
 
-	void Enum::add(const CreateRequest& info)
+	void Enum::add(const CreateRequest& request)
 	{
-//		try {
-		emplace_back(info.get_name(), m_filter->get_write_manager().create_service(info));
+		emplace_back(request.get_name(), request.execute(m_filter->get_write_manager()));
 		notify_changed();
-//		} catch (AbstractError &e) {
-//			Rethrow(e, L"Unable to create service");
-//		}
 	}
 
 	void Enum::del(iterator it)
@@ -238,12 +236,12 @@ namespace service {
 		}
 	}
 
-	void Enum::set_config(iterator it, const ConfigRequest& info)
+	void Enum::set_config(iterator it, const ConfigRequest& request)
 	{
 		if (it != end()) {
 			LogNoise(L"%s\n", it->name.c_str());
-			info.log();
-			*it = Info(it->name.c_str(), Item::set_config(m_filter->get_read_manager(), it->name.c_str(), info));
+			request.log();
+			*it = Info(it->name.c_str(), Item::set_config(m_filter->get_read_manager(), it->name.c_str(), request));
 			notify_changed();
 		}
 	}

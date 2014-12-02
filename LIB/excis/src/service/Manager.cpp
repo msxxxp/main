@@ -54,6 +54,11 @@ namespace service {
 		swap(m_hndl, other.m_hndl);
 	}
 
+	Manager::operator SC_HANDLE() const
+	{
+		return m_hndl;
+	}
+
 	SC_HANDLE Manager::get_handle() const
 	{
 		return m_hndl;

@@ -8,7 +8,7 @@ namespace service {
 	namespace {
 		SC_HANDLE service_manager_open(connection::Remote* conn, ACCESS_MASK acc)
 		{
-			LogNoise(L"(%p, %X)\n", conn, acc);
+			LogNoise(L"(%p, 0x%X)\n", conn, acc);
 			return CheckHandleErr(::OpenSCManagerW(conn->get_host().c_str(), nullptr, acc));
 		}
 

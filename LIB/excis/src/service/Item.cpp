@@ -28,7 +28,7 @@ namespace service {
 		m_hndl(CheckHandleErr(::OpenServiceW(scm, name, access)))
 	{
 		LogTraceObjBegin();
-		LogNoise2(L"(%p, %s, %u) -> %p\n", scm, name, access, m_hndl);
+		LogNoise2(L"(%p, %s, 0x%X) -> %p\n", scm, name, access, m_hndl);
 		LogTraceObjEnd();
 	}
 

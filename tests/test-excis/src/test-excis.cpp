@@ -1,6 +1,7 @@
 #include <tests.hpp>
 
 #include <basis/configure.hpp>
+#include <basis/sys/cstr.hpp>
 #include <basis/sys/logger.hpp>
 #include <basis/sys/totext.hpp>
 #include <basis/sys/traceback.hpp>
@@ -13,7 +14,10 @@
 namespace {
 	void setup_logger()
 	{
-		LogSetOptions(L"logger:///default?level=t3;prefix=fu;target=co");
+		wchar_t buff[256];
+		logger::Prefix::flags prefix = logger::Prefix::Full & ~logger::Prefix::Date;
+		safe_snprintf(buff, lengthof(buff), L"logger:///default?level=%s;prefix=%d;target=%s", L"t3", prefix, L"co");
+		LogSetOptions(buff);
 
 		traceback::init();
 	}

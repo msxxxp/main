@@ -7,7 +7,6 @@
 
 #include <excis/exception.hpp>
 #include <excis/service.hpp>
-#include <excis/services.hpp>
 
 struct ServicesView: public sync::Observer
 {
@@ -16,8 +15,8 @@ struct ServicesView: public sync::Observer
 		LogTraceObj();
 	}
 
-	ServicesView(Ext::Services* svcs):
-		m_svcs(svcs)
+	ServicesView(service::Enum* enumSvc):
+		m_svcs(enumSvc)
 	{
 		LogTraceObj();
 		m_svcs->register_observer(this);
@@ -27,20 +26,20 @@ struct ServicesView: public sync::Observer
 		UNUSED(event);
 		LogReport(L"Services changed. type: %d, size: %Iu\n", (int)m_svcs->get_type(), m_svcs->size());
 
-		for (Ext::Services::size_type i = 0; i < m_svcs->size(); ++i) {
+		for (service::Enum::size_type i = 0; i < m_svcs->size(); ++i) {
 			LogReport(L"svc[%Iu] name: '%s'\n", i, (*m_svcs)[i].name.c_str());
 		}
 	}
 
 private:
-	Ext::Services* m_svcs;
+	service::Enum* m_svcs;
 };
 
 void test_service()
 {
 	LogAtten(L"\n");
 
-	Ext::Services svcs;//(L"localhost");
+	service::Enum svcs;//(L"localhost");
 
 	LogTrace();
 	ServicesView obs(&svcs);
@@ -48,10 +47,10 @@ void test_service()
 //	svcs.start_batch();
 
 	LogTrace();
-	svcs.set_type(Ext::Service::EnumerateType_t::SERVICES);
+	svcs.set_type(service::EnumerateType::SERVICES);
 
 	LogTrace();
-	svcs.set_type(Ext::Service::EnumerateType_t::DRIVERS);
+	svcs.set_type(service::EnumerateType::DRIVERS);
 
 	LogTrace();
 	svcs.set_host(L"localhost");

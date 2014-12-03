@@ -2,39 +2,32 @@
 
 #include <basis/sys/logger.hpp>
 
-#include <basis/simstd/string>
-
 namespace exception {
 
 	struct RuntimeError: public Abstract {
-		virtual RuntimeError * clone() const;
+		RuntimeError * clone() const;
 
-		virtual ustring type() const;
+		const wchar_t* type() const;
 
-		virtual ustring what() const;
+		const wchar_t* what() const;
 
-		virtual DWORD code() const;
+		DWORD code() const;
 
-		virtual void format_error(cstr::mstring& out) const;
+		void format_error(cstr::mstring& out) const;
 
 	protected:
-#ifdef NDEBUG
 		RuntimeError(const ustring& wh, size_t code = 0);
 		RuntimeError(const Abstract& prev, const ustring& wh, size_t code = 0);
-#else
 		RuntimeError(const ustring& wh, PCSTR file, size_t line, PCSTR func, size_t code = 0);
 		RuntimeError(const Abstract & prev, const ustring& wh, PCSTR file, size_t line, PCSTR func, size_t code = 0);
-#endif
 
 	private:
 		size_t m_code;
-		ustring m_what;
 
 		friend struct HiddenFunctions;
 	};
 
 	///================================================================================ RuntimeError
-#ifdef NDEBUG
 	RuntimeError::RuntimeError(const ustring& wh, size_t code) :
 		m_code(code),
 		m_what(wh)
@@ -49,7 +42,7 @@ namespace exception {
 	{
 		LogNoise(L"%s\n", what().c_str());
 	}
-#else
+
 	RuntimeError::RuntimeError(const ustring& wh, PCSTR file, size_t line, PCSTR func, size_t code) :
 		Abstract(file, line, func),
 		m_code(code),
@@ -65,19 +58,18 @@ namespace exception {
 	{
 		LogNoise(L"%s\n", what().c_str());
 	}
-#endif
 
 	RuntimeError * RuntimeError::clone() const
 	{
 		return new RuntimeError(*this);
 	}
 
-	ustring RuntimeError::type() const
+	const wchar_t* RuntimeError::type() const
 	{
 		return L"RuntimeError";
 	}
 
-	ustring RuntimeError::what() const
+	const wchar_t* RuntimeError::what() const
 	{
 		return m_what;
 	}
@@ -95,15 +87,14 @@ namespace exception {
 		}
 	}
 
-#ifdef NDEBUG
 	void HiddenFunctions::RethrowExceptionFunc(const Abstract& prev, const ustring& what)
 	{
 		throw RuntimeError(prev, what, prev.code());
 	}
-#else
+
 	void HiddenFunctions::RethrowExceptionFunc(const Abstract& prev, const ustring& what, PCSTR file, size_t line, PCSTR func)
 	{
 		throw RuntimeError(prev, what, file, line, func, prev.code());
 	}
-#endif
+
 }

@@ -5,26 +5,21 @@
 
 namespace exception {
 
-	///==================================================================================== WinError
-	struct WinError: public Abstract {
-		virtual WinError * clone() const override;
+	class WinError: public Abstract {
+	public:
+		WinError* clone() const override;
 
-		virtual ustring type() const override;
+		const wchar_t* type() const override;
 
-		virtual ustring	 what() const override;
+		const wchar_t* what() const override;
 
-		virtual DWORD code() const override;
-
-		virtual void format_error(cstr::mstring& out) const override;
+		DWORD code() const override;
 
 	protected:
-#ifdef NDEBUG
 		WinError();
 		WinError(DWORD code);
-#else
 		WinError(PCSTR file, size_t line, PCSTR func);
 		WinError(DWORD code, PCSTR file, size_t line, PCSTR func);
-#endif
 
 	private:
 		DWORD m_code;
@@ -32,80 +27,66 @@ namespace exception {
 		friend struct HiddenFunctions;
 	};
 
-
-	///========================================================================================= Seh
-	struct SehError: public Abstract {
+	class SehError: public Abstract {
+	public:
 		SehError(PEXCEPTION_POINTERS ep);
 
-		virtual SehError * clone() const override;
+		SehError* clone() const override;
 
-		virtual ustring type() const override;
+		const wchar_t* type() const override;
 
-		virtual ustring	 what() const override;
+		const wchar_t* what() const override;
 
-		virtual DWORD code() const override;
-
-		virtual void format_error(cstr::mstring& out) const override;
+		DWORD code() const override;
 
 	private:
-		DWORD  m_code;
-		void * m_address;
+		DWORD m_code;
+		void* m_address;
 
 		friend struct HiddenFunctions;
 	};
 
-	///==================================================================================== WmiError
-	struct WmiError: public WinError {
-		virtual WmiError * clone() const override;
+	class WmiError: public WinError {
+	public:
+		WmiError* clone() const override;
 
-		virtual ustring type() const override;
+		const wchar_t* type() const override;
 
-		virtual ustring	 what() const override;
+		const wchar_t* what() const override;
 
 	private:
-#ifdef NDEBUG
 		WmiError(HRESULT code);
-#else
 		WmiError(HRESULT code, PCSTR file, size_t line, PCSTR func);
-#endif
 
 		friend struct HiddenFunctions;
 	};
 
+	class HMailError: public WinError {
+	public:
+		HMailError* clone() const override;
 
-	///================================================================================== HMailError
-	struct HMailError: public WinError {
-		virtual HMailError * clone() const override;
+		const wchar_t* type() const override;
 
-		virtual ustring type() const override;
-
-		virtual ustring	 what() const override;
+		const wchar_t* what() const override;
 
 	private:
-#ifdef NDEBUG
 		HMailError(HRESULT code);
-#else
 		HMailError(HRESULT code, PCSTR file, size_t line, PCSTR func);
-#endif
 
 		friend struct HiddenFunctions;
 	};
 
+	class WSockError: public WinError {
+	public:
+		WSockError* clone() const override;
 
-	///================================================================================== WSockError
-	struct WSockError: public WinError {
-		virtual WSockError * clone() const override;
-
-		virtual ustring type() const override;
+		const wchar_t* type() const override;
 
 	private:
-#ifdef NDEBUG
 		WSockError();
 		WSockError(DWORD code);
-#else
 		WSockError(PCSTR file, size_t line, PCSTR func);
 		WSockError(DWORD code, PCSTR file, size_t line, PCSTR func);
-#endif
 
 		friend struct HiddenFunctions;
 	};

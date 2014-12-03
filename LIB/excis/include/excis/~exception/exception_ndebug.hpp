@@ -1,9 +1,5 @@
-﻿#ifndef _LIBEXT_EXCEPTION_EXCEPTION_NDEBUG_HPP_
-#define _LIBEXT_EXCEPTION_EXCEPTION_NDEBUG_HPP_
-
-#define THROW_PLACE_STR ustring()
-
-namespace exception {
+﻿#ifndef EXCIS_EXCEPTION_EXCEPTION_NDEBUG_HPP_
+#define EXCIS_EXCEPTION_EXCEPTION_NDEBUG_HPP_
 
 #define CheckApi(arg) (exception::HiddenFunctions::CheckApiFunc((arg)))
 
@@ -28,57 +24,5 @@ namespace exception {
 #define CheckPointerErr(arg) (exception::HiddenFunctions::CheckPointerErrFunc((arg)))
 
 #define Rethrow(arg1, arg2) (exception::HiddenFunctions::RethrowExceptionFunc((arg1), (arg2)))
-
-	struct HiddenFunctions {
-		static bool CheckApiFunc(bool r);
-
-		static bool CheckApiThrowErrorFunc(bool r, DWORD err);
-
-		static DWORD CheckApiErrorFunc(DWORD err);
-
-		static HRESULT CheckHMailErrorFunc(HRESULT err);
-
-		static int CheckWSockFunc(int err);
-
-		static HRESULT CheckComFunc(HRESULT res);
-
-		static HRESULT CheckWmiFunc(HRESULT res);
-
-		static HANDLE CheckHandleFuncHan(HANDLE hnd);
-
-		static HANDLE CheckHandleErrFuncHan(HANDLE hnd);
-
-		static PVOID CheckPointerFuncVoid(PVOID ptr);
-
-		static PVOID CheckPointerErrFuncVoid(PVOID ptr);
-
-		template<typename Type>
-		static Type CheckHandleFunc(Type hnd)
-		{
-			return (Type)CheckHandleFuncHan((HANDLE)hnd);
-		}
-
-		template<typename Type>
-		static Type CheckHandleErrFunc(Type hnd)
-		{
-			return (Type)CheckHandleErrFuncHan((HANDLE)hnd);
-		}
-
-		template<typename Type>
-		static Type CheckPointerFunc(Type ptr)
-		{
-			return (Type)CheckPointerFuncVoid((PVOID)ptr);
-		}
-
-		template<typename Type>
-		static Type CheckPointerErrFunc(Type ptr)
-		{
-			return (Type)CheckPointerErrFuncVoid((PVOID)ptr);
-		}
-
-		static void RethrowExceptionFunc(const Abstract & prev, const ustring& what);
-	};
-
-}
 
 #endif

@@ -7,6 +7,7 @@
  **/
 
 #include <basis/sys/memory.hpp>
+#include <basis/simstd/string>
 //#include <libbase/str.hpp>
 #include <excis/sid.hpp>
 #include <excis/exception.hpp>

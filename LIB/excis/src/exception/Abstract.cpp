@@ -1,32 +1,42 @@
 ﻿#include <excis/exception.hpp>
+#include <basis/sys/memory.hpp>
 
 //#include <basis/sys/console.hpp>
 //#include <basis/sys/totext.hpp>
 
 namespace exception {
 
-	const wchar_t* const THROW_PLACE_FORMAT = L"%S: %d [%S]";
-	const wchar_t* const DEFAULT_WHERE = L"";
-
-	const wchar_t* throw_place_string(const char* file, size_t line, const char* func)
+	namespace
 	{
-		const size_t LENGTH = MAX_PATH;
-		auto buff = memory::malloc<wchar_t*>(LENGTH);
-		safe_snprintf(buff, LENGTH, THROW_PLACE_FORMAT, file, line, func);
-		return buff;
+		const wchar_t* const THROW_PLACE_FORMAT = L"%S: %d [%S]";
+		const wchar_t* const DEFAULT_STRING = L"";
+
+		const wchar_t* throw_place_string(const char* file, size_t line, const char* func)
+		{
+			const size_t LENGTH = MAX_PATH;
+			auto buff = memory::malloc<wchar_t*>(LENGTH);
+			safe_snprintf(buff, LENGTH, THROW_PLACE_FORMAT, file, line, func);
+			return buff;
+		}
+
+		void cleanup(const wchar_t* str)
+		{
+			if (str != DEFAULT_STRING)
+				memory::free(str);
+		}
 	}
 
 	Abstract::~Abstract()
 	{
-		if (m_where != DEFAULT_WHERE)
-			memory::free(m_where);
+		cleanup(m_where);
 	}
 
 	Abstract::Abstract():
 		file(""),
 		func(""),
 		line(static_cast<size_t>(-1)),
-		m_where(DEFAULT_WHERE),
+		m_what(nullptr),
+		m_where(DEFAULT_STRING),
 		m_prev_exc()
 	{
 	}
@@ -35,34 +45,34 @@ namespace exception {
 		file(""),
 		func(""),
 		line(static_cast<size_t>(-1)),
-		m_where(DEFAULT_WHERE),
+		m_what(nullptr),
+		m_where(DEFAULT_STRING),
 		m_prev_exc(prev.clone())
 	{
 	}
 
-	Abstract::Abstract(PCSTR file, size_t line, PCSTR func) :
-		file(file),
-		func(func),
-		line(line),
-		m_where(DEFAULT_WHERE),
-		m_prev_exc()
+	const wchar_t* Abstract::what() const
 	{
+		return m_what;
 	}
 
-	Abstract::Abstract(const this_type& prev, PCSTR file, size_t line, PCSTR func) :
-		file(file),
-		func(func),
-		line(line),
-		m_where(DEFAULT_WHERE),
-		m_prev_exc(prev.clone())
+	const wchar_t* Abstract::where() const
 	{
-	}
-
-	ustring Abstract::where() const
-	{
-		if (m_where == DEFAULT_WHERE && line != static_cast<size_t>(-1))
+		if (m_where == DEFAULT_STRING && line != static_cast<size_t>(-1))
 			m_where = throw_place_string(file, line, func);
-		return ustring(m_where);
+		return m_where;
+	}
+
+	void Abstract::format_error(cstr::mstring& out) const
+	{
+		wchar_t buf[MAX_PATH_LEN] = {0};
+
+		safe_snprintf(buf, lengthof(buf), L"Error: %s", what());
+		out.push_back(buf);
+		safe_snprintf(buf, lengthof(buf), L"Exception: %s", type());
+		out.push_back(buf);
+		safe_snprintf(buf, lengthof(buf), L"Where: %s", where());
+		out.push_back(buf);
 	}
 
 	Abstract::this_type* Abstract::get_prev() const
@@ -75,6 +85,16 @@ namespace exception {
 		cstr::mstring msg;
 		format_error(msg);
 		return simstd::move(msg);
+	}
+
+	void Abstract::change_where(const wchar_t* newWhere) const
+	{
+		const wchar_t* buff = (newWhere) ? cstr::dup(newWhere) : DEFAULT_STRING;
+
+		using simstd::swap;
+		swap(m_where, buff);
+
+		cleanup(buff);
 	}
 
 }

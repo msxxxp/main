@@ -1,7 +1,9 @@
-#include <basis/sys/sstr.hpp>
-
 #include <excis/auth.hpp>
+
 #include <excis/exception.hpp>
+
+#include <basis/sys/sstr.hpp>
+#include <basis/simstd/string>
 
 #include <wincred.h>
 #include <ntsecapi.h>

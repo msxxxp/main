@@ -7,202 +7,53 @@
 
 namespace exception {
 
-#ifdef NDEBUG
 	WinError::WinError() :
-		m_code(::GetLastError())
+		WinError(::GetLastError())
 	{
-		LogNoise(L"%s\n", what().c_str());
 	}
 
 	WinError::WinError(DWORD code) :
 		m_code(code)
 	{
-		LogNoise(L"%s\n", what().c_str());
+		LogNoise(L"%s\n", what());
 	}
-#else
+
 	WinError::WinError(PCSTR file, size_t line, PCSTR func) :
-		Abstract(file, line, func),
-		m_code(::GetLastError())
+		WinError(::GetLastError())
 	{
-		LogNoise(L"%s\n", what().c_str());
+		this->file = file;
+		this->func = func;
+		this->line = line;
 	}
 
 	WinError::WinError(DWORD code, PCSTR file, size_t line, PCSTR func) :
-		Abstract(file, line, func),
-		m_code(code)
+		WinError(code)
 	{
-		LogNoise(L"%s\n", what().c_str());
+		this->file = file;
+		this->func = func;
+		this->line = line;
 	}
-#endif
 
 	WinError * WinError::clone() const
 	{
 		return new WinError(*this);
 	}
 
-	ustring WinError::type() const
+	const wchar_t* WinError::type() const
 	{
 		return L"WinError";
 	}
 
-	ustring WinError::what() const
+	const wchar_t* WinError::what() const
 	{
-		return ustring(totext::api_error(code()).c_str());
+		if (Abstract::what() == nullptr)
+			change_what(totext::api_error(code()).c_str());
+		return Abstract::what();
 	}
 
 	DWORD WinError::code() const
 	{
 		return m_code;
 	}
-
-	void WinError::format_error(cstr::mstring& out) const
-	{
-		wchar_t buf[MAX_PATH_LEN] = {0};
-
-		safe_snprintf(buf, lengthof(buf), L"Error: %s", what().c_str());
-		out.push_back(buf);
-#ifndef NDEBUG
-		safe_snprintf(buf, lengthof(buf), L"Exception: %s", type().c_str());
-		out.push_back(buf);
-		safe_snprintf(buf, lengthof(buf), L"Where: %s", where().c_str());
-		out.push_back(buf);
-#endif
-	}
-
-#ifdef NDEBUG
-	bool HiddenFunctions::CheckApiFunc(bool r)
-	{
-		if (!r) {
-			DWORD err = ::GetLastError();
-			throw WinError(err);
-		}
-		return r;
-	}
-
-	bool HiddenFunctions::CheckApiThrowErrorFunc(bool r, DWORD err)
-	{
-		if (!r) {
-			throw WinError(err);
-		}
-		return r;
-	}
-
-	DWORD HiddenFunctions::CheckApiErrorFunc(DWORD err)
-	{
-		if (err != ERROR_SUCCESS) {
-			throw WinError(err);
-		}
-		return err;
-	}
-
-	HRESULT HiddenFunctions::CheckComFunc(HRESULT res)
-	{
-		if (FAILED(res))
-			throw WinError(res);
-		return res;
-	}
-
-	HANDLE HiddenFunctions::CheckHandleFuncHan(HANDLE hnd)
-	{
-		if (!hnd || hnd == INVALID_HANDLE_VALUE) {
-			throw WinError(ERROR_INVALID_HANDLE);
-		}
-		return hnd;
-	}
-
-	HANDLE HiddenFunctions::CheckHandleErrFuncHan(HANDLE hnd)
-	{
-		if (!hnd || hnd == INVALID_HANDLE_VALUE) {
-			DWORD err = ::GetLastError();
-			throw WinError(err);
-		}
-		return hnd;
-	}
-
-	PVOID HiddenFunctions::CheckPointerFuncVoid(PVOID ptr)
-	{
-		if (!ptr) {
-			throw WinError(E_POINTER);
-		}
-		return ptr;
-	}
-
-	PVOID HiddenFunctions::CheckPointerErrFuncVoid(PVOID ptr)
-	{
-		if (!ptr) {
-			DWORD err = ::GetLastError();
-			throw WinError(err);
-		}
-		return ptr;
-	}
-
-#else
-	bool HiddenFunctions::CheckApiFunc(bool r, PCSTR file, size_t line, PCSTR func)
-	{
-		if (!r) {
-			DWORD err = ::GetLastError();
-			throw WinError(err, file, line, func);
-		}
-		return r;
-	}
-
-	bool HiddenFunctions::CheckApiThrowErrorFunc(bool r, DWORD err, PCSTR file, size_t line, PCSTR func)
-	{
-		if (!r) {
-			throw WinError(err, file, line, func);
-		}
-		return r;
-	}
-
-	DWORD HiddenFunctions::CheckApiErrorFunc(DWORD err, PCSTR file, size_t line, PCSTR func)
-	{
-		if (err != ERROR_SUCCESS) {
-			throw WinError(err, file, line, func);
-		}
-		return err;
-	}
-
-	HRESULT HiddenFunctions::CheckComFunc(HRESULT res, PCSTR file, size_t line, PCSTR func)
-	{
-		if (FAILED(res)) {
-			throw WinError(res, file, line, func);
-		}
-		return res;
-	}
-
-	HANDLE HiddenFunctions::CheckHandleFuncHan(HANDLE hnd, PCSTR file, size_t line, PCSTR func)
-	{
-		if (hnd == nullptr || hnd == INVALID_HANDLE_VALUE ) {
-			throw WinError(ERROR_INVALID_HANDLE, file, line, func);
-		}
-		return hnd;
-	}
-
-	HANDLE HiddenFunctions::CheckHandleErrFuncHan(HANDLE hnd, PCSTR file, size_t line, PCSTR func)
-	{
-		if (hnd == nullptr || hnd == INVALID_HANDLE_VALUE ) {
-			DWORD err = ::GetLastError();
-			throw WinError(err, file, line, func);
-		}
-		return hnd;
-	}
-
-	PVOID HiddenFunctions::CheckPointerFuncVoid(PVOID ptr, PCSTR file, size_t line, PCSTR func)
-	{
-		if (!ptr) {
-			throw WinError(E_POINTER, file, line, func);
-		}
-		return ptr;
-	}
-
-	PVOID HiddenFunctions::CheckPointerErrFuncVoid(PVOID ptr, PCSTR file, size_t line, PCSTR func)
-	{
-		if (!ptr) {
-			DWORD err = ::GetLastError();
-			throw WinError(err, file, line, func);
-		}
-		return ptr;
-	}
-#endif
 
 }

@@ -10,15 +10,15 @@ namespace exception {
 
 		virtual this_type* clone() const = 0;
 
-		virtual ustring type() const = 0;
-
-		virtual ustring what() const = 0;
-
-		virtual ustring where() const;
+		virtual const wchar_t* type() const = 0;
 
 		virtual DWORD code() const = 0;
 
-		virtual void format_error(cstr::mstring& out) const = 0;
+		virtual const wchar_t* what() const = 0;
+
+		virtual const wchar_t* where() const;
+
+		virtual void format_error(cstr::mstring& out) const;
 
 		this_type* get_prev() const;
 
@@ -27,8 +27,9 @@ namespace exception {
 	protected:
 		Abstract();
 		Abstract(const this_type& prev);
-		Abstract(PCSTR file, size_t line, PCSTR func);
-		Abstract(const this_type& prev, PCSTR file, size_t line, PCSTR func);
+
+		void change_what(const wchar_t* newWhere) const;
+		void change_where(const wchar_t* newWhere) const;
 
 	protected:
 		const char* file;
@@ -36,7 +37,8 @@ namespace exception {
 		size_t line;
 
 	private:
-		const wchar_t* m_where;
+		mutable const wchar_t* m_what;
+		mutable const wchar_t* m_where;
 		simstd::shared_ptr<this_type> m_prev_exc;
 //		simstd::Backtrace             m_backtrace;
 	};

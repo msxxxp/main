@@ -24,9 +24,9 @@ namespace exception {
 			LogDebug(L"param[%u]:    0x%I64X\n", i, ep->ExceptionRecord->ExceptionInformation[i]);
 		}
 
-		traceback::LazyFrame frame(reinterpret_cast<void*>(ep->ExceptionRecord->ExceptionAddress));
-		m_where = frame.to_str();
-		LogFatal(L"exception at %s\n", m_where.c_str());
+		traceback::LazyFrame frame(m_address);
+		change_where(frame.to_str().c_str());
+//		LogFatal(L"exception at %s\n", where());
 #ifdef DEBUG
 		traceback::Enum bt;
 		for (auto it = bt.begin(); it != bt.end(); ++it) {
@@ -40,33 +40,21 @@ namespace exception {
 		return new SehError(*this);
 	}
 
-	ustring SehError::type() const
+	const wchar_t* SehError::type() const
 	{
 		return L"SehError";
 	}
 
-	ustring SehError::what() const
+	const wchar_t* SehError::what() const
 	{
-		return totext::api_error(code(), L"NTDLL.DLL");
+		if (Abstract::what() == nullptr)
+			change_what(totext::api_error(code(), L"NTDLL.DLL").c_str());
+		return Abstract::what();
 	}
 
 	DWORD SehError::code() const
 	{
 		return m_code;
-	}
-
-	void SehError::format_error(cstr::mstring& out) const
-	{
-		wchar_t buf[MAX_PATH_LEN] = {0};
-
-		safe_snprintf(buf, lengthof(buf), L"Error: %s", what().c_str());
-		out.push_back(buf);
-//#ifndef NDEBUG
-		safe_snprintf(buf, lengthof(buf), L"Exception: %s", type().c_str());
-		out.push_back(buf);
-		safe_snprintf(buf, lengthof(buf), L"Where: %s", where().c_str());
-		out.push_back(buf);
-//#endif
 	}
 
 	LONG WINAPI vectored_handler(PEXCEPTION_POINTERS ep)

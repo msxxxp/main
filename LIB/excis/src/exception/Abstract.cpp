@@ -87,6 +87,16 @@ namespace exception {
 		return simstd::move(msg);
 	}
 
+	void Abstract::change_what(const wchar_t* newWhat) const
+	{
+		const wchar_t* buff = (newWhat) ? cstr::dup(newWhat) : DEFAULT_STRING;
+
+		using simstd::swap;
+		swap(m_what, buff);
+
+		cleanup(buff);
+	}
+
 	void Abstract::change_where(const wchar_t* newWhere) const
 	{
 		const wchar_t* buff = (newWhere) ? cstr::dup(newWhere) : DEFAULT_STRING;

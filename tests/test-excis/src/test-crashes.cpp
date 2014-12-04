@@ -49,8 +49,8 @@ void test_cpp_exception()
 	try {
 		do_cpp_exception();
 	} catch (exception::Abstract & e) {
-		LogFatal(L"SEH exception cought: %s\n", e.what().c_str());
-		LogFatal(L"SEH exception cought: %s\n", e.where().c_str());
+		LogFatal(L"SEH exception cought: %s\n", e.what());
+		LogFatal(L"SEH exception cought: %s\n", e.where());
 
 		auto mstr = e.format_error();
 		for (size_t i = 0; i < mstr.size(); ++i)
@@ -69,8 +69,8 @@ void test_access_violation()
 	try {
 		do_acces_violation();
 	} catch (exception::Abstract & e) {
-		LogFatal(L"SEH exception cought: %s\n", e.what().c_str());
-		LogFatal(L"SEH exception cought: %s\n", e.where().c_str());
+		LogFatal(L"SEH exception cought: %s\n", e.what());
+		LogFatal(L"SEH exception cought: %s\n", e.where());
 
 		auto mstr = e.format_error();
 		for (size_t i = 0; i < mstr.size(); ++i)
@@ -89,8 +89,8 @@ void test_zero_division()
 	try {
 		do_zero_division();
 	} catch (exception::Abstract & e) {
-		LogFatal(L"SEH exception cought: %s\n", e.what().c_str());
-		LogFatal(L"SEH exception cought: %s\n", e.where().c_str());
+		LogFatal(L"SEH exception cought: %s\n", e.what());
+		LogFatal(L"SEH exception cought: %s\n", e.where());
 
 		auto mstr = e.format_error();
 		for (size_t i = 0; i < mstr.size(); ++i)

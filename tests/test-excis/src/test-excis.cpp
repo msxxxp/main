@@ -34,8 +34,8 @@ int main(int argc, char* argv[])
 	for (int i = 0; i < argc; ++i)
 		LogDebug(L"'%S'\n", argv[i]);
 
-	exception::set_vectored_exception_filter();
-	exception::set_unhandled_exception_filter();
+	exception::set_vectored_filter();
+	exception::set_unhandled_filter();
 
 	try {
 //		test_crashes();
@@ -45,7 +45,7 @@ int main(int argc, char* argv[])
 
 		test_service();
 	} catch (exception::Abstract& e) {
-		LogError(L"exception cought: %s, %s\n", e.what().c_str(), e.where().c_str());
+		LogError(L"exception cought: %s, %s\n", e.what(), e.where());
 
 		auto mstr = e.format_error();
 		for (size_t i = 0; i < mstr.size(); ++i)

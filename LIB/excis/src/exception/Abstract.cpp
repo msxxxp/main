@@ -8,7 +8,7 @@ namespace exception {
 
 	namespace
 	{
-		const wchar_t* const THROW_PLACE_FORMAT = L"%S: %d [%S]";
+		const wchar_t* const THROW_PLACE_FORMAT = L"%S:%d {%S}";
 		const wchar_t* const DEFAULT_STRING = L"";
 
 		const wchar_t* throw_place_string(const char* file, size_t line, const char* func)
@@ -67,9 +67,9 @@ namespace exception {
 	{
 		wchar_t buf[MAX_PATH_LEN] = {0};
 
-		safe_snprintf(buf, lengthof(buf), L"Error: %s", what());
-		out.push_back(buf);
 		safe_snprintf(buf, lengthof(buf), L"Exception: %s", type());
+		out.push_back(buf);
+		safe_snprintf(buf, lengthof(buf), L"Error: %s", what());
 		out.push_back(buf);
 		safe_snprintf(buf, lengthof(buf), L"Where: %s", where());
 		out.push_back(buf);

@@ -16,7 +16,7 @@ namespace {
 	{
 		wchar_t buff[256];
 		logger::Prefix::flags prefix = logger::Prefix::Full & ~logger::Prefix::Date;
-		safe_snprintf(buff, lengthof(buff), L"logger:///default?level=%s;prefix=%d;target=%s", L"t3", prefix, L"co");
+		safe_snprintf(buff, lengthof(buff), L"logger:///default?level=%s;prefix=%d;target=%s", L"d", prefix, L"co");
 		LogSetOptions(buff);
 
 		traceback::init();
@@ -38,12 +38,12 @@ int main(int argc, char* argv[])
 	exception::set_unhandled_filter();
 
 	try {
-//		test_crashes();
+		test_crashes();
 
 //		test_auth();
 //		add_auth();
 
-		test_service();
+//		test_service();
 	} catch (exception::Abstract& e) {
 		LogError(L"exception cought: %s, %s\n", e.what(), e.where());
 

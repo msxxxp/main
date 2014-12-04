@@ -14,14 +14,14 @@ namespace exception {
 		m_code(ep->ExceptionRecord->ExceptionCode),
 		m_address(ep->ExceptionRecord->ExceptionAddress)
 	{
-		LogDebug(L"ep:      %p\n", ep);
-		LogReport(L"code:    0x%X\n", ep->ExceptionRecord->ExceptionCode);
-		LogReport(L"flags:   0x%X\n", ep->ExceptionRecord->ExceptionFlags);
-		LogReport(L"record:  0x%p\n", ep->ExceptionRecord->ExceptionRecord);
-		LogReport(L"address: 0x%p\n", ep->ExceptionRecord->ExceptionAddress);
-		LogDebug(L"params:  %u\n", ep->ExceptionRecord->NumberParameters);
+		LogNoise2(L"ep:      %p\n", ep);
+		LogNoise2(L"code:    0x%X\n", ep->ExceptionRecord->ExceptionCode);
+		LogNoise2(L"flags:   0x%X\n", ep->ExceptionRecord->ExceptionFlags);
+		LogNoise2(L"record:  0x%p\n", ep->ExceptionRecord->ExceptionRecord);
+		LogNoise2(L"address: 0x%p\n", ep->ExceptionRecord->ExceptionAddress);
+		LogNoise2(L"params:  %u\n", ep->ExceptionRecord->NumberParameters);
 		for (DWORD i = 0; i < ep->ExceptionRecord->NumberParameters; ++i) {
-			LogDebug(L"param[%u]:    0x%I64X\n", i, ep->ExceptionRecord->ExceptionInformation[i]);
+			LogNoise2(L"param[%u]:    0x%I64X\n", i, ep->ExceptionRecord->ExceptionInformation[i]);
 		}
 
 		traceback::LazyFrame frame(m_address);
@@ -30,7 +30,7 @@ namespace exception {
 #ifdef DEBUG
 		traceback::Enum bt;
 		for (auto it = bt.begin(); it != bt.end(); ++it) {
-			LogReport(L"\tbt: %s\n", it->to_str().c_str());
+			LogNoise(L"\tbt: %s\n", it->to_str().c_str());
 		}
 #endif
 	}
@@ -59,17 +59,11 @@ namespace exception {
 
 	LONG WINAPI vectored_handler(PEXCEPTION_POINTERS ep)
 	{
+		LogTrace();
 		if (ep->ExceptionRecord->ExceptionCode != 0x20474343) {
-			LogDebug(L"code:    0x%X\n", ep->ExceptionRecord->ExceptionCode);
-			LogDebug(L"flags:   0x%X\n", ep->ExceptionRecord->ExceptionFlags);
-			LogDebug(L"record:  0x%p\n", ep->ExceptionRecord->ExceptionRecord);
-			LogDebug(L"address: 0x%p\n", ep->ExceptionRecord->ExceptionAddress);
-			LogDebug(L"params:  %u\n", ep->ExceptionRecord->NumberParameters);
-			for (DWORD i = 0; i < ep->ExceptionRecord->NumberParameters; ++i) {
-				LogDebug(L"param[%u]:    0x%I64X\n", i, ep->ExceptionRecord->ExceptionInformation[i]);
-			}
-
 			throw SehError(ep);
+		} else {
+			LogWarn(L"unhandled GCC exception\n");
 		}
 		return EXCEPTION_CONTINUE_SEARCH;
 	}

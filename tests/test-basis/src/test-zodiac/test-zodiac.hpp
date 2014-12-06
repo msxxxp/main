@@ -4,7 +4,7 @@
 #include <basis/configure.hpp>
 #include <basis/simstd/string>
 
-#include "priority_queue.hpp"
+#include "priority-queue.hpp"
 
 class Reader;
 class Writer;

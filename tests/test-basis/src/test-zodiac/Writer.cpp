@@ -1,7 +1,6 @@
-﻿#include "test_zodiac.hpp"
-
-#include <basis/sys/logger.hpp>
-
+﻿#include <basis/sys/logger.hpp>
+
+#include "test-zodiac.hpp"
 Writer::Writer(MessageQueue<MessageType>& que, int num) :
 	m_que(que),
 	m_thread(nullptr),

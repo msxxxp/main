@@ -1,6 +1,6 @@
-#include <tests.hpp>
-#include "test_zodiac/test_zodiac.hpp"
+#include "test-zodiac/test-zodiac.hpp"
 
+#include <tests.hpp>
 #include <basis/sys/console.hpp>
 #include <basis/sys/logger.hpp>
 

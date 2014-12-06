@@ -32,7 +32,7 @@ namespace exception {
 		m_code(code),
 		m_what(wh)
 	{
-		LogNoise(L"%s\n", what().c_str());
+		LogNoise(L"%s\n", what());
 	}
 
 	RuntimeError::RuntimeError(const Abstract& prev, const ustring& wh, size_t code) :
@@ -40,7 +40,7 @@ namespace exception {
 		m_code(code),
 		m_what(wh)
 	{
-		LogNoise(L"%s\n", what().c_str());
+		LogNoise(L"%s\n", what());
 	}
 
 	RuntimeError::RuntimeError(const ustring& wh, PCSTR file, size_t line, PCSTR func, size_t code) :
@@ -48,7 +48,7 @@ namespace exception {
 		m_code(code),
 		m_what(wh)
 	{
-		LogNoise(L"%s\n", what().c_str());
+		LogNoise(L"%s\n", what());
 	}
 
 	RuntimeError::RuntimeError(const Abstract& prev, const ustring& wh, PCSTR file, size_t line, PCSTR func, size_t code) :
@@ -56,7 +56,7 @@ namespace exception {
 		m_code(code),
 		m_what(wh)
 	{
-		LogNoise(L"%s\n", what().c_str());
+		LogNoise(L"%s\n", what());
 	}
 
 	RuntimeError * RuntimeError::clone() const
@@ -81,7 +81,7 @@ namespace exception {
 
 	void RuntimeError::format_error(cstr::mstring& out) const
 	{
-		out.push_back(what().c_str());
+		out.push_back(what());
 		if (get_prev()) {
 			get_prev()->format_error(out);
 		}

@@ -1,9 +1,8 @@
-﻿#include "test_zodiac.hpp"
-
-#include <basis/sys/logger.hpp>
+﻿#include <basis/sys/logger.hpp>
 
 #include <basis/simstd/vector>
-
+
+#include "test-zodiac.hpp"
 Main::~Main()
 {
 	LogConsoleReport(-1, L"Main::%S()\n", __FUNCTION__);

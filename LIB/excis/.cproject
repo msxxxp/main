@@ -47,9 +47,6 @@
 							<tool id="cdt.managedbuild.tool.gnu.c.linker.mingw.base.520621290" name="MinGW C Linker" superClass="cdt.managedbuild.tool.gnu.c.linker.mingw.base"/>
 						</toolChain>
 					</folderInfo>
-					<fileInfo id="cdt.managedbuild.config.gnu.mingw.lib.release.1769857005.1397918849" name="Runtime.cpp" rcbsApplicability="disable" resourcePath="src/exception/Runtime.cpp" toolsToInvoke="cdt.managedbuild.tool.gnu.cpp.compiler.mingw.lib.release.1754867741.601966559">
-						<tool id="cdt.managedbuild.tool.gnu.cpp.compiler.mingw.lib.release.1754867741.601966559" name="GCC C++ Compiler" superClass="cdt.managedbuild.tool.gnu.cpp.compiler.mingw.lib.release.1754867741"/>
-					</fileInfo>
 					<sourceEntries>
 						<entry excluding="include|src" flags="VALUE_WORKSPACE_PATH|RESOLVED" kind="sourcePath" name=""/>
 						<entry flags="VALUE_WORKSPACE_PATH|RESOLVED" kind="sourcePath" name="include"/>
@@ -104,9 +101,6 @@
 							<tool id="cdt.managedbuild.tool.gnu.c.linker.mingw.base.1504060826" name="MinGW C Linker" superClass="cdt.managedbuild.tool.gnu.c.linker.mingw.base"/>
 						</toolChain>
 					</folderInfo>
-					<fileInfo id="cdt.managedbuild.config.gnu.mingw.lib.release.1769857005.219085268.44660763" name="Runtime.cpp" rcbsApplicability="disable" resourcePath="src/exception/Runtime.cpp" toolsToInvoke="cdt.managedbuild.tool.gnu.cpp.compiler.mingw.lib.release.1519857453.1078767674">
-						<tool id="cdt.managedbuild.tool.gnu.cpp.compiler.mingw.lib.release.1519857453.1078767674" name="GCC C++ Compiler" superClass="cdt.managedbuild.tool.gnu.cpp.compiler.mingw.lib.release.1519857453"/>
-					</fileInfo>
 					<sourceEntries>
 						<entry excluding="include|src" flags="VALUE_WORKSPACE_PATH|RESOLVED" kind="sourcePath" name=""/>
 						<entry flags="VALUE_WORKSPACE_PATH|RESOLVED" kind="sourcePath" name="include"/>
@@ -161,9 +155,6 @@
 							<tool id="cdt.managedbuild.tool.gnu.c.linker.mingw.base.948332218" name="MinGW C Linker" superClass="cdt.managedbuild.tool.gnu.c.linker.mingw.base"/>
 						</toolChain>
 					</folderInfo>
-					<fileInfo id="cdt.managedbuild.config.gnu.mingw.lib.release.1769857005.1055929403.165617222" name="Runtime.cpp" rcbsApplicability="disable" resourcePath="src/exception/Runtime.cpp" toolsToInvoke="cdt.managedbuild.tool.gnu.cpp.compiler.mingw.lib.release.1007499377.1776568976">
-						<tool id="cdt.managedbuild.tool.gnu.cpp.compiler.mingw.lib.release.1007499377.1776568976" name="GCC C++ Compiler" superClass="cdt.managedbuild.tool.gnu.cpp.compiler.mingw.lib.release.1007499377"/>
-					</fileInfo>
 					<sourceEntries>
 						<entry excluding="include|src" flags="VALUE_WORKSPACE_PATH|RESOLVED" kind="sourcePath" name=""/>
 						<entry flags="VALUE_WORKSPACE_PATH|RESOLVED" kind="sourcePath" name="include"/>
@@ -218,9 +209,6 @@
 							<tool id="cdt.managedbuild.tool.gnu.c.linker.mingw.base.1058794853" name="MinGW C Linker" superClass="cdt.managedbuild.tool.gnu.c.linker.mingw.base"/>
 						</toolChain>
 					</folderInfo>
-					<fileInfo id="cdt.managedbuild.config.gnu.mingw.lib.release.1769857005.1055929403.1111670559.1795806679" name="Runtime.cpp" rcbsApplicability="disable" resourcePath="src/exception/Runtime.cpp" toolsToInvoke="cdt.managedbuild.tool.gnu.cpp.compiler.mingw.lib.release.1494516997.723087047">
-						<tool id="cdt.managedbuild.tool.gnu.cpp.compiler.mingw.lib.release.1494516997.723087047" name="GCC C++ Compiler" superClass="cdt.managedbuild.tool.gnu.cpp.compiler.mingw.lib.release.1494516997"/>
-					</fileInfo>
 					<sourceEntries>
 						<entry excluding="include|src" flags="VALUE_WORKSPACE_PATH|RESOLVED" kind="sourcePath" name=""/>
 						<entry flags="VALUE_WORKSPACE_PATH|RESOLVED" kind="sourcePath" name="include"/>

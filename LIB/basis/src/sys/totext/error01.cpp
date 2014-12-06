@@ -1,11 +1,10 @@
 ﻿#include <basis/sys/totext.hpp>
-#include <basis/sys/sstr.hpp>
 
-#include <basis/simstd/string>
+//#include <basis/sys/sstr.hpp>
 
 namespace totext {
 
-	ustring api_error(DWORD err, const wchar_t* lib)
+	cstr::aeu api_error(DWORD err, const wchar_t* lib)
 	{
 		HMODULE mod = nullptr;
 		if (err && lib) {
@@ -24,7 +23,7 @@ namespace totext {
 			if (lib) {
 				return api_error(err);
 			} else {
-				return sstr::format(L"[0x%X (%u)] Unknown error", err, err);
+				return cstr::format(L"[0x%X (%u)] Unknown error", err, err);
 			}
 		}
 
@@ -38,7 +37,7 @@ namespace totext {
 			}
 		}
 
-		ustring ret = sstr::format(L"[0x%X (%u)] %s", err, err, buf);
+		auto ret = cstr::format(L"[0x%X (%u)] %s", err, err, buf);
 		{ // delete return char
 			ret[ret.size() - 2] = L'\0';
 		}

@@ -12,5 +12,6 @@
 #include <basis/sys/~cstr/NamedValues.hpp>
 #include <basis/sys/~cstr/convert_a.hpp>
 #include <basis/sys/~cstr/convert_w.hpp>
+#include <basis/sys/~cstr/aeu.hpp>
 
 #endif

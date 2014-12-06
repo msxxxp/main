@@ -77,7 +77,7 @@ namespace global {
 	};
 
 	struct Vars {
-		crypt::Provider cryptProvider;
+		crypt::ProviderHolder cryptProvider;
 		fsys::Folders_t folders;
 		fsys::Files_t files;
 	};

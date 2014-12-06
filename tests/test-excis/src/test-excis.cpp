@@ -16,7 +16,7 @@ namespace {
 	{
 		wchar_t buff[256];
 		logger::Prefix::flags prefix = logger::Prefix::Full & ~logger::Prefix::Date;
-		safe_snprintf(buff, lengthof(buff), L"logger:///default?level=%s;prefix=%d;target=%s", L"d", prefix, L"co");
+		safe_snprintf(buff, lengthof(buff), L"logger:///default?level=%s;prefix=%d;target=%s", L"t", prefix, L"co");
 		LogSetOptions(buff);
 
 		traceback::init();

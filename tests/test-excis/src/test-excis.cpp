@@ -2,6 +2,7 @@
 
 #include <basis/configure.hpp>
 #include <basis/sys/cstr.hpp>
+#include <basis/sys/linkage.hpp>
 #include <basis/sys/logger.hpp>
 #include <basis/sys/totext.hpp>
 #include <basis/sys/traceback.hpp>
@@ -23,6 +24,26 @@ namespace {
 	}
 }
 
+bool showCrashDialog = false;
+
+LONG WINAPI RedirectedSetUnhandledExceptionFilter(EXCEPTION_POINTERS * /*ExceptionInfo*/)
+{
+	// When the CRT calls SetUnhandledExceptionFilter with NULL parameter
+	// our handler will not get removed.
+
+	console::printf("%s:%d\n", __PRETTY_FUNCTION__, __LINE__);
+
+	return 0;
+}
+
+LONG WINAPI OurSetUnhandledExceptionFilter(EXCEPTION_POINTERS * /*ExceptionInfo*/)
+{
+	console::printf("%s:%d\n", __PRETTY_FUNCTION__, __LINE__);
+
+	return showCrashDialog ? EXCEPTION_CONTINUE_SEARCH : EXCEPTION_EXECUTE_HANDLER;
+}
+
+
 int main(int argc, char* argv[])
 {
 	console::set_output_codepage(console::Codepage::UTF8);
@@ -34,8 +55,13 @@ int main(int argc, char* argv[])
 	for (int i = 0; i < argc; ++i)
 		LogDebug(L"'%S'\n", argv[i]);
 
-	exception::set_vectored_filter();
-	exception::set_unhandled_filter();
+//	exception::set_vectored_filter();
+//	exception::set_unhandled_filter();
+
+	::SetUnhandledExceptionFilter(OurSetUnhandledExceptionFilter);
+
+	linkage::CAPIHook apiHook("kernel32.dll", "SetUnhandledExceptionFilter", (PROC)RedirectedSetUnhandledExceptionFilter);
+
 
 	try {
 		test_crashes();

@@ -22,7 +22,8 @@ namespace crypt {
 	ProviderImpl::~ProviderImpl()
 	{
 		LogTraceObjBegin();
-		::CryptReleaseContext(m_handle, 0);
+		bool ok = ::CryptReleaseContext(m_handle, 0);
+		LogErrorIf(!ok, L"-> %s\n", totext::api_error().c_str());
 		LogTraceObjEnd();
 	}
 
@@ -30,8 +31,8 @@ namespace crypt {
 		m_handle()
 	{
 		LogTraceObjBegin();
-		bool ret = ::CryptAcquireContextW(&m_handle, nullptr, nullptr, PROV_RSA_AES, 0) || ::CryptAcquireContextW(&m_handle, nullptr, nullptr, PROV_RSA_AES, CRYPT_NEWKEYSET);
-		LogErrorIf(!ret, L"can't acquire provider -> %s\n", totext::api_error().c_str());
+		bool ok = ::CryptAcquireContextW(&m_handle, nullptr, nullptr, PROV_RSA_AES, 0) || ::CryptAcquireContextW(&m_handle, nullptr, nullptr, PROV_RSA_AES, CRYPT_NEWKEYSET);
+		LogErrorIf(!ok, L"-> %s\n", totext::api_error().c_str());
 		LogTraceObjEnd();
 	}
 

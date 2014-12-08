@@ -1,12 +1,7 @@
-//#include "CmnHdr.h"
-//#pragma comment(lib, "ImageHlp")
-
 #include <basis/sys/linkage.hpp>
 #include <basis/os/imagehlp.hpp>
 
 #include "Toolhelp.hpp"
-
-//#include <StrSafe.h>
 
 #include <ImageHlp.h>
 

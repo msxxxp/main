@@ -26,15 +26,23 @@ namespace {
 
 bool showCrashDialog = false;
 
-LONG WINAPI RedirectedSetUnhandledExceptionFilter(EXCEPTION_POINTERS * /*ExceptionInfo*/)
-{
-	// When the CRT calls SetUnhandledExceptionFilter with NULL parameter
-	// our handler will not get removed.
+//LONG WINAPI OurAddVectoredExceptionFilter(EXCEPTION_POINTERS * /*ExceptionInfo*/)
+//{
+//	console::printf("%s:%d\n", __PRETTY_FUNCTION__, __LINE__);
+//
+//	return showCrashDialog ? EXCEPTION_CONTINUE_SEARCH : EXCEPTION_EXECUTE_HANDLER;
+//}
 
-	console::printf("%s:%d\n", __PRETTY_FUNCTION__, __LINE__);
-
-	return 0;
-}
+//LONG WINAPI VectoredExceptionHandler(PEXCEPTION_POINTERS /*pExceptionInfo*/)
+//{
+//	console::printf(L"%S:%d\n", __PRETTY_FUNCTION__, __LINE__);
+////		std::ofstream f;
+////		f.open("VectoredExceptionHandler.txt", std::ios::out | std::ios::trunc);
+////		f << std::hex << pExceptionInfo->ExceptionRecord->ExceptionCode << std::endl;
+////		f.close();
+//
+//	return EXCEPTION_CONTINUE_SEARCH;
+//}
 
 LONG WINAPI OurSetUnhandledExceptionFilter(EXCEPTION_POINTERS * /*ExceptionInfo*/)
 {
@@ -43,9 +51,11 @@ LONG WINAPI OurSetUnhandledExceptionFilter(EXCEPTION_POINTERS * /*ExceptionInfo*
 	return showCrashDialog ? EXCEPTION_CONTINUE_SEARCH : EXCEPTION_EXECUTE_HANDLER;
 }
 
-
 int main(int argc, char* argv[])
 {
+	RaiseException(0xc0000374, 0, 0, NULL);
+//	crt::set_unhandled_exception_filter();
+
 	console::set_output_codepage(console::Codepage::UTF8);
 	console::printf("%s:%d\n", __PRETTY_FUNCTION__, __LINE__);
 
@@ -55,13 +65,14 @@ int main(int argc, char* argv[])
 	for (int i = 0; i < argc; ++i)
 		LogDebug(L"'%S'\n", argv[i]);
 
+//	AddVectoredExceptionHandler(1, VectoredExceptionHandler);
+//	SetUnhandledExceptionFilter(TopLevelExceptionHandler);
+
+//	::AddVectoredExceptionHandler(1, OurAddVectoredExceptionFilter);
+//	::SetUnhandledExceptionFilter(OurSetUnhandledExceptionFilter);
+
 //	exception::set_vectored_filter();
 //	exception::set_unhandled_filter();
-
-	::SetUnhandledExceptionFilter(OurSetUnhandledExceptionFilter);
-
-	linkage::CAPIHook apiHook("kernel32.dll", "SetUnhandledExceptionFilter", (PROC)RedirectedSetUnhandledExceptionFilter);
-
 
 	try {
 		test_crashes();
@@ -92,6 +103,7 @@ int main(int argc, char* argv[])
 
 extern "C" int wmain(int /*argc*/, wchar_t* /*argv*/[])
 {
+	RaiseException(0xc0000374, 0, 0, NULL);
 	return main(0, nullptr);
 }
 

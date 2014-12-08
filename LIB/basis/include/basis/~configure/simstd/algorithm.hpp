@@ -18,6 +18,49 @@ namespace simstd {
 			swap(a[n], b[n]);
 	}
 
+#ifdef min
+#undef min
+#endif
+#ifdef max
+#undef max
+#endif
+
+	template<typename T>
+	const T& min(const T& a, const T& b)
+	{
+		return (b < a) ? b : a;
+	}
+
+	template<typename T, typename Comparator>
+	const T& min(const T& a, const T& b, Comparator comp)
+	{
+		return comp(b, a) ? b : a;
+	}
+
+	template<typename T>
+	const T& max(const T& a, const T& b)
+	{
+		return (b < a) ? a : b;
+	}
+
+	template<typename T, typename Comparator>
+	const T& max(const T& a, const T& b, Comparator comp)
+	{
+		return comp(b, a) ? a : b;
+	}
+
+	template<typename T>
+	bool between(const T& a, const T& val, const T& b)
+	{
+		return (a <= val) && (val <= b);
+	}
+
+	template<typename T>
+	bool between_strict(const T& a, const T& val, const T& b)
+	{
+		return (a < val) && (val < b);
+	}
+
 }
 
 #endif

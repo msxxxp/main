@@ -75,32 +75,6 @@ LONG WINAPI OurAddVectoredExceptionFilter(EXCEPTION_POINTERS * /*ExceptionInfo*/
 //	return showCrashDialog ? EXCEPTION_CONTINUE_SEARCH : EXCEPTION_EXECUTE_HANDLER;
 //}
 
-void crash_virtual_function_call1()
-{
-	struct B
-	{
-		virtual ~B() = default;
-
-		B()
-		{
-			LogTrace();
-			nvf();
-		}
-
-		virtual void vf() = 0;
-
-		void nvf() {vf();}
-	};
-
-	struct D: public B
-	{
-		void vf() override {LogTrace();}
-	};
-
-	B* b = new D;
-	b->vf();
-}
-
 void my_terminate_handler()
 {
 	console::printf("%s:%d\n", __PRETTY_FUNCTION__, __LINE__);
@@ -114,7 +88,6 @@ int main(int argc, char* argv[])
 
 	console::printf("%s:%d\n", __PRETTY_FUNCTION__, __LINE__);
 	setup_logger();
-
 	console::printf("%s:%d\n", __PRETTY_FUNCTION__, __LINE__);
 //	linkage::CAPIHook apiHook1("kernel32.dll", "SetUnhandledExceptionFilter", (PROC)RedirectedSetUnhandledExceptionFilter);
 //	linkage::CAPIHook apiHook2("kernel32.dll", "AddVectoredExceptionHandler", (PROC)RedirectedAddVectoredExceptionHandler);
@@ -146,8 +119,7 @@ int main(int argc, char* argv[])
 //	exception::set_unhandled_filter();
 
 	console::printf("%s:%d\n", __PRETTY_FUNCTION__, __LINE__);
-//	test_crashes();
-//	crash_virtual_function_call1();
+	test_crashes();
 	try {
 //		console::printf("%s:%d\n", __PRETTY_FUNCTION__, __LINE__);
 //		test_crashes();

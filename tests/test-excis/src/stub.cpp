@@ -27,7 +27,7 @@ extern "C" {
 
 		console::printf(L"%S:%d\n", __PRETTY_FUNCTION__, __LINE__);
 
-		linkage::CAPIHook apiHook1("kernel32.dll", "SetUnhandledExceptionFilter", (PROC)RedirectedSetUnhandledExceptionFilter);
+//		linkage::CAPIHook apiHook1("kernel32.dll", "SetUnhandledExceptionFilter", (PROC)RedirectedSetUnhandledExceptionFilter);
 
 		crt::init_atexit();
 

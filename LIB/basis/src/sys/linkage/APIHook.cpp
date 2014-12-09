@@ -1,21 +1,30 @@
 #include <basis/sys/linkage.hpp>
+#include <basis/sys/logger.hpp>
 #include <basis/os/imagehlp.hpp>
 
 #include "Toolhelp.hpp"
 
-#include <ImageHlp.h>
+//#include <ImageHlp.h>
 
 namespace linkage {
 
-// The head of the linked-list of CAPIHook objects
+	// Hook LoadLibrary functions and GetProcAddress so that hooked functions
+	// are handled correctly if these functions are called.
+	CAPIHook CAPIHook::sm_LoadLibraryA("Kernel32.dll", "LoadLibraryA", (PROC)CAPIHook::LoadLibraryA);
+	CAPIHook CAPIHook::sm_LoadLibraryW("Kernel32.dll", "LoadLibraryW", (PROC)CAPIHook::LoadLibraryW);
+	CAPIHook CAPIHook::sm_LoadLibraryExA("Kernel32.dll", "LoadLibraryExA", (PROC)CAPIHook::LoadLibraryExA);
+	CAPIHook CAPIHook::sm_LoadLibraryExW("Kernel32.dll", "LoadLibraryExW", (PROC)CAPIHook::LoadLibraryExW);
+	CAPIHook CAPIHook::sm_GetProcAddress("Kernel32.dll", "GetProcAddress", (PROC)CAPIHook::GetProcAddress);
+
+	// The head of the linked-list of CAPIHook objects
 	CAPIHook* CAPIHook::sm_pHead = NULL;
 
-// By default, the module containing the CAPIHook() is not hooked
+	// By default, the module containing the CAPIHook() is not hooked
 	BOOL CAPIHook::ExcludeAPIHookMod = TRUE;
 
 	CAPIHook::~CAPIHook()
 	{
-
+		console::printf("%s:%d\n", __PRETTY_FUNCTION__, __LINE__);
 		// Unhook this function from all modules
 		ReplaceIATEntryInAllMods(m_pszCalleeModName, m_pfnHook, m_pfnOrig);
 
@@ -47,24 +56,23 @@ namespace linkage {
 		//       is the name of the loaded module to hook its export table and
 		//       re-hook the import tables of all loaded modules.
 
+		console::printf("%s:%d\n", __PRETTY_FUNCTION__, __LINE__);
 		m_pNext = sm_pHead;    // The next node was at the head
-		sm_pHead = this;        // This node is now at the head
+		sm_pHead = this;       // This node is now at the head
 
 		// Save information about this hooked function
 		m_pszCalleeModName = pszCalleeModName;
 		m_pszFuncName = pszFuncName;
 		m_pfnHook = pfnHook;
 
-		m_pfnOrig = GetProcAddressRaw(GetModuleHandleA(pszCalleeModName), m_pszFuncName);
+		m_pfnOrig = GetProcAddressRaw(::GetModuleHandleA(pszCalleeModName), m_pszFuncName);
 
 		// If function does not exit,... bye bye
 		// This happens when the module is not already loaded
 		if (m_pfnOrig == NULL) {
-//			wchar_t szPathname[MAX_PATH];
-//			GetModuleFileNameW(NULL, szPathname, _countof(szPathname));
-//			wchar_t sz[1024];
-//			StringCchPrintfW(sz, _countof(sz), TEXT("[%4u - %s] impossible to find %S\r\n"), GetCurrentProcessId(), szPathname, pszFuncName);
-//			OutputDebugString(sz);
+			wchar_t szPathname[MAX_PATH];
+			GetModuleFileNameW(NULL, szPathname, lengthof(szPathname));
+			console::printf("%s:%d [%4u - %s] impossible to find %S\n", __PRETTY_FUNCTION__, __LINE__, GetCurrentProcessId(), szPathname, pszFuncName);
 			return;
 		}
 
@@ -100,18 +108,21 @@ namespace linkage {
 	// NOTE: This function must NOT be inlined
 	FARPROC CAPIHook::GetProcAddressRaw(HMODULE hmod, PCSTR pszProcName)
 	{
+		console::printf("%s:%d\n", __PRETTY_FUNCTION__, __LINE__);
 		return (::GetProcAddress(hmod, pszProcName));
 	}
 
 	// Returns the HMODULE that contains the specified memory address
 	static HMODULE ModuleFromAddress(PVOID pv)
 	{
+		console::printf("%s:%d\n", __PRETTY_FUNCTION__, __LINE__);
 		MEMORY_BASIC_INFORMATION mbi;
 		return ((VirtualQuery(pv, &mbi, sizeof(mbi)) != 0) ? (HMODULE)mbi.AllocationBase : NULL);
 	}
 
 	void CAPIHook::ReplaceIATEntryInAllMods(PCSTR pszCalleeModName, PROC pfnCurrent, PROC pfnNew)
 	{
+		console::printf("%s:%d\n", __PRETTY_FUNCTION__, __LINE__);
 		HMODULE hmodThisMod = ExcludeAPIHookMod ? ModuleFromAddress(reinterpret_cast<void*>(ReplaceIATEntryInAllMods)) : NULL;
 
 		// Get the list of modules in this process
@@ -134,6 +145,7 @@ namespace linkage {
 	// Handle unexpected exceptions if the module is unloaded
 	LONG WINAPI InvalidReadExceptionFilter(PEXCEPTION_POINTERS pep)
 	{
+		console::printf("%s:%d\n", __PRETTY_FUNCTION__, __LINE__);
 		UNUSED(pep);
 
 		// handle all unexpected exceptions because we simply don't patch
@@ -147,6 +159,7 @@ namespace linkage {
 
 	void CAPIHook::ReplaceIATEntryInOneMod(PCSTR pszCalleeModName, PROC pfnCurrent, PROC pfnNew, HMODULE hmodCaller)
 	{
+//		console::printf("%s:%d\n", __PRETTY_FUNCTION__, __LINE__);
 		// Get the address of the module's import section
 		ULONG ulSize;
 
@@ -201,6 +214,7 @@ namespace linkage {
 
 	void CAPIHook::ReplaceEATEntryInOneMod(HMODULE hmod, PCSTR pszFunctionName, PROC pfnNew)
 	{
+		console::printf("%s:%d\n", __PRETTY_FUNCTION__, __LINE__);
 		// Get the address of the module's export section
 		ULONG ulSize;
 
@@ -253,21 +267,9 @@ namespace linkage {
 		}
 	}
 
-// Hook LoadLibrary functions and GetProcAddress so that hooked functions
-// are handled correctly if these functions are called.
-
-	CAPIHook CAPIHook::sm_LoadLibraryA("Kernel32.dll", "LoadLibraryA", (PROC)CAPIHook::LoadLibraryA);
-
-	CAPIHook CAPIHook::sm_LoadLibraryW("Kernel32.dll", "LoadLibraryW", (PROC)CAPIHook::LoadLibraryW);
-
-	CAPIHook CAPIHook::sm_LoadLibraryExA("Kernel32.dll", "LoadLibraryExA", (PROC)CAPIHook::LoadLibraryExA);
-
-	CAPIHook CAPIHook::sm_LoadLibraryExW("Kernel32.dll", "LoadLibraryExW", (PROC)CAPIHook::LoadLibraryExW);
-
-	CAPIHook CAPIHook::sm_GetProcAddress("Kernel32.dll", "GetProcAddress", (PROC)CAPIHook::GetProcAddress);
-
 	void CAPIHook::FixupNewlyLoadedModule(HMODULE hmod, DWORD dwFlags)
 	{
+		console::printf("%s:%d\n", __PRETTY_FUNCTION__, __LINE__);
 		// If a new module is loaded, hook the hooked functions
 		if ((hmod != NULL)
 		    &&   // Do not hook our own module
@@ -295,7 +297,7 @@ namespace linkage {
 
 	HMODULE WINAPI CAPIHook::LoadLibraryA(PCSTR pszModulePath)
 	{
-
+		console::printf("%s:%d\n", __PRETTY_FUNCTION__, __LINE__);
 		HMODULE hmod = ::LoadLibraryA(pszModulePath);
 		FixupNewlyLoadedModule(hmod, 0);
 		return (hmod);
@@ -303,7 +305,7 @@ namespace linkage {
 
 	HMODULE WINAPI CAPIHook::LoadLibraryW(PCWSTR pszModulePath)
 	{
-
+		console::printf("%s:%d\n", __PRETTY_FUNCTION__, __LINE__);
 		HMODULE hmod = ::LoadLibraryW(pszModulePath);
 		FixupNewlyLoadedModule(hmod, 0);
 		return (hmod);
@@ -311,7 +313,7 @@ namespace linkage {
 
 	HMODULE WINAPI CAPIHook::LoadLibraryExA(PCSTR pszModulePath, HANDLE hFile, DWORD dwFlags)
 	{
-
+		console::printf("%s:%d\n", __PRETTY_FUNCTION__, __LINE__);
 		HMODULE hmod = ::LoadLibraryExA(pszModulePath, hFile, dwFlags);
 		FixupNewlyLoadedModule(hmod, dwFlags);
 		return (hmod);
@@ -319,7 +321,7 @@ namespace linkage {
 
 	HMODULE WINAPI CAPIHook::LoadLibraryExW(PCWSTR pszModulePath, HANDLE hFile, DWORD dwFlags)
 	{
-
+		console::printf("%s:%d\n", __PRETTY_FUNCTION__, __LINE__);
 		HMODULE hmod = ::LoadLibraryExW(pszModulePath, hFile, dwFlags);
 		FixupNewlyLoadedModule(hmod, dwFlags);
 		return (hmod);
@@ -327,6 +329,7 @@ namespace linkage {
 
 	FARPROC WINAPI CAPIHook::GetProcAddress(HMODULE hmod, PCSTR pszProcName)
 	{
+		console::printf("%s:%d\n", __PRETTY_FUNCTION__, __LINE__);
 		// Get the true address of the function
 		FARPROC pfn = GetProcAddressRaw(hmod, pszProcName);
 

@@ -3,7 +3,7 @@
 
 #include <basis/configure.hpp>
 
-#include <Wininet.h>
+#include <wininet.h>
 
 typedef struct tagPARSEDURL {
 	DWORD cbSize;

@@ -1,6 +1,6 @@
 ﻿
 #include <basis/sys/crt.hpp>
-//#include <basis/sys/console.hpp>
+#include <basis/sys/console.hpp>
 //#include <basis/sys/memory.hpp>
 
 #include <atomic>
@@ -85,7 +85,7 @@ namespace crt {
 
 	void cxa_pure_virtual()
 	{
-//		console::printf(L"%S():%d pure virtual method called\n", __FUNCTION__, __LINE__);
+		console::printf("%s():%d pure virtual method called\n", __FUNCTION__, __LINE__);
 //		::abort_message("pure virtual method called");
 	}
 

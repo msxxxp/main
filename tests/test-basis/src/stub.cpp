@@ -8,54 +8,64 @@ extern "C" int wmain(int argc, wchar_t* argv[]);
 
 extern int WINAPI wWinMain(HINSTANCE, HINSTANCE, LPWSTR, int);
 
-extern "C" {
-	int mainCRTStartup()
+namespace {
+
+	void prolog()
 	{
-		console::printf(L"%S:%d\n", __PRETTY_FUNCTION__, __LINE__);
+		console::printf("%s:%d\n", __PRETTY_FUNCTION__, __LINE__);
+
 		crt::init_atexit();
+	}
 
-		int argc = 0;
-		wchar_t ** argv = ::CommandLineToArgvW(::GetCommandLineW(), &argc);
+	int epilog(int errcode)
+	{
+		console::printf("%s:%d\n", __PRETTY_FUNCTION__, __LINE__);
 
-		int Result = wmain(argc, argv);
-
-		::LocalFree(argv);
 		crt::invoke_atexit();
 
 		{
 			const memory::heap::Stat& stat = memory::heap::DefaultStat::get_stat();
-			console::printf(L"stat alloc: %I64u, %I64u \n", stat.allocations, stat.allocSize);
-			console::printf(L"stat free : %I64u, %I64u \n", stat.frees, stat.freeSize);
-			console::printf(L"stat diff : %I64d \n", stat.allocSize - stat.freeSize);
+			console::printf("stat alloc: %I64u, %I64u \n", stat.allocations, stat.allocSize);
+			console::printf("stat free : %I64u, %I64u \n", stat.frees, stat.freeSize);
+			console::printf("stat diff : %I64d \n", stat.allocSize - stat.freeSize);
 		}
-		::ExitProcess(Result);
-		return Result;
+
+		::ExitProcess(errcode);
+		return errcode;
+	}
+
+}
+
+extern "C" {
+
+	int mainCRTStartup()
+	{
+		console::printf("%s:%d\n", __PRETTY_FUNCTION__, __LINE__);
+
+		prolog();
+
+		int argc = 0;
+		wchar_t ** argv = ::CommandLineToArgvW(::GetCommandLineW(), &argc);
+
+		int ret = wmain(argc, argv);
+
+		::LocalFree(argv);
+
+		return epilog(ret);
 	}
 
 	int	WinMainCRTStartup() // -mwindows
 	{
-		console::printf(L"%S:%d\n", __PRETTY_FUNCTION__, __LINE__);
-		crt::init_atexit();
-
-		int ret = 0;
+		prolog();
 
 		STARTUPINFOW startupInfo;
 		::RtlSecureZeroMemory(&startupInfo, sizeof(startupInfo));
 		startupInfo.cb = sizeof(startupInfo);
 		::GetStartupInfoW(&startupInfo);
 
-		ret = wWinMain(::GetModuleHandleW(nullptr), nullptr, ::GetCommandLineW(), startupInfo.dwFlags & STARTF_USESHOWWINDOW ? startupInfo.wShowWindow : SW_SHOWDEFAULT);
+		int ret = wWinMain(::GetModuleHandleW(nullptr), nullptr, ::GetCommandLineW(), startupInfo.dwFlags & STARTF_USESHOWWINDOW ? startupInfo.wShowWindow : SW_SHOWDEFAULT);
 
-		crt::invoke_atexit();
-
-		{
-			const memory::heap::Stat& stat = memory::heap::DefaultStat::get_stat();
-			console::printf(L"stat alloc: %I64u, %I64u \n", stat.allocations, stat.allocSize);
-			console::printf(L"stat free : %I64u, %I64u \n", stat.frees, stat.freeSize);
-			console::printf(L"stat diff : %I64d \n", stat.allocSize - stat.freeSize);
-		}
-		::ExitProcess(ret);
-		return ret;
+		return epilog(ret);
 	}
 
 //	BOOL WINAPI	DllMainCRTStartup(HANDLE, DWORD dwReason, PVOID)

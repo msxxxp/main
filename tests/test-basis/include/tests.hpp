@@ -7,6 +7,8 @@ void test_chrono();
 
 void test_console_input();
 
+void test_crashes();
+
 void test_crypt();
 
 void test_future();

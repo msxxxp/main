@@ -2,9 +2,9 @@
 #define _GLOBAL_HPP_
 
 #include <basis/configure.hpp>
+#include <basis/sys/crypt.hpp>
 #include <basis/simstd/memory>
 
-#include <crypt.hpp>
 #include <fsys.hpp>
 
 namespace global {

@@ -85,81 +85,6 @@ namespace fsys {
 	}
 
 	///=================================================================================================================
-	struct Sequence::FindStat {
-		const wchar_t* name() const;
-
-		uint64_t size() const;
-
-		size_t attr() const;
-
-		FILETIME ctime_ft() const;
-		FILETIME atime_ft() const;
-		FILETIME mtime_ft() const;
-
-		uint64_t cmtime() const;
-		uint64_t atime() const;
-		uint64_t mtime() const;
-
-		bool is_file() const;
-		bool is_dir() const;
-		bool is_link() const;
-
-	private:
-		WIN32_FIND_DATAW m_stat;
-		friend struct ci_iterator;
-	};
-
-	inline const wchar_t* Sequence::FindStat::name() const
-	{
-		return m_stat.cFileName;
-	}
-
-	inline uint64_t Sequence::FindStat::size() const
-	{
-		return make_uint64(m_stat.nFileSizeHigh, m_stat.nFileSizeLow);
-	}
-
-	inline size_t Sequence::FindStat::attr() const
-	{
-		return m_stat.dwFileAttributes;
-	}
-
-	inline FILETIME Sequence::FindStat::ctime_ft() const
-	{
-		return m_stat.ftCreationTime;
-	}
-
-	inline FILETIME Sequence::FindStat::atime_ft() const
-	{
-		return m_stat.ftLastAccessTime;
-	}
-
-	inline FILETIME Sequence::FindStat::mtime_ft() const
-	{
-		return m_stat.ftLastWriteTime;
-	}
-
-	inline uint64_t Sequence::FindStat::mtime() const
-	{
-		return make_uint64(m_stat.ftLastWriteTime.dwHighDateTime, m_stat.ftLastWriteTime.dwLowDateTime);
-	}
-
-	inline bool Sequence::FindStat::is_file() const
-	{
-		return !fsys::is_dir(m_stat.dwFileAttributes);
-	}
-
-	inline bool Sequence::FindStat::is_dir() const
-	{
-		return fsys::is_dir(m_stat.dwFileAttributes);
-	}
-
-	inline bool Sequence::FindStat::is_link() const
-	{
-		return fsys::is_link(m_stat.dwFileAttributes);
-	}
-
-	///=================================================================================================================
 	class Sequence::Statistics {
 	public:
 		Statistics();
@@ -197,96 +122,11 @@ namespace fsys {
 		Impl* m_impl;
 	};
 
-	///=================================================================================================================
-	class Sequence::Filter {
-	public:
-		enum class Type: ssize_t
-		{
-			Include,
-			Exclude,
-		};
-
-		Filter();
-
-//		void set_flag(SearchFlags flag, bool value);
-//		bool get_flag(SearchFlags flag) const;
-
-		bool operator ()(const FindStat& stat, Statistics& statistics) const;
-
-	private:
-		bool apply_to_folder(const FindStat& stat, Statistics& statistics) const;
-		bool apply_to_file(const FindStat& stat, Statistics& statistics) const;
-
-		bool apply_attributes(const FindStat& stat, Statistics& statistics) const;
-		bool apply_mask(const FindStat& stat, Statistics& statistics) const;
-
-		ustring name;
-		ustring mask;
-		Type    type;
-		Size    minSize, maxSize;
-		Time    minWrTime, maxWrTime;
-		Time    minCrTime, maxCrTime;
-		Time    minAcTime, maxAcTime;
-		Time    minChTime, maxChTime;
-		Attr    enabledAttr, disabledAttr;
-	};
-
-	///=================================================================================================================
-	class Sequence::Options {
-	public:
-		uint64_t           fileMinSize;
-		uint64_t           fileMaxSize;
-		flags_type         flags;
-		mutable Statistics statistics;
-
-		Options();
-
-		void set_flag(SearchFlags flag, bool value);
-		bool get_flag(SearchFlags flag) const;
-
-		bool is_filtered_folder(const FindStat & stat) const;
-		bool is_filtered_file(const FindStat & stat) const;
-	};
-
-	///=================================================================================================================
-	class Sequence::ci_iterator {
-		typedef ci_iterator this_type;
-
-	public:
-		this_type & operator ++();
-
-		this_type operator ++(int);
-
-		const value_type & operator *() const;
-
-		const value_type * operator ->() const;
-
-		bool operator ==(const this_type & rhs) const;
-
-		bool operator !=(const this_type & rhs) const;
-
-	private:
-		ci_iterator();
-
-		ci_iterator(const Sequence & seq);
-
-		struct impl;
-		simstd::shared_ptr<impl> m_impl;
-
-		friend class Sequence;
-	};
-
-	///=================================================================================================================
-	struct Sequence::ci_iterator::impl {
-		~impl() noexcept;
-		impl() noexcept;
-		impl(const Sequence & seq) noexcept;
-
-		const Sequence * m_sequence;
-		HANDLE           m_find_handle;
-		FindStat         m_fstat;
-	};
-
 }
+
+#include <fsys/Sequence/Stat.hpp>
+#include <fsys/Sequence/Filter.hpp>
+#include <fsys/Sequence/Options.hpp>
+#include <fsys/Sequence/Iterator.hpp>
 
 #endif

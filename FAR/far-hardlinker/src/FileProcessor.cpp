@@ -172,6 +172,7 @@ ssize_t FileProcessor::execute()
 	} else {
 		LogConsoleInfo(-1, L"files found to process: %I64u\n", global::vars().files.size());
 	}
+	return 0;
 
 	using namespace global;
 	simstd::sort(vars().files.begin(), vars().files.end(), CompareBySizeAndTimeLess);

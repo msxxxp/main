@@ -14,28 +14,22 @@ fsys::Sequence::Filter& fsys::Sequence::Options::add_filter(Filter::Type type, c
 
 bool fsys::Sequence::Options::apply_filters(const FindStat& stat) const
 {
-	bool ret = true;
-
+	bool skip = false;
 	if (cstr::compare(stat.name(), L".") == 0 || cstr::compare(stat.name(), L"..") == 0) {
-		LogConsoleDebug(FOREGROUND_INTENSITY | FOREGROUND_RED | FOREGROUND_GREEN, L"  folder ignored [invalid]:");
-		ret = false;
+//		LogConsoleDebug(FOREGROUND_INTENSITY | FOREGROUND_RED | FOREGROUND_GREEN, L"  ignored [invalid]: '%s'\n", stat.name());
+		skip = true;
 	} else {
 		for (const Sequence::Filter& filter : filters)
 		{
-			if (filter(stat, statistics))
-			{
-				ret = false;
+			if (filter(stat, statistics)) {
+				skip = true;
 				break;
 			}
 		}
 	}
 
-	if (ret)
-		LogConsoleDebug(-1, L"  file accepted: '%s'\n", stat.name());
-	else
-		LogConsoleDebug(-1, L" '%s'\n", stat.name());
-
-	return ret;
+	LogConsole(-1, skip ? logger::Level::Debug1 : logger::Level::Debug2, L"  %s: '%s', 0x%08X, %I64u\n", skip ? L"skipped" : L"accepted", stat.name(), stat.attr(), stat.size());
+	return skip;
 }
 
 //	bool Sequence::Options::is_filtered_folder(const FindStat & stat) const

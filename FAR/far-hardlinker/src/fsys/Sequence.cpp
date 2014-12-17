@@ -9,7 +9,7 @@
 
 namespace fsys {
 
-	Sequence::Sequence(const ustring& path, const ustring& mask, const Options & options) :
+	Sequence::Sequence(const ustring& path, const ustring& mask, const Options& options) :
 		m_path(path),
 		m_mask(mask),
 		m_options(options)
@@ -64,7 +64,7 @@ namespace fsys {
 
 			const Options& options = m_impl->m_sequence->options();
 			if (options.apply_filters(st))
-				break;
+				continue;
 		}
 		return *this;
 	}

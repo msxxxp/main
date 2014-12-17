@@ -14,9 +14,9 @@ namespace fsys {
 		FILETIME atime_ft() const;
 		FILETIME mtime_ft() const;
 
-		uint64_t cmtime() const;
-		uint64_t atime() const;
-		uint64_t mtime() const;
+		int64_t ctime() const;
+		int64_t atime() const;
+		int64_t mtime() const;
 
 		bool is_file() const;
 		bool is_dir() const;
@@ -57,9 +57,19 @@ namespace fsys {
 		return m_stat.ftLastWriteTime;
 	}
 
-	inline uint64_t Sequence::FindStat::mtime() const
+	inline int64_t Sequence::FindStat::ctime() const
 	{
-		return make_uint64(m_stat.ftLastWriteTime.dwHighDateTime, m_stat.ftLastWriteTime.dwLowDateTime);
+		return static_cast<int64_t>(make_uint64(m_stat.ftCreationTime.dwHighDateTime, m_stat.ftCreationTime.dwLowDateTime));
+	}
+
+	inline int64_t Sequence::FindStat::atime() const
+	{
+		return static_cast<int64_t>(make_uint64(m_stat.ftLastAccessTime.dwHighDateTime, m_stat.ftLastAccessTime.dwLowDateTime));
+	}
+
+	inline int64_t Sequence::FindStat::mtime() const
+	{
+		return static_cast<int64_t>(make_uint64(m_stat.ftLastWriteTime.dwHighDateTime, m_stat.ftLastWriteTime.dwLowDateTime));
 	}
 
 	inline bool Sequence::FindStat::is_file() const

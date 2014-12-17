@@ -1,21 +1,48 @@
 #include <fsys.hpp>
 
+const wchar_t* to_str(fsys::Sequence::Filter::Type type)
+{
+	auto ret = L"I";
+	switch (type) {
+		case fsys::Sequence::Filter::Type::IncludeOnly:
+			break;
+		case fsys::Sequence::Filter::Type::ExcludeAll:
+			ret = L"E";
+			break;
+	}
+	return ret;
+}
+
+inline bool skip_or_not(fsys::Sequence::Filter::Type type, bool passed)
+{
+	return (type == fsys::Sequence::Filter::Type::ExcludeAll && passed) || (type == fsys::Sequence::Filter::Type::IncludeOnly && !passed);
+}
+
 fsys::Sequence::Filter::Filter(Type type, const ustring& name):
 	name(name),
 	mask(),
 	type(type),
-	minSize(0), maxSize(static_cast<uint64_t>(-1)),
-	minWrTime(0), maxWrTime(static_cast<uint64_t>(-1)),
-	minCrTime(0), maxCrTime(static_cast<uint64_t>(-1)),
-	minAcTime(0), maxAcTime(static_cast<uint64_t>(-1)),
-	minChTime(0), maxChTime(static_cast<uint64_t>(-1)),
-	enabledAttr(static_cast<size_t>(-1)), disabledAttr(0)
+	minSize(0), maxSize(UINT64_MAX),
+	minWrTime(0), maxWrTime(INT64_MAX),
+	minCrTime(0), maxCrTime(INT64_MAX),
+	minAcTime(0), maxAcTime(INT64_MAX),
+	enabledAttr(0), disabledAttr(0)
 {
+	LogTraceObj();
 }
 
 bool fsys::Sequence::Filter::operator ()(const FindStat& stat, Statistics& statistics) const
-{
-	return apply_attributes(stat, statistics) && apply_mask(stat, statistics);
+{ // return true if skip this item
+	LogConsoleDebug2(-1, L"   test [%s]: '%s'\n", to_str(type), stat.name());
+	bool passed =
+		apply_attributes(stat, statistics) &&
+		apply_size(stat, statistics) &&
+		apply_wr_time(stat, statistics) &&
+		apply_cr_time(stat, statistics) &&
+		apply_ac_time(stat, statistics) &&
+		apply_mask(stat, statistics);
+
+	return (type == Type::IncludeOnly && !passed) || (type == Type::ExcludeAll && passed);
 }
 
 //	bool Sequence::Filter::apply_to_folder(const FindStat& stat, Statistics& statistics) const
@@ -114,20 +141,82 @@ bool fsys::Sequence::Filter::operator ()(const FindStat& stat, Statistics& stati
 //		return ret;
 //	}
 
-bool fsys::Sequence::Filter::apply_attributes(const FindStat& stat, Statistics& /*statistics*/) const
-{ // FIXME
-	bool ret = false;
-	if (type == Type::Include)
-		ret = (stat.attr() & enabledAttr) == stat.attr() && (stat.attr() & disabledAttr) == Attr();
+bool fsys::Sequence::Filter::apply_mask(const FindStat& /*stat*/, Statistics& /*statistics*/) const
+{
+	bool passed = true;
+
+	if (passed)
+		LogConsoleDebug2(-1, L"    passed [");
 	else
-		ret = (stat.attr() & enabledAttr) == Attr() && (stat.attr() & disabledAttr) != Attr();
-	return ret;
+		LogConsoleDebug2(-1, L"    ignore [");
+	LogConsoleDebug2(-1, L"mask(%s)]\n", mask.c_str());
+
+	return passed;
 }
 
-bool fsys::Sequence::Filter::apply_mask(const FindStat& stat, Statistics& /*statistics*/) const
-{ // FIXME
-	return false;
-	return stat.name() == mask;
+bool fsys::Sequence::Filter::apply_size(const FindStat& stat, Statistics& /*statistics*/) const
+{
+	bool passed = simstd::between(minSize, stat.size(), maxSize);
+
+	if (passed)
+		LogConsoleDebug2(-1, L"    passed [");
+	else
+		LogConsoleDebug2(-1, L"    ignore [");
+	LogConsoleDebug2(-1, L"size(%I64u, %I64u)]: %I64u\n", minSize, maxSize, stat.size());
+
+	return passed;
+}
+
+bool fsys::Sequence::Filter::apply_wr_time(const FindStat& stat, Statistics& /*statistics*/) const
+{
+	bool passed = simstd::between(minWrTime, stat.mtime(), maxWrTime);
+
+	if (passed)
+		LogConsoleDebug2(-1, L"    passed [");
+	else
+		LogConsoleDebug2(-1, L"    ignore [");
+	LogConsoleDebug2(-1, L"wrtime(%I64d, %I64d)]: %I64d\n", minWrTime, maxWrTime, stat.mtime());
+
+	return passed;
+}
+
+bool fsys::Sequence::Filter::apply_cr_time(const FindStat& stat, Statistics& /*statistics*/) const
+{
+	bool passed = simstd::between(minCrTime, stat.ctime(), maxCrTime);
+
+	if (passed)
+		LogConsoleDebug2(-1, L"    passed [");
+	else
+		LogConsoleDebug2(-1, L"    ignore [");
+	LogConsoleDebug2(-1, L"crtime(%I64d, %I64d)]: %I64d\n", minCrTime, maxCrTime, stat.ctime());
+
+	return passed;
+}
+
+bool fsys::Sequence::Filter::apply_ac_time(const FindStat& stat, Statistics& /*statistics*/) const
+{
+	bool passed = simstd::between(minAcTime, stat.atime(), maxAcTime);
+
+	if (passed)
+		LogConsoleDebug2(-1, L"    passed [");
+	else
+		LogConsoleDebug2(-1, L"    ignore [");
+	LogConsoleDebug2(-1, L"actime(%I64d, %I64d)]: %I64d\n", minAcTime, maxAcTime, stat.atime());
+
+	return passed;
+}
+
+bool fsys::Sequence::Filter::apply_attributes(const FindStat& stat, Statistics& /*statistics*/) const
+{
+	bool passed = (stat.attr() | enabledAttr) == stat.attr() && (stat.attr() & disabledAttr) == Attr();
+
+	if (passed)
+		LogConsoleDebug2(-1, L"    passed [");
+	else
+		LogConsoleDebug2(-1, L"    ignore [");
+	LogConsoleDebug2(-1, L"attr(0x%08X && !0x%08X)]: 0x%08X\n", enabledAttr, disabledAttr, stat.attr());
+
+	return passed;
 }
 
 void fsys::Sequence::Filter::set_type()
@@ -169,14 +258,15 @@ void fsys::Sequence::Filter::set_ac_time(const Time& minAcTime, const Size& maxA
 	this->maxAcTime = maxAcTime;
 }
 
-void fsys::Sequence::Filter::set_ch_time(const Time& minChTime, const Size& maxChTime)
-{
-	this->minChTime = minChTime;
-	this->maxChTime = maxChTime;
-}
-
 void fsys::Sequence::Filter::set_attr(const Attr& enabledAttr, const Attr& disabledAttr)
 {
 	this->enabledAttr = enabledAttr;
 	this->disabledAttr = disabledAttr;
+	this->enabledAttr = this->enabledAttr & ~this->disabledAttr;
+	LogNoise(L"{ea: 0x%08X, da: 0x%08X}\n", this->enabledAttr, this->disabledAttr);
+}
+
+fsys::Sequence::Filter::Type fsys::Sequence::Filter::get_type() const
+{
+	return type;
 }

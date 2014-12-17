@@ -51,7 +51,7 @@ namespace fsys {
 		typedef ci_iterator const_iterator;
 
 		typedef size_t   Attr;
-		typedef uint64_t Time;
+		typedef int64_t  Time;
 		typedef uint64_t Size;
 
 		Sequence(const ustring& path, const ustring& mask, const Options& options);

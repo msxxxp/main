@@ -117,6 +117,7 @@ namespace { \
 #	define LogRegisterLocal(name)
 #endif
 
+#define LogConsole(color, level, format, ...)                            get_console_logger_module()->out_with_color((WORD)color, level, format, ##__VA_ARGS__)
 #define LogConsoleNoise2(color, format, ...)                             get_console_logger_module()->out_with_color((WORD)color, logger::Level::Trace2, format, ##__VA_ARGS__)
 #define LogConsoleNoise2If(condition, color, format, ...) if (condition) get_console_logger_module()->out_with_color((WORD)color, logger::Level::Trace2, format, ##__VA_ARGS__)
 #define LogConsoleNoise(color, format, ...)                              get_console_logger_module()->out_with_color((WORD)color, logger::Level::Trace1, format, ##__VA_ARGS__)

@@ -1,49 +1,135 @@
 ﻿#ifndef _FSYS_SEQUENCE_FILTERSBUNCH_HPP_
 #define _FSYS_SEQUENCE_FILTERSBUNCH_HPP_
 
-namespace fsys {
+#include <basis/simstd/vector>
 
-	class Sequence::FiltersBunch {
-	public:
-		enum class Type: ssize_t
-		{
-			IncludeOnly,
-			ExcludeAll,
-		};
+class fsys::Sequence::Filter {
+public:
+	class ByAttr;
+	class BySize;
+	class ByMask;
+	class ByWrTime;
+	class ByCrTime;
+	class ByAcTime;
 
-		FiltersBunch(Type type, const ustring& name);
+	virtual ~Filter() = default;
 
-		void set_type();
-		void set_name(const ustring& name);
-		void set_mask(const ustring& mask);
-		void set_size(const Size& minSize, const Size& maxSize);
-		void set_wr_time(const Time& minWrTime, const Size& maxWrTime);
-		void set_cr_time(const Time& minCrTime, const Size& maxCrTime);
-		void set_ac_time(const Time& minAcTime, const Size& maxAcTime);
-		void set_attr(const Attr& enabledAttr, const Attr& disabledAttr);
+	virtual bool operator ()(const FindStat& stat) const = 0;
 
-		bool operator ()(const FindStat& stat, Statistics& statistics) const;
+private:
+	virtual void destroy() = 0;
+	virtual Filter* clone() const = 0;
 
-		Type get_type() const;
+	friend class fsys::Sequence::FiltersBunch;
+};
 
-	private:
-		bool apply_mask(const FindStat& stat, Statistics& statistics) const;
-		bool apply_size(const FindStat& stat, Statistics& statistics) const;
-		bool apply_wr_time(const FindStat& stat, Statistics& statistics) const;
-		bool apply_cr_time(const FindStat& stat, Statistics& statistics) const;
-		bool apply_ac_time(const FindStat& stat, Statistics& statistics) const;
-		bool apply_attributes(const FindStat& stat, Statistics& statistics) const;
+class fsys::Sequence::Filter::ByAttr: public Filter {
+	typedef ByAttr this_type;
+public:
+	ByAttr(Attr include, Size exclude);
 
-		ustring name;
-		ustring mask;
-		Type    type;
-		Size    minSize, maxSize;
-		Time    minWrTime, maxWrTime;
-		Time    minCrTime, maxCrTime;
-		Time    minAcTime, maxAcTime;
-		Attr    enabledAttr, disabledAttr;
+	bool operator ()(const FindStat& stat) const override;
+
+private:
+	Attr include, exclude;
+
+	void destroy() override;
+	fsys::Sequence::Filter* clone() const override;
+};
+
+class fsys::Sequence::Filter::BySize: public Filter {
+	typedef BySize this_type;
+public:
+	BySize(Size from, Size to);
+
+	bool operator ()(const FindStat& stat) const override;
+
+private:
+	Size minSize, maxSize;
+
+	void destroy() override;
+	fsys::Sequence::Filter* clone() const override;
+};
+
+class fsys::Sequence::Filter::ByMask: public Filter {
+	typedef ByMask this_type;
+public:
+	ByMask(const ustring& mask);
+
+	bool operator ()(const FindStat& stat) const override;
+
+private:
+	ustring mask;
+
+	void destroy() override;
+	fsys::Sequence::Filter* clone() const override;
+};
+
+class fsys::Sequence::Filter::ByWrTime: public Filter {
+	typedef ByWrTime this_type;
+public:
+	ByWrTime(Time from, Time to);
+
+	bool operator ()(const FindStat& stat) const override;
+
+private:
+	Time minTime, maxTime;
+
+	void destroy() override;
+	fsys::Sequence::Filter* clone() const override;
+};
+
+class fsys::Sequence::Filter::ByCrTime: public Filter {
+	typedef ByCrTime this_type;
+public:
+	ByCrTime(Time from, Time to);
+
+	bool operator ()(const FindStat& stat) const override;
+
+private:
+	Time minTime, maxTime;
+
+	void destroy() override;
+	fsys::Sequence::Filter* clone() const override;
+};
+
+class fsys::Sequence::Filter::ByAcTime: public Filter {
+	typedef ByAcTime this_type;
+public:
+	ByAcTime(Time from, Time to);
+
+	bool operator ()(const FindStat& stat) const override;
+
+private:
+	Time minTime, maxTime;
+
+	void destroy() override;
+	fsys::Sequence::Filter* clone() const override;
+};
+
+class fsys::Sequence::FiltersBunch {
+public:
+	enum class Type: ssize_t
+	{
+		IncludeOnly,
+		ExcludeAll,
 	};
 
-}
+	~FiltersBunch();
+	FiltersBunch(Type type, const ustring& name);
+
+	bool operator ()(const FindStat& stat, Statistics& statistics) const;
+
+	Type get_type() const;
+
+	void add_filter(const Filter& filter);
+
+private:
+	ustring name;
+	Type    type;
+
+	typedef simstd::vector<Filter*> Filters;
+	Filters bunch;
+};
 
 #endif

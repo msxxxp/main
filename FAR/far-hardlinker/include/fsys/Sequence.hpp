@@ -16,6 +16,7 @@ namespace fsys {
 	public:
 		struct FindStat;
 		class FiltersBunch;
+		class Filter;
 		class Options;
 		class Statistics;
 

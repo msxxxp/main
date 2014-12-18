@@ -11,7 +11,7 @@ namespace fsys {
 
 		Options();
 
-		FiltersBunch& add_filter(FiltersBunch::Type type, const ustring& name);
+		FiltersBunch& add_filter_bunch(FiltersBunch::Type type, const ustring& name);
 
 		bool apply_filters(const FindStat& stat) const;
 

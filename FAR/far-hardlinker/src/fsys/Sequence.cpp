@@ -63,8 +63,8 @@ namespace fsys {
 			}
 
 			const Options& options = m_impl->m_sequence->options();
-			if (options.apply_filters(st))
-				continue;
+			if (!options.apply_filters(st))
+				break;
 		}
 		return *this;
 	}

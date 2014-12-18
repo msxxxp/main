@@ -13,7 +13,7 @@ namespace fsys {
 		++global::statistics().fileObjectsDestroyed;
 	}
 
-	File::File(const fsys::Sequence::FindStat & info, Node_t parent) :
+	File::File(const fsys::Sequence::FindStat& info, Node_t parent) :
 		Node(info.name(), parent),
 		m_size(info.size()),
 		m_mtime(info.mtime()),

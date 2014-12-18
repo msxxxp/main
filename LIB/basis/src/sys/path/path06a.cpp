@@ -6,7 +6,7 @@ namespace path {
 
 	ustring make(const ustring& path, const ustring &name)
 	{
-		console::printf(L"'%s'\\'%s'", path.c_str(), name.c_str());
+//		console::printf(L"'%s'\\'%s'", path.c_str(), name.c_str());
 		return make(path.c_str(), name.c_str());
 	}
 

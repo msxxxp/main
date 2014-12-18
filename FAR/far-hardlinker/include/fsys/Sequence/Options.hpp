@@ -11,12 +11,12 @@ namespace fsys {
 
 		Options();
 
-		Filter& add_filter(Filter::Type type, const ustring& name);
+		FiltersBunch& add_filter(FiltersBunch::Type type, const ustring& name);
 
 		bool apply_filters(const FindStat& stat) const;
 
 	private:
-		typedef simstd::vector<Filter> Filters;
+		typedef simstd::vector<FiltersBunch> Filters;
 		Filters filters;
 	};
 

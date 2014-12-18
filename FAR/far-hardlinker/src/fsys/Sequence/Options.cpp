@@ -6,7 +6,7 @@ fsys::Sequence::Options::Options()
 {
 }
 
-fsys::Sequence::Filter& fsys::Sequence::Options::add_filter(Filter::Type type, const ustring& name)
+fsys::Sequence::FiltersBunch& fsys::Sequence::Options::add_filter(FiltersBunch::Type type, const ustring& name)
 {
 	filters.emplace_back(type, name);
 	return filters.back();
@@ -19,7 +19,7 @@ bool fsys::Sequence::Options::apply_filters(const FindStat& stat) const
 //		LogConsoleDebug(FOREGROUND_INTENSITY | FOREGROUND_RED | FOREGROUND_GREEN, L"  ignored [invalid]: '%s'\n", stat.name());
 		skip = true;
 	} else {
-		for (const Sequence::Filter& filter : filters)
+		for (const Sequence::FiltersBunch& filter : filters)
 		{
 			if (filter(stat, statistics)) {
 				skip = true;

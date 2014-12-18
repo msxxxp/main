@@ -1,9 +1,9 @@
-﻿#ifndef _FSYS_SEQUENCE_FILTER_HPP_
-#define _FSYS_SEQUENCE_FILTER_HPP_
+﻿#ifndef _FSYS_SEQUENCE_FILTERSBUNCH_HPP_
+#define _FSYS_SEQUENCE_FILTERSBUNCH_HPP_
 
 namespace fsys {
 
-	class Sequence::Filter {
+	class Sequence::FiltersBunch {
 	public:
 		enum class Type: ssize_t
 		{
@@ -11,7 +11,7 @@ namespace fsys {
 			ExcludeAll,
 		};
 
-		Filter(Type type, const ustring& name);
+		FiltersBunch(Type type, const ustring& name);
 
 		void set_type();
 		void set_name(const ustring& name);
@@ -27,9 +27,6 @@ namespace fsys {
 		Type get_type() const;
 
 	private:
-//		bool apply_to_folder(const FindStat& stat, Statistics& statistics) const;
-//		bool apply_to_file(const FindStat& stat, Statistics& statistics) const;
-
 		bool apply_mask(const FindStat& stat, Statistics& statistics) const;
 		bool apply_size(const FindStat& stat, Statistics& statistics) const;
 		bool apply_wr_time(const FindStat& stat, Statistics& statistics) const;

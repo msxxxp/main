@@ -125,7 +125,7 @@ namespace fsys {
 }
 
 #include <fsys/Sequence/Stat.hpp>
-#include <fsys/Sequence/Filter.hpp>
+#include <fsys/Sequence/FiltersBunch.hpp>
 #include <fsys/Sequence/Options.hpp>
 #include <fsys/Sequence/Iterator.hpp>
 

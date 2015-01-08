@@ -25,9 +25,9 @@ namespace {
 
 int main(int argc, char* argv[])
 {
-	console::printf("%s:%d\n", __PRETTY_FUNCTION__, __LINE__);
-
 	console::set_output_codepage(console::Codepage::UTF8);
+
+	console::printf("%s:%d\n", __PRETTY_FUNCTION__, __LINE__);
 
 	crt::set_unhandled_exception_filter();
 

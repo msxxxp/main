@@ -85,7 +85,7 @@ namespace crt {
 
 	void cxa_pure_virtual()
 	{
-		console::printf("%s():%d pure virtual method called\n", __FUNCTION__, __LINE__);
+		console::printf("%s():%d pure virtual function called\n", __FUNCTION__, __LINE__);
 //		::abort_message("pure virtual method called");
 	}
 

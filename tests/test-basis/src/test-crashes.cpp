@@ -4,7 +4,7 @@
 #include <basis/sys/logger.hpp>
 #include <basis/simstd/string>
 
-//#include <ctime>
+#include <ctime>
 
 void do_null_string()
 {
@@ -46,6 +46,7 @@ void crash_zero_division()
 
 void crash_virtual_function_call()
 {
+	LogWarn(L"pure virtual function call\n");
 	struct B
 	{
 		virtual ~B() = default;
@@ -74,9 +75,8 @@ void crash_virtual_function_call()
 
 void test_crashes()
 {
-//	srand(static_cast<unsigned int>(std::time(0)));
-//	int option = rand() % 4;
-	int option = 0;
+	srand(static_cast<unsigned int>(std::time(0)));
+	int option = rand() % 4;
 
 	switch (option)
 	{

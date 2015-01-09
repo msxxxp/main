@@ -1,7 +1,7 @@
 #ifndef BASIS_SYS_MEMORY_MEMORY_HPP_
 #define BASIS_SYS_MEMORY_MEMORY_HPP_
 
-#include <basis/sys/~memory/heap/DefaultStat.hpp>
+#include <basis/sys/~memory/heap/Default.hpp>
 #include <basis/sys/memory.hpp>
 
 #include <type_traits>
@@ -56,14 +56,14 @@ namespace memory {
 	inline size_t size(Pointer ptr)
 	{
 		static_assert(std::is_pointer<Pointer>::value, "Pointer type is required");
-		return (ptr) ? memory::heap::DefaultStat::size(ptr) : 0;
+		return (ptr) ? heap::DefaultHost::size(ptr) : 0;
 	}
 
 	template<typename Pointer>
 	inline Pointer malloc(size_t size, DWORD flags = 0/*HEAP_ZERO_MEMORY*/)
 	{
 		static_assert(std::is_pointer<Pointer>::value, "Pointer type is required");
-		return static_cast<Pointer>(heap::DefaultStat::alloc(size, flags));
+		return static_cast<Pointer>(heap::DefaultHost::alloc(size, flags));
 	}
 
 	template<typename Pointer>
@@ -71,7 +71,7 @@ namespace memory {
 	{
 		static_assert(std::is_pointer<Pointer>::value, "Pointer type is required");
 		Pointer tmp_ptr = nullptr;
-		return static_cast<Pointer>(heap::DefaultStat::alloc(sizeof(*tmp_ptr) * count, flags | HEAP_ZERO_MEMORY));
+		return static_cast<Pointer>(heap::DefaultHost::alloc(sizeof(*tmp_ptr) * count, flags | HEAP_ZERO_MEMORY));
 	}
 
 	template<typename Pointer>
@@ -79,14 +79,14 @@ namespace memory {
 	{
 		static_assert(std::is_pointer<Pointer>::value, "Pointer type is required");
 		Pointer tmp_ptr = nullptr;
-		return static_cast<Pointer>(heap::DefaultStat::alloc(sizeof(*tmp_ptr), flags | HEAP_ZERO_MEMORY));
+		return static_cast<Pointer>(heap::DefaultHost::alloc(sizeof(*tmp_ptr), flags | HEAP_ZERO_MEMORY));
 	}
 
 	template<typename Pointer>
 	inline void free(Pointer & in)
 	{
 		static_assert(std::is_pointer<Pointer>::value, "Pointer type is required");
-		heap::DefaultStat::free(*(void**)(&in));
+		heap::DefaultHost::free(*(void**)(&in));
 		*(void**)(&in) = nullptr;
 	}
 
@@ -94,7 +94,7 @@ namespace memory {
 	inline bool realloc(Pointer & in, size_t size, DWORD flags = HEAP_ZERO_MEMORY)
 	{
 		static_assert(std::is_pointer<Pointer>::value, "Pointer type is required");
-		return (in = static_cast<Pointer>((in) ? heap::DefaultStat::realloc((void*)in, size, flags) : heap::DefaultStat::alloc(size, flags)));
+		return (in = static_cast<Pointer>((in) ? heap::DefaultHost::realloc((void*)in, size, flags) : heap::DefaultHost::alloc(size, flags)));
 	}
 
 	template<typename Pointer1, typename Pointer2>

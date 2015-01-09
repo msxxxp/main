@@ -1,7 +1,7 @@
 ﻿#ifndef BASIS_MEMORY_MOVABLE_ALLOCATOR_HPP_
 #define BASIS_MEMORY_MOVABLE_ALLOCATOR_HPP_
 
-#include <basis/sys/~memory/heap/DefaultMovable.hpp>
+#include <basis/sys/~memory/heap/Default.hpp>
 
 namespace simstd {
 

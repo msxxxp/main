@@ -13,7 +13,7 @@
 //#include <vector>
 //#include <string>
 
-typedef memory::heap::DefaultStatTag<A> heap_type;
+typedef memory::heap::DefaultHostTag<A> heap_type;
 typedef simstd::AllocatorHeap<A, heap_type> EqAlloc;
 
 void test_list()
@@ -89,10 +89,11 @@ void test_list()
 //
 //		list1.push_back(simstd::move(a));
 	}
+
 	{
-		const memory::heap::Stat& stat = heap_type::get_stat();
-		console::printf("stat alloc: %I64u, %I64u\n", stat.allocations, stat.allocSize);
-		console::printf("stat free : %I64u, %I64u\n", stat.frees, stat.freeSize);
-		console::printf("stat diff : %I64d\n", stat.allocSize - stat.freeSize);
+		const auto stat = heap_type::get_stat();
+		console::printf("stat alloc: %I64u, %I64u\n", stat.get_allocations(), stat.get_allocations_size());
+		console::printf("stat free : %I64u, %I64u\n", stat.get_frees(), stat.get_frees_size());
+		console::printf("stat diff : %I64d\n", stat.get_allocations_size() - stat.get_frees_size());
 	}
 }

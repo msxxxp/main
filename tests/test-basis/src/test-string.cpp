@@ -5,14 +5,14 @@
 
 void test_string()
 {
-	typedef int TypeTag;
-	typedef typename memory::heap::SpecialLogged<TypeTag> Heap;
-	typedef typename simstd::AllocatorHeap<char, Heap> Allocator;
+	typedef simstd::char_traits<char> TypeTag;
+	typedef typename memory::heap::DefaultHostTag<TypeTag> heap_type;
+	typedef typename simstd::AllocatorHeap<char, heap_type> Allocator;
 	typedef typename simstd::basic_string<char, simstd::char_traits<char>, Allocator> tstring;
 
 	LogTrace();
 
-	Heap::init();
+	heap_type::init();
 
 	{
 		tstring str1;
@@ -49,10 +49,11 @@ void test_string()
 		str6.append(1, 'a');
 		LogInfo(L"str6: size: %Iu, capa: %Iu '%S'\n", str6.size(), str6.capacity(), str6.c_str());
 	}
+
 	{
-		const memory::heap::Stat& stat = Heap::get_stat();
-		console::printf(L"stat alloc: %I64u, %I64u \n", stat.allocations, stat.allocSize);
-		console::printf(L"stat free : %I64u, %I64u \n", stat.frees, stat.freeSize);
-		console::printf(L"stat diff : %I64d \n", stat.allocSize - stat.freeSize);
+		const auto stat = heap_type::get_stat();
+		console::printf("stat alloc: %I64u, %I64u\n", stat.get_allocations(), stat.get_allocations_size());
+		console::printf("stat free : %I64u, %I64u\n", stat.get_frees(), stat.get_frees_size());
+		console::printf("stat diff : %I64d\n", stat.get_allocations_size() - stat.get_frees_size());
 	}
 }

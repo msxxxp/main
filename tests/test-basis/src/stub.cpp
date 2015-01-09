@@ -12,22 +12,22 @@ namespace {
 
 	void prolog()
 	{
-		console::printf("%s:%d\n", __PRETTY_FUNCTION__, __LINE__);
+		console::printf("%s():%d\n", __PRETTY_FUNCTION__, __LINE__);
 
 		crt::init_atexit();
 	}
 
 	int epilog(int errcode)
 	{
-		console::printf("%s:%d\n", __PRETTY_FUNCTION__, __LINE__);
+		console::printf("%s():%d\n", __PRETTY_FUNCTION__, __LINE__);
 
 		crt::invoke_atexit();
 
 		{
-			const memory::heap::Stat& stat = memory::heap::DefaultStat::get_stat();
-			console::printf("stat alloc: %I64u, %I64u \n", stat.allocations, stat.allocSize);
-			console::printf("stat free : %I64u, %I64u \n", stat.frees, stat.freeSize);
-			console::printf("stat diff : %I64d \n", stat.allocSize - stat.freeSize);
+			const auto stat = memory::heap::DefaultHost::get_stat();
+			console::printf("stat alloc: %I64u, %I64u\n", stat.get_allocations(), stat.get_allocations_size());
+			console::printf("stat free : %I64u, %I64u\n", stat.get_frees(), stat.get_frees_size());
+			console::printf("stat diff : %I64d\n", stat.get_allocations_size() - stat.get_frees_size());
 		}
 
 		::ExitProcess(errcode);
@@ -40,7 +40,7 @@ extern "C" {
 
 	int mainCRTStartup()
 	{
-		console::printf("%s:%d\n", __PRETTY_FUNCTION__, __LINE__);
+		console::printf("%s():%d\n", __PRETTY_FUNCTION__, __LINE__);
 
 		prolog();
 
@@ -56,6 +56,8 @@ extern "C" {
 
 	int	WinMainCRTStartup() // -mwindows
 	{
+		console::printf("%s():%d\n", __PRETTY_FUNCTION__, __LINE__);
+
 		prolog();
 
 		STARTUPINFOW startupInfo;

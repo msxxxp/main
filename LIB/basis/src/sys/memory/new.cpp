@@ -1,11 +1,11 @@
 #ifndef _MSC_VER
 
 #include <basis/configure.hpp>
-#include <basis/sys/~memory/heap/DefaultStat.hpp>
+#include <basis/sys/~memory/heap/Host.hpp>
 
 void * operator new(size_t size) noexcept
 {
-	return memory::heap::DefaultStat::alloc(size);
+	return memory::heap::DefaultHost::alloc(size);
 }
 
 #endif

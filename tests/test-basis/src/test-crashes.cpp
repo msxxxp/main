@@ -76,20 +76,22 @@ void crash_virtual_function_call()
 void test_crashes()
 {
 	srand(static_cast<unsigned int>(std::time(0)));
-	int option = rand() % 4;
+	int option = rand() % 5;
 
 	switch (option)
 	{
-		case 0:
-			crash_null_string();
+		case 0: // no crash
 			break;
 		case 1:
-			crash_zero_division();
+			crash_null_string();
 			break;
 		case 2:
-			crash_access_violation();
+			crash_zero_division();
 			break;
 		case 3:
+			crash_access_violation();
+			break;
+		case 4:
 			crash_virtual_function_call();
 			break;
 	}

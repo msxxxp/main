@@ -30,6 +30,7 @@ namespace crt {
 
 	void set_unhandled_exception_filter()
 	{
+		traceback::init();
 		::SetUnhandledExceptionFilter(unhandled_exception_filter);
 	}
 }

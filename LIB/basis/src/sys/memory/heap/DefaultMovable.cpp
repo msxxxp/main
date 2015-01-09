@@ -47,12 +47,5 @@ namespace memory {
 			return HeapSize(GetProcessHeap(), 0, ptr);
 		}
 
-		const Stat & DefaultMovable::get_stat()
-		{
-			return m_stat;
-		}
-
-		Stat DefaultMovable::m_stat;
-
 	}
 }

@@ -35,15 +35,8 @@ namespace memory {
 
 		size_t Default::size(const void* ptr)
 		{
-			return HeapSize(GetProcessHeap(), 0, ptr);
+			return ptr ? HeapSize(GetProcessHeap(), 0, ptr) : 0;
 		}
-
-		const Stat & Default::get_stat()
-		{
-			return m_stat;
-		}
-
-		Stat Default::m_stat;
 
 	}
 }

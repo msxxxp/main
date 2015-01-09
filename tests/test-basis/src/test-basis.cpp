@@ -3,12 +3,11 @@
 #include <basis/sys/console.hpp>
 #include <basis/sys/crt.hpp>
 #include <basis/sys/logger.hpp>
-#include <basis/sys/traceback.hpp>
 
 namespace {
 	void setup_logger()
 	{
-		console::printf("%s:%d\n", __PRETTY_FUNCTION__, __LINE__);
+		console::printf("%s():%d\n", __PRETTY_FUNCTION__, __LINE__);
 
 		wchar_t buff[256];
 
@@ -17,19 +16,14 @@ namespace {
 		safe_snprintf(buff, lengthof(buff), L"logger:///default?level=%s;prefix=%d;target=%s", L"t2", prefix, L"co");
 
 		LogSetOptions(buff);
-
-		traceback::init();
 	}
-
 }
 
 int main(int argc, char* argv[])
 {
 	console::set_output_codepage(console::Codepage::UTF8);
 
-	console::printf("%s:%d\n", __PRETTY_FUNCTION__, __LINE__);
-
-	crt::set_unhandled_exception_filter();
+	console::printf("%s():%d\n", __PRETTY_FUNCTION__, __LINE__);
 
 	setup_logger();
 
@@ -37,11 +31,9 @@ int main(int argc, char* argv[])
 	for (int i = 0; i < argc; ++i)
 		LogDebug(L"'%S'\n", argv[i]);
 
-//	// Exception code c0000005
-//	int* p1 = NULL;
-//	*p1 = 99;
+	crt::set_unhandled_exception_filter();
 
-//	test_logger();
+	test_logger();
 //
 //	test_chrono();
 //
@@ -49,7 +41,7 @@ int main(int argc, char* argv[])
 //
 //	test_crypt();
 //
-	test_crashes();
+//	test_crashes();
 //
 //	test_traceback();
 //
@@ -61,7 +53,7 @@ int main(int argc, char* argv[])
 //
 //	test_zodiac();
 
-	console::printf("%s:%d\n", __PRETTY_FUNCTION__, __LINE__);
+	console::printf("%s():%d\n", __PRETTY_FUNCTION__, __LINE__);
 	return 0;
 }
 

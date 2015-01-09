@@ -22,6 +22,7 @@ namespace memory {
 			static void   free(const void* ptr);
 			static size_t size(const void* ptr);
 
+			static const char* get_name();
 			static const stat_type& get_stat();
 
 		private:
@@ -89,6 +90,12 @@ namespace memory {
 		size_t Host<HeapType, StatType, TagType>::size(const void* ptr)
 		{
 			return heap.size(ptr);
+		}
+
+		template<typename HeapType, typename StatType, typename TagType>
+		const char* Host<HeapType, StatType, TagType>::get_name()
+		{
+			return heap.get_name();
 		}
 
 		template<typename HeapType, typename StatType, typename TagType>

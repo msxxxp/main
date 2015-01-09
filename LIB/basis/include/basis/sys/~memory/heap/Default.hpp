@@ -14,6 +14,8 @@ namespace memory {
 			static void*  realloc(void* ptr, size_t size, size_t flags = 0);
 			static void   free(const void* ptr);
 			static size_t size(const void* ptr);
+
+			static const char* get_name();
 		};
 
 		struct DefaultMovable
@@ -28,6 +30,8 @@ namespace memory {
 			static void*  lock(void* hndl);
 			static void   unlock(const void* hndl);
 			static size_t size(const void* ptr);
+
+			static const char* get_name();
 		};
 
 	}

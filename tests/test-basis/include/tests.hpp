@@ -21,6 +21,8 @@ void test_lock_rw();
 
 void test_logger();
 
+void test_memory();
+
 void test_string();
 
 void test_threads();

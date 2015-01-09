@@ -13,7 +13,7 @@ namespace {
 
 		logger::Prefix::flags prefix = logger::Prefix::Full & ~logger::Prefix::Date;
 
-		safe_snprintf(buff, lengthof(buff), L"logger:///default?level=%s;prefix=%d;target=%s", L"t2", prefix, L"co");
+		safe_snprintf(buff, lengthof(buff), L"logger:///default?level=%s;prefix=%d;target=%s", L"t1", prefix, L"co");
 
 		LogSetOptions(buff);
 	}
@@ -34,7 +34,7 @@ int main(int argc, char* argv[])
 	crt::set_unhandled_exception_filter();
 
 	test_logger();
-//
+
 //	test_chrono();
 //
 //	test_console_input();
@@ -42,6 +42,12 @@ int main(int argc, char* argv[])
 //	test_crypt();
 //
 //	test_crashes();
+//
+//	test_list();
+//
+//	test_memory();
+//
+	test_string();
 //
 //	test_traceback();
 //

@@ -25,9 +25,10 @@ namespace {
 
 		{
 			const auto stat = memory::heap::DefaultHost::get_stat();
-			console::printf("stat alloc: %I64u, %I64u\n", stat.get_allocations(), stat.get_allocations_size());
-			console::printf("stat free : %I64u, %I64u\n", stat.get_frees(), stat.get_frees_size());
-			console::printf("stat diff : %I64d\n", stat.get_allocations_size() - stat.get_frees_size());
+			console::printf("Heap '%s' statistics:\n", memory::heap::DefaultHost::get_name());
+			console::printf("  alloc: %I64u, %I64u\n", stat.get_allocations(), stat.get_allocations_size());
+			console::printf("  free : %I64u, %I64u\n", stat.get_frees(), stat.get_frees_size());
+			console::printf("  diff : %I64d\n", stat.get_allocations_size() - stat.get_frees_size());
 		}
 
 		::ExitProcess(errcode);

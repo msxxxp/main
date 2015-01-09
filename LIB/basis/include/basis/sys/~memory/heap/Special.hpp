@@ -1,7 +1,6 @@
 #ifndef BASIS_SYS_MEMORY_HEAP_SPECIAL_HPP_
 #define BASIS_SYS_MEMORY_HEAP_SPECIAL_HPP_
 
-//#include <basis/sys/memory.hpp>
 #include <basis/sys/crt.hpp>
 
 namespace memory {

@@ -5,7 +5,7 @@
 A::~A()
 {
 	LogTraceObj();
-	LogNoise(L"val: %d\n", m_a);
+	LogNoise2(L"val: %d\n", m_a);
 }
 
 A::A() :
@@ -18,7 +18,7 @@ A::A(int a) :
 	m_a(a)
 {
 	LogTraceObj();
-	LogNoise(L"%d\n", m_a);
+	LogNoise2(L"%d\n", m_a);
 }
 
 A::A(const A& other) :

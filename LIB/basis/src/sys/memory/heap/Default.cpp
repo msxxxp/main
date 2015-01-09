@@ -38,5 +38,10 @@ namespace memory {
 			return ptr ? HeapSize(GetProcessHeap(), 0, ptr) : 0;
 		}
 
+		const char* Default::get_name()
+		{
+			return "Default";
+		}
+
 	}
 }

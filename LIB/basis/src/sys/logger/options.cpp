@@ -273,8 +273,10 @@ namespace logger {
 
 	void set_options(const wchar_t* url)
 	{
+		TraceFunc();
 		auto urlCopy = cstr::dup(url);
 
+		TraceFunc();
 		URL_COMPONENTSW info;
 		bool res = url::crack(urlCopy, &info);
 		if (res && cstr::compare_ci(L"logger", info.lpszScheme, info.dwSchemeLength) == 0) {
@@ -288,6 +290,7 @@ namespace logger {
 		}
 
 		memory::free(urlCopy);
+		TraceFunc();
 	}
 
 }

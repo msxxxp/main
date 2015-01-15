@@ -12,25 +12,25 @@ namespace {
 
 	void prolog()
 	{
-		console::printf("%s():%d\n", __PRETTY_FUNCTION__, __LINE__);
-
+		TraceFunc();
 		crt::init_atexit();
+		TraceFunc();
 	}
 
 	int epilog(int errcode)
 	{
-		console::printf("%s():%d\n", __PRETTY_FUNCTION__, __LINE__);
-
+		TraceFunc();
 		crt::invoke_atexit();
 
 		{
-			const auto stat = memory::heap::DefaultHost::get_stat();
-			console::printf("Heap '%s' statistics:\n", memory::heap::DefaultHost::get_name());
+			const auto stat = memory::heap::DefaultStat::get_stat();
+			console::printf("Heap '%s' statistics:\n", memory::heap::DefaultStat::get_name());
 			console::printf("  alloc: %I64u, %I64u\n", stat.get_allocations(), stat.get_allocations_size());
 			console::printf("  free : %I64u, %I64u\n", stat.get_frees(), stat.get_frees_size());
 			console::printf("  diff : %I64d\n", stat.get_allocations_size() - stat.get_frees_size());
 		}
 
+		TraceFunc();
 		::ExitProcess(errcode);
 		return errcode;
 	}
@@ -41,7 +41,7 @@ extern "C" {
 
 	int mainCRTStartup()
 	{
-		console::printf("%s():%d\n", __PRETTY_FUNCTION__, __LINE__);
+		TraceFunc();
 
 		prolog();
 
@@ -52,12 +52,13 @@ extern "C" {
 
 		::LocalFree(argv);
 
+		TraceFunc();
 		return epilog(ret);
 	}
 
 	int	WinMainCRTStartup() // -mwindows
 	{
-		console::printf("%s():%d\n", __PRETTY_FUNCTION__, __LINE__);
+		TraceFunc();
 
 		prolog();
 
@@ -68,6 +69,7 @@ extern "C" {
 
 		int ret = wWinMain(::GetModuleHandleW(nullptr), nullptr, ::GetCommandLineW(), startupInfo.dwFlags & STARTF_USESHOWWINDOW ? startupInfo.wShowWindow : SW_SHOWDEFAULT);
 
+		TraceFunc();
 		return epilog(ret);
 	}
 
@@ -88,11 +90,13 @@ extern "C" {
 
 	int atexit(crt::Function pf)
 	{
+		TraceFunc();
 		return crt::atexit(pf);
 	}
 
 	void __cxa_pure_virtual(void)
 	{
+		TraceFunc();
 		crt::cxa_pure_virtual();
 	}
 

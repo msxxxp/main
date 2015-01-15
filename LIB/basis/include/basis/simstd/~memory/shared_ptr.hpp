@@ -23,16 +23,19 @@ namespace simstd {
 		shared_ptr() throw() :
 			m_impl(0)
 		{
+			TraceFunc();
 		}
 
-		constexpr shared_ptr(nullptr_t ptr) noexcept :
+		/*constexpr*/ shared_ptr(nullptr_t ptr) noexcept :
 			m_impl(new shared_ptr_impl_std(ptr))
 		{
+			TraceFunc();
 		}
 
 		explicit shared_ptr(element_type * ptr) :
 			m_impl(new shared_ptr_impl_std(ptr))
 		{
+			TraceFunc();
 			static_assert(sizeof(Type) > 0, "incomplete type");
 		}
 
@@ -40,12 +43,14 @@ namespace simstd {
 		shared_ptr(element_type * ptr, Deleter d) :
 			m_impl(new shared_ptr_impl_deleter<Deleter>(ptr, d))
 		{
+			TraceFunc();
 		}
 
 		template<typename Deleter>
 		shared_ptr(nullptr_t ptr, Deleter d) :
 			m_impl(new shared_ptr_impl_deleter<Deleter>(ptr, d))
 		{
+			TraceFunc();
 		}
 
 		shared_ptr(const this_type & other) :
@@ -68,6 +73,7 @@ namespace simstd {
 		template<typename newType>
 		operator shared_ptr<newType>()
 		{
+			TraceFunc();
 			return shared_ptr<newType>(m_impl); // TODO
 		}
 
@@ -135,21 +141,29 @@ namespace simstd {
 
 		struct shared_ptr_impl: public pattern::RefCounter
 		{
-			shared_ptr_impl(element_type * ptr) : m_ptr(ptr) {}
+			shared_ptr_impl(element_type* ptr):
+				m_ptr(ptr)
+			{
+				TraceFunc();
+			}
 
-			element_type * get() const {return m_ptr;}
+			element_type* get() const {return m_ptr;}
 
 			void destroy() const override = 0;
 
 			void deallocate() const override {delete this;}
 
 		private:
-			element_type * m_ptr;
+			element_type* m_ptr;
 		};
 
 		struct shared_ptr_impl_std: public shared_ptr_impl
 		{
-			shared_ptr_impl_std(element_type * ptr) : shared_ptr_impl(ptr) {}
+			shared_ptr_impl_std(element_type * ptr) :
+				shared_ptr_impl(ptr)
+			{
+				TraceFunc();
+			}
 
 		private:
 			void destroy() const override {default_deleter()(get());}
@@ -157,7 +171,12 @@ namespace simstd {
 
 		template<typename Deleter>
 		struct shared_ptr_impl_deleter: public shared_ptr_impl {
-			shared_ptr_impl_deleter(element_type * ptr, Deleter d) : shared_ptr_impl(ptr), m_deleter(d) {}
+			shared_ptr_impl_deleter(element_type * ptr, Deleter d) :
+				shared_ptr_impl(ptr),
+				m_deleter(d)
+			{
+				TraceFunc();
+			}
 
 		private:
 			void destroy() const override {m_deleter(get());}

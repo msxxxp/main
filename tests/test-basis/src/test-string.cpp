@@ -8,7 +8,7 @@ void test_string()
 	LogTrace();
 
 	struct HeapTag {};
-	typedef memory::heap::DefaultHostTag<HeapTag> heap_type;
+	typedef memory::heap::DecoratorTag<memory::heap::DefaultStat, HeapTag> heap_type;
 	typedef simstd::AllocatorHeap<char, heap_type> Allocator;
 	typedef simstd::basic_string<char, simstd::char_traits<char>, Allocator> tstring;
 

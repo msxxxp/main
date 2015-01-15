@@ -15,6 +15,11 @@ namespace memory {
 			m_heap = HeapCreate(0, 0, 0);
 		}
 
+		size_t Heap::size() const
+		{
+			return static_cast<size_t>(-1);
+		}
+
 		void* Heap::alloc(size_t size)
 		{
 			return HeapAlloc(m_heap, 0, size);
@@ -23,11 +28,6 @@ namespace memory {
 		void Heap::free(const void* ptr)
 		{
 			HeapFree(m_heap, 0, const_cast<void*>(ptr));
-		}
-
-		size_t Heap::size() const
-		{
-			return static_cast<size_t>(-1);
 		}
 
 		size_t Heap::size(const void* ptr) const

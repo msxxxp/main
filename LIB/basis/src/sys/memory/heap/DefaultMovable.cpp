@@ -13,19 +13,35 @@ namespace memory {
 		{
 		}
 
-		void* DefaultMovable::alloc(size_t size, size_t flags)
+		size_t DefaultMovable::size()
 		{
-			return HeapAlloc(GetProcessHeap(), flags, size);
+			return static_cast<size_t>(-1);
 		}
 
-		void* DefaultMovable::realloc(void* ptr, size_t size, size_t flags)
+		void* DefaultMovable::alloc(size_t size, const char* function, int line)
 		{
-			return HeapReAlloc(GetProcessHeap(), flags, ptr, size);
+			UNUSED(function);
+			UNUSED(line);
+			return HeapAlloc(GetProcessHeap(), 0, size);
 		}
 
-		void DefaultMovable::free(const void* hndl)
+		void* DefaultMovable::realloc(void* ptr, size_t size, const char* function, int line)
 		{
+			UNUSED(function);
+			UNUSED(line);
+			return HeapReAlloc(GetProcessHeap(), 0, ptr, size);
+		}
+
+		void DefaultMovable::free(const void* hndl, const char* function, int line)
+		{
+			UNUSED(function);
+			UNUSED(line);
 			HeapFree(GetProcessHeap(), 0, const_cast<void*>(hndl));
+		}
+
+		size_t DefaultMovable::size(const void* ptr)
+		{
+			return HeapSize(GetProcessHeap(), 0, ptr);
 		}
 
 		void* DefaultMovable::lock(void * hndl)
@@ -35,16 +51,6 @@ namespace memory {
 
 		void DefaultMovable::unlock(const void* /*hndl*/)
 		{
-		}
-
-		size_t DefaultMovable::size()
-		{
-			return static_cast<size_t>(-1);
-		}
-
-		size_t DefaultMovable::size(const void* ptr)
-		{
-			return HeapSize(GetProcessHeap(), 0, ptr);
 		}
 
 	}

@@ -7,7 +7,7 @@
 namespace {
 	void setup_logger()
 	{
-		console::printf("%s():%d\n", __PRETTY_FUNCTION__, __LINE__);
+		TraceFunc();
 
 		wchar_t buff[256];
 
@@ -16,15 +16,16 @@ namespace {
 		safe_snprintf(buff, lengthof(buff), L"logger:///default?level=%s;prefix=%d;target=%s", L"t1", prefix, L"co");
 
 		LogSetOptions(buff);
+		TraceFunc();
 	}
 }
 
 int main(int argc, char* argv[])
 {
+	TraceFunc();
 	console::set_output_codepage(console::Codepage::UTF8);
 
-	console::printf("%s():%d\n", __PRETTY_FUNCTION__, __LINE__);
-
+	TraceFunc();
 	setup_logger();
 
 	LogDebug(L"argc: %d\n", argc);
@@ -45,9 +46,9 @@ int main(int argc, char* argv[])
 //
 //	test_list();
 //
-//	test_memory();
+	test_memory();
 //
-	test_string();
+//	test_string();
 //
 //	test_traceback();
 //
@@ -55,20 +56,24 @@ int main(int argc, char* argv[])
 //
 //	test_url();
 //
+//	test_vector();
+//
 //	test_window();
 //
 //	test_zodiac();
 
-	console::printf("%s():%d\n", __PRETTY_FUNCTION__, __LINE__);
+	TraceFunc();
 	return 0;
 }
 
 extern "C" int wmain(int /*argc*/, wchar_t* /*argv*/[])
 {
+	TraceFunc();
 	return main(0, nullptr);
 }
 
 int WINAPI wWinMain(HINSTANCE /*hInstance*/, HINSTANCE /*hPrevInstance*/, LPWSTR /*lpCmdLine*/, int /*nShowCmd*/)
 {
+	TraceFunc();
 	return main(0, nullptr);
 }

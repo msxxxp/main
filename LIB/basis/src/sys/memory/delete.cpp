@@ -5,7 +5,7 @@
 
 void operator delete(void * ptr) noexcept
 {
-	memory::heap::DefaultHost::free(ptr);
+	memory::heap::DefaultStat::free(ptr);
 }
 
 #endif

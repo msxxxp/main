@@ -1,5 +1,6 @@
 #include <basis/sys/linkage.hpp>
 #include <basis/sys/logger.hpp>
+#include <basis/sys/console.hpp>
 #include <basis/os/imagehlp.hpp>
 
 #include "Toolhelp.hpp"

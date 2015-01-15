@@ -18,22 +18,22 @@ namespace simstd {
 ///=========================================================================== no exception versions
 inline void* operator new(size_t size, const simstd::nothrow_t&) throw()
 {
-	return memory::heap::DefaultHost::alloc(size);
+	return memory::heap::DefaultStat::alloc(size);
 }
 
 inline void* operator new[](size_t size, const simstd::nothrow_t&) throw()
 {
-	return memory::heap::DefaultHost::alloc(size);
+	return memory::heap::DefaultStat::alloc(size);
 }
 
 inline void operator delete(void* ptr, const simstd::nothrow_t&) throw()
 {
-	memory::heap::DefaultHost::free(ptr);
+	memory::heap::DefaultStat::free(ptr);
 }
 
 inline void operator delete[](void * ptr, const simstd::nothrow_t&) throw()
 {
-	memory::heap::DefaultHost::free(ptr);
+	memory::heap::DefaultStat::free(ptr);
 }
 
 ///===================================================================== Default no exception global

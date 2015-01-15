@@ -6,9 +6,6 @@
 #include <basis/simstd/mutex>
 #include <basis/simstd/vector>
 
-//#define TraceFunc() console::printf(L"%S:%d\n", __PRETTY_FUNCTION__, __LINE__);
-#define TraceFunc()
-
 namespace logger {
 
 	struct pModule_less {

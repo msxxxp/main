@@ -6,15 +6,6 @@
 
 #include <type_traits>
 
-#ifdef NDEBUG
-	#define MemoryAllocate(p1) memory::malloc(p1)
-#else
-	#define MemoryAllocate(p1) memory::malloc(p1, THIS_PLACE)
-#endif
-
-#define MemoryFree(p1) memory::free(p1)
-#define MemorySize(p1) memory::size(p1)
-
 namespace memory {
 
 //	template<typename Type>
@@ -56,45 +47,49 @@ namespace memory {
 	inline size_t size(Pointer ptr)
 	{
 		static_assert(std::is_pointer<Pointer>::value, "Pointer type is required");
-		return (ptr) ? heap::DefaultHost::size(ptr) : 0;
+		return (ptr) ? heap::DefaultStat::size(ptr) : 0;
 	}
 
 	template<typename Pointer>
 	inline Pointer malloc(size_t size, DWORD flags = 0/*HEAP_ZERO_MEMORY*/)
 	{
+		UNUSED(flags);
 		static_assert(std::is_pointer<Pointer>::value, "Pointer type is required");
-		return static_cast<Pointer>(heap::DefaultHost::alloc(size, flags));
+		return static_cast<Pointer>(HostAlloc(heap::DefaultStat, size));
 	}
 
 	template<typename Pointer>
 	inline Pointer calloc(size_t count, DWORD flags = 0)
 	{
+		UNUSED(flags);
 		static_assert(std::is_pointer<Pointer>::value, "Pointer type is required");
 		Pointer tmp_ptr = nullptr;
-		return static_cast<Pointer>(heap::DefaultHost::alloc(sizeof(*tmp_ptr) * count, flags | HEAP_ZERO_MEMORY));
+		return static_cast<Pointer>(HostAlloc(heap::DefaultStat, sizeof(*tmp_ptr) * count));
 	}
 
 	template<typename Pointer>
 	inline Pointer ealloc(DWORD flags = 0)
 	{
+		UNUSED(flags);
 		static_assert(std::is_pointer<Pointer>::value, "Pointer type is required");
 		Pointer tmp_ptr = nullptr;
-		return static_cast<Pointer>(heap::DefaultHost::alloc(sizeof(*tmp_ptr), flags | HEAP_ZERO_MEMORY));
+		return static_cast<Pointer>(HostAlloc(heap::DefaultStat, sizeof(*tmp_ptr)));
 	}
 
 	template<typename Pointer>
 	inline void free(Pointer & in)
 	{
 		static_assert(std::is_pointer<Pointer>::value, "Pointer type is required");
-		heap::DefaultHost::free(*(void**)(&in));
+		HostFree(heap::DefaultStat, *(void**)(&in));
 		*(void**)(&in) = nullptr;
 	}
 
 	template<typename Pointer>
-	inline bool realloc(Pointer & in, size_t size, DWORD flags = HEAP_ZERO_MEMORY)
+	inline bool realloc(Pointer& in, size_t size, DWORD flags = HEAP_ZERO_MEMORY)
 	{
+		UNUSED(flags);
 		static_assert(std::is_pointer<Pointer>::value, "Pointer type is required");
-		return (in = static_cast<Pointer>((in) ? heap::DefaultHost::realloc((void*)in, size, flags) : heap::DefaultHost::alloc(size, flags)));
+		return (in = static_cast<Pointer>(HostRealloc(heap::DefaultStat, (void*)in, size)));
 	}
 
 	template<typename Pointer1, typename Pointer2>

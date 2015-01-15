@@ -31,6 +31,8 @@ void test_traceback();
 
 void test_url();
 
+void test_vector();
+
 void test_window();
 
 void test_zodiac();

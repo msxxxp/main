@@ -9,10 +9,10 @@ namespace {
 
 namespace console {
 
-	size_t vprintf_var(Handle hnd, const wchar_t* format, va_list vl)
+	size_t vprintf_var(Handle hnd, const char* format, va_list vl)
 	{
 		typedef memory::heap::Default heap_type;
-		typedef wchar_t char_type;
+		typedef char char_type;
 
 		char_type* buff = nullptr;
 		size_t len = DEFAULT_PRINTF_BUFFER;
@@ -26,10 +26,10 @@ namespace console {
 		return ret;
 	}
 
-	size_t vprintf(Handle hnd, const wchar_t* format, va_list vl)
+	size_t vprintf(Handle hnd, const char* format, va_list vl)
 	{
 		{
-			wchar_t buff[DEFAULT_PRINTF_BUFFER / 2];
+			char buff[DEFAULT_PRINTF_BUFFER / 2];
 			if (safe_vsnprintf(buff, lengthof(buff), format, vl))
 				return puts(buff, cstr::length(buff), hnd);
 		}

@@ -3,6 +3,7 @@
 #include <basis/sys/console.hpp>
 #include <basis/sys/logger.hpp>
 #include <basis/sys/traceback.hpp>
+#include <basis/simstd/memory>
 //#include <basis/sys/window.hpp>
 
 //#include <stdio.h>
@@ -64,7 +65,7 @@
 
 void test_window()
 {
-	LogTrace();
+//	LogTrace();
 //	CMyWnd * wnd = new CMyWnd;
 //	wnd->create(0, L"HelloWorld!", 0, WS_OVERLAPPEDWINDOW | WS_VISIBLE, 300, 300, 500, 400, 0);
 //

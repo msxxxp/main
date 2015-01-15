@@ -29,4 +29,9 @@
 #include <basis/~configure/obligatory/Va_list.hpp>
 #include <basis/~configure/simstd/rel_ops.hpp>
 
+#include <stdio.h>
+#define TraceFunc() printf("%s:%d\n", __PRETTY_FUNCTION__, __LINE__)
+#define TraceFuncFormat(format, ...) printf(format, ##__VA_ARGS__)
+//#define TraceFunc()
+
 #endif

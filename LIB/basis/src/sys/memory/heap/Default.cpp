@@ -4,33 +4,54 @@
 namespace memory {
 	namespace heap {
 
+		Default::~Default()
+		{
+			TraceFunc();
+		}
+
+		Default::Default()
+		{
+			TraceFunc();
+		}
+
 		void Default::init(size_t size)
 		{
 			UNUSED(size);
+			TraceFunc();
 		}
 
 		void Default::destroy()
 		{
-		}
-
-		void* Default::alloc(size_t size, size_t flags)
-		{
-			return HeapAlloc(GetProcessHeap(), flags, size);
-		}
-
-		void* Default::realloc(void* ptr, size_t size, size_t flags)
-		{
-			return HeapReAlloc(GetProcessHeap(), flags, ptr, size);
-		}
-
-		void Default::free(const void* ptr)
-		{
-			HeapFree(GetProcessHeap(), 0, const_cast<void*>(ptr));
+			TraceFunc();
 		}
 
 		size_t Default::size()
 		{
 			return static_cast<size_t>(-1);
+		}
+
+		void* Default::alloc(size_t size, const char* function, int line)
+		{
+			TraceFunc();
+			UNUSED(function);
+			UNUSED(line);
+			return HeapAlloc(GetProcessHeap(), 0, size);
+		}
+
+		void* Default::realloc(void* ptr, size_t size, const char* function, int line)
+		{
+			TraceFunc();
+			UNUSED(function);
+			UNUSED(line);
+			return HeapReAlloc(GetProcessHeap(), 0, ptr, size);
+		}
+
+		void Default::free(const void* ptr, const char* function, int line)
+		{
+			TraceFunc();
+			UNUSED(function);
+			UNUSED(line);
+			HeapFree(GetProcessHeap(), 0, const_cast<void*>(ptr));
 		}
 
 		size_t Default::size(const void* ptr)

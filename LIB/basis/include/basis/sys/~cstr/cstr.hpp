@@ -153,7 +153,6 @@ namespace cstr {
 		return src ? memory::dup<CharType*>(src, (length + 1) * sizeof(CharType)) : nullptr;
 	}
 
-
 	template<typename CharType>
 	CharType * copy(CharType * dest, const CharType * src)
 	{

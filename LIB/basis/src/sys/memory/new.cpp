@@ -5,7 +5,7 @@
 
 void * operator new(size_t size) noexcept
 {
-	return memory::heap::DefaultHost::alloc(size);
+	return memory::heap::DefaultStat::alloc(size);
 }
 
 #endif

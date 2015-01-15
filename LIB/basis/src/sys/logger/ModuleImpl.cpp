@@ -2,9 +2,6 @@
 
 #include <basis/sys/cstr.hpp>
 
-//#define TraceFunc() console::printf(L"%S:%d\n", __PRETTY_FUNCTION__, __LINE__);
-#define TraceFunc()
-
 namespace logger {
 
 	const size_t default_buffer_size = 4 * 1024;

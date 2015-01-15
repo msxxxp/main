@@ -17,11 +17,15 @@ namespace console {
 
 	size_t vprintf(const char* format, va_list vl);
 
+	size_t fvprintf(HANDLE hndl, const char* format, va_list vl);
+
 	int printf(Handle hnd, const char* format, ...);
 
 	int printf(const char* format, ...);
 
 	int aprintf(const char* format, ...);
+
+	int fprintf(HANDLE hndl, const char* format, ...);
 
 }
 

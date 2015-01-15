@@ -22,13 +22,7 @@ namespace {
 		TraceFunc();
 		crt::invoke_atexit();
 
-		{
-			const auto stat = memory::heap::DefaultStat::get_stat();
-			console::printf("Heap '%s' statistics:\n", memory::heap::DefaultStat::get_name());
-			console::printf("  alloc: %I64u, %I64u\n", stat.get_allocations(), stat.get_allocations_size());
-			console::printf("  free : %I64u, %I64u\n", stat.get_frees(), stat.get_frees_size());
-			console::printf("  diff : %I64d\n", stat.get_allocations_size() - stat.get_frees_size());
-		}
+		crt::check_default_heap();
 
 		TraceFunc();
 		::ExitProcess(errcode);

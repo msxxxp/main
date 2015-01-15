@@ -17,12 +17,17 @@ void test_vector()
 {
 	LogWarn(L"\n");
 
-	vector_type* vec1 = new vector_type;
+	vector_type* vec1 = memory::malloc<vector_type*>(sizeof(vector_type));
+	new (vec1, simstd::nothrow) vector_type();
+
+//	vector_type* vec1 = new vector_type;
 	LogReport(L"size: %Iu, capa: %Iu\n", vec1->size(), vec1->capacity());
 
 	vec1->emplace_back(nullptr, 0, "", 0);
 	LogReport(L"size: %Iu, capa: %Iu\n", vec1->size(), vec1->capacity());
-	delete vec1;
+//	delete vec1;
+	vec1->~vector();
+	memory::free(vec1);
 
 	{
 		const auto stat = heap_type::get_stat();

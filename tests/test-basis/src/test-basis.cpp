@@ -46,7 +46,7 @@ int main(int argc, char* argv[])
 //
 //	test_list();
 //
-//	test_memory();
+	test_memory();
 //
 //	test_string();
 //
@@ -56,7 +56,7 @@ int main(int argc, char* argv[])
 //
 //	test_url();
 //
-	test_vector();
+//	test_vector();
 //
 //	test_window();
 //

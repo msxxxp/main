@@ -6,9 +6,6 @@ namespace memory {
 
 		struct Default
 		{
-			~Default();
-			Default();
-
 			static void   init(size_t size = 0);
 			static void   destroy();
 			static size_t size();

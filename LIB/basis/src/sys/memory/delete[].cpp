@@ -1,11 +1,11 @@
 #ifndef _MSC_VER
 
 #include <basis/configure.hpp>
-#include <basis/sys/~memory/heap/Host.hpp>
+#include <basis/sys/~memory/heap/Heap.hpp>
 
-void operator delete [](void * ptr) noexcept
+void operator delete [](void* ptr) noexcept
 {
-	memory::heap::DefaultStat::free(ptr);
+	HostFree(memory::heap::DefaultStat, ptr);
 }
 
 #endif

@@ -51,6 +51,7 @@
 									<listOptionValue builtIn="false" value="_UNICODE"/>
 									<listOptionValue builtIn="false" value="NDEBUG"/>
 									<listOptionValue builtIn="false" value="ENABLE_LOGGER"/>
+									<listOptionValue builtIn="false" value="MEMORY_LOGGING=2"/>
 								</option>
 								<option id="gnu.cpp.compiler.option.include.paths.427395775" name="Include paths (-I)" superClass="gnu.cpp.compiler.option.include.paths" useByScannerDiscovery="false" valueType="includePath">
 									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/basis/include}&quot;"/>

@@ -80,13 +80,13 @@ namespace simstd {
 	template<typename Type, typename HeapType>
 	typename AllocatorHeap<Type, HeapType>::pointer AllocatorHeap<Type, HeapType>::allocate(size_type cnt, simstd::allocator<void>::const_pointer /*hint*/)
 	{
-		return static_cast<pointer>(HeapType::alloc(sizeof(Type) * cnt));
+		return static_cast<pointer>(HostAlloc(HeapType, sizeof(Type) * cnt));
 	}
 
 	template<typename Type, typename HeapType>
 	void AllocatorHeap<Type, HeapType>::deallocate(pointer ptr, size_type /*cnt*/)
 	{
-		HeapType::free(ptr);
+		HostFree(HeapType, ptr);
 	}
 
 	template<typename Type, typename HeapType>

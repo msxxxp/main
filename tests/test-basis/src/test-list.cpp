@@ -18,7 +18,7 @@ void test_list()
 	LogTrace();
 
 	struct HeapTag {};
-	typedef memory::heap::DecoratorTag<memory::heap::DefaultStat, HeapTag> heap_type;
+	typedef memory::heap::DecoratorStat<memory::heap::Default, memory::heap::StatCount, HeapTag> heap_type;
 	typedef simstd::AllocatorHeap<A, heap_type> EqAlloc;
 
 	heap_type::init();

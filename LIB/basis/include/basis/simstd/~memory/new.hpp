@@ -1,7 +1,7 @@
-﻿#ifndef BASIS_NEW_HPP_
-#define BASIS_NEW_HPP_
+﻿#ifndef BASIS_SIMSTD_MEMORY_NEW_HPP_
+#define BASIS_SIMSTD_MEMORY_NEW_HPP_
 
-#include <basis/sys/~memory/heap/Host.hpp>
+#include <basis/sys/memory.hpp>
 
 namespace simstd {
 	struct nothrow_t
@@ -18,22 +18,22 @@ namespace simstd {
 ///=========================================================================== no exception versions
 inline void* operator new(size_t size, const simstd::nothrow_t&) throw()
 {
-	return memory::heap::DefaultStat::alloc(size);
+	return HostAlloc(memory::heap::DefaultStat, size);
 }
 
 inline void* operator new[](size_t size, const simstd::nothrow_t&) throw()
 {
-	return memory::heap::DefaultStat::alloc(size);
+	return HostAlloc(memory::heap::DefaultStat, size);
 }
 
 inline void operator delete(void* ptr, const simstd::nothrow_t&) throw()
 {
-	memory::heap::DefaultStat::free(ptr);
+	HostFree(memory::heap::DefaultStat, ptr);
 }
 
 inline void operator delete[](void * ptr, const simstd::nothrow_t&) throw()
 {
-	memory::heap::DefaultStat::free(ptr);
+	HostFree(memory::heap::DefaultStat, ptr);
 }
 
 ///===================================================================== Default no exception global

@@ -1,6 +1,8 @@
 ﻿#ifndef BASIS_CONFIGURE_HPP_
 #define BASIS_CONFIGURE_HPP_
 
+#include <basis/~configure/defines.hpp>
+
 #include <basis/~configure/os/windows_prolog.hpp>
 
 #ifdef _MSC_VER
@@ -28,10 +30,6 @@
 #include <basis/~configure/obligatory/this_file.hpp>
 #include <basis/~configure/obligatory/Va_list.hpp>
 #include <basis/~configure/simstd/rel_ops.hpp>
-
-#include <stdio.h>
-#define TraceFunc() printf("%s:%d\n", __PRETTY_FUNCTION__, __LINE__)
-#define TraceFuncFormat(format, ...) printf(format, ##__VA_ARGS__)
-//#define TraceFunc()
+#include <basis/~configure/printf_trace.hpp>
 
 #endif

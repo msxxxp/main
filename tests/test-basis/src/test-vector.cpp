@@ -8,7 +8,8 @@
 #include <basis/simstd/vector>
 
 namespace {
-	typedef simstd::AllocatorHeap<memory::heap::AllocatedItem, memory::heap::Default> Allocator;
+	typedef memory::heap::DefaultStat heap_type;
+	typedef simstd::AllocatorHeap<memory::heap::AllocatedItem, heap_type> Allocator;
 	typedef simstd::vector<memory::heap::AllocatedItem, Allocator> vector_type;
 }
 
@@ -21,4 +22,12 @@ void test_vector()
 
 	vec1->emplace_back(nullptr, 0, "", 0);
 	LogReport(L"size: %Iu, capa: %Iu\n", vec1->size(), vec1->capacity());
+	delete vec1;
+
+	{
+		const auto stat = heap_type::get_stat();
+		LogReport(L"stat alloc: %I64u, %I64u\n", stat.get_allocations(), stat.get_allocations_size());
+		LogReport(L"stat free : %I64u, %I64u\n", stat.get_frees(), stat.get_frees_size());
+		LogReport(L"stat diff : %I64d\n", stat.get_allocations_size() - stat.get_frees_size());
+	}
 }

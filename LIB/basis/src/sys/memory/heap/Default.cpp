@@ -4,16 +4,6 @@
 namespace memory {
 	namespace heap {
 
-		Default::~Default()
-		{
-			TraceFunc();
-		}
-
-		Default::Default()
-		{
-			TraceFunc();
-		}
-
 		void Default::init(size_t size)
 		{
 			UNUSED(size);

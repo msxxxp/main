@@ -1,7 +1,6 @@
 #ifndef BASIS_SYS_MEMORY_MEMORY_HPP_
 #define BASIS_SYS_MEMORY_MEMORY_HPP_
 
-#include <basis/sys/~memory/heap/Default.hpp>
 #include <basis/sys/memory.hpp>
 
 #include <type_traits>

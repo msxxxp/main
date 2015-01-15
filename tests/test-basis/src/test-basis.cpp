@@ -34,8 +34,8 @@ int main(int argc, char* argv[])
 
 	crt::set_unhandled_exception_filter();
 
-	test_logger();
-
+//	test_logger();
+//
 //	test_chrono();
 //
 //	test_console_input();
@@ -46,7 +46,7 @@ int main(int argc, char* argv[])
 //
 //	test_list();
 //
-	test_memory();
+//	test_memory();
 //
 //	test_string();
 //
@@ -56,7 +56,7 @@ int main(int argc, char* argv[])
 //
 //	test_url();
 //
-//	test_vector();
+	test_vector();
 //
 //	test_window();
 //

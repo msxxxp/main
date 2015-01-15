@@ -8,13 +8,14 @@ void test_memory()
 {
 	LogInfo(L"\n");
 
-	typedef typename memory::heap::DefaultStatLogged heap_type;
+	struct TypeTag {};
+	typedef typename memory::heap::DecoratorStat<memory::heap::Default, memory::heap::StatLog, TypeTag> heap_type;
 
 	struct TypeTag1 {};
-	typedef typename memory::heap::DecoratorTag<memory::heap::DefaultStat, TypeTag1> heap_type1;
+	typedef typename memory::heap::DecoratorStat<memory::heap::Default, memory::heap::StatLog, TypeTag1> heap_type1;
 
 	struct TypeTag2 {};
-	typedef typename memory::heap::DecoratorTag<memory::heap::DefaultStat, TypeTag2> heap_type2;
+	typedef typename memory::heap::DecoratorStat<memory::heap::Default, memory::heap::StatLog, TypeTag2> heap_type2;
 
 	auto ptr = HostAlloc(heap_type, 47);
 	HostFree(heap_type, ptr);

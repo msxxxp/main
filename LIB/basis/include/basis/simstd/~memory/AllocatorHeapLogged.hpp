@@ -90,7 +90,7 @@ namespace simstd {
 	template<typename Type, typename HeapType>
 	typename AllocatorHeapLogged<Type, HeapType>::pointer AllocatorHeapLogged<Type, HeapType>::allocate(size_type cnt, simstd::allocator<void>::const_pointer hint)
 	{
-		this_type::pointer ret = static_cast<pointer>(HeapType::alloc(sizeof(Type) * cnt));
+		this_type::pointer ret = static_cast<pointer>(HostAlloc(HeapType, sizeof(Type) * cnt));
 		console::printf(L"%S() [%Iu, %p, %Iu] -> %p\n", __PRETTY_FUNCTION__, cnt, hint, sizeof(Type), ret);
 		return ret;
 	}
@@ -99,7 +99,7 @@ namespace simstd {
 	void AllocatorHeapLogged<Type, HeapType>::deallocate(pointer ptr, size_type cnt)
 	{
 		console::printf(L"%S() [%p, %Iu]\n", __PRETTY_FUNCTION__, ptr, cnt);
-		HeapType::free(ptr);
+		HostFree(HeapType, ptr);
 	}
 
 	template<typename Type, typename HeapType>

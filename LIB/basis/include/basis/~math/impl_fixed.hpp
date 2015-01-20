@@ -32,7 +32,6 @@ namespace math {
 	{
 	}
 
-
 	template<int FractalBits>
 	fixed<FractalBits>::fixed(floating_point_type other):
 		value(value_type(other * BASE_NUMBER))
@@ -153,7 +152,6 @@ namespace math {
 		ret.value = value < 0 ? -value : value;
 		return ret;
 	}
-
 
 	template<int FractalBits>
 	typename fixed<FractalBits>::this_type fixed<FractalBits>::operator -() const

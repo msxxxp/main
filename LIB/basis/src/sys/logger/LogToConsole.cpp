@@ -43,9 +43,9 @@ namespace logger {
 		};
 
 		struct LogToConsole: public Target_i, private pattern::Uncopyable {
-			~LogToConsole() = default;
+			~LogToConsole();
 
-			LogToConsole() = default;
+			LogToConsole();
 
 			void out(const Module * lgr, Level lvl, const wchar_t* str, size_t size) const override;
 
@@ -59,15 +59,15 @@ namespace logger {
 			mutable sync_type m_sync;
 		};
 
-//		LogToConsole::~LogToConsole()
-//		{
-//			console::printf(L"%S():%d\n", __FUNCTION__, __LINE__);
-//		}
+		LogToConsole::~LogToConsole()
+		{
+			TraceFunc();
+		}
 
-//		LogToConsole::LogToConsole()
-//		{
-//			console::printf(L"%S():%d\n", __FUNCTION__, __LINE__);
-//		}
+		LogToConsole::LogToConsole()
+		{
+			TraceFunc();
+		}
 
 		void LogToConsole::out(const Module * lgr, Level lvl, const wchar_t* str, size_t size) const
 		{

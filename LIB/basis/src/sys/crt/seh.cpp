@@ -1,5 +1,5 @@
 ﻿#include <basis/sys/crt.hpp>
-#include <basis/sys/logger.hpp>
+#include <basis/sys/console.hpp>
 #include <basis/sys/totext.hpp>
 #include <basis/sys/traceback.hpp>
 
@@ -9,21 +9,21 @@ namespace crt {
 
 	LONG WINAPI unhandled_exception_filter(PEXCEPTION_POINTERS ep)
 	{
-		LogReport(L"code:    0x%X\n", ep->ExceptionRecord->ExceptionCode);
-		LogReport(L"flags:   0x%X\n", ep->ExceptionRecord->ExceptionFlags);
-		LogReport(L"record:  0x%p\n", ep->ExceptionRecord->ExceptionRecord);
-		LogReport(L"address: 0x%p\n", ep->ExceptionRecord->ExceptionAddress);
-		LogReport(L"params:  %u\n", ep->ExceptionRecord->NumberParameters);
+		console::printf("code:    0x%X\n", ep->ExceptionRecord->ExceptionCode);
+		console::printf("flags:   0x%X\n", ep->ExceptionRecord->ExceptionFlags);
+		console::printf("record:  0x%p\n", ep->ExceptionRecord->ExceptionRecord);
+		console::printf("address: 0x%p\n", ep->ExceptionRecord->ExceptionAddress);
+		console::printf("params:  %u\n", ep->ExceptionRecord->NumberParameters);
 		for (DWORD i = 0; i < ep->ExceptionRecord->NumberParameters; ++i) {
-			LogReport(L"param[%u]:    0x%I64X\n", i, ep->ExceptionRecord->ExceptionInformation[i]);
+			console::printf("param[%u]:    0x%I64X\n", i, ep->ExceptionRecord->ExceptionInformation[i]);
 		}
 
 		traceback::LazyFrame frame(reinterpret_cast<void*>(ep->ExceptionRecord->ExceptionAddress));
-		LogFatal(L"exception at %s\n", frame.to_str().c_str());
+		console::printf("exception at %S\n", frame.to_str().c_str());
 
 //		print_trace(ep->ContextRecord, reinterpret_cast<void*>(ep->ExceptionRecord->ExceptionAddress));
 
-		LogFatal(L"terminating process %s\n", totext::nt_status(ep->ExceptionRecord->ExceptionCode).c_str());
+		console::printf("terminating process %S\n", totext::nt_status(ep->ExceptionRecord->ExceptionCode).c_str());
 //		return EXCEPTION_CONTINUE_EXECUTION; // should terminate process.
 		return EXCEPTION_EXECUTE_HANDLER; // should terminate process.
 	}

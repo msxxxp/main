@@ -69,7 +69,7 @@ namespace logger {
 	{
 		TraceFunc();
 //		auto lockScope(simstd::auto_lock(m_sync));
-		defaultModule->out(Level::Force, L"Logger is being destroyed\n");
+		defaultModule->out(Level::Force, L"Logger is being destroyed. Modules: %Iu\n", m_modules.size());
 		while (!m_modules.empty()) {
 			m_modules.back()->destroy();
 			m_modules.pop_back();

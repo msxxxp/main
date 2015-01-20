@@ -7,6 +7,11 @@ namespace logger {
 	const size_t default_buffer_size = 4 * 1024;
 
 	///================================================================================== ModuleImpl
+	ModuleImpl::~ModuleImpl()
+	{
+		TraceFuncFormat("%s:%d %S\n", __PRETTY_FUNCTION__, __LINE__, m_name);
+	}
+
 	ModuleImpl::ModuleImpl(const wchar_t* name, const Target_t & tgt, Level lvl) :
 		m_target(tgt),
 		m_lvl(lvl),
@@ -169,6 +174,7 @@ namespace logger {
 	{
 		TraceFunc();
 		size_t written = safe_vsnprintf(pend, size, frmat, args);
+		TraceFuncFormat("'%S'\n", pend);
 		auto scopeLock(m_target->lock_scope());
 		m_target->out(this, lvl, buff, pend - buff + written);
 		TraceFunc();

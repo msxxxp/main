@@ -12,6 +12,8 @@ namespace os {
 
 		static wininet_dll & inst();
 
+		~wininet_dll();
+
 	private:
 		wininet_dll();
 	};

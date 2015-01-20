@@ -46,6 +46,8 @@ namespace logger {
 
 	///================================================================================== ModuleImpl
 	struct ModuleImpl: public Module, public pattern::Destroyable, private pattern::Uncopyable {
+		~ModuleImpl();
+
 		ModuleImpl(const wchar_t* name, const Target_t & tgt, Level lvl);
 
 		void destroy() const override;

@@ -32,7 +32,7 @@ int main(int argc, char* argv[])
 	for (int i = 0; i < argc; ++i)
 		LogDebug(L"'%S'\n", argv[i]);
 
-	crt::set_unhandled_exception_filter();
+//	crt::set_unhandled_exception_filter();
 
 //	test_logger();
 //
@@ -46,7 +46,9 @@ int main(int argc, char* argv[])
 //
 //	test_list();
 //
-	test_memory();
+	test_math();
+//
+//	test_memory();
 //
 //	test_string();
 //

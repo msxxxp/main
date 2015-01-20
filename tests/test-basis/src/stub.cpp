@@ -22,9 +22,11 @@ namespace {
 		TraceFunc();
 		crt::invoke_atexit();
 
-		crt::check_default_heap();
+		TraceFunc();
+//		crt::check_default_heap();
 
 		TraceFunc();
+
 		::ExitProcess(errcode);
 		return errcode;
 	}

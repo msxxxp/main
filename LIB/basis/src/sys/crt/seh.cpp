@@ -25,7 +25,7 @@ namespace crt {
 
 		console::printf("terminating process %S\n", totext::nt_status(ep->ExceptionRecord->ExceptionCode).c_str());
 //		return EXCEPTION_CONTINUE_EXECUTION; // should terminate process.
-		return EXCEPTION_EXECUTE_HANDLER; // should terminate process.
+		return EXCEPTION_EXECUTE_HANDLER;    // should terminate process.
 	}
 
 	void set_unhandled_exception_filter()

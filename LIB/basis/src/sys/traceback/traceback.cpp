@@ -266,7 +266,7 @@ namespace traceback {
 
 		{
 			size_t size = sizeof(SYMBOL_INFOW) + MAX_SYM_NAME * sizeof(wchar_t);
-			SYMBOL_INFOW * symInfo = static_cast<SYMBOL_INFOW*>(malloc(size));
+			SYMBOL_INFOW * symInfo = static_cast<SYMBOL_INFOW*>(HostAlloc(memory::heap::DefaultStat, size));
 			memory::zero(symInfo, sizeof(*symInfo));
 			symInfo->SizeOfStruct = sizeof(*symInfo);
 			symInfo->MaxNameLen = MAX_SYM_NAME;
@@ -280,7 +280,7 @@ namespace traceback {
 				m_offset = (size_t)displacement;
 				ret = true;
 			}
-			free(symInfo);
+			HostFree(memory::heap::DefaultStat, symInfo);
 		}
 
 		{

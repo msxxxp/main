@@ -9,6 +9,8 @@ namespace memory {
 			static void   init(size_t size = 0);
 			static void   destroy();
 			static size_t size();
+			static void   lock();
+			static void   unlock();
 
 			static void*  alloc(size_t size, const char* function = "", int line = 0);
 			static void*  realloc(void* ptr, size_t size, const char* function = "", int line = 0);
@@ -23,6 +25,8 @@ namespace memory {
 			static void   init(size_t size = 0);
 			static void   destroy();
 			static size_t size();
+			static void   lock();
+			static void   unlock();
 
 			static void*  alloc(size_t size, const char* function = "", int line = 0);
 			static void*  realloc(void* ptr, size_t size, const char* function = "", int line = 0);

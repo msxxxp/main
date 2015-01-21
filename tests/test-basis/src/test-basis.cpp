@@ -48,7 +48,7 @@ int main(int argc, char* argv[])
 //
 //	test_math();
 //
-//	test_memory();
+	test_memory();
 //
 //	test_string();
 //

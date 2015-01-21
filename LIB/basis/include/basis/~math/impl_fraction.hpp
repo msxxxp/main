@@ -8,7 +8,7 @@ namespace math {
 		numerator(),
 		denominator(1)
 	{
-		FixedType l_fixed(fixed.abs());
+		auto l_fixed(fixed.abs());
 
 		numerator = l_fixed;
 		if (l_fixed.fraq() != FixedType(0))
@@ -16,6 +16,8 @@ namespace math {
 			const int prec = 1000;
 			denominator = prec * FixedType::BASE_NUMBER / l_fixed.fraq().value;
 			numerator =  prec + numerator * denominator;
+//			denominator = FixedType::BASE_NUMBER;
+//			numerator =  l_fixed.value;
 			reduce();
 		}
 

@@ -9,8 +9,8 @@ void test_math()
 	LogWarn(L"\n");
 
 	math::fixed<32> v0;
-	math::fixed<32> v1(1);
-	math::fixed<32> v_1(-1);
+	math::fixed<32> v1(15, 64);
+	math::fixed<32> v_1(-7, 64);
 	math::fixed<32> v1_25(1.25);
 	math::fixed<32> v_1_25(-1.25);
 	math::fixed<32> v1_5(1.5);
@@ -41,14 +41,14 @@ void test_math()
 	math::fraction sp13_14(v13_14);
 	math::fraction sp_13_14(v_13_14);
 	math::fraction sp__13_14(v__13_14);
-	LogReport(L"sp0:       %d/%d\n", sp0.numerator, sp0.denominator);
-	LogReport(L"sp1:       %d/%d\n", sp1.numerator, sp1.denominator);
-	LogReport(L"sp_1:      %d/%d\n", sp_1.numerator, sp_1.denominator);
-	LogReport(L"sp1_25:    %d/%d\n", sp1_25.numerator, sp1_25.denominator);
-	LogReport(L"sp_1_25:   %d/%d\n", sp_1_25.numerator, sp_1_25.denominator);
-	LogReport(L"sp1_5:     %d/%d\n", sp1_5.numerator, sp1_5.denominator);
-	LogReport(L"sp_1_5:    %d/%d\n", sp_1_5.numerator, sp_1_5.denominator);
-	LogReport(L"sp13_14:   %d/%d\n", sp13_14.numerator, sp13_14.denominator);
-	LogReport(L"sp_13_14:  %d/%d\n", sp_13_14.numerator, sp_13_14.denominator);
-	LogReport(L"sp__13_14: %d/%d\n", sp__13_14.numerator, sp__13_14.denominator);
+	LogReport(L"sp0:       %Id/%Id\n", sp0.numerator, sp0.denominator);
+	LogReport(L"sp1:       %Id/%Id\n", sp1.numerator, sp1.denominator);
+	LogReport(L"sp_1:      %Id/%Id\n", sp_1.numerator, sp_1.denominator);
+	LogReport(L"sp1_25:    %Id/%Id\n", sp1_25.numerator, sp1_25.denominator);
+	LogReport(L"sp_1_25:   %Id/%Id\n", sp_1_25.numerator, sp_1_25.denominator);
+	LogReport(L"sp1_5:     %Id/%Id\n", sp1_5.numerator, sp1_5.denominator);
+	LogReport(L"sp_1_5:    %Id/%Id\n", sp_1_5.numerator, sp_1_5.denominator);
+	LogReport(L"sp13_14:   %Id/%Id\n", sp13_14.numerator, sp13_14.denominator);
+	LogReport(L"sp_13_14:  %Id/%Id\n", sp_13_14.numerator, sp_13_14.denominator);
+	LogReport(L"sp__13_14: %Id/%Id\n", sp__13_14.numerator, sp__13_14.denominator);
 }

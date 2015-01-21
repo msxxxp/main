@@ -23,7 +23,7 @@ namespace {
 		crt::invoke_atexit();
 
 		TraceFunc();
-//		crt::check_default_heap();
+		crt::check_default_heap();
 
 		TraceFunc();
 

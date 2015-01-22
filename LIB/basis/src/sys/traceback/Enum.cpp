@@ -7,50 +7,10 @@
 #include <basis/simstd/algorithm>
 #include <basis/simstd/string>
 
-#if defined(__GNUC__) && defined(DEBUG)
-#include <bfd.h>
-#endif
-
 namespace traceback {
 
 	LogRegisterLocal(L"traceback");
 
-	struct DebugSymbols {
-		static DebugSymbols & inst(const wchar_t* path = nullptr)
-		{
-			static DebugSymbols instance(path);
-			return instance;
-		}
-
-	private:
-		~DebugSymbols()
-		{
-			bool ret = os::Dbghelp_dll::inst().SymCleanup(::GetCurrentProcess());
-			LogTraceIf(ret);
-			LogErrorIf(!ret, L"%s\n", totext::api_error().c_str());
-			UNUSED(ret);
-		}
-
-		DebugSymbols(const wchar_t* path)
-		{
-			os::Dbghelp_dll::inst().SymSetOptions(os::Dbghelp_dll::inst().SymGetOptions() | /*SYMOPT_DEFERRED_LOADS | */SYMOPT_FAIL_CRITICAL_ERRORS | SYMOPT_LOAD_LINES);
-			bool ret = os::Dbghelp_dll::inst().SymInitializeW(::GetCurrentProcess(), path, TRUE);
-			LogNoiseIf(ret, L"['%s']\n", path);
-			LogErrorIf(!ret, L"['%s'] -> %s\n", path, totext::api_error().c_str());
-			UNUSED(ret);
-
-#if defined(__GNUC__) && defined(DEBUG)
-			bfd_init();
-#endif
-		}
-	};
-
-	void init(const wchar_t* path)
-	{
-		DebugSymbols::inst(path);
-	}
-
-	///=============================================================================================
 	Enum::Enum(size_t depth)
 	{
 		LogNoise(L"depth: %Iu\n", depth);

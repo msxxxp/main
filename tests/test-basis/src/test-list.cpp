@@ -13,7 +13,7 @@ void test_list()
 {
 	LogAtten(L"\n");
 
-//	A ma[7];
+	A ma[7];
 
 	struct HeapTag {};
 	typedef memory::heap::DecoratorStat<memory::heap::Special<HeapTag>, memory::heap::StatLog, HeapTag> heap_type;

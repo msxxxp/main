@@ -13,6 +13,7 @@ namespace traceback {
 
 	Enum::Enum(size_t depth)
 	{
+		TraceFunc();
 		LogNoise(L"depth: %Iu\n", depth);
 
 		{
@@ -25,10 +26,12 @@ namespace traceback {
 			memory::free(tempFramesArray);
 		}
 		LogDebug(L"captured frames: %Iu\n", size());
+		TraceFunc();
 	}
 
 	Enum::Enum(PCONTEXT context, void* address, size_t depth)
 	{
+		TraceFunc();
 		LogNoise(L"context: %p address: %p depth: %Iu\n", context, address, depth);
 
 		/* � ��� � Release-������������ ���������� ��������� ���� /Oy- (�� �������� ��������� �� ������), ����� ����� ������.
@@ -85,6 +88,7 @@ namespace traceback {
 		}
 
 		LogDebug(L"captured frames: %Iu\n", size());
+		TraceFunc();
 	}
 
 	size_t Enum::get_max_depth()

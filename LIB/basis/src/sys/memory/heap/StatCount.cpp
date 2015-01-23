@@ -3,10 +3,12 @@
 
 #include <basis/simstd/vector>
 
+#ifndef NDEBUG
 namespace {
 	typedef simstd::AllocatorHeap<memory::heap::AllocatedItem, memory::heap::Default> Allocator;
 	typedef simstd::vector<memory::heap::AllocatedItem, Allocator> vector_type;
 }
+#endif
 
 memory::heap::AllocatedItem::AllocatedItem(void* ptr, uint64_t size, const char* function, int line) :
 	size(size),
@@ -20,6 +22,10 @@ memory::heap::AllocatedItem::AllocatedItem(void* ptr, uint64_t size, const char*
 memory::heap::StatCount::~StatCount()
 {
 	TraceFunc();
+#ifndef NDEBUG
+	reinterpret_cast<vector_type*>(database)->~vector();
+	HostFree(memory::heap::Default, database);
+#endif
 }
 
 memory::heap::StatCount::StatCount():
@@ -29,10 +35,11 @@ memory::heap::StatCount::StatCount():
 	freeSize(),
 	database()
 {
-//#ifndef NDEBUG
 	TraceFunc();
-//	database = new vector_type;
-//#endif
+#ifndef NDEBUG
+	database = HostAlloc(memory::heap::Default, sizeof(vector_type));
+	new (database, simstd::nothrow) vector_type();
+#endif
 }
 
 void* memory::heap::StatCount::commit_alloc(void* ptr, uint64_t size, const char* function, int line)
@@ -45,13 +52,9 @@ void* memory::heap::StatCount::commit_alloc(void* ptr, uint64_t size, const char
 		++allocations;
 		allocSize += size;
 
-//		printf("%s:%d\n", __PRETTY_FUNCTION__, __LINE__);
-//#ifndef NDEBUG
-//		printf("%s:%d size: %Iu\n", __PRETTY_FUNCTION__, __LINE__, (unsigned)reinterpret_cast<vector_type*>(database)->size());
-//		reinterpret_cast<vector_type*>(database)->emplace_back(nullptr, 0, "", 0);
-//		reinterpret_cast<vector_type*>(database)->emplace_back(ptr, size, function, line);
-//#endif
-//		printf("%s:%d\n", __PRETTY_FUNCTION__, __LINE__);
+#ifndef NDEBUG
+		reinterpret_cast<vector_type*>(database)->emplace_back(ptr, size, function, line);
+#endif
 	}
 
 	return ptr;

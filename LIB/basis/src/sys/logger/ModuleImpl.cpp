@@ -120,8 +120,8 @@ namespace logger {
 			Va_list args;
 			va_start(args, format);
 			out_args(lvl, buff, pend, lengthof(buff) - (pend - buff), format, args);
+			TraceFunc();
 		}
-		TraceFunc();
 	}
 
 	lock_type ModuleImpl::lock_scope() const

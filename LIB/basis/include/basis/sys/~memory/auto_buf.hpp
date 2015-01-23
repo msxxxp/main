@@ -12,7 +12,7 @@ namespace memory {
 		~auto_buf()
 		{
 			must_be_pointer<Type>::constraints(m_ptr);
-			memory::free(m_ptr);
+			HostFree(memory::heap::DefaultStat, m_ptr);
 		}
 
 		auto_buf() :
@@ -21,7 +21,7 @@ namespace memory {
 		}
 
 		explicit auto_buf(size_type size_bytes) :
-			m_ptr(memory::malloc<value_type>(size_bytes))
+			m_ptr(static_cast<value_type>(HostAlloc(memory::heap::DefaultStat, size_bytes)))
 		{
 		}
 

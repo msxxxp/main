@@ -3,7 +3,7 @@
 #include <basis/sys/memory.hpp>
 
 namespace {
-	const size_t DEFAULT_PRINTF_BUFFER = 8 * 1024;
+	const size_t DEFAULT_PRINTF_BUFFER = 16 * 1024;
 }
 
 namespace console {

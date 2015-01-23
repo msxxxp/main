@@ -13,7 +13,7 @@ namespace {
 
 		logger::Prefix::flags prefix = logger::Prefix::Full & ~logger::Prefix::Date;
 
-		safe_snprintf(buff, lengthof(buff), L"logger:///default?level=%s;prefix=%d;target=%s", L"d2", prefix, L"co");
+		safe_snprintf(buff, lengthof(buff), L"logger:///default?level=%s;prefix=%d;target=%s", L"t1", prefix, L"co");
 
 		LogSetOptions(buff);
 		TraceFunc();

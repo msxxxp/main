@@ -52,6 +52,7 @@ namespace traceback {
 
 	Frame::~Frame()
 	{
+		TraceFunc();
 	}
 
 	Frame::Frame(void* address)
@@ -60,6 +61,7 @@ namespace traceback {
 		, m_line()
 		, m_offset()
 	{
+		TraceFunc();
 		IMAGEHLP_MODULEW64 modInfo;
 		memory::zero(modInfo);
 		modInfo.SizeOfStruct = sizeof(modInfo) - 8;
@@ -86,6 +88,7 @@ namespace traceback {
 		}
 
 		(modInfo.SymType && LoadFromPDB(address)) || LoadFromBfd(address) || LoadFromMap(address);
+		TraceFunc();
 	}
 
 	void * Frame::address() const
@@ -125,6 +128,7 @@ namespace traceback {
 
 	bool Frame::LoadFromPDB(void* address)
 	{
+		TraceFunc();
 		LogTrace();
 		bool ret = false;
 
@@ -160,11 +164,13 @@ namespace traceback {
 				m_file = info.FileName;
 			}
 		}
+		TraceFunc();
 		return ret;
 	}
 
 	bool Frame::LoadFromBfd(void* address)
 	{
+		TraceFunc();
 		LogTrace();
 		bool ret = false;
 		m_address = address;
@@ -188,12 +194,15 @@ namespace traceback {
 		}
 		ret = file || func;
 #endif
+		TraceFunc();
 		return ret;
 	}
 
 	bool Frame::LoadFromMap(void * address)
 	{
 		UNUSED(address);
+		TraceFunc();
+		TraceFunc();
 		return false;
 	}
 

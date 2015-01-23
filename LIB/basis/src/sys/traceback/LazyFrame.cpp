@@ -89,8 +89,10 @@ namespace traceback {
 
 	void LazyFrame::init_data() const
 	{
+		TraceFunc();
 		if (!m_data)
 			m_data = read_frame_data(m_address);
+		TraceFunc();
 	}
 
 }

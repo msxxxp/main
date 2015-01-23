@@ -34,10 +34,13 @@ namespace traceback {
 		/* � ��� � Release-������������ ���������� ��������� ���� /Oy- (�� �������� ��������� �� ������), ����� ����� ������.
 		 * http://www.bytetalk.net/2011/06/why-rtlcapturecontext-crashes-on.html
 		 */
-//		CONTEXT ctx;
-//		memory::zero(ctx);
-//		ctx.ContextFlags = CONTEXT_FULL;
-//		::RtlCaptureContext(&ctx);
+		if (context == nullptr) {
+			CONTEXT ctx;
+			memory::zero(ctx);
+			ctx.ContextFlags = CONTEXT_CONTROL/*CONTEXT_FULL*/;
+			::RtlCaptureContext(&ctx);
+			context = &ctx;
+		}
 
 		STACKFRAME64 sf;
 		memset(&sf, 0, sizeof(sf));
@@ -66,14 +69,14 @@ namespace traceback {
 #endif
 
 		while (depth-- > 0) {
-			PFUNCTION_TABLE_ACCESS_ROUTINE64 tar = (PFUNCTION_TABLE_ACCESS_ROUTINE64)&os::Dbghelp_dll::inst().SymFunctionTableAccess64;
-			PGET_MODULE_BASE_ROUTINE64 mbr = (PGET_MODULE_BASE_ROUTINE64)&os::Dbghelp_dll::inst().SymGetModuleBase64;
+			PFUNCTION_TABLE_ACCESS_ROUTINE64 tar = (PFUNCTION_TABLE_ACCESS_ROUTINE64)os::Dbghelp_dll::inst().SymFunctionTableAccess64;
+			PGET_MODULE_BASE_ROUTINE64 mbr = (PGET_MODULE_BASE_ROUTINE64)os::Dbghelp_dll::inst().SymGetModuleBase64;
 			BOOL res = os::Dbghelp_dll::inst().StackWalk64(machine, GetCurrentProcess(), GetCurrentThread(), &sf, (void*)context, nullptr, tar, mbr, nullptr);
 #ifdef _AMD64_
 			if (!res || sf.AddrReturn.Offset == 0)
 				break;
 			emplace_back(reinterpret_cast<void*>(sf.AddrReturn.Offset));
-			LogDebug(L"frame: %p\n", (void*)sf.AddrReturn.Offset);
+			LogNoise(L"frame: %p\n", (void*)sf.AddrReturn.Offset);
 #else
 			if (!res || sf.AddrPC.Offset == 0)
 				break;

@@ -7,6 +7,10 @@ namespace crt {
 
 	void set_unhandled_exception_filter();
 
+	LONG WINAPI vectored_exception_filter(PEXCEPTION_POINTERS ep);
+
+	void set_vectored_exception_filter();
+
 }
 
 #endif

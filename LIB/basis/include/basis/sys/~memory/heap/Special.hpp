@@ -12,11 +12,15 @@ namespace memory {
 			static void   init(size_t size = 0);
 			static void   destroy();
 			static size_t size();
+			static void   lock();
+			static void   unlock();
 
-			static void*  alloc(size_t size, size_t flags = 0);
-			static void*  realloc(void* ptr, size_t size, size_t flags = 0);
-			static void   free(const void* ptr);
+			static void*  alloc(size_t size, const char* function = "", int line = 0);
+			static void*  realloc(void* ptr, size_t size, const char* function = "", int line = 0);
+			static void   free(const void* ptr, const char* function = "", int line = 0);
 			static size_t size(const void* ptr);
+
+			static const char* get_name();
 
 		private:
 			static HANDLE m_heap;
@@ -48,22 +52,51 @@ namespace memory {
 		}
 
 		template<typename Type>
-		void* Special<Type>::alloc(size_t size, size_t flags)
+		size_t Special<Type>::size()
 		{
-			CRT_ASSERT(m_heap);
-			return HeapAlloc(m_heap, flags, size);
+			return static_cast<size_t>(-1);
 		}
 
 		template<typename Type>
-		void* Special<Type>::realloc(void* ptr, size_t size, size_t flags)
+		void Special<Type>::lock()
 		{
 			CRT_ASSERT(m_heap);
-			return HeapReAlloc(m_heap, flags, ptr, size);
+			HeapLock(m_heap);
 		}
 
 		template<typename Type>
-		void Special<Type>::free(const void* ptr)
+		void Special<Type>::unlock()
 		{
+			CRT_ASSERT(m_heap);
+			HeapUnlock(m_heap);
+		}
+
+		template<typename Type>
+		void* Special<Type>::alloc(size_t size, const char* function, int line)
+		{
+			UNUSED(function);
+			UNUSED(line);
+
+			CRT_ASSERT(m_heap);
+			return HeapAlloc(m_heap, 0, size);
+		}
+
+		template<typename Type>
+		void* Special<Type>::realloc(void* ptr, size_t size, const char* function, int line)
+		{
+			UNUSED(function);
+			UNUSED(line);
+
+			CRT_ASSERT(m_heap);
+			return HeapReAlloc(m_heap, 0, ptr, size);
+		}
+
+		template<typename Type>
+		void Special<Type>::free(const void* ptr, const char* function, int line)
+		{
+			UNUSED(function);
+			UNUSED(line);
+
 			CRT_ASSERT(m_heap);
 			HeapFree(m_heap, 0, const_cast<void*>(ptr));
 		}
@@ -76,9 +109,9 @@ namespace memory {
 		}
 
 		template<typename Type>
-		size_t Special<Type>::size()
+		const char* Special<Type>::get_name()
 		{
-			return static_cast<size_t>(-1);
+			return "Special";
 		}
 
 	}

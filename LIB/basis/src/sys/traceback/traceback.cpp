@@ -137,7 +137,7 @@ namespace traceback {
 
 			DWORD64 displacement;
 			bool res = os::Dbghelp_dll::inst().SymFromAddrW(::GetCurrentProcess(), reinterpret_cast<DWORD64>(address), &displacement, symInfo);
-			LogErrorIf(!res, L"%s\n", totext::api_error().c_str());
+			LogWarnIf(!res, L"%s\n", totext::api_error().c_str());
 			if (res) {
 				m_address = reinterpret_cast<void*>(symInfo->Address);
 				m_function = symInfo->Name;
